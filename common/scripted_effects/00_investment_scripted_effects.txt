@@ -287,6 +287,7 @@ get_building_construction_values = {
 # Function: get_available_project
 # Purpose: get_available_project searches through the project_array (group of projects) to determine whether a project exists or is available
 get_available_project = {
+	clear_variable = new_project
 	for_each_loop = {
 		array = project_array
 		if = { limit = { check_variable = { v = 0 } }
@@ -1269,54 +1270,7 @@ init_project_two = {
 # - Used in the AC_event.10 to AC Event Master Event
 # Purpose: It properly calculates the section
 start_project_two = {
-	# Get available project
-	get_available_project = yes
-
-	# new_project sets the correct index for the new project
-	if = { limit = { has_variable = new_project }
-
-		# Initializes the Project
-		set_variable = { project = new_project }
-		set_variable = { project_type = -1 }
-
-		init_project_two = yes
-
-		# Should scope to the actual project
-		var:AC_state_target = {
-			add_to_array = { projects_in_state = PREV.id } #Should be FROM
-			# Create a new array for this
-			add_to_array = { project_type_in_state = PREV.project_building_type^-1 }
-			set_variable = { project_target_state_@PREV = PREV.project }
-			# Sets the starting nation
-			set_variable = { PREV.project_array^PREV.project = THIS.id }
-			CONTROLLER = {
-				set_variable = { PREV.PREV.project_target_country^PREV.PREV.project = THIS.id }
-			}
-		}
-
-		# Active Project Variables
-		set_variable = { project_build_amount^project = project_build_amount^-1 }
-		set_variable = { project_building_type^project = project_building_type^-1 }
-		set_variable = { project_monetary_cost^project = project_monetary_cost^-1 }
-
-		# Activate Project
-		add_to_variable = { treasury = project_monetary_cost_effect } # Project Monetary Cost Effect is -1
-		clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-		set_temp_variable = { temp_calculator = project_monetary_cost_effect }
-		multiply_temp_variable = { temp_calculator = -1 }
-		add_to_variable = { int_investments = temp_calculator }
-    	clamp_variable = { var = int_investments min = 0 max = 1000000 }
-		add_to_variable = { active_projects = 1 }
-
-		# Initializes the target decisions for the investment project
-		initialize_start_project_decisions = yes
-
-		clear_variable = project
-		clear_variable = project_type
-		clear_variable = new_project
-	}
-
-	refresh_gui = yes
+	eon_investment_execute_offer = yes
 }
 
 # Either FROM or Country
@@ -1438,7 +1392,7 @@ end_project = {
 		# Refund Remaining Cash if the project is unfinished
 		if = { limit = { check_variable = { project_monetary_cost^project > 0 } }
 			add_to_variable = { var = treasury value = project_monetary_cost^project }
-			if = { limit = { check_variable = { int_investments > project_monetary_cost^project } }
+			if = { limit = { check_variable = { int_investments >= project_monetary_cost^project } }
 				subtract_from_variable = { var = int_investments value = project_monetary_cost^project }
 				clamp_variable = { var = int_investments min = 0 }
 			}
@@ -1447,8 +1401,14 @@ end_project = {
 			}
 			set_temp_variable = { return_to_sender = project_monetary_cost^project }
 			multiply_temp_variable = { return_to_sender = 0.10 }
-			var:project_array^project = {
-				CONTROLLER = { add_to_variable = { var = treasury value = return_to_sender } }
+			if = { limit = { has_variable = eon_project_cofinancer^project }
+				var:eon_project_cofinancer^project = {
+					if = { limit = { exists = yes } add_to_variable = { var = treasury value = return_to_sender } }
+				}
+			}
+			else = {
+				# Existing projects have no reliable original-payer record.
+				var:project_array^project = { CONTROLLER = { add_to_variable = { var = treasury value = return_to_sender } } }
 			}
 		}
 
@@ -1461,6 +1421,7 @@ end_project = {
 		clear_variable = project_total_construction_duration_display^project
 		clear_variable = project_target_country^project
 		clear_variable = project_monetary_cost^project
+		clear_variable = eon_project_cofinancer^project
 	}
 
 	clear_variable = project

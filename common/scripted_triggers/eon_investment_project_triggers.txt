@@ -1,0 +1,559 @@
+# Persistent project proposals. This file does not change price or building policy.
+# Country scope: investor. Different investors can independently propose to one recipient.
+eon_investment_offer_valid = {
+	exists = yes
+	has_variable = eon_investment_offer_partner
+	NOT = { check_variable = { eon_investment_offer_partner = 0 } }
+	NOT = { check_variable = { eon_investment_offer_state = 0 } }
+	check_variable = { eon_investment_offer_type > 0 }
+	check_variable = { eon_investment_offer_type < 16 }
+	check_variable = { eon_investment_offer_amount > 0 }
+	check_variable = { eon_investment_offer_amount < 11 }
+	check_variable = { eon_investment_offer_cost > 0 }
+	check_variable = { eon_investment_offer_duration > 0 }
+	check_variable = { treasury >= eon_investment_offer_cost }
+	check_variable = { active_projects < 15 }
+	is_in_array = { array = project_array value = 0 }
+	NOT = { has_country_flag = disabled_foreign_investment }
+	NOT = { has_country_flag = eon_investment_offer_withdrawn }
+	var:eon_investment_offer_partner = {
+		exists = yes
+		NOT = { has_war_with = PREV }
+		NOT = { has_country_flag = int_auto_reject_investment_flag }
+		check_variable = { treasury >= PREV.eon_investment_offer_cofunding }
+		PREV = { NOT = { has_war_with = PREV } NOT = { is_justifying_wargoal_against = PREV } }
+	}
+	var:eon_investment_offer_state = {
+		NOT = { is_controlled_by = PREV }
+		CONTROLLER = { exists = yes check_variable = { id = PREV.PREV.eon_investment_offer_partner } }
+		check_variable = { projects_in_state^num = project_type_in_state^num }
+		NOT = { is_in_array = { array = projects_in_state value = PREV.id } }
+		eon_investment_snapshot_building_available = yes
+	}
+}
+
+# Country-event context: ROOT/current is recipient, FROM is original donor.
+eon_investment_response_matches = {
+	FROM = { check_variable = { eon_investment_offer_partner = PREV.id } }
+}
+eon_investment_response_valid = {
+	eon_investment_response_matches = yes
+	FROM = { eon_investment_offer_valid = yes }
+}
+
+# State scope; PREV is the investor. Original building eligibility is preserved.
+eon_investment_snapshot_building_available = {
+	if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 1 } } }
+		eon_investment_building_1 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 2 } } }
+		eon_investment_building_2 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 3 } } }
+		eon_investment_building_3 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 4 } } }
+		eon_investment_building_4 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 5 } } }
+		eon_investment_building_5 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 6 } } }
+		eon_investment_building_6 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 7 } } }
+		eon_investment_building_7 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 8 } } }
+		eon_investment_building_8 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 9 } } }
+		eon_investment_building_9 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 10 } } }
+		eon_investment_building_10 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 11 } } }
+		eon_investment_building_11 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 12 } } }
+		eon_investment_building_12 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 13 } } }
+		eon_investment_building_13 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 14 } } }
+		eon_investment_building_14 = yes
+	}
+	else_if = { limit = { PREV = { check_variable = { eon_investment_offer_type = 15 } } }
+		eon_investment_building_15 = yes
+	}
+	else = { always = no }
+}
+
+eon_investment_building_1 = {
+	PREV = {
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 6 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 5 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 7 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 6 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 8 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 7 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 9 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 8 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 10 } }
+			PREV = { free_building_slots = { building = industrial_complex size > 9 include_locked = no } }
+		}
+	}
+}
+
+eon_investment_building_2 = {
+	PREV = {
+		# Investor has Military-Industrial Complex
+		has_idea = defense_industry
+		# Check to see if project_build_amount > 1
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = arms_factory size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = arms_factory size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = arms_factory size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = arms_factory size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = arms_factory size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 6 } }
+			PREV = { free_building_slots = { building = arms_factory size > 5 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 7 } }
+			PREV = { free_building_slots = { building = arms_factory size > 6 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 8 } }
+			PREV = { free_building_slots = { building = arms_factory size > 7 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 9 } }
+			PREV = { free_building_slots = { building = arms_factory size > 8 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 10 } }
+			PREV = { free_building_slots = { building = arms_factory size > 9 include_locked = no } }
+		}
+	}
+}
+
+eon_investment_building_3 = {
+	PREV = {
+		has_idea = maritime_industry
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = dockyard size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = dockyard size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = dockyard size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = dockyard size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = dockyard size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 6 } }
+			PREV = { free_building_slots = { building = dockyard size > 5 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 7 } }
+			PREV = { free_building_slots = { building = dockyard size > 6 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 8 } }
+			PREV = { free_building_slots = { building = dockyard size > 7 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 9 } }
+			PREV = { free_building_slots = { building = dockyard size > 8 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 10 } }
+			PREV = { free_building_slots = { building = dockyard size > 9 include_locked = no } }
+		}
+	}
+}
+
+eon_investment_building_4 = {
+	PREV = {
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = infrastructure size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = infrastructure size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = infrastructure size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = infrastructure size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = infrastructure size > 4 include_locked = no } }
+		}
+		else = {
+			always = no
+		}
+	}
+}
+
+eon_investment_building_5 = {
+	PREV = {
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = offices size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = offices size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = offices size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = offices size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = offices size > 4 include_locked = no } }
+		}
+		else = {
+			always = no
+		}
+	}
+}
+
+eon_investment_building_6 = {
+	PREV = {
+		# Investor has Military-Industrial Complex/The Military
+		OR = {
+			has_idea = defense_industry
+			has_idea = the_military
+		}
+		# Check to see if project_build_amount > 1
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = anti_air_building size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = anti_air_building size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = anti_air_building size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = anti_air_building size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = anti_air_building size > 4 include_locked = no } }
+		}
+		else = {
+			always = no
+		}
+	}
+}
+
+eon_investment_building_7 = {
+	#Investor has Military Industrial Complex/The Military
+	PREV = {
+		OR = {
+			has_idea = defense_industry
+			has_idea = the_military
+		}
+	}
+
+	if = { limit = { PREV = { has_tech = radar check_variable = { eon_investment_offer_amount = 1 } } }
+		radar_station < 6
+	}
+	else_if = { limit = { PREV = { has_tech = radar check_variable = { eon_investment_offer_amount = 2 } } }
+		radar_station < 5
+	}
+	else_if = { limit = { PREV = { has_tech = radar check_variable = { eon_investment_offer_amount = 3 } } }
+		radar_station < 4
+	}
+	else_if = { limit = { PREV = { has_tech = radar check_variable = { eon_investment_offer_amount = 4 } } }
+		radar_station < 3
+	}
+	else_if = { limit = { PREV = { has_tech = radar check_variable = { eon_investment_offer_amount = 5 } } }
+		radar_station < 2
+	}
+	else_if = { limit = { PREV = { has_tech = radar check_variable = { eon_investment_offer_amount = 6 } } }
+		radar_station < 1
+	}
+	else = { always = no }
+}
+
+eon_investment_building_8 = {
+	PREV = {
+		# Investor has Military-Industrial Complex/The Military
+		OR = {
+			has_idea = defense_industry
+			has_idea = the_military
+		}
+		# Check to see if project_build_amount > 1
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = air_base size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = air_base size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = air_base size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = air_base size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = air_base size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 6 } }
+			PREV = { free_building_slots = { building = air_base size > 5 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 7 } }
+			PREV = { free_building_slots = { building = air_base size > 6 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 8 } }
+			PREV = { free_building_slots = { building = air_base size > 7 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 9 } }
+			PREV = { free_building_slots = { building = air_base size > 8 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 10 } }
+			PREV = { free_building_slots = { building = air_base size > 9 include_locked = no } }
+		}
+	}
+}
+
+eon_investment_building_9 = {
+	PREV = {
+		if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = fuel_silo size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = fuel_silo size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = fuel_silo size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = fuel_silo size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = fuel_silo size > 0 include_locked = no } }
+		}
+		else = {
+			always = no
+		}
+	}
+}
+
+eon_investment_building_10 = {
+	PREV = {
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = internet_station size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = internet_station size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = internet_station size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = internet_station size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = internet_station size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 6 } }
+			PREV = { free_building_slots = { building = internet_station size > 5 include_locked = no } }
+		}
+		else = {
+			always = no
+		}
+	}
+}
+
+eon_investment_building_11 = {
+	PREV = {
+		has_tech = fuel_silos
+		# Count the building quantity
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 6 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 5 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 7 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 6 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 8 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 7 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 9 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 8 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 10 } }
+			PREV = { free_building_slots = { building = synthetic_refinery size > 9 include_locked = no } }
+		}
+		else = { always = no }
+	}
+}
+
+eon_investment_building_12 = {
+	PREV = {
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 6 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 5 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 7 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 6 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 8 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 7 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 9 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 8 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 10 } }
+			PREV = { free_building_slots = { building = fossil_powerplant size > 9 include_locked = no } }
+		}
+		else = { always = no }
+	}
+}
+
+eon_investment_building_13 = {
+	PREV = {
+		has_tech = reactor1
+		# Count the building quantity
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 6 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 5 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 7 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 6 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 8 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 7 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 9 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 8 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 10 } }
+			PREV = { free_building_slots = { building = nuclear_reactor size > 9 include_locked = no } }
+		}
+		else = { always = no }
+	}
+}
+
+eon_investment_building_14 = {
+	PREV = {
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 2 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 4 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 3 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 5 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 4 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 6 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 5 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 7 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 6 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 8 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 7 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 9 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 8 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 10 } }
+			PREV = { free_building_slots = { building = agriculture_district size > 9 include_locked = no } }
+		}
+		else = { always = no }
+	}
+}
+
+eon_investment_building_15 = {
+	PREV = {
+		if = { limit = { check_variable = { eon_investment_offer_amount = 1 } }
+			PREV = { free_building_slots = { building = rubber_refinery size > 0 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 2 } }
+			PREV = { free_building_slots = { building = rubber_refinery size > 1 include_locked = no } }
+		}
+		else_if = { limit = { check_variable = { eon_investment_offer_amount = 3 } }
+			PREV = { free_building_slots = { building = rubber_refinery size > 2 include_locked = no } }
+		}
+		else = { always = no }
+	}
+}

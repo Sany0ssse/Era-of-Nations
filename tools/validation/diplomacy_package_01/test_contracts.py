@@ -75,6 +75,8 @@ class Interpreter:
         if token == 'ROOT': return self.donor
         if token == 'THIS': return stack[-1]
         if token == 'PREV': return stack[-2]
+        if token.startswith('var:'):
+            return self.countries[int(self.value(token[4:], stack))]
         raise ValueError('Unknown country ' + token)
     def value(self, token, stack):
         if isinstance(token, list):
@@ -84,6 +86,7 @@ class Interpreter:
                 elif n.key == 'multiply': result *= self.value(n.value, stack)
                 else: raise ValueError('Unknown modeled math statement: ' + n.key)
             return result
+        if token.startswith('var:'): token = token[4:]
         try: return Decimal(token)
         except Exception: pass
         if token in ('ROOT', 'THIS', 'PREV'): return Decimal(self.country(token, stack).ident)
@@ -121,7 +124,9 @@ class Interpreter:
         for n in nodes:
             c, k, v = stack[-1], n.key, n.value
             if k == 'tooltip': continue
-            if k in ('ROOT', 'THIS', 'PREV'):
+            if k in TREATY_TRIGGERS:
+                ok = self.trigger(TREATY_TRIGGERS[k], stack) == (v == 'yes')
+            elif k in ('ROOT', 'THIS', 'PREV') or k.startswith('var:'):
                 ok = self.trigger(v, stack + [self.country(k, stack)])
             elif k in ('AND', 'custom_trigger_tooltip'): ok = self.trigger(v, stack)
             elif k == 'NOT': ok = not self.trigger(v, stack)
@@ -129,6 +134,7 @@ class Interpreter:
             elif k == 'exists': ok = c.exists == (v == 'yes')
             elif k == 'is_ai': ok = c.ai == (v == 'yes')
             elif k == 'has_war_with': ok = self.country(v, stack).ident in c.wars
+            elif k == 'has_country_flag': ok = self.flag(v, stack) in c.flags
             elif k == 'has_captured_operative': ok = self.country(v, stack).ident in c.captured
             elif k == 'check_variable': ok = self.check(v, stack)
             elif k == 'is_in_array':
@@ -152,7 +158,10 @@ class Interpreter:
         for n in nodes:
             c, k, v = stack[-1], n.key, n.value
             if k in ('log', 'ingame_update_setup', 'custom_effect_tooltip', 'break'): continue
-            if k in ('ROOT', 'THIS', 'PREV'):
+            if k in TREATY_HELPERS:
+                assert v == 'yes'
+                self.effect(TREATY_HELPERS[k], stack)
+            elif k in ('ROOT', 'THIS', 'PREV') or k.startswith('var:'):
                 self.effect(v, stack + [self.country(k, stack)])
             elif k == 'if':
                 if self.trigger(child(v, 'limit').value, stack):
@@ -185,7 +194,8 @@ class Interpreter:
             elif k == 'clear_variable': c.variables.pop(v, None)
             elif k == 'clr_country_flag': c.flags.discard(self.flag(v, stack))
             elif k == 'set_country_flag':
-                p = self.params(v); c.flags.add(self.flag(p['flag'], stack))
+                flag = self.params(v)['flag'] if isinstance(v, list) else v
+                c.flags.add(self.flag(flag, stack))
             elif k in ('add_opinion_modifier', 'reverse_add_opinion_modifier', 'remove_opinion_modifier'):
                 p = self.params(v); other = self.country(p['target'], stack)
                 item = (other.ident, p['modifier'])
@@ -220,6 +230,11 @@ treasury_matches = list(re.finditer(r'(?ms)^modify_treasury_effect\s*=\s*\{.*?^\
 assert len(treasury_matches) == 1, 'Missing or duplicate treasury helper'
 TREASURY_HELPER = child(parse(treasury_matches[0].group()), 'modify_treasury_effect').value
 assert all(n.key in ('custom_effect_tooltip', 'add_to_variable', 'clamp_variable', 'ingame_update_setup') for n in TREASURY_HELPER), 'Unmodeled treasury helper statement'
+
+# Package 02 delegates current native treaty cancellation to these actual helpers.
+# Preserve all original cancellation scenarios instead of testing stale inline code.
+TREATY_HELPERS = {n.key: n.value for n in parse((ROOT / 'common/scripted_effects/eon_investment_treaty_effects.txt').read_text(encoding='utf-8-sig'))}
+TREATY_TRIGGERS = {n.key: n.value for n in parse((ROOT / 'common/scripted_triggers/eon_investment_treaty_triggers.txt').read_text(encoding='utf-8-sig'))}
 
 raw = SOURCE.read_bytes()
 source = raw.decode('utf-8-sig')
@@ -401,6 +416,8 @@ base_raw = subprocess.check_output(['git', 'show', BASELINE + ':common/scripted_
 base_text = base_raw.decode('utf-8-sig')
 base_actions = child(parse(base_text), 'scripted_diplomatic_actions').value
 changed = {'diplo_action_assume_debt', 'cancel_mutual_investment_treaty', 'negotiate_operative_release', 'negotiate_operative_exchange'}
+# Package 02 verifies these narrowly owned deltas against d4ec in its source test.
+changed.update({'propose_improved_trade_agreement', 'cancel_trade_agreement', 'propose_mutual_investment_treaty'})
 for n in base_actions:
     if n.key not in changed:
         current = child(actions, n.key)

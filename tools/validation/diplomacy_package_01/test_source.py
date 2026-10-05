@@ -42,6 +42,23 @@ for rel in files:
             raise AssertionError(('Other events changed',first,restored[first-80:first+180],before[first-80:first+180]))
     else:
         restored=after
+        # Later package 02 appends three independently checked pair cleanups.
+        # Remove exactly those additions before proving package 01's old boundary.
+        # Package 02 checks their full delta against d4ec4a02 separately.
+        for target in (b'FROM',b'ROOT'):
+            addition=(b'\n\t\t\t\t\tset_temp_variable = { eon_trade_treaty_partner = '+target+b' }'
+                      b'\n\t\t\t\t\teon_trade_treaty_cleanup_annexed_pair = yes'
+                      b'\n\t\t\t\t\tset_temp_variable = { eon_investment_treaty_partner = '+target+b' }'
+                      b'\n\t\t\t\t\teon_investment_treaty_cleanup_annexed_pair = yes'
+                      b'\n\t\t\t\t\tset_temp_variable = { eon_investment_annexed_partner = '+target+b' }'
+                      b'\n\t\t\t\t\teon_investment_project_cleanup_annexed_pair = yes')
+            if addition in restored:
+                assert restored.count(addition)==1; restored=restored.replace(addition,b'')
+        addition=(b'\n\t\t\t\teon_trade_treaty_clear_pending = yes'
+                  b'\n\t\t\t\teon_investment_treaty_clear_pending = yes'
+                  b'\n\t\t\t\teon_investment_clear_offer = yes')
+        if addition in restored:
+            assert restored.count(addition)==2; restored=restored.replace(addition,b'')
         for target in (b'FROM',b'ROOT'):
             addition=b'\n\t\t\t\t\tset_temp_variable = { eon_energy_pair_partner = '+target+b' }\n\t\t\t\t\teon_energy_clear_pair_pending = yes\n\t\t\t\t\teon_energy_framework_cleanup_annexed_pair = yes'
             assert restored.count(addition)==1; restored=restored.replace(addition,b'')

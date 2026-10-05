@@ -1,0 +1,121 @@
+# Country scope is the investor unless explicitly documented otherwise.
+eon_investment_clear_offer = {
+	if = { limit = { has_variable = eon_investment_offer_partner }
+		var:eon_investment_offer_partner = { PREV = { clr_country_flag = this_investment_offer_pending@PREV } }
+	}
+	clear_variable = eon_investment_offer_partner
+	clear_variable = eon_investment_offer_state
+	clear_variable = eon_investment_offer_type
+	clear_variable = eon_investment_offer_amount
+	clear_variable = eon_investment_offer_cost
+	clear_variable = eon_investment_offer_cofunding
+	clear_variable = eon_investment_offer_duration
+	clear_variable = eon_investment_offer_total_duration
+	clr_country_flag = eon_investment_offer_withdrawn
+	clr_country_flag = AC_ai_investment_pending
+}
+
+# Stage once; later GUI edits do not alter this country-variable snapshot.
+eon_investment_prepare_offer = {
+	set_temp_variable = { eon_investment_offer_prepared = 0 }
+	if = { limit = { check_variable = { eon_investment_offer_partner = 0 } }
+		set_variable = { eon_investment_offer_partner = AC_nation_target }
+		set_variable = { eon_investment_offer_state = AC_state_target }
+		set_variable = { eon_investment_offer_type = project_building_type^-1 }
+		set_variable = { eon_investment_offer_amount = project_build_amount^-1 }
+		set_variable = { eon_investment_offer_cost = project_monetary_cost^-1 }
+		set_variable = { eon_investment_offer_cofunding = project_monetary_cost^-1 }
+		multiply_variable = { eon_investment_offer_cofunding = 0.10 }
+		set_variable = { eon_investment_offer_duration = project_construction_duration^-1 }
+		set_variable = { eon_investment_offer_total_duration = project_total_construction_duration_display^-1 }
+		if = { limit = { eon_investment_offer_valid = yes }
+			var:eon_investment_offer_partner = { PREV = { set_country_flag = { flag = this_investment_offer_pending@PREV days = 90 value = 1 } } }
+			set_country_flag = AC_ai_investment_pending
+			set_temp_variable = { eon_investment_offer_prepared = 1 }
+		}
+		else = { eon_investment_clear_offer = yes }
+	}
+}
+
+# Legacy scripted investments are called in state scope, with ROOT as donor.
+eon_investment_prepare_scripted_offer = {
+	ROOT = {
+		if = { limit = { check_variable = { eon_investment_offer_partner = 0 } }
+			PREV = {
+				save_event_target_as = AC_state_event_target
+				set_variable = { ROOT.AC_state_target = THIS.id }
+				CONTROLLER = { set_variable = { ROOT.AC_nation_target = THIS.id } }
+			}
+			update_gui = yes
+			country_event = { id = AC_event.3 }
+		}
+	}
+}
+
+# Atomic acceptance: validate first, then start exactly the frozen project and
+# debit its donor plus the existing 10% recipient contribution. No GUI restoration.
+eon_investment_execute_offer = {
+	set_temp_variable = { eon_investment_project_started = 0 }
+	if = { limit = { eon_investment_offer_valid = yes }
+		get_available_project = yes
+		if = { limit = { has_variable = new_project }
+			set_variable = { project = new_project }
+			set_variable = { project_build_amount^project = eon_investment_offer_amount }
+			set_variable = { project_building_type^project = eon_investment_offer_type }
+			set_variable = { project_monetary_cost^project = eon_investment_offer_cost }
+			set_variable = { project_construction_duration^project = eon_investment_offer_duration }
+			set_variable = { project_total_construction_duration_display^project = eon_investment_offer_total_duration }
+			set_variable = { project_target_country^project = eon_investment_offer_partner }
+			set_variable = { eon_project_cofinancer^project = eon_investment_offer_partner }
+			var:eon_investment_offer_state = {
+				add_to_array = { projects_in_state = PREV.id }
+				add_to_array = { project_type_in_state = PREV.eon_investment_offer_type }
+				set_variable = { project_target_state_@PREV = PREV.project }
+				set_variable = { PREV.project_array^PREV.project = THIS.id }
+			}
+			subtract_from_variable = { treasury = eon_investment_offer_cost }
+			clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+			add_to_variable = { int_investments = eon_investment_offer_cost }
+			clamp_variable = { var = int_investments min = 0 max = 1000000 }
+			add_to_variable = { active_projects = 1 }
+			var:eon_investment_offer_partner = {
+				set_temp_variable = { treasury_change = PREV.eon_investment_offer_cofunding }
+				multiply_temp_variable = { treasury_change = -1 }
+				modify_treasury_effect = yes
+				set_temp_variable = { modify_capitalization = 0.025 }
+				modify_capitalization_support = yes
+				if = { limit = { NOT = { has_country_flag = influence_gained_@PREV } }
+					if = { limit = { has_global_flag = GAME_RULE_gain_0_5_percent_invest } set_temp_variable = { percent_change = 0.50 } }
+					else_if = { limit = { has_global_flag = GAME_RULE_gain_2_percent_invest } set_temp_variable = { percent_change = 2.0 } }
+					else = { set_temp_variable = { percent_change = 1.0 } }
+					set_temp_variable = { tag_index = PREV.id }
+					set_temp_variable = { influence_target = THIS.id }
+					change_influence_percentage = yes
+					if = { limit = { has_global_flag = GAME_RULE_influence_cooldown_limits_14 }
+						set_country_flag = { flag = influence_gained_@PREV value = 1 days = 14 }
+						custom_effect_tooltip = cooldown_influence_limit_14_tooltip
+					}
+					else_if = { limit = { has_global_flag = GAME_RULE_influence_cooldown_limits_30 }
+						set_country_flag = { flag = influence_gained_@PREV value = 1 days = 30 }
+						custom_effect_tooltip = cooldown_influence_limit_30_tooltip
+					}
+				}
+			}
+			initialize_start_project_decisions = yes
+			clear_variable = project
+			clear_variable = project_type
+			clear_variable = new_project
+			set_temp_variable = { eon_investment_project_started = 1 }
+		}
+	}
+	eon_investment_clear_offer = yes
+	refresh_gui = yes
+}
+
+# Root inserts this into both annex hooks. Current country is surviving donor;
+# eon_investment_annexed_partner is a temporary country value supplied by caller.
+eon_investment_project_cleanup_annexed_pair = {
+	if = { limit = { check_variable = { eon_investment_offer_partner = eon_investment_annexed_partner } }
+		eon_investment_clear_offer = yes
+	}
+}

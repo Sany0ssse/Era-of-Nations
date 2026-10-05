@@ -87,14 +87,13 @@ scripted_gui = {
 			}
 			# Begins project or cancels the project if you have one active in a given state
 			AC_build_button_click = {
-				if = { limit = { NOT = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } } }
+				if = { limit = { NOT = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } } ROOT = { check_variable = { eon_investment_offer_partner = 0 } } }
 					# PREV is the state target
 					THIS = {
 						set_variable = { ROOT.AC_state_target = THIS.id }
 						# CONTROLLER is pretty obvious
 						CONTROLLER = {
 							set_variable = { ROOT.AC_nation_target = THIS.id }
-							ROOT = { set_country_flag = { flag = this_investment_offer_pending@PREV days = 90 value = 1 } }
 						}
 					}
 					ROOT = {
@@ -103,7 +102,7 @@ scripted_gui = {
 						country_event = { id = AC_event.3 }
 					}
 				}
-				else = {
+				else_if = { limit = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } }
 					ROOT = {
 						set_variable = { project = PREV.project_target_state_@ROOT }
 						end_project = yes
@@ -417,7 +416,10 @@ scripted_gui = {
 				# NOT = { ROOT = { controls_state = PREV.id } }
 				# #Cannot be being justified upon investment country
 				# ROOT = { not = { is_justifying_wargoal_against = PREV } }
-				if = { limit = { NOT = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } } currently_is_considering_a_project = yes }
+				if = { limit = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } }
+					always = yes
+				}
+				else_if = { limit = { NOT = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } } currently_is_considering_a_project = yes }
 					ROOT = {
 						check_variable = { active_projects < 15 }
 						check_variable = { project_building_type^-1 > 0 }

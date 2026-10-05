@@ -1,0 +1,116 @@
+# All helpers preserve the shared temporary eon_investment_treaty_partner input.
+# Calling country is one side of the pair; the temporary input is the other ID.
+eon_investment_treaty_clear_pending = {
+	clear_variable = pending_mutual_investment_treaty_offer
+	clear_variable = eon_investment_treaty_pending_sender
+	clear_variable = eon_investment_treaty_pending_terms
+	clear_variable = eon_investment_treaty_withdrawn_partner
+}
+
+# Only clear terms once both queues are empty; unrelated damaged/legacy queues survive.
+eon_investment_treaty_clear_idle_terms = {
+	if = {
+		limit = {
+			check_variable = { pending_mutual_investment_treaty_offer = 0 }
+			check_variable = { eon_investment_treaty_pending_sender = 0 }
+		}
+		clear_variable = eon_investment_treaty_pending_terms
+	}
+}
+
+# Native response: ROOT = sender, current country = receiver.
+# Each side matches independently, so pre-package outgoing-only requests drain safely.
+eon_investment_treaty_finish_response = {
+	ROOT = {
+		if = {
+			limit = { check_variable = { pending_mutual_investment_treaty_offer = PREV.id } }
+			clear_variable = pending_mutual_investment_treaty_offer
+			if = {
+				limit = { check_variable = { eon_investment_treaty_withdrawn_partner = PREV.id } }
+				clear_variable = eon_investment_treaty_withdrawn_partner
+			}
+			eon_investment_treaty_clear_idle_terms = yes
+		}
+	}
+	if = {
+		limit = { check_variable = { eon_investment_treaty_pending_sender = ROOT.id } }
+		clear_variable = eon_investment_treaty_pending_sender
+		if = {
+			limit = { check_variable = { eon_investment_treaty_withdrawn_partner = ROOT.id } }
+			clear_variable = eon_investment_treaty_withdrawn_partner
+		}
+		eon_investment_treaty_clear_idle_terms = yes
+	}
+}
+
+# Withdrawal invalidates consent but keeps the queue reserved until the old reply drains.
+eon_investment_treaty_withdraw_pair = {
+	if = {
+		limit = {
+			OR = {
+				check_variable = { pending_mutual_investment_treaty_offer = eon_investment_treaty_partner }
+				check_variable = { eon_investment_treaty_pending_sender = eon_investment_treaty_partner }
+			}
+		}
+		set_variable = { eon_investment_treaty_withdrawn_partner = eon_investment_treaty_partner }
+	}
+}
+
+# Remove all historical duplicates for this partner, retaining every other target.
+eon_investment_treaty_remove_pair_target = {
+	set_temp_variable = { eon_investment_treaty_cleanup_break = 0 }
+	while_loop_effect = {
+		limit = { is_in_array = { array = permanent_investment_targets value = var:eon_investment_treaty_partner } }
+		break = eon_investment_treaty_cleanup_break
+		remove_from_array = { array = permanent_investment_targets value = var:eon_investment_treaty_partner }
+	}
+}
+
+eon_investment_treaty_set_pair_target = {
+	eon_investment_treaty_remove_pair_target = yes
+	add_to_array = { array = permanent_investment_targets value = var:eon_investment_treaty_partner }
+}
+
+# Stop only this side's standing treaty. Active building/project queues are not touched.
+eon_investment_treaty_remove_pair = {
+	# Re-enter the caller through its partner so the inherited scoped flag uses PREV.
+	var:eon_investment_treaty_partner = {
+		PREV = {
+			clr_country_flag = mutual_investment_treaty_@PREV
+			remove_opinion_modifier = { target = PREV modifier = mutual_investment_treaty_opinion }
+			remove_opinion_modifier = { target = PREV modifier = mutual_investment_treaty_trade_opinion }
+		}
+	}
+	eon_investment_treaty_remove_pair_target = yes
+}
+
+# Clear only the caller's queue references to the specified vanished partner.
+eon_investment_treaty_cleanup_pending_pair = {
+	if = {
+		limit = { check_variable = { pending_mutual_investment_treaty_offer = eon_investment_treaty_partner } }
+		clear_variable = pending_mutual_investment_treaty_offer
+	}
+	if = {
+		limit = { check_variable = { eon_investment_treaty_pending_sender = eon_investment_treaty_partner } }
+		clear_variable = eon_investment_treaty_pending_sender
+	}
+	if = {
+		limit = { check_variable = { eon_investment_treaty_withdrawn_partner = eon_investment_treaty_partner } }
+		clear_variable = eon_investment_treaty_withdrawn_partner
+	}
+	eon_investment_treaty_clear_idle_terms = yes
+}
+
+# Annexed partners cannot reply. Remove both countries' standing pair state, so a
+# subsequently released tag cannot retain this treaty. Restore the shared input.
+eon_investment_treaty_cleanup_annexed_pair = {
+	set_temp_variable = { eon_investment_treaty_annex_saved_partner = eon_investment_treaty_partner }
+	var:eon_investment_treaty_partner = {
+		set_temp_variable = { eon_investment_treaty_partner = PREV.id }
+		eon_investment_treaty_remove_pair = yes
+		eon_investment_treaty_cleanup_pending_pair = yes
+	}
+	set_temp_variable = { eon_investment_treaty_partner = eon_investment_treaty_annex_saved_partner }
+	eon_investment_treaty_remove_pair = yes
+	eon_investment_treaty_cleanup_pending_pair = yes
+}

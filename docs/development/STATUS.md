@@ -6,17 +6,24 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and first implementation package are complete at
+The existing diplomacy audit and two implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
-The new package reconciles ordinary NATO/CSTO/SCO membership and native exits,
+The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
 and gives the existing energy agreement a guarded proposal/response/execution/
 revision/termination cycle. Reproducible source models and independent reviews
-passed. This package has not been launched in HOI4; new-campaign acceptance,
+passed. The second package guards trade and mutual investment treaty proposals,
+responses and bilateral cleanup, freezes foreign building proposals before
+consent, rechecks execution conditions and repairs refunds. It retains existing
+prices, political rules and separate storyline paths. Neither diplomacy package
+has been launched in HOI4; new-campaign acceptance,
 native callback timing, actual accounting and save/load remain pending. See
+[DIPLOMACY_PACKAGE_02_UK.md](DIPLOMACY_PACKAGE_02_UK.md) and
 [DIPLOMACY_PACKAGE_01_UK.md](DIPLOMACY_PACKAGE_01_UK.md) for changes, checks and
-the runtime checklist, and [DIPLOMACY_AUDIT_UK.md](DIPLOMACY_AUDIT_UK.md) for the
-earlier baseline audit and subsequent priorities.
+runtime checklists. [ORDINARY_ALLIANCES_PLAN_UK.md](ORDINARY_ALLIANCES_PLAN_UK.md)
+describes the next ordinary defensive-alliance task; its gameplay is not yet
+implemented. [DIPLOMACY_AUDIT_UK.md](DIPLOMACY_AUDIT_UK.md) preserves the earlier
+baseline audit and subsequent priorities.
 
 ## Completed setup
 

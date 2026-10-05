@@ -1,0 +1,113 @@
+# Pair effects receive a shared temporary country ID: eon_trade_treaty_partner.
+# Side effects run with PREV = the other contracting country.
+eon_trade_treaty_refresh_side = {
+	if = {
+		limit = { original_tag = SIN }
+		SIN_calculate_singaporean_trade_agreements = yes
+	}
+}
+
+eon_trade_treaty_establish_side = {
+	if = {
+		limit = { NOT = { has_country_flag = trade_agreement@PREV } }
+		clamp_variable = { var = signed_trade_agreements min = 0 }
+		add_to_variable = { signed_trade_agreements = 1 }
+		set_country_flag = trade_agreement@PREV
+		eon_trade_treaty_refresh_side = yes
+	}
+	add_opinion_modifier = { target = PREV modifier = mutual_trade_agreement }
+	add_opinion_modifier = { target = PREV modifier = mutual_trade_opinion }
+}
+
+eon_trade_treaty_establish_pair = {
+	var:eon_trade_treaty_partner = {
+		eon_trade_treaty_establish_side = yes
+		PREV = { eon_trade_treaty_establish_side = yes }
+	}
+}
+
+eon_trade_treaty_remove_side = {
+	remove_opinion_modifier = { target = PREV modifier = mutual_trade_agreement }
+	remove_opinion_modifier = { target = PREV modifier = mutual_trade_opinion }
+	if = {
+		limit = { has_country_flag = trade_agreement@PREV }
+		clr_country_flag = trade_agreement@PREV
+		add_to_variable = { signed_trade_agreements = -1 }
+		clamp_variable = { var = signed_trade_agreements min = 0 }
+		eon_trade_treaty_refresh_side = yes
+	}
+}
+
+eon_trade_treaty_remove_pair = {
+	var:eon_trade_treaty_partner = {
+		eon_trade_treaty_remove_side = yes
+		PREV = { eon_trade_treaty_remove_side = yes }
+	}
+}
+
+# Retain the reservation until the original native response is consumed.
+eon_trade_treaty_withdraw_side = {
+	if = {
+		limit = {
+			OR = {
+				check_variable = { pending_trade_offer_country = PREV.id }
+				check_variable = { eon_trade_treaty_pending_sender = PREV.id }
+			}
+		}
+		set_country_flag = eon_trade_treaty_withdrawn
+	}
+}
+
+eon_trade_treaty_withdraw_pair = {
+	var:eon_trade_treaty_partner = {
+		eon_trade_treaty_withdraw_side = yes
+		PREV = { eon_trade_treaty_withdraw_side = yes }
+	}
+}
+
+eon_trade_treaty_clear_pending = {
+	clear_variable = pending_trade_offer_country
+	clear_variable = eon_trade_treaty_pending_sender
+	clr_country_flag = eon_trade_treaty_withdrawn
+}
+
+eon_trade_treaty_finish_response = {
+	ROOT = {
+		if = {
+			limit = { check_variable = { pending_trade_offer_country = PREV.id } }
+			clear_variable = pending_trade_offer_country
+			if = {
+				limit = { check_variable = { eon_trade_treaty_pending_sender = 0 } }
+				clr_country_flag = eon_trade_treaty_withdrawn
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { eon_trade_treaty_pending_sender = ROOT.id } }
+		clear_variable = eon_trade_treaty_pending_sender
+		if = {
+			limit = { check_variable = { pending_trade_offer_country = 0 } }
+			clr_country_flag = eon_trade_treaty_withdrawn
+		}
+	}
+}
+
+# Annexed partners cannot answer. Preserve requests concerning third countries.
+eon_trade_treaty_cleanup_annexed_pair = {
+	eon_trade_treaty_remove_pair = yes
+	if = {
+		limit = { check_variable = { pending_trade_offer_country = eon_trade_treaty_partner } }
+		clear_variable = pending_trade_offer_country
+	}
+	if = {
+		limit = { check_variable = { eon_trade_treaty_pending_sender = eon_trade_treaty_partner } }
+		clear_variable = eon_trade_treaty_pending_sender
+	}
+	if = {
+		limit = {
+			check_variable = { pending_trade_offer_country = 0 }
+			check_variable = { eon_trade_treaty_pending_sender = 0 }
+		}
+		clr_country_flag = eon_trade_treaty_withdrawn
+	}
+}

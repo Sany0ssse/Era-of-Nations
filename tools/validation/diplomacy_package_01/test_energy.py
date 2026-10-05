@@ -37,6 +37,13 @@ effects={k:v for k,o,v in ast((ROOT/'common/scripted_effects/eon_energy_contract
 framework_effects_path=ROOT/'common/scripted_effects/eon_energy_framework_effects.txt'
 if framework_effects_path.exists():
     effects.update({k:v for k,o,v in ast(framework_effects_path.read_text(encoding='utf-8-sig'))})
+
+# Package 02 extends the same annex hooks. Execute its actual cleanup helpers
+# as well, so energy regressions still exercise the whole current callback.
+for stem in ('eon_trade_treaty', 'eon_investment_treaty', 'eon_investment_project'):
+    path = ROOT / 'common/scripted_effects' / (stem + '_effects.txt')
+    if path.exists():
+        effects.update({k:v for k,o,v in ast(path.read_text(encoding='utf-8-sig'))})
 gui=get_gui(ast((ROOT/'common/scripted_guis/01_energy_gui.txt').read_text(encoding='utf-8-sig')))
 confirm=one(gui,'confirm_energy_sell_click')
 events=get_event_map((ROOT/'events/00_Energy_market_events.txt').read_text(encoding='utf-8-sig'))
@@ -93,6 +100,7 @@ def trigger(nodes,s,c):
         elif k=='has_country_flag': passed=flag_name(s,c,v) in country['flags']
         elif k=='has_variable': passed=v in country['variables']
         elif k=='tag': passed=c['scope']==country_ref(s,c,v)
+        elif k=='original_tag': passed=country.get('original_tag',c['scope'])==v
         elif k=='is_ai': passed=country['ai']==(v=='yes')
         elif k=='exists': passed=country['exists']==(v=='yes')
         elif k=='has_war_with': passed=country_ref(s,c,v) in country['wars']
@@ -137,6 +145,12 @@ def execute(nodes,s,c):
             elif k.startswith('multiply_'): dest[key]=current*rhs
             else: dest[key]=current-rhs
         elif k=='clear_variable': country['variables'].pop(v,None)
+        elif k=='clamp_variable':
+            d={a:z for a,b,z in v}; dest=country['variables']; key=d['var']
+            current=dest.get(key,0)
+            if 'min' in d: current=max(current,value(s,c,d['min']))
+            if 'max' in d: current=min(current,value(s,c,d['max']))
+            dest[key]=current
         elif k=='set_country_flag':
             name=v if isinstance(v,str) else one(v,'flag'); country['flags'].add(flag_name(s,c,name))
         elif k=='clr_country_flag': country['flags'].discard(flag_name(s,c,v))
@@ -159,9 +173,11 @@ def execute(nodes,s,c):
                 if 'break' in d and s['temp'].get(d['break'],0): break
         elif k=='while_loop_effect':
             lim=one(v,'limit'); count=0
+            breaks=[x[2] for x in v if x[0]=='break']
             while trigger(lim,s,c):
                 count+=1; assert count<100,'Loop failed to terminate'
-                execute([x for x in v if x[0]!='limit'],s,c)
+                execute([x for x in v if x[0] not in ('limit','break')],s,c)
+                if breaks and value(s,c,breaks[0]): break
         elif k=='every_other_country':
             for target,data in s['countries'].items():
                 if target!=c['scope'] and data['exists']: execute(v,s,switch(c,target))
