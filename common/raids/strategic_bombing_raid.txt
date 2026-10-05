@@ -1,0 +1,1062 @@
+types = {
+	strategic_bombing_raid = {
+
+		days_to_prepare = 15
+		days_re_enable = 180
+
+		category = strategic_bombing
+
+		command_power = 50
+
+		arrow = {
+			type = air
+		}
+
+		allowed = {
+
+		}
+		# Raid Type is visible
+		visible = {
+
+		}
+
+		visible = {
+			always = yes
+		}
+
+		# Specific Target is visible
+		show_target = {
+			NOT = {	has_non_aggression_pact_with = FROM	}
+			NOT = { is_in_faction_with = FROM }
+			OR = {
+				has_war_with = FROM
+				has_wargoal_against = FROM
+				AND = {
+					has_idea = intervention_limited_interventionism
+					is_neighbor_of = FROM
+				}
+				AND = {
+					has_idea = intervention_regional_interventionism
+					custom_trigger_tooltip = {
+						tooltip = nation_on_same_continent
+						FROM = {
+							PREV_is_on_same_continent = yes
+						}
+					}
+				}
+				has_idea = intervention_global_interventionism
+				has_idea = intervention_neo_imperialism
+				has_idea = SOV_soviet_internationalism
+			}
+		}
+		available = {
+			FROM = { exists = yes }
+		}
+		launchable = {
+			FROM = { exists = yes }
+			OR = {
+				has_war_with = FROM
+				has_political_power > 99
+			}
+		}
+
+		unit_requirements = {
+			equipment = {
+				type = { strategic_bomber }
+				amount = { min = 25 }
+			}
+		}
+
+		launch_sound = raid_launch_air
+		target_icon = GFX_other_target_icon
+
+		target_type = {
+			province = any
+		}
+
+		starting_point = {
+			types = { air_base }
+		}
+
+		success_factors = {
+			success = {
+				base = 0.55
+
+				experience = {
+					reference = 1.0
+					weight = 0.15
+					start_weight = -0.15
+				}
+
+				air_defence = {
+					reference = 100
+					start_weight = -0.08
+					weight = 0.08
+				}
+
+				air_agility = {
+					reference = 100
+					start_weight = -0.12
+					weight = 0.12
+				}
+
+				reliability = {
+					start_weight = -0.12
+					weight = 0.10
+				}
+
+				air_superiority = {
+					reference = 1.0
+					start_weight = -0.30
+					weight = 0.30
+				}
+
+				interception = {
+					reference = 300
+					weight = -0.25
+				}
+
+				anti_air = {
+					reference = 5
+					weight = -0.25
+				}
+			}
+
+			critical = {
+				base = 0.10
+
+				air_superiority = {
+					reference = 1.0
+					start_reference = 0.80
+					start_weight = 0
+					weight = 0.15
+				}
+
+				experience = {
+					reference = 1.0
+					start_reference = 0.6
+					start_weight = 0
+					weight = 0.12
+				}
+
+				anti_air = {
+					reference = 5.0
+					weight = -0.10  # REDUCED from -0.15 - less penalty
+				}
+			}
+
+			disaster = {
+				base = 0.10
+
+				air_superiority = {
+					reference = 1.0
+					start_weight = 0.25
+					weight = -0.30
+				}
+
+				anti_air = {
+					reference = 5.0
+					weight = 0.20
+				}
+
+
+				interception = {
+					reference = 300
+					weight = 0.20
+				}
+
+				experience = {
+					reference = 1.0
+					start_weight = 0.15
+					weight = -0.12
+				}
+			}
+		}
+
+		success_levels = {
+
+			failure = {
+				actor_effects = {
+					var:actor_country = {
+						add_war_support = -0.05
+					}
+					raid_damage_units = {
+						plane_loss = 0.28
+						ratio = yes
+					}
+				}
+				victim_effects = {
+                    hidden_effect = {
+					    var:target_state = {
+                            add_to_variable = { state_damage = 20 }
+				            calculate_damaged_state = yes
+                            add_dynamic_modifier = { modifier = dependents_productivity_modifier3 days = 15 }
+        					multiply_variable = { productivity_state_var = 0.9 }
+							clamp_variable = {
+								var = productivity_state_var
+								min = 100
+							}
+						    random_list = {
+							    30 = {
+                                    damage_building = { type = infrastructure damage = 0.5 }
+                                    damage_building = { type = internet_station damage = 0.5 }
+                                    damage_building = { type = fuel_silo damage = 0.5 }
+                                }
+							    30 = {
+                                    damage_building = { type = infrastructure damage = 0.8 }
+                                    damage_building = { type = internet_station damage = 0.8 }
+                                    damage_building = { type = fuel_silo damage = 0.8 }
+                                }
+							    20 = {
+                                    damage_building = { type = infrastructure damage = 0.3 }
+                                    damage_building = { type = internet_station damage = 0.3 }
+                                    damage_building = { type = fuel_silo damage = 0.3 }
+                                }
+							    20 = { } # No damage
+						    }
+							if = {
+								limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+								random_list = {
+									2 = { state_event = damage_building.1 }
+									1 = { state_event = destroy_building.1 }
+									97 = {  }
+								}
+							}
+							if = {
+								limit = { nuclear_reactor > 0 }
+								random_list = {
+									2 = { state_event = damage_building.2 }
+									1 = { state_event = destroy_building.2 }
+									97 = {  }
+								}
+							}
+							if = {
+								limit = { has_variable = hydroelectric_energy_production_var }
+								random_list = {
+									2 = { state_event = damage_building.3 }
+									1 = { state_event = destroy_building.3 }
+									97 = {  }
+								}
+							}
+							if = {
+								limit = { has_variable = geothermal_energy_production_var }
+								random_list = {
+									2 = { state_event = damage_building.4 }
+									1 = { state_event = destroy_building.4 }
+									97 = {  }
+								}
+							}
+							if = {
+								limit = { industrial_complex > 0 }
+								random = {
+									chance = 1
+									state_event = destroy_building.5
+								}
+							}
+							if = {
+								limit = { arms_factory > 0 }
+								random = {
+									chance = 1
+									state_event = destroy_building.6
+								}
+							}
+							if = {
+								limit = { dockyard > 0 }
+								random = {
+									chance = 1
+									state_event = destroy_building.7
+								}
+							}
+							if = {
+								limit = { offices > 0 }
+								random = {
+									chance = 1
+									state_event = destroy_building.8
+								}
+							}
+							if = {
+								limit = { rubber_refinery > 0 }
+								random = {
+									chance = 1
+									state_event = destroy_building.9
+								}
+							}
+							if = {
+								limit = { agriculture_district > 0 }
+								random = {
+									chance = 1
+									state_event = destroy_building.10
+								}
+							}
+							if = {
+								limit = { nuclear_reactor > 0 }
+								random = {
+									chance = 1
+									state_event = destroy_building.11
+								}
+							}
+							if = {
+								limit = { synthetic_refinery > 0 }
+								random = {
+									chance = 1
+									state_event = destroy_building.12
+								}
+							}
+							if = {
+								limit = { fossil_powerplant > 0 }
+								random = {
+									chance = 1
+									state_event = destroy_building.13
+								}
+							}
+							if = {
+								limit = { tungsten > 8 }
+							  	random = {
+							  	chance = 1
+							  		add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+								}
+							}
+							if = {
+								limit = { chromium > 8 }
+							 	random = {
+							 		chance = 1
+							 		add_dynamic_modifier = {
+							  			modifier = rare_metal_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+							if = {
+								limit = { OR = { aluminium > 24 steel > 24 } }
+							 	random = {
+							 		chance = 1
+							 		add_dynamic_modifier = {
+							   			modifier = metal_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+							if = {
+								limit = { oil > 18 }
+							 	random = {
+							 	chance = 1
+							 		add_dynamic_modifier = {
+							   			modifier = oil_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+					    }
+                    }
+					var:victim_country = {
+						custom_effect_tooltip = strategic_bombing_failure_tt
+					}
+				}
+			}
+			limited_success = {
+				actor_effects = {
+					raid_damage_units = {
+						plane_loss = 0.08
+						ratio = yes
+					}
+					raid_add_unit_experience = 0.06
+				}
+				victim_effects = {
+                    hidden_effect = {
+					    var:target_state = {
+                            add_to_variable = { state_damage = 40 }
+				            calculate_damaged_state = yes
+                            add_dynamic_modifier = { modifier = dependents_productivity_modifier2 days = 15 }
+        					multiply_variable = { productivity_state_var = 0.85 }
+							clamp_variable = {
+								var = productivity_state_var
+								min = 100
+							}
+						    random_list = {
+							    25 = {
+                                    damage_building = { type = infrastructure damage = 1.5 }
+                                    damage_building = { type = internet_station damage = 1.5 }
+								    damage_building = { type = synthetic_refinery damage = 1.5 }
+								    damage_building = { type = fossil_powerplant damage = 1.5 }
+								    damage_building = { type = rubber_refinery damage = 1.5 }
+								    damage_building = { type = industrial_complex damage = 1.5 }
+								    damage_building = { type = arms_factory damage = 1.5 }
+    								damage_building = { type = dockyard damage = 1.5 }
+                                    damage_building = { type = fuel_silo damage = 1.5 }
+                                    damage_building = { type = offices damage = 1.5 }
+                                    damage_building = { type = agriculture_district damage = 1.5 }
+	    						}
+		    					25 = {
+                                    damage_building = { type = infrastructure damage = 2 }
+                                    damage_building = { type = internet_station damage = 2 }
+	    							damage_building = { type = synthetic_refinery damage = 2 }
+		    						damage_building = { type = fossil_powerplant damage = 2 }
+			    					damage_building = { type = rubber_refinery damage = 2 }
+				    				damage_building = { type = industrial_complex damage = 2 }
+					    			damage_building = { type = arms_factory damage = 2 }
+						    		damage_building = { type = dockyard damage = 2 }
+                                    damage_building = { type = fuel_silo damage = 2 }
+                                    damage_building = { type = offices damage = 2 }
+                                    damage_building = { type = agriculture_district damage = 2 }
+    							}
+	    						25 = {
+                                    damage_building = { type = infrastructure damage = 2.5 }
+                                    damage_building = { type = internet_station damage = 2.5 }
+				    				damage_building = { type = synthetic_refinery damage = 2.5 }
+					    			damage_building = { type = fossil_powerplant damage = 2.5 }
+						    		damage_building = { type = rubber_refinery damage = 2.5 }
+							    	damage_building = { type = industrial_complex damage = 2.5 }
+								    damage_building = { type = arms_factory damage = 2.5 }
+    								damage_building = { type = dockyard damage = 2.5 }
+                                    damage_building = { type = fuel_silo damage = 2.5 }
+                                    damage_building = { type = offices damage = 2.5 }
+                                    damage_building = { type = agriculture_district damage = 2.5 }
+	    						}
+		    					25 = {
+                                    damage_building = { type = infrastructure damage = 1.8 }
+                                    damage_building = { type = internet_station damage = 1.8 }
+					    			damage_building = { type = synthetic_refinery damage = 1.8 }
+						    		damage_building = { type = fossil_powerplant damage = 1.8 }
+							    	damage_building = { type = rubber_refinery damage = 1.8 }
+								    damage_building = { type = industrial_complex damage = 1.8 }
+    								damage_building = { type = arms_factory damage = 1.8 }
+	    							damage_building = { type = dockyard damage = 1.8 }
+                                    damage_building = { type = fuel_silo damage = 1.8 }
+                                    damage_building = { type = offices damage = 1.8 }
+                                    damage_building = { type = agriculture_district damage = 1.8 }
+		    					}
+			    			}
+							if = {
+								limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+								random_list = {
+									3 = { state_event = damage_building.1 }
+									2 = { state_event = destroy_building.1 }
+									95 = {  }
+								}
+							}
+							if = {
+								limit = { nuclear_reactor > 0 }
+								random_list = {
+									3 = { state_event = damage_building.2 }
+									2 = { state_event = destroy_building.2 }
+									95 = {  }
+								}
+							}
+							if = {
+								limit = { has_variable = hydroelectric_energy_production_var }
+								random_list = {
+									3 = { state_event = damage_building.3 }
+									2 = { state_event = destroy_building.3 }
+									95 = {  }
+								}
+							}
+							if = {
+								limit = { has_variable = geothermal_energy_production_var }
+								random_list = {
+									3 = { state_event = damage_building.4 }
+									2 = { state_event = destroy_building.4 }
+									95 = {  }
+								}
+							}
+							if = {
+								limit = { industrial_complex > 0 }
+								random = {
+									chance = 2
+									state_event = destroy_building.5
+								}
+							}
+							if = {
+								limit = { arms_factory > 0 }
+								random = {
+									chance = 2
+									state_event = destroy_building.6
+								}
+							}
+							if = {
+								limit = { dockyard > 0 }
+								random = {
+									chance = 2
+									state_event = destroy_building.7
+								}
+							}
+							if = {
+								limit = { offices > 0 }
+								random = {
+									chance = 2
+									state_event = destroy_building.8
+								}
+							}
+							if = {
+								limit = { rubber_refinery > 0 }
+								random = {
+									chance = 2
+									state_event = destroy_building.9
+								}
+							}
+							if = {
+								limit = { agriculture_district > 0 }
+								random = {
+									chance = 2
+									state_event = destroy_building.10
+								}
+							}
+							if = {
+								limit = { nuclear_reactor > 0 }
+								random = {
+									chance = 2
+									state_event = destroy_building.11
+								}
+							}
+							if = {
+								limit = { synthetic_refinery > 0 }
+								random = {
+									chance = 2
+									state_event = destroy_building.12
+								}
+							}
+							if = {
+								limit = { fossil_powerplant > 0 }
+								random = {
+									chance = 2
+									state_event = destroy_building.13
+								}
+							}
+							if = {
+								limit = { tungsten > 8 }
+							  	random = {
+							  	chance = 2
+							  		add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+								}
+							}
+							if = {
+								limit = { chromium > 8 }
+							 	random = {
+							 		chance = 2
+							 		add_dynamic_modifier = {
+							  			modifier = rare_metal_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+							if = {
+								limit = { OR = { aluminium > 24 steel > 24 } }
+							 	random = {
+							 		chance = 2
+							 		add_dynamic_modifier = {
+							   			modifier = metal_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+							if = {
+								limit = { oil > 18 }
+							 	random = {
+							 	chance = 2
+							 		add_dynamic_modifier = {
+							   			modifier = oil_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+				    	}
+                    }
+					var:victim_country = {
+						custom_effect_tooltip = strategic_bombing_limited_success_tt
+					}
+				}
+			}
+			success = {
+				actor_effects = {
+					raid_damage_units = {
+						plane_loss = 0.04
+						ratio = yes
+					}
+					raid_add_unit_experience = 0.12
+				}
+				victim_effects = {
+                    hidden_effect = {
+    					var:target_state = {
+                            add_to_variable = { state_damage = 60 }
+		    		        calculate_damaged_state = yes
+                            add_dynamic_modifier = { modifier = dependents_productivity_modifier1 days = 15 }
+        					multiply_variable = { productivity_state_var = 0.8 }
+							clamp_variable = {
+								var = productivity_state_var
+								min = 100
+							}
+				    		random_list = {
+    							25 = {
+                                    damage_building = { type = infrastructure damage = 2.5 }
+                                    damage_building = { type = internet_station damage = 2.5 }
+			    					damage_building = { type = synthetic_refinery damage = 2.5 }
+				    				damage_building = { type = fossil_powerplant damage = 2.5 }
+					    			damage_building = { type = rubber_refinery damage = 2.5 }
+						    		damage_building = { type = industrial_complex damage = 2.5 }
+							    	damage_building = { type = arms_factory damage = 2.5 }
+								    damage_building = { type = air_base damage = 2.5 }
+    								damage_building = { type = dockyard damage = 2.5 }
+                                    damage_building = { type = fuel_silo damage = 2.5 }
+                                    damage_building = { type = offices damage = 2.5 }
+                                    damage_building = { type = agriculture_district damage = 2.5 }
+	    						}
+		    					25 = {
+                                    damage_building = { type = infrastructure damage = 3 }
+                                    damage_building = { type = internet_station damage = 3 }
+					    			damage_building = { type = synthetic_refinery damage = 3 }
+						    		damage_building = { type = fossil_powerplant damage = 3 }
+							    	damage_building = { type = rubber_refinery damage = 3 }
+    								damage_building = { type = industrial_complex damage = 3 }
+	    							damage_building = { type = arms_factory damage = 3 }
+		    						damage_building = { type = air_base damage = 3 }
+			    					damage_building = { type = dockyard damage = 3 }
+                                    damage_building = { type = fuel_silo damage = 3 }
+                                    damage_building = { type = offices damage = 3 }
+                                    damage_building = { type = agriculture_district damage = 3 }
+				    			}
+    							25 = {
+                                    damage_building = { type = infrastructure damage = 3.5 }
+                                    damage_building = { type = internet_station damage = 3.5 }
+			    					damage_building = { type = synthetic_refinery damage = 3.5 }
+				    				damage_building = { type = fossil_powerplant damage = 3.5 }
+					    			damage_building = { type = rubber_refinery damage = 3.5 }
+						    		damage_building = { type = industrial_complex damage = 3.5 }
+							    	damage_building = { type = arms_factory damage = 3.5 }
+								    damage_building = { type = air_base damage = 3.5 }
+    								damage_building = { type = dockyard damage = 3.5 }
+                                    damage_building = { type = fuel_silo damage = 3.5 }
+                                    damage_building = { type = offices damage = 3.5 }
+                                    damage_building = { type = agriculture_district damage = 3.5 }
+	    						}
+		    					25 = {
+                                    damage_building = { type = infrastructure damage = 4 }
+                                    damage_building = { type = internet_station damage = 4 }
+					    			damage_building = { type = synthetic_refinery damage = 4 }
+						    		damage_building = { type = fossil_powerplant damage = 4 }
+							    	damage_building = { type = rubber_refinery damage = 4 }
+								    damage_building = { type = industrial_complex damage = 4 }
+    								damage_building = { type = arms_factory damage = 4 }
+	    							damage_building = { type = air_base damage = 4 }
+		    						damage_building = { type = dockyard damage = 4 }
+                                    damage_building = { type = fuel_silo damage = 4 }
+                                    damage_building = { type = offices damage = 4 }
+                                    damage_building = { type = agriculture_district damage = 4 }
+			    				}
+				    		}
+							if = {
+								limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+								random_list = {
+									4 = { state_event = damage_building.1 }
+									3 = { state_event = destroy_building.1 }
+									93 = {  }
+								}
+							}
+							if = {
+								limit = { nuclear_reactor > 0 }
+								random_list = {
+									4 = { state_event = damage_building.2 }
+									3 = { state_event = destroy_building.2 }
+									93 = {  }
+								}
+							}
+							if = {
+								limit = { has_variable = hydroelectric_energy_production_var }
+								random_list = {
+									4 = { state_event = damage_building.3 }
+									3 = { state_event = destroy_building.3 }
+									93 = {  }
+								}
+							}
+							if = {
+								limit = { has_variable = geothermal_energy_production_var }
+								random_list = {
+									4 = { state_event = damage_building.4 }
+									3 = { state_event = destroy_building.4 }
+									93 = {  }
+								}
+							}
+							if = {
+								limit = { industrial_complex > 0 }
+								random = {
+									chance = 3
+									state_event = destroy_building.5
+								}
+							}
+							if = {
+								limit = { arms_factory > 0 }
+								random = {
+									chance = 3
+									state_event = destroy_building.6
+								}
+							}
+							if = {
+								limit = { dockyard > 0 }
+								random = {
+									chance = 3
+									state_event = destroy_building.7
+								}
+							}
+							if = {
+								limit = { offices > 0 }
+								random = {
+									chance = 3
+									state_event = destroy_building.8
+								}
+							}
+							if = {
+								limit = { rubber_refinery > 0 }
+								random = {
+									chance = 3
+									state_event = destroy_building.9
+								}
+							}
+							if = {
+								limit = { agriculture_district > 0 }
+								random = {
+									chance = 3
+									state_event = destroy_building.10
+								}
+							}
+							if = {
+								limit = { nuclear_reactor > 0 }
+								random = {
+									chance = 3
+									state_event = destroy_building.11
+								}
+							}
+							if = {
+								limit = { synthetic_refinery > 0 }
+								random = {
+									chance = 3
+									state_event = destroy_building.12
+								}
+							}
+							if = {
+								limit = { fossil_powerplant > 0 }
+								random = {
+									chance = 3
+									state_event = destroy_building.13
+								}
+							}
+							if = {
+								limit = { tungsten > 8 }
+							  	random = {
+							  	chance = 3
+							  		add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+								}
+							}
+							if = {
+								limit = { chromium > 8 }
+							 	random = {
+							 		chance = 3
+							 		add_dynamic_modifier = {
+							  			modifier = rare_metal_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+							if = {
+								limit = { OR = { aluminium > 24 steel > 24 } }
+							 	random = {
+							 		chance = 3
+							 		add_dynamic_modifier = {
+							   			modifier = metal_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+							if = {
+								limit = { oil > 18 }
+							 	random = {
+							 	chance = 3
+							 		add_dynamic_modifier = {
+							   			modifier = oil_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+					    }
+                    }
+					var:victim_country = {
+						custom_effect_tooltip = strategic_bombing_success_tt
+					}
+				}
+			}
+			critical_success = {
+				actor_effects = {
+					raid_damage_units = {
+						plane_loss = 0.025
+						ratio = yes
+					}
+					raid_add_unit_experience = 0.25
+				}
+				victim_effects = {
+                    hidden_effect = {
+    					var:target_state = {
+                            add_to_variable = { state_damage = 100 }
+		    		        calculate_damaged_state = yes
+                            add_dynamic_modifier = { modifier = dependents_productivity_modifier days = 15 }
+        					multiply_variable = { productivity_state_var = 0.75 }
+							clamp_variable = {
+								var = productivity_state_var
+								min = 100
+							}
+				    		random_list = {
+					    		25 = {
+						    		# Primary targets - 5 levels
+                                    damage_building = { type = internet_station damage = 5 }
+								    damage_building = { type = infrastructure damage = 5 }
+    								damage_building = { type = industrial_complex damage = 5 }
+	    							damage_building = { type = arms_factory damage = 5 }
+		    						damage_building = { type = air_base damage = 5 }
+			    					damage_building = { type = synthetic_refinery damage = 5 }
+				    				damage_building = { type = fossil_powerplant damage = 5 }
+                                    damage_building = { type = fuel_silo damage = 5 }
+					    			# Secondary - 80% = 4 levels
+						    		damage_building = { type = dockyard damage = 4 }
+							    	damage_building = { type = anti_air_building damage = 4 }
+								    damage_building = { type = rubber_refinery damage = 4 }
+    								# Tertiary - 60% = 3 levels
+	    							damage_building = { type = radar_station damage = 3 }
+		    						damage_building = { type = rocket_site damage = 3 }
+                                    damage_building = { type = offices damage = 3 }
+                                    damage_building = { type = agriculture_district damage = 3 }
+			    				}
+				    			25 = {
+    								# Primary targets - 6 levels
+                                    damage_building = { type = internet_station damage = 6 }
+		    						damage_building = { type = infrastructure damage = 6 }
+			    					damage_building = { type = industrial_complex damage = 6 }
+				    				damage_building = { type = arms_factory damage = 6 }
+					    			damage_building = { type = air_base damage = 6 }
+						    		damage_building = { type = synthetic_refinery damage = 6 }
+							    	damage_building = { type = fossil_powerplant damage = 6 }
+                                    damage_building = { type = fuel_silo damage = 6 }
+    								# Secondary - 80% = 4.8 levels
+	    							damage_building = { type = dockyard damage = 5 }
+		    						damage_building = { type = anti_air_building damage = 5 }
+			    					damage_building = { type = rubber_refinery damage = 5 }
+				    				# Tertiary - 60% = 3.6 levels
+					    			damage_building = { type = radar_station damage = 4 }
+						    		damage_building = { type = rocket_site damage = 4 }
+                                    damage_building = { type = offices damage = 4 }
+                                    damage_building = { type = agriculture_district damage = 4 }
+    							}
+	    						25 = {
+		    						# Primary targets - 7 levels
+                                    damage_building = { type = internet_station damage = 7 }
+				        			damage_building = { type = infrastructure damage = 7 }
+						    		damage_building = { type = industrial_complex damage = 7 }
+							    	damage_building = { type = arms_factory damage = 7 }
+    								damage_building = { type = air_base damage = 7 }
+	    							damage_building = { type = synthetic_refinery damage = 7 }
+		    						damage_building = { type = fossil_powerplant damage = 7 }
+                                    damage_building = { type = fuel_silo damage = 7 }
+			    					# Secondary - 80% = 5.6 levels
+						    		damage_building = { type = dockyard damage = 6 }
+				    				damage_building = { type = anti_air_building damage = 6 }
+					    			damage_building = { type = rubber_refinery damage = 6 }
+    								# Tertiary - 60% = 4.2 levels
+	    							damage_building = { type = radar_station damage = 4 }
+		    						damage_building = { type = rocket_site damage = 4 }
+                                    damage_building = { type = offices damage = 4 }
+                                    damage_building = { type = agriculture_district damage = 4 }
+			    				}
+				    			25 = {
+					    			# Primary targets - 8 levels (MAXIMUM DESTRUCTION)
+                                    damage_building = { type = internet_station damage = 8 }
+							    	damage_building = { type = infrastructure damage = 8 }
+								    damage_building = { type = industrial_complex damage = 8 }
+    								damage_building = { type = arms_factory damage = 8 }
+	    							damage_building = { type = air_base damage = 8 }
+		    						damage_building = { type = synthetic_refinery damage = 8 }
+			    					damage_building = { type = fossil_powerplant damage = 8 }
+                                    damage_building = { type = fuel_silo damage = 8 }
+				    				# Secondary - 80% = 6.4 levels
+					    			damage_building = { type = dockyard damage = 6 }
+						    		damage_building = { type = anti_air_building damage = 6 }
+							    	damage_building = { type = rubber_refinery damage = 6 }
+								    # Tertiary - 60% = 4.8 levels
+    								damage_building = { type = radar_station damage = 5 }
+	    							damage_building = { type = rocket_site damage = 5 }
+                                    damage_building = { type = offices damage = 5 }
+                                    damage_building = { type = agriculture_district damage = 5 }
+		    					}
+			    			}
+							if = {
+								limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+								random_list = {
+									5 = { state_event = damage_building.1 }
+									4 = { state_event = destroy_building.1 }
+									91 = {  }
+								}
+							}
+							if = {
+								limit = { nuclear_reactor > 0 }
+								random_list = {
+									5 = { state_event = damage_building.2 }
+									4 = { state_event = destroy_building.2 }
+									91 = {  }
+								}
+							}
+							if = {
+								limit = { has_variable = hydroelectric_energy_production_var }
+								random_list = {
+									5 = { state_event = damage_building.3 }
+									4 = { state_event = destroy_building.3 }
+									91 = {  }
+								}
+							}
+							if = {
+								limit = { has_variable = geothermal_energy_production_var }
+								random_list = {
+									5 = { state_event = damage_building.4 }
+									4 = { state_event = destroy_building.4 }
+									91 = {  }
+								}
+							}
+							if = {
+								limit = { industrial_complex > 0 }
+								random = {
+									chance = 4
+									state_event = destroy_building.5
+								}
+							}
+							if = {
+								limit = { arms_factory > 0 }
+								random = {
+									chance = 4
+									state_event = destroy_building.6
+								}
+							}
+							if = {
+								limit = { dockyard > 0 }
+								random = {
+									chance = 4
+									state_event = destroy_building.7
+								}
+							}
+							if = {
+								limit = { offices > 0 }
+								random = {
+									chance = 4
+									state_event = destroy_building.8
+								}
+							}
+							if = {
+								limit = { rubber_refinery > 0 }
+								random = {
+									chance = 4
+									state_event = destroy_building.9
+								}
+							}
+							if = {
+								limit = { agriculture_district > 0 }
+								random = {
+									chance = 4
+									state_event = destroy_building.10
+								}
+							}
+							if = {
+								limit = { nuclear_reactor > 0 }
+								random = {
+									chance = 4
+									state_event = destroy_building.11
+								}
+							}
+							if = {
+								limit = { synthetic_refinery > 0 }
+								random = {
+									chance = 4
+									state_event = destroy_building.12
+								}
+							}
+							if = {
+								limit = { fossil_powerplant > 0 }
+								random = {
+									chance = 4
+									state_event = destroy_building.13
+								}
+							}
+							if = {
+								limit = { tungsten > 8 }
+							  	random = {
+							  	chance = 4
+							  		add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+								}
+							}
+							if = {
+								limit = { chromium > 8 }
+							 	random = {
+							 		chance = 4
+							 		add_dynamic_modifier = {
+							  			modifier = rare_metal_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+							if = {
+								limit = { OR = { aluminium > 24 steel > 24 } }
+							 	random = {
+							 		chance = 4
+							 		add_dynamic_modifier = {
+							   			modifier = metal_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+							if = {
+								limit = { oil > 18 }
+							 	random = {
+							 	chance = 4
+							 		add_dynamic_modifier = {
+							   			modifier = oil_refining_modifier
+							   			days = 27
+									}
+								}
+							}
+				    	}
+                    }
+					var:victim_country = {
+						custom_effect_tooltip = strategic_bombing_critical_success_tt
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 25
+				has_war_with = FROM
+			}
+			modifier = {
+				add = 75
+				strength_ratio = {
+					tag = FROM
+					ratio < 2
+				}
+				has_war_with = FROM
+			}
+            modifier = {
+                add = 150
+                casualties_inflicted_by = {
+                    opponent = FROM
+                    thousands > 1000
+                }
+				has_war_with = FROM
+            }
+		}
+	}
+}

@@ -1,0 +1,1479 @@
+
+SPR_monarchist_spain = {
+	SPR_spawn_new_guardia_real_decision = {
+		visible = {
+			OR = {
+				nationalist_monarchists_are_in_power = yes
+				western_autocrats_are_in_power = yes
+			}
+			has_completed_focus = SPR_expand_royal_guard
+		}
+
+		available = {
+			# Add Tooltip Variable that says you can't have more than 10 units in general
+		}
+
+		days_remove = 90
+		days_re_enable = 90
+
+		cost = 25
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_spawn_new_guardia_real_decision"
+			if = { limit = { NOT = { has_completed_focus = SPR_guardia_real } }
+				capital_scope = {
+					create_unit = {
+						division = " name = \"Guardia Real\" division_template = \"Guardia Real\" start_experience_factor = 0.5"
+						owner = SPR
+						prioritize_location = 9767
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					create_unit = {
+						division = " name = \"Guardia Real\" division_template = \"Expanded Guardia Real\" start_experience_factor = 0.5"
+						owner = SPR
+						prioritize_location = 9767
+					}
+				}
+			}
+		}
+	}
+
+	SPR_a_just_tax_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			nationalist_monarchists_are_in_power = yes
+			has_completed_focus = SPR_the_throne_and_the_state
+		}
+
+		days_remove = 180
+		days_re_enable = 180
+
+		modifier = {
+			nationalist_drift = -0.05
+			population_tax_income_multiplier_modifier = -0.15
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_a_just_tax_decision"
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = 0.03 }
+			modify_treasury_effect = yes
+		}
+	}
+
+	SPR_a_divine_right_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			nationalist_monarchists_are_in_power = yes
+			has_completed_focus = SPR_divine_right
+		}
+
+		days_remove = 90
+		days_re_enable = 45
+
+		cost = 50
+
+		modifier = {
+			political_power_factor = -0.15
+			nationalist_drift = 0.05
+			nationalist_outlook_campaign_cost_modifier = -0.15
+		}
+	}
+
+	SPR_install_the_carlists_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			has_completed_focus = SPR_question_of_thrones
+			has_country_flag = SPR_carlists_chosen
+		}
+
+		available = {
+			emerging_anarchist_communism_not_in_power_or_coalition = yes
+			emerging_communist_state_not_in_power_or_coalition = yes
+			neutrality_neutral_social_not_in_power_or_coalition = yes
+			neutrality_neutral_communism_not_in_power_or_coalition = yes
+			40_percent_government_popularity = yes
+		}
+
+		cost = 50
+
+		days_remove = 60
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_install_the_carlists_decision"
+			set_country_flag = SPR_carlist_rising
+			custom_effect_tooltip = SPR_carlists_ascend_to_throne_tt
+			# should set the leaders to the Carlists
+			set_variable = { Monarchist_leader = 3 }
+			set_variable = { Western_Autocracy_leader = 3 }
+		}
+
+	}
+
+	# The New Elections
+	SPR_remove_our_coalition_partner_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			has_completed_focus = SPR_the_new_elections
+			western_autocrats_are_in_power = yes
+			OR = {
+				nationalist_fascist_are_in_coalition = yes
+				nationalist_right_wing_populists_are_in_coalition = yes
+				western_conservatism_are_in_coalition = yes
+				western_social_democrats_are_in_coalition = yes
+			}
+		}
+
+		cost = 150
+
+		days_remove = 30
+		days_re_enable = 30
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_remove_our_coalition_partner_decision"
+			if = { limit = { nationalist_fascist_are_in_coalition = yes }
+				hidden_effect = {
+					# remove_ideas = {
+
+					# }
+				}
+				remove_from_array = { gov_coalition_array = 21 }
+			}
+			else_if = { limit = { nationalist_right_wing_populists_are_in_coalition = yes }
+				hidden_effect = {
+					# remove_ideas = {
+
+					# }
+				}
+				remove_from_array = { gov_coalition_array = 20 }
+			}
+			else_if = { limit = { western_conservatism_are_in_coalition = yes }
+				hidden_effect = {
+					remove_ideas = {
+						SPR_family_first_idea
+						SPR_conservative_education_reforms_idea
+						SPR_spanish_deregulation_idea
+						SPR_spanish_intervention_abroad_idea
+						SPR_the_spanish_patriot_act_idea_lar
+						SPR_the_spanish_patriot_act_idea
+						SPR_longer_work_less_siesta_idea
+						SPR_unionization_of_faith_idea
+					}
+				}
+				remove_from_array = { gov_coalition_array = 1 }
+			}
+			else_if = { limit = { western_social_democrats_are_in_coalition = yes }
+				hidden_effect = {
+					# remove_ideas = {
+
+					# }
+				}
+				remove_from_array = { gov_coalition_array = 3 }
+			}
+		}
+	}
+
+	SPR_add_conservatism_into_coalition_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			has_completed_focus = SPR_the_new_elections
+			western_autocrats_are_in_power = yes
+			NOT = { western_conservatism_are_in_coalition = yes }
+		}
+
+		available = {
+			NOT = {
+				western_social_democrats_are_in_coalition = yes
+				nationalist_fascist_are_in_coalition = yes
+				nationalist_right_wing_populists_are_in_coalition = yes
+			}
+		}
+
+		cost = 100
+
+		days_re_enable = 45
+		days_remove = 90
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_add_conservatism_into_coalition_decision"
+			set_temp_variable = { add_col_one = 1 }
+			add_coalition_members_effect = yes
+			if = { limit = { has_completed_focus = SPR_party_of_the_people }
+				add_ideas = SPR_a_party_of_the_people_idea
+			}
+			if = { limit = { has_completed_focus = SPR_conservative_education_reforms }
+				add_ideas = SPR_conservative_education_reforms_idea
+			}
+			if = { limit = { has_completed_focus = SPR_revised_military_interventionism }
+				add_ideas = SPR_spanish_intervention_abroad_idea
+			}
+			if = { limit = { has_completed_focus = SPR_family_first }
+				add_ideas = SPR_family_first_idea
+			}
+			if = { limit = { has_completed_focus = SPR_the_welfare_state }
+				add_ideas = SPR_the_conservative_welfare_state_idea
+			}
+			if = {
+				limit = {
+					has_completed_focus = SPR_unionization_of_faith
+					OR = {
+						has_idea = communist_cadres
+						has_idea = labour_unions
+					}
+				}
+				add_ideas = SPR_unionization_of_faith_idea
+			}
+		}
+	}
+
+	SPR_add_socialism_into_coalition_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			has_completed_focus = SPR_the_new_elections
+			western_autocrats_are_in_power = yes
+			NOT = { western_social_democrats_are_in_coalition = yes }
+		}
+
+		available = {
+			NOT = {
+				western_conservatism_are_in_coalition = yes
+				nationalist_fascist_are_in_coalition = yes
+				nationalist_right_wing_populists_are_in_coalition = yes
+			}
+		}
+
+		cost = 100
+
+		days_re_enable = 45
+		days_remove = 90
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_add_conservatism_into_coalition_decision"
+			set_temp_variable = { add_col_one = 3 }
+			add_coalition_members_effect = yes
+			# TODO: Need to add more permanent ideas for this path
+		}
+	}
+
+	SPR_add_nat_fascism_into_coalition_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			has_completed_focus = SPR_the_new_elections
+			western_autocrats_are_in_power = yes
+			NOT = { nationalist_fascist_are_in_coalition = yes }
+		}
+
+		available = {
+			NOT = {
+				western_conservatism_are_in_coalition = yes
+				western_social_democrats_are_in_coalition = yes
+				nationalist_right_wing_populists_are_in_coalition = yes
+			}
+		}
+
+		cost = 100
+
+		days_re_enable = 45
+		days_remove = 90
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_add_conservatism_into_coalition_decision"
+			set_temp_variable = { add_col_one = 21 }
+			add_coalition_members_effect = yes
+			if = { limit = { has_completed_focus = SPR_the_youth_front }
+				add_ideas = SPR_the_falangist_youth_front_idea
+			}
+			if = { limit = { has_completed_focus = SPR_the_hands_of_the_few }
+				add_ideas = SPR_the_hands_of_the_few_idea
+			}
+		}
+	}
+
+	SPR_add_nat_rwp_into_coalition_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			has_completed_focus = SPR_the_new_elections
+			western_autocrats_are_in_power = yes
+			NOT = { nationalist_right_wing_populists_are_in_coalition = yes }
+		}
+
+		available = {
+			NOT = {
+				western_conservatism_are_in_coalition = yes
+				western_social_democrats_are_in_coalition = yes
+				nationalist_fascist_are_in_coalition = yes
+			}
+		}
+
+		cost = 100
+
+		days_re_enable = 45
+		days_remove = 90
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_add_nat_rwp_into_coalition_decision"
+			set_temp_variable = { add_col_one = 20 }
+			add_coalition_members_effect = yes
+			if = { limit = { has_completed_focus = SPR_the_natalist_view }
+				add_ideas = SPR_the_natalist_view_idea
+			}
+			if = { limit = { has_completed_focus = SPR_reinforce_the_castle_doctrine }
+				add_ideas = SPR_the_castle_doctrine_idea
+			}
+			if = { limit = { has_completed_focus = SPR_authoritarianism_by_law }
+				add_ideas = SPR_rigged_elections_idea
+			}
+			if = { limit = { has_completed_focus = SPR_anti_immigration_policies }
+				add_ideas = SPR_anti_immigration_policies_idea
+			}
+			if = { limit = { has_completed_focus = SPR_the_identity_of_spain }
+				add_ideas = SPR_the_true_identity_of_spain_idea
+			}
+			if = { limit = { has_completed_focus = SPR_state_sponsored_unions }
+				add_ideas = SPR_state_sponsored_unions_idea
+			}
+			if = { limit = { has_completed_focus = SPR_unionization_of_faith }
+				add_ideas = SPR_unionization_of_faith_idea
+			}
+		}
+
+	}
+}
+
+SPR_political_policy_category = {
+	SPR_file_a_motion_of_no_confidence = {
+		allowed = { original_tag = SPR }
+		visible = {
+			has_completed_focus = SPR_the_republic
+			has_elections = yes
+		}
+
+		available = {
+			NOT = { has_country_flag = SPR_filed_a_motion_of_no_confidence }
+		}
+		cost = 100
+
+		days_remove = 60
+		days_re_enable = 1
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_file_a_motion_of_no_confidence"
+			set_party_index_to_ruling_party = yes
+			set_temp_variable = { party_popularity_increase = -0.01 }
+			add_relative_party_popularity = yes
+			set_country_flag = { flag = SPR_filed_a_motion_of_no_confidence value = 1 days = 365 }
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_file_a_motion_of_no_confidence"
+			country_event = { id = MD4_election_campaign.0 }
+
+			custom_effect_tooltip = SPR_file_a_motion_of_no_confidence_tt
+		}
+	}
+	SPR_political_support_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			has_completed_focus = SPR_the_republic
+			NOT = { has_completed_focus = SPR_the_old_ways }
+		}
+
+		cost = 50
+
+		days_remove = 45
+		days_re_enable = 45
+
+		modifier = {
+			political_power_factor = -0.15
+			tax_gain_multiplier_modifier = -0.05
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_political_support_decision"
+			set_party_index_to_ruling_party = yes
+			set_temp_variable = { party_popularity_increase = 0.04 }
+			set_temp_variable = { temp_outlook_increase = 0.03 }
+			add_relative_party_popularity = yes
+		}
+	}
+
+	SPR_exploit_the_union_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			OR = {
+				if = { limit = { has_completed_focus = SPR_the_new_elections }
+					western_autocrats_are_in_power = yes
+				}
+				nationalist_right_wing_populists_are_in_power_or_coalition = yes
+			}
+			has_idea = labour_unions
+			has_completed_focus = SPR_a_party_with_a_union
+		}
+
+		available = {
+			nationalist_right_wing_populists_are_in_power_or_coalition = yes
+			30_percent_government_popularity = yes
+		}
+
+		cost = 50
+
+		days_remove = 120
+		days_re_enable = 90
+
+		modifier = {
+			political_power_factor = -0.20
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_exploit_the_union_decision"
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = 0.008 }
+			modify_treasury_effect = yes
+			set_temp_variable = { temp_opinion = -5 }
+			change_labour_unions_opinion = yes
+			change_farmers_opinion = yes
+			set_temp_variable = { party_index = 20 }
+			set_temp_variable = { party_popularity_increase = -0.02 }
+			set_temp_variable = { temp_outlook_increase = 0.02 }
+			add_relative_party_popularity = yes
+		}
+	}
+
+	SPR_tap_the_bank_funds_decision = {
+		allowed = { original_tag = SPR }
+		visible = { has_completed_focus = SPR_a_state_bank }
+
+		available = {
+			NOT = { has_active_mission = bankruptcy_incoming_collapse }
+		}
+		cost = 50
+
+		days_remove = 180
+		days_re_enable = 5
+		fixed_random_seed = no
+
+		modifier = {
+			stability_weekly = -0.001
+			democratic_drift = -0.05
+			neutrality_drift = -0.05
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_file_a_motion_of_no_confidence"
+			set_party_index_to_ruling_party = yes
+			set_temp_variable = { party_popularity_increase = -0.01 }
+			add_relative_party_popularity = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = -0.025 }
+			modify_treasury_effect = yes
+			set_temp_variable = { int_investment_change = treasury_change }
+			multiply_temp_variable = { int_investment_change = -1.25 }
+			modify_international_investment_effect = yes
+			random_list = {
+				30 = {
+					increase_corruption = yes
+				}
+				70 = {
+
+				}
+			}
+		}
+	}
+
+	SPR_encourage_communist_neighbors_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			OR = {
+				neutrality_neutral_communism_in_power_or_coalition = yes
+				emerging_communist_state_in_power_or_coalition = yes
+			}
+			has_completed_focus = SPR_communist_everywhere
+		}
+
+		cost = 75
+
+		days_remove = 30
+		days_re_enable = 60
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_encourage_communist_neighbors_decision"
+			set_temp_variable = { temp_opinion = 5 }
+			change_communist_cadres_opinion = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove SPR_encourage_communist_neighbors_decision"
+			every_neighbor_country = {
+				limit = {
+					NOT = {
+						neutrality_neutral_communism_are_in_coalition = yes
+						emerging_communist_state_are_in_coalition = yes
+					}
+				}
+				set_temp_variable = { party_index = 4 }
+				set_temp_variable = { party_popularity_increase = 0.025 }
+				set_temp_variable = { temp_outlook_increase = 0.025 }
+				add_relative_party_popularity = yes
+				set_temp_variable = { party_index = 19 }
+				add_relative_party_popularity = yes
+			}
+		}
+	}
+
+	SPR_unban_the_monarchy_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			NOT = {
+				emerging_communist_state_in_power_or_coalition = yes
+				neutrality_neutral_communism_in_power_or_coalition = yes
+			}
+			has_global_flag = SPR_chavy_deposition_of_monarchs_flag
+		}
+
+		available = {
+			NOT = {
+				emerging_communist_state_in_power_or_coalition = yes
+				neutrality_neutral_communism_in_power_or_coalition = yes
+			}
+			30_percent_government_popularity = yes
+		}
+
+		cost = 50
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_unban_the_monarchy_decision"
+			clr_country_flag = party0_banned
+			clr_country_flag = party23_banned
+			custom_effect_tooltip = SPR_monarchs_unbanned_tt
+		}
+	}
+
+	# Replace Policies
+	SPR_conservatism_policy_replacer_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			NOT = { western_autocrats_are_in_power = yes }
+			OR = {
+				western_conservatism_are_in_power_or_coalition = yes
+				neutrality_neutral_conservatism_in_power_or_coalition = yes
+			}
+			OR = {
+				has_completed_focus = SPR_party_of_the_people
+				has_completed_focus = SPR_the_welfare_state
+			}
+			NOT = {
+				OR = {
+					has_idea = SPR_a_party_of_the_people_idea
+					has_idea = SPR_the_conservative_welfare_state_idea
+				}
+			}
+		}
+
+		available = {
+			OR = {
+				western_conservatism_are_in_power_or_coalition = yes
+				neutrality_neutral_conservatism_in_power_or_coalition = yes
+			}
+		}
+
+		days_remove = 30
+		fire_only_once = no
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_conservatism_policy_replacer_decision"
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_a_party_of_the_people_idea }
+					has_completed_focus = SPR_party_of_the_people
+				}
+				add_ideas = SPR_a_party_of_the_people_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_the_conservative_welfare_state_idea }
+					has_completed_focus = SPR_the_welfare_state
+				}
+				add_ideas = SPR_the_conservative_welfare_state_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_family_first_idea }
+					has_completed_focus = SPR_family_first
+				}
+				add_ideas = SPR_family_first_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_unionization_of_faith_idea }
+					has_completed_focus = SPR_unionization_of_faith
+				}
+				add_ideas = SPR_unionization_of_faith_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_spanish_intervention_abroad_idea }
+					has_completed_focus = SPR_revised_military_interventionism
+				}
+				add_ideas = SPR_spanish_intervention_abroad_idea
+			}
+			if = {
+				limit = {
+					has_completed_focus = SPR_spanish_patriot_act
+					NOT = { has_idea = SPR_the_spanish_patriot_act_idea_lar }
+					NOT = { has_idea = SPR_the_spanish_patriot_act_idea }
+				}
+				if = { limit = { has_dlc = "La Resistance" }
+					add_ideas = SPR_the_spanish_patriot_act_idea_lar
+					if = { limit = { has_intelligence_agency = no }
+						create_intelligence_agency = {
+							name = "National Intelligence Centre (CNI)"
+							icon = GFX_intelligence_agency_logo_spr
+						}
+					}
+				}
+				else = {
+					add_ideas = SPR_the_spanish_patriot_act_idea
+				}
+			}
+
+			# Unique Custom Party Content
+			if = {
+				limit = {
+					OR = {
+						western_conservatism_are_in_power = yes
+						neutrality_neutral_conservatism_are_in_power = yes
+					}
+				}
+				# Golden Shares
+				if = { limit = { has_completed_focus = SPR_revival_of_golden_shares }
+					add_ideas = SPR_revival_of_golden_share2_idea
+				}
+				else_if = { limit = { has_completed_focus = SPR_the_iberian_standards }
+					add_ideas = SPR_revival_of_golden_share_idea
+				}
+			}
+		}
+	}
+
+	SPR_rwp_policy_replacer_decisions = {
+		allowed = { original_tag = SPR }
+		visible = {
+			NOT = { western_autocrats_are_in_power = yes }
+			nationalist_right_wing_populists_are_in_power_or_coalition = yes
+			OR = {
+				has_completed_focus = SPR_the_natalist_view
+				has_completed_focus = SPR_pin_parental_education
+				has_completed_focus = SPR_rise_of_nativism
+			}
+			NOT = {
+				OR = {
+					has_idea = SPR_the_natalist_view_idea
+					has_idea = SPR_parental_choice_on_all_topics_idea
+					has_idea = SPR_parental_choice_on_controversial_idea
+					has_idea = SPR_a_harsh_nativism_stance_idea
+					has_idea = SPR_a_soft_nativism_stance_idea
+				}
+			}
+		}
+
+		available = {
+			nationalist_right_wing_populists_are_in_power_or_coalition = yes
+		}
+
+		days_remove = 30
+		fire_only_once = no
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_rwp_policy_replacer_decisions"
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_the_natalist_view_idea }
+					has_completed_focus = SPR_the_natalist_view
+				}
+				add_ideas = SPR_the_natalist_view_idea
+			}
+			if = { limit = { has_completed_focus = SPR_pin_parental_education }
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_parental_choice_on_all_topics_idea }
+						has_country_flag = SPR_pin_parental_education_full_flag
+					}
+					add_ideas = SPR_parental_choice_on_all_topics_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_parental_choice_on_controversial_idea }
+						has_country_flag = SPR_pin_parental_education_controversial_flag
+					}
+					add_ideas = SPR_parental_choice_on_controversial_idea
+				}
+			}
+			if = { limit = { has_completed_focus = SPR_rise_of_nativism }
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_a_harsh_nativism_stance_idea }
+						has_country_flag = SPR_harsh_nativism_stance_flag
+					}
+					add_ideas = SPR_a_harsh_nativism_stance_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_a_soft_nativism_stance_idea }
+						has_country_flag = SPR_soft_nativism_stance_flag
+					}
+					add_ideas = SPR_a_soft_nativism_stance_idea
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_the_castle_doctrine_idea }
+					has_completed_focus = SPR_reinforce_the_castle_doctrine
+				}
+				add_ideas = SPR_the_castle_doctrine_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_anti_immigration_policies_idea }
+					has_completed_focus = SPR_anti_immigration_policies
+				}
+				add_ideas = SPR_anti_immigration_policies_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_funding_for_police_idea }
+					has_completed_focus = SPR_funding_for_police
+				}
+				add_ideas = SPR_funding_for_police_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_state_sponsored_unions_idea }
+					has_completed_focus = SPR_state_sponsored_unions
+				}
+				add_ideas = SPR_state_sponsored_unions_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_unionization_of_faith_idea }
+					has_completed_focus = SPR_unionization_of_faith
+				}
+				add_ideas = SPR_unionization_of_faith_idea
+			}
+
+			# Unique Party Effects
+			if = {
+				limit = {
+					nationalist_right_wing_populists_are_in_power = yes
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_true_identity_of_spain_idea }
+						has_completed_focus = SPR_the_identity_of_spain
+					}
+					add_ideas = SPR_the_true_identity_of_spain_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_true_identity_of_spain_soft1_idea }
+						has_completed_focus = SPR_a_softer_stance
+					}
+					swap_ideas = {
+						remove_idea = SPR_the_true_identity_of_spain_idea
+						add_idea = SPR_the_true_identity_of_spain_soft1_idea
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_true_identity_of_spain_soft2_idea }
+						has_completed_focus = SPR_negotiate_with_the_parties
+					}
+					swap_ideas = {
+						remove_idea = SPR_the_true_identity_of_spain_soft1_idea
+						add_idea = SPR_the_true_identity_of_spain_soft2_idea
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_true_identity_of_spain_harsh1_idea }
+						has_completed_focus = SPR_eliminate_separatism
+					}
+					swap_ideas = {
+						remove_idea = SPR_the_true_identity_of_spain_idea
+						add_idea = SPR_the_true_identity_of_spain_harsh1_idea
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_true_identity_of_spain_harsh2_idea }
+						has_completed_focus = SPR_ban_the_parties
+					}
+					swap_ideas = {
+						remove_idea = SPR_the_true_identity_of_spain_harsh1_idea
+						add_idea = SPR_the_true_identity_of_spain_harsh2_idea
+					}
+				}
+			}
+		}
+	}
+
+	SPR_falangists_policy_replacer_decision = {
+		allowed = { original_tag = SPR }
+		visible = {
+			NOT = { western_autocrats_are_in_power = yes }
+			nationalist_fascists_are_in_power_or_coalition = yes
+			OR = {
+				has_completed_focus = SPR_the_youth_front
+				has_completed_focus = SPR_return_of_francoism
+				has_completed_focus = SPR_spanish_first
+			}
+			NOT = {
+				has_idea = SPR_the_falangist_youth_front_idea
+			}
+		}
+
+		available = {
+			nationalist_fascists_are_in_power_or_coalition = yes
+		}
+
+		days_remove = 30
+		fire_only_once = no
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_falangists_policy_replacer_decision"
+			if = {
+				limit = {
+					has_completed_focus = SPR_the_youth_front
+					NOT = { has_idea = SPR_the_falangist_youth_front_idea }
+				}
+				add_ideas = SPR_the_falangist_youth_front_idea
+			}
+			if = {
+				limit = {
+					has_completed_focus = SPR_role_of_the_woman
+				}
+				if = {
+					limit = {
+						has_country_flag = SPR_women_homefront_idea_flag
+						NOT = { has_idea = SPR_women_belong_on_the_homefront_idea }
+					}
+					add_ideas = SPR_women_belong_on_the_homefront_idea
+				}
+				if = {
+					limit = {
+						has_country_flag = SPR_women_choose_idea_flag
+						NOT = { has_idea = SPR_women_choose_idea }
+					}
+					add_ideas = SPR_women_choose_idea
+				}
+			}
+			if = {
+				limit = {
+					has_completed_focus = SPR_the_hands_of_the_few
+					NOT = { has_idea = SPR_the_hands_of_the_few_idea }
+				}
+				add_ideas = SPR_the_hands_of_the_few_idea
+			}
+
+			# Unique Party Only Ideas
+			if = { limit = { nationalist_fascist_are_in_power = yes }
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_pride_of_the_army_idea }
+						has_completed_focus = SPR_nation_of_pride
+					}
+					add_ideas = SPR_pride_of_the_army_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_pride_of_the_army2_idea }
+						has_completed_focus = SPR_pride_in_the_army
+					}
+					swap_ideas = {
+						remove_idea = SPR_pride_of_the_army_idea
+						add_idea = SPR_pride_of_the_army2_idea
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_una_espana_y_granda_libre_idea }
+						has_completed_focus = SPR_glory_to_spain
+					}
+					add_ideas = SPR_una_espana_y_granda_libre_idea
+				}
+
+			}
+
+		}
+	}
+
+
+	SPR_socialism_policy_replacer_decision = {
+		allowed = { original_tag = SPR }
+
+		visible = {
+			NOT = { western_autocrats_are_in_power = yes }
+			OR = {
+				western_socialism_are_in_power_or_coalition = yes
+				western_liberal_are_in_power_or_coalition = yes
+				neutrality_neutral_social_in_power_or_coalition = yes
+				emerging_anarchist_communism_in_power_or_coalition = yes
+			}
+			OR = {
+				has_completed_focus = SPR_a_keynesian_take
+				has_completed_focus = SPR_decommodify_the_basics
+			}
+			NOT = {
+				OR = {
+					has_idea = SPR_keynesian_economic_idea
+					has_idea = SPR_decommodify_the_basics_idea
+				}
+			}
+		}
+
+		available = {
+			OR = {
+				western_socialism_are_in_power_or_coalition = yes
+				western_liberal_are_in_power_or_coalition = yes
+				neutrality_neutral_social_in_power_or_coalition = yes
+				emerging_anarchist_communism_in_power_or_coalition = yes
+			}
+		}
+
+		days_remove = 30
+		fire_only_once = no
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_socialism_policy_replacer_decision"
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_decommodify_the_basics_idea }
+					has_completed_focus = SPR_decommodify_the_basics
+				}
+				add_ideas = SPR_decommodify_the_basics_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_keynesian_economic_idea }
+					has_completed_focus = SPR_a_keynesian_take
+				}
+				add_ideas = SPR_keynesian_economic_idea
+			}
+
+			# Unique
+			if = {
+				limit = {
+					OR = {
+						western_social_democrats_are_in_power = yes
+						western_liberals_are_in_power = yes
+						neutrality_neutral_social_are_in_power = yes
+						emerging_anarchist_communism_are_in_power = yes
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_collectiveness_egalitarianism_idea }
+						NOT = { has_idea = SPR_collectiveness_egalitarianism2_idea }
+						has_completed_focus = SPR_the_heart_of_the_collective
+					}
+					add_ideas = SPR_collectiveness_egalitarianism_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_scandinavians_style_idea }
+						has_completed_focus = SPR_analyze_the_scandinavians
+					}
+					add_ideas = SPR_the_scandinavians_style_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_end_the_loophole_idea }
+						has_completed_focus = SPR_tax_the_rich
+					}
+					add_ideas = SPR_end_the_loophole_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_peoples_spain_idea }
+						has_completed_focus = SPR_the_peoples_spain
+					}
+					add_ideas = SPR_the_peoples_spain_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_regulate_the_markets_idea }
+						has_completed_focus = SPR_regulate_the_markets
+					}
+					add_ideas = SPR_regulate_the_markets_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_separation_of_church_and_state_idea }
+						has_completed_focus = SPR_separation_of_church_and_state
+					}
+					add_ideas = SPR_separation_of_church_and_state_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_collectiveness_egalitarianism2_idea }
+						has_completed_focus = SPR_analyze_the_scandinavians
+					}
+					swap_ideas = {
+						remove_idea = SPR_collectiveness_egalitarianism_idea
+						add_idea = SPR_collectiveness_egalitarianism2_idea
+					}
+				}
+			}
+		}
+	}
+
+	SPR_communist_policy_replacer_decision = {
+		allowed = { original_tag = SPR }
+
+		visible = {
+			NOT = { western_autocrats_are_in_power = yes }
+			OR = {
+				emerging_communist_state_in_power_or_coalition = yes
+				neutrality_neutral_communism_in_power_or_coalition = yes
+			}
+			OR = {
+				has_completed_focus = SPR_marxist_education
+				has_completed_focus = SPR_in_support_of_the_worker
+			}
+			NOT = {
+				OR = {
+					has_idea = SPR_marxist_reeducation_idea
+					has_idea = SPR_the_rights_of_the_worker_idea
+				}
+			}
+		}
+
+		available = {
+			OR = {
+				emerging_communist_state_in_power_or_coalition = yes
+				neutrality_neutral_communism_in_power_or_coalition = yes
+			}
+		}
+
+		days_remove = 30
+		fire_only_once = no
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_socialism_policy_replacer_decision"
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_the_rights_of_the_worker_idea }
+					NOT = { has_idea = SPR_the_rights_of_the_worker1_idea }
+					NOT = { has_idea = SPR_the_rights_of_the_worker2_idea }
+					has_completed_focus = SPR_in_support_of_the_worker
+				}
+				add_ideas = SPR_the_rights_of_the_worker_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_the_rights_of_the_worker1_idea }
+					has_completed_focus = SPR_collectively_owned
+				}
+				swap_ideas = {
+					remove_idea = SPR_the_rights_of_the_worker_idea
+					add_idea = SPR_the_rights_of_the_worker1_idea
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_the_rights_of_the_worker2_idea }
+					has_completed_focus = SPR_redistribution_of_wealth
+				}
+				swap_ideas = {
+					remove_idea = SPR_the_rights_of_the_worker1_idea
+					add_idea = SPR_the_rights_of_the_worker2_idea
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_communistic_research_idea }
+					NOT = { has_idea = SPR_communistic_research2_idea }
+					has_completed_focus = SPR_the_material
+				}
+				add_ideas = SPR_communistic_research_idea
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_communistic_research2_idea }
+					has_completed_focus = SPR_the_technical_base
+				}
+				swap_ideas = {
+					remove_idea = SPR_communistic_research_idea
+					add_idea = SPR_communistic_research2_idea
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_idea = SPR_the_emancipation_of_the_woman_idea }
+					has_completed_focus = SPR_the_emancipation_of_the_woman
+				}
+				add_ideas = SPR_the_emancipation_of_the_woman_idea
+			}
+
+			# Unique
+			if = {
+				limit = {
+					OR = {
+						emerging_communist_state_are_in_power = yes
+						neutrality_neutral_communism_are_in_power = yes
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_peoples_militias_idea }
+						has_completed_focus = SPR_the_peoples_militias
+					}
+					add_ideas = SPR_the_peoples_militias_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_culture_of_proletarianism_idea }
+						NOT = { has_idea = SPR_the_culture_of_proletarianism2_idea }
+						has_completed_focus = SPR_the_culture_of_proletarianism
+					}
+					add_ideas = SPR_the_culture_of_proletarianism_idea
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_the_culture_of_proletarianism2_idea }
+						has_completed_focus = SPR_the_red_rose
+					}
+					swap_ideas = {
+						remove_idea = SPR_the_culture_of_proletarianism_idea
+						add_idea = SPR_the_culture_of_proletarianism2_idea
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_idea = SPR_union_of_working_youth_idea }
+						has_completed_focus = SPR_union_of_working_youth
+					}
+					add_ideas = SPR_union_of_working_youth_idea
+				}
+			}
+		}
+	}
+
+	# Economic Political Decisions
+	SPR_expand_the_huelva_copper_mine = {
+		icon = GFX_decision_tungsten
+
+		cost = 75
+
+		days_remove = 120
+		fire_only_once = yes
+
+		visible = {
+			has_completed_focus = SPR_andalucian_mines
+		}
+		available = {
+			has_full_control_of_state = 93
+			has_tech = excavation3
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_expand_the_los_santos_mine"
+			set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove SPR_expand_the_los_santos_mine"
+			add_resource = {
+				type = tungsten
+				amount = 5
+				state = 93
+			}
+		}
+
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 10
+				check_variable = { resource_imported@tungsten > 7 }
+			}
+			modifier = {
+				factor = 0
+				has_active_mission = bankruptcy_incoming_collapse
+			}
+		}
+	}
+
+	SPR_expand_the_los_santos_mine = {
+		icon = GFX_decision_tungsten
+
+		cost = 75
+
+		days_remove = 120
+		fire_only_once = yes
+
+		visible = {
+			has_completed_focus = SPR_extremadura_mines
+		}
+		available = {
+			has_full_control_of_state = 971
+			has_tech = excavation3
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_expand_the_los_santos_mine"
+			set_temp_variable = { treasury_change = -4.25 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove SPR_expand_the_los_santos_mine"
+			add_resource = {
+				type = tungsten
+				amount = 6
+				state = 971
+			}
+		}
+
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 10
+				check_variable = { resource_imported@tungsten > 7 }
+			}
+			modifier = {
+				factor = 0
+				has_active_mission = bankruptcy_incoming_collapse
+			}
+		}
+	}
+
+	SPR_exploit_the_mediterranean_province = {
+		icon = GFX_decision_aluminium
+
+		cost = 75
+
+		days_remove = 120
+		fire_only_once = yes
+
+		visible = {
+			has_completed_focus = SPR_modernize_mining_operations
+		}
+		available = {
+			has_full_control_of_state = 971
+			has_tech = excavation4
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_exploit_the_mediterranean_province"
+			set_temp_variable = { treasury_change = -8.25 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove SPR_exploit_the_mediterranean_province"
+			add_resource = {
+				type = aluminium
+				amount = 10
+				state = 93
+			}
+		}
+
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 10
+				check_variable = { resource_imported@aluminium > 7 }
+			}
+			modifier = {
+				factor = 0
+				has_active_mission = bankruptcy_incoming_collapse
+			}
+		}
+	}
+}
+
+SPR_foreign_recruitment = {
+	SPR_spawn_new_foreign_legion_decision = {
+		visible = { has_completed_focus = SPR_the_foreign_legion }
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SPR_deployed_legion_tt
+				check_variable = { SPR_deployed_legions < SPR_legion_cap }
+			}
+			NOT = { has_decision = SPR_reform_the_spanish_foreign_legion_decision }
+		}
+
+		days_remove = 90
+		days_re_enable = 90
+
+		cost = 25
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_spawn_foreign_legion_decision"
+			add_to_variable = { SPR.SPR_deployed_legions = 1 }
+			if = {
+				limit = { has_country_flag = SPR_reformed_the_new_foreign_legion }
+				94 = {
+					create_unit = {
+						division = "name = \"Expanded Foreign Legion Tercio\" division_template = \"Expanded Foreign Legion Tercio\" start_experience_factor = 0.80"
+						owner = SPR
+						prioritize_location = 9793
+						count = 1
+					}
+				}
+			}
+			else = {
+				94 = {
+					create_unit = {
+						division = "name = \"Foreign Legion Tercio\" division_template = \"Foreign Legion Tercio\" start_experience_factor = 0.5"
+						owner = SPR
+						prioritize_location = 9793
+						count = 1
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 2
+				has_government = nationalist
+			}
+		}
+	}
+
+	SPR_reform_the_spanish_foreign_legion_decision = {
+		visible = {
+			has_completed_focus = SPR_expand_the_foreign_legion
+			NOT = { has_country_flag = SPR_reformed_the_new_foreign_legion }
+		}
+
+		available = {
+			has_army_manpower = { size > 149999 }
+			NOT = { has_active_mission = bankruptcy_incoming_collapse }
+			NOT = { has_decision = SPR_spawn_new_foreign_legion_decision }
+		}
+
+		days_remove = 365
+
+		cost = 150
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_spawn_foreign_legion_decision"
+			set_country_flag = SPR_reformed_the_new_foreign_legion
+			delete_unit_template_and_units = {
+				division_template = "Foreign Legion Tercio"
+				disband = yes
+			}
+			SPR = {
+				division_template = {
+					name = "Expanded Foreign Legion Tercio"
+					is_locked = yes
+					regiments = {
+						L_arm_Bat = { x = 0 y = 0 }
+						Mech_Inf_Bat = { x = 0 y = 1 }
+						Mech_Inf_Bat = { x = 0 y = 2 }
+						Mot_Inf_Bat = { x = 1 y = 0 }
+						Arty_Bat = { x = 2 y = 0 }
+						L_arm_Bat = { x = 3 y = 0 }
+						Mech_Inf_Bat = { x = 3 y = 1 }
+						Mech_Inf_Bat = { x = 3 y = 2 }
+					}
+
+					support = {
+						Arty_Battery = { x = 0 y = 0 }
+						H_Engi_Comp = { x = 0 y = 1 }
+						armor_Recce_Comp = { x = 0 y = 2 }
+						combat_service_support_company = { x = 0 y = 3 }
+					}
+				}
+			}
+			93 = {
+				create_unit = {
+					division = "name = \"Tercio 'Don Juan José de Austria' No. 3 of the Legion\" division_template = \"Expanded Foreign Legion Tercio\" start_experience_factor = 0.95"
+					owner = SPR
+					prioritize_location = 9979
+				}
+				create_unit = {
+					division = "name = \"Tercio 'Alejandro Farnesio' No. 4 of the Legion\" division_template = \"Expanded Foreign Legion Tercio\" start_experience_factor = 0.95"
+					owner = SPR
+					prioritize_location = 875
+				}
+				create_unit = {
+					division = "name = \"Tercio 'Gonzalo Fernández de Córdoba' No. 5 of the Legion\" division_template = \"Expanded Foreign Legion Tercio\" start_experience_factor = 0.95"
+					owner = SPR
+					prioritize_location = 1176
+				}
+				create_unit = {
+					division = "name = \"Tercio 'Inés Suárez' No. 6 of the Legion\" division_template = \"Expanded Foreign Legion Tercio\" start_experience_factor = 0.95"
+					owner = SPR
+					prioritize_location = 7183
+				}
+			}
+
+			set_variable = { SPR.SPR_deployed_legions = 4 }
+		}
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 2
+				has_government = nationalist
+			}
+		}
+	}
+
+	SPR_spawn_new_regulares_decision = {
+		visible = {
+			has_completed_focus = SPR_expand_the_regulares
+		}
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SPR_deployed_regulares_tt
+				check_variable = { SPR_deployed_regulares < SPR_regulare_cap }
+			}
+		}
+
+		days_remove = 90
+		days_re_enable = 90
+
+		cost = 25
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SPR_spawn_new_regulares_decision"
+			if = { limit = { NOT = { has_completed_focus = SPR_expand_the_regulares } }
+				495 = {
+					create_unit = {
+						division = " name = \"Regulares Group\" division_template = \"Regulares Group\" start_experience_factor = 0.5"
+						owner = SPR
+					}
+				}
+
+				add_to_variable = { SPR_deployed_regulares = 1 }
+			}
+			else = {
+				495 = {
+					create_unit = {
+						division = " name = \"Regulares Brigade\" division_template = \"Regulares Brigade\" start_experience_factor = 0.5"
+						owner = SPR
+					}
+				}
+
+				add_to_variable = { SPR_deployed_regulares = 1 }
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 2
+				has_government = nationalist
+			}
+		}
+	}
+}

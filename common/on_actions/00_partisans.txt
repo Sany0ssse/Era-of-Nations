@@ -1,0 +1,1138 @@
+on_actions = {
+
+	on_monthly = { ##civil_war_partisans
+		effect = {
+			if = {
+				limit = {
+					has_war = yes
+					#Iraq MNF war Costilb
+					NOT = {
+						 AND = {
+							tag = IRQ
+							USA = { has_war_with = PREV }
+						       }
+						 AND = {
+								has_war_with = IRQ
+								tag = USA
+						       }
+					}
+					OR = {
+						#Generic civil war
+						has_civil_war = yes
+						#Special case
+						AND = {
+							has_country_flag = Custom_Civil_War
+							has_war = yes
+						}
+						#Syrian civil war
+						AND = {
+							OR = {
+								original_tag = SYR
+								original_tag = FSA
+								original_tag = NUS
+								original_tag = ROJ
+								original_tag = ALA
+								original_tag = DRU
+								original_tag = ISI
+								original_tag = KUR
+								original_tag = PUK
+								original_tag = IRQ
+							}
+							OR = {
+								has_war_with = SYR
+								has_war_with = FSA
+								has_war_with = NUS
+								has_war_with = ROJ
+								has_war_with = ALA
+								has_war_with = DRU
+								has_war_with = ISI
+								has_war_with = KUR
+								has_war_with = PUK
+								has_war_with = IRQ
+							}
+						}
+						#Libyan Civil War
+						AND = {
+							OR = {
+								original_tag = HOR
+								original_tag = GNA
+								original_tag = GNC
+								original_tag = TUA
+							}
+							OR = {
+								has_war_with = HOR
+								has_war_with = GNA
+								has_war_with = GNC
+								has_war_with = TUA
+							}
+						}
+						#Yemeni Civil War
+						AND = {
+							OR = {
+								original_tag = AQY
+								original_tag = YEM
+								original_tag = HOU
+							}
+							OR = {
+								has_war_with = AQY
+								has_war_with = YEM
+								has_war_with = HOU
+							}
+						}
+						#Afghanistan Civil War
+						AND = {
+							OR = {
+								original_tag = AFG
+								original_tag = TAL
+							}
+							OR = {
+								has_war_with = AFG
+								has_war_with = TAL
+							}
+						}
+						#Somalian Civil War
+						AND = {
+							OR = {
+								original_tag = SOM
+								original_tag = SHB
+								original_tag = SML
+								original_tag = PUN
+								original_tag = SNA
+								original_tag = SWS
+								original_tag = JUB
+							}
+							OR = {
+								has_war_with = SOM
+								has_war_with = SHB
+								has_war_with = SML
+								has_war_with = PUN
+								has_war_with = SNA
+								has_war_with = SWS
+								has_war_with = JUB
+							}
+						}
+						#Sudan Civil War
+						AND = {
+							OR = {
+								original_tag = SUD
+								original_tag = DAR
+							}
+							OR = {
+								has_war_with = SUD
+								has_war_with = DAR
+							}
+						}
+						#Central African Civil War
+						AND = {
+							OR = {
+								original_tag = CAR
+								original_tag = BAL
+								original_tag = SEL
+								original_tag = LOG
+							}
+							OR = {
+								has_war_with = CAR
+								has_war_with = BAL
+								has_war_with = SEL
+								has_war_with = LOG
+							}
+						}
+						#Sierra Leone Civil War
+						AND = {
+							OR = {
+								original_tag = SIE
+								original_tag = AFR
+							}
+							OR = {
+								has_war_with = SIE
+								has_war_with = AFR
+							}
+						}
+						#Liberian Civil War
+						AND = {
+							OR = {
+								original_tag = LIB
+								original_tag = LUR
+							}
+							OR = {
+								has_war_with = LIB
+								has_war_with = LUR
+							}
+						}
+						#1st Sudanese civil war
+						AND = {
+							OR = {
+								original_tag = SUD
+								original_tag = SSU
+							}
+							OR = {
+								has_war_with = SUD
+								has_war_with = SSU
+							}
+						}
+						#Angolan civil war
+						AND = {
+							OR = {
+								original_tag = AGL
+								original_tag = UNI
+							}
+							OR = {
+								has_war_with = AGL
+								has_war_with = UNI
+							}
+						}
+						#Congo war
+						AND = {
+							OR = {
+								original_tag = DRC
+								original_tag = RCD
+								original_tag = MLC
+							}
+							OR = {
+								has_war_with = DRC
+								has_war_with = RCD
+								has_war_with = MLC
+							}
+						}
+						#Aceh war
+						AND = {
+							OR = {
+							original_tag = ACE
+							original_tag = IND
+							}
+							OR = {
+							has_war_with = ACE
+							has_war_with = IND
+							}
+						}
+						#Nepal war
+						AND = {
+							OR = {
+								original_tag = NPM
+							    original_tag = NEP
+								}
+							OR = {
+								has_war_with = NPM
+								has_war_with = NEP
+								}
+						}
+						#Sri-Lanka war
+						AND = {
+							OR = {
+								original_tag = SRI
+							    original_tag = TML
+							}
+							OR = {
+								has_war_with = SRI
+								has_war_with = TML
+							}
+						}
+						#PMR and Moldova war
+						AND = {
+							OR = {
+								original_tag = PMR
+							    original_tag = MLV
+								}
+							OR = {
+								has_war_with = PMR
+								has_war_with = MLV
+								}
+						}
+					}
+				}
+				every_state = {
+					limit = {
+						check_variable = { partisan_strikes_count = 0 }
+						is_core_of = PREV
+						THIS.controller = { has_war = yes }
+						NOT = { has_state_flag = restored_order }
+					}
+					if = {
+						limit = { any_country_with_core = { has_country_flag = skilled_partisans } }
+						add_dynamic_modifier = {
+							modifier = partisans_activity_1
+							days = 32
+						}
+						damage_units = {
+							state = THIS
+							damage = 0.02
+						}
+					}
+					else = {
+						add_dynamic_modifier = {
+							modifier = partisans_activity
+							days = 32
+						}
+						damage_units = {
+							state = THIS
+							damage = 0.01
+						}
+					}
+					if = { limit = { tungsten > 8 }
+					  random = {
+					  chance = 1
+					  add_dynamic_modifier = {
+						modifier = tech_metal_refining_modifier
+						days = 27
+											 }
+							   }
+					}
+					if = { limit = { chromium > 8 }
+					 random = {
+					 chance = 1
+					 add_dynamic_modifier = {
+					   modifier = rare_metal_refining_modifier
+					   days = 27
+											}
+							  }
+					}
+					if = { limit = { OR = { aluminium > 24 steel > 24 } }
+					 random = {
+					 chance = 1
+					 add_dynamic_modifier = {
+					   modifier = metal_refining_modifier
+					   days = 27
+											}
+							  }
+					}
+					if = { limit = { oil > 18 }
+					 random = {
+					 chance = 1
+					 add_dynamic_modifier = {
+					   modifier = oil_refining_modifier
+					   days = 27
+											}
+							  }
+					}
+					multiply_variable = { productivity_state_var = 0.99 }
+					add_to_variable = { partisan_strikes_count = 1 }
+				}
+			}
+		}
+	}
+
+	on_monthly =  { ##resistance partisans
+		effect = {
+			if = {
+				limit = { NOT = { has_global_flag = resistance_partisans_checked } }
+				set_global_flag = { flag = resistance_partisans_checked value = 1 days = 1 }
+				every_state = {
+					limit = {
+					has_active_resistance = yes
+					}
+					if = {
+						limit = {
+							check_variable = { resistance > 24 }
+							check_variable = { resistance < 51 }
+						}
+						if = {
+							limit = { any_country_with_core = { NOT = { tag = PREV.controller } has_country_flag = skilled_partisans } }
+							damage_units = {
+								state = THIS
+								damage = 0.02
+							}
+							add_dynamic_modifier = {
+								modifier = partisan_resistance_1
+								days = 31
+							}
+						}
+						else = {
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							add_dynamic_modifier = {
+								modifier = partisan_resistance
+								days = 31
+							}
+						}
+				 	}
+				 	else_if = {
+						limit = {
+							check_variable = { resistance > 50 }
+							check_variable = { resistance < 75 }
+						}
+						if = {
+							limit = { any_country_with_core = { NOT = { tag = PREV.controller } has_country_flag = skilled_partisans } }
+							damage_units = {
+								state = THIS
+								damage = 0.04
+							}
+							add_dynamic_modifier = {
+								modifier = partisan_resistance_1
+								days = 31
+							}
+						}
+						else = {
+							damage_units = {
+								state = THIS
+								damage = 0.03
+							}
+							add_dynamic_modifier = {
+								modifier = partisan_resistance
+								days = 31
+							}
+						}
+				 	}
+				}
+			}
+		}
+	}
+
+	on_monthly =  { ##border_partisans
+		effect = {
+			if = {
+				limit = {
+					has_war = yes
+					NOT = {
+						OR = {
+							#Generic civil war
+							has_civil_war = yes
+							#Special case
+							AND = {
+								has_country_flag = Custom_Civil_War
+								has_war = yes
+							}
+							#Syrian civil war
+							AND = {
+								OR = {
+									original_tag = SYR
+									original_tag = FSA
+									original_tag = NUS
+									original_tag = ROJ
+									original_tag = ALA
+									original_tag = DRU
+									original_tag = ISI
+									original_tag = KUR
+									original_tag = PUK
+								}
+								OR = {
+									has_war_with = SYR
+									has_war_with = FSA
+									has_war_with = NUS
+									has_war_with = ROJ
+									has_war_with = ALA
+									has_war_with = DRU
+									has_war_with = ISI
+									has_war_with = KUR
+									has_war_with = PUK
+								}
+							}
+							#Libyan Civil War
+							AND = {
+								OR = {
+									original_tag = HOR
+									original_tag = GNA
+									original_tag = GNC
+									original_tag = TUA
+								}
+								OR = {
+									has_war_with = HOR
+									has_war_with = GNA
+									has_war_with = GNC
+									has_war_with = TUA
+								}
+							}
+							#Yemeni Civil War
+							AND = {
+								OR = {
+									original_tag = AQY
+									original_tag = YEM
+									original_tag = HOU
+								}
+								OR = {
+									has_war_with = AQY
+									has_war_with = YEM
+									has_war_with = HOU
+								}
+							}
+							#Afghanistan Civil War
+							AND = {
+								OR = {
+									original_tag = AFG
+									original_tag = TAL
+								}
+								OR = {
+									has_war_with = AFG
+									has_war_with = TAL
+								}
+							}
+							#Somalian Civil War
+							AND = {
+								OR = {
+									original_tag = SOM
+									original_tag = SHB
+									original_tag = SML
+									original_tag = PUN
+									original_tag = SNA
+									original_tag = SWS
+									original_tag = JUB
+								}
+								OR = {
+									has_war_with = SOM
+									has_war_with = SHB
+									has_war_with = SML
+									has_war_with = PUN
+									has_war_with = SNA
+									has_war_with = SWS
+									has_war_with = JUB
+								}
+							}
+							#Sudan Civil War
+							AND = {
+								OR = {
+									original_tag = SUD
+									original_tag = DAR
+								}
+								OR = {
+									has_war_with = SUD
+									has_war_with = DAR
+								}
+							}
+							#Central African Civil War
+							AND = {
+								OR = {
+									original_tag = CAR
+									original_tag = BAL
+									original_tag = SEL
+									original_tag = LOG
+								}
+								OR = {
+									has_war_with = CAR
+									has_war_with = BAL
+									has_war_with = SEL
+									has_war_with = LOG
+								}
+							}
+							#Sierra Leone Civil War
+							AND = {
+								OR = {
+									original_tag = SIE
+									original_tag = AFR
+								}
+								OR = {
+									has_war_with = SIE
+									has_war_with = AFR
+								}
+							}
+							#Liberian Civil War
+							AND = {
+								OR = {
+									original_tag = LIB
+									original_tag = LUR
+								}
+								OR = {
+									has_war_with = LIB
+									has_war_with = LUR
+								}
+							}
+							#1st Sudanese civil war
+							AND = {
+								OR = {
+									original_tag = SUD
+									original_tag = SSU
+								}
+								OR = {
+									has_war_with = SUD
+									has_war_with = SSU
+								}
+							}
+							#Angolan civil war
+							AND = {
+								OR = {
+									original_tag = AGL
+									original_tag = UNI
+								}
+								OR = {
+									has_war_with = AGL
+									has_war_with = UNI
+								}
+							}
+							#Congo war
+							AND = {
+								OR = {
+									original_tag = DRC
+									original_tag = RCD
+									original_tag = MLC
+								}
+								OR = {
+									has_war_with = DRC
+									has_war_with = RCD
+									has_war_with = MLC
+								}
+							}
+							#Aceh war
+							AND = {
+								OR = {
+									original_tag = ACE
+									original_tag = IND
+								}
+								OR = {
+									has_war_with = ACE
+									has_war_with = IND
+								}
+							}
+							#Nepal war
+							AND = {
+								OR = {
+									original_tag = NPM
+								    original_tag = NEP
+									}
+								OR = {
+									has_war_with = NPM
+									has_war_with = NEP
+									}
+							}
+							#Sri-Lanka war
+							AND = {
+								OR = {
+									original_tag = SRI
+							    	original_tag = TML
+								}
+								OR = {
+									has_war_with = SRI
+									has_war_with = TML
+								}
+							}
+							#PMR and Moldova war
+							AND = {
+								OR = {
+									original_tag = PMR
+								    original_tag = MLV
+									}
+								OR = {
+									has_war_with = PMR
+									has_war_with = MLV
+								}
+							}
+						}
+					}
+				}
+				every_controlled_state = {
+					limit = {
+						NOT = {
+							any_country = {
+								has_full_control_of_state = PREV
+							}
+							THIS.controller = { has_country_flag = IRQ_MNF }
+							has_dynamic_modifier = {
+								modifier = partisans_activity
+							}
+							has_dynamic_modifier = {
+								modifier = partisans_activity_1
+							}
+							has_dynamic_modifier = {
+								modifier = chechen_insurgents
+							}
+						}
+						THIS = { is_core_of = THIS.controller }
+					}
+					for_each_loop = {
+						array = global.countries
+						value = v
+					 if = {
+						limit = {
+							NOT = {	THIS = { is_core_of = var:v } }
+							var:v = { exists = yes }
+							NOT = {
+								THIS.controller = {
+									is_ally_with = var:v
+									gives_military_access_to = var:v
+									has_volunteers_amount_from = {
+										tag = var:v
+										count > 0
+									}
+								}
+							}
+						}
+						if = {
+							limit = {
+							var:THIS.controller = { check_variable = { has_war_support > 0.24 } }
+							var:THIS.controller = { check_variable = { has_war_support < 0.51 } }
+							}
+						    if = {
+							     limit = { THIS.controller = { has_country_flag = skilled_partisans } }
+						    	 damage_units = {
+								  state = THIS
+								  limit = { tag = var:v }
+								  damage = 0.02
+							                    }
+							     set_variable = { rear_raids_army_speed = -0.02 }
+							     set_variable = { rear_raids_local_supplies = -0.02 }
+							     set_variable = { rear_raids_attrition = 0.02 }
+							     add_dynamic_modifier = {
+								  modifier = rear_raids_1
+								   days = 31
+							     }
+						         }
+						    else = {
+						         damage_units = {
+							      state = THIS
+							      limit = { tag = var:v }
+							      damage = 0.01
+						                        }
+						        set_variable = { rear_raids_army_speed = -0.01 }
+					    	    set_variable = { rear_raids_local_supplies = -0.01 }
+					        	set_variable = { rear_raids_attrition = 0.01 }
+						        add_dynamic_modifier = {
+							     modifier = rear_raids
+							     days = 31
+						                               }
+					        }
+				    	}
+						else_if = {
+							limit = {
+							var:THIS.controller = { check_variable = { has_war_support > 0.5 } }
+							var:THIS.controller = { check_variable = { has_war_support < 0.76 } }
+							}
+						    if = {
+							     limit = { THIS.controller = { has_country_flag = skilled_partisans } }
+							     damage_units = {
+								  state = THIS
+								  limit = { tag = var:v }
+								  damage = 0.04
+						                    }
+							     set_variable = { rear_raids_army_speed = -0.04 }
+							     set_variable = { rear_raids_local_supplies = -0.04 }
+							     set_variable = { rear_raids_attrition = 0.04 }
+							     add_dynamic_modifier = {
+								  modifier = rear_raids_1
+								   days = 31
+							     }
+						         }
+						    else = {
+						         damage_units = {
+							      state = THIS
+							      limit = { tag = var:v }
+							      damage = 0.03
+						                        }
+						        set_variable = { rear_raids_army_speed = -0.03 }
+						        set_variable = { rear_raids_local_supplies = -0.03 }
+						        set_variable = { rear_raids_attrition = 0.03 }
+						        add_dynamic_modifier = {
+							     modifier = rear_raids
+							     days = 31
+					        	                       }
+				        	}
+				        }
+						else_if = {
+							limit = { var:THIS.controller = { check_variable = { has_war_support > 0.75 } }	}
+						if = {
+							 limit = { THIS.controller = { has_country_flag = skilled_partisans } }
+							 damage_units = {
+							  state = THIS
+							  limit = { tag = var:v }
+							  damage = 0.06
+											}
+							 set_variable = { rear_raids_army_speed = -0.06 }
+							 set_variable = { rear_raids_local_supplies = -0.06 }
+							 set_variable = { rear_raids_attrition = 0.06 }
+							 add_dynamic_modifier = {
+							  modifier = rear_raids_1
+							   days = 31
+							 }
+						}
+						else = {
+							 damage_units = {
+							  state = THIS
+							  limit = { tag = var:v }
+							  damage = 0.05
+											}
+							set_variable = { rear_raids_army_speed = -0.05 }
+							set_variable = { rear_raids_local_supplies = -0.05 }
+							set_variable = { rear_raids_attrition = 0.05 }
+							add_dynamic_modifier = {
+							 modifier = rear_raids
+							 days = 31
+												   }
+						}
+				    }
+				 }
+				}
+			}
+			}
+		}
+	}
+
+	on_startup = { ##startup_civil_war_partisans
+		effect = {
+			every_country = {
+				limit = {
+					has_war = yes
+					OR = {
+						#Generic civil war
+						has_civil_war = yes
+						#Special case
+						AND = {
+							has_country_flag = Custom_Civil_War
+							has_war = yes
+						}
+						#Syrian civil war
+						AND = {
+							OR = {
+								original_tag = SYR
+								original_tag = FSA
+								original_tag = NUS
+								original_tag = ROJ
+								original_tag = ALA
+								original_tag = DRU
+								original_tag = ISI
+								original_tag = KUR
+								original_tag = PUK
+								original_tag = IRQ
+							}
+							OR = {
+								has_war_with = SYR
+								has_war_with = FSA
+								has_war_with = NUS
+								has_war_with = ROJ
+								has_war_with = ALA
+								has_war_with = DRU
+								has_war_with = ISI
+								has_war_with = KUR
+								has_war_with = PUK
+								has_war_with = IRQ
+							}
+						}
+						#Libyan Civil War
+						AND = {
+							OR = {
+								original_tag = HOR
+								original_tag = GNA
+								original_tag = GNC
+								original_tag = TUA
+							}
+							OR = {
+								has_war_with = HOR
+								has_war_with = GNA
+								has_war_with = GNC
+								has_war_with = TUA
+							}
+						}
+						#Yemeni Civil War
+						AND = {
+							OR = {
+								original_tag = AQY
+								original_tag = YEM
+								original_tag = HOU
+							}
+							OR = {
+								has_war_with = AQY
+								has_war_with = YEM
+								has_war_with = HOU
+							}
+						}
+						#Afghanistan Civil War
+						AND = {
+							OR = {
+								original_tag = AFG
+								original_tag = TAL
+							}
+							OR = {
+								has_war_with = AFG
+								has_war_with = TAL
+							}
+						}
+						#Somalian Civil War
+						AND = {
+							OR = {
+								original_tag = SOM
+								original_tag = SHB
+								original_tag = SML
+								original_tag = PUN
+								original_tag = SNA
+								original_tag = SWS
+								original_tag = JUB
+							}
+							OR = {
+								has_war_with = SOM
+								has_war_with = SHB
+								has_war_with = SML
+								has_war_with = PUN
+								has_war_with = SNA
+								has_war_with = SWS
+								has_war_with = JUB
+							}
+						}
+						#Sudan Civil War
+						AND = {
+							OR = {
+								original_tag = SUD
+								original_tag = DAR
+							}
+							OR = {
+								has_war_with = SUD
+								has_war_with = DAR
+							}
+						}
+						#Central African Civil War
+						AND = {
+							OR = {
+								original_tag = CAR
+								original_tag = BAL
+								original_tag = SEL
+								original_tag = LOG
+							}
+							OR = {
+								has_war_with = CAR
+								has_war_with = BAL
+								has_war_with = SEL
+								has_war_with = LOG
+							}
+						}
+						#Sierra Leone Civil War
+						AND = {
+							OR = {
+								original_tag = SIE
+								original_tag = AFR
+							}
+							OR = {
+								has_war_with = SIE
+								has_war_with = AFR
+							}
+						}
+						#Liberian Civil War
+						AND = {
+							OR = {
+								original_tag = LIB
+								original_tag = LUR
+							}
+							OR = {
+								has_war_with = LIB
+								has_war_with = LUR
+							}
+						}
+						#1st Sudanese civil war
+						AND = {
+							OR = {
+								original_tag = SUD
+								original_tag = SSU
+							}
+							OR = {
+								has_war_with = SUD
+								has_war_with = SSU
+							}
+						}
+						#Angolan civil war
+						AND = {
+							OR = {
+								original_tag = AGL
+								original_tag = UNI
+							}
+							OR = {
+								has_war_with = AGL
+								has_war_with = UNI
+							}
+						}
+						#Congo war
+						AND = {
+							OR = {
+								original_tag = DRC
+								original_tag = RCD
+								original_tag = MLC
+							}
+							OR = {
+								has_war_with = DRC
+								has_war_with = RCD
+								has_war_with = MLC
+							}
+						}
+						#Aceh war
+						AND = {
+							OR = {
+							original_tag = ACE
+							original_tag = IND
+							}
+							OR = {
+							has_war_with = ACE
+							has_war_with = IND
+							}
+						}
+						#Nepal war
+						AND = {
+							OR = {
+								original_tag = NPM
+							    original_tag = NEP
+								}
+							OR = {
+								has_war_with = NPM
+								has_war_with = NEP
+								}
+						}
+						#Sri-Lanka war
+						AND = {
+							OR = {
+								original_tag = SRI
+							    original_tag = TML
+							}
+							OR = {
+								has_war_with = SRI
+								has_war_with = TML
+							}
+						}
+						#PMR and Moldova war
+						AND = {
+							OR = {
+								original_tag = PMR
+							    original_tag = MLV
+								}
+							OR = {
+								has_war_with = PMR
+								has_war_with = MLV
+								}
+						}
+					}
+				}
+				every_state = {
+					limit = {
+						check_variable = { partisan_strikes_count = 0 }
+						is_core_of = PREV
+						THIS.controller = { has_war = yes }
+					}
+					if = {
+						limit = { any_country_with_core = { has_country_flag = skilled_partisans } }
+						add_dynamic_modifier = {
+							modifier = partisans_activity_1
+							days = 32
+						}
+					}
+					else = {
+						add_dynamic_modifier = {
+							modifier = partisans_activity
+							days = 32
+						}
+					}
+					add_to_variable = { partisan_strikes_count = 1 }
+				}
+			}
+		}
+	}
+
+	on_startup = {
+		effect = {
+			672 = {
+				add_dynamic_modifier = {
+					modifier = chechen_insurgents
+					days = 7
+				}
+		}
+		}
+	}
+
+	on_weekly_CHE = {
+		effect = {
+			if = {
+				limit = {
+					CHE = {
+						exists = yes
+						has_war_with = SOV
+					}
+				}
+				672 = {
+					add_dynamic_modifier = {
+						modifier = chechen_insurgents
+						days = 8
+					}
+					damage_units = {
+						state = THIS
+						limit = { tag = SOV }
+						damage = 0.01
+									}
+					}
+			}
+		}
+	}
+
+	on_monthly = {
+		effect = {
+			if = {
+				limit = { has_war = yes }
+				every_controlled_state = {
+					limit = {
+						has_active_resistance = yes
+						check_variable = { resistance > 74 }
+						any_country = {
+							PREV = { is_core_of = PREV }
+							has_war_with = PREV.PREV
+						}
+					}
+					set_temp_variable = { global.state_to_spawn_partisans = THIS }
+					PREV = {
+						random_occupied_country = {
+							limit = { var:global.state_to_spawn_partisans = { is_core_of = PREV } }
+							THIS = { transfer_state = global.state_to_spawn_partisans }
+							division_template = {
+								name = "Partisans Troops"
+								is_locked = yes
+								regiments = {
+									Militia_Bat = { x = 0 y = 0 }
+									Militia_Bat = { x = 0 y = 1 }
+									Militia_Bat = { x = 0 y = 2 }
+								}
+								support = {
+									L_Recce_Comp = { x = 0 y = 0}
+								}
+								priority = 2
+							}
+							if = {
+								limit = {
+									has_country_flag = skilled_partisans
+								}
+								var:global.state_to_spawn_partisans = {
+									create_unit = {
+										division = "name = \"Partisans Troops\" division_template = \"Partisans Troops\" start_experience_factor = 0.5"
+										owner = PREV
+									}
+								}
+							}
+							else = {
+								var:global.state_to_spawn_partisans = {
+									create_unit = {
+										division = "name = \"Partisans Troops\" division_template = \"Partisans Troops\" start_experience_factor = 0.1"
+										owner = PREV
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_peace = {
+		effect = {
+			set_temp_variable = { adding_manpower = civil_war_garrisons }
+			multiply_temp_variable = { adding_manpower = 1000 }
+			set_temp_variable = { adding_cnc = civil_war_garrisons }
+			multiply_temp_variable = { adding_cnc = 250 }
+			add_manpower = adding_manpower
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = adding_manpower
+			}
+			add_equipment_to_stockpile = {
+				type = cnc_equipment
+				amount = adding_cnc
+			}
+			clear_variable = civil_war_garrisons
+			every_controlled_state = {
+				if = {
+					limit = { has_state_flag = restored_order }
+					clr_state_flag = restored_order
+				}
+			}
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			FROM.FROM = {
+				if = {
+					limit = { has_state_flag = restored_order }
+					clr_state_flag = restored_order
+				}
+			}
+		}
+	}
+}

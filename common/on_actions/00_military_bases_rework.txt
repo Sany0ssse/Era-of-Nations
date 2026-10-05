@@ -1,0 +1,66 @@
+on_actions = {
+	on_monthly = {
+		effect = {
+			every_unit_leader = {
+				limit = { is_corps_commander = yes }
+				if = {
+					limit = {
+						NOT = {
+							any_state = {
+								NOT = { is_owned_and_controlled_by = PREV }
+								PREV = { check_variable = { num_units_in_state@PREV > 0 } }
+							}
+						}
+					}
+					set_variable = { military_bases_buff = 0 }
+					for_each_loop = {
+						array = global.countries
+						value = v
+						if = {
+							limit = {
+								var:v = { gives_military_access_to = PREV.PREV }
+								NOT = {
+									any_state = {
+										PREV = { check_variable = { num_units_in_state@PREV > 0 } }
+										set_temp_variable = { own_capital = PREV.PREV.capital }
+										set_temp_variable = { base_capital = var:v.capital }
+										check_variable = { distance_to@var:own_capital < distance_to@var:base_capital }
+									}
+								}
+							}
+							add_to_variable = { military_bases_buff = 1 }
+						}
+					}
+
+					#Leader Buff
+					set_temp_variable = { military_bases_leader_factor_temp = 1 }
+					add_to_temp_variable = { military_bases_leader_factor_temp = modifier@military_bases_leader_modifier }
+					clamp_temp_variable = {
+						var = military_bases_leader_factor_temp
+						min = 0
+					}
+					multiply_variable = { military_bases_buff = military_bases_leader_factor_temp }
+
+					#Country Buff
+					set_temp_variable = { military_bases_country_factor_temp = 1 }
+					add_to_temp_variable = { military_bases_country_factor_temp = modifier@military_bases_country_modifier }
+					clamp_temp_variable = {
+						var = military_bases_country_factor_temp
+						min = 0
+					}
+					multiply_variable = { military_bases_buff = military_bases_country_factor_temp }
+
+					multiply_variable = { military_bases_buff = -0.001 }
+					if = {
+						limit = { check_variable = { military_bases_buff < -0.25 } }
+						set_variable = { military_bases_buff = -0.25 }
+					}
+					add_dynamic_modifier = {
+						modifier = military_bases_supply_modifier
+						days = 31
+					}
+				}
+			}
+		}
+	}
+}

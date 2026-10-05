@@ -1,0 +1,2138 @@
+
+
+GENERIC_stabilize_government_civil_war_script = {
+	if = {
+		limit = {
+			original_tag = UKR
+			OVERLORD = {
+				original_tag = SOV 
+			}
+			UKR = {
+				NOT = {
+					has_country_flag = ukr_revoult_bilo
+				}
+			}
+		}
+		UKR = {
+			set_country_flag = ukr_revoult_bilo
+			country_event = { id = ukraine_maidan_west.1 days = 10 }
+		}
+	}
+	if = {
+		limit = {
+			original_tag = UKR
+			OVERLORD = {
+				NOT = {
+					original_tag = SOV
+				}
+			}
+			UKR = {
+				has_country_flag = ukr_revoult_bilo
+			}
+		}
+		UKR = {
+			set_country_flag = ukr_revoult_bilo
+			country_event = { id = ukraine_maidan_east.1 days = 10 }
+		}
+	}
+	if = {
+		limit = {
+			NOT = {
+				original_tag = UKR
+			}
+		}
+		if = {
+			limit = { 
+				has_government = nationalist 
+			}
+			start_civil_war = {
+				ideology = democratic
+				size = 0.5
+			}
+		}
+		if = {
+			limit = { 
+				has_government = communism
+			}
+			start_civil_war = {
+				ideology = democratic
+				size = 0.5
+			}
+		}
+		if = {
+			limit = { 
+				has_government = democratic
+			}
+			start_civil_war = {
+				ideology = nationalist
+				size = 0.5
+			}
+		}
+		if = {
+			limit = { 
+				has_government = neutrality
+			}
+			start_civil_war = {
+				ideology = communism
+				size = 0.5
+			}
+		}
+		if = {
+			limit = { 
+				has_government = fascism
+			}
+			start_civil_war = {
+				ideology = nationalist
+				size = 0.5
+			}
+		}
+	}
+}
+GENERIC_limited_market_script = {
+	if = {
+		limit = { 
+			has_idea = consumption_economy
+		}
+		swap_ideas = {
+			remove_idea = consumption_economy
+			add_idea = md_closed_economy
+		}
+	}
+	if = {
+		limit = { 
+			has_idea = semi_consumption_economy
+		}
+		swap_ideas = {
+			remove_idea = semi_consumption_economy
+			add_idea = md_closed_economy
+		}
+	}
+	if = {
+		limit = { 
+			has_idea = mixed_economy
+		}
+		swap_ideas = {
+			remove_idea = mixed_economy
+			add_idea = md_closed_economy
+		}
+	}
+	if = {
+		limit = { 
+			has_idea = export_economy
+		}
+		swap_ideas = {
+			remove_idea = export_economy
+			add_idea = md_closed_economy
+		}
+	}
+	if = {
+		limit = { 
+			has_idea = globalized_trade_economy
+		}
+		swap_ideas = {
+			remove_idea = globalized_trade_economy
+			add_idea = md_closed_economy
+		}
+	}
+}
+
+###########ECONOMIC CRISIS - OIL COMPANIES COUNT###########
+modify_economic_crisis_oil_support = {
+	add_to_variable = { economic_crisis_oil = modify_economic_crisis_oil }
+	custom_effect_tooltip = GENERIC_economic_crisis_oil_tt
+	clamp_variable = {
+		var = economic_crisis_oil
+		min = 0
+		max = 400
+	}
+}
+###########INFLIATION - PETRO DOLLAR###########
+modify_infliation_petrodollar_support = {
+	add_to_variable = { infliation_petrodollar = modify_infliation_petrodollar }
+	custom_effect_tooltip = GENERIC_infliation_petrodollar_tt
+	clamp_variable = {
+		var = infliation_petrodollar
+		min = 0
+		max = 400
+	}
+}
+###########RECOGNIZE - NUMBER###########
+modify_recognize_country_support = {
+	add_to_variable = { recognize_country = modify_recognize_country }
+	custom_effect_tooltip = GENERIC_recognize_country_tt
+	clamp_variable = {
+		var = recognize_country
+		min = 0
+		max = 5
+	}
+}
+###########ANTI PUPPET - SCRIPT###########
+GENERIC_antipuppet_script = {
+	if = {
+		limit = { 
+			is_subject = yes
+		}
+		add_autonomy_score = { value = 100 }
+	}
+}
+###########ANTI INFLUENCY PUPPET - SCRIPT###########
+GENERIC_antiinfluency_script = {
+	set_temp_variable = { percent_change = 5 }
+	change_domestic_influence_percentage = yes
+}
+###########INFLIATION - PETRO DOLLAR SCRIPT###########
+GENERIC_petrodollar_script = {
+	if = {
+		limit = { 
+			check_variable = { infliation_petrodollar > 110 }
+		}
+		add_ideas = GENERIC_sobad_petrodollar_infliation_idea
+	}
+	if = {
+		limit = { 
+			check_variable = { infliation_petrodollar < 110 }
+			check_variable = { infliation_petrodollar > 80 }
+		}
+		add_ideas = GENERIC_bad_petrodollar_infliation_idea
+	}
+	if = {
+		limit = { 
+			check_variable = { infliation_petrodollar < 80 }
+			check_variable = { infliation_petrodollar > 20 }
+		}
+		add_ideas = GENERIC_notslow_petrodollar_infliation_idea
+	}
+	if = {
+		limit = { 
+			check_variable = { infliation_petrodollar < 20 }
+		}
+		add_ideas = GENERIC_slow_petrodollar_infliation_idea
+	}
+}
+###########INFLIATION - PETRO RUBLE###########
+modify_infliation_petroruble_support = {
+	add_to_variable = { infliation_petroruble = modify_infliation_petroruble }
+	custom_effect_tooltip = GENERIC_infliation_petroruble_tt
+	clamp_variable = {
+		var = infliation_petroruble
+		min = 0
+		max = 400
+	}
+}
+###########INFLIATION - PETRO RUBLE SCRIPT###########
+GENERIC_petroruble_script = {
+	if = {
+		limit = { 
+			check_variable = { infliation_petroruble > 80 }
+		}
+		add_ideas = GENERIC_sogood_petroruble_infliation_idea
+	}
+	if = {
+		limit = { 
+			check_variable = { infliation_petroruble > 40 }
+			check_variable = { infliation_petroruble < 80 }
+		}
+		add_ideas = GENERIC_good_petroruble_infliation_idea
+	}
+	if = {
+		limit = { 
+			check_variable = { infliation_petroruble < 20 }
+		}
+		remove_ideas = GENERIC_good_petroruble_infliation_idea
+	}
+}
+###########INFLIATION - PETRO YUAN###########
+modify_infliation_petroyuan_support = {
+	add_to_variable = { infliation_petroyuan = modify_infliation_petroyuan }
+	custom_effect_tooltip = GENERIC_infliation_petroyuan_tt
+	clamp_variable = {
+		var = infliation_petroyuan
+		min = 0
+		max = 400
+	}
+}
+###########INFLIATION - PETRO YUAN SCRIPT###########
+GENERIC_petroyuan_script = {
+	if = {
+		limit = { 
+			check_variable = { infliation_petroyuan > 80 }
+		}
+		add_ideas = GENERIC_sogood_petroyuan_infliation_idea
+	}
+	if = {
+		limit = { 
+			check_variable = { infliation_petroyuan > 40 }
+			check_variable = { infliation_petroyuan < 80 }
+		}
+		add_ideas = GENERIC_good_petroyuan_infliation_idea
+	}
+	if = {
+		limit = { 
+			check_variable = { infliation_petroyuan < 20 }
+		}
+		remove_ideas = GENERIC_good_petroyuan_infliation_idea
+	}
+}
+###########INFLIATION - PETRO ESCUDO###########
+modify_infliation_petroescudo_support = {
+	add_to_variable = { infliation_petroescudo = modify_infliation_petroescudo }
+	custom_effect_tooltip = GENERIC_infliation_petroescudo_tt
+	clamp_variable = {
+		var = infliation_petroescudo
+		min = 0
+		max = 400
+	}
+}
+###########INFLIATION - PETRO ESCUDO SCRIPT###########
+GENERIC_petroescudo_script = {
+	if = {
+		limit = { 
+			check_variable = { infliation_petroescudo > 80 }
+		}
+		add_ideas = GENERIC_sogood_petroyuan_infliation_idea
+	}
+	if = {
+		limit = { 
+			check_variable = { infliation_petroescudo > 40 }
+			check_variable = { infliation_petroescudo < 80 }
+		}
+		add_ideas = GENERIC_good_petroyuan_infliation_idea
+	}
+	if = {
+		limit = { 
+			check_variable = { infliation_petroescudo < 20 }
+		}
+		remove_ideas = GENERIC_good_petroyuan_infliation_idea
+	}
+}
+###########CAPITALIZATION -  COMPANIES COUNT VARIABLE###########
+modify_count_companies_support = {
+	if = {
+		limit = { NOT = { has_variable = count_companies } }
+		set_variable = { count_companies = 0 }
+	}
+	add_to_variable = { count_companies = modify_count_companies }
+	custom_effect_tooltip = GENERIC_count_companies_tt
+	clamp_variable = {
+		var = count_companies
+		min = 0
+		max = 12
+	}
+}
+###########CAPITALIZATION -  COMPANIES COUNT SCRIPT###########
+GENERIC_count_companies_script = {
+	if = {
+		limit = { 
+			check_variable = { count_companies > 4 }
+			NOT = {
+				has_country_flag = companies_first_growth
+			}
+		}
+		hidden_effect = {
+			country_event = redux_generic.16
+			set_country_flag = companies_first_growth
+		}
+	}
+	if = {
+		limit = { 
+			check_variable = { count_companies > 9 }
+			NOT = {
+				has_country_flag = companies_second_growth
+			}
+		}
+		hidden_effect = {
+			country_event = redux_generic.16
+			set_country_flag = companies_second_growth
+		}
+	}
+}
+###########CAPITALIZATION -  POSITIVE INCOME###########
+GENERIC_income_positive_script = {
+	if = {
+		limit = { 
+			has_war = no
+			check_variable = { count_companies > 4 }
+			check_variable = { count_companies < 9 }
+			OR = {
+				has_idea = stable_growth
+				has_idea = fast_growth
+				has_idea = economic_boom
+			}
+			OR = {
+				has_idea = modest_corruption
+				has_idea = slight_corruption
+				has_idea = negligible_corruption
+			}
+		}
+		hidden_effect = {
+			set_temp_variable = { modify_capitalization =  0.185 }
+			modify_capitalization_support = yes 
+		}
+	}
+	if = {
+		limit = { 
+			has_war = no
+			check_variable = { count_companies > 9 }
+			OR = {
+				has_idea = stable_growth
+				has_idea = fast_growth
+				has_idea = economic_boom
+			}
+			OR = {
+				has_idea = modest_corruption
+				has_idea = slight_corruption
+				has_idea = negligible_corruption
+			}
+		}
+		hidden_effect = {
+			set_temp_variable = { modify_capitalization =  0.400 }
+			modify_capitalization_support = yes 
+		}
+	}
+}
+###########CAPITALIZATION -  NEGATIVE INCOME###########
+GENERIC_income_negative_script = {
+	if = {
+		limit = { 
+			has_war = no
+			check_variable = { count_companies > 4 }
+			check_variable = { count_companies < 9 }
+			OR = {
+				has_idea = depression
+				has_idea = recession
+			}
+			OR = {
+				has_idea = paralyzing_corruption
+				has_idea = modest_corruption
+				has_idea = slight_corruption
+				has_idea = negligible_corruption
+			}
+		}
+		hidden_effect = {
+			set_temp_variable = { modify_capitalization =  -0.285 }
+			modify_capitalization_support = yes 
+		}
+	}
+	if = {
+		limit = { 
+			has_war = no
+			check_variable = { count_companies > 9 }
+			OR = {
+				has_idea = depression
+				has_idea = recession
+			}
+			OR = {
+				has_idea = paralyzing_corruption
+				has_idea = modest_corruption
+				has_idea = slight_corruption
+				has_idea = negligible_corruption
+			}
+		}
+		hidden_effect = {
+			set_temp_variable = { modify_capitalization =  -0.550 }
+			modify_capitalization_support = yes 
+		}
+	}
+}
+
+
+###########CAPITALIZATION -  VARIABLE###########
+modify_capitalization_support = {
+	add_to_variable = { capitalization = modify_capitalization }
+	custom_effect_tooltip = GENERIC_capitalization_tt
+	clamp_variable = {
+		var = capitalization
+		min = 0.001
+		max = 99999
+	}
+}
+###########CAPITALIZATION - CHANGE ECONOMY POSITIVE SCRIPT###########
+GENERIC_capitalization_change_economy_positive_script = {
+	if = {
+		limit = {
+			has_idea = emerging_economy
+			check_variable = { capitalization > 3 }
+		}
+		swap_ideas = {
+			remove_idea = emerging_economy
+			add_idea = developed_economy
+		}
+	}
+	else_if = {
+		limit = {
+			has_idea = frontier_market
+			check_variable = { capitalization > 1 }
+		}
+		swap_ideas = {
+			remove_idea = frontier_market
+			add_idea = emerging_economy
+		}
+	}
+}
+###########CAPITALIZATION - CHANGE ECONOMY NEGATIVE SCRIPT###########
+GENERIC_capitalization_change_economy_negative_script = {
+	if = {
+		limit = {
+			has_idea = emerging_economy
+			check_variable = { capitalization < 1 }
+		}
+		swap_ideas = {
+			remove_idea = emerging_economy
+			add_idea = frontier_market
+		}
+	}
+	else_if = {
+		limit = {
+			has_idea = developed_economy
+			check_variable = { capitalization < 3 }
+		}
+		swap_ideas = {
+			remove_idea = developed_economy
+			add_idea = emerging_economy
+		}
+	}
+}
+###########CAPITALIZATION -  SCRIPT###########
+GENERIC_capitalization_script = {
+	#Generic Companies
+	if = {
+		limit = { 
+			has_idea = Generic_Automobilecompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Constructioncompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Consumercompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Distributioncompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Pharmaceuticalcompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Electronicscompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Foodcompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Commercialcompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Steelmakercompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Clothingcompany_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Automobilecompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Electronicscompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Foodcompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Distributioncompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Pharmaceuticalcompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Commercialcompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Steelmakercompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Clothingcompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Constructioncompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = Generic_Consumercompany_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	#Saudi Companies
+	if = {
+		limit = { 
+			has_idea = SAU_Saudi_Aramco_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.012 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SAU_Saudi_Aramco_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.015 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SAU_Rajhi_Bank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SAU_Riyad_Bank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SAU_Saudi_Electricity_Company_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	#Germany Companies
+	if = {
+		limit = { 
+			has_idea = GER_SAP_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Volkswagen_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_BMW_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Deutsche_Telekom_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Porsche_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_MercedesBenz_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Siemens_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Landesbank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Deutsche_Bahn_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Bechtle_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Software_AG_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Software_AG_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Kaufland_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = GER_Lufthansa_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	#China Companies
+	if = {
+		limit = { 
+			has_idea = CHI_Baidu_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_Lenovo_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_Petro_China
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_Tencent_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_Alibaba_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_CCB_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_ICBC_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_China_State_Construction_Engineering
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_China_Telecom
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_Agricultural_Bank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_aigo_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_Brilliance_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_Air_China_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = CHI_CNOOC_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	#English Companies
+	if = {
+		limit = { 
+			has_idea = ENG_AstraZeneca_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_Shell_company
+		}
+		set_temp_variable = { modify_capitalization =  0.012 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_Diageo_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_Reckitt_Benckiser_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_Linde_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_Unilever_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_BP_company
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_GlaxoSmithKline_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_HSBC_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_Rio_Tinto_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_Barclays_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_NatWest_Group_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_BT_Group_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ENG_British_Airways_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	#France Companies
+	if = {
+		limit = { 
+			has_idea = FRA_Chanel_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = FRA_LVMH_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = FRA_Schneider_Electric_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = FRA_LOreal_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = FRA_Vinci_SA_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = FRA_TotalEnergies_company
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	#USA Companies
+	if = {
+		limit = { 
+			has_idea = USA_Ford_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Apple_company
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Amazon_company
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Berkshire_Hathaway_company
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_United_Health_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Coke_company
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Tesla_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_PandG_company
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Microsoft_company
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Oracle_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Alphabet_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Nvidia_Corporation_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_AMD_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Adobe_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Exxon_Mobil_Corporation_company
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Walmart_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_CityGroup_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_JPMorgan_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Marathon_Petroleum_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_att_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_ibm_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_ge_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Chevron_Corporation_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Bank_America_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Home_Depot_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Kroger_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = USA_Comcast_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	#Holland Companies
+	if = {
+		limit = { 
+			has_idea = HOL_ABN_AMRO_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = HOL_Amstel_Brewery_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = HOL_DSM_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = HOL_Exact_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = HOL_Grolsch_Brewery_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = HOL_Airlines_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = HOL_BAM_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	#Belarus Companies
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belarusbank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belarusbank_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belneft_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belneft_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belagroprombank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belagroprombank_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belivenstbank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belivenstbank_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belavtodor_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belenergo_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belenergo_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belavia_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belavia_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belaz_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belaz_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_gomselmash_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_gomselmash_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_kommunarka_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_kommunarka_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_borimed_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_borimed_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belkal_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belkal_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_bmz_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_bmz_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belrepublicbank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belrepublicbank_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belshina_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = BLR_economy_belshina_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	#Azerbaijan Companies
+	if = {
+		limit = { 
+			has_idea = AZE_Attabank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = AZE_AzerGanja_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = AZE_AzerSoccar_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = AZE_AzerABB_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = AZE_Azerigazbank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = AZE_Azercell_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = AZE_AzerAirlines_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	#Armenian Companies
+	if = {
+		limit = { 
+			has_idea = ARM_economy_ardshinbank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_ardshinbank_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_inecobank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_inecobank_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_evocabank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_evocabank_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_marianna_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_marianna_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_Eraz_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_Eraz_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_Hrazdan_cement_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_Hrazdan_cement_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_teghout_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_teghout_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_teghout_idea2
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_ml_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_ml_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_shoghakn_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_shoghakn_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_shoghakn_idea2
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_grand_tobacco_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_grand_tobacco_privatization_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_ameriabank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_spaika_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = ARM_economy_ucom_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	#Taiwan Companies
+	if = {
+		limit = { 
+			has_idea = TAI_TSMC_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = TAI_Foxconn_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = TAI_Formosa_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = TAI_MediaTek_company
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	#Turkey Companies
+	if = {
+		limit = { 
+			has_idea = TUR_QNB_Finansbank_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = TUR_Erdemir_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = TUR_Koc_Holding_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = TUR_ENKA_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = TUR_Bim_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = TUR_Turkcell_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = TUR_Garanti_BBVA_company
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	#Russian Companies
+	if = {
+		limit = { 
+			has_idea = SOV_nornickel_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rusal_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rostelekom_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rostelekom_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_sber_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_sberbank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_sberbank_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_gazprom_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_gazprom1_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_gazprom2_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_sibur_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_slavneft_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_slavneft_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rosneft_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rosneft_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rosneft_idea2
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_azod_phosagro_income
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rusagro_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rusagro_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_miratorg_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_miratorg_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_aeroflot_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_aeroflot_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_sibneft_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_yandex_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_yandex_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_vtbbank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_vtb_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rosatom_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rosatom_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rosatom_idea2
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_interrao
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_megaphon_idea 
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_mts_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_mts_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_beeline_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.005 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_beeline_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_lukoil_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.010 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_gazprom_neft_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_alphabank_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_alphabank_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_rushydro_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.006 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_severstal_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_severstal_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_mechel_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_efko_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_efko_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_evraz_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_evraz_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.007 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_evraz_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_alrosa_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.008 }
+		modify_capitalization_support = yes 
+	}
+	if = {
+		limit = { 
+			has_idea = SOV_alrosa_idea1
+		}
+		set_temp_variable = { modify_capitalization =  0.009 }
+		modify_capitalization_support = yes 
+	}
+	#Nigerian Companies
+	if = {
+		limit = { 
+			has_idea = NIG_american_deal_idea
+		}
+		set_temp_variable = { modify_capitalization =  0.012 }
+		modify_capitalization_support = yes 
+	}
+}
+
+

@@ -1,0 +1,1531 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			every_country = {
+				set_temp_variable = { stability_shit = stability }
+				add_to_temp_variable = { stability_shit = stability_factor }
+				if = {
+					limit = { check_variable = { stability_shit = 0 } }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = {
+						AND = {
+							check_variable = { stability_shit > 0 }
+							check_variable = { stability_shit < 0.35 }
+						}
+					}
+					add_stability = 0.35
+				}
+				else_if = {
+					limit = { check_variable = { stability_shit = 1 } }
+					add_stability = -0.45
+				}
+				if = {
+					limit = { has_war = yes }
+					add_stability = 0.15
+				}
+				if = {
+					limit = { tag = CAN }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = ITA }
+					add_stability = -0.15
+				}
+				else_if = {
+					limit = { tag = CUB }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = VEN }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = TRI }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = AZE }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = FIJ }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = ABK }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = JAM }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = SAO }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = MLT }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = SIN }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = SLV }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = STK }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = ANT }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = VER }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = IRE }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = SAU }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = BRA }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = SOL }
+					add_stability = 0.45
+				}
+				else_if = {
+					limit = { tag = USA }
+					add_stability = 0.45
+				}
+			}
+		}
+	}
+	on_startup = {
+		effect = {
+			every_country = {
+				add_ideas = coal_costilb_idea
+				if = {
+					limit = { is_ai = yes }
+					add_dynamic_modifier = {
+						modifier = costilb_modifier
+					}
+				}
+			}
+		}
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = { NOT = { has_idea = coal_costilb_idea } }
+				add_ideas = coal_costilb_idea
+			}
+			if = {
+				limit = { is_ai = yes }
+				subtract_from_variable = { costil_command_buff = ai_attache_count_add }
+				set_variable = { ai_attache_count_add = 0 }
+				for_each_loop = {
+					array = global.countries
+					value = v
+					if = {
+						limit = {
+							var:v = {
+								has_attache_from = PREV
+							}
+						}
+						add_to_variable = { ai_attache_count_add = 1 }
+					}
+				}
+				multiply_variable = { ai_attache_count_add = 40 }
+				add_to_variable = { costil_command_buff = ai_attache_count_add }
+			}
+			if = {
+				limit = {
+					is_ai = yes
+					NOT = { has_dynamic_modifier = costilb_modifier }
+				}
+				add_dynamic_modifier = {
+					modifier = costilb_modifier
+				}
+			}
+		}
+	}
+	on_puppet = {
+		effect = {
+			free_random_operative = {
+				captured_by = ROOT
+				all = yes
+			}
+		}
+	}
+	on_annex = {
+		effect = {
+			free_random_operative = {
+				captured_by = FROM
+				all = yes
+			}
+		}
+	}
+	on_subject_annexed = {
+		effect = {
+			free_random_operative = {
+				captured_by = ROOT
+				all = yes
+			}
+		}
+	}
+
+	on_peaceconference_ended = {
+		effect = {
+			if = {
+				limit = {
+					ROOT = {
+						tag = SOV
+					}
+					FROM = {
+						tag = CHE
+					}
+					NOT = { has_global_flag = chechen_war_ended }
+				}
+				if = {
+					limit = {
+						ROOT = { is_ai = yes }
+						FROM = { is_ai = yes }
+					}
+					SOV = {
+						annex_country = {
+							target = CHE
+							transfer_troops = no
+						}
+					}
+					set_global_flag = chechen_war_ended
+				}
+				set_global_flag = { flag = kaukaz_terrorism_buff value = 1 days = 180 }
+			}
+			else_if = {
+				limit = {
+					ROOT = { has_country_flag = annex_on_peace_conference@FROM }
+				}
+				ROOT = {
+					annex_country = {
+						target = FROM
+						transfer_troops = no
+					}
+				}
+			}
+		}
+	}
+
+	on_peaceconference_ended = {
+		effect = {
+			if = {
+				limit = {
+					ROOT = {
+						tag = USA
+					}
+					FROM = {
+						tag = IRQ
+					}
+					NOT = { has_global_flag = iraq_war_ended }
+				}
+				set_global_flag = iraq_war_ended
+				set_global_flag = { flag = iraq_terrorism_buff value = 1 days = 180 }
+			}
+		}
+	}
+
+	on_peace = {
+		effect = {
+			delete_unit_template_and_units = {
+				division_template = "Partisans Troops"
+				disband = no
+			}
+		}
+	}
+
+	on_annex = {
+		effect = {
+			if = {
+				limit = { has_war = no }
+				delete_unit_template_and_units = {
+					division_template = "Partisans Troops"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "People's Militia Troops"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Foreign Peacekeepers"
+					disband = no
+				}
+            	delete_unit_template_and_units = {
+                	division_template = "Grey Men"
+                	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "Reserve Battalion"
+                	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "Rosgvardia"
+                	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "Rosgvardia Tank Brigade"
+                	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "OMON"
+                	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "SOBR"
+               	 	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "SOF"
+               	 	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "Special Forces 'O'"
+               	 	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "BARS Battalion"
+                	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "Cossack Regiment"
+                	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "Battalion of Prisoners"
+                	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "Volunteer Assault Corps"
+                	disband = no
+            	}
+            	delete_unit_template_and_units = {
+                	division_template = "Volunteer Battalion"
+                	disband = no
+            	}
+				delete_unit_template_and_units = {
+					division_template = "Gazprom PMC"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Polish Legions"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Brygada Lotnictwa Armii"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "JW NIL"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "JW AGAT"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "JW GROM"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "JW Komandosów"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "JW FORMOZA"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "SSO"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Territorial Defence"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Internal Troops"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "People's Militia"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "National Battalion"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Militia Brigade"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Corpo de Fuzileiros"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Portuguese Legion"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Lusitanian Red Guard"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "National Republican Guard"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Motorisierte-Schützendivision"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Spezialaufklärungszug"
+					disband = no
+				}
+				delete_unit_template_and_units = {
+					division_template = "Kampfschwimmerkommando"
+					disband = no
+				}
+			}
+		}
+	}
+
+    on_monthly = {
+		effect = {
+			if = {
+				limit = { is_ai = yes }
+				for_each_loop = {
+					array = subjects
+					value = v
+					if = {
+						limit = {
+							var:v = {
+								NOT = {
+									has_autonomy_state = autonomy_authority_of_palestine
+									has_autonomy_state = autonomy_authority_of_palestine_1
+									has_autonomy_state = autonomy_authority_of_palestine_2
+									has_autonomy_state = autonomy_provisional_security_of_gaza
+									has_autonomy_state = autonomy_korean_federation
+									has_autonomy_state = autonomy_republic_khm
+									has_autonomy_state = autonomy_warsaw
+									has_autonomy_state = autonomy_governorate_rf
+									has_autonomy_state = autonomy_pmc_wagner
+									has_autonomy_state = autonomy_state_cis
+									has_autonomy_state = autonomy_autonomous_province1
+									has_autonomy_state = autonomy_balkan_federation
+									has_autonomy_state = autonomy_irn_province
+									has_autonomy_state = TAJ_autonomy_administrative_region
+									has_autonomy_state = TUR_eyalet_province
+									has_autonomy_state = autonomy_uar_regional_command
+									has_autonomy_state = autonomy_republic_ukr
+									has_autonomy_state = autonomy_union_state
+									has_autonomy_state = autonomy_collaboration_government
+									has_autonomy_state = autonomy_fifty_second_state_afghanistan
+									has_autonomy_state = autonomy_cuban_confederation
+									has_autonomy_state = autonomy_marz_arm
+									has_autonomy_state = autonomy_armenia_state
+									has_autonomy_state = autonomy_terrorist_mintaqah
+									has_autonomy_state = autonomy_special_administrative_region_HKG
+									has_autonomy_state = autonomy_special_administrative_region_MAC
+									has_autonomy_state = autonomy_special_administrative_region_TAI
+									has_autonomy_state = autonomy_special_administrative_region_TIB
+									has_autonomy_state = autonomy_special_administrative_region_ETK
+									has_autonomy_state = autonomy_special_administrative_region_MON
+									has_autonomy_state = danish_crown_holding
+									has_autonomy_state = autonomy_autonomous_state
+									has_autonomy_state = autonomy_autonomous_state_colored
+									has_autonomy_state = HOL_personal_union
+									has_autonomy_state = autonomy_islamic_republic
+									has_autonomy_state = autonomy_socialist_union
+									has_autonomy_state = autonomy_federal_state_iran
+									has_autonomy_state = autonomy_fifty_first_state_iraq
+									has_autonomy_state = autonomy_autonomous_federation
+									has_autonomy_state = autonomy_visegrad_subject
+									has_autonomy_state = autonomy_intermarium_subject
+									has_autonomy_state = autonomy_junior_uniate
+								}
+								check_variable = { autonomy_ratio = 0 }
+							}
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_terrorist_branch } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_terrorist_wilayah
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_terrorist_wilayah } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_terrorist_mintaqah
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_associated_state_colored } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_satellite_state_colored
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_satellite_state_colored } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_puppet_state_colored
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_puppet_state_colored } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_autonomous_state_colored
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_associated_state } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_satellite_state
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_satellite_state } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_puppet_state
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_puppet_state } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_autonomous_state
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_associated_federation } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_satellite_federation
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_satellite_federation } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_puppet_federation
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_puppet_federation } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_autonomous_federation
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_state_rf } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_republic_rf
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_republic_rf } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_kray_rf
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_kray_rf } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_oblast_rf
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_oblast_rf } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_okrug_rf
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_okrug_rf } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_governorate_rf
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_autonomous_province } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_autonomous_province1
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_uar_state } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_uar_province
+							}
+							add_political_power = -50
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_uar_province } }
+							set_autonomy = {
+								target = v
+								autonomy_state = autonomy_uar_regional_command
+							}
+							add_political_power = -50
+						}
+					}
+				    if = {
+						limit = {
+							NOT = { has_country_flag = integration_of_institutions_idea }
+							var:v = {
+								OR = {
+									has_autonomy_state = autonomy_autonomous_federation
+									has_autonomy_state = autonomy_autonomous_state
+									has_autonomy_state = autonomy_autonomous_state_colored
+									has_autonomy_state = autonomy_terrorist_mintaqah
+									has_autonomy_state = autonomy_uar_regional_command
+									has_autonomy_state = autonomy_collaboration_government
+									has_autonomy_state = HOL_personal_union
+								}
+							}
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = autonomy_uar_regional_command } }
+							var:v = {
+								for_each_scope_loop = {
+									array = core_states
+									add_core_of = PREV.PREV
+								}
+								if = { limit = { original_tag = LBA }
+									set_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								every_unit_leader = {
+									set_nationality = PREV
+								}
+								if = { limit = { original_tag = LBA }
+									clr_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								if = {
+									limit = { has_country_flag = overlord_subsidies }
+									clr_country_flag = overlord_subsidies
+									clr_country_flag = overlord_is_subsidizing_us_@PREV
+								}
+								if = {
+									limit = {
+										has_country_flag = SCO_joint_exercises_offered
+									}
+									clr_country_flag = SCO_joint_exercises_offered
+								}
+								PREV = {
+									if = {
+										limit = { PREV = { has_country_flag = overlord_subsidies } }
+										clr_country_flag = overlord_subsidies
+										clr_country_flag = overlord_is_subsidizing_us_@PREV
+									}
+									if = {
+										limit = {
+											has_country_flag = SCO_joint_exercises_offered
+										}
+										clr_country_flag = SCO_joint_exercises_offered
+									}
+									add_to_variable = { treasury = PREV.treasury }
+									clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+									add_to_variable = { debt = PREV.debt }
+	    							clamp_variable = { var = debt min = 0 max = 1000000 }
+									add_to_variable = { int_investments = PREV.int_investments }
+									set_country_flag = { flag = integration_of_institutions days = 100 value = 1 }
+            						clamp_variable = { var = int_investments min = 0 max = 1000000 }
+									if = { limit = { original_tag = USA }
+										add_to_array = { USA_collapse_releases = PREV.id }
+									}
+									annex_country = {
+										target = PREV
+										transfer_troops = yes
+									}
+									add_political_power = -50
+								}
+							}
+						}
+						if = {
+							limit = { var:v = { has_autonomy_state = HOL_personal_union } }
+							var:v = {
+								for_each_scope_loop = {
+									array = core_states
+									add_core_of = PREV.PREV
+								}
+								if = { limit = { original_tag = LBA }
+									set_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								every_unit_leader = {
+									set_nationality = PREV
+								}
+								if = { limit = { original_tag = LBA }
+									clr_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								if = {
+									limit = { has_country_flag = overlord_subsidies }
+									clr_country_flag = overlord_subsidies
+									clr_country_flag = overlord_is_subsidizing_us_@PREV
+								}
+								if = {
+									limit = {
+										has_country_flag = SCO_joint_exercises_offered
+									}
+									clr_country_flag = SCO_joint_exercises_offered
+								}
+								PREV = {
+									if = {
+										limit = { PREV = { has_country_flag = overlord_subsidies } }
+										clr_country_flag = overlord_subsidies
+										clr_country_flag = overlord_is_subsidizing_us_@PREV
+									}
+									if = {
+										limit = {
+											has_country_flag = SCO_joint_exercises_offered
+										}
+										clr_country_flag = SCO_joint_exercises_offered
+									}
+									add_to_variable = { treasury = PREV.treasury }
+									clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+									add_to_variable = { debt = PREV.debt }
+	    							clamp_variable = { var = debt min = 0 max = 1000000 }
+									add_to_variable = { int_investments = PREV.int_investments }
+									set_country_flag = { flag = integration_of_institutions days = 100 value = 1 }
+            						clamp_variable = { var = int_investments min = 0 max = 1000000 }
+									if = { limit = { original_tag = USA }
+										add_to_array = { USA_collapse_releases = PREV.id }
+									}
+									annex_country = {
+										target = PREV
+										transfer_troops = yes
+									}
+									add_political_power = -50
+								}
+							}
+						}
+						if = {
+							limit = {
+								var:v = {
+									has_autonomy_state = autonomy_terrorist_mintaqah
+									OR = {
+										original_tag = IKR
+										original_tag = BLC
+										original_tag = ARA
+										original_tag = LOR
+									}
+								}
+								NOT = { has_country_flag = PER_federalized_republic }
+								if = {
+									limit = { var:v = { original_tag = PKK } }
+									NOT = { has_country_flag = TUR_PKK_federalized }
+								}
+								if = {
+									limit = { var:v = { original_tag = ERI } }
+									NOT = { has_idea = ETH_eritrean_constitution }
+								}
+							}
+							var:v = {
+								for_each_scope_loop = {
+									array = core_states
+									add_core_of = PREV.PREV
+								}
+								if = { limit = { original_tag = LBA }
+									set_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								every_unit_leader = {
+									set_nationality = PREV
+								}
+								if = { limit = { original_tag = LBA }
+									clr_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								if = {
+									limit = { has_country_flag = overlord_subsidies }
+									clr_country_flag = overlord_subsidies
+									clr_country_flag = overlord_is_subsidizing_us_@PREV
+								}
+								if = {
+									limit = {
+										has_country_flag = SCO_joint_exercises_offered
+									}
+									clr_country_flag = SCO_joint_exercises_offered
+								}
+								PREV = {
+									if = {
+										limit = { PREV = { has_country_flag = overlord_subsidies } }
+										clr_country_flag = overlord_subsidies
+										clr_country_flag = overlord_is_subsidizing_us_@PREV
+									}
+									if = {
+										limit = {
+											has_country_flag = SCO_joint_exercises_offered
+										}
+										clr_country_flag = SCO_joint_exercises_offered
+									}
+									add_to_variable = { treasury = PREV.treasury }
+									clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+									add_to_variable = { debt = PREV.debt }
+	    							clamp_variable = { var = debt min = 0 max = 1000000 }
+									add_to_variable = { int_investments = PREV.int_investments }
+									set_country_flag = { flag = integration_of_institutions days = 100 value = 1 }
+            						clamp_variable = { var = int_investments min = 0 max = 1000000 }
+									if = { limit = { original_tag = USA }
+										add_to_array = { USA_collapse_releases = PREV.id }
+									}
+									annex_country = {
+										target = PREV
+										transfer_troops = yes
+									}
+									add_political_power = -50
+								}
+							}
+						}
+						if = {
+							limit = {
+								var:v = {
+									has_autonomy_state = autonomy_autonomous_state
+									OR = {
+										original_tag = IKR
+										original_tag = BLC
+										original_tag = ARA
+										original_tag = LOR
+									}
+								}
+								NOT = { has_country_flag = PER_federalized_republic }
+								if = {
+									limit = { var:v = { original_tag = PKK } }
+									NOT = { has_country_flag = TUR_PKK_federalized }
+								}
+								if = {
+									limit = { var:v = { OR = { original_tag = KUR original_tag = PUK } } }
+									NOT = { has_country_flag = IRQ_autonomous_kurdistan }
+								}
+								if = {
+									limit = { var:v = { original_tag = ERI } }
+									NOT = { has_idea = ETH_eritrean_constitution }
+								}
+							}
+							var:v = {
+								for_each_scope_loop = {
+									array = core_states
+									add_core_of = PREV.PREV
+								}
+								if = { limit = { original_tag = LBA }
+									set_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								every_unit_leader = {
+									set_nationality = PREV
+								}
+								if = { limit = { original_tag = LBA }
+									clr_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								if = {
+									limit = { has_country_flag = overlord_subsidies }
+									clr_country_flag = overlord_subsidies
+									clr_country_flag = overlord_is_subsidizing_us_@PREV
+								}
+								if = {
+									limit = {
+										has_country_flag = SCO_joint_exercises_offered
+									}
+									clr_country_flag = SCO_joint_exercises_offered
+								}
+								PREV = {
+									if = {
+										limit = { PREV = { has_country_flag = overlord_subsidies } }
+										clr_country_flag = overlord_subsidies
+										clr_country_flag = overlord_is_subsidizing_us_@PREV
+									}
+									if = {
+										limit = {
+											has_country_flag = SCO_joint_exercises_offered
+										}
+										clr_country_flag = SCO_joint_exercises_offered
+									}
+									add_to_variable = { treasury = PREV.treasury }
+									clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+									add_to_variable = { debt = PREV.debt }
+	    							clamp_variable = { var = debt min = 0 max = 1000000 }
+									add_to_variable = { int_investments = PREV.int_investments }
+									set_country_flag = { flag = integration_of_institutions days = 100 value = 1 }
+            						clamp_variable = { var = int_investments min = 0 max = 1000000 }
+									if = { limit = { original_tag = USA }
+										add_to_array = { USA_collapse_releases = PREV.id }
+									}
+									annex_country = {
+										target = PREV
+										transfer_troops = yes
+									}
+									add_political_power = -50
+								}
+							}
+						}
+						if = {
+							limit = {
+								var:v = {
+									has_autonomy_state = autonomy_autonomous_state_colored
+									OR = {
+										original_tag = IKR
+										original_tag = BLC
+										original_tag = ARA
+										original_tag = LOR
+									}
+								}
+								NOT = { has_country_flag = PER_federalized_republic }
+								if = {
+									limit = { var:v = { original_tag = PKK } }
+									NOT = { has_country_flag = TUR_PKK_federalized }
+								}
+								if = {
+									limit = { var:v = { OR = { original_tag = KUR original_tag = PUK } } }
+									NOT = { has_country_flag = IRQ_autonomous_kurdistan }
+								}
+								if = {
+									limit = { var:v = { original_tag = ERI } }
+									NOT = { has_idea = ETH_eritrean_constitution }
+								}
+							}
+							var:v = {
+								for_each_scope_loop = {
+									array = core_states
+									add_core_of = PREV.PREV
+								}
+								if = { limit = { original_tag = LBA }
+									set_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								every_unit_leader = {
+									set_nationality = PREV
+								}
+								if = { limit = { original_tag = LBA }
+									clr_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								if = {
+									limit = { has_country_flag = overlord_subsidies }
+									clr_country_flag = overlord_subsidies
+									clr_country_flag = overlord_is_subsidizing_us_@PREV
+								}
+								if = {
+									limit = {
+										has_country_flag = SCO_joint_exercises_offered
+									}
+									clr_country_flag = SCO_joint_exercises_offered
+								}
+								PREV = {
+									if = {
+										limit = { PREV = { has_country_flag = overlord_subsidies } }
+										clr_country_flag = overlord_subsidies
+										clr_country_flag = overlord_is_subsidizing_us_@PREV
+									}
+									if = {
+										limit = {
+											has_country_flag = SCO_joint_exercises_offered
+										}
+										clr_country_flag = SCO_joint_exercises_offered
+									}
+									add_to_variable = { treasury = PREV.treasury }
+									clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+									add_to_variable = { debt = PREV.debt }
+	    							clamp_variable = { var = debt min = 0 max = 1000000 }
+									add_to_variable = { int_investments = PREV.int_investments }
+									set_country_flag = { flag = integration_of_institutions days = 100 value = 1 }
+            						clamp_variable = { var = int_investments min = 0 max = 1000000 }
+									if = { limit = { original_tag = USA }
+										add_to_array = { USA_collapse_releases = PREV.id }
+									}
+									annex_country = {
+										target = PREV
+										transfer_troops = yes
+									}
+									add_political_power = -50
+								}
+							}
+						}
+						if = {
+							limit = {
+								var:v = {
+									has_autonomy_state = autonomy_autonomous_federation
+								}
+							}
+							var:v = {
+								for_each_scope_loop = {
+									array = core_states
+									add_core_of = PREV.PREV
+								}
+								if = { limit = { original_tag = LBA }
+									set_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								every_unit_leader = {
+									set_nationality = PREV
+								}
+								if = { limit = { original_tag = LBA }
+									clr_country_flag = LBA_prevent_giving_tribal_traits
+								}
+								if = {
+									limit = { has_country_flag = overlord_subsidies }
+									clr_country_flag = overlord_subsidies
+									clr_country_flag = overlord_is_subsidizing_us_@PREV
+								}
+								if = {
+									limit = {
+										has_country_flag = SCO_joint_exercises_offered
+									}
+									clr_country_flag = SCO_joint_exercises_offered
+								}
+								PREV = {
+									if = {
+										limit = { PREV = { has_country_flag = overlord_subsidies } }
+										clr_country_flag = overlord_subsidies
+										clr_country_flag = overlord_is_subsidizing_us_@PREV
+									}
+									if = {
+										limit = {
+											has_country_flag = SCO_joint_exercises_offered
+										}
+										clr_country_flag = SCO_joint_exercises_offered
+									}
+									add_to_variable = { treasury = PREV.treasury }
+									clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+									add_to_variable = { debt = PREV.debt }
+	    							clamp_variable = { var = debt min = 0 max = 1000000 }
+									add_to_variable = { int_investments = PREV.int_investments }
+									set_country_flag = { flag = integration_of_institutions days = 100 value = 1 }
+            						clamp_variable = { var = int_investments min = 0 max = 1000000 }
+									if = { limit = { original_tag = USA }
+										add_to_array = { USA_collapse_releases = PREV.id }
+									}
+									annex_country = {
+										target = PREV
+										transfer_troops = yes
+									}
+									add_political_power = -50
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_monthly = {
+		effect = {
+			every_controlled_state = {
+				if = {
+					limit = { check_variable = { state_population = 0 } }
+					add_manpower = 100
+				}
+			}
+		}
+	}
+
+	on_annex = {
+		effect = {
+			FROM = {
+				every_other_country = {
+					clr_country_flag = energy_agreement@FROM
+					FROM = { clr_country_flag = energy_agreement@PREV }
+					for_each_loop = {
+						array = energy_contractors
+						value = v
+						index = i
+						break = break
+						if = {
+							limit = { check_variable = { v = FROM } }
+							set_variable = { index_to_remove = i }
+							add_to_variable = { break = 1 }
+						}
+					}
+					if = {
+						limit = { has_variable = index_to_remove }
+						remove_from_array = {
+							array = energy_contractors
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_ammount
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_price
+							index = index_to_remove
+						}
+						clear_variable = index_to_remove
+					}
+				}
+				clear_array = energy_contractors
+				clear_array = energy_contracts_ammount
+				clear_array = energy_contracts_price
+			}
+		}
+	}
+
+	on_subject_annexed = {
+		effect = {
+			ROOT = {
+				every_other_country = {
+					clr_country_flag = energy_agreement@ROOT
+					ROOT = { clr_country_flag = energy_agreement@PREV }
+					for_each_loop = {
+						array = energy_contractors
+						value = v
+						index = i
+						break = break
+						if = {
+							limit = { check_variable = { v = ROOT } }
+							set_variable = { index_to_remove = i }
+							add_to_variable = { break = 1 }
+						}
+					}
+					if = {
+						limit = { has_variable = index_to_remove }
+						remove_from_array = {
+							array = energy_contractors
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_ammount
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_price
+							index = index_to_remove
+						}
+						clear_variable = index_to_remove
+					}
+				}
+				clear_array = energy_contractors
+				clear_array = energy_contracts_ammount
+				clear_array = energy_contracts_price
+			}
+		}
+	}
+
+	on_monthly = {
+		effect = {
+			if = {
+				limit = { check_variable = { energy_balance < -1 } }
+				every_other_country = {
+					for_each_loop = {
+						array = energy_contractors
+						value = v
+						index = i
+						if = {
+							limit = {
+								check_variable = { v = ROOT }
+								check_variable = { energy_contracts_ammount^i > 0 }
+							}
+							set_variable = { index_to_remove = i }
+							add_to_variable = { break = 1 }
+						}
+					}
+					if = {
+						limit = { has_variable = index_to_remove }
+						remove_from_array = {
+							array = energy_contractors
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_ammount
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_price
+							index = index_to_remove
+						}
+						clear_variable = index_to_remove
+					}
+				}
+			}
+		}
+	}
+	on_daily = {
+		effect = {
+			if = {
+				limit = { NOT = { has_global_flag = daily_new_countries_checked } }
+				set_global_flag = { flag = daily_new_countries_checked days = 1 value = 1 }
+				every_country = {
+					limit = { NOT = { has_country_flag = country_setuped } }
+					setup_new_country = yes
+				}
+			}
+		}
+	}
+	on_annex = {
+		effect = {
+			every_country = {
+				limit = {
+					OR = {
+						has_operation_token = {
+    						tag = FROM
+    						token = token_airforce
+						}
+						has_operation_token = {
+    						tag = FROM
+    						token = token_army
+						}
+						has_operation_token = {
+    						tag = FROM
+    						token = token_civilian
+						}
+						has_operation_token = {
+    						tag = FROM
+    						token = token_navy
+						}
+						has_operation_token = {
+    						tag = FROM
+    						token = token_resistance_contacts
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = FROM
+    						token = token_airforce
+						}
+					}
+					remove_operation_token = {
+    					tag = FROM
+    					token = token_airforce
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = FROM
+    						token = token_army
+						}
+					}
+					remove_operation_token = {
+    					tag = FROM
+    					token = token_army
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = FROM
+    						token = token_civilian
+						}
+					}
+					remove_operation_token = {
+    					tag = FROM
+    					token = token_civilian
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = FROM
+    						token = token_navy
+						}
+					}
+					remove_operation_token = {
+    					tag = FROM
+    					token = token_navy
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = FROM
+    						token = token_resistance_contacts
+						}
+					}
+					remove_operation_token = {
+    					tag = FROM
+    					token = token_resistance_contacts
+					}
+				}
+			}
+		}
+	}
+	on_subject_annexed = {
+		effect = {
+			every_country = {
+				limit = {
+					OR = {
+						has_operation_token = {
+    						tag = FROM
+    						token = token_airforce
+						}
+						has_operation_token = {
+    						tag = FROM
+    						token = token_army
+						}
+						has_operation_token = {
+    						tag = FROM
+    						token = token_civilian
+						}
+						has_operation_token = {
+    						tag = FROM
+    						token = token_navy
+						}
+						has_operation_token = {
+    						tag = FROM
+    						token = token_resistance_contacts
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = ROOT
+    						token = token_airforce
+						}
+					}
+					remove_operation_token = {
+    					tag = ROOT
+    					token = token_airforce
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = ROOT
+    						token = token_army
+						}
+					}
+					remove_operation_token = {
+    					tag = ROOT
+    					token = token_army
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = ROOT
+    						token = token_civilian
+						}
+					}
+					remove_operation_token = {
+    					tag = ROOT
+    					token = token_civilian
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = ROOT
+    						token = token_navy
+						}
+					}
+					remove_operation_token = {
+    					tag = ROOT
+    					token = token_navy
+					}
+				}
+				if = {
+					limit = {
+						has_operation_token = {
+    						tag = ROOT
+    						token = token_resistance_contacts
+						}
+					}
+					remove_operation_token = {
+    					tag = ROOT
+    					token = token_resistance_contacts
+					}
+				}
+			}
+		}
+	}
+	on_puppet = {
+		effect = {
+			ROOT = { revoke_sanctions_non_exist_country = yes }
+		}
+	}
+	on_annex = {
+		effect = {
+			FROM = {
+				revoke_sanctions_non_exist_country = yes
+				remove_dynamic_modifier = {	modifier = embargo_dynamic_modifier	}
+                clear_variable = embargo_modifier_value
+                clear_variable = embargo_modifier_value_minus
+			}
+		}
+	}
+	on_subject_annexed = {
+		effect = {
+			ROOT = {
+				revoke_sanctions_non_exist_country = yes
+				remove_dynamic_modifier = {	modifier = embargo_dynamic_modifier	}
+                clear_variable = embargo_modifier_value
+                clear_variable = embargo_modifier_value_minus
+			}
+		}
+	}
+	on_subject_autonomy_level_change = {
+		effect = {
+			ROOT = { revoke_sanctions_non_exist_country = yes }
+		}
+	}
+	on_daily = {
+		effect = {
+			if = {
+				limit = {
+					is_subject = yes
+					OR = {
+						has_dynamic_modifier = { modifier = sanctions_dynamic_modifier }
+						has_dynamic_modifier = { modifier = sanctions_feedback_dynamic_modifier }
+					}
+				}
+				revoke_sanctions_non_exist_country = yes
+			}
+		}
+	}
+	on_daily_SOV = {
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = SOV_gru_active
+					NOT = {
+						any_country = {
+							has_idea = SOV_gru_foreign
+						}
+					}
+				}
+				clr_country_flag = SOV_gru_active
+				country_event = sov_gru.4
+			}
+			if = {
+				limit = {
+					has_country_flag = SOV_wagner_active
+					NOT = {
+						any_country = {
+							has_idea = SOV_wagner_foreign
+						}
+					}
+				}
+				clr_country_flag = SOV_wagner_active
+				country_event = sov_gru.9
+			}
+		}
+	}
+	on_daily_ARM = {
+		effect = {
+			if = {
+				limit = {
+					has_idea = ARM_armenian_foreign_legion_idea
+					NOT = {
+						any_country = {
+							has_idea = ARM_armenian_foreign_legion_moblize_idea
+						}
+					}
+				}
+				add_ideas = ARM_armenian_foreign_legion_idea
+				country_event = arm_foreign_legion.6
+			}
+		}
+	}
+	on_daily_POL = {
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = ruthkowski_patrol_active
+					NOT = {
+						any_country = {
+							has_idea = POL_rutkowski_patrol_idea
+						}
+					}
+				}
+				clr_country_flag = ruthkowski_patrol_active
+				country_event = pol_rutkowski.6
+			}
+		}
+	}
+	on_daily_NKO = {
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = NKO_sof_active
+					NOT = {
+						any_country = {
+							has_idea = sof_nko
+						}
+					}
+				}
+				clr_country_flag = NKO_sof_active
+				country_event = sof_nko.5
+			}
+		}
+	}
+	on_daily_GDR = {
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = gdr_werwolf_active
+					NOT = {
+						any_country = {
+							has_idea = GDR_werwolf_battalion_idea
+						}
+					}
+				}
+				clr_country_flag = gdr_werwolf_active
+				country_event = gdr_werwolf.6
+			}
+		}
+	}
+	on_daily = {
+		effect = {
+			if = {
+				limit = {
+					has_idea = GENERIC_jihadis_volunteers_idea
+					has_country_flag = jihadis_volunteers_active
+					NOT = {
+						any_country = {
+							has_idea = GENERIC_jihadis_volunteers_active_idea
+						}
+					}
+				}
+				clr_country_flag = jihadis_volunteers_active
+				country_event = jihadis_volunteers.6
+			}
+		}
+	}
+}

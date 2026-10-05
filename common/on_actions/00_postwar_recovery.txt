@@ -1,0 +1,260 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			every_country = {
+				set_variable = { prev_stability = stability }
+				set_variable = { prev_productivity = overall_productivity }
+				set_variable = { prev_num_of_factories = industrial_complex_total }
+				set_variable = { prev_num_of_damaged_factories = num_of_damaged_civs }
+			}
+		}
+	}
+	on_war = {
+		effect = {
+			if = {
+				limit = { has_idea = postwar_restoration }
+				remove_ideas = postwar_restoration
+			}
+			set_variable = { prev_stability = stability }
+			set_variable = { prev_productivity = overall_productivity }
+			set_variable = { prev_num_of_factories = industrial_complex_total }
+			set_variable = { prev_num_of_damaged_factories = num_of_damaged_civs }
+		}
+	}
+	on_peace = {
+		effect = {
+			set_temp_variable = { stability_postwar_rate = prev_stability }
+			divide_temp_variable = { stability_postwar_rate = stability }
+			set_temp_variable = { productivity_postwar_rate = prev_productivity }
+			divide_temp_variable = { productivity_postwar_rate = overall_productivity }
+			set_temp_variable = { factories_postwar_rate = prev_num_of_factories }
+			divide_temp_variable = { factories_postwar_rate = industrial_complex_total }
+			set_temp_variable = { factories_fixing_postwar_rate = num_of_damaged_civs }
+			divide_temp_variable = { factories_fixing_postwar_rate = prev_num_of_damaged_factories }
+			if = {
+				limit = {
+					OR = {
+						check_variable = { stability_postwar_rate > 2 }
+						check_variable = { productivity_postwar_rate > 2 }
+						check_variable = { factories_postwar_rate > 2 }
+						check_variable = { factories_fixing_postwar_rate > 2 }
+					}
+				}
+				add_timed_idea = {
+					idea = postwar_restoration
+					days = 120
+				}
+				add_offsite_building = {
+					type = industrial_complex
+					level = 2
+				}
+			}
+		}
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					has_stability < 0.5
+					NOT = {
+						check_variable = { protest_strength > 0 }
+						has_idea = depression
+						has_idea = inflation_03
+						has_active_mission = bankruptcy_incoming_collapse
+						has_dynamic_modifier = very_high_interest_country_modifiers
+						check_variable = { party_popularity@ruling_party < 0.5 }
+						has_idea = foreign_interference_in_our_politics_dem_idea
+						has_idea = foreign_interference_in_our_politics_nat_idea
+						has_idea = foreign_interference_in_our_politics_neu_idea
+						has_idea = foreign_interference_in_our_politics_com_idea
+						has_idea = foreign_interference_in_our_politics_salad_idea
+						has_idea = GENERIC_nationalist_influency_idea
+						has_idea = GENERIC_communism_influency_idea
+						has_idea = GENERIC_salafist_influency_idea
+						has_idea = GENERIC_democratic_influency_idea
+						has_war = yes
+						has_idea = ITA_mafia
+						has_idea = ABK_mafia_idea
+						has_idea = ABK_mafia2_idea
+						has_idea = ABK_mafia3_idea
+						has_idea = ABK_mafia4_idea
+						has_idea = ARM_armenian_mafia_2
+						has_idea = ARM_armenian_mafia_3
+						has_idea = ARM_armenian_mafia_4
+						has_idea = ARM_armenian_mafia_6
+						has_idea = TUR_mafia_active
+						has_idea = TUR_mafia_active2
+						has_idea = TUR_mafia_weakened
+						has_idea = TUR_mafia_weak
+						has_idea = SMA_mafia
+						has_idea = arab_mafia_1
+						has_idea = arab_mafia_2
+						has_idea = arab_mafia_3
+						has_idea = arab_mafia_4
+						has_idea = arab_mafia_5
+						has_dynamic_modifier = cartel_penalties
+						has_idea = HEZ_unknown_cartel_operations
+						has_idea = Non_State_actor
+						has_idea = Lacks_International_Recognition
+						has_idea = rival_government
+						has_idea = international_sanctions
+						has_idea = Massive_International_Sanctions
+						has_idea = USoE_environmental_sanctions
+						has_idea = IRQ_international_sanctions
+						has_idea = IRQ_international_sanctions2
+						has_idea = IRQ_international_sanctions3
+						has_idea = IRQ_international_sanctions4
+						has_idea = NKO_international_sanctions_idea
+						has_idea = NKO_international_sanctions_idea1
+						has_idea = NKO_international_sanctions_idea2
+						has_idea = NKO_international_sanctions_idea3
+						has_idea = NKO_international_sanctions_idea4
+						has_idea = PAL_quartet_very_high_sanctions
+						has_idea = PAL_quartet_high_sanctions
+						has_idea = PAL_quartet_moderate_sanctions
+						has_idea = SER_International_Isolation
+						has_idea = SER_International_Isolation_1
+						has_dynamic_modifier = { modifier = sanctions_dynamic_modifier }
+						any_country = {
+							any_character = {
+								is_operative = yes
+								OR = {
+									operative_leader_mission = propaganda
+									operative_leader_mission = boost_ideology
+								}
+								check_variable = { operation_country = PREV.PREV }
+							}
+						}
+					}
+				}
+				add_timed_idea = {
+					idea = Political_stabilization
+					days = 120
+				}
+			}
+		}
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					has_idea = total_war_economy
+					has_war = no
+				}
+				swap_ideas = {
+					remove_idea = total_war_economy
+					add_idea = partial_mobilization_economy
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = war_economy_mdc
+					has_war = no
+				}
+				swap_ideas = {
+					remove_idea = war_economy_mdc
+					add_idea = partial_mobilization_economy
+				}
+			}
+			if = {
+				limit = {
+					has_idea = partial_mobilization_economy
+					has_war = no
+					threat < 0.25
+					NOT = { has_global_flag = age_has_begun_4 }
+					NOT = { has_country_flag = AI_is_threatened }
+					NOT = { any_allied_country = { has_war = yes } }
+				}
+				swap_ideas = {
+					remove_idea = partial_mobilization_economy
+					add_idea = civil_economy
+				}
+			}
+
+		}
+	}
+	on_startup = {
+		effect = {
+			CHE = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			AFG = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			TAL = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			NEP = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			NPM = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			SUD = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			SSU = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			ACE = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			AGL = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			UNI = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			LUR = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			LIB = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			MLC = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			DRC = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			SWS = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			SOM = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			SNA = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			ERI = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			ETH = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+			TML = {
+				add_ideas = total_war_economy
+				add_offsite_building = { level = 3 type = arms_factory }
+			}
+		}
+	}
+}

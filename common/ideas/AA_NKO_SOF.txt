@@ -1,0 +1,47 @@
+ideas = {
+	country = {
+		sof_nko = {
+			allowed_civil_war = { always = yes }
+			picture = nko_sso_idea
+			cancel = {
+				OR = {
+					has_war_with = NKO
+					has_war = no
+				}
+			}
+			on_remove = {
+				NKO = {
+					country_event = sof_nko.5
+					NKO = {
+						diplomatic_relation = {
+							country = PREV
+							relation = send_attache
+							active = no
+						}
+					}
+				}
+				delete_unit_template_and_units = {
+					division_template = "NKO SOF Brigade"
+					disband = no
+				}
+			}
+			modifier = {
+				special_forces_training_time_factor = -0.01
+				special_forces_cap = 0.01
+			}
+		}
+	}
+	hidden_ideas = {
+		nko_sof_active = {
+			allowed_civil_war = { always = yes }
+			cancel = {
+				NOT = {
+					has_country_flag = NKO_sof_active
+				}
+			}
+			modifier = {
+				max_command_power = 20
+			}
+		}
+	}
+}

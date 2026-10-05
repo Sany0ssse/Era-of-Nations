@@ -1,0 +1,922 @@
+#### MDREDUX Political Decisions ########
+generic_coalition_politics_decisions = {
+	GENERIC_join_civil_war = {
+		icon = GFX_decision_arm_kalash_button
+		cost = 100
+		fire_only_once = no
+		visible = {
+			FROM = {
+				is_subject_of = ROOT
+				has_war = yes
+			}
+			any_country = {
+				has_war_with = FROM
+				NOT = { has_war_with = ROOT }
+			}
+		}
+		available = {
+			FROM = {
+				is_subject = yes
+				has_war = yes
+			}
+			has_political_power > 100
+		}
+		target_array = subjects
+		complete_effect = {
+			every_country = {
+				limit = { has_war_with = FROM }
+				ROOT = {
+					declare_war_on = {
+						target = PREV
+						type = annex_everything
+					}
+				}
+			}
+			FROM = {
+				country_event = generic_puppet.1
+			}
+		}
+		ai_will_do = {
+			base = 300
+		}
+	}
+	GENERIC_puppet_independence = {
+		icon = GFX_decision_arm_kalash_button
+		cost = 250
+		fire_only_once = no
+		days_re_enable = 20
+		visible = {
+			is_subject = yes
+		}
+		available = {
+			is_subject = yes
+			has_autonomy_state = autonomy_autonomous_state
+			has_war_support > 0.5
+			has_political_power > 250
+			OVERLORD = {
+				influence_less_40 = yes
+			}
+			if = {
+				limit = {
+					is_ai = yes
+				}
+				num_divisions > 10
+			}
+		}
+		complete_effect = {
+			leave_faction = yes
+			activate_mission = GENERIC_war_for_independence
+			OVERLORD = {
+				end_puppet = ROOT
+				set_country_flag = former_suzereign
+				declare_war_on = {
+					target = ROOT
+					type = annex_everything
+				}
+				ROOT = {
+					set_country_flag = GENERIC_escape_from_overlord_start
+					PREV = {
+						country_event = influence.511
+					}
+					add_war_support = 0.05
+				}
+			}
+		}
+		ai_will_do = {
+			base = 300
+		}
+	}
+	GENERIC_war_for_independence = {
+		icon = GFX_decision_generic_stabilize_timer_button
+		allowed = { always = yes }
+		available = {
+			has_war = no
+			hidden_trigger = {
+				has_country_flag = GENERIC_escape_from_overlord_start
+				NOT = {
+					has_country_flag = GENERIC_escape_from_overlord_failed
+				}
+			}
+		}
+		activation = {
+			has_war = yes
+			has_country_flag = GENERIC_escape_from_overlord_start
+			NOT = {
+				has_country_flag = GENERIC_escape_from_overlord_failed
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				is_subject = yes
+				exists = no
+				has_war = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = {
+					ROOT = {
+						AND = {
+							has_country_flag = GENERIC_escape_from_overlord_start
+							is_subject = yes
+						}
+					}
+				}
+				ROOT = {
+					clr_country_flag = GENERIC_escape_from_overlord_start
+           			set_country_flag = GENERIC_escape_from_overlord_failed
+					country_event = influence.512
+				}
+				every_country = {
+					limit = {
+						has_country_flag = former_suzereign
+					}
+					country_event = influence.514
+				}
+			}
+			if = {
+				limit = {
+					ROOT = {
+						AND = {
+							has_country_flag = GENERIC_escape_from_overlord_start
+							has_war = no
+							is_subject = no
+						}
+					}
+				}
+				ROOT = {
+					clr_country_flag = GENERIC_escape_from_overlord_start
+           			set_country_flag = GENERIC_escape_from_overlord_failed
+					country_event = influence.513
+				}
+			}
+		}
+		days_mission_timeout = 50
+		is_good = no
+		fire_only_once = yes
+		timeout_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = former_suzereign
+					has_war_with = ROOT
+				}
+				white_peace = ROOT
+				clr_country_flag = former_suzereign
+			}
+			ROOT = {
+				clr_country_flag = GENERIC_escape_from_overlord_start
+           		set_country_flag = GENERIC_escape_from_overlord_failed
+				country_event = influence.513
+			}
+        }
+	}
+	#GENERIC_puppet_reduce_autonomy = {
+	#	icon = GFX_decision_puppetdown_button
+	#	cost = 500
+	#	fire_only_once = no
+	#	days_remove = 30
+	#	days_re_enable = 15
+	#
+	#	target_root_trigger = {
+	#		num_subjects > 0
+	#	}
+	#
+	#	visible = {
+	#		FROM = {
+	#			is_subject_of = ROOT
+	#			NOT = {
+	#				has_autonomy_state = autonomy_special_administrative_region_HKG
+	#				has_autonomy_state = autonomy_special_administrative_region_MAC
+	#				has_autonomy_state = autonomy_special_administrative_region_TAI
+	#				has_autonomy_state = autonomy_special_administrative_region_TIB
+	#				has_autonomy_state = autonomy_special_administrative_region_ETK
+	#				has_autonomy_state = autonomy_special_administrative_region_MON
+	#				has_autonomy_state = autonomy_warsaw
+	#				has_autonomy_state = autonomy_state_rf
+	#				has_autonomy_state = autonomy_republic_rf
+	#				has_autonomy_state = autonomy_kray_rf
+	#				has_autonomy_state = autonomy_oblast_rf
+	#				has_autonomy_state = autonomy_okrug_rf
+	#				has_autonomy_state = autonomy_governorate_rf
+	#				has_autonomy_state = autonomy_pmc_wagner
+	#				has_autonomy_state = autonomy_state_cis
+	#			}
+	#		}
+	#	}
+	#
+	#	available = {
+	#		FROM = {
+	#			influence_higher_40 = yes
+	#		}
+	#	}
+	#
+	#	target_array = subjects
+	#
+	#	remove_effect = {
+	#		log = "[GetDateText]: [This.GetName]: decision influence_for_autonomy_decision executed"
+	#		set_temp_variable = { percent_change = -20 }
+	#		set_temp_variable = { tag_index = ROOT.id }
+	#		set_temp_variable = { influence_target = FROM.id }
+	#		change_influence_percentage = yes
+	#		FROM = {
+	#			add_autonomy_ratio = {
+	#				value = -1.6
+	#				localization = influence_for_autonomy_decision_autonomy
+	#			}
+	#		}
+	#	}
+	#
+	#	ai_will_do = {
+	#		base = 500
+	#	}
+	#}
+	#Demand QUAD Intervention
+	demand_quad_intervention = {
+		icon = GFX_decision_generic_join_nato
+		cost = 125
+		available = {
+			surrender_progress > 0.7
+		}
+		visible = {
+			has_war = yes
+			has_idea = USA_quad_member_idea
+			NOT = { has_idea = QUAD_intervention_active }
+		}
+		complete_effect = {
+			custom_effect_tooltip = TT_ALL_NATO_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				country_event = { id = NATO_rework.7 days = 1 }
+			}
+			for_each_scope_loop = {
+				array = global.nato_members
+				country_event = { id = NATO_rework.7 days = 1 }
+			}
+			hidden_effect = { add_ideas = NATO_intervention_active }
+		}
+		ai_will_do = {
+			factor = 200
+		}
+	}
+	#NATO USA war against Russia
+	NATO_war_againts_powerfull_russia = {
+		icon = GFX_decision_generic_join_nato
+		fire_only_once = yes
+		visible = {
+			has_global_flag = NATO_war_againts_powerfull_russia
+			SOV = { has_added_tension_amount > 10 }
+			original_tag = USA
+			USA = {
+				is_ai = yes
+				has_idea = NATO_member
+			}
+			GER = {
+				has_idea = NATO_member
+			}
+			NOT = {
+				has_war_with = SOV
+				SOV = {
+					has_idea = NATO_member
+				}
+			}
+			SOV = { 
+				OR = {
+					owns_state = 114
+					owns_state = 119
+					POL = {
+						is_subject_of = SOV
+					}
+					SLO = {
+						is_subject_of = SOV
+					}
+				}
+				OR = {
+					owns_state = 76
+					owns_state = 117
+					owns_state = 150
+					CZE = {
+						is_subject_of = SOV
+					}
+					AUS = {
+						is_subject_of = SOV
+					}
+					ROM = {
+						is_subject_of = SOV
+					}
+				}
+			}
+		}
+		complete_effect = {
+			declare_war_on = {
+				target = SOV
+				type = annex_everything
+			}
+		}
+		ai_will_do = {
+			factor = 200
+		}
+	}
+	#NATO USA war against Poland
+	NATO_war_againts_powerfull_poland = {
+		icon = GFX_decision_generic_join_nato
+		fire_only_once = yes
+		visible = {
+			has_global_flag = NATO_war_againts_powerfull_poland
+			POL = { has_added_tension_amount > 10 }
+			original_tag = USA
+			USA = {
+				is_ai = yes
+				has_idea = NATO_member
+			}
+			GER = {
+				has_idea = NATO_member
+			}
+			NOT = {
+				has_war_with = POL
+				POL = {
+					has_idea = NATO_member
+				}
+			}
+			POL = { 
+				OR = {
+					owns_state = 150
+					owns_state = 121
+					HUN = {
+						is_subject_of = POL
+					}
+					ROM = {
+						is_subject_of = POL
+					}
+				}
+				OR = {
+					owns_state = 119
+					owns_state = 117
+					CZE = {
+						is_subject_of = POL
+					}
+					SLO = {
+						is_subject_of = POL
+					}
+				}
+			}
+		}
+		complete_effect = {
+			declare_war_on = {
+				target = POL
+				type = annex_everything
+			}
+		}
+		ai_will_do = {
+			factor = 200
+		}
+	}
+	#NATO USA war against Hungary
+	NATO_war_againts_powerfull_hungary = {
+		icon = GFX_decision_generic_join_nato
+		fire_only_once = yes
+		visible = {
+			has_global_flag = NATO_war_againts_powerfull_hungary
+			HUN = { has_added_tension_amount > 10 }
+			original_tag = USA
+			USA = {
+				is_ai = yes
+				has_idea = NATO_member
+			}
+			GER = {
+				has_idea = NATO_member
+			}
+			NOT = {
+				has_war_with = HUN
+				HUN = {
+					has_idea = NATO_member
+				}
+			}
+			HUN = { 
+				OR = {
+					owns_state = 76
+					owns_state = 119
+					owns_state = 150
+					AUS = {
+						is_subject_of = HUN
+					}
+					SLO = {
+						is_subject_of = HUN
+					}
+					ROM = {
+						is_subject_of = HUN
+					}
+				}
+				OR = {
+					owns_state = 117
+					owns_state = 114
+					POL = {
+						is_subject_of = HUN
+					}
+					CZE = {
+						is_subject_of = HUN
+					}
+				}
+			}
+		}
+		complete_effect = {
+			declare_war_on = {
+				target = HUN
+				type = annex_everything
+			}
+		}
+		ai_will_do = {
+			factor = 200
+		}
+	}
+	#NATO USA war against Ukraine
+	NATO_war_againts_powerfull_ukraine = {
+		icon = GFX_decision_generic_join_nato
+		fire_only_once = yes
+		visible = {
+			has_global_flag = NATO_war_againts_powerfull_ukraine
+			UKR = { has_added_tension_amount > 10 }
+			original_tag = USA
+			USA = {
+				is_ai = yes
+				has_idea = NATO_member
+			}
+			GER = {
+				has_idea = NATO_member
+			}
+			NOT = {
+				has_war_with = UKR
+				UKR = {
+					has_idea = NATO_member
+				}
+			}
+			UKR = { 
+				OR = {
+					owns_state = 119
+					owns_state = 121
+					owns_state = 150
+					ROM = {
+						is_subject_of = UKR
+					}
+					HUN = {
+						is_subject_of = UKR
+					}
+					SLO = {
+						is_subject_of = UKR
+					}
+				}
+				OR = {
+					owns_state = 117
+					owns_state = 114
+					POL = {
+						is_subject_of = UKR
+					}
+					CZE = {
+						is_subject_of = UKR
+					}
+				}
+			}
+		}
+		complete_effect = {
+			declare_war_on = {
+				target = UKR
+				type = annex_everything
+			}
+		}
+		ai_will_do = {
+			factor = 200
+		}
+	}
+	#Russia war against Ukraine
+	SOV_war_againts_powerfull_ukraine = {
+		icon = GFX_decision_generic_join_nato
+		fire_only_once = yes
+		visible = {
+			has_global_flag = SOV_war_againts_powerfull_ukraine
+			UKR = { has_added_tension_amount > 10 }
+			original_tag = SOV
+			SOV = {
+				is_ai = yes
+				OR = {
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+			NOT = {
+				has_war_with = UKR
+				is_in_faction_with = UKR
+				is_subject_of = UKR
+				UKR = {
+					has_idea = NATO_member
+					is_subject_of = SOV
+				}
+			}
+			UKR = { 
+				OR = {
+					owns_state = 703
+					owns_state = 110
+					BLR = {
+						is_subject_of = UKR
+					}
+					LIT = {
+						is_subject_of = UKR
+					}
+				}
+				OR = {
+					owns_state = 149
+					owns_state = 147
+					PMR = {
+						is_subject_of = UKR
+					}
+					MLV = {
+						is_subject_of = UKR
+					}
+				}
+			}
+		}
+		complete_effect = {
+			declare_war_on = {
+				target = UKR
+				type = annex_everything
+			}
+		}
+		ai_will_do = {
+			factor = 200
+		}
+	}
+	#Russia war against Belarus
+	SOV_war_againts_powerfull_belarus = {
+		icon = GFX_decision_generic_join_nato
+		fire_only_once = yes
+		visible = {
+			has_global_flag = SOV_war_againts_powerfull_belarus
+			BLR = { has_added_tension_amount > 10 }
+			original_tag = SOV
+			SOV = {
+				is_ai = yes
+				OR = {
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+			NOT = {
+				has_war_with = BLR
+				is_in_faction_with = BLR
+				is_subject_of = BLR
+				BLR = {
+					has_idea = NATO_member
+					is_subject_of = SOV
+				}
+			}
+			BLR = { 
+				OR = {
+					owns_state = 698
+					owns_state = 110
+					UKR = {
+						is_subject_of = BLR
+					}
+					LIT = {
+						is_subject_of = BLR
+					}
+				}
+				OR = {
+					owns_state = 149
+					owns_state = 147
+					PMR = {
+						is_subject_of = BLR
+					}
+					MLV = {
+						is_subject_of = BLR
+					}
+				}
+			}
+		}
+		complete_effect = {
+			declare_war_on = {
+				target = BLR
+				type = annex_everything
+			}
+		}
+		ai_will_do = {
+			factor = 200
+		}
+	}
+	#Russia war against Poland
+	SOV_war_againts_powerfull_poland = {
+		icon = GFX_decision_generic_join_nato
+		fire_only_once = yes
+		visible = {
+			has_global_flag = SOV_war_againts_powerfull_poland
+			POL = { has_added_tension_amount > 10 }
+			is_ai = yes
+			original_tag = SOV
+			OR = {
+				has_government = communism
+				has_government = nationalist
+			}
+			NOT = {
+				has_war_with = POL
+				is_in_faction_with = POL
+				is_subject_of = POL
+				POL = {
+					has_idea = NATO_member
+					is_subject_of = SOV
+				}
+			}
+			POL = { 
+				OR = {
+					owns_state = 703
+					BLR = {
+						is_subject_of = POL
+					}
+				}
+				OR = {
+					owns_state = 698
+					owns_state = 110
+					UKR = {
+						is_subject_of = POL
+					}
+					LIT = {
+						is_subject_of = POL
+					}
+				}
+				OR = {
+					owns_state = 149
+					owns_state = 147
+					PMR = {
+						is_subject_of = POL
+					}
+					MLV = {
+						is_subject_of = POL
+					}
+				}
+			}
+		}
+		complete_effect = {
+			declare_war_on = {
+				target = POL
+				type = annex_everything
+			}
+		}
+		ai_will_do = {
+			factor = 200
+		}
+	}
+	#Go away Wagner
+	GENERIC_go_away_wagner = {
+		icon = GFX_decision_sov_wagner_cancel_button
+		cost = 10
+		visible = {
+			has_idea = SOV_wagner_foreign_africa
+		}
+		complete_effect = {
+			remove_ideas = SOV_wagner_foreign_africa
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 299
+				has_opinion = { 
+					target = SOV value < 1 
+				}
+			}
+		}
+	}
+	#Go away Blackwater
+	GENERIC_go_away_blackwater = {
+		icon = GFX_decision_pmc_blackwater_gone_button
+		cost = 10
+		visible = {
+			has_idea = USA_blackwater_foreign
+		}
+		complete_effect = {
+			remove_ideas = USA_blackwater_foreign
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 299
+				has_opinion = { 
+					target = USA value < 1 
+				}
+			}
+		}
+	}
+	#BLACKWATER MECHANIC - BLACKWATER GOES
+	USA_pmc_blackwater_goes = {
+		icon = GFX_decision_pmc_blackwater_button
+		days_remove = 15
+
+		cost = 30
+		
+		allowed = {
+    		tag = USA
+		}
+		visible = {
+			USA = {
+				check_variable = { pmc_blackwater > 0 }
+				check_variable = { pmc_blackwater < 4 }
+			}
+			FROM = {
+				NOT = {
+					has_war_with = USA
+					has_idea = USA_blackwater_foreign
+					has_idea = NATO_member
+				}
+				OR = { 
+					has_idea = regional_power
+					has_idea = minor_power
+					has_idea = non_power
+					is_in_faction_with = USA
+					is_subject_of = USA
+				}
+				has_opinion = {
+					target = USA
+					value > 50
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = FROM
+				is_capital = yes
+			}
+		}
+
+		days_re_enable = 100
+
+		on_map_mode = map_only
+
+		target_array = global.blackwater_region
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision USA_pmc_blackwater_goes"
+			hidden_effect = {
+				USA = {
+					set_temp_variable = { modify_pmc_blackwater = -1 }
+					modify_pmc_blackwater_support = yes
+				}
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove USA_pmc_blackwater_goes"
+			FROM = { country_event = pmc_events.8 }
+		}
+
+		ai_will_do = { 
+			factor = 1000
+		}
+	}
+	#PMC MECHANIC - MRPI GOES
+	USA_pmc_mrpi_goes = {
+		icon = GFX_decision_pmc_mrpi_button
+		days_remove = 15
+
+		cost = 30
+
+		allowed = {
+    		tag = USA
+		}
+		visible = {
+			USA = {
+				check_variable = { pmc_mrpi > 0 }
+				check_variable = { pmc_mrpi < 3 }
+			}
+			FROM = {
+				OR = { 
+					has_idea = regional_power
+					has_idea = minor_power
+					has_idea = non_power
+					is_in_faction_with = USA
+					is_subject_of = USA
+				}
+				NOT = {
+					has_war_with = USA
+					has_idea = USA_mrpi_foreign
+					has_idea = NATO_member
+				}
+				has_opinion = {
+					target = USA
+					value > 50
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = FROM
+				is_capital = yes
+			}
+		}
+
+		days_re_enable = 100
+
+		on_map_mode = map_only
+
+		target_array = global.blackwater_region
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision USA_pmc_mrpi_goess"
+			hidden_effect = {
+				USA = {
+					set_temp_variable = { modify_pmc_mrpi = -1 }
+					modify_pmc_mrpi_support = yes
+				}
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove USA_pmc_mrpi_goes"
+			FROM = { country_event = pmc_events.12 }
+		}
+
+		ai_will_do = { 
+			factor = 1000
+		}
+	}
+	#PMC MECHANIC - LUSITANIA SECURITY GOES
+	POR_pmc_lus_goes = {
+		icon = GFX_decision_pmc_lus_button
+		days_remove = 15
+
+		cost = 30
+
+		allowed = {
+    		tag = POR
+		}
+		visible = {
+			POR = {
+				has_completed_focus = POR_our_pmc
+				check_variable = { pmc_lus > 0 }
+				check_variable = { pmc_lus < 2 }
+			}
+			FROM = {
+				OR = {
+					has_idea = regional_power
+					has_idea = minor_power
+					has_idea = non_power
+					is_in_faction_with = POR
+					is_subject_of = POR
+					has_idea = CPLP_member
+					has_idea = CPLP_member1
+				}
+				NOT = {
+					has_war_with = POR
+					has_idea = POR_lusitania_security_foreign
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = FROM
+				is_capital = yes
+			}
+		}
+
+		days_re_enable = 100
+
+		on_map_mode = map_only
+
+		target_array = global.lusitania_security_region
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision POR_pmc_lus_goes"
+			hidden_effect = {
+				POR = {
+					set_temp_variable = { modify_pmc_lus = -1 }
+					modify_pmc_lus_support = yes
+				}
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove POR_pmc_lus_goes"
+			FROM = { country_event = pmc_events.18 }
+		}
+
+		ai_will_do = { 
+			factor = 1000
+		}
+	}
+	#Go away Lusitania Security
+	GENERIC_go_away_lus = {
+		icon = GFX_decision_pmc_lus_gone_button
+		cost = 10
+		visible = {
+			has_idea = POR_lusitania_security_foreign
+		}
+		complete_effect = {
+			remove_ideas = POR_lusitania_security_foreign
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 299
+				has_opinion = { 
+					target = POR value < 1 
+				}
+			}
+		}
+	}
+}

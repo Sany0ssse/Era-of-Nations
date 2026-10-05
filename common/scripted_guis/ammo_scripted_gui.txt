@@ -1,0 +1,155 @@
+scripted_gui = {
+
+	Ammunition = {
+		context_type = player_context
+
+		window_name = "Ammunition_topbar"
+
+
+		triggers = {
+		}
+
+		properties = {
+			Ammo_ratio_bar = {
+				frame = Ammo_topbar_ratio
+			}
+
+			Ammo_icon = {
+				frame = Ammo_topbar_icon_index
+			}
+        }
+
+		effects = {
+			ammo_bg_click = {
+				buy_ammo_from_the_market_effect = yes
+			}
+			ammo_bg_right_click = {
+				count_max_ammo_limit = yes
+				count_ammo_production = yes
+				count_maximum_consumption = yes
+				count_current_consumption = yes
+				count_consumption_rating = yes
+                count_summarry_ammunition_effect = yes
+				count_ammo_stock_days = yes
+				if = {
+					limit = { is_ai = no }
+					force_update_dynamic_modifier = yes
+				}
+			}
+			ammo_bg_control_click = {
+				if = {
+					limit = { has_idea = heavy_ammo_restrictions_spirit }
+					remove_ideas = heavy_ammo_restrictions_spirit
+					add_ideas = some_ammo_restrictions_spirit
+					count_ammo_production = yes
+					count_maximum_consumption = yes
+					count_current_consumption = yes
+					count_consumption_rating = yes
+                	count_summarry_ammunition_effect = yes
+					count_ammo_stock_days = yes
+				}
+				else_if = {
+					limit = { has_idea = some_ammo_restrictions_spirit }
+					remove_ideas = some_ammo_restrictions_spirit
+					count_ammo_production = yes
+					count_maximum_consumption = yes
+					count_current_consumption = yes
+					count_consumption_rating = yes
+                	count_summarry_ammunition_effect = yes
+					count_ammo_stock_days = yes
+				}
+				else_if = {
+					limit = {
+						NOT = { has_idea = heavy_ammo_restrictions_spirit }
+						NOT = { has_idea = some_ammo_restrictions_spirit }
+						NOT = { has_idea = some_ammo_additional_consumption_spirit }
+						NOT = { has_idea = heavy_ammo_additional_consumption_spirit }
+					}
+					add_ideas = some_ammo_additional_consumption_spirit
+					count_ammo_production = yes
+					count_maximum_consumption = yes
+					count_current_consumption = yes
+					count_consumption_rating = yes
+                	count_summarry_ammunition_effect = yes
+					count_ammo_stock_days = yes
+				}
+				else = {
+					remove_ideas = some_ammo_additional_consumption_spirit
+					add_ideas = heavy_ammo_additional_consumption_spirit
+					count_ammo_production = yes
+					count_maximum_consumption = yes
+					count_current_consumption = yes
+					count_consumption_rating = yes
+                	count_summarry_ammunition_effect = yes
+					count_ammo_stock_days = yes
+				}
+			}
+			ammo_bg_control_right_click = {
+				if = {
+					limit = { has_idea = heavy_ammo_additional_consumption_spirit }
+					remove_ideas = heavy_ammo_additional_consumption_spirit
+					add_ideas = some_ammo_additional_consumption_spirit
+					count_ammo_production = yes
+					count_maximum_consumption = yes
+					count_current_consumption = yes
+					count_consumption_rating = yes
+                	count_summarry_ammunition_effect = yes
+					count_ammo_stock_days = yes
+				}
+				else_if = {
+					limit = { has_idea = some_ammo_additional_consumption_spirit }
+					remove_ideas = some_ammo_additional_consumption_spirit
+					count_ammo_production = yes
+					count_maximum_consumption = yes
+					count_current_consumption = yes
+					count_consumption_rating = yes
+                	count_summarry_ammunition_effect = yes
+					count_ammo_stock_days = yes
+				}
+				else_if = {
+					limit = {
+						NOT = { has_idea = heavy_ammo_restrictions_spirit }
+						NOT = { has_idea = some_ammo_restrictions_spirit }
+						NOT = { has_idea = some_ammo_additional_consumption_spirit }
+						NOT = { has_idea = heavy_ammo_additional_consumption_spirit }
+					}
+					add_ideas = some_ammo_restrictions_spirit
+					count_ammo_production = yes
+					count_maximum_consumption = yes
+					count_current_consumption = yes
+					count_consumption_rating = yes
+                	count_summarry_ammunition_effect = yes
+					count_ammo_stock_days = yes
+				}
+				else = {
+					add_ideas = heavy_ammo_restrictions_spirit
+					count_ammo_production = yes
+					count_maximum_consumption = yes
+					count_current_consumption = yes
+					count_consumption_rating = yes
+                	count_summarry_ammunition_effect = yes
+					count_ammo_stock_days = yes
+				}
+			}
+		}
+
+		# AI Section
+		ai_enabled = { always = yes }
+		ai_test_interval = 672 # 7 Days
+		ai_test_variance = 0
+		ai_max_weight_taken_per_test = 1
+
+		ai_check = {
+			NOT = { check_variable = { ammo_stock = max_ammo_limit } }
+			check_variable = { ammo_production_rating < 0 }
+		}
+
+		ai_weights = {
+			ammo_bg_click = {
+				ai_will_do = {
+					base = 25
+				}
+			}
+		}
+	}
+}

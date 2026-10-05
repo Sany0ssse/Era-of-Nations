@@ -1,0 +1,233 @@
+# Author(s): AngriestBird, LordBogdanoff
+# TODO: This should be rewritten with a for_each_scope_loop but this is currently not on the cards right now. Potentially look at an on_daily_KHM
+###########KHMAO CONTENT###########
+KHM_russia_send_event = {
+	if = {
+		limit = {
+			original_tag = var:nation_selected
+			country_exists = var:nation_selected
+		}
+		set_country_flag = KHM_subject_agree
+		country_event = subject_rus.41
+	}
+}
+russia_khm_subjects = {
+	set_temp_variable = { nation_selected = KCC.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = ING.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = ADY.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = BSH.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = TAT.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = DAG.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = URA.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = GOR.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = KAE.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = KBK.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = CHE.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = KLM.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = ALT.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = TUV.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = YAK.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = BRY.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = SIB.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = FAR.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = KUB.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = YAM.id }
+	KHM_russia_send_event = yes
+	set_temp_variable = { nation_selected = NEE.id }
+	KHM_russia_send_event = yes
+}
+###########KHMAO CONTENT###########
+KHM_subject_annex_effect = {
+	if = {
+		limit = {
+			var:tag_to_annex = {
+				OR = {
+					has_autonomy_state = autonomy_republic_khm
+					has_autonomy_state = autonomy_republic_rf
+				}
+				is_subject_of = KHM
+			}
+			country_exists = var:tag_to_annex
+		}
+		add_political_power = -90
+		set_temp_variable = { treasury_change = -4 }
+		modify_treasury_effect = yes
+		set_party_index_to_ruling_party = yes
+		set_temp_variable = { party_popularity_increase = -0.03 }
+		set_temp_variable = { temp_outlook_increase = -0.03 }
+		add_relative_party_popularity = yes
+		var:tag_to_annex = {
+			PREV = {
+				annex_country = { target = CHE transfer_troops = yes }
+			}
+			every_core_state = { add_core_of = KHM }
+		}
+		add_to_variable = { treasury = tag_to_annex.treasury }
+		clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+		add_to_variable = { debt = tag_to_annex.debt }
+	    clamp_variable = { var = debt min = 0 max = 1000000 }
+		add_to_variable = { int_investments = tag_to_annex.int_investments }
+    	clamp_variable = { var = int_investments min = 0 max = 1000000 }
+	}
+}
+
+khanti_subjects_annex = {
+	decrease_economic_growth = yes
+	set_temp_variable = { tag_to_annex = CHE.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = CRM.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = BLR.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = NEE.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = CHU.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = MEL.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = MOV.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = UDM.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = YAM.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = CKK.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = KAE.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = KHS.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = ALT.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = URA.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = SIB.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = FAR.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = GOR.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = KUB.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = TUV.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = DPR.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = LPR.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = KOM.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = KBK.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = ADY.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = SOO.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = ING.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = DAG.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = TAT.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = YAK.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = BRY.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = KLM.id }
+	KHM_subject_annex_effect = yes
+	set_temp_variable = { tag_to_annex = BSH.id }
+	KHM_subject_annex_effect = yes
+}
+###########KHMAO CONTENT###########
+KHM_territory_core_effect = {
+	if = {
+		limit = {
+			KHM = { owns_state = var:state_to_annex }
+		}
+		add_political_power = -40
+		set_temp_variable = { treasury_change = -1 }
+		modify_treasury_effect = yes
+		KHM = {
+			add_state_core = var:state_to_annex
+		}
+	}
+}
+khanti_territory_core = {
+	set_temp_variable = { state_to_annex = 644 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 645 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 654 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 656 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 667 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 670 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 666 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 663 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 1118 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 675 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 676 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 658 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 646 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 659 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 660 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 662 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 655 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 657 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 1071 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 677 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 1067 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 680 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 1066 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 682 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 685 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 1069 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 692 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 687 }
+	KHM_territory_core_effect = yes
+	set_temp_variable = { state_to_annex = 691 }
+	KHM_territory_core_effect = yes
+}

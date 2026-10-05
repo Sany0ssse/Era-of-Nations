@@ -1,0 +1,79 @@
+MOR_sahrawi_relations = {
+	allowed = { tag = MOR }
+	enable = { has_opinion_modifier = SHA_MOR_Occupation }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = antagonize id = "SHA" value = 50 }
+	ai_strategy = { type = contain id = "SHA" value = 100 }
+	ai_strategy = { type = conquer id = "SHA" value = 50 }
+}
+
+MOR_algerian_relations = {
+	allowed = { tag = MOR }
+	enable = { has_opinion_modifier = ALG_MOR_Is_Occuping_WS_Border_Closed }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = antagonize id = "ALG" value = 25 }
+	ai_strategy = { type = contain id = "ALG" value = 50 }
+}
+
+MOR_support_saudis = {
+	allowed = { tag = MOR }
+	enable = { NOT = { has_war_with = SAU } }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SAU" value = 50 }
+	ai_strategy = { type = protect id = "SAU" value = 50 }
+	ai_strategy = { type = influence id = "SAU" value = 50 }
+	ai_strategy = { type = support id = "SAU" value = 100 }
+	ai_strategy = { type = send_volunteers_desire id = "SAU" value = 100 }
+}
+
+MOR_moroccan_spanish_relations = {
+	allowed = { original_tag = MOR }
+	enable = {
+		country_exists = SPR
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = antagonize id = "SPR" value = 50 }
+	ai_strategy = { type = contain id = "SPR" value = 50 }
+}
+
+#Libya increased support for Sahrawi
+MOR_libya_supports_sahrawi = {
+	allowed = { tag = MOR }
+
+	enable = {
+		LBA = { has_completed_focus = LBA_close_ties_sahrawi }
+		NOT = { is_in_faction_with = LBA }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = antagonize id = "LBA" value = 50 }
+}
+#Libya switched supporting us instead
+MOR_libya_abandoned_sahrawi = {
+	allowed = { tag = MOR }
+
+	enable = {
+		LBA = { has_completed_focus = LBA_switch_to_morocco }
+		NOT = { has_war_with = LBA }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "LBA" value = 50 }
+}
+#Libya has codemned Spanish colonialism
+MOR_libya_is_against_spain = {
+	allowed = { tag = MOR }
+
+	enable = {
+		LBA = { has_completed_focus = LBA_condemn_spanish_colonialism }
+		NOT = { has_war_with = LBA }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "LBA" value = 50 }
+	ai_strategy = { type = alliance id = "LBA" value = 50 }
+}

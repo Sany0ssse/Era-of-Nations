@@ -1,0 +1,161 @@
+scripted_gui = {
+	polsejm_gui = {
+		context_type = decision_category
+		window_name = "polandsejm_ui_window"
+		visible = { always = yes }
+
+		properties = {
+			GFX_poland_sejm_suppurt = {
+				image = "[POL_sejm_support_img]"
+			}
+		}
+	}
+	pol_army_gui = {
+		context_type = decision_category
+		window_name = "pol_army_ui_window"
+		visible = { always = yes }
+	}
+	pol_economy_gui = {
+		context_type = decision_category
+		window_name = "pol_economy_ui_window"
+		visible = { always = yes }
+		properties = {
+			poland_currency_icon = {
+				image = "[POL_economy_currency_img]"
+			}
+		}
+	}
+	visegrad_gui = {
+		context_type = decision_category
+		window_name = "visegrad_ui_window"
+		visible = { always = yes }
+		triggers = {
+			poland_visegrad_decisions_click_enabled = {
+				POL = { has_idea = Visegrad_group }
+				country_exists = POL
+			}
+			slovakia_visegrad_decisions_click_enabled = {
+				SLO = { has_idea = Visegrad_group }
+				country_exists = SLO
+			}
+			czech_visegrad_decisions_click_enabled = {
+				CZE = { has_idea = Visegrad_group }
+				country_exists = CZE
+			}
+			hungary_visegrad_decisions_click_enabled = {
+				HUN = { has_idea = Visegrad_group }
+				country_exists = HUN
+			}
+			visegrad_invest_5_button_click_enabled = {
+				check_variable = { treasury > 4.9 }
+				custom_trigger_tooltip = {
+					tooltip = temp_vishegrad_invest_tt
+					NOT = { has_country_flag = temp_vishegrad_invest }
+				}
+			}
+			visegrad_invest_15_button_click_enabled = {
+				check_variable = { treasury > 14.9 }
+				custom_trigger_tooltip = {
+					tooltip = temp_vishegrad_invest_tt
+					NOT = { has_country_flag = temp_vishegrad_invest }
+				}
+			}
+			visegrad_invest_35_button_click_enabled = {
+				check_variable = { treasury > 34.9 }
+				custom_trigger_tooltip = {
+					tooltip = temp_vishegrad_invest_tt
+					NOT = { has_country_flag = temp_vishegrad_invest }
+				}
+			}
+		}
+		ai_enabled = { always = yes }
+		ai_check = {
+			has_idea = Visegrad_group
+		}
+		ai_test_interval = 24
+		ai_max_weight_taken_per_test = 1
+		ai_weights = {
+			visegrad_invest_5_button_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						check_variable = { treasury > 4.9 }
+						add = 100
+					}
+				}
+			}
+			visegrad_invest_15_button_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						check_variable = { treasury > 14.9 }
+						add = 100
+					}
+				}
+			}
+			visegrad_invest_35_button_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						check_variable = { treasury > 34.9 }
+						add = 100
+					}
+				}
+			}
+		}
+		effects = {
+			visegrad_invest_5_button_click = {
+				set_country_flag = { flag = temp_vishegrad_invest value = 1 days = 30 }
+				set_temp_variable = { visegrad_fund_treasury_change = 5 }
+				visegrad_fund_treasury_update = yes
+				set_temp_variable = { treasury_change = -5.00 }
+				modify_treasury_effect = yes
+				ingame_update_setup = yes
+				set_temp_variable = { visegrad_influence_change = 1 }
+				visegrad_influence_update = yes
+			}
+			visegrad_invest_15_button_click = {
+				set_country_flag = { flag = temp_vishegrad_invest value = 1 days = 30 }
+				set_temp_variable = { visegrad_fund_treasury_change = 15 }
+				visegrad_fund_treasury_update = yes
+				set_temp_variable = { treasury_change = -15.00 }
+				modify_treasury_effect = yes
+				ingame_update_setup = yes
+				set_temp_variable = { visegrad_influence_change = 3 }
+				visegrad_influence_update = yes
+			}
+			visegrad_invest_35_button_click = {
+				set_country_flag = { flag = temp_vishegrad_invest value = 1 days = 30 }
+				set_temp_variable = { visegrad_fund_treasury_change = 35 }
+				visegrad_fund_treasury_update = yes
+				set_temp_variable = { treasury_change = -35.00 }
+				modify_treasury_effect = yes
+				ingame_update_setup = yes
+				set_temp_variable = { visegrad_influence_change = 7 }
+				visegrad_influence_update = yes
+			}
+			visegrad_generic_decision_button_click = {
+				set_variable = { visegrad_country_decisions_var = 0 }
+				set_variable = { visegrad_decisions_var = 0 }
+			}
+			visegrad_economy_decision_button_click = {
+				set_variable = { visegrad_decisions_var = 1 }
+			}
+			visegrad_military_decision_button_click = {
+				set_variable = { visegrad_decisions_var = 2 }
+			}
+			poland_visegrad_decisions_click = {
+				set_variable = { visegrad_country_decisions_var = 1 }
+			}
+			slovakia_visegrad_decisions_click = {
+				set_variable = { visegrad_country_decisions_var = 2 }
+			}
+			czech_visegrad_decisions_click = {
+				set_variable = { visegrad_country_decisions_var = 3 }
+			}
+			hungary_visegrad_decisions_click = {
+				set_variable = { visegrad_country_decisions_var = 4 }
+			}
+		}
+	}
+}

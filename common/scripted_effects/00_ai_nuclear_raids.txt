@@ -1,0 +1,3282 @@
+launch_nuclear_ai_country_strike = {
+ country_event = nuclear_ai_raid.1
+ set_country_flag = has_been_nuked
+ set_country_flag = has_been_hrucked
+ set_temp_variable = { planes_and_sams = num_deployed_planes_with_type@small_plane_airframe }
+ add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_small_plane_airframe }
+ add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@medium_plane_fighter_airframe }
+ add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_fighter_airframe }
+ add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_scout_airframe }
+ add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@large_plane_awacs_airframe }
+ add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@sam_missile_equipment }
+ divide_temp_variable = { planes_and_sams = num_owned_controlled_states }
+ every_owned_state = {
+	                  limit = { is_fully_controlled_by = PREV }
+					  set_temp_variable = { ai_nuke_success_chance = building_level@radar_station }
+					  add_to_temp_variable= { ai_nuke_success_chance = PREV.planes_and_sams }
+					  add_to_temp_variable= { ai_nuke_success_chance = building_level@anti_air_building }
+					  add_to_temp_variable= { ai_nuke_success_chance = building_level@air_base }
+					  add_to_temp_variable= { ai_nuke_success_chance = building_level@rocket_site }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = gen_3_light } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = gen_4_light } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = gen_5_light } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = gen_6_light } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = gen_3_medium } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = gen_4_medium } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = gen_5_medium } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = gen_6_medium } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = avionics_1 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = avionics_2 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = avionics_3 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = awacs_1 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = awacs_2 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = awacs_3 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = air_weapons_1 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = air_weapons_2 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = air_weapons_3 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = air_weapons_4 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = SAM0 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = SAM1 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = SAM2 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = SAM3 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = SAM4 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = SAM5 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = SAM6 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  if = {
+						  limit = { var:THIS.controller = { has_tech = SAM7 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					  }
+					  set_temp_variable = { ai_nuke_success_chance_multiplyer = 0 }
+					  var:THIS.controller = {
+						add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@air_intercept_efficiency }
+						add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@static_anti_air_hit_chance_factor }
+					  }
+					  multiply_temp_variable = { ai_nuke_success_chance_multiplyer = 1000 }
+					  add_to_temp_variable = { ai_nuke_success_chance = ai_nuke_success_chance_multiplyer }
+					  multiply_temp_variable = { ai_nuke_success_chance = 0.1 }
+					  clamp_temp_variable = {
+							var =  ai_nuke_success_chance
+							  min = 20
+							  max = 70
+					  }
+					  add_to_temp_variable = { ai_nuke_success_chance = -100 }
+					  multiply_temp_variable = { ai_nuke_success_chance = -1 }
+					  add_to_temp_variable = { ai_nuke_success_chance = global.temp_arctic_nuclear_level }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = ICBM1 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = ICBM2 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = ICBM3 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = ICBM4 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = ICBM5 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = ICBM6 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = ICBM7 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = ICBM8 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = NIRBM1 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = NIRBM2 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = NIRBM3 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = NIRBM4 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = NIRBM5 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = NIRBM6 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  if = {
+						  limit = { var:global.nuke_striker = { has_tech = NIRBM7 } }
+						  add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					  }
+					  clamp_temp_variable = {
+							var =  ai_nuke_success_chance
+							min = 20
+							max = 70
+					  }
+					  random = {
+						chance = ai_nuke_success_chance
+						PREV = {
+							launch_nuke = {
+								state = PREV
+								use_nuke = no
+							}
+						}
+						damage_units = {
+							state = THIS
+							damage = 0.75
+							army = yes
+							navy = yes
+						}
+						if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								has_dynamic_modifier = { modifier = Underground_modifier }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout1
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		civil_bunker > 0
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout2
+								days = 365
+							}
+						}
+						else = {
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout3
+								days = 365
+							}
+						}
+						set_temp_variable = { nuke_building_destroy_chance = 0 }
+						var:THIS.controller = {
+							add_to_temp_variable = { PREV.nuke_building_destroy_chance = modifier@industry_air_damage_factor }
+						}
+						multiply_temp_variable = { nuke_building_destroy_chance = 100 }
+						add_to_temp_variable = { nuke_building_destroy_chance = ai_nuke_success_chance }
+						clamp_temp_variable = {
+								var = nuke_building_destroy_chance
+								min = 20
+							    max = 70
+						}
+						if = {
+						   limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.1
+						   }
+					   }
+					   if = {
+						   limit = { nuclear_reactor > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.2
+						   }
+					   }
+					   if = {
+						   limit = { has_variable = hydroelectric_energy_production_var }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.3
+						   }
+					   }
+					   if = {
+						   limit = { has_variable = geothermal_energy_production_var }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.4
+						   }
+					   }
+					   if = {
+						   limit = { industrial_complex > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.5
+						   }
+					   }
+					   if = {
+						   limit = { arms_factory > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.6
+						   }
+					   }
+					   if = {
+						   limit = { dockyard > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.7
+						   }
+					   }
+					   if = {
+						   limit = { offices > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.8
+						   }
+					   }
+					   if = {
+						   limit = { rubber_refinery > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.9
+						   }
+					   }
+					   if = {
+						   limit = { agriculture_district > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.10
+						   }
+					   }
+					   if = {
+						   limit = { nuclear_reactor > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.11
+						   }
+					   }
+					   if = {
+						   limit = { synthetic_refinery > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.12
+						   }
+					   }
+					   if = {
+						   limit = { fossil_powerplant > 0 }
+						   random = {
+							   chance = nuke_building_destroy_chance
+							   state_event = destroy_building.13
+						   }
+					   }
+					   if = { limit = { tungsten > 8 }
+						 random = {
+						 chance = nuke_building_destroy_chance
+						 add_dynamic_modifier = {
+						   modifier = tech_metal_refining_modifier
+						   days = 27
+												}
+								  }
+					   }
+					   if = { limit = { chromium > 8 }
+						random = {
+						chance = nuke_building_destroy_chance
+						add_dynamic_modifier = {
+						  modifier = rare_metal_refining_modifier
+						  days = 27
+											   }
+								 }
+					   }
+					   if = { limit = { OR = { aluminium > 24 steel > 24 } }
+						random = {
+						chance = nuke_building_destroy_chance
+						add_dynamic_modifier = {
+						  modifier = metal_refining_modifier
+						  days = 27
+											   }
+								 }
+					   }
+					   if = { limit = { oil > 18 }
+						random = {
+						chance = nuke_building_destroy_chance
+						add_dynamic_modifier = {
+						  modifier = oil_refining_modifier
+						  days = 27
+											   }
+								 }
+					   }
+					  }
+	                 }
+}
+
+launch_tactical_nuclear_ai_strike = {
+ 	set_variable = { global.amogusus_count = 0 }
+	random_list = {
+		25 = {
+			every_neighbor_country = {
+	   			limit = {
+					has_war_with = var:global.nuke_striker
+					has_capitulated = no
+					var:global.nuke_striker = {
+						OR = {
+					   		check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   		check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						}
+						OR = {
+							any_controlled_state = {
+								OR = {
+									check_variable = { non_damaged_building_level@rocket_site > 0 }
+									AND = {
+										check_variable = { non_damaged_building_level@air_base > 0 }
+										check_variable = { num_equipment@strategic_bomber > 0 }
+									}
+								}
+							}
+							check_variable = { deployed_navy_manpower_k > 0 }
+						}
+					}
+	        	}
+				set_country_flag = has_been_nuked
+				set_country_flag = has_been_hrucked
+				country_event = nuclear_ai_raid.2
+				add_to_variable = { global.amogusus_count = 1 }
+ 				set_temp_variable = { planes_and_sams = num_deployed_planes_with_type@small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_scout_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@large_plane_awacs_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@sam_missile_equipment }
+				random_controlled_state = {
+					limit = {
+						NOT = { is_controlled_by = var:global.nuke_striker }
+						is_fully_controlled_by = PREV
+						any_neighbor_state = {
+							is_controlled_by = var:global.nuke_striker
+						}
+						any_country = {
+						   	divisions_in_state = {
+								size > 0
+						    	state = PREV
+					   		}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout1
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout2
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout3
+							}
+						}
+					}
+					set_temp_variable = { ai_nuke_success_chance = building_level@radar_station }
+					add_to_temp_variable= { ai_nuke_success_chance = PREV.planes_and_sams }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@anti_air_building }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@air_base }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@rocket_site }
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_3_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_4_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_5_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_6_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_3_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_4_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_5_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_6_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM0 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					set_temp_variable = { ai_nuke_success_chance_multiplyer = 0 }
+					var:THIS.controller = {
+			  			add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@air_intercept_efficiency }
+			  			add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@static_anti_air_hit_chance_factor }
+					}
+					multiply_temp_variable = { ai_nuke_success_chance_multiplyer = 1000 }
+					add_to_temp_variable = { ai_nuke_success_chance = ai_nuke_success_chance_multiplyer }
+					multiply_temp_variable = { ai_nuke_success_chance = 0.1 }
+					clamp_temp_variable = {
+						var =  ai_nuke_success_chance
+						min = 20
+						max = 70
+					}
+					add_to_temp_variable = { ai_nuke_success_chance = -100 }
+					multiply_temp_variable = { ai_nuke_success_chance = -1 }
+					add_to_temp_variable = { ai_nuke_success_chance = global.temp_arctic_nuclear_level }
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM8 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					clamp_temp_variable = {
+						  var =  ai_nuke_success_chance
+						  min = 20
+						  max = 70
+					}
+					random = {
+						chance = ai_nuke_success_chance
+						PREV = {
+							launch_nuke = {
+						  		state = PREV
+						  		use_nuke = no
+				  			}
+			    		}
+			  			damage_units = {
+				  			state = THIS
+				  			damage = 0.75
+				  			army = yes
+				  			navy = yes
+			    		}
+						if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								has_dynamic_modifier = { modifier = Underground_modifier }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout1
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		civil_bunker > 0
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout2
+								days = 365
+							}
+						}
+						else = {
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout3
+								days = 365
+							}
+						}
+			  			set_temp_variable = { nuke_building_destroy_chance = 0 }
+			  			var:THIS.controller = {
+				  			add_to_temp_variable = { PREV.nuke_building_destroy_chance = modifier@industry_air_damage_factor }
+			  			}
+			  			multiply_temp_variable = { nuke_building_destroy_chance = 100 }
+			  			add_to_temp_variable = { nuke_building_destroy_chance = ai_nuke_success_chance }
+			  			clamp_temp_variable = {
+						  var = nuke_building_destroy_chance
+						  min = 20
+						  max = 70
+			  			}
+			  			if = {
+				 			limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.1
+				 			}
+			 			}
+			 			if = {
+				 			limit = { nuclear_reactor > 0 }
+				 			random = {
+								chance = nuke_building_destroy_chance
+					 			state_event = destroy_building.2
+				 			}
+			 			}
+			 			if = {
+				 		limit = { has_variable = hydroelectric_energy_production_var }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.3
+				 			}
+			 			}
+			 			if = {
+				 			limit = { has_variable = geothermal_energy_production_var }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.4
+				 			}
+			 			}
+			 			if = {
+				 			limit = { industrial_complex > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.5
+				 			}
+			 			}
+			 			if = {
+				 			limit = { arms_factory > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.6
+				 			}
+			 			}
+			 			if = {
+				 			limit = { dockyard > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.7
+				 			}
+			 			}
+			 			if = {
+				 			limit = { offices > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.8
+				 			}
+			 			}
+			 			if = {
+				 			limit = { rubber_refinery > 0 }
+				 			random = {
+								chance = nuke_building_destroy_chance
+					 			state_event = destroy_building.9
+				 			}
+			 			}
+			 			if = {
+				 			limit = { agriculture_district > 0 }
+				 			random = {
+					 			chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.10
+				 			}
+			 			}
+			 			if = {
+				 			limit = { nuclear_reactor > 0 }
+				 			random = {
+					 			chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.11
+				 			}
+			 			}
+			 			if = {
+				 			limit = { synthetic_refinery > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.12
+				 			}
+			 			}
+			 			if = {
+				 			limit = { fossil_powerplant > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.13
+				 			}
+			 			}
+			 			if = { limit = { tungsten > 8 }
+			   				random = {
+			   					chance = nuke_building_destroy_chance
+			   					add_dynamic_modifier = {
+				 					modifier = tech_metal_refining_modifier
+				 					days = 27
+								}
+							}
+			 			}
+			 			if = { limit = { chromium > 8 }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = rare_metal_refining_modifier
+									days = 27
+								}
+					    	}
+			 			}
+			 			if = { limit = { OR = { aluminium > 24 steel > 24 } }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = metal_refining_modifier
+									days = 27
+								}
+						    }
+			 			}
+			 			if = { limit = { oil > 18 }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = oil_refining_modifier
+									days = 27
+								}
+							}
+			 			}
+					}
+		    	}
+	    	}
+			var:global.nuke_striker = {
+				if = {
+					limit = { check_variable = { global.amogusus_count > 0 } }
+					add_named_threat = {
+						threat = 50
+						name = state_nuclear_strike_wt_tt
+					}
+	    			send_equipment = {
+		    			equipment = nuclear_ballistic_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+	    			send_equipment = {
+		    			equipment = nuclear_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+				}
+	        }
+		}
+		25 = {
+			every_enemy_country = {
+	   			limit = {
+					has_capitulated = no
+					var:global.nuke_striker = {
+						OR = {
+					   		check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   		check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						}
+						OR = {
+							any_controlled_state = {
+								OR = {
+									check_variable = { non_damaged_building_level@rocket_site > 0 }
+									AND = {
+										check_variable = { non_damaged_building_level@air_base > 0 }
+										check_variable = { num_equipment@strategic_bomber > 0 }
+									}
+								}
+							}
+							check_variable = { deployed_navy_manpower_k > 0 }
+						}
+					}
+	        	}
+				set_country_flag = has_been_nuked
+				set_country_flag = has_been_hrucked
+				country_event = nuclear_ai_raid.2
+				add_to_variable = { global.amogusus_count = 1 }
+ 				set_temp_variable = { planes_and_sams = num_deployed_planes_with_type@small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_scout_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@large_plane_awacs_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@sam_missile_equipment }
+				random_owned_state = {
+					limit = {
+						NOT = { is_controlled_by = var:global.nuke_striker }
+						is_fully_controlled_by = PREV
+						OR = {
+							arms_factory > 0
+							dockyard > 0
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout1
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout2
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout3
+							}
+						}
+					}
+					set_temp_variable = { ai_nuke_success_chance = building_level@radar_station }
+					add_to_temp_variable= { ai_nuke_success_chance = PREV.planes_and_sams }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@anti_air_building }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@air_base }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@rocket_site }
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_3_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_4_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_5_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_6_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_3_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_4_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_5_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_6_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM0 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					set_temp_variable = { ai_nuke_success_chance_multiplyer = 0 }
+					var:THIS.controller = {
+			  			add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@air_intercept_efficiency }
+			  			add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@static_anti_air_hit_chance_factor }
+					}
+					multiply_temp_variable = { ai_nuke_success_chance_multiplyer = 1000 }
+					add_to_temp_variable = { ai_nuke_success_chance = ai_nuke_success_chance_multiplyer }
+					multiply_temp_variable = { ai_nuke_success_chance = 0.1 }
+					clamp_temp_variable = {
+						var =  ai_nuke_success_chance
+						min = 20
+						max = 70
+					}
+					add_to_temp_variable = { ai_nuke_success_chance = -100 }
+					multiply_temp_variable = { ai_nuke_success_chance = -1 }
+					add_to_temp_variable = { ai_nuke_success_chance = global.temp_arctic_nuclear_level }
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM8 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					clamp_temp_variable = {
+						  var =  ai_nuke_success_chance
+						  min = 20
+						  max = 70
+					}
+					random = {
+						chance = ai_nuke_success_chance
+						PREV = {
+							launch_nuke = {
+						  		state = PREV
+						  		use_nuke = no
+				  			}
+			    		}
+			  			damage_units = {
+				  			state = THIS
+				  			damage = 0.75
+				  			army = yes
+				  			navy = yes
+			    		}
+						if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								has_dynamic_modifier = { modifier = Underground_modifier }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout1
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		civil_bunker > 0
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout2
+								days = 365
+							}
+						}
+						else = {
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout3
+								days = 365
+							}
+						}
+			  			set_temp_variable = { nuke_building_destroy_chance = 0 }
+			  			var:THIS.controller = {
+				  			add_to_temp_variable = { PREV.nuke_building_destroy_chance = modifier@industry_air_damage_factor }
+			  			}
+			  			multiply_temp_variable = { nuke_building_destroy_chance = 100 }
+			  			add_to_temp_variable = { nuke_building_destroy_chance = ai_nuke_success_chance }
+			  			clamp_temp_variable = {
+						  var = nuke_building_destroy_chance
+						  min = 20
+						  max = 70
+			  			}
+			  			if = {
+				 			limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.1
+				 			}
+			 			}
+			 			if = {
+				 			limit = { nuclear_reactor > 0 }
+				 			random = {
+								chance = nuke_building_destroy_chance
+					 			state_event = destroy_building.2
+				 			}
+			 			}
+			 			if = {
+				 		limit = { has_variable = hydroelectric_energy_production_var }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.3
+				 			}
+			 			}
+			 			if = {
+				 			limit = { has_variable = geothermal_energy_production_var }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.4
+				 			}
+			 			}
+			 			if = {
+				 			limit = { industrial_complex > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.5
+				 			}
+			 			}
+			 			if = {
+				 			limit = { arms_factory > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.6
+				 			}
+			 			}
+			 			if = {
+				 			limit = { dockyard > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.7
+				 			}
+			 			}
+			 			if = {
+				 			limit = { offices > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.8
+				 			}
+			 			}
+			 			if = {
+				 			limit = { rubber_refinery > 0 }
+				 			random = {
+								chance = nuke_building_destroy_chance
+					 			state_event = destroy_building.9
+				 			}
+			 			}
+			 			if = {
+				 			limit = { agriculture_district > 0 }
+				 			random = {
+					 			chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.10
+				 			}
+			 			}
+			 			if = {
+				 			limit = { nuclear_reactor > 0 }
+				 			random = {
+					 			chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.11
+				 			}
+			 			}
+			 			if = {
+				 			limit = { synthetic_refinery > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.12
+				 			}
+			 			}
+			 			if = {
+				 			limit = { fossil_powerplant > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.13
+				 			}
+			 			}
+			 			if = { limit = { tungsten > 8 }
+			   				random = {
+			   					chance = nuke_building_destroy_chance
+			   					add_dynamic_modifier = {
+				 					modifier = tech_metal_refining_modifier
+				 					days = 27
+								}
+							}
+			 			}
+			 			if = { limit = { chromium > 8 }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = rare_metal_refining_modifier
+									days = 27
+								}
+					    	}
+			 			}
+			 			if = { limit = { OR = { aluminium > 24 steel > 24 } }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = metal_refining_modifier
+									days = 27
+								}
+						    }
+			 			}
+			 			if = { limit = { oil > 18 }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = oil_refining_modifier
+									days = 27
+								}
+							}
+			 			}
+					}
+		    	}
+	    	}
+			var:global.nuke_striker = {
+				if = {
+					limit = { check_variable = { global.amogusus_count > 0 } }
+					add_named_threat = {
+						threat = 50
+						name = state_nuclear_strike_wt_tt
+					}
+	    			send_equipment = {
+		    			equipment = nuclear_ballistic_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+	    			send_equipment = {
+		    			equipment = nuclear_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+				}
+	        }
+		}
+		25 = {
+			every_enemy_country = {
+	   			limit = {
+					has_capitulated = no
+					var:global.nuke_striker = {
+						OR = {
+					   		check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   		check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						}
+						OR = {
+							any_controlled_state = {
+								OR = {
+									check_variable = { non_damaged_building_level@rocket_site > 0 }
+									AND = {
+										check_variable = { non_damaged_building_level@air_base > 0 }
+										check_variable = { num_equipment@strategic_bomber > 0 }
+									}
+								}
+							}
+							check_variable = { deployed_navy_manpower_k > 0 }
+						}
+					}
+	        	}
+				set_country_flag = has_been_nuked
+				set_country_flag = has_been_hrucked
+				country_event = nuclear_ai_raid.2
+				add_to_variable = { global.amogusus_count = 1 }
+ 				set_temp_variable = { planes_and_sams = num_deployed_planes_with_type@small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_scout_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@large_plane_awacs_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@sam_missile_equipment }
+				capital_scope = {
+					if = {
+						limit = {
+							NOT = { is_controlled_by = var:global.nuke_striker }
+							is_fully_controlled_by = PREV
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout1
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout2
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout3
+								}
+							}
+						}
+						set_temp_variable = { ai_nuke_success_chance = building_level@radar_station }
+						add_to_temp_variable= { ai_nuke_success_chance = PREV.planes_and_sams }
+						add_to_temp_variable= { ai_nuke_success_chance = building_level@anti_air_building }
+						add_to_temp_variable= { ai_nuke_success_chance = building_level@air_base }
+						add_to_temp_variable= { ai_nuke_success_chance = building_level@rocket_site }
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_3_light } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_4_light } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_5_light } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_6_light } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_3_medium } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_4_medium } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_5_medium } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_6_medium } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = avionics_1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = avionics_2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = avionics_3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = awacs_1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = awacs_2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = awacs_3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = air_weapons_1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = air_weapons_2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = air_weapons_3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = air_weapons_4 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM0 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM4 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM5 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM6 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM7 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						set_temp_variable = { ai_nuke_success_chance_multiplyer = 0 }
+						var:THIS.controller = {
+			  				add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@air_intercept_efficiency }
+			  				add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@static_anti_air_hit_chance_factor }
+						}
+						multiply_temp_variable = { ai_nuke_success_chance_multiplyer = 1000 }
+						add_to_temp_variable = { ai_nuke_success_chance = ai_nuke_success_chance_multiplyer }
+						multiply_temp_variable = { ai_nuke_success_chance = 0.1 }
+						clamp_temp_variable = {
+							var =  ai_nuke_success_chance
+							min = 20
+							max = 70
+						}
+						add_to_temp_variable = { ai_nuke_success_chance = -100 }
+						multiply_temp_variable = { ai_nuke_success_chance = -1 }
+						add_to_temp_variable = { ai_nuke_success_chance = global.temp_arctic_nuclear_level }
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM4 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM5 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM6 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM7 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM8 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM4 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM5 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM6 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM7 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						clamp_temp_variable = {
+							  var =  ai_nuke_success_chance
+							  min = 20
+							  max = 70
+						}
+						random = {
+							chance = ai_nuke_success_chance
+							PREV = {
+								launch_nuke = {
+							  		state = PREV
+							  		use_nuke = no
+				  				}
+			    			}
+			  				damage_units = {
+				  				state = THIS
+				  				damage = 0.75
+				  				army = yes
+				  				navy = yes
+			    			}
+							if = {
+								limit = {
+									NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        			NOT = { civil_bunker > 0 }
+								}
+								add_dynamic_modifier = {
+									modifier = nuclear_fallout
+									days = 365
+								}
+							}
+							else_if = {
+								limit = {
+									has_dynamic_modifier = { modifier = Underground_modifier }
+                        			NOT = { civil_bunker > 0 }
+								}
+								add_dynamic_modifier = {
+									modifier = nuclear_fallout1
+									days = 365
+								}
+							}
+							else_if = {
+								limit = {
+									NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        			civil_bunker > 0
+								}
+								add_dynamic_modifier = {
+									modifier = nuclear_fallout2
+									days = 365
+								}
+							}
+							else = {
+								add_dynamic_modifier = {
+									modifier = nuclear_fallout3
+									days = 365
+								}
+							}
+			  				set_temp_variable = { nuke_building_destroy_chance = 0 }
+			  				var:THIS.controller = {
+				  				add_to_temp_variable = { PREV.nuke_building_destroy_chance = modifier@industry_air_damage_factor }
+			  				}
+			  				multiply_temp_variable = { nuke_building_destroy_chance = 100 }
+			  				add_to_temp_variable = { nuke_building_destroy_chance = ai_nuke_success_chance }
+			  				clamp_temp_variable = {
+							  var = nuke_building_destroy_chance
+							  min = 20
+							  max = 70
+			  				}
+			  				if = {
+				 				limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.1
+				 				}
+			 				}
+			 				if = {
+				 				limit = { nuclear_reactor > 0 }
+				 				random = {
+									chance = nuke_building_destroy_chance
+					 				state_event = destroy_building.2
+				 				}
+			 				}
+			 				if = {
+				 			limit = { has_variable = hydroelectric_energy_production_var }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.3
+				 				}
+			 				}
+			 				if = {
+				 				limit = { has_variable = geothermal_energy_production_var }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+						 			state_event = destroy_building.4
+				 				}
+			 				}
+			 				if = {
+				 				limit = { industrial_complex > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.5
+				 				}
+			 				}
+			 				if = {
+				 				limit = { arms_factory > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.6
+				 				}
+			 				}
+			 				if = {
+				 				limit = { dockyard > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.7
+				 				}
+			 				}
+			 				if = {
+				 				limit = { offices > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.8
+				 				}
+			 				}
+			 				if = {
+				 				limit = { rubber_refinery > 0 }
+				 				random = {
+									chance = nuke_building_destroy_chance
+					 				state_event = destroy_building.9
+				 				}
+			 				}
+			 				if = {
+				 				limit = { agriculture_district > 0 }
+				 				random = {
+					 				chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.10
+				 				}
+			 				}
+			 				if = {
+				 				limit = { nuclear_reactor > 0 }
+				 				random = {
+					 				chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.11
+				 				}
+			 				}
+			 				if = {
+				 				limit = { synthetic_refinery > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+						 			state_event = destroy_building.12
+				 				}
+			 				}
+			 				if = {
+				 				limit = { fossil_powerplant > 0 }
+				 				random = {
+						 			chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.13
+				 				}
+			 				}
+			 				if = { limit = { tungsten > 8 }
+			   					random = {
+			   						chance = nuke_building_destroy_chance
+			   						add_dynamic_modifier = {
+				 						modifier = tech_metal_refining_modifier
+				 						days = 27
+									}
+								}
+			 				}
+			 				if = { limit = { chromium > 8 }
+			  					random = {
+			  						chance = nuke_building_destroy_chance
+			  						add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					    		}
+			 				}
+			 				if = { limit = { OR = { aluminium > 24 steel > 24 } }
+			  					random = {
+			  						chance = nuke_building_destroy_chance
+			  						add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+							    }
+			 				}
+			 				if = { limit = { oil > 18 }
+			  					random = {
+			  						chance = nuke_building_destroy_chance
+			  						add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+			 				}
+						}
+					}
+		    	}
+	    	}
+			var:global.nuke_striker = {
+				if = {
+					limit = { check_variable = { global.amogusus_count > 0 } }
+					add_named_threat = {
+						threat = 50
+						name = state_nuclear_strike_wt_tt
+					}
+	    			send_equipment = {
+		    			equipment = nuclear_ballistic_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+	    			send_equipment = {
+		    			equipment = nuclear_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+				}
+	        }
+		}
+		25 = {}
+	}
+}
+
+launch_tactical_nuclear_ai_first_strike = {
+	set_variable = { global.amogusus_count = 0 }
+	random_list = {
+		25 = {
+			every_neighbor_country = {
+	   			limit = {
+					has_war_with = var:global.nuke_striker
+					has_capitulated = no
+					var:global.nuke_striker = {
+						if = {
+							limit = { has_country_leader_with_trait = iron_dimon }
+							has_opinion = {
+								target = PREV
+								value < -99
+							}
+						}
+						else = {
+							has_opinion = {
+								target = PREV
+								value < -149
+							}
+						}
+						OR = {
+					   		check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   		check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						}
+						OR = {
+							any_controlled_state = {
+								OR = {
+									check_variable = { non_damaged_building_level@rocket_site > 0 }
+									AND = {
+										check_variable = { non_damaged_building_level@air_base > 0 }
+										check_variable = { num_equipment@strategic_bomber > 0 }
+									}
+								}
+							}
+							check_variable = { deployed_navy_manpower_k > 0 }
+						}
+					}
+					set_temp_variable = { rootie = var:global.nuke_striker }
+					set_temp_variable = { nuclear_potential_difference_percent = var:rootie.nuclear_potential }
+					if = {
+						limit = { check_variable = { THIS.nuclear_potential = 0 }}
+						set_temp_variable = { nuclear_potential_difference_percent = 2 }
+					}
+					else = { divide_temp_variable = { nuclear_potential_difference_percent = THIS.nuclear_potential } }
+					if = {
+						limit = { var:global.nuke_striker = { has_country_leader_with_trait = iron_dimon } }
+						check_variable = { nuclear_potential_difference_percent > 1 }
+					}
+					else = {
+						check_variable = { nuclear_potential_difference_percent > 2 }
+					}
+	        	}
+				set_country_flag = has_been_nuked
+				set_country_flag = has_been_hrucked
+				country_event = nuclear_ai_raid.2
+				add_to_variable = { global.amogusus_count = 1 }
+ 				set_temp_variable = { planes_and_sams = num_deployed_planes_with_type@small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_scout_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@large_plane_awacs_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@sam_missile_equipment }
+				random_controlled_state = {
+					limit = {
+						NOT = { is_controlled_by = var:global.nuke_striker }
+						is_fully_controlled_by = PREV
+						any_neighbor_state = {
+							is_controlled_by = var:global.nuke_striker
+						}
+						any_country = {
+						   	divisions_in_state = {
+								size > 0
+						    	state = PREV
+					   		}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout1
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout2
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout3
+							}
+						}
+					}
+					set_temp_variable = { ai_nuke_success_chance = building_level@radar_station }
+					add_to_temp_variable= { ai_nuke_success_chance = PREV.planes_and_sams }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@anti_air_building }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@air_base }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@rocket_site }
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_3_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_4_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_5_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_6_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_3_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_4_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_5_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_6_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM0 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					set_temp_variable = { ai_nuke_success_chance_multiplyer = 0 }
+					var:THIS.controller = {
+			  			add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@air_intercept_efficiency }
+			  			add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@static_anti_air_hit_chance_factor }
+					}
+					multiply_temp_variable = { ai_nuke_success_chance_multiplyer = 1000 }
+					add_to_temp_variable = { ai_nuke_success_chance = ai_nuke_success_chance_multiplyer }
+					multiply_temp_variable = { ai_nuke_success_chance = 0.1 }
+					clamp_temp_variable = {
+						var =  ai_nuke_success_chance
+						min = 20
+						max = 70
+					}
+					add_to_temp_variable = { ai_nuke_success_chance = -100 }
+					multiply_temp_variable = { ai_nuke_success_chance = -1 }
+					add_to_temp_variable = { ai_nuke_success_chance = global.temp_arctic_nuclear_level }
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM8 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					clamp_temp_variable = {
+						  var =  ai_nuke_success_chance
+						  min = 20
+						  max = 70
+					}
+					random = {
+						chance = ai_nuke_success_chance
+						PREV = {
+							launch_nuke = {
+						  		state = PREV
+						  		use_nuke = no
+				  			}
+			    		}
+			  			damage_units = {
+				  			state = THIS
+				  			damage = 0.75
+				  			army = yes
+				  			navy = yes
+			    		}
+						if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								has_dynamic_modifier = { modifier = Underground_modifier }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout1
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		civil_bunker > 0
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout2
+								days = 365
+							}
+						}
+						else = {
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout3
+								days = 365
+							}
+						}
+			  			set_temp_variable = { nuke_building_destroy_chance = 0 }
+			  			var:THIS.controller = {
+				  			add_to_temp_variable = { PREV.nuke_building_destroy_chance = modifier@industry_air_damage_factor }
+			  			}
+			  			multiply_temp_variable = { nuke_building_destroy_chance = 100 }
+			  			add_to_temp_variable = { nuke_building_destroy_chance = ai_nuke_success_chance }
+			  			clamp_temp_variable = {
+						  var = nuke_building_destroy_chance
+						  min = 20
+						  max = 70
+			  			}
+			  			if = {
+				 			limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.1
+				 			}
+			 			}
+			 			if = {
+				 			limit = { nuclear_reactor > 0 }
+				 			random = {
+								chance = nuke_building_destroy_chance
+					 			state_event = destroy_building.2
+				 			}
+			 			}
+			 			if = {
+				 		limit = { has_variable = hydroelectric_energy_production_var }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.3
+				 			}
+			 			}
+			 			if = {
+				 			limit = { has_variable = geothermal_energy_production_var }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.4
+				 			}
+			 			}
+			 			if = {
+				 			limit = { industrial_complex > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.5
+				 			}
+			 			}
+			 			if = {
+				 			limit = { arms_factory > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.6
+				 			}
+			 			}
+			 			if = {
+				 			limit = { dockyard > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.7
+				 			}
+			 			}
+			 			if = {
+				 			limit = { offices > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.8
+				 			}
+			 			}
+			 			if = {
+				 			limit = { rubber_refinery > 0 }
+				 			random = {
+								chance = nuke_building_destroy_chance
+					 			state_event = destroy_building.9
+				 			}
+			 			}
+			 			if = {
+				 			limit = { agriculture_district > 0 }
+				 			random = {
+					 			chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.10
+				 			}
+			 			}
+			 			if = {
+				 			limit = { nuclear_reactor > 0 }
+				 			random = {
+					 			chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.11
+				 			}
+			 			}
+			 			if = {
+				 			limit = { synthetic_refinery > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.12
+				 			}
+			 			}
+			 			if = {
+				 			limit = { fossil_powerplant > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.13
+				 			}
+			 			}
+			 			if = { limit = { tungsten > 8 }
+			   				random = {
+			   					chance = nuke_building_destroy_chance
+			   					add_dynamic_modifier = {
+				 					modifier = tech_metal_refining_modifier
+				 					days = 27
+								}
+							}
+			 			}
+			 			if = { limit = { chromium > 8 }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = rare_metal_refining_modifier
+									days = 27
+								}
+					    	}
+			 			}
+			 			if = { limit = { OR = { aluminium > 24 steel > 24 } }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = metal_refining_modifier
+									days = 27
+								}
+						    }
+			 			}
+			 			if = { limit = { oil > 18 }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = oil_refining_modifier
+									days = 27
+								}
+							}
+			 			}
+					}
+		    	}
+	    	}
+			var:global.nuke_striker = {
+				if = {
+					limit = { check_variable = { global.amogusus_count > 0 } }
+					add_named_threat = {
+						threat = 50
+						name = state_nuclear_strike_wt_tt
+					}
+	    			send_equipment = {
+		    			equipment = nuclear_ballistic_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+	    			send_equipment = {
+		    			equipment = nuclear_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+				}
+	        }
+		}
+		25 = {
+			every_enemy_country = {
+	   			limit = {
+					has_capitulated = no
+					var:global.nuke_striker = {
+						if = {
+							limit = { has_country_leader_with_trait = iron_dimon }
+							has_opinion = {
+								target = PREV
+								value < -99
+							}
+						}
+						else = {
+							has_opinion = {
+								target = PREV
+								value < -149
+							}
+						}
+						OR = {
+					   		check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   		check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						}
+						OR = {
+							any_controlled_state = {
+								OR = {
+									check_variable = { non_damaged_building_level@rocket_site > 0 }
+									AND = {
+										check_variable = { non_damaged_building_level@air_base > 0 }
+										check_variable = { num_equipment@strategic_bomber > 0 }
+									}
+								}
+							}
+							check_variable = { deployed_navy_manpower_k > 0 }
+						}
+					}
+					set_temp_variable = { rootie = var:global.nuke_striker }
+					set_temp_variable = { nuclear_potential_difference_percent = var:rootie.nuclear_potential }
+					if = {
+						limit = { check_variable = { THIS.nuclear_potential = 0 }}
+						set_temp_variable = { nuclear_potential_difference_percent = 2 }
+					}
+					else = { divide_temp_variable = { nuclear_potential_difference_percent = THIS.nuclear_potential } }
+					if = {
+						limit = { var:global.nuke_striker = { has_country_leader_with_trait = iron_dimon } }
+						check_variable = { nuclear_potential_difference_percent > 1 }
+					}
+					else = {
+						check_variable = { nuclear_potential_difference_percent > 2 }
+					}
+	        	}
+				set_country_flag = has_been_nuked
+				set_country_flag = has_been_hrucked
+				country_event = nuclear_ai_raid.2
+				add_to_variable = { global.amogusus_count = 1 }
+ 				set_temp_variable = { planes_and_sams = num_deployed_planes_with_type@small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_scout_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@large_plane_awacs_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@sam_missile_equipment }
+				random_owned_state = {
+					limit = {
+						NOT = { is_controlled_by = var:global.nuke_striker }
+						is_fully_controlled_by = PREV
+						OR = {
+							arms_factory > 0
+							dockyard > 0
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout1
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout2
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout3
+							}
+						}
+					}
+					set_temp_variable = { ai_nuke_success_chance = building_level@radar_station }
+					add_to_temp_variable= { ai_nuke_success_chance = PREV.planes_and_sams }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@anti_air_building }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@air_base }
+					add_to_temp_variable= { ai_nuke_success_chance = building_level@rocket_site }
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_3_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_4_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_5_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_6_light } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_3_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_4_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_5_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = gen_6_medium } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = avionics_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = awacs_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = air_weapons_4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM0 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					if = {
+						limit = { var:THIS.controller = { has_tech = SAM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 10 }
+					}
+					set_temp_variable = { ai_nuke_success_chance_multiplyer = 0 }
+					var:THIS.controller = {
+			  			add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@air_intercept_efficiency }
+			  			add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@static_anti_air_hit_chance_factor }
+					}
+					multiply_temp_variable = { ai_nuke_success_chance_multiplyer = 1000 }
+					add_to_temp_variable = { ai_nuke_success_chance = ai_nuke_success_chance_multiplyer }
+					multiply_temp_variable = { ai_nuke_success_chance = 0.1 }
+					clamp_temp_variable = {
+						var =  ai_nuke_success_chance
+						min = 20
+						max = 70
+					}
+					add_to_temp_variable = { ai_nuke_success_chance = -100 }
+					multiply_temp_variable = { ai_nuke_success_chance = -1 }
+					add_to_temp_variable = { ai_nuke_success_chance = global.temp_arctic_nuclear_level }
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = ICBM8 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM1 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM2 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM3 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM4 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM5 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM6 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					if = {
+						limit = { var:global.nuke_striker = { has_tech = NIRBM7 } }
+						add_to_temp_variable = { ai_nuke_success_chance = 1 }
+					}
+					clamp_temp_variable = {
+						  var =  ai_nuke_success_chance
+						  min = 20
+						  max = 70
+					}
+					random = {
+						chance = ai_nuke_success_chance
+						PREV = {
+							launch_nuke = {
+						  		state = PREV
+						  		use_nuke = no
+				  			}
+			    		}
+			  			damage_units = {
+				  			state = THIS
+				  			damage = 0.75
+				  			army = yes
+				  			navy = yes
+			    		}
+						if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								has_dynamic_modifier = { modifier = Underground_modifier }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout1
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		civil_bunker > 0
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout2
+								days = 365
+							}
+						}
+						else = {
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout3
+								days = 365
+							}
+						}
+			  			set_temp_variable = { nuke_building_destroy_chance = 0 }
+			  			var:THIS.controller = {
+				  			add_to_temp_variable = { PREV.nuke_building_destroy_chance = modifier@industry_air_damage_factor }
+			  			}
+			  			multiply_temp_variable = { nuke_building_destroy_chance = 100 }
+			  			add_to_temp_variable = { nuke_building_destroy_chance = ai_nuke_success_chance }
+			  			clamp_temp_variable = {
+						  var = nuke_building_destroy_chance
+						  min = 20
+						  max = 70
+			  			}
+			  			if = {
+				 			limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.1
+				 			}
+			 			}
+			 			if = {
+				 			limit = { nuclear_reactor > 0 }
+				 			random = {
+								chance = nuke_building_destroy_chance
+					 			state_event = destroy_building.2
+				 			}
+			 			}
+			 			if = {
+				 		limit = { has_variable = hydroelectric_energy_production_var }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.3
+				 			}
+			 			}
+			 			if = {
+				 			limit = { has_variable = geothermal_energy_production_var }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.4
+				 			}
+			 			}
+			 			if = {
+				 			limit = { industrial_complex > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.5
+				 			}
+			 			}
+			 			if = {
+				 			limit = { arms_factory > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.6
+				 			}
+			 			}
+			 			if = {
+				 			limit = { dockyard > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.7
+				 			}
+			 			}
+			 			if = {
+				 			limit = { offices > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.8
+				 			}
+			 			}
+			 			if = {
+				 			limit = { rubber_refinery > 0 }
+				 			random = {
+								chance = nuke_building_destroy_chance
+					 			state_event = destroy_building.9
+				 			}
+			 			}
+			 			if = {
+				 			limit = { agriculture_district > 0 }
+				 			random = {
+					 			chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.10
+				 			}
+			 			}
+			 			if = {
+				 			limit = { nuclear_reactor > 0 }
+				 			random = {
+					 			chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.11
+				 			}
+			 			}
+			 			if = {
+				 			limit = { synthetic_refinery > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.12
+				 			}
+			 			}
+			 			if = {
+				 			limit = { fossil_powerplant > 0 }
+				 			random = {
+						 		chance = nuke_building_destroy_chance
+						 		state_event = destroy_building.13
+				 			}
+			 			}
+			 			if = { limit = { tungsten > 8 }
+			   				random = {
+			   					chance = nuke_building_destroy_chance
+			   					add_dynamic_modifier = {
+				 					modifier = tech_metal_refining_modifier
+				 					days = 27
+								}
+							}
+			 			}
+			 			if = { limit = { chromium > 8 }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = rare_metal_refining_modifier
+									days = 27
+								}
+					    	}
+			 			}
+			 			if = { limit = { OR = { aluminium > 24 steel > 24 } }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = metal_refining_modifier
+									days = 27
+								}
+						    }
+			 			}
+			 			if = { limit = { oil > 18 }
+			  				random = {
+			  					chance = nuke_building_destroy_chance
+			  					add_dynamic_modifier = {
+									modifier = oil_refining_modifier
+									days = 27
+								}
+							}
+			 			}
+					}
+		    	}
+	    	}
+			var:global.nuke_striker = {
+				if = {
+					limit = { check_variable = { global.amogusus_count > 0 } }
+					add_named_threat = {
+						threat = 50
+						name = state_nuclear_strike_wt_tt
+					}
+	    			send_equipment = {
+		    			equipment = nuclear_ballistic_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+	    			send_equipment = {
+		    			equipment = nuclear_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+				}
+	        }
+		}
+		25 = {
+			every_enemy_country = {
+	   			limit = {
+					has_capitulated = no
+					var:global.nuke_striker = {
+						if = {
+							limit = { has_country_leader_with_trait = iron_dimon }
+							has_opinion = {
+								target = PREV
+								value < -99
+							}
+						}
+						else = {
+							has_opinion = {
+								target = PREV
+								value < -149
+							}
+						}
+						OR = {
+					   		check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   		check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						}
+						OR = {
+							any_controlled_state = {
+								OR = {
+									check_variable = { non_damaged_building_level@rocket_site > 0 }
+									AND = {
+										check_variable = { non_damaged_building_level@air_base > 0 }
+										check_variable = { num_equipment@strategic_bomber > 0 }
+									}
+								}
+							}
+							check_variable = { deployed_navy_manpower_k > 0 }
+						}
+					}
+					set_temp_variable = { rootie = var:global.nuke_striker }
+					set_temp_variable = { nuclear_potential_difference_percent = var:rootie.nuclear_potential }
+					if = {
+						limit = { check_variable = { THIS.nuclear_potential = 0 }}
+						set_temp_variable = { nuclear_potential_difference_percent = 2 }
+					}
+					else = { divide_temp_variable = { nuclear_potential_difference_percent = THIS.nuclear_potential } }
+					if = {
+						limit = { var:global.nuke_striker = { has_country_leader_with_trait = iron_dimon } }
+						check_variable = { nuclear_potential_difference_percent > 1 }
+					}
+					else = {
+						check_variable = { nuclear_potential_difference_percent > 2 }
+					}
+	        	}
+				set_country_flag = has_been_nuked
+				set_country_flag = has_been_hrucked
+				country_event = nuclear_ai_raid.2
+				add_to_variable = { global.amogusus_count = 1 }
+ 				set_temp_variable = { planes_and_sams = num_deployed_planes_with_type@small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_small_plane_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_fighter_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@cv_medium_plane_scout_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@large_plane_awacs_airframe }
+ 				add_to_temp_variable = { planes_and_sams = num_deployed_planes_with_type@sam_missile_equipment }
+				capital_scope = {
+					if = {
+						limit = {
+							NOT = { is_controlled_by = var:global.nuke_striker }
+							is_fully_controlled_by = PREV
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout1
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout2
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout3
+								}
+							}
+						}
+						set_temp_variable = { ai_nuke_success_chance = building_level@radar_station }
+						add_to_temp_variable= { ai_nuke_success_chance = PREV.planes_and_sams }
+						add_to_temp_variable= { ai_nuke_success_chance = building_level@anti_air_building }
+						add_to_temp_variable= { ai_nuke_success_chance = building_level@air_base }
+						add_to_temp_variable= { ai_nuke_success_chance = building_level@rocket_site }
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_3_light } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_4_light } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_5_light } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_6_light } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_3_medium } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_4_medium } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_5_medium } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = gen_6_medium } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = avionics_1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = avionics_2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = avionics_3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = awacs_1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = awacs_2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = awacs_3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = air_weapons_1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = air_weapons_2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = air_weapons_3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = air_weapons_4 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM0 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM4 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM5 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM6 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						if = {
+							limit = { var:THIS.controller = { has_tech = SAM7 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 10 }
+						}
+						set_temp_variable = { ai_nuke_success_chance_multiplyer = 0 }
+						var:THIS.controller = {
+			  				add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@air_intercept_efficiency }
+			  				add_to_temp_variable = { PREV.ai_nuke_success_chance_multiplyer = modifier@static_anti_air_hit_chance_factor }
+						}
+						multiply_temp_variable = { ai_nuke_success_chance_multiplyer = 1000 }
+						add_to_temp_variable = { ai_nuke_success_chance = ai_nuke_success_chance_multiplyer }
+						multiply_temp_variable = { ai_nuke_success_chance = 0.1 }
+						clamp_temp_variable = {
+							var =  ai_nuke_success_chance
+							min = 20
+							max = 70
+						}
+						add_to_temp_variable = { ai_nuke_success_chance = -100 }
+						multiply_temp_variable = { ai_nuke_success_chance = -1 }
+						add_to_temp_variable = { ai_nuke_success_chance = global.temp_arctic_nuclear_level }
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM4 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM5 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM6 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM7 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = ICBM8 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM1 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM2 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM3 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM4 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM5 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM6 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						if = {
+							limit = { var:global.nuke_striker = { has_tech = NIRBM7 } }
+							add_to_temp_variable = { ai_nuke_success_chance = 1 }
+						}
+						clamp_temp_variable = {
+							  var =  ai_nuke_success_chance
+							  min = 20
+							  max = 70
+						}
+						random = {
+							chance = ai_nuke_success_chance
+							PREV = {
+								launch_nuke = {
+							  		state = PREV
+							  		use_nuke = no
+				  				}
+			    			}
+			  				damage_units = {
+				  				state = THIS
+				  				damage = 0.75
+				  				army = yes
+				  				navy = yes
+			    			}
+							if = {
+								limit = {
+									NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        			NOT = { civil_bunker > 0 }
+								}
+								add_dynamic_modifier = {
+									modifier = nuclear_fallout
+									days = 365
+								}
+							}
+							else_if = {
+								limit = {
+									has_dynamic_modifier = { modifier = Underground_modifier }
+                        			NOT = { civil_bunker > 0 }
+								}
+								add_dynamic_modifier = {
+									modifier = nuclear_fallout1
+									days = 365
+								}
+							}
+							else_if = {
+								limit = {
+									NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        			civil_bunker > 0
+								}
+								add_dynamic_modifier = {
+									modifier = nuclear_fallout2
+									days = 365
+								}
+							}
+							else = {
+								add_dynamic_modifier = {
+									modifier = nuclear_fallout3
+									days = 365
+								}
+							}
+			  				set_temp_variable = { nuke_building_destroy_chance = 0 }
+			  				var:THIS.controller = {
+				  				add_to_temp_variable = { PREV.nuke_building_destroy_chance = modifier@industry_air_damage_factor }
+			  				}
+			  				multiply_temp_variable = { nuke_building_destroy_chance = 100 }
+			  				add_to_temp_variable = { nuke_building_destroy_chance = ai_nuke_success_chance }
+			  				clamp_temp_variable = {
+							  var = nuke_building_destroy_chance
+							  min = 20
+							  max = 70
+			  				}
+			  				if = {
+				 				limit = { check_variable = { number_of_battery_parks_state_var > 0 } }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.1
+				 				}
+			 				}
+			 				if = {
+				 				limit = { nuclear_reactor > 0 }
+				 				random = {
+									chance = nuke_building_destroy_chance
+					 				state_event = destroy_building.2
+				 				}
+			 				}
+			 				if = {
+				 			limit = { has_variable = hydroelectric_energy_production_var }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.3
+				 				}
+			 				}
+			 				if = {
+				 				limit = { has_variable = geothermal_energy_production_var }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+						 			state_event = destroy_building.4
+				 				}
+			 				}
+			 				if = {
+				 				limit = { industrial_complex > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.5
+				 				}
+			 				}
+			 				if = {
+				 				limit = { arms_factory > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.6
+				 				}
+			 				}
+			 				if = {
+				 				limit = { dockyard > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.7
+				 				}
+			 				}
+			 				if = {
+				 				limit = { offices > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.8
+				 				}
+			 				}
+			 				if = {
+				 				limit = { rubber_refinery > 0 }
+				 				random = {
+									chance = nuke_building_destroy_chance
+					 				state_event = destroy_building.9
+				 				}
+			 				}
+			 				if = {
+				 				limit = { agriculture_district > 0 }
+				 				random = {
+					 				chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.10
+				 				}
+			 				}
+			 				if = {
+				 				limit = { nuclear_reactor > 0 }
+				 				random = {
+					 				chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.11
+				 				}
+			 				}
+			 				if = {
+				 				limit = { synthetic_refinery > 0 }
+				 				random = {
+							 		chance = nuke_building_destroy_chance
+						 			state_event = destroy_building.12
+				 				}
+			 				}
+			 				if = {
+				 				limit = { fossil_powerplant > 0 }
+				 				random = {
+						 			chance = nuke_building_destroy_chance
+							 		state_event = destroy_building.13
+				 				}
+			 				}
+			 				if = { limit = { tungsten > 8 }
+			   					random = {
+			   						chance = nuke_building_destroy_chance
+			   						add_dynamic_modifier = {
+				 						modifier = tech_metal_refining_modifier
+				 						days = 27
+									}
+								}
+			 				}
+			 				if = { limit = { chromium > 8 }
+			  					random = {
+			  						chance = nuke_building_destroy_chance
+			  						add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					    		}
+			 				}
+			 				if = { limit = { OR = { aluminium > 24 steel > 24 } }
+			  					random = {
+			  						chance = nuke_building_destroy_chance
+			  						add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+							    }
+			 				}
+			 				if = { limit = { oil > 18 }
+			  					random = {
+			  						chance = nuke_building_destroy_chance
+			  						add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+			 				}
+						}
+					}
+		    	}
+	    	}
+			var:global.nuke_striker = {
+				if = {
+					limit = { check_variable = { global.amogusus_count > 0 } }
+					add_named_threat = {
+						threat = 50
+						name = state_nuclear_strike_wt_tt
+					}
+	    			send_equipment = {
+		    			equipment = nuclear_ballistic_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+	    			send_equipment = {
+		    			equipment = nuclear_missile_equipment
+		    			amount = global.amogusus_count
+		    			target = EUU
+	            	}
+				}
+	        }
+		}
+		25 = {}
+	}
+}

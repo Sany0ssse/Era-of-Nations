@@ -1,0 +1,89 @@
+on_actions = {
+	on_weekly_ISR = {
+		effect = {
+			if = { limit = { PAL = { is_subject_of = ISR } }
+				remove_ideas = {
+					ISR_calm_security
+					ISR_stable_security
+					ISR_routine_security
+					ISR_frequent_incidents
+					ISR_very_frequent_incidents
+					ISR_intifada
+					palestinian_resistance
+				}
+
+				if = {
+					limit = { check_variable = { ISR_palestine_situation > 94 } }
+					add_ideas = palestinian_resistance
+				}
+				else_if = {
+					limit = { check_variable = { ISR_palestine_situation > 79 } }
+					add_ideas = ISR_intifada
+				}
+				else_if = {
+					limit = { check_variable = { ISR_palestine_situation > 64 } }
+					add_ideas = ISR_very_frequent_incidents
+				}
+				else_if = {
+					limit = { check_variable = { ISR_palestine_situation > 49 } }
+					add_ideas = ISR_frequent_incidents
+				}
+				else_if = {
+					limit = { check_variable = { ISR_palestine_situation > 34 } }
+					add_ideas = ISR_routine_security
+				}
+				else_if = {
+					limit = { check_variable = { ISR_palestine_situation > 19 } }
+					add_ideas = ISR_stable_security
+				}
+				else = {
+					add_ideas = ISR_calm_security
+				}
+			}
+			ISR_update_palestine = yes
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = MEPP_peace_deal_signed }
+					PAL = { has_country_flag = peace_deal_accepted_@ROOT }
+					ISR = { has_country_flag = peace_deal_accepted_@ROOT }
+				}
+				country_event = { id = peace_plan.7 days = 1 random_days = 14 }
+			}
+		}
+	}
+	on_monthly_ISR = {
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = ISR_bibi_scandals
+					has_country_leader = {
+						name = "Benjamin Netanyahu"
+						ruling_only = yes
+					}
+				}
+				random_list = {
+					50 = {
+						country_event = israel_likud.1
+					}
+					50 = {
+						country_event = israel_likud.2
+					}
+				}
+
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = ISR_palestine_situation
+						value = 70
+						compare = greater_than_or_equals
+					}
+				}
+				add_to_variable = {
+					ISR_palestine_situation_additional = -5
+				}
+			}
+		}
+	}
+}

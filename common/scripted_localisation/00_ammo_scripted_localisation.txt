@@ -1,0 +1,167 @@
+defined_text = {
+    name = Ammo_status
+
+    text = { # Full
+        trigger = {
+            check_variable = { ammo_production_rating > 0 }
+            OR = {
+                check_variable = { ammo_stock_days < 1 }
+                check_variable = { ammo_stock = max_ammo_limit }
+            }
+        }
+        localization_key = Ammo_full_txt
+    }
+    text = { # Empty
+        trigger = {
+            check_variable = { ammo_production_rating < 0 }
+            OR = {
+                check_variable = { ammo_stock_days < 1 }
+                check_variable = { ammo_stock = 0 }
+            }
+        }
+        localization_key = Ammo_empty_txt
+    }
+    text = { # Exactly 0 net or gaining, >5yr
+        trigger = {
+            OR = {
+                check_variable = { ammo_production_rating = 0 }
+                AND = {
+                    check_variable = { ammo_production_rating > 0 }
+                    check_variable = { ammo_stock_days > 1825 }
+                }
+            }
+        }
+        localization_key = Ammo_p_gt_5_yrs_txt
+    }
+    text = { # Gaining, <=5yr and >=1yr
+        trigger = {
+            check_variable = { ammo_production_rating > 0 }
+            check_variable = {
+                var     = ammo_stock_days
+                value   = 1825
+                compare = less_than_or_equals
+            }
+            check_variable = {
+                var     = ammo_stock_days
+                value   = 365
+                compare = greater_than_or_equals
+            }
+        }
+        localization_key = Ammo_p_yrs_txt
+    }
+    text = { # Gaining, <1yr
+        trigger = {
+            check_variable = { ammo_production_rating > 0 }
+            check_variable = { ammo_stock_days < 365 }
+        }
+        localization_key = Ammo_p_days_txt
+    }
+    text = { # Draining, <1yr
+        trigger = {
+            check_variable = { ammo_production_rating < 0 }
+            check_variable = { ammo_stock_days < 365 }
+        }
+        localization_key = Ammo_n_days_txt
+    }
+    text = { # Draining, <=5yr and >=1yr
+        trigger = {
+            check_variable = { ammo_production_rating < 0 }
+            check_variable = {
+                var     = ammo_stock_days
+                value   = 1825
+                compare = less_than_or_equals
+            }
+            check_variable = {
+                var     = ammo_stock_days
+                value   = 365
+                compare = greater_than_or_equals
+            }
+        }
+        localization_key = Ammo_n_years_txt
+    }
+    text = { # Draining, >5yr
+        trigger = {
+            check_variable = { ammo_production_rating < 0 }
+            check_variable = { ammo_stock_days > 1825 }
+        }
+        localization_key = Ammo_n_gt_5_yrs_txt
+    }
+}
+defined_text = { # Needed to fix dollar sign notation
+    name = Sl_stats_bypass_tt
+
+    text = {
+        trigger = {
+            always = yes
+        }
+        localization_key = Ammo_stats_raw_tt
+    }
+}
+defined_text = {
+    name = Ammo_sl_time_remaining_body
+
+    text = { # Full
+        trigger = {
+            check_variable = { ammo_production_rating > 0 }
+            OR = {
+                check_variable = { ammo_stock_days < 1 }
+                check_variable = { ammo_stock = max_ammo_limit }
+            }
+        }
+        localization_key = Ammo_time_full_tt
+    }
+    text = { # Empty
+        trigger = {
+            check_variable = { ammo_production_rating < 0 }
+            OR = {
+                check_variable = { ammo_stock_days < 1 }
+                check_variable = { ammo_stock = 0 }
+            }
+        }
+        localization_key = Ammo_time_empty_tt
+    }
+    text = {
+        trigger = {
+            check_variable = {
+                var     = ammo_production_rating
+                value   = 0
+                compare = greater_than_or_equals
+            }
+        }
+        localization_key = Ammo_time_inc_tt
+    }
+    text = {
+        trigger = {
+            always = yes
+        }
+        localization_key = Ammo_time_dec_tt
+    }
+}
+defined_text = {
+    name = Ammo_sl_desc_bypass_tt
+
+    text = {
+        trigger = {
+            always = yes
+        }
+        localization_key = Ammo_desc_raw_tt
+    }
+}
+
+defined_text = {
+    name = Sda_send_ammo_full
+
+    text = {
+        trigger = {
+            check_variable = { ammo_production_rating > 0 }
+            check_variable = { ammo_stock_days  < 8 }
+        }
+        localization_key = Sda_send_ammo_full_n
+    }
+    text = {
+        trigger = {
+            always = yes
+        }
+        localization_key = Sda_send_ammo_full_p
+    }
+}

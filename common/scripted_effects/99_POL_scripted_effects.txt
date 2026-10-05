@@ -1,0 +1,124 @@
+##### POLAND SCRIPTED EFFECTS BY DUKE #####
+
+calculate_poland_sejm_approval = {
+    add_to_variable = { POL_sejm_support = POL_sejm_change }
+    custom_effect_tooltip = POL_sejm_change_TT
+    clamp_variable = {
+        var = POL_sejm_support
+        min = 0
+        max = 100
+    }
+}
+calculate_poland_ukranian_unrest = {
+    add_to_variable = { POL_current_UKR_inrest = POL_current_UKR_inrest_change }
+    custom_effect_tooltip = POL_current_UKR_inrest_TT
+    clamp_variable = {
+        var = POL_current_UKR_inrest
+        min = 0
+        max = 100
+    }
+}
+visegrad_fund_treasury_update = {
+    add_to_variable = { global.visegrad_fund_treasury = visegrad_fund_treasury_change }
+    custom_effect_tooltip = visegrad_fund_treasury_change_TT
+    clamp_variable = {
+        var = global.visegrad_fund_treasury
+        min = 0
+    }
+}
+visegrad_cohesion_update = {
+    add_to_variable = { global.visegrad_cohesion = visegrad_cohesion_change }
+    custom_effect_tooltip = visegrad_cohesion_change_TT
+    clamp_variable = {
+        var = global.visegrad_cohesion
+        min = 0
+        max = 100
+    }
+}
+visegrad_influence_update = {
+    add_to_variable = { visegrad_influence = visegrad_influence_change }
+    custom_effect_tooltip = visegrad_influence_change_TT
+    clamp_variable = {
+        var = visegrad_influence
+        min = 0
+        max = 100
+    }
+}
+random_poland_sejm_demands = {
+    if = {
+        limit = {
+           has_idea = POL_sejm_idea
+        }
+		add_to_variable = { POL_event_counter_1_poland_sejm = 1 }
+		if = {
+			limit = { check_variable = { POL_event_counter_1_poland_sejm > 3 } }
+			set_variable = { POL_event_counter_1_poland_sejm = 0 }
+			random_list = {
+				25 = {
+                    if = {
+                        limit = { NOT = { has_idea = social_06 } }
+					    country_event = poland_sejm.1
+                    }
+				}
+				20 = {
+                    if = {
+                        limit = { NOT = { has_idea = health_06 } }
+					    country_event = poland_sejm.2
+                    }
+				}
+				20 = {
+                    if = {
+                        limit = { NOT = { has_idea = edu_05 } }
+					    country_event = poland_sejm.3
+                    }
+				}
+				10 = {
+                    if = {
+                        limit = {
+                            NOT = { has_government = communism }
+                            NOT = { has_government = nationalist }
+                        }
+					    country_event = poland_sejm.4
+                    }
+                    else_if = {
+                        limit = {
+                            NOT = { has_idea = police_01 }
+                            NOT = { has_idea = police_02 }
+                        }
+                        country_event = poland_sejm.4
+                    }
+				}
+				15 = {
+                    if = {
+                        limit = { 
+                            NOT = { has_government = nationalist }
+                            NOT = { has_idea = defence_00 }
+                            NOT = { has_idea = defence_01 }
+                            NOT = { has_idea = defence_02 }
+                            has_war = no
+                        }
+					    country_event = poland_sejm.5
+                    }
+				}
+				20 = {
+                    if = {
+                        limit = { check_variable = { population_tax_rate > 22 } }
+					    country_event = poland_sejm.6
+                    }
+				}
+				10 = {
+                    if = {
+                        limit = {
+                            NOT = { has_government = communism }
+                        }
+					    country_event = poland_sejm.7
+                    }
+                    else_if = {
+                        limit = { check_variable = { corporate_tax_rate > 22 } }
+                        country_event = poland_sejm.7
+                    }
+				}
+			}
+		}
+    }
+}

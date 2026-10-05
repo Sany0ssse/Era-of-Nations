@@ -1,0 +1,2785 @@
+﻿## Authors: LordBogdanoff, PAKMAN, Dhinesh, Litvin2010 and MS
+focus_tree = {
+	id = gdr_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 10
+			tag = GDR
+		}
+	}
+	continuous_focus_position = { x = 4 y = 2780 }
+
+	#################
+	# Policy branch #
+	#################
+
+	#############
+	# Communism #
+	#############
+
+	focus = {
+		id = GDR_communists_of_the_GDR
+		icon = GDR_gdr
+
+		x = -8
+		y = 2
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_communists_of_the_GDR"
+			add_political_power = 100
+			set_party_index_to_ruling_party = yes
+			set_temp_variable = { party_popularity_increase = 0.1 }
+			set_temp_variable = { temp_outlook_increase = 0.1 }
+			add_relative_party_popularity = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_legacy_socialist_past
+		icon = gdr_commies_legacy
+
+		x = -8
+		y = 3
+
+		cost = 5
+
+		prerequisite = { focus = GDR_communists_of_the_GDR }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_legacy_socialist_past"
+			add_ideas = GDR_socialist_legacy_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_no_the_european_union
+		icon = POL_we_dont_need_eu
+
+		x = -7
+		y = 4
+
+		cost = 5
+
+		prerequisite = { focus = GDR_legacy_socialist_past }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: GDR_no_the_european_union"
+			set_temp_variable = { modify_eurosceptic = 0.25 }
+			set_temp_variable = { modify_eurosceptic_target = GDR }
+			eurosceptic_change = yes
+			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				add_opinion_modifier = { target = GDR modifier = GDR_no_the_eu }
+				reverse_add_opinion_modifier = { target = GDR modifier = GDR_no_the_eu }
+			}
+			for_each_scope_loop = {
+				array = global.EU_member
+				add_opinion_modifier = { target = GDR modifier = GDR_no_the_eu }
+				reverse_add_opinion_modifier = { target = GDR modifier = GDR_no_the_eu }
+			}
+			set_temp_variable = { percent_change = 6 }
+			change_domestic_influence_percentage = yes
+			add_popularity = {
+				ideology = communism
+				popularity = -0.1
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_purging_dissidents_ranks
+		icon = gdr_commies_dissidents
+
+		x = -9
+		y = 4
+
+		cost = 5
+
+		prerequisite = { focus = GDR_legacy_socialist_past }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_purging_dissidents_ranks"
+			swap_ideas = {
+				remove_idea = GDR_socialist_legacy_idea
+				add_idea = GDR_socialist_legacy_idea1
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_economic_stabilization
+		icon = GDR_economic_higher
+
+		x = -7
+		y = 5
+
+		cost = 5
+
+		prerequisite = { focus = GDR_no_the_european_union }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_economic_stabilization"
+			increase_economic_growth = yes
+			swap_ideas = {
+				remove_idea = GDR_divided_germany_legacy
+				add_idea = GDR_divided_germany_legacy2
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_Socialist_partners
+		icon = gdr_commies_brothers
+
+		x = -9
+		y = 5
+
+		cost = 5
+
+		prerequisite = { focus = GDR_purging_dissidents_ranks }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_Socialist_partners"
+			every_other_country = {
+				limit = {
+					emerging_communist_state_are_in_power = yes
+				}
+				ROOT = { country_event = mdc4.1 }
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_stasi_2
+		icon = gdr_commies_shtazi_2_0
+
+		x = -10
+		y = 6
+
+		cost = 5
+
+		prerequisite = { focus = GDR_Socialist_partners }
+		prerequisite = { focus = GDR_economic_stabilization }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			has_completed_focus = GDR_return_of_the_stasi
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_stasi_2"
+			if = {
+				limit = {
+					has_idea = GDR_shtazi_idea
+				}
+				swap_ideas = {
+					remove_idea = GDR_shtazi_idea
+					add_idea = GDR_shtazi_idea1
+				}
+				remove_ideas = GDR_shtazi_idea
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_idea = GDR_shtazi_idea
+					}
+				}
+				effect_tooltip = {
+					add_ideas = GDR_shtazi_idea1
+				}
+			}
+			set_temp_variable = { temp_opinion = 2 }
+			change_intelligence_community_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_fiveyear_plan
+		icon = gdr_commies_5years
+
+		x = -6
+		y = 6
+
+		cost = 5
+
+		prerequisite = { focus = GDR_Socialist_partners }
+		prerequisite = { focus = GDR_economic_stabilization }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_fiveyear_plan"
+			add_timed_idea = {
+				idea = GENERIC_five_year_plan_idea
+				days = 1820
+			}
+			custom_effect_tooltip = generic_five_year_plan_tt
+			set_country_flag = GENERIC_start_five_year_plan
+			activate_mission = five_year_plan_mission
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_reorganization_national_front
+		icon = GDR_national_front
+
+		x = -8
+		y = 6
+
+		cost = 5
+
+		prerequisite = { focus = GDR_Socialist_partners }
+		prerequisite = { focus = GDR_economic_stabilization }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_reorganization_national_front"
+			country_event = GDR_main_events.1
+			add_political_power = 100
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_congress_socialist_party
+		icon = gdr_commies_party
+
+		x = -8
+		y = 7
+
+		cost = 5
+
+		prerequisite = { focus = GDR_reorganization_national_front }
+		prerequisite = { focus = GDR_stasi_2 }
+		prerequisite = { focus = GDR_fiveyear_plan }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_congress_socialist_party"
+			country_event = GDR_main_events.6
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_honeckers_successor
+		icon = gdr_honnecker_start
+
+		x = 0
+		y = 8
+
+		cost = 5
+
+		prerequisite = { focus = GDR_congress_socialist_party }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			always = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_honeckers_successor"
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_consumer_socialism
+		icon = gdr_honnecker_consumer_socialism
+
+		x = -1
+		y = 9
+
+		cost = 5
+
+		prerequisite = { focus = GDR_honeckers_successor }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_consumer_socialism"
+			add_timed_idea = {
+				idea = GENERIC_healthcare_reform_up_idea
+				days = 360
+			}
+			add_timed_idea = {
+				idea = GENERIC_social_reform_up_idea
+				days = 360
+			}
+			add_ideas = GDR_consumer_socialism_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_dominance_over_the_agenda
+		icon = gdr_honnecker_agenda
+
+		x = 1
+		y = 9
+
+		cost = 5
+
+		prerequisite = { focus = GDR_honeckers_successor }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_dominance_over_the_agenda"
+			add_popularity = {
+				ideology = democratic
+				popularity = -0.1
+			}
+			add_ideas = GDR_agenda_dominance_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_cultural_liberalization
+		icon = gdr_honnecker_cultural
+
+		x = 1
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_dominance_over_the_agenda }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_cultural_liberalization"
+			swap_ideas = {
+				remove_idea = GDR_agenda_dominance_idea
+				add_idea = GDR_agenda_dominance_idea2
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_shut_up_the_party_opposition
+		icon = gdr_ulbricht_ban
+
+		x = 3
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_dominance_over_the_agenda }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_shut_up_the_party_opposition"
+			add_popularity = {
+				ideology = communism
+				popularity = 0.12
+			}
+			add_political_power = 100
+			add_ideas = GDR_shut_up_oppos_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_economics_above_ideology
+		icon = gdr_honnecker_economic
+
+		x = -1
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_consumer_socialism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_economics_above_ideology"
+			swap_ideas = {
+				remove_idea = GDR_consumer_socialism_idea
+				add_idea = GDR_consumer_socialism_idea2
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_strengthen_the_national_front
+		icon = GDR_strengthen
+
+		x = -3
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_consumer_socialism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_strengthen_the_national_front"
+			add_ideas = GDR_question_nat_front1
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_germany_honecker
+		icon = gdr_honnecker_germany
+
+		x = 1
+		y = 11
+
+		cost = 5
+
+		prerequisite = { focus = GDR_cultural_liberalization }
+		prerequisite = { focus = GDR_shut_up_the_party_opposition }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_germany_honecker"
+			remove_ideas = GDR_shut_up_oppos_idea
+			swap_ideas = {
+				remove_idea = GDR_agenda_dominance_idea2
+				add_idea = GDR_agenda_dominance_idea3
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_member_of_the_global_economy
+		icon = gdr_honnecker_global
+
+		x = -1
+		y = 11
+
+		cost = 5
+
+		prerequisite = { focus = GDR_economics_above_ideology }
+		prerequisite = { focus = GDR_strengthen_the_national_front }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_member_of_the_global_economy"
+			swap_ideas = {
+				remove_idea = GDR_consumer_socialism_idea2
+				add_idea = GDR_consumer_socialism_idea3
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_truly_peoples_germany
+		icon = gdr_honnecker_true_national
+
+		x = 0
+		y = 12
+
+		cost = 5
+
+		prerequisite = { focus = GDR_member_of_the_global_economy }
+		prerequisite = { focus = GDR_germany_honecker }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_truly_peoples_germany"
+			remove_ideas = GDR_consumer_socialism_idea3
+			remove_ideas = GDR_agenda_dominance_idea3
+			add_ideas = GDR_peoples_germany
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_ulbrichts_successor
+		icon = gdr_ulbricht_start
+
+		x = -8
+		y = 8
+
+		cost = 5
+
+		prerequisite = { focus = GDR_congress_socialist_party }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			always = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_ulbrichts_successor"
+
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_military_education
+		icon = gdr_ulbricht_military
+
+		x = -7
+		y = 9
+
+		cost = 5
+
+		prerequisite = { focus = GDR_ulbrichts_successor }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_military_education"
+			add_ideas = GDR_military_patriotic_education_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_neighbor_program
+		icon = gdr_ulbricht_programm
+
+		x = -9
+		y = 9
+
+		cost = 5
+
+		prerequisite = { focus = GDR_ulbrichts_successor }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_neighbor_program"
+			add_ideas = GDR_ulbrichts_neighbor
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_marxism_in_every_home
+		icon = gdr_ulbricht_marx
+
+		x = -7
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_military_education }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_marxism_in_every_home"
+			add_popularity = {
+				ideology = communism
+				popularity = 0.1
+			}
+			add_timed_idea = {
+				idea = GENERIC_education_reform_up_idea
+				days = 365
+			}
+			add_political_power = 100
+			add_stability = 0.03
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_end_illusions
+		icon = GDR_end_illusions
+
+		x = -5
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_military_education }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_end_illusions"
+			country_event = GDR_main_events.2
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_strengthen_the_capital
+		icon = gdr_ulbricht_capital_defence
+
+		x = -9
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_neighbor_program }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_strengthen_the_capital"
+			capital_scope = {
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+				}
+			}
+			set_temp_variable = { treasury_change = -0.5 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_doctrine_of_the_socialist_outpost
+		icon = gdr_ulbricht_socialist_outpost
+
+		x = -11
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_neighbor_program }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_doctrine_of_the_socialist_outpost"
+			capital_scope = {
+				add_building_construction = {
+					type = bunker
+					level = 3
+					instant_build = yes
+				}
+			}
+			add_ideas = GDR_socialist_outpost
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_autarky_at_any_cost
+		icon = gdr_ulbricht_self
+
+		x = -9
+		y = 11
+
+		cost = 5
+
+		prerequisite = { focus = GDR_doctrine_of_the_socialist_outpost }
+		prerequisite = { focus = GDR_strengthen_the_capital}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_autarky_at_any_cost"
+			set_temp_variable = { percent_change = 25 }
+			change_domestic_influence_percentage = yes
+			decrease_exports = yes
+			swap_ideas = {
+				remove_idea = GDR_socialist_outpost
+				add_idea = GDR_socialist_outpost1
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_minor_cult_of_stalin
+		icon = gdr_ulbricht_minor_stalin
+
+		x = -7
+		y = 11
+
+		cost = 5
+
+		prerequisite = { focus = GDR_marxism_in_every_home }
+		prerequisite = { focus = GDR_end_illusions }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_minor_cult_of_stalin"
+			add_popularity = {
+				ideology = communism
+				popularity = -0.1
+			}
+			add_political_power = 100
+			country_event = GDR_main_events.5
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_the_phoenix_reborn
+		icon = gdr_ulbricht_phoenix
+
+		x = -8
+		y = 12
+
+		cost = 5
+
+		prerequisite = { focus = GDR_autarky_at_any_cost }
+		prerequisite = { focus = GDR_minor_cult_of_stalin }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_the_phoenix_reborn"
+			country_event = GDR_main_events.4
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_gisi
+		icon = gdr_gisi_start
+
+		x = -16
+		y = 8
+
+		cost = 5
+
+		prerequisite = { focus = GDR_congress_socialist_party }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			always = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_gisi"
+
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_path_to_market_socialism
+		icon = gdr_gisi_path_market
+
+		x = -17
+		y = 9
+
+		cost = 5
+
+		prerequisite = { focus = GDR_gisi }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_path_to_market_socialism"
+			add_ideas = GDR_market_socialism
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_restructuring
+		icon = gdr_gisi_perestroika
+
+		x = -15
+		y = 9
+
+		cost = 5
+
+		prerequisite = { focus = GDR_gisi }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_restructuring"
+			add_ideas = GDR_restructuring_yoooo
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_limited_privatization
+		icon = gdr_gisi_limited_privatization
+
+		x = -17
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_path_to_market_socialism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_limited_privatization"
+			random_owned_controlled_state = {
+				limit = {
+					industrial_complex > 0
+				}
+				remove_building = {
+					type = industrial_complex
+					level = 1
+				}
+			}
+			set_temp_variable = { treasury_change = 8 }
+			modify_treasury_effect = yes
+			set_temp_variable = { temp_productivity_change = 15 }
+			flat_productivity_change_effect = yes
+			add_timed_idea = {
+				idea = GENERIC_privatisation_effect_idea
+				days = 180
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_cultural_progressivism
+		icon = gdr_gisi_progressivism
+
+		x = -15
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_restructuring }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_cultural_progressivism"
+			swap_ideas = {
+				remove_idea = GDR_restructuring_yoooo
+				add_idea = GDR_restructuring_again
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_question_national_front
+		icon = GDR_national_front_free
+
+		x = -19
+		y = 10
+
+		cost = 5
+
+		prerequisite = { focus = GDR_path_to_market_socialism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_question_national_front"
+			country_event = GDR_main_events.3
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_allow_free_elections
+		icon = gdr_gisi_free_elections
+
+		x = -13
+		y = 10
+
+		cost = 3
+
+		prerequisite = { focus = GDR_restructuring }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_allow_free_elections"
+			set_politics = {
+				elections_allowed = yes
+				ruling_party = communism
+			}
+			add_popularity = {
+				ideology = democratic
+				popularity = 0.2
+			}
+			recalculate_party = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_end_hostilities_with_the_west
+		icon = gdr_gisi_eu
+
+		x = -15
+		y = 11
+
+		cost = 5
+
+		prerequisite = { focus = GDR_cultural_progressivism }
+		prerequisite = { focus = GDR_allow_free_elections }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_end_hostilities_with_the_west"
+			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				add_opinion_modifier = { target = GDR modifier = declaration_of_friendship }
+				reverse_add_opinion_modifier = { target = GDR modifier = declaration_of_friendship }
+			}
+			for_each_scope_loop = {
+				array = global.EU_member
+				add_opinion_modifier = { target = GDR modifier = declaration_of_friendship }
+				reverse_add_opinion_modifier = { target = GDR modifier = declaration_of_friendship }
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_peoples_corporations
+		icon = gdr_gisi_people_corporations
+
+		x = -17
+		y = 11
+
+		cost = 5
+
+		prerequisite = { focus = GDR_limited_privatization }
+		prerequisite = { focus = GDR_question_national_front }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_peoples_corporations"
+			swap_ideas = {
+				remove_idea = GDR_market_socialism
+				add_idea = GDR_market_socialism2
+			}
+	}
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_truly_democratic_republic
+		icon = gdr_gisi_true_democratic
+
+		x = -16
+		y = 12
+
+		cost = 5
+
+		prerequisite = { focus = GDR_peoples_corporations }
+		prerequisite = { focus = GDR_end_hostilities_with_the_west }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_truly_democratic_republic"
+			remove_ideas = GDR_market_socialism2
+			remove_ideas = GDR_restructuring_again
+			add_ideas = GDR_new_republic
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	########
+	# ARMY #
+	########
+
+	focus = {
+		id = GDR_national_peoples_army
+		icon = gdr_army_start
+
+		x = -8
+		y = 14
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_national_peoples_army"
+			add_war_support = 0.05
+			army_experience = 30
+			navy_experience = 30
+			air_experience = 30
+			swap_ideas = {
+				remove_idea = GDR_lask_idea
+				add_idea = GDR_lask1_idea
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_the_military_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_military_districts
+		icon = gdr_army_districts
+
+		x = -8
+		y = 15
+
+		cost = 5
+
+		prerequisite = { focus = GDR_national_peoples_army }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_military_districts"
+			add_manpower = 25000
+			add_ideas = GDR_military_districts_idea
+			set_temp_variable = { temp_opinion = 3 }
+			change_the_military_opinion = yes
+			custom_effect_tooltip = New_mobilization_brigade_active_tt
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_reform_of_the_army
+		icon = gdr_army_groundforces
+
+		x = -8
+		y = 16
+
+		cost = 5
+
+		prerequisite = { focus = GDR_military_districts }
+		prerequisite = { focus = GDR_new_officer_personnel }
+		prerequisite = { focus = GDR_reactivation_of_the_t72 }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_reform_of_the_army"
+			add_tech_bonus = {
+				name = GDR_reform_of_the_army
+				bonus = 0.50
+				uses = 2
+				category = CAT_artillery
+				category = CAT_support_weapons
+			}
+			swap_ideas = {
+				remove_idea = GDR_lask2_idea
+				add_idea = GDR_lask3_idea
+			}
+			add_timed_idea = {
+				idea = GENERIC_army_reform_up_idea
+				days = 300
+			}
+			add_country_leader_trait = POR_reformator_army_trait
+			set_temp_variable = { treasury_change = -2.50 }
+			modify_treasury_effect = yes
+			set_temp_variable = { temp_opinion = 3 }
+			change_the_military_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_new_officer_personnel
+		icon = gdr_army_officers
+
+		x = -10
+		y = 15
+
+		cost = 5
+
+		prerequisite = { focus = GDR_national_peoples_army }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_new_officer_personnel"
+			swap_ideas = {
+				remove_idea = GDR_lask1_idea
+				add_idea = GDR_lask2_idea
+			}
+			random_Army_leader = {
+				limit = {
+					is_field_marshal = no
+				}
+				gain_xp = 200
+				add_skill_level = 1
+				add_attack = 1
+				add_logistics = 1
+			}
+			random_Army_leader = {
+				limit = {
+					is_field_marshal = no
+				}
+				gain_xp = 200
+				add_skill_level = 1
+				add_attack = 1
+				add_logistics = 1
+			}
+			set_temp_variable = { temp_opinion = 3 }
+			change_the_military_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_reactivation_of_the_t72
+		icon = gdr_army_t72
+
+		x = -6
+		y = 15
+
+		cost = 5
+
+		prerequisite = { focus = GDR_national_peoples_army }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_reactivation_of_the_t72"
+			add_tech_bonus = {
+				name = CAT_tanks
+				bonus = 0.50
+				uses = 2
+				category = CAT_tanks
+			}
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "T-72A"
+				amount = 500
+				producer = SOV
+			}
+			set_temp_variable = { temp_opinion = 3 }
+			change_the_military_opinion = yes
+			set_temp_variable = { treasury_change = -2.50 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_support_troops
+		icon = gdr_army_til
+
+		x = -9
+		y = 17
+
+		cost = 5
+
+		prerequisite = { focus = GDR_reform_of_the_army }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_support_troops"
+			add_ideas = GDR_rear_troops_idea
+			set_temp_variable = { temp_opinion = 3 }
+			change_the_military_opinion = yes
+			set_temp_variable = { treasury_change = -1.00 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_military_industry
+		icon = gdr_army_promka
+
+		x = -9
+		y = 18
+
+		cost = 5
+
+		prerequisite = { focus = GDR_support_troops }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_military_industry"
+			two_random_arms_factory = yes
+			two_radar_station = yes
+			set_temp_variable = { temp_opinion = 5 }
+			change_the_military_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_air_defense_forces
+		icon = gdr_army_anti_air
+
+		x = -7
+		y = 17
+
+		cost = 5
+
+		prerequisite = { focus = GDR_reform_of_the_army }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_air_defense_forces"
+			add_ideas = GDR_anti_air_idea
+			set_temp_variable = { temp_opinion = 3 }
+			change_the_military_opinion = yes
+			two_anti_air = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_special_forces
+		icon = gdr_army_specialforces
+
+		x = -7
+		y = 18
+
+		cost = 5
+
+		prerequisite = { focus = GDR_air_defense_forces }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_special_forces"
+			add_ideas = GDR_special_forces_idea
+			custom_effect_tooltip = New_mobilization_brigade_active_tt
+			set_temp_variable = { temp_opinion = 3 }
+			change_the_military_opinion = yes
+			set_temp_variable = { treasury_change = -2.50 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_air_force
+		icon = gdr_army_airforce
+
+		x = -11
+		y = 16
+
+		cost = 5
+
+		prerequisite = { focus = GDR_new_officer_personnel }
+		prerequisite = { focus = GDR_military_districts }
+		prerequisite = { focus = GDR_reactivation_of_the_t72 }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_air_force"
+			air_experience = 20
+			swap_ideas = {
+				remove_idea = GDR_lsk_idea
+				add_idea = GDR_lsk1_idea
+			}
+			set_temp_variable = { temp_opinion = 3 }
+			change_the_military_opinion = yes
+			set_temp_variable = { treasury_change = -2.50 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_anti_aircraft_missile_forces
+		icon = gdr_army_air_anti_air
+
+		x = -11
+		y = 17
+
+		cost = 5
+
+		prerequisite = { focus = GDR_air_force }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_anti_aircraft_missile_forces"
+			add_ideas = GDR_anti_air_missile_forces_idea
+			random_owned_controlled_state = {
+				add_building_construction = {
+					type = rocket_site
+					level = 3
+					instant_build = yes
+				}
+			}
+			set_temp_variable = { treasury_change = -1.25 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_improvement_of_airfields
+		icon = gdr_army_airport
+
+		x = -11
+		y = 18
+
+		cost = 5
+
+		prerequisite = { focus = GDR_anti_aircraft_missile_forces }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_improvement_of_airfields"
+			swap_ideas = {
+				remove_idea = GDR_lsk1_idea
+				add_idea = GDR_lsk2_idea
+			}
+			set_temp_variable = { temp_productivity_change = 15 }
+			flat_productivity_change_effect = yes
+			two_air_base = yes
+			two_air_base = yes
+			two_air_base = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_navy
+		icon = gdr_army_flett
+
+		x = -5
+		y = 16
+
+		cost = 5
+
+		prerequisite = { focus = GDR_reactivation_of_the_t72 }
+		prerequisite = { focus = GDR_military_districts }
+		prerequisite = { focus = GDR_new_officer_personnel }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		available = {
+			any_owned_state = { is_coastal = yes }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_navy"
+			navy_experience = 30
+			swap_ideas = {
+				remove_idea = GDR_vm_idea
+				add_idea = GDR_vm1_idea
+			}
+			set_temp_variable = { treasury_change = -2.50 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_marine_corps
+		icon = gdr_army_morpeh
+
+		x = -5
+		y = 17
+
+		cost = 5
+
+		prerequisite = { focus = GDR_navy }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		available = {
+			any_owned_state = { is_coastal = yes }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_marine_corps"
+			add_ideas = GDR_marine_corps_idea
+			random_Army_leader = {
+				limit = {
+					is_field_marshal = no
+				}
+				gain_xp = 100
+				add_logistics = 1
+				add_planning = 1
+				add_unit_leader_trait = expert_improviser
+			}
+			set_temp_variable = { treasury_change = -2.00 }
+			modify_treasury_effect = yes
+			set_temp_variable = { temp_opinion = 3 }
+			change_the_military_opinion = yes
+			custom_effect_tooltip = New_mobilization_brigade_active_tt
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_new_ports
+		icon = gdr_army_port
+
+		x = -5
+		y = 18
+
+		cost = 5
+
+		prerequisite = { focus = GDR_marine_corps }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		available = {
+			any_owned_state = { is_coastal = yes }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_new_ports"
+			swap_ideas = {
+				remove_idea = GDR_vm1_idea
+				add_idea = GDR_vm2_idea
+			}
+			set_temp_variable = { temp_productivity_change = 15 }
+			flat_productivity_change_effect = yes
+			two_random_dockyards = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_border_troops
+		icon = gdr_army_bordertroops
+
+		x = -8
+		y = 19
+
+		cost = 5
+
+		prerequisite = { focus = GDR_special_forces }
+		prerequisite = { focus = GDR_military_industry }
+		prerequisite = { focus = GDR_improvement_of_airfields }
+		prerequisite = { focus = GDR_new_ports }
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_border_troops"
+			add_manpower = 25000
+			set_temp_variable = { percent_change = 3 }
+			change_domestic_influence_percentage = yes
+			add_stability = 0.03
+			add_ideas = GDR_border_troops_idea
+			if = {
+				limit = { owns_state = 1079 }
+				1079 = {
+					add_building_construction = {
+						type = bunker
+						level = 5
+						instant_build = yes
+						province = 14394
+					}
+					add_building_construction = {
+						type = bunker
+						level = 5
+						instant_build = yes
+						province = 3207
+					}
+					add_building_construction = {
+						type = bunker
+						level = 5
+						instant_build = yes
+						province = 375
+					}
+					add_building_construction = {
+						type = bunker
+						level = 5
+						instant_build = yes
+						province = 11219
+					}
+					add_building_construction = {
+						type = bunker
+						level = 5
+						instant_build = yes
+						province = 3499
+					}
+					add_building_construction = {
+						type = bunker
+						level = 5
+						instant_build = yes
+						province = 478
+					}
+					add_building_construction = {
+						type = bunker
+						level = 5
+						instant_build = yes
+						province = 9496
+					}
+					add_building_construction = {
+						type = bunker
+						level = 5
+						instant_build = yes
+						province = 9428
+					}
+					add_building_construction = {
+						type = bunker
+						level = 5
+						instant_build = yes
+						province = 11444
+					}
+				}
+			}
+			set_temp_variable = { treasury_change = -1.5 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	############
+	# Agencies #
+	############
+
+	focus = {
+		id = GDR_return_of_the_stasi
+		icon = gdr_services_shtazi
+
+		x = -16
+		y = 14
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_return_of_the_stasi"
+			custom_effect_tooltip = available_new_departament
+		  	show_ideas_tooltip = GDR_shtazi_idea
+			set_temp_variable = { temp_opinion = 5 }
+			change_intelligence_community_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_barracks_peoples_police
+		icon = gdr_services_barrack_police
+
+		x = -16
+		y = 15
+
+		cost = 5
+
+		prerequisite = { focus = GDR_return_of_the_stasi }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_barracks_peoples_police"
+			custom_effect_tooltip = available_new_departament
+		  	show_ideas_tooltip = GDR_barrackpolice_idea
+			set_temp_variable = { temp_opinion = 5 }
+			change_intelligence_community_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_police_readliness
+		icon = grd_services_police_ready
+
+		x = -14
+		y = 15
+
+		cost = 5
+
+		prerequisite = { focus = GDR_return_of_the_stasi }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_police_readliness"
+			custom_effect_tooltip = available_new_departament
+		  	show_ideas_tooltip = GDR_policeready_idea
+			set_temp_variable = { temp_opinion = 3 }
+			change_intelligence_community_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_peoples_militia
+		icon = gdr_services_people_militia
+
+		x = -18
+		y = 15
+
+		cost = 5
+
+		prerequisite = { focus = GDR_return_of_the_stasi }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_peoples_militia"
+			custom_effect_tooltip = available_new_departament
+		  	show_ideas_tooltip = GDR_peoplepolice_idea
+			set_temp_variable = { temp_opinion = 5 }
+			change_intelligence_community_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_main_intelligence_directorate
+		icon = gdr_services_intelligence
+
+		x = -17
+		y = 16
+
+		cost = 5
+
+		prerequisite = { focus = GDR_peoples_militia }
+		prerequisite = { focus = GDR_barracks_peoples_police }
+		prerequisite = { focus = GDR_police_readliness }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_main_intelligence_directorate"
+			custom_effect_tooltip = available_new_departament
+		  	show_ideas_tooltip = GDR_intelligence_idea
+			set_temp_variable = { temp_opinion = 4 }
+			change_intelligence_community_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_agency_for_the_protection_economy
+		icon = gdr_services_economy
+
+		x = -15
+		y = 16
+
+		cost = 5
+
+		prerequisite = { focus = GDR_peoples_militia }
+		prerequisite = { focus = GDR_barracks_peoples_police }
+		prerequisite = { focus = GDR_police_readliness }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_agency_for_the_protection_economy"
+			custom_effect_tooltip = available_new_departament
+		  	show_ideas_tooltip = GDR_protectioneconomy_idea
+			set_temp_variable = { temp_opinion = 4 }
+			change_intelligence_community_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+
+	focus = {
+		id = GDR_central_investigation_service
+		icon = gdr_services_central
+
+		x = -16
+		y = 17
+
+		cost = 5
+
+		prerequisite = { focus = GDR_main_intelligence_directorate }
+		prerequisite = { focus = GDR_agency_for_the_protection_economy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_central_investigation_service"
+			custom_effect_tooltip = available_new_departament
+		  	show_ideas_tooltip = GDR_investigation_idea
+			set_temp_variable = { temp_opinion = 3 }
+			change_intelligence_community_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_werwolf
+		icon = grd_werwolf_stasi
+
+		x = -18
+		y = 17
+
+		cost = 5
+
+		prerequisite = { focus = GDR_main_intelligence_directorate }
+		prerequisite = { focus = GDR_agency_for_the_protection_economy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_werwolf"
+			custom_effect_tooltip = GDR_Werwolf_military_aid_tt
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	###########
+	# ECONOMY #
+	###########
+
+	focus = {
+		id = GDR_economy
+		icon = gdr_economy_start
+
+		x = 8
+		y = 14
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_economy"
+			add_political_power = 100
+			add_stability = 0.02
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_Deutsche_Reichsbahn
+		icon = gdr_economy_deutche
+
+		x = 8
+		y = 15
+
+		cost = 5
+
+		prerequisite = { focus = GDR_economy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_Deutsche_Reichsbahn"
+			custom_effect_tooltip = available_new_company
+		  	show_ideas_tooltip = GDR_Deutsche_Reichsbahn_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_Interflug
+		icon = gdr_economy_interflug
+
+		x = 6
+		y = 15
+
+		cost = 5
+
+		prerequisite = { focus = GDR_economy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_Interflug"
+			custom_effect_tooltip = available_new_company
+		  	show_ideas_tooltip = GDR_Interflug_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_Robotron
+		icon = gdr_economy_robotron
+
+		x = 10
+		y = 15
+
+		cost = 5
+
+		prerequisite = { focus = GDR_economy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_Robotron"
+			custom_effect_tooltip = available_new_company
+		  	show_ideas_tooltip = GDR_Robotron_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_VVB_LOWA
+		icon = gdr_economy_lowa
+
+		x = 8
+		y = 16
+
+		cost = 5
+
+		prerequisite = { focus = GDR_Deutsche_Reichsbahn }
+		prerequisite = { focus = GDR_Interflug }
+		prerequisite = { focus = GDR_Robotron }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_VVB_LOWA"
+			custom_effect_tooltip = available_new_company
+		  	show_ideas_tooltip = GDR_VVB_LOWA_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_Fortschritt
+		icon = gdr_economy_forschritt
+
+		x = 10
+		y = 16
+
+		cost = 5
+
+		prerequisite = { focus = GDR_Deutsche_Reichsbahn }
+		prerequisite = { focus = GDR_Interflug }
+		prerequisite = { focus = GDR_Robotron }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_Fortschritt"
+			custom_effect_tooltip = available_new_company
+		  	show_ideas_tooltip = GDR_Fortschritt_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_ORWO
+		icon = gdr_economy_orwo
+
+		x = 7
+		y = 17
+
+		cost = 5
+
+		prerequisite = { focus = GDR_Fortschritt }
+		prerequisite = { focus = GDR_Wartburg }
+		prerequisite = { focus = GDR_VVB_LOWA }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_ORWO"
+			one_random_industrial_complex = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_Wartburg
+		icon = gdr_economy_wartburg
+
+		x = 6
+		y = 16
+
+		cost = 5
+
+		prerequisite = { focus = GDR_Deutsche_Reichsbahn }
+		prerequisite = { focus = GDR_Interflug }
+		prerequisite = { focus = GDR_Robotron }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_Wartburg"
+			custom_effect_tooltip = available_new_company
+		  	show_ideas_tooltip = GDR_Wartburg_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_TAKRAF
+		icon = gdr_economy_takraf
+
+		x = 9
+		y = 17
+
+		cost = 5
+
+		prerequisite = { focus = GDR_Fortschritt }
+		prerequisite = { focus = GDR_Wartburg }
+		prerequisite = { focus = GDR_VVB_LOWA }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_TAKRAF"
+			custom_effect_tooltip = available_new_company
+		  	show_ideas_tooltip = GDR_TAKRAF_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = GDR_wismut
+		icon = gdr_economy_wismut
+
+		x = 8
+		y = 18
+
+		cost = 5
+
+		prerequisite = { focus = GDR_ORWO }
+		prerequisite = { focus = GDR_TAKRAF }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_wismut"
+			custom_effect_tooltip = available_new_company
+		  	show_ideas_tooltip = GDR_Wismut_idea
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	########
+	# FOREIGN POLITICS #
+	########
+	focus = {
+		id = GDR_interventionism_for_socialism
+		icon = gdr_dyplo_start
+
+		x = 0
+		y = 14
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_DIPLOMACY }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_interventionism_for_socialism"
+			GER = {
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = GDR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+				add_popularity = {
+					ideology = communism
+					popularity = 0.05
+				}
+			}
+			POL = {
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = GDR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+				add_popularity = {
+					ideology = communism
+					popularity = 0.05
+				}
+			}
+			HUN = {
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = GDR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+				add_popularity = {
+					ideology = communism
+					popularity = 0.05
+				}
+			}
+			SLO = {
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = GDR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+				add_popularity = {
+					ideology = communism
+					popularity = 0.05
+				}
+			}
+			CZE = {
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = GDR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+				add_popularity = {
+					ideology = communism
+					popularity = 0.05
+				}
+			}
+			AUS = {
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = GDR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+				add_popularity = {
+					ideology = communism
+					popularity = 0.05
+				}
+			}
+			DEN = {
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = GDR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+				add_popularity = {
+					ideology = communism
+					popularity = 0.05
+				}
+			}
+			increase_intervention_law_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_dismantle_german_aggression
+		icon = gdr_dyplo_dead_frg
+
+		x = 0
+		y = 1
+		relative_position_id = GDR_interventionism_for_socialism
+
+		cost = 4
+
+		prerequisite = { focus = GDR_interventionism_for_socialism }
+		search_filters = { FOCUS_FILTER_DIPLOMACY }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_dismantle_german_aggression"
+			GER = {
+				every_neighbor_country = {
+					set_temp_variable = { percent_change = -5 }
+					set_temp_variable = { tag_index = GER }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+				}
+			}
+			set_temp_variable = { percent_change = 7.5 }
+			change_domestic_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_support_rhineland_separatism
+		icon = gdr_dyplo_rhein
+
+		x = -1
+		y = 1
+		relative_position_id = GDR_dismantle_german_aggression
+
+		cost = 4
+
+		prerequisite = { focus = GDR_dismantle_german_aggression }
+		search_filters = { FOCUS_FILTER_DIPLOMACY }
+
+		bypass = {
+			OR = {
+				controls_state = 40
+				country_exists = RHE
+			}
+		}
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_support_rhineland_separatism"
+			RHE = {
+				set_temp_variable = { modify_separatism = 15 }
+				modify_separatism_support = yes
+			}
+			set_temp_variable = { percent_change = 3 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = RHE }
+			change_influence_percentage = yes
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			40 = {
+				owner = {
+					GDR = {
+						add_opinion_modifier = { target = PREV modifier = recent_actions_negative }
+						reverse_add_opinion_modifier = { target = PREV modifier = recent_actions_negative }
+					}
+				}
+			}
+
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_support_bavarian_separatism
+		icon = gdr_dyplo_bavaria
+
+		x = 1
+		y = 1
+		relative_position_id = GDR_dismantle_german_aggression
+
+		cost = 4
+
+		prerequisite = { focus = GDR_dismantle_german_aggression }
+		search_filters = { FOCUS_FILTER_DIPLOMACY }
+
+		bypass = {
+			OR = {
+				controls_state = 43
+				country_exists = BAY
+			}
+		}
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_support_rhineland_separatism"
+			BAY = {
+				set_temp_variable = { modify_separatism = 15 }
+				modify_separatism_support = yes
+			}
+			set_temp_variable = { percent_change = 3 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = BAY }
+			change_influence_percentage = yes
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			43 = {
+				owner = {
+					GDR = {
+						add_opinion_modifier = { target = PREV modifier = recent_actions_negative }
+						reverse_add_opinion_modifier = { target = PREV modifier = recent_actions_negative }
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_end_germany
+		icon = gdr_dyplo_attack_germany
+
+		x = 1
+		y = 1
+		relative_position_id = GDR_support_rhineland_separatism
+
+		cost = 4
+
+		prerequisite = { focus = GDR_support_bavarian_separatism }
+		prerequisite = { focus = GDR_support_rhineland_separatism }
+		search_filters = { FOCUS_FILTER_DIPLOMACY }
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_end_germany"
+			add_war_support = 0.03
+			create_wargoal = {
+				type = annex_everything
+				target = GER
+			}
+			add_timed_idea = {
+				idea = GDR_GER_attack_idea
+				days = 185
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_silesian_revolt
+		icon = gdr_dyplo_silesia
+
+		x = 3
+		y = 1
+		relative_position_id = GDR_interventionism_for_socialism
+
+		cost = 4
+
+		prerequisite = { focus = GDR_interventionism_for_socialism }
+		search_filters = { FOCUS_FILTER_DIPLOMACY }
+
+		available = {
+			if = {
+				limit = {
+					CZE = {
+						exists = yes
+						controls_state = 1018
+					}
+				}
+				CZE = {
+					influence_higher_30 = yes
+				}
+			}
+			if = {
+				limit = {
+					POL = {
+						exists = yes
+						OR = {
+							controls_state = 626
+							controls_state = 115
+						}
+					}
+				}
+				POL = {
+					influence_higher_30 = yes
+				}
+			}
+			emerging_communist_state_are_in_power = yes
+		}
+
+		bypass = {
+			CZE = {
+				OR = {
+					NOT = { country_exists = CZE }
+					is_puppet_of = GDR
+					is_in_faction_with = GDR
+				}
+			}
+			POL = {
+				OR = {
+					NOT = { country_exists = CZE }
+					is_puppet_of = GDR
+					is_in_faction_with = GDR
+				}
+			}
+			controls_state = 1018
+			controls_state = 626
+			controls_state = 115
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_silesian_revolt"
+			custom_effect_tooltip = GDR_silesian_revolt_tt
+			hidden_effect = {
+				CZE = {
+					release = SIL
+				}
+				POL = {
+					release = SIL
+				}
+				SIL = {
+					declare_war_on = {
+						target = CZE
+						type = liberate_wargoal
+					}
+					declare_war_on = {
+						target = POL
+						type = liberate_wargoal
+					}
+					set_country_flag = GENERIC_separatism_rebeliion_flag
+					division_template = {
+						name = "National Militia"
+						priority = 1
+						regiments = {
+							L_Inf_Bat = { x = 0 y = 0 }
+							L_Inf_Bat = { x = 0 y = 1 }
+							L_Inf_Bat = { x = 0 y = 2 }
+							L_Inf_Bat = { x = 0 y = 3 }
+							Arty_Bat = { x = 1 y = 0 }
+						}
+						support = {
+							L_Recce_Comp = { x = 0 y = 0 }
+							L_Engi_Comp = { x = 0 y = 1 }
+						}
+					}
+					random_owned_controlled_state = {
+						prioritize = { 1018 }
+						create_unit = {
+							division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+							owner = SIL
+							count = 4
+						}
+					}
+					random_owned_controlled_state = {
+						prioritize = { 626 }
+						create_unit = {
+							division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+							owner = SIL
+							count = 4
+						}
+					}
+					random_owned_controlled_state = {
+						prioritize = { 115 }
+						create_unit = {
+							division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+							owner = SIL
+							count = 4
+						}
+					}
+				}
+			}
+			set_temp_variable = { treasury_change = -15 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_end_czechia
+		icon = gdr_dyplo_attack_czech
+
+		x = 0
+		y = 1
+		relative_position_id = GDR_silesian_revolt
+
+		cost = 4
+
+		prerequisite = { focus = GDR_silesian_revolt }
+		search_filters = { FOCUS_FILTER_DIPLOMACY }
+
+		bypass = {
+			CZE = {
+				OR = {
+					NOT = { country_exists = CZE }
+					is_puppet_of = GDR
+					is_in_faction_with = GDR
+					has_war_with = GDR
+				}
+			}
+		}
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_end_czechia"
+			add_war_support = 0.03
+			create_wargoal = {
+				type = annex_everything
+				target = CZE
+			}
+			add_timed_idea = {
+				idea = GDR_CZE_attack_idea
+				days = 185
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_socialist_revolution_in_austria
+		icon = gdr_dyplo_dead_austria
+
+		x = -3
+		y = 1
+		relative_position_id = GDR_interventionism_for_socialism
+
+		cost = 4
+
+		prerequisite = { focus = GDR_interventionism_for_socialism }
+		search_filters = { FOCUS_FILTER_DIPLOMACY }
+
+		available = {
+			AUS = {
+				influence_higher_30 = yes
+				controls_state = 76
+			}
+			emerging_communist_state_are_in_power = yes
+		}
+
+		bypass = {
+			AUS = {
+				OR = {
+					NOT = { country_exists = AUS }
+					is_puppet_of = GDR
+					is_in_faction_with = GDR
+				}
+			}
+			controls_state = 76
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_socialist_revolution_in_austria"
+			custom_effect_tooltip = GDR_civil_war_austria_tt
+			hidden_effect = {
+				AUS = {
+					start_civil_war = {
+						ideology = communism
+						size = 0.5
+						states = { 76 }
+					}
+				}
+				76 = {
+					owner = {
+						GDR = {
+							set_autonomy = {
+								target = PREV
+								autonomy_state = autonomy_associated_state
+								end_civil_wars = no
+							}
+							declare_war_on = {
+								target = AUS
+								type = annex_everything
+							}
+						}
+					}
+				}
+			}
+			set_temp_variable = { treasury_change = -15 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	focus = {
+		id = GDR_end_denmark
+		icon = gdr_dyplo_attack_denmark
+
+		x = 0
+		y = 1
+		relative_position_id = GDR_socialist_revolution_in_austria
+
+		cost = 4
+
+		prerequisite = { focus = GDR_socialist_revolution_in_austria }
+		search_filters = { FOCUS_FILTER_DIPLOMACY }
+
+		bypass = {
+			DEN = {
+				OR = {
+					NOT = { country_exists = DEN }
+					is_puppet_of = GDR
+					is_in_faction_with = GDR
+				}
+			}
+		}
+
+		available = {
+			emerging_communist_state_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GDR_end_denmark"
+			add_war_support = 0.03
+			create_wargoal = {
+				type = annex_everything
+				target = DEN
+			}
+			add_timed_idea = {
+				idea = GDR_DEN_attack_idea
+				days = 185
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+}

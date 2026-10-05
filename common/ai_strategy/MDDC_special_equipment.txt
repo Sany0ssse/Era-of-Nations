@@ -1,0 +1,50 @@
+default_build_cross_river_equipment = {
+	enable = {
+		has_tech = cross_river_equipment
+        check_variable = { num_equipment@cross_river_equipment < 501 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = cross_river_equipment
+		value = 1
+	}
+}
+
+default_cross_river_equipment_market_stockpile_threshold = {
+	enable = {
+		NOT = {
+			check_variable = { interest_rate > 10 }
+			check_variable = { treasury_rate < 0 }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = equipment_market_buying_threshold id = cross_river_equipment value = 100 }
+}
+
+default_build_seads = {
+	enable = {
+		has_design_based_on = small_plane_scout_airframe
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = small_plane_scout_airframe
+		value = 1
+	}
+}
+
+default_seads_market_stockpile_threshold = {
+	enable = {
+		NOT = {
+			check_variable = { interest_rate > 10 }
+			check_variable = { treasury_rate < 0 }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = equipment_market_buying_threshold id = small_plane_scout_airframe value = 100 }
+}

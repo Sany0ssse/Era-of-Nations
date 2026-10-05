@@ -1,0 +1,719 @@
+    #Navy Ammo Consumption
+    @carrier_ammo = 12
+    @helicopter_operator_ammo = 40
+    @battleship_ammo = 32
+    @battle_cruiser_ammo = 28
+    @cruiser_ammo = 24
+    @destroyer_ammo = 20
+    @stealth_destroyer_ammo = 20
+    @frigate_ammo = 12
+    @stealth_frigate_ammo = 12
+    @heavy_frigate_ammo = 16
+    @corvette_ammo = 8
+    @stealth_corvette_ammo = 8
+    @patrol_boat_ammo = 4
+    @missile_submarine_ammo = 28
+    @attack_submarine_ammo = 12
+
+    #Air Ammo Consumption
+    @small_plane_airframe_ammo = 4
+    @small_plane_cas_airframe_ammo = 8
+    @small_plane_strike_airframe_ammo = 4
+    @small_plane_scout_airframe_ammo = 4
+    @cv_small_plane_scout_airframe_ammo = 4
+    @small_plane_naval_bomber_airframe_ammo = 8
+    @small_plane_suicide_airframe_ammo = 4
+    @cv_small_plane_airframe_ammo = 4
+    @cv_small_plane_cas_airframe_ammo = 8
+    @cv_small_plane_naval_bomber_airframe_ammo = 8
+    @cv_small_plane_strike_airframe_ammo = 4
+    @cv_small_plane_suicide_airframe_ammo = 4
+    @medium_plane_airframe_ammo = 8
+    @medium_plane_fighter_airframe_ammo = 4
+    @medium_plane_cas_airframe_ammo = 8
+    @medium_plane_maritime_patrol_airframe_ammo = 8
+    @cv_medium_plane_airframe_ammo = 8
+    @cv_medium_plane_fighter_airframe_ammo = 4
+    @cv_medium_plane_cas_airframe_ammo = 8
+    @cv_medium_plane_maritime_patrol_airframe_ammo = 8
+    @strategic_bomber_ammo = 40
+    @large_plane_maritime_patrol_airframe_ammo = 20
+    @large_plane_cas_airframe_ammo = 28
+    @mothership_equipment_ammo = 16
+
+    #Land Ammo Consumption
+    @Militia_Bat_ammo = 24
+    @Mot_Militia_Bat_ammo = 32
+    @L_Inf_Bat_ammo = 8
+    @HQ_L_Inf_Bat_ammo = 4
+    @HQ_L_Air_Inf_Bat_ammo = 4
+    @HQ_L_Marine_Bat_ammo = 4
+    @L_Ranger_Bat_ammo = 8
+    @L_Ranger_Recce_Comp_ammo = 8
+    @Mot_Inf_Bat_ammo = 24
+    @HQ_Mot_Inf_Bat_ammo = 12
+    @HQ_Mot_Air_Inf_Bat_ammo = 12
+    @HQ_Mot_Marine_Bat_ammo = 12
+    @Mech_Inf_Bat_ammo = 24
+    @HQ_Mech_Inf_Bat_ammo = 12
+    @Arm_Inf_Bat_ammo = 40
+    @HQ_Arm_Inf_Bat_ammo = 20
+    @L_Air_Inf_Bat_ammo = 8
+    @Mot_Air_Inf_Bat_ammo = 16
+    @Mech_Air_Inf_Bat_ammo = 24
+    @HQ_Mech_Air_Inf_Bat_ammo = 24
+    @Arm_Air_Inf_Bat_ammo = 40
+    @HQ_Arm_Air_Inf_Bat_ammo = 20
+    @L_Marine_Bat_ammo = 8
+    @L_Marine_Cdo_Bat_ammo = 8
+    @Mot_Marine_Bat_ammo = 16
+    @Mech_Marine_Bat_ammo = 24
+    @HQ_Mech_Marine_Bat_ammo = 12
+    @Arm_Marine_Bat_ammo = 40
+    @HQ_Arm_Marine_Bat_ammo = 40
+    @L_Air_assault_Bat_ammo = 40
+    @HQ_L_Air_assault_Bat_ammo = 20
+    @attack_helo_bat_ammo = 48
+    @attack_helo_comp_ammo = 48
+    @Special_Forces_ammo = 8
+    @armor_Bat_ammo = 40
+    @L_arm_Bat_ammo = 40
+    @HQ_armor_Bat_ammo = 20
+    @HQ_L_arm_Bat_ammo = 20
+    @armor_Comp_ammo = 40
+    @L_Recce_Comp_ammo = 8
+    @Mot_Recce_Comp_ammo = 16
+    @Mech_Recce_Comp_ammo = 24
+    @Arm_Recce_Comp_ammo = 32
+    @armor_Recce_Comp_ammo = 40
+    @Arty_Bat_ammo = 80
+    @Arty_Battery_ammo = 80
+    @SP_Arty_Bat_ammo = 120
+    @SP_Arty_Battery_ammo = 120
+    @SP_R_Arty_Bat_ammo = 80
+    @SP_R_Arty_Battery_ammo = 80
+    @SP_AA_Bat_ammo = 120
+    @SP_AA_Battery_ammo = 120
+    @air_assault_Arty_Battery_ammo = 160
+
+    #Default Ammo Constants
+    @base_max_ammo_limit = 10000 #Base max ammo limit regardless of number of supply nodes
+    @base_ammo_gain = 10 #Base Gain of ammo regardless of number of military factories
+    @base_ammo_gain_per_arms_factory = 100 #Base Gain of ammo per military factory
+    @base_max_ammo_limit_per_supply_node = 100000 #Base max ammo limit given by supply node
+
+count_maximum_consumption = {
+    set_variable = { maximum_ammo_consumption = 0 }
+    set_variable = { fleet_maximum_ammo_consumption = 0 }
+    set_variable = { air_maximum_ammo_consumption = 0 }
+    set_variable = { land_maximum_ammo_consumption = 0 }
+
+    #Count Potentian Fleet Consumption
+    set_temp_variable = { carrier_ammo_consumption = num_ships_with_type@carrier }
+    multiply_temp_variable = { carrier_ammo_consumption = @carrier_ammo }
+    set_temp_variable = { helicopter_operator_ammo_consumption = num_ships_with_type@helicopter_operator }
+    multiply_temp_variable = { helicopter_operator_ammo_consumption = @helicopter_operator_ammo }
+    set_temp_variable = { battleship_ammo_consumption = num_ships_with_type@battleship }
+    multiply_temp_variable = { battleship_ammo_consumption = @battleship_ammo }
+    set_temp_variable = { battle_cruiser_ammo_consumption = num_ships_with_type@battle_cruiser }
+    multiply_temp_variable = { battle_cruiser_ammo_consumption = @battle_cruiser_ammo }
+    set_temp_variable = { cruiser_ammo_consumption = num_ships_with_type@cruiser }
+    multiply_temp_variable = { cruiser_ammo_consumption = @cruiser_ammo }
+    set_temp_variable = { destroyer_ammo_consumption = num_ships_with_type@destroyer }
+    multiply_temp_variable = { destroyer_ammo_consumption = @destroyer_ammo }
+    set_temp_variable = { stealth_destroyer_ammo_consumption = num_ships_with_type@stealth_destroyer }
+    multiply_temp_variable = { stealth_destroyer_ammo_consumption = @stealth_destroyer_ammo }
+    set_temp_variable = { frigate_ammo_consumption = num_ships_with_type@frigate }
+    multiply_temp_variable = { frigate_ammo_consumption = @frigate_ammo }
+    set_temp_variable = { stealth_frigate_ammo_consumption = num_ships_with_type@stealth_frigate }
+    multiply_temp_variable = { stealth_frigate_ammo_consumption = @stealth_frigate_ammo }
+    set_temp_variable = { heavy_frigate_ammo_consumption = num_ships_with_type@heavy_frigate }
+    multiply_temp_variable = { heavy_frigate_ammo_consumption = @heavy_frigate_ammo }
+    set_temp_variable = { corvette_ammo_consumption = num_ships_with_type@corvette }
+    multiply_temp_variable = { corvette_ammo_consumption = @corvette_ammo }
+    set_temp_variable = { stealth_corvette_ammo_consumption = num_ships_with_type@stealth_corvette }
+    multiply_temp_variable = { stealth_corvette_ammo_consumption = @stealth_corvette_ammo }
+    set_temp_variable = { patrol_boat_ammo_consumption = num_ships_with_type@patrol_boat }
+    multiply_temp_variable = { patrol_boat_ammo_consumption = @patrol_boat_ammo }
+    set_temp_variable = { missile_submarine_ammo_consumption = num_ships_with_type@missile_submarine }
+    multiply_temp_variable = { missile_submarine_ammo_consumption = @missile_submarine_ammo }
+    set_temp_variable = { attack_submarine_ammo_consumption = num_ships_with_type@attack_submarine }
+    multiply_temp_variable = { attack_submarine_ammo_consumption = @attack_submarine_ammo }
+    #Counting Fleet Sum Ammo Consumption
+    add_to_variable = { fleet_maximum_ammo_consumption = carrier_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = helicopter_operator_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = battleship_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = battle_cruiser_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = destroyer_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = stealth_destroyer_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = frigate_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = stealth_frigate_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = heavy_frigate_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = corvette_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = stealth_corvette_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = patrol_boat_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = missile_submarine_ammo_consumption }
+    add_to_variable = { fleet_maximum_ammo_consumption = attack_submarine_ammo_consumption }
+    round_variable = fleet_maximum_ammo_consumption
+
+    #Count Potentian Air Consumption
+    set_temp_variable = { small_plane_airframe_ammo_consumption = num_deployed_planes_with_type@small_plane_airframe }
+    multiply_temp_variable = { small_plane_airframe_ammo_consumption = @small_plane_airframe_ammo }
+    set_temp_variable = { small_plane_cas_airframe_ammo_consumption = num_deployed_planes_with_type@small_plane_cas_airframe }
+    multiply_temp_variable = { small_plane_cas_airframe_ammo_consumption = @small_plane_cas_airframe_ammo }
+    set_temp_variable = { small_plane_strike_airframe_ammo_consumption = num_deployed_planes_with_type@small_plane_strike_airframe }
+    multiply_temp_variable = { small_plane_strike_airframe_ammo_consumption = @small_plane_strike_airframe_ammo }
+    set_temp_variable = { small_plane_scout_airframe_ammo_consumption = num_deployed_planes_with_type@small_plane_scout_airframe }
+    multiply_temp_variable = { small_plane_scout_airframe_ammo_consumption = @small_plane_scout_airframe_ammo }
+    set_temp_variable = { cv_small_plane_scout_airframe_ammo_consumption = num_deployed_planes_with_type@cv_small_plane_scout_airframe }
+    multiply_temp_variable = { cv_small_plane_scout_airframe_ammo_consumption = @cv_small_plane_scout_airframe_ammo }
+    set_temp_variable = { small_plane_naval_bomber_airframe_ammo_consumption = num_deployed_planes_with_type@small_plane_naval_bomber_airframe }
+    multiply_temp_variable = { small_plane_naval_bomber_airframe_ammo_consumption = @small_plane_naval_bomber_airframe_ammo }
+    set_temp_variable = { small_plane_suicide_airframe_ammo_consumption = num_deployed_planes_with_type@small_plane_suicide_airframe }
+    multiply_temp_variable = { small_plane_suicide_airframe_ammo_consumption = @small_plane_suicide_airframe_ammo }
+    set_temp_variable = { cv_small_plane_airframe_ammo_consumption = num_deployed_planes_with_type@cv_small_plane_airframe }
+    multiply_temp_variable = { cv_small_plane_airframe_ammo_consumption = @cv_small_plane_airframe_ammo }
+    set_temp_variable = { cv_small_plane_cas_airframe_ammo_consumption = num_deployed_planes_with_type@cv_small_plane_cas_airframe }
+    multiply_temp_variable = { cv_small_plane_cas_airframe_ammo_consumption = @cv_small_plane_cas_airframe_ammo }
+    set_temp_variable = { cv_small_plane_naval_bomber_airframe_ammo_consumption = num_deployed_planes_with_type@cv_small_plane_naval_bomber_airframe }
+    multiply_temp_variable = { cv_small_plane_naval_bomber_airframe_ammo_consumption = @cv_small_plane_naval_bomber_airframe_ammo }
+    set_temp_variable = { cv_small_plane_strike_airframe_ammo_consumption = num_deployed_planes_with_type@cv_small_plane_strike_airframe }
+    multiply_temp_variable = { cv_small_plane_strike_airframe_ammo_consumption = @cv_small_plane_strike_airframe_ammo }
+    set_temp_variable = { cv_small_plane_suicide_airframe_ammo_consumption = num_deployed_planes_with_type@cv_small_plane_suicide_airframe }
+    multiply_temp_variable = { cv_small_plane_suicide_airframe_ammo_consumption = @cv_small_plane_suicide_airframe_ammo }
+    set_temp_variable = { medium_plane_airframe_ammo_consumption = num_deployed_planes_with_type@medium_plane_airframe }
+    multiply_temp_variable = { medium_plane_airframe_ammo_consumption = @medium_plane_airframe_ammo }
+    set_temp_variable = { medium_plane_fighter_airframe_ammo_consumption = num_deployed_planes_with_type@medium_plane_fighter_airframe }
+    multiply_temp_variable = { medium_plane_fighter_airframe_ammo_consumption = @medium_plane_fighter_airframe_ammo }
+    set_temp_variable = { medium_plane_cas_airframe_ammo_consumption = num_deployed_planes_with_type@medium_plane_cas_airframe }
+    multiply_temp_variable = { medium_plane_cas_airframe_ammo_consumption = @medium_plane_cas_airframe_ammo }
+    set_temp_variable = { medium_plane_maritime_patrol_airframe_ammo_consumption = num_deployed_planes_with_type@medium_plane_maritime_patrol_airframe }
+    multiply_temp_variable = { medium_plane_maritime_patrol_airframe_ammo_consumption = @medium_plane_maritime_patrol_airframe_ammo }
+    set_temp_variable = { cv_medium_plane_airframe_ammo_consumption = num_deployed_planes_with_type@cv_medium_plane_airframe }
+    multiply_temp_variable = { cv_medium_plane_airframe_ammo_consumption = @cv_medium_plane_airframe_ammo }
+    set_temp_variable = { cv_medium_plane_fighter_airframe_ammo_consumption = num_deployed_planes_with_type@cv_medium_plane_fighter_airframe }
+    multiply_temp_variable = { cv_medium_plane_fighter_airframe_ammo_consumption = @cv_medium_plane_fighter_airframe_ammo }
+    set_temp_variable = { cv_medium_plane_cas_airframe_ammo_consumption = num_deployed_planes_with_type@cv_medium_plane_cas_airframe }
+    multiply_temp_variable = { cv_medium_plane_cas_airframe_ammo_consumption = @cv_medium_plane_cas_airframe_ammo }
+    set_temp_variable = { cv_medium_plane_maritime_patrol_airframe_ammo_consumption = num_deployed_planes_with_type@cv_medium_plane_maritime_patrol_airframe }
+    multiply_temp_variable = { cv_medium_plane_maritime_patrol_airframe_ammo_consumption = @cv_medium_plane_maritime_patrol_airframe_ammo }
+    set_temp_variable = { strategic_bomber_ammo_consumption = num_deployed_planes_with_type@strategic_bomber }
+    multiply_temp_variable = { strategic_bomber_ammo_consumption = @strategic_bomber_ammo }
+    set_temp_variable = { large_plane_maritime_patrol_airframe_ammo_consumption = num_deployed_planes_with_type@large_plane_maritime_patrol_airframe }
+    multiply_temp_variable = { large_plane_maritime_patrol_airframe_ammo_consumption = @large_plane_maritime_patrol_airframe_ammo }
+    set_temp_variable = { large_plane_cas_airframe_ammo_consumption = num_deployed_planes_with_type@large_plane_cas_airframe }
+    multiply_temp_variable = { large_plane_cas_airframe_ammo_consumption = @large_plane_cas_airframe_ammo }
+    set_temp_variable = { mothership_equipment_ammo_consumption = num_deployed_planes_with_type@mothership_equipment }
+    multiply_temp_variable = { mothership_equipment_ammo_consumption = @mothership_equipment_ammo }
+    #Counting Air Sum Ammo Consumption
+    add_to_variable = { air_maximum_ammo_consumption = small_plane_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = small_plane_cas_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = small_plane_strike_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = small_plane_scout_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_small_plane_scout_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = small_plane_naval_bomber_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = small_plane_suicide_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_small_plane_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_small_plane_cas_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_small_plane_naval_bomber_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_small_plane_strike_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_small_plane_suicide_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = medium_plane_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = medium_plane_fighter_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = medium_plane_cas_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = medium_plane_maritime_patrol_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_medium_plane_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_medium_plane_fighter_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_medium_plane_cas_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = cv_medium_plane_maritime_patrol_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = strategic_bomber_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = large_plane_maritime_patrol_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = large_plane_cas_airframe_ammo_consumption }
+    add_to_variable = { air_maximum_ammo_consumption = mothership_equipment_ammo_consumption }
+    round_variable = air_maximum_ammo_consumption
+
+    #Count Potentian Land Consumption
+    set_temp_variable = { Militia_Bat_ammo_consumption = num_battalions_with_type@Militia_Bat }
+    multiply_temp_variable = { Militia_Bat_ammo_consumption = @Militia_Bat_ammo }
+    set_temp_variable = { Mot_Militia_Bat_ammo_consumption = num_battalions_with_type@Mot_Militia_Bat }
+    multiply_temp_variable = { Mot_Militia_Bat_ammo_consumption = @Mot_Militia_Bat_ammo }
+    set_temp_variable = { L_Inf_Bat_ammo_consumption = num_battalions_with_type@L_Inf_Bat }
+    multiply_temp_variable = { L_Inf_Bat_ammo_consumption = @L_Inf_Bat_ammo }
+    set_temp_variable = { HQ_L_Inf_Bat_ammo_consumption = num_battalions_with_type@HQ_L_Inf_Bat }
+    multiply_temp_variable = { HQ_L_Inf_Bat_ammo_consumption = @HQ_L_Inf_Bat_ammo }
+    set_temp_variable = { L_Ranger_Bat_ammo_consumption = num_battalions_with_type@L_Ranger_Bat }
+    multiply_temp_variable = { L_Ranger_Bat_ammo_consumption = @L_Ranger_Bat_ammo }
+    set_temp_variable = { L_Ranger_Recce_Comp_ammo_consumption = num_battalions_with_type@L_Ranger_Recce_Comp }
+    multiply_temp_variable = { L_Ranger_Recce_Comp_ammo_consumption = @L_Ranger_Recce_Comp_ammo }
+    set_temp_variable = { Mot_Inf_Bat_ammo_consumption = num_battalions_with_type@Mot_Inf_Bat }
+    multiply_temp_variable = { Mot_Inf_Bat_ammo_consumption = @Mot_Inf_Bat_ammo }
+    set_temp_variable = { HQ_Mot_Inf_Bat_ammo_consumption = num_battalions_with_type@HQ_Mot_Inf_Bat }
+    multiply_temp_variable = { HQ_Mot_Inf_Bat_ammo_consumption = @HQ_Mot_Inf_Bat_ammo }
+    set_temp_variable = { Mech_Inf_Bat_ammo_consumption = num_battalions_with_type@Mech_Inf_Bat }
+    multiply_temp_variable = { Mech_Inf_Bat_ammo_consumption = @Mech_Inf_Bat_ammo }
+    set_temp_variable = { HQ_Mech_Inf_Bat_ammo_consumption = num_battalions_with_type@HQ_Mech_Inf_Bat }
+    multiply_temp_variable = { HQ_Mech_Inf_Bat_ammo_consumption = @HQ_Mech_Inf_Bat_ammo }
+    set_temp_variable = { Arm_Inf_Bat_ammo_consumption = num_battalions_with_type@Arm_Inf_Bat }
+    multiply_temp_variable = { Arm_Inf_Bat_ammo_consumption = @Arm_Inf_Bat_ammo }
+    set_temp_variable = { HQ_Arm_Inf_Bat_ammo_consumption = num_battalions_with_type@HQ_Arm_Inf_Bat }
+    multiply_temp_variable = { HQ_Arm_Inf_Bat_ammo_consumption = @HQ_Arm_Inf_Bat_ammo }
+    set_temp_variable = { L_Air_Inf_Bat_ammo_consumption = num_battalions_with_type@L_Air_Inf_Bat }
+    multiply_temp_variable = { L_Air_Inf_Bat_ammo_consumption = @L_Air_Inf_Bat_ammo }
+    set_temp_variable = { HQ_L_Air_Inf_Bat_ammo_consumption = num_battalions_with_type@HQ_L_Air_Inf_Bat }
+    multiply_temp_variable = { HQ_L_Air_Inf_Bat_ammo_consumption = @HQ_L_Air_Inf_Bat_ammo }
+    set_temp_variable = { Mot_Air_Inf_Bat_ammo_consumption = num_battalions_with_type@Mot_Air_Inf_Bat }
+    multiply_temp_variable = { Mot_Air_Inf_Bat_ammo_consumption = @Mot_Air_Inf_Bat_ammo }
+    set_temp_variable = { HQ_Mot_Air_Inf_Bat_ammo_consumption = num_battalions_with_type@HQ_Mot_Air_Inf_Bat }
+    multiply_temp_variable = { HQ_Mot_Air_Inf_Bat_ammo_consumption = @HQ_Mot_Air_Inf_Bat_ammo }
+    set_temp_variable = { Mech_Air_Inf_Bat_ammo_consumption = num_battalions_with_type@Mech_Air_Inf_Bat }
+    multiply_temp_variable = { Mech_Air_Inf_Bat_ammo_consumption = @Mech_Air_Inf_Bat_ammo }
+    set_temp_variable = { HQ_Mech_Air_Inf_Bat_ammo_consumption = num_battalions_with_type@HQ_Mech_Air_Inf_Bat }
+    multiply_temp_variable = { HQ_Mech_Air_Inf_Bat_ammo_consumption = @HQ_Mech_Air_Inf_Bat_ammo }
+    set_temp_variable = { Arm_Air_Inf_Bat_ammo_consumption = num_battalions_with_type@Arm_Air_Inf_Bat }
+    multiply_temp_variable = { Arm_Air_Inf_Bat_ammo_consumption = @Arm_Air_Inf_Bat_ammo }
+    set_temp_variable = { HQ_Arm_Air_Inf_Bat_ammo_consumption = num_battalions_with_type@HQ_Arm_Air_Inf_Bat }
+    multiply_temp_variable = { HQ_Arm_Air_Inf_Bat_ammo_consumption = @HQ_Arm_Air_Inf_Bat_ammo }
+    set_temp_variable = { L_Marine_Bat_ammo_consumption = num_battalions_with_type@L_Marine_Bat }
+    multiply_temp_variable = { L_Marine_Bat_ammo_consumption = @L_Marine_Bat_ammo }
+    set_temp_variable = { HQ_L_Marine_Bat_ammo_consumption = num_battalions_with_type@HQ_L_Marine_Bat }
+    multiply_temp_variable = { HQ_L_Marine_Bat_ammo_consumption = @HQ_L_Marine_Bat_ammo }
+    set_temp_variable = { L_Marine_Cdo_Bat_ammo_consumption = num_battalions_with_type@L_Marine_Cdo_Bat }
+    multiply_temp_variable = { L_Marine_Cdo_Bat_ammo_consumption = @L_Marine_Cdo_Bat_ammo }
+    set_temp_variable = { Mot_Marine_Bat_ammo_consumption = num_battalions_with_type@Mot_Marine_Bat }
+    multiply_temp_variable = { Mot_Marine_Bat_ammo_consumption = @Mot_Marine_Bat_ammo }
+    set_temp_variable = { HQ_Mot_Marine_Bat_ammo_consumption = num_battalions_with_type@HQ_Mot_Marine_Bat }
+    multiply_temp_variable = { HQ_Mot_Marine_Bat_ammo_consumption = @HQ_Mot_Marine_Bat_ammo }
+    set_temp_variable = { Mech_Marine_Bat_ammo_consumption = num_battalions_with_type@Mech_Marine_Bat }
+    multiply_temp_variable = { Mech_Marine_Bat_ammo_consumption = @Mech_Marine_Bat_ammo }
+    set_temp_variable = { HQ_Mech_Marine_Bat_ammo_consumption = num_battalions_with_type@HQ_Mech_Marine_Bat }
+    multiply_temp_variable = { HQ_Mech_Marine_Bat_ammo_consumption = @HQ_Mech_Marine_Bat_ammo }
+    set_temp_variable = { Arm_Marine_Bat_ammo_consumption = num_battalions_with_type@Arm_Marine_Bat }
+    multiply_temp_variable = { Arm_Marine_Bat_ammo_consumption = @Arm_Marine_Bat_ammo }
+    set_temp_variable = { HQ_Arm_Marine_Bat_ammo_consumption = num_battalions_with_type@HQ_Arm_Marine_Bat }
+    multiply_temp_variable = { HQ_Arm_Marine_Bat_ammo_consumption = @HQ_Arm_Marine_Bat_ammo }
+    set_temp_variable = { L_Air_assault_Bat_ammo_consumption = num_battalions_with_type@L_Air_assault_Bat }
+    multiply_temp_variable = { L_Air_assault_Bat_ammo_consumption = @L_Air_assault_Bat_ammo }
+    set_temp_variable = { HQ_L_Air_assault_Bat_ammo_consumption = num_battalions_with_type@HQ_L_Air_assault_Bat }
+    multiply_temp_variable = { HQ_L_Air_assault_Bat_ammo_consumption = @HQ_L_Air_assault_Bat_ammo }
+    set_temp_variable = { attack_helo_bat_ammo_consumption = num_battalions_with_type@attack_helo_bat }
+    multiply_temp_variable = { attack_helo_bat_ammo_consumption = @attack_helo_bat_ammo }
+    set_temp_variable = { attack_helo_comp_ammo_consumption = num_battalions_with_type@attack_helo_comp }
+    multiply_temp_variable = { attack_helo_comp_ammo_consumption = @attack_helo_comp_ammo }
+    set_temp_variable = { Special_Forces_ammo_consumption = num_battalions_with_type@Special_Forces }
+    multiply_temp_variable = { Special_Forces_ammo_consumption = @Special_Forces_ammo }
+    set_temp_variable = { armor_Bat_ammo_consumption = num_battalions_with_type@armor_Bat }
+    multiply_temp_variable = { armor_Bat_ammo_consumption = @armor_Bat_ammo }
+    set_temp_variable = { L_arm_Bat_ammo_consumption = num_battalions_with_type@L_arm_Bat }
+    multiply_temp_variable = { L_arm_Bat_ammo_consumption = @L_arm_Bat_ammo }
+    set_temp_variable = { HQ_armor_Bat_ammo_consumption = num_battalions_with_type@HQ_armor_Bat }
+    multiply_temp_variable = { HQ_armor_Bat_ammo_consumption = @HQ_armor_Bat_ammo }
+    set_temp_variable = { HQ_L_arm_Bat_ammo_consumption = num_battalions_with_type@HQ_L_arm_Bat }
+    multiply_temp_variable = { HQ_L_arm_Bat_ammo_consumption = @HQ_L_arm_Bat_ammo }
+    set_temp_variable = { armor_Comp_ammo_consumption = num_battalions_with_type@armor_Comp }
+    multiply_temp_variable = { armor_Comp_ammo_consumption = @armor_Comp_ammo }
+    set_temp_variable = { L_Recce_Comp_ammo_consumption = num_battalions_with_type@L_Recce_Comp }
+    multiply_temp_variable = { L_Recce_Comp_ammo_consumption = @L_Recce_Comp_ammo }
+    set_temp_variable = { Mot_Recce_Comp_ammo_consumption = num_battalions_with_type@Mot_Recce_Comp }
+    multiply_temp_variable = { Mot_Recce_Comp_ammo_consumption = @Mot_Recce_Comp_ammo }
+    set_temp_variable = { Mech_Recce_Comp_ammo_consumption = num_battalions_with_type@Mech_Recce_Comp }
+    multiply_temp_variable = { Mech_Recce_Comp_ammo_consumption = @Mech_Recce_Comp_ammo }
+    set_temp_variable = { Arm_Recce_Comp_ammo_consumption = num_battalions_with_type@Arm_Recce_Comp }
+    multiply_temp_variable = { Arm_Recce_Comp_ammo_consumption = @Arm_Recce_Comp_ammo }
+    set_temp_variable = { armor_Recce_Comp_ammo_consumption = num_battalions_with_type@armor_Recce_Comp }
+    multiply_temp_variable = { armor_Recce_Comp_ammo_consumption = @armor_Recce_Comp_ammo }
+    set_temp_variable = { Arty_Bat_ammo_consumption = num_battalions_with_type@Arty_Bat }
+    multiply_temp_variable = { Arty_Bat_ammo_consumption = @Arty_Bat_ammo }
+    set_temp_variable = { Arty_Battery_ammo_consumption = num_battalions_with_type@Arty_Battery }
+    multiply_temp_variable = { Arty_Battery_ammo_consumption = @Arty_Battery_ammo }
+    set_temp_variable = { SP_Arty_Bat_ammo_consumption = num_battalions_with_type@SP_Arty_Bat }
+    multiply_temp_variable = { SP_Arty_Bat_ammo_consumption = @SP_Arty_Bat_ammo }
+    set_temp_variable = { SP_Arty_Battery_ammo_consumption = num_battalions_with_type@SP_Arty_Battery }
+    multiply_temp_variable = { SP_Arty_Battery_ammo_consumption = @SP_Arty_Battery_ammo }
+    set_temp_variable = { SP_R_Arty_Bat_ammo_consumption = num_battalions_with_type@SP_R_Arty_Bat }
+    multiply_temp_variable = { SP_R_Arty_Bat_ammo_consumption = @SP_R_Arty_Bat_ammo }
+    set_temp_variable = { SP_R_Arty_Battery_ammo_consumption = num_battalions_with_type@SP_R_Arty_Battery }
+    multiply_temp_variable = { SP_R_Arty_Battery_ammo_consumption = @SP_R_Arty_Battery_ammo }
+    set_temp_variable = { SP_AA_Bat_ammo_consumption = num_battalions_with_type@SP_AA_Bat }
+    multiply_temp_variable = { SP_AA_Bat_ammo_consumption = @SP_AA_Bat_ammo }
+    set_temp_variable = { SP_AA_Battery_ammo_consumption = num_battalions_with_type@SP_AA_Battery }
+    multiply_temp_variable = { SP_AA_Battery_ammo_consumption = @SP_AA_Battery_ammo }
+    set_temp_variable = { air_assault_Arty_Battery_ammo_consumption = num_battalions_with_type@air_assault_Arty_Battery }
+    multiply_temp_variable = { air_assault_Arty_Battery_ammo_consumption = @air_assault_Arty_Battery_ammo }
+    #Counting Land Sum Ammo Consumption
+    add_to_variable = { land_maximum_ammo_consumption = Militia_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Mot_Militia_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = L_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_L_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = L_Ranger_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = L_Ranger_Recce_Comp_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Mot_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_Mot_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Mech_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_Mech_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Arm_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_Arm_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = L_Air_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_L_Air_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Mot_Air_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_Mot_Air_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Mech_Air_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_Mech_Air_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Arm_Air_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_Arm_Air_Inf_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = L_Marine_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_L_Marine_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = L_Marine_Cdo_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Mot_Marine_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_Mot_Marine_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Mech_Marine_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_Mech_Marine_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Arm_Marine_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_Arm_Marine_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = L_Air_assault_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_L_Air_assault_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = attack_helo_bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = attack_helo_comp_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Special_Forces_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = armor_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = L_arm_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_armor_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = HQ_L_arm_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = armor_Comp_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = L_Recce_Comp_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Mot_Recce_Comp_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Mech_Recce_Comp_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Arm_Recce_Comp_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = armor_Recce_Comp_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Arty_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = Arty_Battery_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = SP_Arty_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = SP_Arty_Battery_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = SP_R_Arty_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = SP_R_Arty_Battery_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = SP_AA_Bat_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = SP_AA_Battery_ammo_consumption }
+    add_to_variable = { land_maximum_ammo_consumption = air_assault_Arty_Battery_ammo_consumption }
+    round_variable = land_maximum_ammo_consumption
+
+    #Count Maximum Ammo Consumption
+    add_to_variable = { maximum_ammo_consumption = fleet_maximum_ammo_consumption }
+    add_to_variable = { maximum_ammo_consumption = air_maximum_ammo_consumption }
+    add_to_variable = { maximum_ammo_consumption = land_maximum_ammo_consumption }
+}
+
+count_current_consumption = {
+	set_variable = { divisions_in_offensive_combat_consumption = 0 }
+	set_variable = { divisions_in_defensive_combat_consumption = 0 }
+    set_variable = { land_ammo_consumption = 0 }
+    set_variable = { air_ammo_consumption = 0 }
+    set_variable = { fleet_ammo_consumption = 0 }
+    set_variable = { ammo_consumption = 0 }
+
+    #Count Fleet Consumption
+    #Пометка для MSа: Да, я понимаю что тут чекается каждый регион, но только с портами но только для стран с флотом
+    # и только во время войны
+    # и можно сделать технически чтобы оно чекалось раз в неделю / месяц, подумаю еще
+    if = {
+        limit = {
+            has_war = yes
+            check_variable = { num_ships > 0 }
+        }
+        set_temp_variable = { number_of_ships_in_combat = num_ships }
+        every_state = {
+            limit = { naval_base > 0 }
+            PREV = {
+                if = {
+                    limit = {
+                        ships_in_state_ports = {
+                            size  > 0
+                            state = PREV
+                        }
+                    }
+                    set_temp_variable = { i = 0 }
+                    while_loop_effect = {
+                        limit = {
+                            check_variable = { i < 100 }
+                            ships_in_state_ports = {
+                                size  > i
+                                state = PREV
+                            }
+                        }
+                        add_to_temp_variable = { i = 1 }
+                    }
+                    subtract_from_temp_variable = {
+                        number_of_ships_in_combat = i
+                    }
+                }
+            }
+        }
+        set_variable = { fleet_ammo_consumption = number_of_ships_in_combat }
+        divide_variable = { fleet_ammo_consumption = num_ships }
+        multiply_variable = { fleet_ammo_consumption = fleet_maximum_ammo_consumption }
+        round_variable = fleet_ammo_consumption
+    }
+
+    #Count Air Consumption
+    #Пометка для MSа: Тут уже полегче, в общем то просто если есть война используется макс значение потребления авиации
+    # если же ты воюешь добровольцами то процент сколько эти добровольцы от армии составляют ну оч примерно
+    # из минусов - приходится чекать страны
+    # Ну и с периодичностью тоже можно подумать
+    if = {
+        limit = {
+            has_war = yes
+            check_variable = { num_deployed_planes > 0 }
+        }
+        set_variable = { air_ammo_consumption = air_maximum_ammo_consumption }
+        if = {
+            limit = {
+                check_variable = { alliance_strength_ratio > 1 }
+                NOT = {
+                    any_enemy_country = { is_major = yes }
+                }
+            }
+            divide_variable = { air_ammo_consumption = alliance_strength_ratio }
+            round_variable = air_ammo_consumption
+        }
+    }
+    else_if = {
+        limit = {
+            check_variable = { num_deployed_planes > 0 }
+            any_other_country = {
+                has_volunteers_amount_from = {
+                    tag = PREV
+                    count > 0
+                }
+            }
+        }
+        set_temp_variable = { number_of_planes_in_combat = 0 }
+        every_other_country = {
+            limit = {
+                has_volunteers_amount_from = {
+                    tag = PREV
+                    count > 0
+                }
+            }
+            add_to_temp_variable = { PREV.number_of_planes_in_combat = 1 }
+        }
+        set_variable = { air_ammo_consumption = number_of_planes_in_combat }
+        divide_variable = { air_ammo_consumption = num_deployed_planes }
+        multiply_variable = { air_ammo_consumption = air_maximum_ammo_consumption }
+        round_variable = air_ammo_consumption
+    }
+
+    #Count Land Consumption
+    #Пометка для MSа: Тут мы считаем у каждого генерала сколько у него дивизий атакуют или защищаются
+    # да, я понимаю что можно арбузить не юзая генералов вообще, но тут ничего не поделаешь +
+    # этим вероятно будет заниматься только Хаски и то вряд ли
+    # все же играть без генералов кринж
+    if = {
+        limit = {
+            has_army_size = {
+                size > 0
+            }
+            OR = {
+                has_war = yes
+                any_other_country = {
+                    has_volunteers_amount_from = {
+                        tag = PREV
+                        count > 0
+                    }
+                }
+            }
+        }
+
+        set_temp_variable = { one_land_unit_consumption = land_maximum_ammo_consumption }
+        divide_temp_variable = { one_land_unit_consumption = num_battalions }
+
+		every_army_leader = {
+			limit = {
+				is_leading_army_group = no
+			}
+			add_to_variable = { PREV.divisions_in_offensive_combat_consumption = num_units_offensive_combats }
+			add_to_variable = { PREV.divisions_in_defensive_combat_consumption = num_units_defensive_combats }
+		}
+
+		#### offensive units consumption
+		multiply_variable = { divisions_in_offensive_combat_consumption = one_land_unit_consumption }
+		multiply_variable = { divisions_in_offensive_combat_consumption = 2 }
+        round_variable = divisions_in_offensive_combat_consumption
+
+		#### defensive units consumption
+		multiply_variable = { divisions_in_defensive_combat_consumption = one_land_unit_consumption }
+        round_variable = divisions_in_defensive_combat_consumption
+
+        #Sum land units consumption
+        add_to_variable = { land_ammo_consumption = divisions_in_offensive_combat_consumption }
+        add_to_variable = { land_ammo_consumption = divisions_in_defensive_combat_consumption }
+        round_variable = land_ammo_consumption
+    }
+
+    #Count Maximum Ammo Consumption
+    add_to_variable = { ammo_consumption = fleet_ammo_consumption }
+    add_to_variable = { ammo_consumption = air_ammo_consumption }
+    add_to_variable = { ammo_consumption = land_ammo_consumption }
+    set_temp_variable = { ammo_consumption_multiplyer_modifier = 1 }
+    add_to_temp_variable = { ammo_consumption_multiplyer_modifier = modifier@ammo_consumption_modifier }
+    multiply_variable = { ammo_consumption = ammo_consumption_multiplyer_modifier }
+    round_variable = ammo_consumption
+    clamp_variable = { var = ammo_consumption min = 0 max = 1000000000 }
+}
+
+count_max_ammo_limit = {
+    set_variable = { max_ammo_limit = num_of_supply_nodes }
+    multiply_variable = { max_ammo_limit = @base_max_ammo_limit_per_supply_node }
+    add_to_variable = { max_ammo_limit = @base_max_ammo_limit }
+    round_variable = max_ammo_limit
+    clamp_variable = { var = max_ammo_limit min = @base_max_ammo_limit max = 1000000000 }
+}
+
+count_ammo_production = {
+    set_variable = { ammo_production = military_fac }
+    subtract_from_variable = { ammo_production = num_of_damaged_mils }
+    multiply_variable = { ammo_production = @base_ammo_gain_per_arms_factory }
+    add_to_variable = { ammo_production = @base_ammo_gain }
+    set_temp_variable = { ammo_production_modifier = 1 }
+    add_to_temp_variable = { ammo_production_modifier = modifier@industrial_capacity_factory }
+    clamp_temp_variable = { var = ammo_production_modifier min = 0.01 }
+    multiply_variable = { ammo_production = ammo_production_modifier }
+    round_variable = ammo_production
+    clamp_variable = { var = ammo_production min = @base_ammo_gain max = max_ammo_limit }
+}
+
+add_ammo = {
+    add_to_variable = { ammo_stock = adding_ammo }
+    clamp_variable = { var = ammo_stock min = 0 max = max_ammo_limit }
+}
+
+add_produced_ammo = {
+    set_temp_variable = { adding_ammo = ammo_production }
+    add_ammo = yes
+
+    # Topbar bar
+    set_variable      = { Ammo_topbar_ratio = ammo_stock }
+    divide_variable   = { Ammo_topbar_ratio = max_ammo_limit  }
+    multiply_variable = { Ammo_topbar_ratio = 100 }
+}
+
+add_consumed_ammo = {
+    set_temp_variable = { adding_ammo = ammo_consumption }
+    multiply_temp_variable = { adding_ammo = -1 }
+    add_ammo = yes
+
+    # Topbar bar
+    set_variable      = { Ammo_topbar_ratio = ammo_stock }
+    divide_variable   = { Ammo_topbar_ratio = max_ammo_limit  }
+    multiply_variable = { Ammo_topbar_ratio = 100 }
+}
+
+count_consumption_rating = {
+    set_variable = { ammo_production_rating = ammo_production }
+    subtract_from_variable = { ammo_production_rating = ammo_consumption }
+    set_variable = { ammo_production_rating_debuff = 0 }
+    if = {
+        limit = {
+            check_variable = { ammo_production_rating < 0 }
+            check_variable = { ammo_stock = 0 }
+        }
+        set_variable = { ammo_production_rating_debuff = ammo_production_rating }
+        multiply_variable = { ammo_production_rating_debuff = 0.00001 }
+        clamp_variable = { var = ammo_production_rating_debuff min = -0.5 }
+        if = {
+            limit = {
+                NOT = { has_dynamic_modifier = { modifier = ammo_deficit_debuff } }
+            }
+            add_dynamic_modifier = { modifier = ammo_deficit_debuff }
+        }
+    }
+    else_if = {
+        limit = { has_dynamic_modifier = { modifier = ammo_deficit_debuff } }
+        remove_dynamic_modifier = { modifier = ammo_deficit_debuff }
+    }
+    if = {
+        limit = {
+            check_variable = { ammo_production_rating > 0 }
+            check_variable = { ammo_stock < max_ammo_limit }
+        }
+        set_variable = { Ammo_topbar_icon_index = 2 }
+    }
+    else_if = {
+        limit = { check_variable = { ammo_production_rating < 0 } }
+        set_variable = { Ammo_topbar_icon_index = 3 }
+    }
+    else = {
+        set_variable = { Ammo_topbar_icon_index = 1 }
+    }
+}
+
+count_starting_ammo = {
+    count_max_ammo_limit = yes
+    count_ammo_production = yes
+    set_temp_variable = { adding_ammo = ammo_production }
+    multiply_temp_variable = { adding_ammo = 1825 }
+    add_ammo = yes
+
+    # Topbar bar
+    set_variable      = { Ammo_topbar_ratio = ammo_stock }
+    divide_variable   = { Ammo_topbar_ratio = max_ammo_limit  }
+    multiply_variable = { Ammo_topbar_ratio = 100 }
+}
+
+count_ammo_stock_days = {
+    clear_variable = ammo_stock_days
+    if = {
+        limit = { check_variable = { ammo_production_rating < 0 } }
+        set_variable = { ammo_stock_days = ammo_stock }
+        divide_variable = { ammo_stock_days = ammo_production_rating }
+        multiply_variable = { ammo_stock_days = -1 }
+    }
+    else_if = {
+        limit  = {
+            check_variable = { ammo_production_rating > 0 }
+            check_variable = { ammo_stock < max_ammo_limit }
+        }
+        set_variable = { ammo_stock_days = max_ammo_limit }
+        subtract_from_variable = { ammo_stock_days = ammo_stock }
+        divide_variable = { ammo_stock_days = ammo_production_rating }
+    }
+    round_variable = ammo_stock_days
+    set_variable = { ammo_stock_years = ammo_stock_days }
+    divide_variable = { ammo_stock_years = 365 }
+    round_variable = ammo_stock_years
+    set_variable = { ammo_stock_months = ammo_stock_days }
+    divide_variable = { ammo_stock_months = 28 }
+    round_variable = ammo_stock_months
+}
+
+count_summarry_ammunition_effect = {
+    set_variable = { summary_ammunition_effect = ammo_production_rating_debuff }
+    if = {
+        limit = { has_idea = heavy_ammo_restrictions_spirit }
+        add_to_variable = { summary_ammunition_effect = -0.1 }
+    }
+    else_if = {
+        limit = { has_idea = some_ammo_restrictions_spirit }
+        add_to_variable = { summary_ammunition_effect = -0.05 }
+    }
+    else_if = {
+        limit = { has_idea = some_ammo_additional_consumption_spirit }
+        add_to_variable = { summary_ammunition_effect = 0.05 }
+    }
+    else_if = {
+        limit = { has_idea = heavy_ammo_additional_consumption_spirit }
+        add_to_variable = { summary_ammunition_effect = 0.1 }
+    }
+}
+
+buy_ammo_from_the_market_effect = {
+    if = {
+        limit = {
+            check_variable = { ammo_stock < max_ammo_limit }
+			NOT = { has_active_mission = bankruptcy_incoming_collapse }
+            NOT = { has_country_flag = recently_bought_ammo }
+        }
+	    set_temp_variable = { adding_ammo = 50000 }
+        add_ammo = yes
+	    set_temp_variable = { treasury_change = -0.1 }
+	    modify_treasury_effect = yes
+		set_country_flag = { flag = recently_bought_ammo value = 1 days = 28 }
+    }
+}

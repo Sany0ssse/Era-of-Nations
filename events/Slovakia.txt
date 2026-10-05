@@ -1,0 +1,3466 @@
+add_namespace = slo_army
+add_namespace = slo_economy
+add_namespace = slo_foreign
+add_namespace = slo_sns
+add_namespace = slo_commi
+add_namespace = slo_smer
+add_namespace = slo_liberals
+add_namespace = slo_mechair
+#The question of the old Soviet wings
+country_event = {
+	id = slo_army.1
+	title = slo_army.1.t
+	desc = slo_army.1.d
+	picture = GFX_POL_mig_29_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_army.1.a
+		log = "[GetDateText]: [This.GetName]: slo_army.1.a executed"
+        air_experience = 35
+		add_tech_bonus = {
+			name = CAT_fighter
+			bonus = 1
+			uses = 3
+			category = CAT_fighter
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = slo_army.1.b
+		log = "[GetDateText]: [This.GetName]: slo_army.1.b executed"
+        create_equipment_variant = {
+			name = "MiG-29 Fulcrum"
+			type = small_plane_airframe_2
+			parent_version = 0
+			modules = {
+				fixed_main_weapon_slot = weap_a2a_hardpoint_1
+				fixed_gun_slot = weap_multi_gun_3
+				fixed_auxiliary_weapon_slot_1 = weap_mp_light_hardpoint_1
+				engine_type_slot = engine_light_double_2
+				avionics_type_slot = avionics_manned_2
+				wingform_type_slot = wing_swept
+				special_slot_type_1 = spec_countermeasures_1
+			}
+			obsolete = yes
+			icon = "gfx/interface/technologies/SOV/AIR/MR2.dds"
+			model = "SOV_small_plane_airframe_2_entity"
+		}
+		ai_chance = {
+			base = 5
+		}
+	}
+}
+#Slovak Sweden Planes Purchase
+country_event = {
+	id = slo_army.2
+	title = slo_army.2.t
+	desc = slo_army.2.d
+	picture = GFX_hun_sweden_plane_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_army.2.a
+		log = "[GetDateText]: [This.GetName]: slo_army.2.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SWE }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		SWE = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+		}
+		SLO = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			country_event = slo_army.3
+		}
+		SWE = {
+			add_equipment_to_stockpile = {
+				type = small_plane_strike_airframe_1
+				variant_name = "Sk-60"
+				amount = -20
+				producer = SWE
+			}
+		}
+		SLO = {
+			add_equipment_to_stockpile = {
+				type = small_plane_strike_airframe_1
+				variant_name = "Sk-60"
+				amount = 20
+				producer = SWE
+			}
+		}
+	}
+	option = {
+		name = slo_army.2.b
+		log = "[GetDateText]: [This.GetName]: slo_army.2.b executed"
+		SLO = { country_event = slo_army.4 }
+	}
+}
+#Slovak Sweden Planes Purchase Accept
+country_event = {
+	id = slo_army.3
+	title = slo_army.3.t
+	desc = slo_army.3.d
+	picture = GFX_hun_sweden_plane_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_army.3.a
+		log = "[GetDateText]: [This.GetName]: slo_army.3.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = small_plane_strike_airframe_1
+				variant_name = "Sk-60"
+				amount = 20
+				producer = SWE
+			}
+		}
+	}
+}
+#Slovak Sweden Planes Purchase Refuse
+country_event = {
+	id = slo_army.4
+	title = slo_army.4.t
+	desc = slo_army.4.d
+	picture = GFX_hun_sweden_plane_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_army.4.a
+		log = "[GetDateText]: [This.GetName]: slo_army.4.a executed"
+	}
+}
+#Investments
+country_event = {
+	id = slo_economy.1
+	title = slo_economy.1.t
+	desc = slo_economy.1.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = slo_economy.1.a
+		log = "[GetDateText]: [This.GetName]: slo_economy.1.a executed"
+		set_temp_variable = { treasury_change = -5.00 }
+		modify_treasury_effect = yes
+		set_temp_variable = { int_investment_change = 5.00 }
+		modify_international_investment_effect = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = recently_invest
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = recently_invest
+		}
+		SLO = {
+			set_temp_variable = { treasury_change = 5.00 }
+			modify_treasury_effect = yes
+			country_event = slo_economy.2
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_economy.1.b
+		log = "[GetDateText]: [This.GetName]: slo_economy.1.b executed"
+		SLO = { country_event = slo_economy.3 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Investments Agree
+country_event = {
+	id = slo_economy.2
+	title = slo_economy.2.t
+	desc = slo_economy.2.d
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+
+	option = {
+		name = slo_economy.2.a
+		log = "[GetDateText]: [This.GetName]: slo_economy.2.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = 5.00 }
+			modify_treasury_effect = yes
+		}
+	}
+}
+#Investments Refuse
+country_event = {
+	id = slo_economy.3
+	title = slo_economy.3.t
+	desc = slo_economy.3.d
+	picture = GFX_treaty_rejected
+	is_triggered_only = yes
+
+	option = {
+		name = slo_economy.3.a
+		log = "[GetDateText]: [This.GetName]: slo_economy.3.a executed"
+	}
+}
+#Russian oil
+country_event = {
+	id = slo_economy.4
+	title = slo_economy.4.t
+	desc = slo_economy.4.d
+	picture = GFX_SLO_russian_oil
+	is_triggered_only = yes
+
+	option = {
+		name = slo_economy.4.a
+		log = "[GetDateText]: [This.GetName]: slo_economy.4.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = 3.50 }
+		modify_treasury_effect = yes
+		add_opinion_modifier = {
+			target = SLO 
+			modifier = trade_mission
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO 
+			modifier = trade_mission
+		}
+		SLO = {
+			add_ideas = SLO_russian_oil
+			set_temp_variable = { treasury_change = -3.50 }
+			modify_treasury_effect = yes
+			country_event = slo_economy.5	
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_economy.4.b
+		log = "[GetDateText]: [This.GetName]: slo_economy.4.b executed"
+		SLO = {
+			country_event = slo_economy.6
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Russian oil accept
+country_event = {
+	id = slo_economy.5
+	title = slo_economy.5.t
+	desc = slo_economy.5.d
+	picture = GFX_SLO_russian_oil
+	is_triggered_only = yes
+
+	option = {
+		name = slo_economy.5.a
+		log = "[GetDateText]: [This.GetName]: slo_economy.5.a executed"
+		effect_tooltip = {
+			add_ideas = SLO_russian_oil
+			set_temp_variable = { treasury_change = -3.50 }
+			modify_treasury_effect = yes
+			add_opinion_modifier = {
+				target = SOV
+				modifier = trade_mission
+			}
+			reverse_add_opinion_modifier = {
+				target = SOV
+				modifier = trade_mission
+			}	
+		}
+	}
+}
+#Russian oil refuse
+country_event = {
+	id = slo_economy.6
+	title = slo_economy.6.t
+	desc = slo_economy.6.d
+	picture = GFX_SLO_russian_oil
+	is_triggered_only = yes
+
+	option = {
+		name = slo_economy.6.a
+		log = "[GetDateText]: [This.GetName]: slo_economy.6.a executed"
+	}
+}
+#EU question
+country_event = {
+	id = slo_foreign.1
+	title = slo_foreign.1.t
+	desc = slo_foreign.1.d
+	picture = GFX_european_union_flag
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.1.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.1.a executed"
+		leaving_EU = yes
+	}
+	option = {
+		name = slo_foreign.1.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.1.b executed"
+		set_temp_variable = { modify_eurosceptic = -0.03 }
+		EU_eurosceptic_change = yes
+		set_temp_variable = { modify_eurosceptic = -0.05 }
+		set_temp_variable = { modify_eurosceptic_target = SLO }
+		eurosceptic_change = yes
+	}
+}
+#Visit to Minsk
+country_event = {
+	id = slo_foreign.2
+	title = slo_foreign.2.t
+	desc = slo_foreign.2.d
+	picture = GFX_SLO_belarus_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.2.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.2.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = BLR }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = BLR }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		set_temp_variable = { receiver_nation = BLR.id }
+		set_temp_variable = { sender_nation = SLO.id }
+		set_improved_trade_agreement = yes
+		give_military_access = SLO
+		give_guarantee = SLO
+		SLO = {
+			give_guarantee = BLR
+			country_event = slo_foreign.3
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.2.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.2.b executed"
+		SLO = {
+			country_event = slo_foreign.4
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Visit to Minsk Accept
+country_event = {
+	id = slo_foreign.3
+	title = slo_foreign.3.t
+	desc = slo_foreign.3.d
+	picture = GFX_SLO_belarus_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.3.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.3.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = SLO }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = BLR }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			set_temp_variable = { receiver_nation = BLR.id }
+			set_temp_variable = { sender_nation = SLO.id }
+			set_improved_trade_agreement = yes
+			give_military_access = BLR
+			give_guarantee = BLR
+			BLR = {
+				give_guarantee = SLO
+			}
+		}
+	}
+}
+#Visit to Minsk Refuse
+country_event = {
+	id = slo_foreign.4
+	title = slo_foreign.4.t
+	desc = slo_foreign.4.d
+	picture = GFX_SLO_belarus_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.4.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.4.a executed"
+	}
+}
+#Cooperation with China
+country_event = {
+	id = slo_foreign.5
+	title = slo_foreign.5.t
+	desc = slo_foreign.5.d
+	picture = GFX_SLO_china_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.5.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.5.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = CHI }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = CHI }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = CHI.id }
+		set_temp_variable = { sender_nation = SLO.id }
+		set_improved_trade_agreement = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		SLO = {
+			country_event = slo_foreign.6
+			add_ideas = SLO_chinese_invest
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.5.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.5.b executed"
+		SLO = {
+			country_event = slo_foreign.7
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Cooperation with China Accept
+country_event = {
+	id = slo_foreign.6
+	title = slo_foreign.6.t
+	desc = slo_foreign.6.d
+	picture = GFX_SLO_china_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.6.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.6.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = SLO }
+			set_temp_variable = { influence_target = CHI }
+			change_influence_percentage = yes
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = CHI }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			set_temp_variable = { receiver_nation = CHI.id }
+			set_temp_variable = { sender_nation = SLO.id }
+			set_improved_trade_agreement = yes
+			add_opinion_modifier = {
+				target = CHI
+				modifier = slovakia_diplomatic_partnership
+			}
+			reverse_add_opinion_modifier = {
+				target = CHI
+				modifier = slovakia_diplomatic_partnership
+			}
+			add_ideas = SLO_chinese_invest
+		}
+	}
+}
+#Cooperation with China Refuse
+country_event = {
+	id = slo_foreign.7
+	title = slo_foreign.7.t
+	desc = slo_foreign.7.d
+	picture = GFX_SLO_china_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.7.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.7.a executed"
+	}
+}
+#Chinese Planes Purchase
+country_event = {
+	id = slo_foreign.8
+	title = slo_foreign.8.t
+	desc = slo_foreign.8.d
+	picture = GFX_hun_sweden_plane_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.8.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.8.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = CHI }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		CHI = {
+			set_temp_variable = { treasury_change = 7 }
+			modify_treasury_effect = yes
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = -7 }
+			modify_treasury_effect = yes
+			country_event = slo_foreign.9
+		}
+		CHI = {
+			add_equipment_to_stockpile = {
+				type = small_plane_strike_airframe_1
+				variant_name = "J-7III"
+				amount = -20
+				producer = CHI
+			}
+		}
+		HUN = {
+			add_equipment_to_stockpile = {
+				type = small_plane_strike_airframe_1
+				variant_name = "J-7III"
+				amount = 20
+				producer = CHI
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.8.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.8.b executed"
+		HUN = { country_event = slo_foreign.10 }
+	}
+}
+#Chinese Planes Purchase
+country_event = {
+	id = slo_foreign.9
+	title = slo_foreign.9.t
+	desc = slo_foreign.9.d
+	picture = GFX_hun_sweden_plane_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.9.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.9.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -7 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = small_plane_strike_airframe_1
+				variant_name = "J-7III"
+				amount = 20
+				producer = SWE
+			}
+		}
+	}
+}
+#Chinese Planes Purchase
+country_event = {
+	id = slo_foreign.10
+	title = slo_foreign.10.t
+	desc = slo_foreign.10.d
+	picture = GFX_hun_sweden_plane_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.10.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.10.a executed"
+	}
+}
+#Purchase Russian armored vehicles
+country_event = {
+	id = slo_foreign.11
+	title = slo_foreign.11.t
+	desc = slo_foreign.11.d
+	picture = GFX_hun_t72_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.11.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.11.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		SOV = {
+			set_temp_variable = { treasury_change = 10 }
+			modify_treasury_effect = yes
+		}
+		SLO = {
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			country_event = slo_foreign.12
+		}
+		SOV = {
+			add_equipment_to_stockpile = {
+				amount = -10
+				type = medium_tank_amphibious_chassis
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				amount = -10
+				type = medium_tank_flame_chassis
+				producer = SOV
+			}
+		}
+		SLO = {
+			add_equipment_to_stockpile = {
+				amount = 10
+				type = medium_tank_flame_chassis
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				amount = 10
+				type = medium_tank_amphibious_chassis
+				producer = SOV
+			}
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.11.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.11.b executed"
+		SLO = { country_event = slo_foreign.13 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Purchase Russian armored vehicles accept
+country_event = {
+	id = slo_foreign.12
+	title = slo_foreign.12.t
+	desc = slo_foreign.12.d
+	picture = GFX_hun_t72_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.12.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.12.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -7 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				amount = 10
+				type = medium_tank_flame_chassis
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				amount = 10
+				type = medium_tank_amphibious_chassis
+				producer = SOV
+			}
+		}
+	}
+}
+#Purchase Russian armored vehicles refuse
+country_event = {
+	id = slo_foreign.13
+	title = slo_foreign.13.t
+	desc = slo_foreign.13.d
+	picture = GFX_hun_t72_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.13.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.13.a executed"
+	}
+}
+#Purchase Iranian missiles
+country_event = {
+	id = slo_foreign.14
+	title = slo_foreign.14.t
+	desc = slo_foreign.14.d
+	picture = GFX_SLO_iranian_missiles_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.14.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.14.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = PER }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		PER = {
+			set_temp_variable = { treasury_change = 10 }
+			modify_treasury_effect = yes
+		}
+		SLO = {
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			country_event = slo_foreign.15
+		}
+		PER = {
+			add_equipment_to_stockpile = {
+				type = guided_missile_equipment_4
+				amount = -50
+				producer = PER
+			}
+		}
+		SLO = {
+			add_equipment_to_stockpile = {
+				type = guided_missile_equipment_4
+				amount = 50
+				producer = PER
+			}
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = rocket_site
+					level = 2
+				}
+			}
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = hungary_army.14.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.14.b executed"
+		SLO = { country_event = slo_foreign.16 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Purchase Russian armored vehicles accept
+country_event = {
+	id = slo_foreign.15
+	title = slo_foreign.15.t
+	desc = slo_foreign.15.d
+	picture = GFX_SLO_iranian_missiles_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.15.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.15.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = guided_missile_equipment_4
+				amount = 50
+				producer = PER
+			}
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = rocket_site
+					level = 2
+				}
+			}
+		}
+	}
+}
+#Purchase Russian armored vehicles refuse
+country_event = {
+	id = slo_foreign.16
+	title = slo_foreign.16.t
+	desc = slo_foreign.16.d
+	picture = GFX_SLO_iranian_missiles_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.16.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.16.a executed"
+	}
+}
+#The issue of the Transnistrian conflict
+country_event = {
+	id = slo_foreign.17
+	title = slo_foreign.17.t
+	desc = slo_foreign.17.d
+	picture = GFX_transnistria_map
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.17.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.16.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = MLV }
+		change_influence_percentage = yes
+		MLV = {
+			add_ideas = SLO_support_us
+			add_opinion_modifier = {
+				target = SLO
+				modifier = slovakia_support_us
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.17.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.16.b executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = PMR }
+		change_influence_percentage = yes
+		PMR = {
+			add_ideas = SLO_support_us
+			add_opinion_modifier = {
+				target = SLO
+				modifier = slovakia_support_us
+			}
+		}
+	}
+}
+#Buy out Transcarpathia
+country_event = {
+	id = slo_foreign.18
+	title = slo_foreign.18.t
+	desc = slo_foreign.18.d
+	picture = GFX_transnistria_map
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.18.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.18.a executed"
+		set_temp_variable = { treasury_change = 25 }
+		modify_treasury_effect = yes
+		SLO = {
+			country_event = slo_foreign.19
+			set_temp_variable = { treasury_change = -25 }
+			modify_treasury_effect = yes
+			701 = {
+				transfer_state_to = SLO
+				add_core_of = SLO
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.18.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.18.b executed"
+		SLO = {
+			country_event = slo_foreign.20
+			701 = {
+				add_claim_by = SLO
+			}
+		}
+	}
+}
+#Buy out Transcarpathia accept
+country_event = {
+	id = slo_foreign.19
+	title = slo_foreign.19.t
+	desc = slo_foreign.19.d
+	picture = GFX_transnistria_map
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.19.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.20.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -25 }
+			modify_treasury_effect = yes
+			701 = {
+				set_state_owner_to = SLO
+				add_core_of = SLO
+			}
+		}
+	}
+}
+#Buy out Transcarpathia refuse
+country_event = {
+	id = slo_foreign.20
+	title = slo_foreign.20.t
+	desc = slo_foreign.20.d
+	picture = GFX_transnistria_map
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.20.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.20.a executed"
+	}
+}
+#Cooperation with Korea
+country_event = {
+	id = slo_foreign.21
+	title = slo_foreign.21.t
+	desc = slo_foreign.21.d
+	picture = GFX_SLO_korea_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.21.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.21.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = KOR }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = KOR }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = KOR.id }
+		set_temp_variable = { sender_nation = SLO.id }
+		set_improved_trade_agreement = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		SLO = {
+			country_event = slo_foreign.22
+			add_ideas = SLO_korean_invest
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.5.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.5.b executed"
+		SLO = {
+			country_event = slo_foreign.23
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Cooperation with Korea Accept
+country_event = {
+	id = slo_foreign.22
+	title = slo_foreign.22.t
+	desc = slo_foreign.22.d
+	picture = GFX_SLO_korea_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.22.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.22.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = SLO }
+			set_temp_variable = { influence_target = KOR }
+			change_influence_percentage = yes
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = KOR }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			set_temp_variable = { receiver_nation = KOR.id }
+			set_temp_variable = { sender_nation = SLO.id }
+			set_improved_trade_agreement = yes
+			add_opinion_modifier = {
+				target = KOR
+				modifier = slovakia_diplomatic_partnership
+			}
+			reverse_add_opinion_modifier = {
+				target = KOR
+				modifier = slovakia_diplomatic_partnership
+			}
+			add_ideas = SLO_korean_invest
+		}
+	}
+}
+#Cooperation with Korea Refuse
+country_event = {
+	id = slo_foreign.23
+	title = slo_foreign.23.t
+	desc = slo_foreign.23.d
+	picture = GFX_SLO_korea_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.23.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.23.a executed"
+	}
+}
+#Purchase German Tanks
+country_event = {
+	id = slo_foreign.24
+	title = slo_foreign.24.t
+	desc = slo_foreign.24.d
+	picture = GFX_hun_german_tanks_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.24.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.24.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = GER }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		GER = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+		}
+		SLO = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			country_event = slo_foreign.25
+		}
+		GER = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "Leopard 2A4"
+				amount = -50
+				producer = GER
+			}
+		}
+		SLO = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "Leopard 2A4"
+				amount = 50
+				producer = GER
+			}
+			
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.24.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.24.b executed"
+		SLO = { country_event = slo_foreign.26 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Purchase German Tanks accept
+country_event = {
+	id = slo_foreign.25
+	title = slo_foreign.25.t
+	desc = slo_foreign.25.d
+	picture = GFX_hun_german_tanks_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.25.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.25.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "Leopard 2A4"
+				amount = 50
+				producer = GER
+			}
+		}
+	}
+}
+#Purchase German Tanks refuse
+country_event = {
+	id = slo_foreign.26
+	title = slo_foreign.26.t
+	desc = slo_foreign.26.d
+	picture = GFX_hun_german_tanks_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.26.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.26.a executed"
+	}
+}
+#Visit to Budapest
+country_event = {
+	id = slo_foreign.27
+	title = slo_foreign.27.t
+	desc = slo_foreign.27.d
+	picture = GFX_SLO_hungary_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.27.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.27.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		set_temp_variable = { receiver_nation = HUN.id }
+		set_temp_variable = { sender_nation = SLO.id }
+		set_improved_trade_agreement = yes
+		give_military_access = SLO
+		give_guarantee = SLO
+		SLO = {
+			give_guarantee = HUN
+			country_event = slo_foreign.28
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.27.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.27.b executed"
+		SLO = {
+			country_event = slo_foreign.29
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Visit to Budapest Accept
+country_event = {
+	id = slo_foreign.28
+	title = slo_foreign.28.t
+	desc = slo_foreign.28.d
+	picture = GFX_SLO_hungary_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.28.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.28.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = SLO }
+			set_temp_variable = { influence_target = HUN }
+			change_influence_percentage = yes
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			set_temp_variable = { receiver_nation = HUN.id }
+			set_temp_variable = { sender_nation = SLO.id }
+			set_improved_trade_agreement = yes
+			give_military_access = HUN
+			give_guarantee = HUN
+			HUN = {
+				give_guarantee = SLO
+			}
+		}
+	}
+}
+#Visit to Budapest Refuse
+country_event = {
+	id = slo_foreign.29
+	title = slo_foreign.29.t
+	desc = slo_foreign.29.d
+	picture = GFX_SLO_hungary_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.29.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.29.a executed"
+	}
+}
+#Purchase Polish Tanks
+country_event = {
+	id = slo_foreign.30
+	title = slo_foreign.30.t
+	desc = slo_foreign.30.d
+	picture = GFX_pt_91_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.30.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.30.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = POL }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		POL = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+		}
+		SLO = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			country_event = slo_foreign.31
+		}
+		POL = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "PT-91"
+				amount = -50
+				producer = POL
+			}
+		}
+		SLO = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "PT-91"
+				amount = 50
+				producer = POL
+			}
+			
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.30.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.30.b executed"
+		SLO = { country_event = slo_foreign.32 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Purchase German Tanks accept
+country_event = {
+	id = slo_foreign.31
+	title = slo_foreign.31.t
+	desc = slo_foreign.31.d
+	picture = GFX_pt_91_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.31.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.31.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "PT-91"
+				amount = 50
+				producer = POL
+			}
+		}
+	}
+}
+#Purchase German Tanks refuse
+country_event = {
+	id = slo_foreign.32
+	title = slo_foreign.32.t
+	desc = slo_foreign.32.d
+	picture = GFX_pt_91_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.32.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.32.a executed"
+	}
+}
+#Visit to Czech
+country_event = {
+	id = slo_foreign.33
+	title = slo_foreign.33.t
+	desc = slo_foreign.33.d
+	picture = GFX_SLO_czech_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.33.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.33.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = CZE }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = CZE }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		set_temp_variable = { receiver_nation = CZE.id }
+		set_temp_variable = { sender_nation = SLO.id }
+		set_improved_trade_agreement = yes
+		give_military_access = SLO
+		give_guarantee = SLO
+		SLO = {
+			give_guarantee = CZE
+			country_event = slo_foreign.34
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.33.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.33.b executed"
+		SLO = {
+			country_event = slo_foreign.35
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Visit to Czech Accept
+country_event = {
+	id = slo_foreign.34
+	title = slo_foreign.34.t
+	desc = slo_foreign.34.d
+	picture = GFX_SLO_czech_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.34.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.34.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = SLO }
+			set_temp_variable = { influence_target = CZE }
+			change_influence_percentage = yes
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = CZE }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			set_temp_variable = { receiver_nation = CZE.id }
+			set_temp_variable = { sender_nation = SLO.id }
+			set_improved_trade_agreement = yes
+			give_military_access = CZE
+			give_guarantee = CZE
+			CZE = {
+				give_guarantee = SLO
+			}
+		}
+	}
+}
+#Visit to Czech Refuse
+country_event = {
+	id = slo_foreign.35
+	title = slo_foreign.35.t
+	desc = slo_foreign.35.d
+	picture = GFX_SLO_czech_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.35.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.35.a executed"
+	}
+}
+#Retern Czechoslovakia
+country_event = {
+	id = slo_foreign.36
+	title = slo_foreign.36.t
+	desc = slo_foreign.36.d
+	picture = GFX_SLO_czech_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.36.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.36.a executed"
+		every_unit_leader = { set_nationality = SLO	}
+		SLO = {
+			add_to_variable = { treasury = CZE.treasury }
+			clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+			add_to_variable = { debt = CZE.debt }
+	   		clamp_variable = { var = debt min = 0 max = 1000000 }
+			add_to_variable = { int_investments = CZE.int_investments }
+    		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+			annex_country = {
+				target = CZE
+				transfer_troops = yes
+			}
+			if = {
+				limit = {
+					OR = {
+						emerging_communist_state_are_in_power = yes
+						neutrality_Neutral_Communism_are_in_power = yes
+					}
+				}
+				set_cosmetic_tag = CZE_SLO_czechoslovakia_commi
+			}
+			else = {
+				set_cosmetic_tag = CZE_SLO_czechoslovakia
+			}
+			118 = {
+				add_core_of = SLO
+			}
+			1018 = {
+				add_core_of = SLO
+			}
+			117 = {
+				add_core_of = SLO
+			}
+			1017 = {
+				add_core_of = SLO
+			}
+		}
+		news_event = slo_foreign.38
+	}
+	option = {
+		name = slo_foreign.36.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.36.b executed"
+		SLO = {
+			country_event = slo_foreign.37
+		}
+	}
+}
+#Retern Czechoslovakia Refuse
+country_event = {
+	id = slo_foreign.37
+	title = slo_foreign.37.t
+	desc = slo_foreign.37.d
+	picture = GFX_SLO_czech_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.37.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.37.a executed"
+		if = {
+			limit = { is_ai = no }
+			create_wargoal = {
+				target = CZE
+				type = annex_everything
+			}
+		}
+		hidden_effect = {
+			set_country_flag = special_czechoslovak_operation_avaliable
+		}
+		118 = {
+			add_core_of = SLO
+		}
+		1018 = {
+			add_core_of = SLO
+		}
+		117 = {
+			add_core_of = SLO
+		}
+		1017 = {
+			add_core_of = SLO
+		}
+	}
+}
+#Retern Czechoslovakia News
+news_event = {
+	id = slo_foreign.38
+	title = slo_foreign.38.t
+	desc = slo_foreign.38.d
+	picture = GFX_czechoslovakia_news
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = slo_foreign.38.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.37.a executed"
+	}
+}
+#Ultimatum Transcarpathia
+country_event = {
+	id = slo_foreign.39
+	title = slo_foreign.39.t
+	desc = slo_foreign.39.d
+	picture = GFX_transnistria_map
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.39.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.39.a executed"
+		set_temp_variable = { treasury_change = 25 }
+		modify_treasury_effect = yes
+		SLO = {
+			country_event = slo_foreign.40
+			set_temp_variable = { treasury_change = -25 }
+			modify_treasury_effect = yes
+			701 = {
+				transfer_state_to = SLO
+				add_core_of = SLO
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.39.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.39.b executed"
+		SLO = {
+			country_event = slo_foreign.41
+			701 = {
+				add_claim_by = SLO
+			}
+		}
+	}
+}
+#Ultimatum Transcarpathia accept
+country_event = {
+	id = slo_foreign.40
+	title = slo_foreign.40.t
+	desc = slo_foreign.40.d
+	picture = GFX_transnistria_map
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.40.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.40.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -25 }
+			modify_treasury_effect = yes
+			701 = {
+				set_state_owner_to = SLO
+				add_core_of = SLO
+			}
+		}
+	}
+}
+#Ultimatum Transcarpathia refuse
+country_event = {
+	id = slo_foreign.41
+	title = slo_foreign.41.t
+	desc = slo_foreign.41.d
+	picture = GFX_transnistria_map
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.41.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.41.a executed"
+		create_wargoal = {
+			type = take_state_focus
+			target = FROM
+			generator = { 701 }
+		}
+	}
+}
+
+
+#Slovak Spring Reborn
+country_event = {
+	id = slo_foreign.42
+	title = slo_foreign.42.t
+	desc = slo_foreign.42.d
+	picture = GFX_slo_event_russia
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.42.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.42.a executed"
+		SLO = {
+			country_event = slo_foreign.43
+			add_ideas = SLO_russia_surropt_idea
+		}
+		
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.42.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.42.b executed"
+		SLO = {
+			country_event = slo_foreign.44
+		}
+
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Russia Agree
+country_event = {
+	id = slo_foreign.43
+	title = slo_foreign.43.t
+	desc = slo_foreign.43.d
+	picture = GFX_slo_event_russia
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.43.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.43.a executed"
+		every_other_country = {
+			limit = { 
+				has_idea = EU_member
+				NOT = { is_in_faction_with = SLO }
+			}
+			add_opinion_modifier = { target = ROOT modifier = medium_decrease }
+			reverse_add_opinion_modifier = { target = ROOT modifier = medium_decrease }
+		}
+
+	}
+}
+#Russia Disagree
+country_event = {
+	id = slo_foreign.44
+	title = slo_foreign.44.t
+	desc = slo_foreign.44.d
+	picture = GFX_slo_event_russia
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.44.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.44.a executed"
+
+	}
+}
+#Tatra Brotherhood
+country_event = {
+	id = slo_foreign.45
+	title = slo_foreign.45.t
+	desc = slo_foreign.45.d
+	picture = GFX_slo_event_russia
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.45.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.45.a executed"
+		SLO = {
+			country_event = slo_foreign.43
+			set_temp_variable = { treasury_change = 15.25 }
+			modify_treasury_effect = yes
+		}
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = -15.25 }
+		modify_treasury_effect = yes
+		
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.45.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.45.b executed"
+		SLO = {
+			country_event = slo_foreign.44
+		}
+
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Russian Bases
+country_event = {
+	id = slo_foreign.46
+	title = slo_foreign.46.t
+	desc = slo_foreign.46.d
+	picture = GFX_slo_event_russia
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.46.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.46.a executed"
+		SLO = {
+			country_event = slo_foreign.43
+			diplomatic_relation = {
+				country = SOV
+				relation = military_access
+				active = yes
+			}
+			if = {
+				limit = { 
+					NOT = { has_idea = SLO_russia_surropt_idea } 
+				}
+				add_ideas = SLO_russia_surropt_idea1
+			}
+			else = {
+				swap_ideas = {
+					remove_idea = SLO_russia_surropt_idea
+					add_idea = SLO_russia_surropt_idea1
+				}
+			}
+		}
+		set_temp_variable = { percent_change = 6 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.46.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.46.b executed"
+		SLO = {
+			country_event = slo_foreign.44
+		}
+
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Russian Union State
+country_event = {
+	id = slo_foreign.47
+	title = slo_foreign.47.t
+	desc = slo_foreign.47.d
+	picture = GFX_slo_event_russia
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.47.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.47.a executed"
+		SLO = {
+			country_event = slo_foreign.43
+			set_country_flag = BLR_unionstate_agree
+			add_ideas = USR_eternal_commitie_idea
+			add_ideas = USR_money_palata_idea
+			add_ideas = USR_council_ministers_idea
+			add_ideas = USR_gos_sovet_idea
+			add_ideas = USR_parlament_idea
+		}
+		SOV = { 
+			set_autonomy = {
+				target = SLO
+				autonomous_state = autonomy_union_state	
+			}
+		}
+		hidden_effect = {
+			news_event = {
+				hours = 6
+				id = union_state_news.7
+			}
+		}
+		
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.47.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.47.b executed"
+		SLO = {
+			country_event = slo_foreign.44
+		}
+
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Iran Cooperation
+country_event = {
+	id = slo_foreign.48
+	title = slo_foreign.48.t
+	desc = slo_foreign.48.d
+	picture = GFX_slo_event_cooperation_iran
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.48.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.48.a executed"
+		SLO = {
+			country_event = slo_foreign.49
+			add_ideas = PER_SLO_cooperation1_idea
+		}
+		add_ideas = PER_SLO_cooperation_idea
+		
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.48.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.48.b executed"
+		SLO = {
+			country_event = slo_foreign.50
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Iran Agree
+country_event = {
+	id = slo_foreign.49
+	title = slo_foreign.49.t
+	desc = slo_foreign.49.d
+	picture = GFX_slo_event_cooperation_iran
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.49.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.49.a executed"
+		every_other_country = {
+			limit = { 
+				has_idea = EU_member
+				NOT = { is_in_faction_with = SLO }
+			}
+			add_opinion_modifier = { target = ROOT modifier = medium_decrease }
+			reverse_add_opinion_modifier = { target = ROOT modifier = medium_decrease }
+		}
+	}
+}
+#Iran Disagree
+country_event = {
+	id = slo_foreign.50
+	title = slo_foreign.50.t
+	desc = slo_foreign.50.d
+	picture = GFX_slo_event_cooperation_iran
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.50.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.50.a executed"
+
+	}
+}
+
+#Iran Drones
+country_event = {
+	id = slo_foreign.51
+	title = slo_foreign.51.t
+	desc = slo_foreign.51.d
+	picture = GFX_slo_event_cooperation_iran
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.51.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.51.a executed"
+		SLO = {
+			country_event = slo_foreign.49
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = small_plane_suicide_airframe_2
+				amount = 500
+				producer = PER
+			}
+		}
+		set_temp_variable = { treasury_change = 10 }
+		modify_treasury_effect = yes
+		add_equipment_to_stockpile = {
+			type = small_plane_suicide_airframe_2
+			amount = -500
+			producer = PER
+		}
+		
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.51.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.51.b executed"
+		SLO = {
+			country_event = slo_foreign.50
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Russian Gas
+country_event = {
+	id = slo_foreign.52
+	title = slo_foreign.52.t
+	desc = slo_foreign.52.d
+	picture = GFX_slo_event_russia
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.52.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.52.a executed"
+		SLO = {
+			set_country_flag = SOV_gazprom_mechanic_slovakia_stream
+			country_event = slo_foreign.43
+			add_ideas = SLO_oil_russian_idea
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.52.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.52.b executed"
+		SLO = {
+			country_event = slo_foreign.44
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Iran Arms
+country_event = {
+	id = slo_foreign.53
+	title = slo_foreign.53.t
+	desc = slo_foreign.53.d
+	picture = GFX_slo_event_cooperation_iran
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.53.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.53.a executed"
+		SLO = {
+			set_temp_variable = { treasury_change = -6 }
+			modify_treasury_effect = yes
+			set_country_flag = PER_nuclear_cooperation_slovakia
+			country_event = slo_foreign.49
+			add_ideas = PER_SLO_nuclear_cooperation_idea
+		}
+		set_temp_variable = { treasury_change = 6 }
+		modify_treasury_effect = yes
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.53.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.53.b executed"
+		SLO = {
+			country_event = slo_foreign.50
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Ukraine Cooperation
+country_event = {
+	id = slo_foreign.54
+	title = slo_foreign.54.t
+	desc = slo_foreign.54.d
+	picture = GFX_event_slovak_ukraine
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.54.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.54.a executed"
+		SLO = {
+			country_event = slo_foreign.55
+			add_ideas = UKR_SLO_cooperation1_idea
+		}
+		add_ideas = UKR_SLO_cooperation_idea
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.54.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.54.b executed"
+		SLO = {
+			country_event = slo_foreign.56
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+
+#Ukraine Agree
+country_event = {
+	id = slo_foreign.55
+	title = slo_foreign.55.t
+	desc = slo_foreign.55.d
+	picture = GFX_event_slovak_ukraine
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.55.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.55.a executed"
+		add_opinion_modifier = { target = SOV modifier = medium_decrease }
+		reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+	}
+}
+#Ukraine  Disagree
+country_event = {
+	id = slo_foreign.56
+	title = slo_foreign.56.t
+	desc = slo_foreign.56.d
+	picture = GFX_event_slovak_ukraine
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.56.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.56.a executed"
+
+	}
+}
+
+#Ukraine Guarantee
+country_event = {
+	id = slo_foreign.57
+	title = slo_foreign.57.t
+	desc = slo_foreign.57.d
+	picture = GFX_event_slovak_ukraine
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.57.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.57.a executed"
+		SLO = {
+			country_event = slo_foreign.55
+			give_guarantee = UKR
+		}
+		give_guarantee = SLO
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.57.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.57.b executed"
+		SLO = {
+			country_event = slo_foreign.56
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Poland Energy
+country_event = {
+	id = slo_foreign.58
+	title = slo_foreign.58.t
+	desc = slo_foreign.58.d
+	picture = GFX_slo_event_with_poland
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.58.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.58.a executed"
+		SLO = {
+			country_event = slo_foreign.59
+			add_ideas = SLO_oil_polish_idea
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.58.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.58.b executed"
+		SLO = {
+			country_event = slo_foreign.60
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Poland Agree
+country_event = {
+	id = slo_foreign.59
+	title = slo_foreign.59.t
+	desc = slo_foreign.59.d
+	picture = GFX_slo_event_with_poland
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.59.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.59.a executed"
+		add_opinion_modifier = { target = SOV modifier = medium_decrease }
+		reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+	}
+}
+#Poland Disagree
+country_event = {
+	id = slo_foreign.60
+	title = slo_foreign.60.t
+	desc = slo_foreign.60.d
+	picture = GFX_slo_event_with_poland
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.60.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.60.a executed"
+
+	}
+}
+
+#Defence with Hungary
+country_event = {
+	id = slo_foreign.61
+	title = slo_foreign.61.t
+	desc = slo_foreign.61.d
+	picture = GFX_slo_event_with_poland
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.61.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.61.a executed"
+		SLO = {
+			country_event = slo_foreign.62
+			give_guarantee = HUN
+		}
+		give_guarantee = SLO
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.61.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.61.b executed"
+		SLO = {
+			country_event = slo_foreign.63
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+
+#Hungary Agree
+country_event = {
+	id = slo_foreign.62
+	title = slo_foreign.62.t
+	desc = slo_foreign.62.d
+	picture = GFX_slo_event_hungary
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.62.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.62.a executed"
+		add_opinion_modifier = { target = POL modifier = medium_decrease }
+		reverse_add_opinion_modifier = { target = POL modifier = medium_decrease }
+	}
+}
+#Poland Disagree
+country_event = {
+	id = slo_foreign.63
+	title = slo_foreign.63.t
+	desc = slo_foreign.63.d
+	picture = GFX_slo_event_hungary
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.63.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.63.a executed"
+
+	}
+}
+#Hungary Guarantee
+country_event = {
+	id = slo_foreign.64
+	title = slo_foreign.64.t
+	desc = slo_foreign.64.d
+	picture = GFX_slo_event_hungary
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.64.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.64.a executed"
+		SLO = {
+			country_event = slo_foreign.65
+			give_guarantee = HUN
+		}
+		give_guarantee = SLO
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_foreign.64.b
+		log = "[GetDateText]: [This.GetName]: slo_foreign.64.b executed"
+		SLO = {
+			country_event = slo_foreign.66
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Hungary Agree
+country_event = {
+	id = slo_foreign.65
+	title = slo_foreign.65.t
+	desc = slo_foreign.65.d
+	picture = GFX_slo_event_hungary
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.65.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.65.a executed"
+		add_opinion_modifier = { target = SOV modifier = medium_decrease }
+		reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+	}
+}
+#Hungary Disagree
+country_event = {
+	id = slo_foreign.66
+	title = slo_foreign.66.t
+	desc = slo_foreign.66.d
+	picture = GFX_slo_event_hungary
+	is_triggered_only = yes
+
+	option = {
+		name = slo_foreign.66.a
+		log = "[GetDateText]: [This.GetName]: slo_foreign.66.a executed"
+	}
+}
+
+#Moving the embassy to Jerusalem
+country_event = {
+	id = slo_sns.1
+	title = slo_sns.1.t
+	desc = sslo_sns.1.d
+	picture = GFX_SLO_israel_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_sns.1.a
+		log = "[GetDateText]: [This.GetName]: slo_sns.1.a executed"
+	}
+}
+#Visit to Israel
+country_event = {
+	id = slo_sns.2
+	title = slo_sns.2.t
+	desc = slo_sns.2.d
+	picture = GFX_SLO_israel_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_sns.2.a
+		log = "[GetDateText]: [This.GetName]: slo_sns.2.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = ISR }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = ISR }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		set_temp_variable = { receiver_nation = ISR.id }
+		set_temp_variable = { sender_nation = SLO.id }
+		set_improved_trade_agreement = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		SLO = {
+			country_event = slo_sns.3
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_sns.2.b
+		log = "[GetDateText]: [This.GetName]: slo_sns.2.b executed"
+		SLO = {
+			country_event = slo_sns.4
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Visit to Israel Accept
+country_event = {
+	id = slo_sns.3
+	title = slo_sns.3.t
+	desc = slo_sns.3.d
+	picture = GFX_SLO_israel_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_sns.3.a
+		log = "[GetDateText]: [This.GetName]: slo_sns.3.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = SLO }
+			set_temp_variable = { influence_target = ISR }
+			change_influence_percentage = yes
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = ISR }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			set_temp_variable = { receiver_nation = ISR.id }
+			set_temp_variable = { sender_nation = SLO.id }
+			set_improved_trade_agreement = yes
+			add_opinion_modifier = {
+				target = ISR
+				modifier = slovakia_diplomatic_partnership
+			}
+			reverse_add_opinion_modifier = {
+				target = ISR
+				modifier = slovakia_diplomatic_partnership
+			}
+		}
+	}
+}
+#Visit to Israel Refuse
+country_event = {
+	id = slo_sns.4
+	title = slo_sns.4.t
+	desc = slo_sns.4.d
+	picture = GFX_SLO_israel_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_sns.4.a
+		log = "[GetDateText]: [This.GetName]: slo_sns.4.a executed"
+	}
+}
+#Chinese Guarantee
+country_event = {
+	id = slo_commi.1
+	title = slo_commi.1.t
+	desc = slo_commi.1.d
+	picture = GFX_SLO_china_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_commi.1.a
+		log = "[GetDateText]: [This.GetName]: slo_commi.1.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = CHI }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		give_military_access = SLO
+		give_guarantee = SLO
+		SLO = {
+			country_event = slo_commi.2
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_commi.1.b
+		log = "[GetDateText]: [This.GetName]: slo_commi.1.b executed"
+		SLO = {
+			country_event = slo_commi.3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#Chinese Guarantee Accept
+country_event = {
+	id = slo_commi.2
+	title = slo_commi.2.t
+	desc = slo_commi.2.d
+	picture = GFX_SLO_china_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_commi.2.a
+		log = "[GetDateText]: [This.GetName]: slo_commi.2.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = CHI }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			give_military_access = BLR
+			CHI = {
+				give_guarantee = SLO
+			}
+		}
+	}
+}
+#Chinese Guarantee Refuse
+country_event = {
+	id = slo_commi.3
+	title = slo_commi.3.t
+	desc = slo_commi.3.d
+	picture = GFX_SLO_china_slovakia_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_commi.3.a
+		log = "[GetDateText]: [This.GetName]: slo_commi.3.a executed"
+	}
+}
+#North Korean workers
+country_event = {
+	id = slo_commi.4
+	title = slo_commi.4.t
+	desc = slo_commi.4.d
+	picture = GFX_nko_workers_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_commi.1.a
+		log = "[GetDateText]: [This.GetName]: slo_commi.4.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = NKO }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		SLO = {
+			country_event = slo_commi.2
+			add_ideas = SLO_korean_workers_idea
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_commi.4.b
+		log = "[GetDateText]: [This.GetName]: slo_commi.4.b executed"
+		SLO = {
+			country_event = slo_commi.3
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value < 0
+				}
+				add = 100
+			}
+		}
+	}
+}
+#North Korean workers Accept
+country_event = {
+	id = slo_commi.5
+	title = slo_commi.5.t
+	desc = slo_commi.5.d
+	picture = GFX_nko_workers_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_commi.5.a
+		log = "[GetDateText]: [This.GetName]: slo_commi.5.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = NKO }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			add_ideas = SLO_korean_workers_idea
+		}
+	}
+}
+#North Korean workers Refuse
+country_event = {
+	id = slo_commi.6
+	title = slo_commi.6.t
+	desc = slo_commi.6.d
+	picture = GFX_nko_workers_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_commi.6.a
+		log = "[GetDateText]: [This.GetName]: slo_commi.6.a executed"
+	}
+}
+#the immigration issue
+country_event = {
+	id = slo_smer.1
+	title = slo_smer.1.t
+	desc = slo_smer.1.d
+	picture = GFX_migration_events
+	is_triggered_only = yes
+
+	option = {
+		name = slo_smer.1.a
+		log = "[GetDateText]: [This.GetName]: slo_smer.1.a executed"
+		increase_migration_law = yes
+	}
+	option = {
+		name = slo_smer.1.b
+		log = "[GetDateText]: [This.GetName]: slo_smer.1.b executed"
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = -0.05 }
+		set_temp_variable = { temp_outlook_increase = -0.05 }
+		add_relative_party_popularity = yes
+		add_ideas = SLO_migrants_in_workplace
+	}
+}
+#Liberals
+#Slovakia Joins OECD
+country_event = {
+	id = slo_liberals.0
+	title = slo_liberals.0.t
+	desc = slo_liberals.0.d
+	picture = GFX_oecd_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_liberals.0.a
+		log = "[GetDateText]: [This.GetName]: slo_liberals.0.a executed"
+		add_timed_idea = {
+			idea = SLO_oecd
+			days = 423
+		}
+	}
+}
+#US Steel-Slovakia Deal
+country_event = {
+	id = slo_liberals.1
+	title = slo_liberals.1.t
+	desc = slo_liberals.1.d
+	picture = GFX_ussteel_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_liberals.1.a
+		log = "[GetDateText]: [This.GetName]: slo_liberals.1.a executed"
+		120 = {
+			add_resource = {
+				type = steel
+				amount = 4
+			}
+		}
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = HUN }
+	}
+}
+#Investment Heaven
+country_event = {
+	id = slo_liberals.2
+	title = slo_liberals.2.t
+	desc = slo_liberals.2.d
+	picture = GFX_investemnt_heaven_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_liberals.2.a
+		log = "[GetDateText]: [This.GetName]: slo_liberals.2.a executed"
+		swap_ideas = {
+			remove_idea = landowners
+			add_idea = international_bankers
+		}
+		set_temp_variable = { temp_opinion = 10 }
+		change_international_bankers_opinion = yes
+	}
+}
+#PM Meets the NATO Secretary
+country_event = {
+	id = slo_liberals.3
+	title = slo_liberals.3.t
+	desc = slo_liberals.3.d
+	picture = GFX_slovakia_nato_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_liberals.3.a
+		log = "[GetDateText]: [This.GetName]: slo_liberals.3.a executed"
+		custom_effect_tooltip = TT_ALL_NATO_MEMBER_NATIONS_GAIN
+		effect_tooltip = {
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+		}
+		for_each_scope_loop = {
+			array = global.nato_members
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+		}
+	}
+}
+#PM Appoints Special Prosecutor
+country_event = {
+	id = slo_liberals.4
+	title = slo_liberals.4.t
+	desc = slo_liberals.4.d
+	picture = GFX_oligarch_slo_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_liberals.4.a
+		log = "[GetDateText]: [This.GetName]: slo_liberals.4.a executed"
+		add_ideas = SLO_prosecutor
+	}
+}
+#Slovakian Mirracle
+country_event = {
+	id = slo_liberals.5
+	title = slo_liberals.5.t
+	desc = slo_liberals.5.d
+	picture = GFX_slovakian_mirracle_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_liberals.5.a
+		log = "[GetDateText]: [This.GetName]: slo_liberals.5.a executed"
+		set_temp_variable = { party_index = 2 }
+		set_temp_variable = { party_popularity_increase = 0.04 }
+		set_temp_variable = { temp_outlook_increase = 0.04 }
+		add_relative_party_popularity = yes
+		add_stability = 0.05
+	}
+}
+#PM Meets the EU Officials
+country_event = {
+	id = slo_liberals.6
+	title = slo_liberals.6.t
+	desc = slo_liberals.6.d
+	picture = GFX_eu_slovak_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_liberals.6.a
+		log = "[GetDateText]: [This.GetName]: slo_liberals.6.a executed"
+		custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+		effect_tooltip = {
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+		}
+		for_each_scope_loop = {
+			array = global.EU_member
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+		}
+	}
+}
+#First Reform Package Approved
+country_event = {
+	id = slo_liberals.7
+	title = slo_liberals.7.t
+	desc = slo_liberals.7.d
+	picture = GFX_slovak_parliament_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_liberals.7.a
+		log = "[GetDateText]: [This.GetName]: slo_liberals.7.a executed"
+		set_temp_variable = { party_index = 2 }
+		set_temp_variable = { party_popularity_increase = 0.04 }
+		set_temp_variable = { temp_outlook_increase = 0.04 }
+		add_relative_party_popularity = yes
+		add_political_power = 200
+	}
+}
+#Oligarchs Swear Loyalty
+country_event = {
+	id = slo_mechair.0
+	title = slo_mechair.0.t
+	desc = slo_mechair.0.d
+	picture = GFX_oligarch_slo_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.0.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.0.a executed"
+		set_temp_variable = { temp_opinion = 10 }
+		change_oligarchs_opinion = yes
+	}
+}
+#President Gone Missing
+country_event = {
+	id = slo_mechair.1
+	title = slo_mechair.1.t
+	desc = slo_mechair.1.d
+	picture = GFX_oligarch_slo_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.1.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.1.a executed"
+		set_temp_variable = { party_index = 2 }
+		set_temp_variable = { party_popularity_increase = -0.04 }
+		set_temp_variable = { temp_outlook_increase = -0.04 }
+		add_relative_party_popularity = yes
+		add_political_power = 200
+	}
+}
+#New Slovakia
+country_event = {
+	id = slo_mechair.2
+	title = slo_mechair.2.t
+	desc = slo_mechair.2.d
+	picture = GFX_oligarch_slo_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.1.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.2.a executed"
+		add_ideas = SLO_presidential_republic
+		
+	}
+}
+#A Quite Morning in Bratislava
+country_event = {
+	id = slo_mechair.3
+	title = slo_mechair.3.t
+	desc = slo_mechair.3.d
+	picture = GFX_slovak_parliament_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.3.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.3.a executed"
+		increase_policing_budget = yes
+		set_temp_variable = { party_index = 1 }
+		set_temp_variable = { party_popularity_increase = -0.04 }
+		add_relative_party_popularity = yes
+		set_temp_variable = { party_index = 14 }
+		set_temp_variable = { party_popularity_increase = -0.06 }
+		add_relative_party_popularity = yes
+		set_temp_variable = { party_index = 16 }
+		set_temp_variable = { party_popularity_increase = -0.06 }
+		add_relative_party_popularity = yes
+		set_temp_variable = { party_index = 2 }
+		set_temp_variable = { party_popularity_increase = -0.04 }
+		set_temp_variable = { temp_outlook_increase = -0.1 }
+		add_relative_party_popularity = yes
+	}
+}
+#Slovakia Proposes an Economic Deal
+country_event = {
+	id = slo_mechair.4
+	title = slo_mechair.4.t
+	desc = slo_mechair.4.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.4.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.4.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = UKR }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = UKR }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = SLO.id }
+		set_temp_variable = { sender_nation = UKR.id }
+		set_improved_trade_agreement = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		SLO = {
+			country_event =  slo_mechair.5
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_mechair.4.b
+		log = "[GetDateText]: [This.GetName]: slo_mechair.4.b executed"
+		SLO = {
+			country_event =  slo_mechair.6
+		}
+	}
+}
+
+#Ukraine Signs the Deal
+country_event = {
+	id = slo_mechair.5
+	title = slo_mechair.5.t
+	desc = slo_mechair.5.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.5.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.5.a executed"
+		add_political_power = 20
+	}
+}
+#Ukraine Refuses to Cooperate
+country_event = {
+	id = slo_mechair.6
+	title = slo_mechair.6.t
+	desc = slo_mechair.6.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.6.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.6.a executed"
+		add_political_power = -20
+	}
+}
+#Slovakia Proposes an Economic Deal
+country_event = {
+	id = slo_mechair.7
+	title = slo_mechair.7.t
+	desc = slo_mechair.7.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.7.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.7.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = SOV }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = SLO.id }
+		set_temp_variable = { sender_nation = SOV.id }
+		set_improved_trade_agreement = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		SLO = {
+			country_event =  slo_mechair.8
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_mechair.7.b
+		log = "[GetDateText]: [This.GetName]: slo_mechair.7.b executed"
+		SLO = {
+			country_event =  slo_mechair.9
+		}
+	}
+}
+#Russia Signs the Deal
+country_event = {
+	id = slo_mechair.8
+	title = slo_mechair.8.t
+	desc = slo_mechair.8.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.8.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.8.a executed"
+		add_political_power = 20
+	}
+}
+#Russia Refuses to Cooperate
+country_event = {
+	id = slo_mechair.9
+	title = slo_mechair.9.t
+	desc = slo_mechair.9.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.9.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.9.a executed"
+		add_political_power = -20
+	}
+}
+#Slovakia Proposes an Economic Deal
+country_event = {
+	id = slo_mechair.10
+	title = slo_mechair.10.t
+	desc = slo_mechair.10.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.10.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.10.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SLO }
+		set_temp_variable = { influence_target = CHI }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = CHI }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = SLO.id }
+		set_temp_variable = { sender_nation = CHI.id }
+		set_improved_trade_agreement = yes
+		add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = SLO
+			modifier = slovakia_diplomatic_partnership
+		}
+		SLO = {
+			country_event =  slo_mechair.11
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_mechair.10.b
+		log = "[GetDateText]: [This.GetName]: slo_mechair.10.b executed"
+		SLO = {
+			country_event =  slo_mechair.12
+		}
+	}
+}
+#China Signs the Deal
+country_event = {
+	id = slo_mechair.11
+	title = slo_mechair.11.t
+	desc = slo_mechair.11.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.11.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.11.a executed"
+		set_temp_variable = { party_index = 2 }
+		set_temp_variable = { party_popularity_increase = 0.04 }
+		set_temp_variable = { temp_outlook_increase = 0.04 }
+		add_political_power = 200
+	}
+}
+#China Refuses to Cooperate
+country_event = {
+	id = slo_mechair.12
+	title = slo_mechair.12.t
+	desc = slo_mechair.12.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.12.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.12.a executed"
+		set_temp_variable = { party_index = 2 }
+		set_temp_variable = { party_popularity_increase = 0.04 }
+		set_temp_variable = { temp_outlook_increase = 0.04 }
+		add_political_power = 200
+	}
+}
+
+#Slovakia Propeses to Reboot the Relations
+country_event = {
+	id = slo_mechair.13
+	title = slo_mechair.13.t
+	desc = slo_mechair.13.d
+	picture = GFX_eu_slovak_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.10.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.13.a executed"
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = SLO }
+		change_influence_percentage = yes
+		SLO = {
+			country_event = slo_mechair.14
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				has_opinion = {
+					target = SLO
+					value > 20
+				}
+				add = 100
+			}
+		}
+	}
+	option = {
+		name = slo_mechair.13.b
+		log = "[GetDateText]: [This.GetName]: slo_mechair.13.b executed"
+		SLO = {
+			country_event = slo_mechair.15
+		}
+	}
+}
+#EU Agrees
+country_event = {
+	id = slo_mechair.14
+	title = slo_mechair.14.t
+	desc = slo_mechair.14.d
+	picture = GFX_eu_slovak_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.14.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.14.a executed"
+		custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+		effect_tooltip = {
+			add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+			reverse_add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+		}
+		for_each_scope_loop = {
+			array = global.EU_member
+			add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+			reverse_add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+		}
+		set_temp_variable = { modify_eurosceptic = -0.03 }
+		EU_eurosceptic_change = yes
+		set_temp_variable = { modify_eurosceptic = -0.05 }
+		set_temp_variable = { modify_eurosceptic_target = SLO }
+		eurosceptic_change = yes
+	}
+}
+#EU Refuses
+country_event = {
+	id = slo_mechair.15
+	title = slo_mechair.15.t
+	desc = slo_mechair.15.d
+	picture = GFX_eu_slovak_event
+	is_triggered_only = yes
+
+	option = {
+		name = slo_mechair.15.a
+		log = "[GetDateText]: [This.GetName]: slo_mechair.15.a executed"
+		custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+		effect_tooltip = {
+			add_opinion_modifier = { target = SLO modifier = slovakia_antieu }
+			reverse_add_opinion_modifier = { target = SLO modifier = slovakia_antieu }
+		}
+		for_each_scope_loop = {
+			array = global.EU_member
+			add_opinion_modifier = { target = SLO modifier = slovakia_antieu }
+			reverse_add_opinion_modifier = { target = SLO modifier = slovakia_antieu }
+		}
+		set_temp_variable = { modify_eurosceptic = 0.05 }
+		EU_eurosceptic_change = yes
+		set_temp_variable = { modify_eurosceptic = 0.05 }
+		set_temp_variable = { modify_eurosceptic_target = SLO }
+		eurosceptic_change = yes
+	}
+}

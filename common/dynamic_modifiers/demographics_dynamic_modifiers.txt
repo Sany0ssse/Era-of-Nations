@@ -1,0 +1,41 @@
+encourage_birth_dynamic_modifier = {
+    enable = { always = yes }
+    remove_trigger = {
+        NOT = { has_idea = encourage_birth }
+    }
+    monthly_population = encourage_birth_var
+}
+discourage_birth_dynamic_modifier = {
+    enable = { always = yes }
+    remove_trigger = {
+        NOT = { has_idea = discourage_birth }
+    }
+    monthly_population = discourage_birth_var
+}
+migrants_attraction = {
+    enable = { always = yes }
+	icon = GFX_idea_migration_regulation_light
+	state_monthly_population = 0.15
+}
+migrants_agreement_add = {
+    enable = { always = yes }
+	icon = GFX_idea_migration_regulation_light
+	base_migration_rate_value = migrants_add
+    remove_trigger = {
+		OR = {
+			check_variable = { migrants_add = 0 }
+			check_variable = { migrants_add < 0 }
+		}
+    }
+}
+migrants_agreement_cut = {
+    enable = { always = yes }
+	icon = GFX_idea_migration_regulation_hard
+	base_migration_rate_value = migrants_cut
+    remove_trigger = {
+		OR = {
+			check_variable = { migrants_cut = 0 }
+			check_variable = { migrants_cut > 0 }
+		}
+    }
+}

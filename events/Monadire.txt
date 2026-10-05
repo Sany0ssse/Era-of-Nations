@@ -1,0 +1,1231 @@
+add_namespace = MND_policy
+add_namespace = MND_news
+
+# Event for Georgia
+country_event = {
+	id = MND_policy.5
+	title = MND_policy.5.t
+	desc = MND_policy.5.d
+	picture = GFX_mnd_event_georgia
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.5.a
+		log = "[GetDateText]: [This.GetName]: MND_policy.5.a executed"
+		set_temp_variable = { treasury_change = -3.00 }
+		modify_treasury_effect = yes
+		custom_effect_tooltip = MND_if_georgia_is_agree_TT
+		MND = {
+			country_event = {
+				id = MND_policy.6
+				days = 1
+			}
+		}
+
+		ai_chance = {
+			base = 55
+			modifier = {
+				add = 45
+				has_opinion = {
+					target = MND
+					value > 20
+				}
+			}
+			modifier = {
+				add = -40
+				has_opinion = {
+					target = MND
+					value < 0
+				}
+			}
+		}
+	}
+
+	option = {
+		name = MND_policy.5.b
+		log = "[GetDateText]: [This.GetName]: MND_policy.5.b executed"
+		MND = {
+			country_event = {
+				id = MND_policy.7
+				days = 1
+			}
+		}
+		custom_effect_tooltip = MND_if_georgia_is_not_agree_TT
+
+		ai_chance = {
+			base = 55
+			modifier = {
+				add = 40
+				has_opinion = {
+					target = MND
+					value < 0
+				}
+			}
+		}
+	}
+}
+
+# Events for Monadire
+# If Georgia is agree
+country_event = {
+	id = MND_policy.6
+	title = MND_policy.6.t
+	desc = MND_policy.6.d
+	picture = GFX_mnd_event_georgia
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.6.a
+		log = "[GetDateText]: [This.GetName]: MND_policy.6.a executed"
+		set_temp_variable = { treasury_change = 3.00 }
+		modify_treasury_effect = yes
+		add_opinion_modifier = {
+			modifier = MND_georgia_is_agree
+			target = GEO
+		}
+		GEO = {
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = GEO }
+			set_temp_variable = { influence_target = MND }
+			change_influence_percentage = yes
+		}
+	}
+}
+
+# If Georgia is not agree
+country_event = {
+	id = MND_policy.7
+	title = MND_policy.7.t
+	desc = MND_policy.7.d
+	picture = GFX_mnd_event_georgia
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.7.a
+		log = "[GetDateText]: [This.GetName]: MND_policy.7.a executed"
+		add_opinion_modifier = {
+			modifier = MND_georgia_is_not_agree
+			target = GEO
+		}
+		GEO = {
+			set_temp_variable = { percent_change = -3 }
+			set_temp_variable = { tag_index = GEO }
+			set_temp_variable = { influence_target = MND }
+			change_influence_percentage = yes
+		}
+	}
+}
+
+# Event for Russia
+country_event = {
+	id = MND_policy.19
+	title = MND_policy.19.t
+	desc = MND_policy.19.d
+	picture = GFX_mnd_event_russia
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.19.a
+
+		set_temp_variable = { treasury_change = -5.00 }
+		modify_treasury_effect = yes
+		custom_effect_tooltip = MND_if_russia_is_agree_TT
+		add_equipment_to_stockpile = {
+			type = Inf_equipment
+			amount = -500
+			producer = SOV
+		}
+		add_equipment_to_stockpile = {
+			type = cnc_equipment
+			amount = -100
+			producer = SOV
+		}
+		MND = {
+			country_event = {
+				id = MND_policy.20
+				days = 1
+			}
+		}
+
+		ai_chance = {
+			base = 55
+			modifier = {
+				add = 45
+				has_opinion = {
+					target = MND
+					value > 20
+				}
+			}
+			modifier = {
+				add = -40
+				has_opinion = {
+					target = MND
+					value < 0
+				}
+			}
+		}
+	}
+
+	option = {
+		name = MND_policy.19.b
+
+		MND = {
+			country_event = {
+				id = MND_policy.21
+				days = 1
+			}
+		}
+		custom_effect_tooltip = MND_if_russia_is_not_agree_TT
+
+		ai_chance = {
+			base = 55
+			modifier = {
+				add = 40
+				has_opinion = {
+					target = MND
+					value < 0
+				}
+			}
+		}
+	}
+}
+
+# If Russia is agree
+country_event = {
+	id = MND_policy.20
+	title = MND_policy.20.t
+	desc = MND_policy.20.d
+	picture = GFX_mnd_event_russia
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.20.a
+
+		set_temp_variable = { treasury_change = 5.00 }
+		modify_treasury_effect = yes
+		add_opinion_modifier = {
+			modifier = MND_russia_is_agree
+			target = SOV
+		}
+		add_equipment_to_stockpile = {
+			type = Inf_equipment
+			amount = 500
+			producer = SOV
+		}
+		add_equipment_to_stockpile = {
+			type = cnc_equipment
+			amount = 100
+			producer = SOV
+		}
+		SOV = {
+			set_temp_variable = { percent_change = 7 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = MND }
+			change_influence_percentage = yes
+		}
+	}
+}
+
+# If Russia is not agree
+country_event = {
+	id = MND_policy.21
+	title = MND_policy.21.t
+	desc = MND_policy.21.d
+	picture = GFX_mnd_event_russia
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.21.a
+		add_opinion_modifier = {
+			modifier = MND_russia_is_not_agree
+			target = SOV
+		}
+		SOV = {
+			set_temp_variable = { percent_change = -3 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = MND }
+			change_influence_percentage = yes
+		}
+	}
+}
+
+#Event for Abkhazia
+country_event = {
+    id = MND_policy.22
+    title = MND_policy.22.t
+    desc = MND_policy.22.d
+    picture = GFX_mnd_event_main
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_policy.22.a
+		set_temp_variable = { treasury_change = -0.3 }
+		modify_treasury_effect = yes
+        add_timed_idea = {
+            idea = MND_chaos_in_abkhazia_idea
+            days = 365
+        }
+		add_opinion_modifier = {
+			target = MND
+			modifier = MND_chaos_abkhazia_hate_opinion
+		}
+    }
+}
+
+country_event = {
+	id = MND_policy.23
+	title = MND_policy.23.t
+	desc = MND_policy.23.d
+	picture = GFX_mnd_event_azer
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.23.a
+		set_temp_variable = { treasury_change = -0.6 }
+		modify_treasury_effect = yes
+		AZE = {
+			country_event = {
+				id = MND_policy.24
+				days = 1
+			}
+		}
+		custom_effect_tooltip = MND_chaos_aze_TT
+
+		ai_chance = {
+			base = 70
+		}
+	}
+	option = {
+		name = MND_policy.23.b
+		set_temp_variable = { treasury_change = -1 }
+		modify_treasury_effect = yes
+		AZE = {
+			country_event = {
+				id = MND_policy.25
+				days = 1
+			}
+		}
+		custom_effect_tooltip = MND_chaos_aze_TT
+
+		ai_chance = {
+			base = 30
+		}
+	}
+}
+
+country_event = {
+	id = MND_policy.24
+	title = MND_policy.24.t
+	desc = MND_policy.24.d
+	picture = GFX_mnd_event_azer
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.24.a
+		add_timed_idea = {
+			idea = MND_chaos_in_abkhazia_idea
+			days = 365
+		}
+
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = MND_policy.24.b
+		set_temp_variable = { treasury_change = -3 }
+		modify_treasury_effect = yes
+		add_timed_idea = {
+			idea = MND_not_chaos_idea
+			days = 365
+		}
+
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = MND_policy.24.c
+		if = {
+			limit = {
+				NOT = { has_war_with = MND }
+			}
+			declare_war_on = {
+				target = MND
+				type = annex_everything
+			}
+		}
+		add_war_support = 0.04
+		add_stability = 0.04
+
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+country_event = {
+	id = MND_policy.25
+	title = MND_policy.25.t
+	desc = MND_policy.25.d
+	picture = GFX_mnd_event_azer
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.25.a
+		add_timed_idea = {
+			idea = MND_chaos_aze_idea
+			days = 365
+		} 
+
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = MND_policy.25.b
+		set_temp_variable = { treasury_change = -3 }
+		modify_treasury_effect = yes
+		add_timed_idea = {
+			idea = MND_not_chaos_idea
+			days = 365
+		}
+
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = MND_policy.25.c
+		if = {
+			limit = {
+				NOT = { has_war_with = MND }
+			}
+			declare_war_on = {
+				target = MND
+				type = annex_everything
+			}
+		}
+		add_war_support = 0.04
+		add_stability = 0.04
+
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# Event for CHEchnya
+country_event = {
+	id = MND_policy.26
+	title = MND_policy.26.t
+	desc = MND_policy.26.d
+	picture = GFX_mnd_event_main
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = MND_policy.26.a
+		if = {
+			limit = {
+				NOT = { has_war_with = MND }
+			}
+			declare_war_on = {
+				target = MND
+				type = annex_everything
+			}
+		}
+		add_opinion_modifier = {
+			target = MND
+			modifier = MND_rus_ichk
+		}
+		set_temp_variable = { treasury_change = -10 }
+		modify_treasury_effect = yes 
+
+		ai_chance = {
+			base = 60
+		}
+	}
+
+	option = {
+		name = MND_policy.26.b
+		add_opinion_modifier = {
+			target = MND
+			modifier = MND_rus_ichk
+		}
+		CHE = {
+			set_temp_variable = { modify_terrorism = 7.5 }
+			modify_terrorism_support = yes
+		}
+		672 = {
+			owner = {
+				add_to_variable = { terrorism_mana = 15 }
+				clamp_variable = {
+					var = terrorism_mana
+					min = 1
+					max = 100
+				}
+			}
+		}
+		set_temp_variable = { percent_change = 10 }
+		set_temp_variable = { tag_index = MND }
+		set_temp_variable = { influence_target = CHE }
+		change_influence_percentage = yes
+		
+		ai_chance = {
+			base = 40
+		}
+	}
+}
+
+country_event = {
+	id = MND_policy.16
+	title = MND_policy.16.t
+	desc = MND_policy.16.d
+	picture = GFX_mnd_event_armenia
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.16.a
+		set_temp_variable = { treasury_change = -0.5 }
+		modify_treasury_effect = yes
+		ARM = {
+			country_event = {
+				id = MND_policy.17
+				days = 1
+			}
+		}
+		custom_effect_tooltip = MND_chaos_arm_TT
+
+		ai_chance = {
+			base = 50
+		}
+	}
+	option = {
+		name = MND_policy.16.b
+		set_temp_variable = { treasury_change = -1 }
+		modify_treasury_effect = yes
+		ARM = {
+			country_event = {
+				id = MND_policy.18
+				days = 1
+			}
+		}
+		custom_effect_tooltip = MND_chaos_arm_TT
+
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+country_event = {
+	id = MND_policy.17
+	title = MND_policy.17.t
+	desc = MND_policy.17.d
+	picture = GFX_mnd_event_armenia
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.17.a
+		add_timed_idea = {
+			idea = MND_chaos_in_abkhazia_idea
+			days = 365
+		}
+
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = MND_policy.17.b
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		add_timed_idea = {
+			idea = MND_not_chaos_idea
+			days = 365
+		}
+
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = MND_policy.17.c
+		if = {
+			limit = {
+				NOT = { has_war_with = MND }
+			}
+			declare_war_on = {
+				target = MND
+				type = annex_everything
+			}
+		}
+		add_war_support = 0.04
+		add_stability = 0.04
+
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+country_event = {
+	id = MND_policy.18
+	title = MND_policy.18.t
+	desc = MND_policy.18.d
+	picture = GFX_mnd_event_armenia
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.18.a
+		add_timed_idea = {
+			idea = MND_chaos_arm_idea
+			days = 365
+		} 
+
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = MND_policy.18.b
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		add_timed_idea = {
+			idea = MND_not_chaos_idea
+			days = 365
+		}
+
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = MND_policy.25.c
+		if = {
+			limit = {
+				NOT = { has_war_with = MND }
+			}
+			declare_war_on = {
+				target = MND
+				type = annex_everything
+			}
+		}
+		add_war_support = 0.04
+		add_stability = 0.04
+
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+country_event = {
+	id = MND_policy.1
+	title = MND_policy.1.t
+	desc = MND_policy.1.d
+	picture = GFX_mnd_event_main
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.1.a
+		log = "[GetDateText]: [This.GetName]: MND_policy.1.a executed"
+	}
+}
+
+country_event = {
+	id = MND_policy.2
+	title = MND_policy.2.t
+	desc = MND_policy.2.d
+	picture = GFX_mnd_event_main
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.2.a
+		log = "[GetDateText]: [This.GetName]: MND_policy.2.a executed"
+		set_temp_variable = {
+			percent_change = 5.50
+		}
+		set_temp_variable = {
+			tag_index = MND
+		}
+		set_temp_variable = {
+			influence_target = GEO
+		}
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = -1 }
+		modify_treasury_effect = yes
+		GEO = {
+			country_event = {
+				id = MND_policy.3
+				days = 1
+			}
+		}
+
+		ai_chance = {
+			base = 50
+		}
+	}
+
+	option = {
+		name = MND_policy.2.b
+		log = "[GetDateText]: [This.GetName]: MND_policy.2.b executed"
+		set_temp_variable = {
+			percent_change = 9.50
+		}
+		set_temp_variable = {
+			tag_index = MND
+		}
+		set_temp_variable = {
+			influence_target = GEO
+		}
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = -2 }
+		modify_treasury_effect = yes
+		GEO = {
+			country_event = {
+				id = MND_policy.3
+				days = 1
+			}
+		}
+
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+country_event = {
+	id = MND_policy.3
+	title = MND_policy.3.t
+	desc = MND_policy.3.d
+	picture = GFX_mnd_event_main
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.3.a
+		log = "[GetDateText]: [This.GetName]: MND_policy.3.a executed"
+		add_stability = -0.02
+		add_war_support = -0.02
+		add_political_power = -100
+		set_temp_variable = { treasury_change = -0.75 }
+		modify_treasury_effect = yes
+		add_opinion_modifier = {
+			target = MND
+			modifier = MND_geo_svaneti
+		}
+		set_party_index_to_ruling_party = yes
+		set_temp_variable = {
+			party_popularity_increase = -0.1
+		}
+		set_temp_variable = {
+			temp_outlook_increase = -0.1
+		}
+		add_relative_party_popularity = yes
+	}
+}
+
+country_event = {
+	id = MND_policy.4
+	title = MND_policy.4.t
+	desc = MND_policy.4.d
+	picture = GFX_mnd_event_main
+	
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.4.a
+		if = {
+			limit = {
+				NOT = { has_war_with = MND }
+			}
+			declare_war_on = {
+				target = MND
+				type = annex_everything
+			}
+		}
+		add_opinion_modifier = {
+			target = MND
+			modifier = MND_rus_dag
+		}
+		set_temp_variable = { treasury_change = -10 }
+		modify_treasury_effect = yes
+		ai_chance = {
+			base = 60
+		}
+	}
+
+	option = {
+		name = MND_policy.4.b
+		add_opinion_modifier = {
+			target = MND
+			modifier = MND_rus_dag
+		}
+		if = {
+			limit = { 
+				SOV = {
+					owns_state = 671
+				}
+			}
+			DAG = {
+				set_temp_variable = { modify_separatism = 5 }
+				modify_separatism_support = yes
+				set_temp_variable = { modify_terrorism = 5 }
+				modify_terrorism_support = yes
+			}
+			671 = {
+				owner = {
+					add_to_variable = { terrorism_mana = 15 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			set_temp_variable = { percent_change = 10 }
+			set_temp_variable = { tag_index = MND }
+			set_temp_variable = { influence_target = DAG }
+			change_influence_percentage = yes
+		}
+
+		ai_chance = {
+			base = 40
+		}
+	}
+}
+
+# Полный успех рейда
+country_event = {
+    id = MND_policy.8
+    title = MND_policy.8.t
+    desc = MND_policy.8.d
+	picture = GFX_mnd_event_main
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_policy.8.a
+        log = "[GetDateText]: [This.GetName]: MND_policy.8.a executed"
+
+        random_owned_state = {
+            damage_building = {
+                type = industrial_complex
+                damage = 5
+            }
+        }
+    }
+}
+
+# Частичный успех
+country_event = {
+    id = MND_policy.9
+    title = MND_policy.9.t
+    desc = MND_policy.9.d
+    is_triggered_only = yes
+	picture = GFX_mnd_event_main
+
+    option = {
+        name = MND_policy.9.a
+        log = "[GetDateText]: [This.GetName]: MND_policy.9.a executed"
+
+		random_owned_state = {
+            damage_building = {
+                type = industrial_complex
+                damage = 3
+            }
+        }
+    }
+}
+
+# Провал
+country_event = {
+    id = MND_policy.10
+    title = MND_policy.10.t
+    desc = MND_policy.10.d
+	picture = GFX_mnd_event_main
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_policy.10.a
+        log = "[GetDateText]: [This.GetName]: MND_policy.10.a executed"
+
+		add_manpower = 50
+    }
+}
+
+# Успех для Монадире
+country_event = {
+    id = MND_policy.11
+    title = MND_policy.11.t
+    desc = MND_policy.11.d
+	picture = GFX_mnd_event_main
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_policy.11.a
+        log = "[GetDateText]: [This.GetName]: MND_policy.11.a executed"
+    }
+}
+
+# Частичный успех для Монадире
+country_event = {
+    id = MND_policy.12
+    title = MND_policy.12.t
+    desc = MND_policy.12.d
+	picture = GFX_mnd_event_main
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_policy.12.a
+        log = "[GetDateText]: [This.GetName]: MND_policy.12.a executed"
+    }
+}
+
+# Провал для Монадире
+country_event = {
+    id = MND_policy.13
+    title = MND_policy.13.t
+    desc = MND_policy.13.d
+	picture = GFX_mnd_event_main
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_policy.13.a
+        log = "[GetDateText]: [This.GetName]: MND_policy.13.a executed"
+
+		add_manpower = -50
+    }
+}
+
+# Confederation
+country_event = {
+	id = MND_policy.14
+	title = MND_policy.14.t
+	desc = MND_policy.14.d
+	picture = GFX_mnd_event_main
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.14.a
+        log = "[GetDateText]: [This.GetName]: MND_policy.14.a executed"
+
+		add_opinion_modifier = {
+			target = MND
+			modifier = MND_confederation_om
+		}
+
+		ai_chance = {
+			base = 80
+		}
+	}
+
+	option = {
+		name = MND_policy.14.b
+        log = "[GetDateText]: [This.GetName]: MND_policy.14.b executed"
+
+		if = {
+			limit = {
+				NOT = { has_war_with = MND }
+			}
+			declare_war_on = {
+				target = MND
+				type = annex_everything
+			}
+		}
+
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+country_event = {
+	id = MND_policy.15
+	title = MND_policy.15.t
+	desc = MND_policy.15.d
+	picture = GFX_mnd_event_main
+
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.15.a
+		log = "[GetDateText]: [This.GetName]: MND_policy.15.a executed"
+
+		add_opinion_modifier = {
+			target = MND
+			modifier = MND_confederation_om2
+		}
+
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	option = {
+		name = MND_policy.15.b
+        log = "[GetDateText]: [This.GetName]: MND_policy.15.b executed"
+
+		if = {
+			limit = {
+				NOT = { has_war_with = MND }
+			}
+			declare_war_on = {
+				target = MND
+				type = annex_everything
+			}
+		}
+
+		ai_chance = {
+			base = 60
+		}
+	}
+}
+
+# Гелаев переходит к Монадире
+news_event = {
+    id = MND_news.1
+    title = MND_news.1.t
+    desc = MND_news.1.d
+    picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.1.a
+    }
+}
+
+# Похищение сотрудников ООН
+news_event = {
+    id = MND_news.2
+    title = MND_news.2.t
+    desc = MND_news.2.d
+    picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.2.a
+		if = {
+			limit = { NOT = { original_tag = MND } }
+			add_opinion_modifier = {
+				target = MND
+				modifier = MND_un_hostages_opinion
+			}
+		}
+    }
+}
+
+# Рейд на Абхазию
+news_event = {
+    id = MND_news.3
+    title = MND_news.3.t
+    desc = MND_news.3.d
+    picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.3.a
+    }
+}
+
+# Временное правительство Абхазии
+news_event = {
+    id = MND_news.4
+    title = MND_news.4.t
+    desc = MND_news.4.d
+    picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.4.a
+    }
+}
+
+# Бунты в Азербайджане
+news_event = {
+    id = MND_news.5
+    title = MND_news.5.t
+    desc = MND_news.5.d
+    picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.5.a
+    }
+}
+
+# Пакости Армении
+news_event = {
+    id = MND_news.6
+    title = MND_news.6.t
+    desc = MND_news.6.d
+    picture = mnd_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.6.a
+    }
+}
+
+# Провозглашение конфедерации
+news_event = {
+    id = MND_news.7
+    title = MND_news.7.t
+    desc = MND_news.7.d
+     picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.7.a
+    }
+}
+
+# Кавказский эмират
+news_event = {
+    id = MND_news.8
+    title = MND_news.8.t
+    desc = MND_news.8.d
+     picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.8.a
+		if = {
+			limit = { original_tag = MND }
+			MND = {
+				load_focus_tree = generic_focus
+			}
+		}
+    }
+}
+
+# Квициани — король Кавказа
+news_event = {
+    id = MND_news.9
+    title = MND_news.9.t
+    desc = MND_news.9.d
+     picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.9.a
+			if = {
+			limit = { original_tag = MND }
+			MND = {
+				load_focus_tree = generic_focus
+			}
+		}
+    }
+}
+
+# Беспорядки в Чечне
+news_event = {
+    id = MND_news.10
+    title = MND_news.10.t
+    desc = MND_news.10.d
+     picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.10.a
+    }
+}
+
+# Беспорядки в Дагестане
+news_event = {
+    id = MND_news.11
+    title = MND_news.11.t
+    desc = MND_news.11.d
+     picture = GFX_mnd_world_event
+
+    is_triggered_only = yes
+
+    option = {
+        name = MND_news.11.a
+    }
+}
+
+country_event = {
+	id = MND_policy.27
+	title = MND_policy.27.t
+	desc = MND_policy.27.d
+	is_triggered_only = yes
+
+	option = {
+		name = MND_policy.27.a
+		log = "[GetDateText]: [This.GetName]: MND_policy.27.a executed"
+		declare_war_on = {
+			target = ABK
+			type = annex_everything
+		}
+
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				ABK = { is_subject = no }
+			}
+		}
+	}
+
+	option = {
+		name = MND_policy.27.b
+		log = "[GetDateText]: [This.GetName]: MND_policy.27.b executed"
+		add_political_power = -150
+		MND = {
+			add_opinion_modifier = {
+				target = GEO
+				modifier = MND_geo_is_not_agree
+			}
+		}
+
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				ABK = { is_subject = yes }
+			}
+		}
+	}
+}

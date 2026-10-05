@@ -1,0 +1,6375 @@
+######## SLOVAKIA FOCUS TREE BY DUKE #########
+
+focus_tree = {
+	id = slovakian_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 20
+			tag = SLO
+		} 
+	}
+	##############################
+	###	Start of EU Focus Tree ###	x = 120 y = 15
+	##############################
+	shared_focus = USoE001
+	shared_focus = POTEF001
+	shared_focus = visegrad_group_shared_focus
+	############################
+	### End of EU Focus Tree ###
+	############################
+	continuous_focus_position = { x = 4500 y = 2200 }
+
+	#ARMY
+
+	#Ozbrojené sily Slovenskej Republiky
+	focus = {
+		id = SLO_army
+		icon = SLO_military
+		x = 38
+		y = 8
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_army"
+			add_war_support = 0.05
+			army_experience = 15
+			navy_experience = 15
+			air_experience = 15
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Army Modernization
+	focus = {
+		id = SLO_army_modernization
+		icon = modernization_of_military_equipment
+		x = 0
+		y = 1
+		relative_position_id = SLO_army
+
+		cost = 3
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_army }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_armed_forced"
+			swap_ideas = {
+				remove_idea = POL_outdate_equipment
+				add_idea = POL_outdate_equipment1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Pozemné sily Slovenskej
+	focus = {
+		id = SLO_ground_forced
+		icon = SLO_ground_forced
+		x = -2
+		y = 2
+		relative_position_id = SLO_army
+
+		cost = 3
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_army_modernization }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ground_forced"
+			army_experience = 15
+			add_doctrine_cost_reduction = {
+				name = CAT_land_doctrine
+				cost_reduction = 1.0
+				uses = 1
+				category = CAT_land_doctrine
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Military Intelligence
+	focus = {
+		id = SLO_military_intelligence
+		icon = SLO_military_intelligence
+		x = 0
+		y = 2
+		relative_position_id = SLO_army
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_army_modernization }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_military_intelligence"
+			create_intelligence_agency = yes
+			custom_effect_tooltip = available_new_departament
+          	show_ideas_tooltip = SLO_structures_vos_idea
+		}
+
+		ai_will_do = {
+			base = 150
+			modifier = {
+				add = 150
+				has_completed_focus = SLO_claim_to_the_Czech_lands
+			}
+		}
+	}
+	#Special Operations Forces
+	focus = {
+		id = SLO_special_operations_forces
+		icon = SLO_special_operations_forces
+		x = 0
+		y = 4
+		relative_position_id = SLO_army
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_military_intelligence }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_special_operations_forces"
+			add_ideas = SLO_special_forces_idea
+			custom_effect_tooltip = New_mobilization_brigade_active_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Retraining of officers
+	focus = {
+		id = SLO_retraining_of_officers
+		icon = SLO_retraining_of_officers
+		x = -3
+		y = 3
+		relative_position_id = SLO_army
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_ground_forced }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_retraining_of_officers"
+			add_command_power = 25
+			army_experience = 25
+			add_doctrine_cost_reduction = {
+				name = CAT_land_doctrine
+				cost_reduction = 0.5
+				uses = 2
+				category = CAT_land_doctrine
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#New Doctrine of the Slovak Army
+	focus = {
+		id = SLO_new_doctrine_of_Slovak_army
+		icon = SLO_new_doctrine_of_Slovak_army
+		x = -1
+		y = 3
+		relative_position_id = SLO_army
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_ground_forced }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_new_doctrine_of_Slovak_army"
+			remove_ideas = POL_soviet_defence_doctrine
+			add_ideas = SLO_slovakian_army_doctrine
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Arsenal update
+	focus = {
+		id = SLO_arsenal_update
+		icon = twardy_modernization
+		x = -2
+		y = 4
+		relative_position_id = SLO_army
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_new_doctrine_of_Slovak_army }
+		prerequisite = { focus = SLO_retraining_of_officers }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_arsenal_update"
+			remove_ideas = POL_outdate_equipment1
+			add_ideas = POL_national_eqiupment_idea
+			one_random_arms_factory = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Vzdušné sily Ozbrojených síl Slovenskej republiky
+	focus = {
+		id = SLO_air_forced
+		icon = SLO_air_forced
+		x = 2
+		y = 2
+		relative_position_id = SLO_army
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_army_modernization }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_air_forced"
+			air_experience = 20
+			add_doctrine_cost_reduction = {
+				name = CAT_air_doctrine
+				cost_reduction = 1.0
+				uses = 2
+				category = CAT_air_doctrine
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Rewrite the Air Force Doctrine
+	focus = {
+		id = SLO_rewrite_the_air_force_doctrine
+		icon = SLO_rewrite_the_air_force_doctrine
+		x = 1
+		y = 3
+		relative_position_id = SLO_army
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_air_forced }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_air_forced"
+			swap_ideas = {
+				remove_idea = POL_outdate_wings
+				add_idea = POL_outdate_wings1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The question of the old Soviet wings
+	focus = {
+		id = SLO_question_of_old_soviet_wings
+		icon = mig29
+		x = 3
+		y = 3
+		relative_position_id = SLO_army
+
+		cost = 3.5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_air_forced }
+		available = {
+			has_completed_focus = SLO_rewrite_the_air_force_doctrine
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_question_of_old_soviet_wings"
+			country_event = slo_army.1
+			remove_ideas = POL_outdate_wings1
+			add_ideas = POL_modern_air_forces
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Buy Swedish wings
+	focus = {
+		id = SLO_buy_swedish_wings
+		icon = buy_swedish_planes
+		x = 2
+		y = 4
+		relative_position_id = SLO_army
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_question_of_old_soviet_wings }
+		prerequisite = { focus = SLO_rewrite_the_air_force_doctrine }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_buy_swedish_wings"
+			SWE = { country_event = { id = slo_army.2 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = HUN_buy_swedish_planes_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#New Army of the European Power
+	focus = {
+		id = SLO_new_army_of_european_power
+		icon = SLO_new_army_of_european_power
+		x = 0
+		y = 5
+		relative_position_id = SLO_army
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = SLO_buy_swedish_wings }
+		prerequisite = { focus = SLO_special_operations_forces }
+		prerequisite = { focus = SLO_arsenal_update }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_buy_swedish_wings"
+			army_experience = 25
+			air_experience = 25
+			add_ideas = POL_modern_arsenal
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	
+
+	#ECONOMY
+ 
+	#Economy of Slovakia
+	focus = {
+		id = SLO_economy_of_slovakia
+		icon = SLO_economy
+		x = 42
+		y = 3
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_economy_of_slovakia"
+			increase_economic_growth = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Development of the National Bank
+	focus = {
+		id = SLO_development_of_national_bank
+		icon = SLO_development_of_national_bank
+		x = 0
+		y = 1
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 3
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_economy_of_slovakia }
+		available = {
+			has_idea = SLO_national_bank
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_economy_of_slovakia"
+			swap_ideas = {
+				remove_idea = SLO_national_bank
+				add_idea = SLO_national_bank1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Support for foreign investment
+	focus = {
+		id = SLO_support_for_foreign_investment
+		icon = generic_economy_foreign_investors
+		x = -1
+		y = 2
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_development_of_national_bank }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_economy_of_slovakia"
+			add_ideas = SLO_support_for_invest
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Support economic growth
+	focus = {
+		id = SLO_support_economic_growth
+		icon = GENERIC_economic_measures
+		x = 1
+		y = 2
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_development_of_national_bank }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_support_economic_growth"
+			large_expenditure = yes
+			increase_economic_growth = yes
+			remove_ideas = SLO_sphins_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Fighting unemployment
+	focus = {
+		id = SLO_fighting_unemployment
+		icon = Unemploymentliwica
+		x = 0
+		y = 3
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_support_economic_growth }
+		prerequisite = { focus = SLO_support_for_foreign_investment }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_fighting_unemployment"
+			add_ideas = SLO_fighting_unemployment_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Actions to reduce inflation
+	focus = {
+		id = SLO_actions_to_reduce_inflation
+		icon = HUN_anti_inflational_policy
+		x = 0
+		y = 4
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_fighting_unemployment }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_actions_to_reduce_inflation"
+			add_stability = 0.05
+			remove_ideas = SLO_high_inflation
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Ask for Dutch investment
+	focus = {
+		id = SLO_ask_for_Dutch_investment
+		icon = align_to_netherlands
+		x = -2
+		y = 1
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_economy_of_slovakia }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ask_for_Dutch_investment"
+			HOL = { country_event = { id = slo_economy.1 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = HOL_invest_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Austrian investments
+	focus = {
+		id = SLO_austrian_investments
+		icon = align_to_austria
+		x = -2
+		y = 3
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_ask_for_Dutch_investment }
+		prerequisite = { focus = SLO_support_for_foreign_investment }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ask_for_Dutch_investment"
+			AUS = { country_event = { id = slo_economy.1 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = AUS_invest_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Development of the service sector
+	focus = {
+		id = SLO_development_of_service_sector
+		icon = generic_economic_urban_infra
+		x = 2
+		y = 1
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_economy_of_slovakia }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_development_of_service_sector"
+			two_random_infrastructure = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Attracting tourism
+	focus = {
+		id = SLO_attracting_tourism
+		icon = Tourism_is_our_oil
+		x = 2
+		y = 3
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_development_of_service_sector }
+		prerequisite = { focus = SLO_support_economic_growth }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_attracting_tourism"
+			add_ideas = HUN_tourism_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Investments in IT
+	focus = {
+		id = SLO_investments_in_it
+		icon = it_sphere
+		x = -4
+		y = 1
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_economy_of_slovakia }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_attracting_tourism"
+			one_random_network_infrastructure = yes
+			add_tech_bonus = {
+				name = CAT_internet_tech
+				bonus = 0.30
+				uses = 1
+				category = CAT_internet_tech
+			}
+			add_tech_bonus = {
+				name = CAT_ai
+				bonus = 0.10
+				uses = 2
+				category = CAT_ai
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Sygic
+	focus = {
+		id = SLO_sygic
+		icon = SLO_sygic
+		x = -3
+		y = 2
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_investments_in_it }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_sygic"
+			custom_effect_tooltip = available_new_company
+          	show_ideas_tooltip = SLO_sygic_idea
+			custom_effect_tooltip = {
+		  		localization_key = available_new_branch
+		  		BRANCH_NAME  = SLO_sygic_branch
+	   		}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#O2 Slovakia
+	focus = {
+		id = SLO_o2_slovakia
+		icon = SLO_o2_slovakia
+		x = -5
+		y = 2
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_investments_in_it }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_o2_slovakia"
+			custom_effect_tooltip = available_new_company
+          	show_ideas_tooltip = SLO_o2_idea
+			custom_effect_tooltip = {
+		  		localization_key = available_new_branch
+		  		BRANCH_NAME  = SLO_o2_branch
+	   		}
+			add_tech_bonus = {
+				name = CAT_internet_tech
+				bonus = 0.20
+				uses = 1
+				category = CAT_internet_tech
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Export of ESET products
+	focus = {
+		id = SLO_export_of_ESET_products
+		icon = SLO_eset
+		x = -4
+		y = 3
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_investments_in_it }
+		available = {
+			has_idea = SLO_eset_idea
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_export_of_ESET_products"
+			swap_ideas = {
+				remove_idea = SLO_eset_idea
+				add_idea = SLO_eset_idea1
+			}
+			custom_effect_tooltip = {
+		  		localization_key = available_new_branch
+		  		BRANCH_NAME  = SLO_eset_branch
+	   		}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Investments in energy
+	focus = {
+		id = SLO_investments_in_energy
+		icon = generic_economic_energy_sector
+		x = -6
+		y = 1
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_economy_of_slovakia }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_o2_slovakia"
+			one_random_synthetic_refinery = yes
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = fossil_powerplant
+					level = 1
+					instant_build = yes
+				}
+			}
+			set_temp_variable = { treasury_change = -1.125 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Slovenské elektrárne
+	focus = {
+		id = SLO_slovenske_elektrarne
+		icon = SLO_slovenske_elektrarne
+		x = -7
+		y = 2
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_investments_in_energy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_o2_slovakia"
+			custom_effect_tooltip = available_new_company
+          	show_ideas_tooltip = SLO_se_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Expansion of Fossil Fuel Stations
+	focus = {
+		id = SLO_expansion_of_fossil_fuel_stations
+		icon = SLO_expansion_of_fossil_fuel_stations
+		x = -6
+		y = 3
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_slovenske_elektrarne }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_expansion_of_fossil_fuel_stations"
+			set_temp_variable = { treasury_change = -1.125 }
+			modify_treasury_effect = yes
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = fossil_powerplant
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Construction of Nuclear Reactors
+	focus = {
+		id = SLO_construction_of_nuclear_reactors
+		icon = generic_economic_nuclear
+		x = -7
+		y = 4
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_slovenske_elektrarne }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_construction_of_nuclear_reactors"
+			set_temp_variable = { treasury_change = -4.5 }
+			modify_treasury_effect = yes
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = nuclear_reactor
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Invest in heavy industry
+	focus = {
+		id = SLO_invest_in_heavy_industry
+		icon = GENERIC_light_industry
+		x = 5
+		y = 1
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_economy_of_slovakia }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_invest_in_heavy_industry"
+			one_random_industrial_complex = yes
+			add_tech_bonus = {
+				name = CAT_industry
+				bonus = 0.15
+				uses = 1
+				category = CAT_industry
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Investments in the automotive industry
+	focus = {
+		id = SLO_investments_in_automotive_industry
+		icon = generic_economic_our_auto
+		x = 5
+		y = 2
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_invest_in_heavy_industry }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_investments_in_automotive_industry"
+			one_random_industrial_complex = yes
+			add_tech_bonus = {
+				name = CAT_nfibers
+				bonus = 0.15
+				uses = 1
+				category = CAT_nfibers
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#OFZ
+	focus = {
+		id = SLO_OFZ
+		icon = SLO_OFZ
+		x = 3
+		y = 2
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_invest_in_heavy_industry }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_OFZ"
+			custom_effect_tooltip = available_new_company
+          	show_ideas_tooltip = SLO_ofz_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Raven
+	focus = {
+		id = SLO_raven
+		icon = SLO_raven
+		x = 3
+		y = 4
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_OFZ }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_raven"
+			custom_effect_tooltip = available_new_company
+          	show_ideas_tooltip = SLO_raven_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Open a Volkswagen plant
+	focus = {
+		id = SLO_open_a_Volkswagen_plant
+		icon = volkswagen
+		x = 4
+		y = 3
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_investments_in_automotive_industry }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_raven"
+			one_random_industrial_complex = yes
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = GER }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Open a Peugeot plant
+	focus = {
+		id = SLO_open_a_Peugeot_plant
+		icon = peugeot
+		x = 6
+		y = 3
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_investments_in_automotive_industry }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_open_a_Peugeot_plant"
+			one_random_industrial_complex = yes
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = FRA }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Open a Kia plant
+	focus = {
+		id = SLO_open_a_Kia_plant
+		icon = kia
+		x = 5
+		y = 4
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_investments_in_automotive_industry }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_open_a_Kia_plant"
+			one_random_industrial_complex = yes
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = KOR }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Slovnaft
+	focus = {
+		id = SLO_slavnaft
+		icon = SLO_slovnaft
+		x = 7
+		y = 2
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_invest_in_heavy_industry }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_slavnaft"
+			custom_effect_tooltip = available_new_company
+          	show_ideas_tooltip = SLO_slovnaft_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Import of Russian petroleum products
+	focus = {
+		id = SLO_import_of_Russian_petroleum_products
+		icon = sov_gazprom_pipeline
+		x = 7
+		y = 4
+		relative_position_id = SLO_economy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = SLO_slavnaft }
+		available = {
+			country_exists = SOV
+			SOV = {
+				has_opinion = {
+					target = SLO
+					value > 9
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_import_of_Russian_petroleum_products"
+			SOV = { country_event = { id = slo_economy.4 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_import_of_Russian_petroleum_products_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+
+    #SDKÚ-DS
+
+	#Market Will Fix Everything!
+	focus = {
+		id = SLO_dzurinda
+		icon = SLO_market_reforms
+		x = 10
+		y = 3
+
+		cost = 2
+
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_dzurinda"
+			add_political_power = 100
+			set_temp_variable = { party_index = 2 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#European Comeback
+	focus = {
+		id = SLO_comeback_europe
+		icon = SLO_eu_comeback
+		x = -1
+		y = 1
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_dzurinda
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_comeback_europe"
+			country_event = slo_liberals.6
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Victory in National Council
+	focus = {
+		id = SLO_green_light_reform
+		icon = SLO_reform_approved
+		x = 1
+		y = 1
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_dzurinda
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_green_light_reform"
+			add_ideas = SLO_market_reforms
+			country_event = slo_liberals.7
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#OECD Membership
+	focus = {
+		id = SLO_join_oecd
+		icon = SLO_oecd
+		x = -2
+		y = 2
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_comeback_europe
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_join_oecd"
+			country_event = slo_liberals.0
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#European Constitutional Amendments
+	focus = {
+		id = SLO_european_amedments
+		icon = SLO_eu_constitution
+		x = 0
+		y = 2
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_comeback_europe
+		}
+		prerequisite = {
+			focus = SLO_green_light_reform
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_european_amedments"
+			swap_ideas = {
+				remove_idea = SLO_market_reforms
+				add_idea  = SLO_market_reforms_1
+			}
+			if = {
+				limit = { 
+					has_idea = SLO_legacy_idea
+				}
+				remove_ideas = SLO_legacy_idea
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#A Deal with the U.S. Steel
+	focus = {
+		id = SLO_ussteel_deal
+		icon = SLO_us_steel
+		x = 2
+		y = 2
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_green_light_reform
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ussteel_deal"
+			country_event = slo_liberals.1
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Income Tax Act
+	focus = {
+		id = SLO_flat_tax
+		icon = SLO_flat_tax
+		x = -1
+		y = 3
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_join_oecd
+		}
+		prerequisite = {
+			focus = SLO_european_amedments
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_flat_tax"
+			swap_ideas = {
+				remove_idea = SLO_market_reforms_1
+				add_idea  = SLO_market_reforms_2
+			}
+			set_temp_variable = { corp_change = -9 }
+			modify_population_tax_rate_effect = yes
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Kickstart the Healthy Privatisation
+	focus = {
+		id = SLO_healthy_privatisation
+		icon = SLO_privatise
+		x = 1
+		y = 3
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_ussteel_deal
+		}
+		prerequisite = {
+			focus = SLO_european_amedments
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_healthy_privatisation"
+			add_timed_idea = {
+				idea = SLO_privatisation
+				days = 600
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Economic and Social Partnership Council
+	focus = {
+		id = SLO_employment_reform
+		icon = SLO_labour_law
+		x = -2
+		y = 4
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_flat_tax
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_employment_reform"
+			set_free_unions = yes
+			swap_ideas = {
+				remove_idea = SLO_market_reforms_2
+				add_idea  = SLO_market_reforms_3
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Heaven for Investors
+	focus = {
+		id = SLO_investment_heaven
+		icon = SLO_investment_Heaven
+		x = 0
+		y = 4
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_flat_tax
+		}
+		prerequisite = {
+			focus = SLO_healthy_privatisation
+		}
+		available = {
+			western_liberals_are_in_power = yes
+			has_completed_focus = SLO_employment_reform
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_employment_reform"
+			country_event = slo_liberals.2
+			swap_ideas = {
+				remove_idea = SLO_market_reforms_3
+				add_idea  = SLO_market_reforms_4
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The NATO's Frontier
+	focus = {
+		id = SLO_nato_frontier
+		icon = SLO_nato_frontier
+		x = 2
+		y = 4
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_healthy_privatisation
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_nato_frontier"
+			country_event = slo_liberals.3
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The State Treasuary
+	focus = {
+		id = SLO_state_treasuary
+		icon = SLO_state_treasury
+		x = 0
+		y = 5
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_investment_heaven
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_state_treasuary"
+			swap_ideas = {
+				remove_idea = SLO_market_reforms_4
+				add_idea  = SLO_market_reforms_5
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Supreme Audit Office
+	focus = {
+		id = SLO_empower_control
+		icon = SLO_nku
+		x = -1
+		y = 6
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_state_treasuary
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_state_treasuary"
+			swap_ideas = {
+				remove_idea = SLO_market_reforms_5
+				add_idea  = SLO_market_reforms_6
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Special Prosecutor's Office
+	focus = {
+		id = SLO_special_prosecutor
+		icon = SLO_special_prosecutor
+		x = 1
+		y = 6
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_state_treasuary
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_special_prosecutor"
+			country_event = slo_liberals.4
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Slovakian Miracle
+	focus = {
+		id = SLO_miracle_dzurinda
+		icon = SLO_slovak_miracle
+		x = 0
+		y = 7
+		relative_position_id = SLO_dzurinda
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_special_prosecutor
+		}
+		prerequisite = {
+			focus = SLO_empower_control
+		}
+		available = {
+			western_liberals_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_miracle_dzurinda"
+			country_event = slo_liberals.5
+			swap_ideas = {
+				remove_idea = SLO_market_reforms_6
+				add_idea  = SLO_market_reforms_7
+			}
+			remove_ideas = SLO_high_inflation
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = democratic
+					popularity = 0.10
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#SMER
+
+	#Smer
+	focus = {
+		id = SLO_smer
+		icon = SLO_smer
+		x = 18
+		y = 3
+
+		cost = 2
+
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_schuster_era"
+			add_political_power = 100
+			set_temp_variable = { party_index = 18 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+			hidden_effect = {
+				if = {
+					limit = { NOT = { is_in_array = { ruling_party = 18 } } }
+					set_temp_variable = { rul_party_temp = 18 }
+					set_temp_variable = { enable_elections = 0 }
+					change_ruling_party_effect = yes
+				}
+				set_temp_variable = { party_index = 18 }
+				set_temp_variable = { party_popularity_increase = 0.10 }
+				set_temp_variable = { temp_outlook_increase = 0.10 }
+				add_relative_party_popularity = yes
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Economic course to the left
+	focus = {
+		id = SLO_economic_course_to_left
+		icon = SLO_left_economy
+		x = -2
+		y = 1
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_smer
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_economic_course_to_left"
+			add_ideas = SLO_left_economy
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Father of all citizens
+	focus = {
+		id = SLO_father_of_all_citizens
+		icon = SLO_otec
+		x = 2
+		y = 1
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_smer
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_father_of_all_citizens"
+			add_ideas = SLO_father_of_citizens
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Tax redistribution
+	focus = {
+		id = SLO_tax_redistribution
+		icon = SLO_tax_redistribution
+		x = -3
+		y = 2
+
+		relative_position_id = SLO_smer
+
+		cost = 3
+	
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_economic_course_to_left
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_father_of_all_citizens"
+			set_temp_variable = { party_index = 18 }
+			set_temp_variable = { party_popularity_increase = 0.03 }
+			set_temp_variable = { temp_outlook_increase = 0.03 }
+			add_relative_party_popularity = yes
+			set_temp_variable = { pop_change = -5 }
+			modify_population_tax_rate_effect = yes
+			set_temp_variable = { corp_change = 5 }
+			modify_corporate_tax_rate_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Ensure a decent pension
+	focus = {
+		id = SLO_ensure_a_decent_pension
+		icon = SLO_pension
+		x = -1
+		y = 2
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_economic_course_to_left
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ensure_a_decent_pension"
+			set_temp_variable = { party_index = 18 }
+			set_temp_variable = { party_popularity_increase = 0.05 }
+			set_temp_variable = { temp_outlook_increase = 0.05 }
+			add_relative_party_popularity = yes
+			swap_ideas = {
+				remove_idea = SLO_left_economy
+				add_idea = SLO_left_economy1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Statist paternalism
+	focus = {
+		id = SLO_statist_paternalism
+		icon = SLO_path_of_total_statism
+		x = 1
+		y = 2
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_father_of_all_citizens
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_statist_paternalism"
+			swap_ideas = {
+				remove_idea = SLO_father_of_citizens
+				add_idea = SLO_father_of_citizens1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#There are only two genders
+	focus = {
+		id = SLO_there_are_only_two_genders
+		icon = ITA_Focus_Ban_LGBT
+		x = 3
+		y = 2
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_father_of_all_citizens
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_there_are_only_two_genders"
+			set_ban_lgbt = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Stop the privatization of healthcare
+	focus = {
+		id = SLO_stop_privatization_of_healthcare
+		icon = SLO_stop_privatization_of_healthcare
+		x = -2
+		y = 3
+
+		relative_position_id = SLO_smer
+
+		cost = 3.5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_tax_redistribution
+		}
+		prerequisite = {
+			focus = SLO_ensure_a_decent_pension
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_stop_privatization_of_healthcare"
+			increase_healthcare_budget = yes
+			swap_ideas = {
+				remove_idea = SLO_left_economy1
+				add_idea = SLO_left_economy2
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Ban on commissions in Slovak banks
+	focus = {
+		id = SLO_ban_on_commissions_in_Slovak_banks
+		icon = SLO_bank_control
+		x = 0
+		y = 3
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_statist_paternalism
+		}
+		prerequisite = {
+			focus = SLO_ensure_a_decent_pension
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ban_on_commissions_in_Slovak_banks"
+			if = {
+				limit = { has_idea = international_bankers }
+				set_temp_variable = { temp_opinion = -15 }
+				change_international_bankers_opinion = yes
+			}
+			set_temp_variable = { modify_capitalization = -0.002 }
+			modify_capitalization_support = yes   
+			add_ideas = SLO_control_of_banks
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The nationalist orientation of the party
+	focus = {
+		id = SLO_nationalist_orientation_of_party
+		icon = SLO_smer_nationalist
+		x = 2
+		y = 3
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_statist_paternalism
+		}
+		prerequisite = {
+			focus = SLO_there_are_only_two_genders
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_nationalist_orientation_of_party"
+			swap_ideas = {
+				remove_idea = SLO_father_of_citizens1
+				add_idea = SLO_father_of_citizens2
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Stop monopolies
+	focus = {
+		id = SLO_stop_monopolies
+		icon = SLV_smer_party_2
+		x = -3
+		y = 4
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_stop_privatization_of_healthcare
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_stop_monopolies"
+			add_timed_idea = {
+				idea = SLO_fight_monopolies
+				days = 360
+			}
+			if = {
+				limit = { has_idea = international_bankers }
+				set_temp_variable = { temp_opinion = -5 }
+				change_international_bankers_opinion = yes
+			}
+			if = {
+				limit = { has_idea = oligarchs }
+				set_temp_variable = { temp_opinion = -15 }
+				change_oligarchs_opinion = yes
+			}
+
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Dynamic minimum wage
+	focus = {
+		id = SLO_dynamic_minimum_wage
+		icon = HUN_minimum_wage
+		x = -1
+		y = 4
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_stop_privatization_of_healthcare
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_dynamic_minimum_wage"
+			swap_ideas = {
+				remove_idea = SLO_left_economy2
+				add_idea = SLO_left_economy3
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Resolve the immigration issue
+	focus = {
+		id = SLO_resolve_immigration_issue
+		icon = POL_migration_korwin
+		x = 1
+		y = 4
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_nationalist_orientation_of_party
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_resolve_immigration_issue"
+			country_event = slo_smer.1
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Ban surrogacy
+	focus = {
+		id = SLO_ban_surrogacy
+		icon = SLO_ban_surrogacy
+		x = 3
+		y = 4
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_nationalist_orientation_of_party
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ban_surrogacy"
+			set_temp_variable = { party_index = 18 }
+			set_temp_variable = { party_popularity_increase = -0.03 }
+			set_temp_variable = { temp_outlook_increase = -0.03 }
+			add_relative_party_popularity = yes
+			add_ideas = SLO_ban_surrogacy_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Conduct fiscal consolidation
+	focus = {
+		id = SLO_conduct_fiscal_consolidation
+		icon = GENERIC_economic_measures
+		x = -2
+		y = 5
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_stop_monopolies
+		}
+		prerequisite = {
+			focus = SLO_dynamic_minimum_wage
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_conduct_fiscal_consolidation"
+			decrease_social_spending = yes
+			decrease_military_spending = yes
+			decrease_healthcare_budget = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Bet on Euroscepticism
+	focus = {
+		id = SLO_bet_on_euroscepticism
+		icon = POL_dont_need_eu
+		x = 0
+		y = 5
+
+		relative_position_id = SLO_smer
+
+		cost = 3
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_resolve_immigration_issue
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+		bypass = { NOT = { has_idea = EU_member } }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_bet_on_euroscepticism"
+			set_temp_variable = { modify_eurosceptic = 0.05 }
+			EU_eurosceptic_change = yes
+			set_temp_variable = { modify_eurosceptic = 0.05 }
+			set_temp_variable = { modify_eurosceptic_target = SLO }
+			eurosceptic_change = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Strengthening the police
+	focus = {
+		id = SLO_strengthening_the_police
+		icon = GENERIC_police_state
+		x = 2
+		y = 5
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_resolve_immigration_issue
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_strengthening_the_police"
+			increase_policing_budget = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Party dictatorship
+	focus = {
+		id = SLO_Party_dictatorship
+		icon = SLO_smer_dictatorship
+		x = -1
+		y = 6
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = {
+			focus = SLO_bet_on_euroscepticism
+		}
+		prerequisite = {
+			focus = SLO_conduct_fiscal_consolidation
+		}
+		prerequisite = {
+			focus = SLO_strengthening_the_police
+		}
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+		mutually_exclusive = { focus = SLO_preservation_of_social_democratic_values }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_strengthening_the_police"
+			set_censorship = yes
+			set_partyall_banned = yes
+			swap_ideas = {
+				remove_idea = SLO_father_of_citizens2
+				add_idea = SLO_father_of_citizens3
+			}
+			add_country_leader_trait = dictator
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = neutrality
+					popularity = 0.10
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Preservation of social democratic values
+	focus = {
+		id = SLO_preservation_of_social_democratic_values
+		icon = SLO_smer_social_democratic
+
+		x = 1
+		y = 6
+
+		relative_position_id = SLO_smer
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		prerequisite = { focus = SLO_bet_on_euroscepticism }
+		prerequisite = { focus = SLO_conduct_fiscal_consolidation }
+		prerequisite = { focus = SLO_strengthening_the_police }
+		mutually_exclusive = { focus = SLO_Party_dictatorship }
+
+		available = {
+			neutrality_neutral_social_are_in_power = yes
+		}
+		
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_preservation_of_social_democratic_values"
+			swap_ideas = {
+				remove_idea = SLO_father_of_citizens2
+				add_idea = SLO_father_of_citizens4
+			}
+			add_country_leader_trait = peoples_leader
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = neutrality
+					popularity = 0.10
+				}
+			}
+			if = {
+				limit = { 
+					has_idea = SLO_legacy_idea
+				}
+				remove_ideas = SLO_legacy_idea
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+
+	#COMMI
+
+	#Triumph of Communism
+	focus = {
+		id = SLO_triumph_of_communism
+		icon = SLO_kss
+
+		x = 2
+		y = 3
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_triumph_of_communism"
+			add_political_power = 100
+			set_temp_variable = { party_index = 4 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+			hidden_effect = {
+				if = {
+					limit = { NOT = { is_in_array = { ruling_party = 4 } } }
+					set_temp_variable = { rul_party_temp = 4 }
+					set_temp_variable = { enable_elections = 0 }
+					change_ruling_party_effect = yes
+				}
+				set_temp_variable = { party_index = 4 }
+				set_temp_variable = { party_popularity_increase = 0.10 }
+				set_temp_variable = { temp_outlook_increase = 0.10 }
+				add_relative_party_popularity = yes
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The power of labor unions
+	focus = {
+		id = SLO_power_of_labor_unions
+		icon = BLR_labour_state
+		x = 0
+		y = 1
+
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 3
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+		prerequisite = { focus = SLO_triumph_of_communism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_triumph_of_communism"
+			set_gov_unions = yes
+			if = {
+				limit = { has_idea = labour_unions }
+				set_temp_variable = { temp_opinion = 10 }
+				change_labour_unions_opinion = yes
+			}
+			else = {
+				if = {
+					limit = { has_idea = small_medium_business_owners }
+					swap_ideas = {
+						remove_idea = small_medium_business_owners
+						add_idea = labour_unions
+					}
+				}
+				else_if = {
+					limit = { has_idea = industrial_conglomerates }
+					swap_ideas = {
+						remove_idea = industrial_conglomerates
+						add_idea = labour_unions
+					}
+				}
+				else_if = {
+					limit = { has_idea = landowners }
+					swap_ideas = {
+						remove_idea = landowners
+						add_idea = labour_unions
+					}
+				}
+				else_if = {
+					limit = { has_idea = farmers }
+						swap_ideas = {
+						remove_idea = farmers
+						add_idea = labour_unions
+					}
+					}
+				else_if = {
+					limit = { has_idea = oligarchs }
+					swap_ideas = {
+						remove_idea = oligarchs
+						add_idea = labour_unions
+					}
+				}
+				else_if = {
+					limit = { has_idea = international_bankers }
+					swap_ideas = {
+						remove_idea = international_bankers
+						add_idea = labour_unions
+					}
+				}
+				else_if = {
+					limit = { has_idea = maritime_industry }
+					swap_ideas = {
+						remove_idea = maritime_industry
+						add_idea = labour_unions
+					}
+				}
+				else_if = {
+					limit = { has_idea = the_military }
+					swap_ideas = {
+						remove_idea = the_military
+						add_idea = labour_unions
+					}
+				}
+				else_if = {
+					limit = { has_idea = intelligence_community }
+					swap_ideas = {
+						remove_idea = intelligence_community
+						add_idea = labour_unions
+					}
+				}
+				else_if = {
+					limit = { has_idea = the_clergy }
+					swap_ideas = {
+						remove_idea = the_clergy
+						add_idea = labour_unions
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#A blow to capitalism
+	focus = {
+		id = SLO_blow_to_capitalism
+		icon = condemn_global_capitalism
+
+		x = -2
+		y = 1
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 2
+
+		prerequisite = { focus = SLO_triumph_of_communism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_blow_to_capitalism"
+			decrease_economic_growth = yes
+			add_ideas = SLO_economic_restructuring
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Ban disloyal political parties
+	focus = {
+		id = SLO_ban_disloyal_political_parties
+		icon = SLO_ban_disloyal_political_parties
+
+		x = 2
+		y = 1
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 2
+
+		prerequisite = { focus = SLO_triumph_of_communism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ban_disloyal_political_parties"
+			set_ban_on_extremism = yes
+			set_temp_variable = { party_index = 4 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+			set_partyall_banned = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Return to a planned economy
+	focus = {
+		id = SLO_return_to_a_planned_economy
+		icon = generic_commie_equality
+
+		x = -1
+		y = 2
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 4
+
+		prerequisite = { focus = SLO_blow_to_capitalism }
+		prerequisite = { focus = SLO_power_of_labor_unions }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_return_to_a_planned_economy"
+			swap_ideas = {
+				remove_idea = SLO_economic_restructuring
+				add_idea = SLO_economic_restructuring1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#All power to the workers!
+	focus = {
+		id = SLO_all_power_to_workers
+		icon = generic_commie_fraternity
+		x = 1
+		y = 2
+
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 3
+
+		prerequisite = { focus = SLO_power_of_labor_unions }
+		prerequisite = { focus = SLO_ban_disloyal_political_parties }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_all_power_to_workers"
+			add_ideas = SLO_dictatorship_of_proletariat
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Nationalization of industrial sectors
+	focus = {
+		id = SLO_nationalization_of_industrial_sectors
+		icon = nationalization_of_industrial_sectors
+
+		x = -2
+		y = 3
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 5
+
+		prerequisite = { focus = SLO_return_to_a_planned_economy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_nationalization_of_industrial_sectors"
+			two_random_industrial_complex = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The Return of the StB
+	focus = {
+		id = SLO_return_of_the_StB
+		icon = return_of_the_StB
+
+		x = 0
+		y = 3
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 3
+
+		prerequisite = { focus = SLO_all_power_to_workers }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_return_of_the_StB"
+			custom_effect_tooltip = available_new_departament
+          	show_ideas_tooltip = SLO_stb_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Centralization of power
+	focus = {
+		id = SLO_centralization_of_power
+		icon = generic_commie_democratic_centralism
+
+		x = 2
+		y = 3
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 3
+
+		prerequisite = { focus = SLO_all_power_to_workers }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_centralization_of_power"
+			increase_centralization = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#We'll complete the five-year plan in four years!
+	focus = {
+		id = SLO_complete_five_year_plan_in_four_years
+		icon = generic_commie_five_year
+		x = -1
+		y = 4
+
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 5
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+		prerequisite = { focus = SLO_nationalization_of_industrial_sectors }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_complete_five_year_plan_in_four_years"
+			add_timed_idea = {
+				idea = SLO_five_year_plan_idea
+				days = 1820
+			} 
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Take control of the media
+	focus = {
+		id = SLO_take_control_of_the_media
+		icon = take_control_of_the_media
+
+		x = 1
+		y = 4
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 3
+
+		prerequisite = { focus = SLO_return_of_the_StB }
+		prerequisite = { focus = SLO_centralization_of_power }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_take_control_of_the_media"
+			set_national_internet = yes
+			swap_ideas = {
+				remove_idea = SLO_dictatorship_of_proletariat
+				add_idea = SLO_dictatorship_of_proletariat1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Proletarians of all countries!
+	focus = {
+		id = SLO_proletarians_of_all_countries
+		icon = pol_commies_proletarians
+
+		x = 0
+		y = 5
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 3
+
+		prerequisite = { focus = SLO_complete_five_year_plan_in_four_years }
+		prerequisite = { focus = SLO_take_control_of_the_media }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_take_control_of_the_media"
+			every_other_country = {
+				limit = {
+					OR = {
+						emerging_communist_state_are_in_power = yes
+						neutrality_Neutral_Communism_are_in_power = yes
+					}
+				}
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+				reverse_add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+			hidden_effect = {
+				GENERIC_terrorism_start_europe = yes
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Preparation for the proletarian revolution in the Czech Republic
+	focus = {
+		id = SLO_preparation_proletarian_revolution_in_czech
+		icon = preparation_proletarian_revolution_in_czech
+
+		x = 0
+		y = 6
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 2
+
+		prerequisite = { focus = SLO_proletarians_of_all_countries }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+			country_exists = CZE
+		}
+	
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_take_control_of_the_media"
+			CZE = {
+				set_temp_variable = { party_index = 4 }
+				set_temp_variable = { party_popularity_increase = 0.10 }
+				set_temp_variable = { temp_outlook_increase = 0.10 }
+				add_relative_party_popularity = yes
+				add_stability = -0.1
+				add_ideas = SLO_ghost_of_communism
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Condemn the imperialism of the EU and NATO
+	focus = {
+		id = SLO_condemn_imperialism_of_EU_and_NATO
+		icon = pol_commies_american_imperialism
+
+		x = -2
+		y = 6
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 2
+
+		prerequisite = { focus = SLO_proletarians_of_all_countries }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+	
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_condemn_imperialism_of_EU_and_NATO"
+			custom_effect_tooltip = TT_ALL_NATO_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				add_opinion_modifier = { target = SLO modifier = slovakia_condemn_us }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+			}
+			for_each_scope_loop = {
+				array = global.nato_members
+				add_opinion_modifier = { target = SLO modifier = slovakia_condemn_us }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+			}
+			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				add_opinion_modifier = { target = SLO modifier = slovakia_condemn_us }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+			}
+			for_each_scope_loop = {
+				array = global.EU_member
+				add_opinion_modifier = { target = SLO modifier = slovakia_condemn_us }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Chinese Guarantees
+	focus = {
+		id = SLO_chinese_guarantees
+		icon = cooperation_with_china
+
+		x = 2
+		y = 6
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 2
+
+		prerequisite = { focus = SLO_proletarians_of_all_countries }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+			NOT = { 
+				has_war_with = CHI
+			}
+			country_exists = CHI
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_chinese_guarantees"
+			CHI = { country_event = { id = slo_commi.1 days = 1 random_hours = 10 } }
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Join Russia
+	focus = {
+		id = SLO_join_russia
+		icon = csto_nation
+
+		x = -1
+		y = 7
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 2
+
+		prerequisite = { focus = SLO_condemn_imperialism_of_EU_and_NATO }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+			SOV = {
+				has_idea = CSTO_member 
+			}
+		}
+		
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_join_russia"
+			if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
+			if = {
+				limit = { has_idea = NATO_member }
+				NATO_leave = yes
+			}
+			SOV = { country_event = { id = CSTO.1 days = 1 }}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Invite North Korean workers
+	focus = {
+		id = SLO_invite_north_korean_workers
+		icon = invite_north_korean_workers
+
+		x = 1
+		y = 7
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 2
+
+		prerequisite = { focus = SLO_chinese_guarantees }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+			NOT = { 
+				has_war_with = NKO
+			}
+			country_exists = NKO
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_join_russia"
+			NKO = { country_event = { id = slo_commi.4 days = 1 random_hours = 10 } }
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Restoration of Czechoslovakia
+	focus = {
+		id = SLO_restoration_of_czechoslovakia
+		icon = SLO_restoration_of_czechoslovakia
+
+		x = 0
+		y = 8
+		relative_position_id = SLO_triumph_of_communism
+
+		cost = 2
+
+		prerequisite = { focus = SLO_preparation_proletarian_revolution_in_czech }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+			NOT = { 
+				has_war_with = CZE
+			}
+			country_exists = CZE
+		}
+
+		bypass = {
+			has_cosmetic_tag = CZE_SLO_czechoslovakia
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_restoration_of_czechoslovakia"
+			CZE = { country_event = { id = slo_foreign.36 days = 1 random_hours = 10 } }
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+
+	#SNS
+
+	#SNS
+	focus = {
+		id = SLO_sns
+		icon = SLO_sns
+		x = 28
+		y = 3
+
+		cost = 2.5
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_sns"
+			add_political_power = 100
+			set_temp_variable = { party_index = 20 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+			hidden_effect = {
+				if = {
+					limit = { NOT = { is_in_array = { ruling_party = 20 } } }
+					set_temp_variable = { rul_party_temp = 20 }
+					set_temp_variable = { enable_elections = 0 }
+					change_ruling_party_effect = yes
+				}
+				set_temp_variable = { party_index = 20 }
+				set_temp_variable = { party_popularity_increase = 0.10 }
+				set_temp_variable = { temp_outlook_increase = 0.10 }
+				add_relative_party_popularity = yes
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Banning LGBT rights
+	focus = {
+		id = SLO_banning_LGBT_rights
+		icon = POL_lpr_hom_tend
+		x = 0
+		y = 1
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_sns }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_banning_LGBT_rights"
+			set_ban_lgbt = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Economic nationalism
+	focus = {
+		id = SLO_economic_nationalism
+		icon = SLO_economic_nationalism
+		x = -2
+		y = 1
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_sns }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_economic_nationalism"
+			set_temp_variable = { percent_change = 5 }
+			change_domestic_influence_percentage = yes
+			add_ideas = SLO_economic_nationalism_idea
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The Path of Total Statism
+	focus = {
+		id = SLO_path_of_total_statism
+		icon = SLO_path_of_total_statism
+		x = 2
+		y = 1
+
+		relative_position_id = SLO_sns
+
+		cost = 3.5
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_sns }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_path_of_total_statism"
+			increase_centralization = yes
+			add_ideas = SLO_total_statism
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Development of agriculture
+	focus = {
+		id = SLO_development_of_agriculture
+		icon = BLR_agroculture
+		x = -3
+		y = 2
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_economic_nationalism }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_development_of_agriculture"
+			two_random_agriculture_district = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Development of national production
+	focus = {
+		id = SLO_Development_of_national_production
+		icon = SLO_Development_of_national_production
+		x = -1
+		y = 2
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_economic_nationalism }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Development_of_national_productiona"
+			two_random_industrial_complex = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Stop political activity in the media
+	focus = {
+		id = SLO_Stop_political_activity_in_media
+		icon = SLO_Stop_political_activity_in_media
+		x = 1
+		y = 2
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_path_of_total_statism }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Stop_political_activity_in_media"
+			add_ideas = SLO_media_control
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Foreign Financing Act
+	focus = {
+		id = SLO_Foreign_Financing_Act
+		icon = SLO_Foreign_Financing_Act
+		x = 3
+		y = 2
+
+		relative_position_id = SLO_sns
+
+		cost = 2.5
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_path_of_total_statism }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Foreign_Financing_Act"
+			swap_ideas = {
+				remove_idea = SLO_total_statism
+				add_idea = SLO_total_statism1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Deprivatization program
+	focus = {
+		id = SLO_deprivatization_program
+		icon = SLO_deprivatization_program
+		x = -2
+		y = 3
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_development_of_agriculture }
+		prerequisite = { focus = SLO_Development_of_national_production }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_deprivatization_program"
+			one_random_industrial_complex = yes
+			swap_ideas = {
+				remove_idea = SLO_economic_nationalism_idea
+				add_idea = SLO_economic_nationalism_idea1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Strengthen measures against illegal migration
+	focus = {
+		id = SLO_Strengthen_measures_against_illegal_migration
+		icon = POL_migration_korwin
+		x = 0
+		y = 3
+
+		relative_position_id = SLO_sns
+
+		cost = 2
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_banning_LGBT_rights }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Strengthen_measures_against_illegal_migration"
+			increase_migration_law = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Total control over political activity
+	focus = {
+		id = SLO_total_control_over_political_activity
+		icon = SLO_total_control_over_political_activity
+		x = 2
+		y = 3
+
+		relative_position_id = SLO_sns
+
+		cost = 5
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_Foreign_Financing_Act }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_deprivatization_program"
+			swap_ideas = {
+				remove_idea = SLO_total_statism1
+				add_idea = SLO_total_statism2
+			}
+			set_temp_variable = { party_index = 20 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Tax cuts for small businesses
+	focus = {
+		id = SLO_tax_cuts_for_small_businesses
+		icon = generic_economic_business_ease
+		x = -3
+		y = 4
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_deprivatization_program }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_tax_cuts_for_small_businesses"
+			set_temp_variable = { corp_change = -5 }
+			modify_corporate_tax_rate_effect = yes
+			set_temp_variable = { temp_opinion = 15 }
+			change_small_medium_business_owners_opinion = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Ban on increasing the minimum wage
+	focus = {
+		id = SLO_ban_on_increasing_the_minimum_wage
+		icon = SLV_sns_party_2
+		x = -1
+		y = 4
+
+		relative_position_id = SLO_sns
+
+		cost = 2.5
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_deprivatization_program }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ban_on_increasing_the_minimum_wage"
+			swap_ideas = {
+				remove_idea = SLO_economic_nationalism_idea1
+				add_idea = SLO_economic_nationalism_idea2
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Destroy the independence of the media
+	focus = {
+		id = SLO_destroy_the_independence_of_media
+		icon = SLO_destroy_the_independence_of_media
+		x = 1
+		y = 4
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes
+		}
+		prerequisite = { focus = SLO_Stop_political_activity_in_media }
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_destroy_the_independence_of_media"
+			set_censorship = yes
+			swap_ideas = {
+				remove_idea = SLO_media_control
+				add_idea = SLO_media_control1
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#One-party state
+	focus = {
+		id = SLO_one_party_state
+		icon = SLO_one_party_state
+		x = 3
+		y = 4
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_total_control_over_political_activity }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_one_party_state"
+			set_temp_variable = { party_index = 20 }
+			set_temp_variable = { party_popularity_increase = 0.05 }
+			set_temp_variable = { temp_outlook_increase = 0.05 }
+			add_relative_party_popularity = yes
+			set_partyall_banned = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Moving the embassy to Jerusalem
+	focus = {
+		id = SLO_moving_embassy_to_jerusalem
+		icon = SLO_moving_embassy_to_jerusalem
+		x = -1
+		y = 5
+
+		relative_position_id = SLO_sns
+
+		cost = 2.5
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_ban_on_increasing_the_minimum_wage }
+		prerequisite = { focus = SLO_tax_cuts_for_small_businesses }
+		prerequisite = { focus = SLO_destroy_the_independence_of_media }
+		prerequisite = { focus = SLO_one_party_state }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_moving_embassy_to_jerusalem"
+			ISR = { country_event = { id = slo_sns.1 days = 1 random_hours = 10 } }
+			add_opinion_modifier = {
+				target = ISR
+				modifier = slovakia_diplomatic_partnership
+			}
+			reverse_add_opinion_modifier = {
+				target = ISR
+				modifier = slovakia_diplomatic_partnership
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Slam the door on NATO
+	focus = {
+		id = SLO_slam_the_door_on_NATO
+		icon = nato_on_fire
+		x = 1
+		y = 5
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_ban_on_increasing_the_minimum_wage }
+		prerequisite = { focus = SLO_tax_cuts_for_small_businesses }
+		prerequisite = { focus = SLO_destroy_the_independence_of_media }
+		prerequisite = { focus = SLO_one_party_state }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_slam_the_door_on_NATO"
+			custom_effect_tooltip = TT_ALL_NATO_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+			}
+			for_each_scope_loop = {
+				array = global.nato_members
+				add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Political partnership with Israel
+	focus = {
+		id = SLO_political_partnership_with_Israel
+		icon = partnership_with_Israel
+		x = -2
+		y = 6
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_moving_embassy_to_jerusalem }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_political_partnership_with_Israel"
+			ISR = { country_event = { id = slo_sns.2 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_political_partnership_with_Israel_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Militarize the Country
+	focus = {
+		id = SLO_militarize_the_country
+		icon = generic_nationalists_militarization
+		x = 0
+		y = 6
+
+		relative_position_id = SLO_sns
+
+		cost = 3
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_moving_embassy_to_jerusalem }
+		prerequisite = { focus = SLO_slam_the_door_on_NATO }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_militarize_the_country"
+			add_ideas = SLO_slovak_militarism
+			one_random_arms_factory = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The Peacock of Independence before the EU
+	focus = {
+		id = SLO_peacock_of_independence_before_the_EU
+		icon = SLO_peacock_of_independence_before_the_EU
+		x = 2
+		y = 6
+
+		relative_position_id = SLO_sns
+
+		cost = 5.5
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_slam_the_door_on_NATO }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_peacock_of_independence_before_the_EU"
+			set_temp_variable = { percent_change = 10 }
+			change_domestic_influence_percentage = yes
+			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+			}
+			for_each_scope_loop = {
+				array = global.EU_member
+				add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_diplomatic_distant }
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Tighten the conscription law
+	focus = {
+		id = SLO_tighten_the_conscription_law
+		icon = militarystart
+		x = -1
+		y = 7
+
+		relative_position_id = SLO_sns
+
+		cost = 2
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_militarize_the_country }
+		bypass = { has_idea = draft_army }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_tighten_the_conscription_law"
+			if = {
+				limit = { has_idea = no_military }
+				swap_ideas = {
+					remove_idea = no_military
+					add_idea = draft_army
+				}
+			}
+			else_if = {
+				limit = { has_idea = partial_draft_army }
+				swap_ideas = {
+					remove_idea = partial_draft_army
+					add_idea = draft_army
+				}
+			}
+			else_if = {
+				limit = { has_idea = volunteer_army }
+				swap_ideas = {
+					remove_idea = volunteer_army
+					add_idea = draft_army
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Increase military spending
+	focus = {
+		id = SLO_increase_military_spending
+		icon = vg_military_invest
+		x = 1
+		y = 7
+
+		relative_position_id = SLO_sns
+
+		cost = 2
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_militarize_the_country }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_increase_military_spending"
+			increase_military_spending = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Strong leader, strong country
+	focus = {
+		id = SLO_strong_leader_strong_country
+		icon = SLO_strong_leader_strong_country
+		x = 0
+		y = 8
+
+		relative_position_id = SLO_sns
+
+		cost = 2
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		prerequisite = { focus = SLO_tighten_the_conscription_law }
+		prerequisite = { focus = SLO_increase_military_spending }
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_strong_leader_strong_country"
+			set_temp_variable = { party_index = 20 }
+			set_temp_variable = { party_popularity_increase = 0.07 }
+			set_temp_variable = { temp_outlook_increase = 0.07 }
+			add_relative_party_popularity = yes
+			add_ideas = SLO_personality_cult
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.10
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+
+	#FOREIGN POLICY
+
+	#Foreign policy of Slovakia
+	focus = {
+		id = SLO_foreign_policy_of_slovakia
+		icon = SLO_foreign_policy
+
+		x = 14
+		y = 11
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_foreign_policy_of_slovakia"
+			set_temp_variable = { percent_change = 5 }
+			change_domestic_influence_percentage = yes
+			every_neighbor_country = {
+				add_opinion_modifier = {
+					target = HUN
+					modifier = hungary_diplomatic_rapprochement
+				}
+				reverse_add_opinion_modifier = {
+					target = HUN
+					modifier = hungary_diplomatic_rapprochement
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Anti-Europeanism
+	focus = {
+		id = SLO_anti_europeanism
+		icon = POL_no_eu_conf
+
+		x = -2
+		y = 1
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_foreign_policy_of_slovakia }
+
+		available = {
+			NOT = { has_government = democratic }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_foreign_policy_of_slovakia"
+			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				add_opinion_modifier = { target = SLO modifier = slovakia_antieu }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_antieu }
+			}
+			for_each_scope_loop = {
+				array = global.EU_member
+				add_opinion_modifier = { target = SLO modifier = slovakia_antieu }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_antieu }
+			}
+			set_temp_variable = { modify_eurosceptic = 0.05 }
+			EU_eurosceptic_change = yes
+			set_temp_variable = { modify_eurosceptic = 0.05 }
+			set_temp_variable = { modify_eurosceptic_target = SLO }
+			eurosceptic_change = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#European integration
+	focus = {
+		id = SLO_european_integration
+		icon = NOR_eu_tour
+		x = 2
+		y = 1
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_foreign_policy_of_slovakia }
+
+		available = {
+			has_government = democratic
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_european_integration"
+			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+			}
+			for_each_scope_loop = {
+				array = global.EU_member
+				add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+			}
+			set_temp_variable = { modify_eurosceptic = -0.03 }
+			EU_eurosceptic_change = yes
+			set_temp_variable = { modify_eurosceptic = -0.05 }
+			set_temp_variable = { modify_eurosceptic_target = SLO }
+			eurosceptic_change = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The EU membership question
+	focus = {
+		id = SLO_EU_membership_question
+		icon = closer_ties_with_eu
+
+		x = -3
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 3
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_anti_europeanism }
+		
+
+		available = {
+			NOT = { has_government = democratic }
+		}
+
+		bypass = {
+			NOT = { has_idea = EU_member }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_EU_membership_question"
+			country_event = slo_foreign.1
+			custom_effect_tooltip = SLO_EU_membership_question_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Focus on the East
+	focus = {
+		id = SLO_focus_on_the_east
+		icon = GENERIC_east_love
+		x = -1
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_anti_europeanism }
+
+		available = {
+			NOT = { has_government = democratic }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_focus_on_the_east"
+			CHI = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+			PER = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+			SOV = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+			RAJ = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Eastern European Frontier
+	focus = {
+		id = SLO_eastern_european_frontier
+		icon = membership_east
+
+		x = -6
+		y = 1
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_foreign_policy_of_slovakia }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_eastern_european_frontier"
+			BLR = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+			UKR = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+			SOV = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+			MLV = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+			ROM = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Support the Belarusian opposition
+	focus = {
+		id = SLO_support_belarusian_opposition
+		icon = BLR_unite_country
+
+		x = -7
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 3
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_eastern_european_frontier }
+
+		available = {
+			has_government = democratic
+			country_exists = BLR
+			OR = {
+				NOT = { is_subject_of = BLR }
+				NOT = { is_in_faction_with = BLR }
+				NOT = {
+					BLR = { is_subject_of = SLO }
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_support_belarusian_opposition"
+			if = {
+				limit = { BLR = { NOT = { has_government = democratic } } }
+				large_expenditure = yes
+				BLR = {
+					add_popularity = {
+						ideology = democratic
+						popularity = 0.1
+					}
+					add_stability = -0.03
+				}
+			}
+			else = {
+				BLR = {
+					add_opinion_modifier = {
+						target = SLO
+						modifier = slovakia_diplomatic_partnership
+					}
+				}
+			}
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = SLO }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Visit to Minsk
+	focus = {
+		id = SLO_visit_to_Minsk
+		icon = SLO_visit_to_Minsk
+
+		x = -5
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_eastern_european_frontier }
+
+		available = {
+			NOT = { 
+				has_war_with = BLR
+				has_government = democratic 
+			}
+			BLR = {
+				has_opinion = {
+					target = SLO
+					value > 0
+				}
+			}
+			country_exists = BLR
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_support_belarusian_opposition"
+			BLR = { country_event = { id = slo_foreign.2 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_visit_to_Minsk_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Join CSTO
+	focus = {
+		id = SLO_form_a_partnership_with_moscow
+		icon = csto_main
+		
+		x = -4
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 3
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_EU_membership_question }
+		prerequisite = { focus = SLO_visit_to_Minsk }
+
+		available = {
+			NOT = { has_government = democratic }
+			SOV = {
+				has_opinion = {
+					target = SLO
+					value > 99
+				}
+				has_idea = CSTO_member 
+			}
+		}
+
+		bypass = {
+			SOV = {
+				NOT = {
+					has_idea = CSTO_member
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_support_belarusian_opposition"
+			if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
+			if = {
+				limit = { has_idea = NATO_member }
+				NATO_leave = yes
+			}
+			SOV = { country_event = { id = CSTO.1 days = 1 } }
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Cooperation with China
+	focus = {
+		id = SLO_cooperation_with_china
+		icon = cooperation_with_china
+
+		x = -2
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_EU_membership_question }
+		prerequisite = { focus = SLO_focus_on_the_east }
+
+		available = {
+			CHI = {
+				has_opinion = {
+					target = SLO
+					value > 0
+				}
+			}
+			NOT = { 
+				has_war_with = CHI
+			}
+			country_exists = CHI
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_cooperation_with_china"
+			CHI = { country_event = { id = slo_foreign.5 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_cooperation_with_china_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Turkish investments
+	focus = {
+		id = SLO_turkish_investments
+		icon = turkish_investments
+		x = -1
+		y = 4
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_focus_on_the_east }
+
+		available = {
+			NOT = { 
+				has_war_with = TUR
+				has_government = democratic 
+			}
+			TUR = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = TUR
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_turkish_investments"
+			TUR = { country_event = { id = slo_economy.1 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_turkish_investments_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Buy Chinese Planes
+	focus = {
+		id = SLO_buy_chinese_planes
+		icon = buy_chinese_j7iii
+
+		x = -3
+		y = 4
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_cooperation_with_china }
+		prerequisite = { focus = SLO_form_a_partnership_with_moscow }
+
+		available = {
+			NOT = { 
+				has_war_with = CHI
+				has_government = democratic 
+			}
+			CHI = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = CHI
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_buy_chinese_planes"
+			CHI = { country_event = { id = slo_foreign.8 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_buy_chinese_planes_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Attract Russian investment
+	focus = {
+		id = SLO_attract_Russian_investment
+		icon = Russian_investment
+
+		x = -5
+		y = 4
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_form_a_partnership_with_moscow }
+
+		available = {
+			NOT = { 
+				has_government = democratic
+				has_idea = NATO_member 
+			}
+			SOV = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = SOV
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_attract_Russian_investment"
+			SOV = { country_event = { id = slo_economy.1 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_attract_Russian_investment_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Purchase Russian armored vehicles
+	focus = {
+		id = SLO_purchase_Russian_armored_vehicles
+		icon = sov_army_rf_reform_new
+
+		x = -5
+		y = 5
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_attract_Russian_investment }
+
+		available = {
+			NOT = { 
+				has_war_with = SOV
+				has_government = democratic
+				has_idea = NATO_member
+			}
+			SOV = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = SOV
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_purchase_Russian_armored_vehicles"
+			SOV = { country_event = { id = slo_foreign.11 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_purchase_Russian_armored_vehicles_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Slovak Spring Reborn
+	focus = {
+		id = SLO_Russian_slovak_spring
+		icon = slo_dyplomacy_russia
+		
+		x = -4
+		y = 6
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_purchase_Russian_armored_vehicles }
+		mutually_exclusive = { focus = SLO_Russian_tatra_brotherhood }
+
+		available = {
+			is_subject = no
+			NOT = { 
+				has_war_with = SOV
+				has_idea = NATO_member
+			}
+			has_government = communism
+			SOV = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = SOV
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Russian_slovak_spring"
+			SOV = { country_event = { id = slo_foreign.42 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				add_ideas = SLO_russia_surropt_idea
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Slovak Tatra Brotherhood
+	focus = {
+		id = SLO_Russian_tatra_brotherhood
+		icon = slo_money_russia
+		
+		x = -6
+		y = 6
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_purchase_Russian_armored_vehicles }
+		mutually_exclusive = { focus = SLO_Russian_slovak_spring }
+
+		available = {
+			is_subject = no
+			NOT = { 
+				has_war_with = SOV
+				has_idea = NATO_member
+			}
+			has_government = nationalist
+			SOV = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = SOV
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Russian_tatra_brotherhood"
+			SOV = { country_event = { id = slo_foreign.45 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				set_temp_variable = { percent_change = 5 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = SLO }
+				change_influence_percentage = yes
+				set_temp_variable = { treasury_change = 15.25 }
+				modify_treasury_effect = yes
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Russian Military Base
+	focus = {
+		id = SLO_Russian_military_base
+		icon = slo_base_russia
+		
+		x = -5
+		y = 7
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { 
+			focus = SLO_Russian_tatra_brotherhood 
+			focus = SLO_Russian_slovak_spring
+		}
+
+		available = {
+			is_subject = no
+			NOT = { 
+				has_war_with = SOV
+				has_idea = NATO_member
+			}
+			OR = {
+				has_government = communism
+				has_government = nationalist
+			}
+			SOV = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = SOV
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Russian_military_base"
+			SOV = { country_event = { id = slo_foreign.46 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				diplomatic_relation = {
+					country = SOV
+					relation = military_access
+					active = yes
+				}
+				if = {
+					limit = { 
+						NOT = { has_idea = SLO_russia_surropt_idea } 
+					}
+					add_ideas = SLO_russia_surropt_idea1
+				}
+				else = {
+					swap_ideas = {
+						remove_idea = SLO_russia_surropt_idea
+						add_idea = SLO_russia_surropt_idea1
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Russian Union State
+	focus = {
+		id = SLO_Russian_union_state
+		icon = align_to_union_state
+		
+		x = -6
+		y = 8
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_Russian_military_base }
+		mutually_exclusive = { focus = SLO_Russian_gas }
+
+		available = {
+			is_subject = no
+			NOT = { 
+				has_war_with = SOV
+				has_idea = NATO_member
+			}
+			OR = {
+				has_government = communism
+				has_government = nationalist
+			}
+			SOV = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = SOV
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Russian_military_base"
+			SOV = { country_event = { id = slo_foreign.47 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				SOV = { 
+					set_autonomy = {
+						target = SLO
+						autonomous_state = autonomy_union_state	
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Russian Gazprom
+	focus = {
+		id = SLO_Russian_gas
+		icon = slo_cooperation_gazprom
+		
+		x = -4
+		y = 8
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_Russian_military_base }
+		mutually_exclusive = { focus = SLO_Russian_union_state }
+
+		available = {
+			is_subject = no
+			NOT = { 
+				has_war_with = SOV
+				has_idea = NATO_member
+			}
+			OR = {
+				has_government = communism
+				has_government = nationalist
+			}
+			SOV = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = SOV
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Russian_military_base"
+			SOV = { country_event = { id = slo_foreign.52 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				SOV = { 
+					set_autonomy = {
+						target = SLO
+						autonomous_state = autonomy_union_state	
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Purchase of Iranian missiles
+	focus = {
+		id = SLO_purchase_of_Iranian_missiles
+		icon = Iranian_missiles
+
+		x = -2
+		y = 5
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_buy_chinese_planes }
+		prerequisite = { focus = SLO_turkish_investments }
+
+		available = {
+			NOT = { 
+				has_war_with = PER
+				has_government = democratic 
+			}
+			PER = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = PER
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_purchase_of_Iranian_missiles"
+			PER = { country_event = { id = slo_foreign.14 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_purchase_of_Iranian_missiles_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Cooperation Iran
+	focus = {
+		id = SLO_Iranian_cooperation
+		icon = slo_dyplomacy_iran
+
+		x = -2
+		y = 6
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_purchase_of_Iranian_missiles }
+
+		available = {
+			NOT = { 
+				has_war_with = PER
+				has_government = democratic 
+			}
+			PER = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = PER
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Iranian_cooperation"
+			PER = { country_event = { id = slo_foreign.48 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				PER = {
+					add_ideas = PER_SLO_cooperation_idea
+				}
+				add_ideas = PER_SLO_cooperation1_idea
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Shaheed
+	focus = {
+		id = SLO_Iranian_drones
+		icon = iran_shaheed
+
+		x = -3
+		y = 7
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_Iranian_cooperation }
+
+		available = {
+			NOT = { 
+				has_war_with = PER
+				has_government = democratic 
+			}
+			PER = {
+				has_tech = gen_4_light
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = PER
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Iranian_cooperation"
+			PER = { country_event = { id = slo_foreign.51 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				set_temp_variable = { treasury_change = -10 }
+				modify_treasury_effect = yes
+				add_equipment_to_stockpile = {
+					type = small_plane_suicide_airframe_2
+					amount = 500
+					producer = PER
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Iranian Nuclear Help
+	focus = {
+		id = SLO_Iranian_nuclear
+		icon = slo_cooperation_iran_nuclear
+
+		x = -1
+		y = 7
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_Iranian_cooperation }
+
+		available = {
+			NOT = { 
+				has_war_with = PER
+				has_government = democratic 
+			}
+			PER = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = PER
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Iranian_nuclear"
+			PER = { country_event = { id = slo_foreign.53 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				set_temp_variable = { treasury_change = -6 }
+				modify_treasury_effect = yes
+				add_ideas = PER_SLO_nuclear_cooperation_idea
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The issue of the Transnistrian conflict
+	focus = {
+		id = SLO_issue_of_transnistrian_conflict
+		icon = transnistrian_conflict
+
+		x = -6
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 3
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_eastern_european_frontier }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_issue_of_transnistrian_conflict"
+			country_event = slo_foreign.17
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Partnership with Ukraine
+	focus = {
+		id = SLO_partnership_with_ukraine
+		icon = partnership_with_ukraine
+
+		x = -8
+		y = 4
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 1
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_issue_of_transnistrian_conflict }
+
+		available = {
+			UKR = {
+				has_opinion = {
+					target = SLO
+					value > 0
+				}
+			}
+			country_exists = UKR
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_issue_of_transnistrian_conflict"
+			UKR = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Cooperation with Ukraine
+	focus = {
+		id = SLO_ukraine_cooperation
+		icon = slo_cooperation_ukraine
+
+		x = -7
+		y = 5
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 3
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_partnership_with_ukraine }
+
+		available = {
+			country_exists = UKR
+			NOT = { 
+				has_war_with = UKR
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ukraine_cooperation"
+			UKR = { country_event = { id = slo_foreign.54 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				SLO = {
+					add_ideas = UKR_SLO_cooperation_idea
+				}
+				add_ideas = UKR_SLO_cooperation1_idea
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	#Guarantee Ukraine
+	focus = {
+		id = SLO_ukraine_guarantee
+		icon = slo_ukraine_guarantee
+
+		x = -7
+		y = 7
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_ukraine_cooperation }
+
+		available = {
+			country_exists = UKR
+			NOT = {
+				has_war_with = UKR
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_ukraine_cooperation"
+			UKR = { country_event = { id = slo_foreign.57 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				UKR = {
+					give_guarantee = SLO
+				}
+				give_guarantee = UKR
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	#Buy out Transcarpathia
+	focus = {
+		id = SLO_buy_out_transcarpathia
+		icon = slo_buy_out_transcarpathia
+
+		x = -9
+		y = 5
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_partnership_with_ukraine }
+
+		available = {
+			country_exists = UKR
+			NOT = { 
+				has_war_with = UKR
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_issue_of_transnistrian_conflict"
+			if = {
+				limit = { NOT = { country_exists = UKR } }
+				every_other_country = {
+					limit = { 701 = { is_owned_by = PREV } }
+					country_event = { id = slo_foreign.18 days = 1 random_hours = 10 }
+				}
+			}
+			else = {
+				UKR = { country_event = { id = slo_foreign.18 days = 1 random_hours = 10 } }
+				custom_effect_tooltip = SLO_buy_out_transcarpathia_tt
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	#Conquer Transcarpathia
+	focus = {
+		id = SLO_conquer_transcarpathia
+		icon = slo_destroy_saloland
+
+		x = -9
+		y = 6
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_buy_out_transcarpathia }
+
+		available = {
+			NOT = {
+				owns_state = 701
+				has_government = democratic
+			}
+			country_exists = UKR
+			OR = {
+				NOT = { is_subject_of = UKR }
+				NOT = { is_in_faction_with = UKR }
+				NOT = {
+					UKR = { is_subject_of = SLO }
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_issue_of_transnistrian_conflict"
+			if = {
+				limit = { NOT = { country_exists = UKR } }
+				every_other_country = {
+					limit = { 701 = { is_owned_by = PREV } }
+					country_event = { id = slo_foreign.39 days = 1 random_hours = 10 }
+				}
+			}
+			else = {
+				UKR = { country_event = { id = slo_foreign.39 days = 1 random_hours = 10 } }
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				strength_ratio = {
+					tag = UKR
+					ratio > 1
+				}
+				add = 50
+			}
+		}
+	}
+	#German investments
+	focus = {
+		id = SLO_German_investments
+		icon = German_investments
+		x = 1
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_european_integration }
+
+		available = {
+			has_government = democratic
+			GER = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			NOT = { 
+				has_war_with = GER
+			}
+			country_exists = GER
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_German_investments"
+			GER = { country_event = { id = slo_economy.1 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_German_investments_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Accept Japanese companies
+	focus = {
+		id = SLO_accept_japanese_companies
+		icon = usa_japan_market
+		x = 0
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_German_investments focus = SLO_focus_on_the_east }
+
+		available = {
+			NOT = { 
+				has_war_with = KOR
+			}
+			JAP = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = JAP
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_accept_japanese_companies"
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = JAP }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			effect_tooltip = {
+				add_ideas = JAP_suzuki_idea
+				add_ideas = JAP_toyota_idea
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Economic partnership with Korea
+	focus = {
+		id = SLO_economic_partnership_with_korea
+		icon = vg_korean_invest
+		x = 0
+		y = 5
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_accept_japanese_companies }
+
+		available = {
+			NOT = { 
+				has_war_with = KOR
+			}
+			KOR = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			country_exists = KOR
+		}
+		
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_accept_japanese_companies"
+			KOR = { country_event = { id = slo_foreign.21 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_economic_partnership_with_korea_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Get closer to France
+	focus = {
+		id = SLO_get_closer_to_France
+		icon = cooperation_with_france
+		x = 3
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_european_integration }
+
+		available = {
+			has_government = democratic
+			FRA = {
+				has_opinion = {
+					target = SLO
+					value > 0
+				}
+			}
+			NOT = { 
+				has_war_with = FRA
+			}
+			country_exists = FRA
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_accept_japanese_companies"
+			FRA = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The question of NATO membership
+	focus = {
+		id = SLO_question_of_NATO_membership
+		icon = NOR_nato_friend
+		x = 2
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_German_investments }
+		prerequisite = { focus = SLO_get_closer_to_France }
+
+
+		available = {
+			has_government = democratic
+		}
+
+		bypass = { has_idea = NATO_member }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_accept_japanese_companies"
+			NATO_join = yes
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Buy German Leopards
+	focus = {
+		id = SLO_buy_German_Leopards
+		icon = purchase_of_german_tanks
+		x = 1
+		y = 4
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_German_investments }
+
+		available = {
+			has_government = democratic
+			GER = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			NOT = { 
+				has_war_with = GER
+			}
+			country_exists = GER
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_buy_German_Leopards"
+			GER = { country_event = { id = slo_foreign.24 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_buy_German_Leopards_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Treaty of Friendship with Italy
+	focus = {
+		id = SLO_treaty_of_friendship_with_italy
+		icon = friendship_with_italy
+		x = 3
+		y = 4
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_get_closer_to_France }
+
+		available = {
+			ITA = {
+				has_opinion = {
+					target = SLO
+					value > 0
+				}
+			}
+			NOT = { 
+				has_war_with = ITA
+			}
+			country_exists = ITA
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_treaty_of_friendship_with_italy"
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = ITA }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+			ITA = {
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#A worthy member of the European Society
+	focus = {
+		id = SLO_worthy_member_of_the_european_society
+		icon = HUN_united_europe
+		x = 2
+		y = 5
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_buy_German_Leopards }
+		prerequisite = { focus = SLO_treaty_of_friendship_with_italy }
+
+		available = {
+			has_government = democratic
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_worthy_member_of_the_european_society"
+			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+			}
+			for_each_scope_loop = {
+				array = global.EU_member
+				add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+				reverse_add_opinion_modifier = { target = SLO modifier = slovakia_eurointegration }
+			}
+			set_temp_variable = { modify_eurosceptic = -0.05 }
+			EU_eurosceptic_change = yes
+			set_temp_variable = { modify_eurosceptic = -0.1 }
+			set_temp_variable = { modify_eurosceptic_target = SLO }
+			eurosceptic_change = yes
+			custom_effect_tooltip = slo_eu_candidate_tt
+			set_country_flag = EU_candidate
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Maintain friendship with the Visegrad Group
+	focus = {
+		id = SLO_maintain_friendship_with_visegrad_group
+		icon = Visegrad_group
+
+		x = 8
+		y = 1
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_foreign_policy_of_slovakia }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_maintain_friendship_with_visegrad_group"
+			every_other_country = {
+				limit = { has_idea = Visegrad_group }
+				add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+				reverse_add_opinion_modifier = {
+					target = SLO
+					modifier = slovakia_diplomatic_partnership
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Polish investments
+	focus = {
+		id = SLO_polish_investments
+		icon = polish_investments
+
+		x = 6
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_maintain_friendship_with_visegrad_group }
+
+		available = {
+			country_exists = POL
+			POL = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			NOT = { 
+				has_war_with = POL
+			}
+			country_exists = POL
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_polish_investments"
+			POL = { country_event = { id = slo_economy.1 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_polish_investments_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Visit to Budapest
+	focus = {
+		id = SLO_visit_to_budapest
+		icon = visit_to_budapest
+
+		x = 10
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_maintain_friendship_with_visegrad_group }
+
+		available = {
+			country_exists = HUN
+			HUN = {
+				has_opinion = {
+					target = SLO
+					value > 0
+				}
+			}
+			NOT = {
+				has_war_with = HUN
+			}
+			country_exists = HUN
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_visit_to_budapest"
+			HUN = { country_event = { id = slo_foreign.27 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_visit_to_budapest_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Kill Budapest
+	focus = {
+		id = SLO_kill_budapest
+		icon = attacks_hungary
+
+		x = 9
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_visit_to_budapest }
+
+		available = {
+			country_exists = HUN
+			NOT = { has_government = democratic }
+			OR = {
+				NOT = { is_subject_of = HUN }
+				NOT = { is_in_faction_with = HUN }
+				NOT = {
+					HUN = { is_subject_of = SLO }
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_kill_budapest"
+			declare_war_on = {
+				target = POL
+				type = liberate_wargoal
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				strength_ratio = {
+					tag = HUN
+					ratio > 1
+				}
+				add = 50
+			}
+		}
+	}
+	#Friend Budapest
+	focus = {
+		id = SLO_friend_budapest
+		icon = dyplomacy_hungary_slovakia
+
+		x = 11
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_visit_to_budapest }
+
+		available = {
+			country_exists = HUN
+			NOT = {
+				has_war_with = HUN
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_friend_budapest"
+			HUN = { country_event = { id = slo_foreign.64 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				HUN = {
+					give_guarantee = SLO
+				}
+				give_guarantee = HUN
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				strength_ratio = {
+					tag = HUN
+					ratio > 1
+				}
+				add = 50
+			}
+		}
+	}
+	#Purchase Polish PT-91s
+	focus = {
+		id = SLO_purchase_polish_PT_91s
+		icon = purchase_polish_PT_91s
+
+		x = 5
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_polish_investments }
+
+		available = {
+			country_exists = POL
+			POL = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			NOT = { 
+				has_war_with = POL
+			}
+			country_exists = POL
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_purchase_polish_PT_91s"
+			POL = { country_event = { id = slo_foreign.30 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_purchase_polish_PT_91s_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Energy Agreement
+	focus = {
+		id = SLO_polish_agreement
+		icon = slo_dyplomacy_with_pol
+
+		x = 5
+		y = 4
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_purchase_polish_PT_91s }
+
+		available = {
+			country_exists = POL
+			POL = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			NOT = { 
+				has_war_with = POL
+			}
+			country_exists = POL
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_purchase_polish_PT_91s"
+			POL = { country_event = { id = slo_foreign.30 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				add_ideas = SLO_oil_polish_idea
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Support Silesia Separatists
+	focus = {
+		id = SLO_silesia_will_be_free
+		icon = blr_silesia_freedom
+
+		x = 7
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_polish_investments }
+
+		available = {
+			country_exists = POL
+			NOT = { has_government = democratic }
+			OR = {
+				NOT = { is_subject_of = POL }
+				NOT = { is_in_faction_with = POL }
+				NOT = {
+					POL = { is_subject_of = SLO }
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_purchase_polish_PT_91s"
+			SIL = {
+				set_temp_variable = { modify_separatism = 15 }
+				modify_separatism_support = yes
+			}
+			set_temp_variable = { percent_change = 3 }
+			set_temp_variable = { tag_index = SLO }
+			set_temp_variable = { influence_target = SIL }
+			change_influence_percentage = yes
+			set_temp_variable = { treasury_change = -35 }
+			modify_treasury_effect = yes
+			add_opinion_modifier = { target = POL modifier = recent_actions_negative }
+			reverse_add_opinion_modifier = { target = POL modifier = recent_actions_negative }
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#End Poland
+	focus = {
+		id = SLO_attack_polish_kurwa_bobr
+		icon = slo_attack_poland
+
+		x = 7
+		y = 4
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_silesia_will_be_free }
+
+		available = {
+			country_exists = POL
+			NOT = { has_government = democratic }
+			OR = {
+				NOT = { is_subject_of = POL }
+				NOT = { is_in_faction_with = POL }
+				NOT = {
+					POL = { is_subject_of = SLO }
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_attack_polish_kurwa_bobr"
+			declare_war_on = {
+				target = POL
+				type = liberate_wargoal
+			}
+			if = {
+				limit = { 
+					POL = {
+						controls_state = 626
+						controls_state = 115
+						influence_higher_30 = yes
+					}
+					SIL = {
+						NOT = {
+							has_country_flag = GENERIC_separatism_rebeliion_flag
+						}
+					}
+				}
+				set_temp_variable = { treasury_change = -8 }
+				modify_treasury_effect = yes
+				custom_effect_tooltip = GDR_silesian_revolt_tt
+				hidden_effect = {
+					POL = {
+						release = SIL
+					}
+					SIL = {
+						declare_war_on = {
+							target = POL
+							type = liberate_wargoal
+						}
+						set_country_flag = GENERIC_separatism_rebeliion_flag
+						division_template = {
+							name = "National Militia"
+							priority = 1
+							regiments = {
+								L_Inf_Bat = { x = 0 y = 0 }
+								L_Inf_Bat = { x = 0 y = 1 }
+								L_Inf_Bat = { x = 0 y = 2 }
+								L_Inf_Bat = { x = 0 y = 3 }
+								Arty_Bat = { x = 1 y = 0 }
+							}
+							support = {
+								L_Recce_Comp = { x = 0 y = 0 }
+								L_Engi_Comp = { x = 0 y = 1 }
+							}
+						}
+						random_owned_controlled_state = {
+							prioritize = { 626 }
+							create_unit = {
+								division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+								owner = SIL
+								count = 2
+							}
+						}
+						random_owned_controlled_state = {
+							prioritize = { 115 }
+							create_unit = {
+								division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+								owner = SIL
+								count = 2
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				strength_ratio = {
+					tag = POL
+					ratio > 1
+				}
+				add = 50
+			}
+		}
+	}
+	#Cooperation Agreement with the Czech Republic
+	focus = {
+		id = SLO_Cooperation_Agreement_with_Czech
+		icon = cooperation_with_czechia
+
+		x = 13
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_maintain_friendship_with_visegrad_group }
+		mutually_exclusive = { focus = SLO_claim_to_the_Czech_lands }
+
+		available = {
+			country_exists = CZE
+			CZE = {
+				has_opinion = {
+					target = SLO
+					value > 0
+				}
+			}
+			NOT = { 
+				has_war_with = CZE
+			}
+			country_exists = CZE
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Cooperation_Agreement_with_Czech"
+			CZE = { country_event = { id = slo_foreign.33 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_Cooperation_Agreement_with_Czech_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Claim to the Czech lands
+	focus = {
+		id = SLO_claim_to_the_Czech_lands
+		icon = SLO_claim_to_the_Czech_lands
+
+		x = 15
+		y = 2
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 5
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_maintain_friendship_with_visegrad_group }
+		mutually_exclusive = { focus = SLO_Cooperation_Agreement_with_Czech }
+
+		available = {
+			NOT = {
+				has_war_with = CZE
+				has_idea = POL_soviet_defence_doctrine
+			}
+			country_exists = CZE
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_claim_to_the_Czech_lands"
+			add_war_support = 0.15
+			118 = {
+				add_claim_by = SLO
+			}
+			1018 = {
+				add_claim_by = SLO
+			}
+			117 = {
+				add_claim_by = SLO
+			}
+			1017 = {
+				add_claim_by = SLO
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Request for Czech Investments
+	focus = {
+		id = SLO_Request_for_Czech_Investments
+		icon = Czech_Investments
+
+		x = 13
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_Cooperation_Agreement_with_Czech }
+
+		available = {
+			country_exists = CZE
+			CZE = {
+				has_opinion = {
+					target = SLO
+					value > 49
+				}
+			}
+			NOT = { 
+				has_war_with = CZE
+			}
+			country_exists = CZE
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_Request_for_Czech_Investments"
+			CZE = { country_event = { id = slo_economy.1 days = 1 random_hours = 10 } }
+			custom_effect_tooltip = SLO_Request_for_Czech_Investments_tt
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#The return of Czechoslovakia
+	focus = {
+		id = SLO_return_of_czechoslovakia
+		icon = return_of_czechoslovakia
+
+		x = 15
+		y = 3
+		relative_position_id = SLO_foreign_policy_of_slovakia
+
+		cost = 2
+		
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_claim_to_the_Czech_lands }
+
+		available = {
+			country_exists = CZE
+			NOT = { 
+				has_war_with = CZE
+			}
+			country_exists = CZE
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_return_of_czechoslovakias"
+			CZE = { country_event = { id = slo_foreign.36 days = 1 random_hours = 10 } }
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+
+#Mečiar
+
+	#Mečiar is on the Horse Again
+	focus = {
+		id = SLO_mechiar_on_the_horse
+		icon = SLO_meciar_again
+		x = -6
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+		
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_mechiar_on_the_horse"
+			add_political_power = 100
+			set_temp_variable = { party_index = 15 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+			hidden_effect = {
+				if = {
+					limit = { NOT = { is_in_array = { ruling_party = 15 } } }
+					set_temp_variable = { rul_party_temp = 15 }
+					set_temp_variable = { enable_elections = 0 }
+					change_ruling_party_effect = yes
+				}
+				set_temp_variable = { party_index = 18 }
+				set_temp_variable = { party_popularity_increase = 0.10 }
+				set_temp_variable = { temp_outlook_increase = 0.10 }
+				add_relative_party_popularity = yes
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Mečiarism
+	focus = {
+		id = SLO_mechiarism
+		icon = SLO_meciarism
+
+		x = 0
+		y = 1
+		relative_position_id = SLO_mechiar_on_the_horse
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_mechiar_on_the_horse }
+
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_mechiarism"
+			add_ideas = SLO_mechiarism
+			if = {
+				limit = { 
+					has_idea = SLO_legacy_idea
+				}
+				remove_ideas = SLO_legacy_idea
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Slovakian Black Gold
+	focus = {
+		id = SLO_mechiar_gold
+		icon = SLO_pie_stuff
+		
+		x = 2
+		y = 2
+		relative_position_id = SLO_mechiar_on_the_horse
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_mechiarism }
+
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_mechiar_gold"
+			country_event = slo_mechair.0
+			add_ideas = SLO_mech_mafia
+			if = {
+				limit = { has_idea = small_medium_business_owners }
+				swap_ideas = {
+					remove_idea = small_medium_business_owners
+					add_idea = oligarchs
+				}
+			}
+			else_if = {
+				limit = { has_idea = industrial_conglomerates }
+				swap_ideas = {
+					remove_idea = industrial_conglomerates
+					add_idea = oligarchs
+				}
+			}
+			else_if = {
+				limit = { has_idea = landowners }
+				swap_ideas = {
+					remove_idea = landowners
+					add_idea = oligarchs
+				}
+			}
+			else_if = {
+				limit = { has_idea = farmers }
+				swap_ideas = {
+					remove_idea = farmers
+					add_idea = oligarchs
+				}
+			}
+			else_if = {
+				limit = { has_idea = labour_unions }
+				swap_ideas = {
+					remove_idea = labour_unions
+					add_idea = oligarchs
+				}
+			}
+			else_if = {
+				limit = { has_idea = international_bankers }
+				swap_ideas = {
+					remove_idea = international_bankers
+					add_idea = oligarchs
+				}
+			}
+			else_if = {
+				limit = { has_idea = maritime_industry }
+				swap_ideas = {
+					remove_idea = maritime_industry
+					add_idea = oligarchs
+				}
+			}
+			else_if = {
+				limit = { has_idea = the_military }
+				swap_ideas = {
+					remove_idea = the_military
+					add_idea = oligarchs
+				}
+			}
+			else_if = {
+				limit = { has_idea = the_clergy }
+				swap_ideas = {
+					remove_idea = the_clergy
+					add_idea = oligarchs
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Exploit the Weaknesses of the Republic
+	focus = {
+		id = SLO_weaknesses_republic
+		icon = SLO_exploit_weaknesses
+		x = 0
+		y = 2
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_mechiarism
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_weaknesses_republic"
+			swap_ideas = {
+				remove_idea = SLO_mechiarism
+				add_idea = SLO_mechiarism_1
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Personal Shield of Mečiar
+	focus = {
+		id = SLO_personal_shield
+		icon = SLO_deal_sis
+		x = -2
+		y = 2
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_mechiarism
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_personal_shield"
+			if = {
+				limit = { has_idea = intelligence_community }
+				set_temp_variable = { temp_opinion = 10 }
+				change_intelligence_community_opinion = yes
+			}
+			else = {
+				if = {
+					limit = { has_idea = small_medium_business_owners }
+					swap_ideas = {
+						remove_idea = small_medium_business_owners
+						add_idea = intelligence_community
+					}
+				}
+				else_if = {
+					limit = { has_idea = industrial_conglomerates }
+					swap_ideas = {
+						remove_idea = industrial_conglomerates
+						add_idea = intelligence_community
+					}
+				}
+				else_if = {
+					limit = { has_idea = landowners }
+					swap_ideas = {
+						remove_idea = landowners
+						add_idea = intelligence_community
+					}
+				}
+				else_if = {
+					limit = { has_idea = farmers }
+					swap_ideas = {
+						remove_idea = farmers
+						add_idea = intelligence_community
+					}
+				}
+				else_if = {
+					limit = { has_idea = labour_unions }
+					swap_ideas = {
+						remove_idea = labour_unions
+						add_idea = intelligence_community
+					}
+				}
+				else_if = {
+					limit = { has_idea = international_bankers }
+					swap_ideas = {
+						remove_idea = international_bankers
+						add_idea = intelligence_community
+					}
+				}
+				else_if = {
+					limit = { has_idea = maritime_industry }
+					swap_ideas = {
+						remove_idea = maritime_industry
+						add_idea = intelligence_community
+					}
+				}
+				else_if = {
+					limit = { has_idea = the_military }
+					swap_ideas = {
+						remove_idea = the_military
+						add_idea = intelligence_community
+					}
+				}
+				else_if = {
+					limit = { has_idea = the_clergy }
+					swap_ideas = {
+						remove_idea = the_clergy
+						add_idea = intelligence_community
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Sideline the President
+	focus = {
+		id = SLO_sideline_president
+		icon = SLO_where_is_president
+		x = -1
+		y = 3
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_personal_shield
+		}
+		prerequisite = {
+			focus = SLO_weaknesses_republic
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_sideline_president"
+			country_event = slo_mechair.1
+			swap_ideas = {
+				remove_idea = SLO_mechiarism_1
+				add_idea = SLO_mechiarism_2
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#A Deal with the People
+	focus = {
+		id = SLO_deal_people
+		icon = SLO_deal_people
+		x = 1
+		y = 3
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_mechiar_gold
+		}
+		prerequisite = {
+			focus = SLO_weaknesses_republic
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_deal_people"
+			swap_ideas = {
+				remove_idea = SLO_mech_mafia
+				add_idea = SLO_mech_mafia_1
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Referendum of Dignity
+	focus = {
+		id = SLO_national_referendum
+		icon = SLO_referendum_dignity
+		x = 0
+		y = 4
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_sideline_president
+		}
+		prerequisite = {
+			focus = SLO_deal_people
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_national_referendum"
+			country_event = slo_mechair.2
+			add_political_power = 100
+			set_temp_variable = { party_index = 18 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+			hidden_effect = {
+				if = {
+					limit = { NOT = { is_in_array = { ruling_party = 3 } } }
+					set_temp_variable = { rul_party_temp = 3 }
+					set_temp_variable = { enable_elections = 0 }
+					change_ruling_party_effect = yes
+				}
+				set_temp_variable = { party_index = 18 }
+				set_temp_variable = { party_popularity_increase = 0.10 }
+				set_temp_variable = { temp_outlook_increase = 0.10 }
+				add_relative_party_popularity = yes
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Mečiar's Political Machine
+	focus = {
+		id = SLO_organize_abductions
+		icon = SLO_political_machine
+		x = -2
+		y = 5
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_national_referendum
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_organize_abductions"
+			swap_ideas = {
+				remove_idea = SLO_mechiarism_2
+				add_idea = SLO_mechiarism_3
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Fear and Hate in Bratislava
+	focus = {
+		id = SLO_fear_hate_bratislava
+		icon = SLO_quite_bratislava
+		x = -2
+		y = 6
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_organize_abductions
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_fear_hate_bratislava"
+			increase_policing_budget = yes
+			country_event = slo_mechair.3
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Economic Hybrid
+	focus = {
+		id = SLO_economic_hybrid
+		icon = SLO_economic_hybrid
+		x = 0
+		y = 5
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_national_referendum
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_economic_hybrid"
+			swap_ideas = {
+				remove_idea = SLO_mech_mafia_1
+				add_idea = SLO_mech_mafia_2
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Council of Oligarchs
+	focus = {
+		id = SLO_oligarch_council
+		icon = SLO_oligarchs_council
+		x = 0
+		y = 6
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_economic_hybrid
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_oligarch_council"
+			swap_ideas = {
+				remove_idea = SLO_mech_mafia_2
+				add_idea = SLO_mech_mafia_3
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Avoid International Isolation
+	focus = {
+		id = SLO_no_isolation
+		icon = SLO_break_isolation
+		x = 2
+		y = 5
+		relative_position_id = SLO_mechiar_on_the_horse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_national_referendum
+		}
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_no_isolation"
+			UKR = {
+				country_event = slo_mechair.4
+			}
+			SOV = {
+				country_event = slo_mechair.7
+			}
+			CHI = {
+				country_event = slo_mechair.10
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Reboot Relations with EU
+	focus = {
+		id = SLO_reboot_relations_eu
+		icon = SLO_eu_slo_deal
+
+		x = 2
+		y = 6
+		relative_position_id = SLO_mechiar_on_the_horse
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = SLO_no_isolation }
+
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_reboot_relations_eu"
+			every_other_country = {
+				limit = { has_idea = EU_foreign_minister }
+				country_event = slo_mechair.13
+			}
+		}
+		ai_will_do = {
+			factor = 150
+		}
+	}
+	#Father of Slovakia
+	focus = {
+		id = SLO_father_of_nation
+		icon = SLO_father_nation
+
+		x = 0
+		y = 7
+		relative_position_id = SLO_mechiar_on_the_horse
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SLO_fear_hate_bratislava
+		}
+		prerequisite = {
+			focus = SLO_oligarch_council
+		}
+		prerequisite = {
+			focus = SLO_reboot_relations_eu
+		}
+
+		available = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus SLO_father_of_nation"
+			remove_ideas = SLO_mech_mafia_3
+			swap_ideas = {
+				remove_idea = SLO_mechiarism_4
+				add_idea = SLO_mechiarism_5
+			}
+			set_temp_variable = { party_index = 18 }
+			set_temp_variable = { party_popularity_increase = 0.05 }
+			set_temp_variable = { temp_outlook_increase = 0.04 }
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = neutrality
+					popularity = 0.10
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 150
+		}
+	}
+}

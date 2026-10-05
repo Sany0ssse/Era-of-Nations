@@ -1,0 +1,2444 @@
+# Written by Mosaink
+increase_sanctions = {
+	if = {
+		limit = { has_idea = Massive_International_Sanctions }
+		add_political_power = 50
+	}
+	if = {
+		limit = { has_idea = international_sanctions }
+		swap_ideas = {
+			remove_idea = international_sanctions
+			add_idea = Massive_International_Sanctions
+		}
+		revoke_sanctions_non_exist_country = yes
+	}
+	#if = {
+	#	limit = { has_idea = Western_Sanctions }
+	#	#swap_ideas = {
+	#	#	remove_idea = Western_Sanctions
+	#	#	add_idea = international_sanctions
+	#	#}
+	#	revoke_sanctions_non_exist_country = yes
+	#}
+	#if = {
+	#	limit = { has_idea = Reduced_Western_Sanctions }
+	#	#swap_ideas = {
+	#	#	remove_idea = Reduced_Western_Sanctions
+	#	#	add_idea = Western_Sanctions
+	#	#}
+	#	revoke_sanctions_non_exist_country = yes
+	#}
+}
+
+decrease_sanctions = {
+	if = {
+		limit = { has_idea = Massive_International_Sanctions }
+		swap_ideas = {
+			remove_idea = Massive_International_Sanctions
+			add_idea = international_sanctions
+		}
+		revoke_sanctions_non_exist_country = yes
+	}
+	if = {
+		limit = { has_idea = international_sanctions }
+		#swap_ideas = {
+		#	remove_idea = international_sanctions
+		#	add_idea = Western_Sanctions
+		#}
+		revoke_sanctions_non_exist_country = yes
+	}
+	if = {
+		limit = { has_idea = Western_Sanctions }
+		#swap_ideas = {
+		#	remove_idea = Western_Sanctions
+		#	add_idea = Reduced_Western_Sanctions
+		#}
+		revoke_sanctions_non_exist_country = yes
+	}
+	if = {
+		limit = { has_idea = Reduced_Western_Sanctions }
+		remove_ideas = Reduced_Western_Sanctions
+		revoke_sanctions_non_exist_country = yes
+	}
+}
+
+##########################GENERIC SANCTIONS MECHANIC################################
+
+issued_sanctions_prev = {
+	if = {
+		limit = {
+			influence_higher_10 = yes
+			influence_higher_20 = no
+		}
+		set_temp_variable = { influence_sanction = 5 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_20 = yes
+			influence_higher_30 = no
+		}
+		set_temp_variable = { influence_sanction = 10 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_30 = yes
+			influence_higher_40 = no
+		}
+		set_temp_variable = { influence_sanction = 15 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_40 = yes
+			influence_higher_50 = no
+		}
+		set_temp_variable = { influence_sanction = 20 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_50 = yes
+			influence_higher_60 = no
+		}
+		set_temp_variable = { influence_sanction = 25 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_60 = yes
+			influence_higher_70 = no
+		}
+		set_temp_variable = { influence_sanction = 30 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_70 = yes
+			influence_higher_80 = no
+		}
+		set_temp_variable = { influence_sanction = 35 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_80 = yes
+			influence_higher_90 = no
+		}
+		set_temp_variable = { influence_sanction = 40 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_90 = yes
+		}
+		set_temp_variable = { influence_sanction = 45 }
+	}
+	if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.09 }
+			check_variable = { modifier@foreign_influence_defense_modifier < 0.2 }
+		}
+		set_temp_variable = { influence_sanction_fight = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.19 }
+			check_variable = { modifier@foreign_influence_defense_modifier < 0.3 }
+		}
+		set_temp_variable = { influence_sanction_fight = 2 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.29 }
+			check_variable = { modifier@foreign_influence_defense_modifier < 0.4 }
+		}
+		set_temp_variable = { influence_sanction_fight = 3 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.39 }
+			check_variable = { modifier@foreign_influence_defense_modifier < 0.5 }
+		}
+		set_temp_variable = { influence_sanction_fight = 4 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.49 }
+		}
+		set_temp_variable = { influence_sanction_fight = 5 }
+	}
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					has_idea = GENERIC_petrodollar_idea
+					PREV = { has_idea = GENERIC_usapetrodollar_idea }
+				}
+				AND = {
+					has_idea = GENERIC_petroeuro_idea
+					PREV = { has_idea = GENERIC_petroeuro_idea }
+				}
+				AND = {
+					has_idea = GENERIC_petrorublik_idea
+					PREV = { has_idea = GENERIC_petroruble_idea }
+				}
+				AND = {
+					has_idea = GENERIC_petroyuanik_idea
+					PREV = { has_idea = GENERIC_petroyuan_idea }
+				}
+			}
+		}
+		set_temp_variable = { sanction_valute = 15 }
+	}
+	if = {
+		limit = {
+			PREV = { has_idea = non_power }
+		}
+		set_temp_variable = { sanction_power_rank = 1 }
+	}
+	else_if = {
+		limit = {
+			PREV = { has_idea = minor_power }
+		}
+		set_temp_variable = { sanction_power_rank = 2 }
+	}
+	else_if = {
+		limit = {
+			PREV = { has_idea = regional_power }
+		}
+		set_temp_variable = { sanction_power_rank = 3 }
+	}
+	else_if = {
+		limit = {
+			PREV = { has_idea = large_power }
+		}
+		set_temp_variable = { sanction_power_rank = 4 }
+	}
+	else_if = {
+		limit = {
+			PREV = { has_idea = great_power }
+		}
+		set_temp_variable = { sanction_power_rank = 5 }
+	}
+	else = {
+		set_temp_variable = { sanction_power_rank = 6 }
+	}
+	if = {
+		limit = {
+			has_idea = regional_power
+		}
+		add_to_temp_variable = { sanction_power_rank = -1 }
+	}
+	else_if = {
+		limit = {
+			has_idea = large_power
+		}
+		add_to_temp_variable = { sanction_power_rank = -2 }
+	}
+	else_if = {
+		limit = {
+			has_idea = great_power
+		}
+		add_to_temp_variable = { sanction_power_rank = -3 }
+	}
+	else_if = {
+		limit = {
+			has_idea = superpower
+		}
+		add_to_temp_variable = { sanction_power_rank = -4 }
+	}
+	if = {
+		limit = { PREV = { has_idea = modest_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 1 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = medium_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 2 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = widespread_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 3 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = systematic_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 3 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = unrestrained_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 4 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = rampant_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 5 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = crippling_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 6 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = paralyzing_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 7 }
+	}
+	if = {
+		limit = { PREV = { has_idea = md_closed_economy } }
+		set_temp_variable = { sanctions_economy = -1 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = consumption_economy } }
+		set_temp_variable = { sanctions_economy = 1 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = semi_consumption_economy } }
+		set_temp_variable = { sanctions_economy = 2 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = mixed_economy } }
+		set_temp_variable = { sanctions_economy = 3 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = export_economy } }
+		set_temp_variable = { sanctions_economy = 4 }
+	}
+	else_if = {
+		limit = { PREV = { has_idea = globalized_trade_economy } }
+		set_temp_variable = { sanctions_economy = 5 }
+	}
+	if = {
+		limit = { PREV = { has_idea = rentier_state } }
+		set_temp_variable = { sanctions_rentier_state = 1 }
+	}
+	set_temp_variable = { sanction_force = sanction_power_rank }
+	add_to_temp_variable = { sanction_force = influence_sanction }
+	subtract_from_temp_variable = { sanction_force = influence_sanction_fight }
+	add_to_temp_variable = { sanction_force = sanction_valute }
+	subtract_from_temp_variable = { sanction_force = sanctions_corruption_value }
+	add_to_temp_variable = { sanction_force = sanctions_economy }
+	add_to_temp_variable = { sanction_force = sanctions_rentier_state }
+	clamp_temp_variable = {
+		var = sanction_force
+		min = sanction_power_rank
+		max = 25
+	}
+	set_temp_variable = { modify_capitalization = sanction_force }
+	multiply_temp_variable = { modify_capitalization = -0.001 }
+	modify_capitalization_support = yes
+	set_temp_variable = { temp_opinion = sanction_force }
+	multiply_temp_variable = { temp_opinion = -1 }
+	change_oligarchs_opinion = yes
+	change_small_medium_business_owners_opinion = yes
+	change_international_bankers_opinion = yes
+	change_fossil_fuel_industry_opinion = yes
+	set_temp_variable = { protest_strength_change = sanction_force }
+	modify_protest_effect = yes
+	add_to_array = { sanctioneers = PREV }
+	add_to_array = { sanctions = sanction_force }
+	add_to_variable = { sum_sanctions_force = sanction_force }
+
+	PREV = {
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { influence_array^0 = PREV }
+						check_variable = { influence_array_val^0 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = PREV }
+						check_variable = { influence_array_val^1 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^2 = PREV }
+						check_variable = { influence_array_val^2 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^3 = PREV }
+						check_variable = { influence_array_val^3 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^4 = PREV }
+						check_variable = { influence_array_val^4 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^5 = PREV }
+						check_variable = { influence_array_val^5 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^6 = PREV }
+						check_variable = { influence_array_val^6 > 9.999 }
+					}
+				}
+				NOT = {
+					AND = {
+							check_variable = { influence_array^0 = PREV }
+							check_variable = { influence_array_val^0 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^1 = PREV }
+							check_variable = { influence_array_val^1 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^2 = PREV }
+							check_variable = { influence_array_val^2 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^3 = PREV }
+							check_variable = { influence_array_val^3 > 19.999 }
+					}
+				}
+			}
+			set_temp_variable = { influence_sanction = 5 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+							check_variable = { influence_array^0 = PREV }
+							check_variable = { influence_array_val^0 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^1 = PREV }
+							check_variable = { influence_array_val^1 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^2 = PREV }
+							check_variable = { influence_array_val^2 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^3 = PREV }
+							check_variable = { influence_array_val^3 > 19.999 }
+					}
+				}
+				NOT = {
+						AND = {
+							check_variable = { influence_array^0 = PREV }
+							check_variable = { influence_array_val^0 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^1 = PREV }
+							check_variable = { influence_array_val^1 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^2 = PREV }
+							check_variable = { influence_array_val^2 > 29.999 }
+						}
+				}
+			}
+			set_temp_variable = { influence_sanction = 10 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+						AND = {
+							check_variable = { influence_array^0 = PREV }
+							check_variable = { influence_array_val^0 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^1 = PREV }
+							check_variable = { influence_array_val^1 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^2 = PREV }
+							check_variable = { influence_array_val^2 > 29.999 }
+						}
+				}
+				NOT = {
+					AND = {
+						check_variable = { influence_array^0 = PREV }
+						check_variable = { influence_array_val^0 > 39.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = PREV }
+						check_variable = { influence_array_val^1 > 39.999 }
+					}
+				}
+			}
+			set_temp_variable = { influence_sanction = 15 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { influence_array^0 = PREV }
+						check_variable = { influence_array_val^0 > 39.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = PREV }
+						check_variable = { influence_array_val^1 > 39.999 }
+					}
+				}
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 49.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 20 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 49.999 }
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 59.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 25 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 59.999 }
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 69.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 30 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 69.999 }
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 79.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 35 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 79.999 }
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 89.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 40 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 89.999 }
+			}
+			set_temp_variable = { influence_sanction = 45 }
+		}
+		if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.09 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.2 }
+			}
+			set_temp_variable = { influence_sanction_fight = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.19 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.3 }
+			}
+			set_temp_variable = { influence_sanction_fight = 2 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.29 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.4 }
+			}
+			set_temp_variable = { influence_sanction_fight = 3 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.39 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.5 }
+			}
+			set_temp_variable = { influence_sanction_fight = 4 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.49 }
+			}
+			set_temp_variable = { influence_sanction_fight = 5 }
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_idea = GENERIC_petrodollar_idea
+						PREV = { has_idea = GENERIC_usapetrodollar_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petroeuro_idea
+						PREV = { has_idea = GENERIC_petroeuro_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petrorublik_idea
+						PREV = { has_idea = GENERIC_petroruble_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petroyuanik_idea
+						PREV = { has_idea = GENERIC_petroyuan_idea }
+					}
+				}
+			}
+			set_temp_variable = { sanction_valute = 15 }
+		}
+		if = {
+			limit = {
+				PREV = { has_idea = non_power }
+			}
+			set_temp_variable = { sanction_power_rank = 1 }
+		}
+		else_if = {
+			limit = {
+				PREV = { has_idea = minor_power }
+			}
+			set_temp_variable = { sanction_power_rank = 2 }
+		}
+		else_if = {
+			limit = {
+				PREV = { has_idea = regional_power }
+			}
+			set_temp_variable = { sanction_power_rank = 3 }
+		}
+		else_if = {
+			limit = {
+				PREV = { has_idea = large_power }
+			}
+			set_temp_variable = { sanction_power_rank = 4 }
+		}
+		else_if = {
+			limit = {
+				PREV = { has_idea = great_power }
+			}
+			set_temp_variable = { sanction_power_rank = 5 }
+		}
+		else = {
+			set_temp_variable = { sanction_power_rank = 6 }
+		}
+		if = {
+			limit = {
+				has_idea = regional_power
+			}
+			add_to_temp_variable = { sanction_power_rank = -1 }
+		}
+		else_if = {
+			limit = {
+				has_idea = large_power
+			}
+			add_to_temp_variable = { sanction_power_rank = -2 }
+		}
+		else_if = {
+			limit = {
+				has_idea = great_power
+			}
+			add_to_temp_variable = { sanction_power_rank = -3 }
+		}
+		else_if = {
+			limit = {
+				has_idea = superpower
+			}
+			add_to_temp_variable = { sanction_power_rank = -4 }
+		}
+		set_temp_variable = { sanction_force = sanction_power_rank }
+		add_to_temp_variable = { sanction_force = influence_sanction }
+		subtract_from_temp_variable = { sanction_force = influence_sanction_fight }
+		add_to_temp_variable = { sanction_force = sanction_valute }
+		multiply_temp_variable = { sanction_force = 0.5	}
+		clamp_temp_variable = {
+			var = sanction_force
+			min = sanction_power_rank
+			max = 25
+		}
+		set_temp_variable = { modify_capitalization = sanction_force }
+		multiply_temp_variable = { modify_capitalization = -0.001 }
+		modify_capitalization_support = yes
+		set_temp_variable = { temp_opinion = sanction_force }
+		multiply_temp_variable = { temp_opinion = -1 }
+		change_oligarchs_opinion = yes
+		change_small_medium_business_owners_opinion = yes
+		change_international_bankers_opinion = yes
+		change_fossil_fuel_industry_opinion = yes
+		set_temp_variable = { protest_strength_change = sanction_force }
+		modify_protest_effect = yes
+		add_to_array = { sanctions_targets = PREV }
+		add_to_array = { sanctions_feedback = sanction_force }
+		add_to_variable = { sum_sanctions_feedback_force = sanction_force }
+	}
+	add_opinion_modifier = {
+		target = PREV
+		modifier = sanctions
+	}
+	calculate_sanctions_modifier = yes
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = sanctions_dynamic_modifier } } }
+		add_dynamic_modifier = { modifier = sanctions_dynamic_modifier }
+	}
+	PREV = {
+		calculate_sanctions_feedback_modifier = yes
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = sanctions_feedback_dynamic_modifier } } }
+			add_dynamic_modifier = { modifier = sanctions_feedback_dynamic_modifier }
+		}
+	}
+}
+
+issued_sanctions = {
+	if = {
+		limit = {
+			influence_higher_10 = yes
+			influence_higher_20 = no
+		}
+		set_temp_variable = { influence_sanction = 5 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_20 = yes
+			influence_higher_30 = no
+		}
+		set_temp_variable = { influence_sanction = 10 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_30 = yes
+			influence_higher_40 = no
+		}
+		set_temp_variable = { influence_sanction = 15 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_40 = yes
+			influence_higher_50 = no
+		}
+		set_temp_variable = { influence_sanction = 20 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_50 = yes
+			influence_higher_60 = no
+		}
+		set_temp_variable = { influence_sanction = 25 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_60 = yes
+			influence_higher_70 = no
+		}
+		set_temp_variable = { influence_sanction = 30 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_70 = yes
+			influence_higher_80 = no
+		}
+		set_temp_variable = { influence_sanction = 35 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_80 = yes
+			influence_higher_90 = no
+		}
+		set_temp_variable = { influence_sanction = 40 }
+	}
+	else_if = {
+		limit = {
+			influence_higher_90 = yes
+		}
+		set_temp_variable = { influence_sanction = 45 }
+	}
+	if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.09 }
+			check_variable = { modifier@foreign_influence_defense_modifier < 0.2 }
+		}
+		set_temp_variable = { influence_sanction_fight = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.19 }
+			check_variable = { modifier@foreign_influence_defense_modifier < 0.3 }
+		}
+		set_temp_variable = { influence_sanction_fight = 2 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.29 }
+			check_variable = { modifier@foreign_influence_defense_modifier < 0.4 }
+		}
+		set_temp_variable = { influence_sanction_fight = 3 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.39 }
+			check_variable = { modifier@foreign_influence_defense_modifier < 0.5 }
+		}
+		set_temp_variable = { influence_sanction_fight = 4 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { modifier@foreign_influence_defense_modifier > 0.49 }
+		}
+		set_temp_variable = { influence_sanction_fight = 5 }
+	}
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					has_idea = GENERIC_petrodollar_idea
+					ROOT = { has_idea = GENERIC_usapetrodollar_idea }
+				}
+				AND = {
+					has_idea = GENERIC_petroeuro_idea
+					ROOT = { has_idea = GENERIC_petroeuro_idea }
+				}
+				AND = {
+					has_idea = GENERIC_petrorublik_idea
+					ROOT = { has_idea = GENERIC_petroruble_idea }
+				}
+				AND = {
+					has_idea = GENERIC_petroyuanik_idea
+					ROOT = { has_idea = GENERIC_petroyuan_idea }
+				}
+			}
+		}
+		set_temp_variable = { sanction_valute = 15 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_idea = non_power }
+		}
+		set_temp_variable = { sanction_power_rank = 1 }
+	}
+	else_if = {
+		limit = {
+			ROOT = { has_idea = minor_power }
+		}
+		set_temp_variable = { sanction_power_rank = 2 }
+	}
+	else_if = {
+		limit = {
+			ROOT = { has_idea = regional_power }
+		}
+		set_temp_variable = { sanction_power_rank = 3 }
+	}
+	else_if = {
+		limit = {
+			ROOT = { has_idea = large_power }
+		}
+		set_temp_variable = { sanction_power_rank = 4 }
+	}
+	else_if = {
+		limit = {
+			ROOT = { has_idea = great_power }
+		}
+		set_temp_variable = { sanction_power_rank = 5 }
+	}
+	else = {
+		set_temp_variable = { sanction_power_rank = 6 }
+	}
+	if = {
+		limit = { ROOT = { has_idea = modest_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 1 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = medium_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 2 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = widespread_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 3 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = systematic_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 3 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = unrestrained_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 4 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = rampant_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 5 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = crippling_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 6 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = paralyzing_corruption } }
+		set_temp_variable = { sanctions_corruption_value = 7 }
+	}
+	if = {
+		limit = { ROOT = { has_idea = md_closed_economy } }
+		set_temp_variable = { sanctions_economy = -1 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = consumption_economy } }
+		set_temp_variable = { sanctions_economy = 1 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = semi_consumption_economy } }
+		set_temp_variable = { sanctions_economy = 2 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = mixed_economy } }
+		set_temp_variable = { sanctions_economy = 3 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = export_economy } }
+		set_temp_variable = { sanctions_economy = 4 }
+	}
+	else_if = {
+		limit = { ROOT = { has_idea = globalized_trade_economy } }
+		set_temp_variable = { sanctions_economy = 5 }
+	}
+	if = {
+		limit = { ROOT = { has_idea = rentier_state } }
+		set_temp_variable = { sanctions_rentier_state = 1 }
+	}
+	set_temp_variable = { sanction_force = sanction_power_rank }
+	add_to_temp_variable = { sanction_force = influence_sanction }
+	subtract_from_temp_variable = { sanction_force = influence_sanction_fight }
+	add_to_temp_variable = { sanction_force = sanction_valute }
+	subtract_from_temp_variable = { sanction_force = sanctions_corruption_value }
+	add_to_temp_variable = { sanction_force = sanctions_economy }
+	add_to_temp_variable = { sanction_force = sanctions_rentier_state }
+	clamp_temp_variable = {
+		var = sanction_force
+		min = sanction_power_rank
+		max = 25
+	}
+	set_temp_variable = { modify_capitalization = sanction_force }
+	multiply_temp_variable = { modify_capitalization = -0.001 }
+	modify_capitalization_support = yes
+	set_temp_variable = { temp_opinion = sanction_force }
+	multiply_temp_variable = { temp_opinion = -1 }
+	change_oligarchs_opinion = yes
+	change_small_medium_business_owners_opinion = yes
+	change_international_bankers_opinion = yes
+	change_fossil_fuel_industry_opinion = yes
+	set_temp_variable = { protest_strength_change = sanction_force }
+	modify_protest_effect = yes
+	add_to_array = { sanctioneers = ROOT }
+	add_to_array = { sanctions = sanction_force }
+	add_to_variable = { sum_sanctions_force = sanction_force }
+
+	ROOT = {
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { influence_array^0 = PREV }
+						check_variable = { influence_array_val^0 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = PREV }
+						check_variable = { influence_array_val^1 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^2 = PREV }
+						check_variable = { influence_array_val^2 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^3 = PREV }
+						check_variable = { influence_array_val^3 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^4 = PREV }
+						check_variable = { influence_array_val^4 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^5 = PREV }
+						check_variable = { influence_array_val^5 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^6 = PREV }
+						check_variable = { influence_array_val^6 > 9.999 }
+					}
+				}
+				NOT = {
+					AND = {
+							check_variable = { influence_array^0 = PREV }
+							check_variable = { influence_array_val^0 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^1 = PREV }
+							check_variable = { influence_array_val^1 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^2 = PREV }
+							check_variable = { influence_array_val^2 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^3 = PREV }
+							check_variable = { influence_array_val^3 > 19.999 }
+					}
+				}
+			}
+			set_temp_variable = { influence_sanction = 5 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+							check_variable = { influence_array^0 = PREV }
+							check_variable = { influence_array_val^0 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^1 = PREV }
+							check_variable = { influence_array_val^1 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^2 = PREV }
+							check_variable = { influence_array_val^2 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^3 = PREV }
+							check_variable = { influence_array_val^3 > 19.999 }
+					}
+				}
+				NOT = {
+						AND = {
+							check_variable = { influence_array^0 = PREV }
+							check_variable = { influence_array_val^0 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^1 = PREV }
+							check_variable = { influence_array_val^1 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^2 = PREV }
+							check_variable = { influence_array_val^2 > 29.999 }
+						}
+				}
+			}
+			set_temp_variable = { influence_sanction = 10 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+						AND = {
+							check_variable = { influence_array^0 = PREV }
+							check_variable = { influence_array_val^0 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^1 = PREV }
+							check_variable = { influence_array_val^1 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^2 = PREV }
+							check_variable = { influence_array_val^2 > 29.999 }
+						}
+				}
+				NOT = {
+					AND = {
+						check_variable = { influence_array^0 = PREV }
+						check_variable = { influence_array_val^0 > 39.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = PREV }
+						check_variable = { influence_array_val^1 > 39.999 }
+					}
+				}
+			}
+			set_temp_variable = { influence_sanction = 15 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { influence_array^0 = PREV }
+						check_variable = { influence_array_val^0 > 39.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = PREV }
+						check_variable = { influence_array_val^1 > 39.999 }
+					}
+				}
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 49.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 20 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 49.999 }
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 59.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 25 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 59.999 }
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 69.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 30 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 69.999 }
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 79.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 35 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 79.999 }
+				NOT = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array_val^0 > 89.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 40 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = PREV }
+				check_variable = { influence_array_val^0 > 89.999 }
+			}
+			set_temp_variable = { influence_sanction = 45 }
+		}
+		if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.09 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.2 }
+			}
+			set_temp_variable = { influence_sanction_fight = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.19 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.3 }
+			}
+			set_temp_variable = { influence_sanction_fight = 2 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.29 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.4 }
+			}
+			set_temp_variable = { influence_sanction_fight = 3 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.39 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.5 }
+			}
+			set_temp_variable = { influence_sanction_fight = 4 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.49 }
+			}
+			set_temp_variable = { influence_sanction_fight = 5 }
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_idea = GENERIC_petrodollar_idea
+						PREV = { has_idea = GENERIC_usapetrodollar_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petroeuro_idea
+						PREV = { has_idea = GENERIC_petroeuro_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petrorublik_idea
+						PREV = { has_idea = GENERIC_petroruble_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petroyuanik_idea
+						PREV = { has_idea = GENERIC_petroyuan_idea }
+					}
+				}
+			}
+			set_temp_variable = { sanction_valute = 15 }
+		}
+		if = {
+			limit = {
+				PREV = { has_idea = non_power }
+			}
+			set_temp_variable = { sanction_power_rank = 1 }
+		}
+		else_if = {
+			limit = {
+				PREV = { has_idea = minor_power }
+			}
+			set_temp_variable = { sanction_power_rank = 2 }
+		}
+		else_if = {
+			limit = {
+				PREV = { has_idea = regional_power }
+			}
+			set_temp_variable = { sanction_power_rank = 3 }
+		}
+		else_if = {
+			limit = {
+				PREV = { has_idea = large_power }
+			}
+			set_temp_variable = { sanction_power_rank = 4 }
+		}
+		else_if = {
+			limit = {
+				PREV = { has_idea = great_power }
+			}
+			set_temp_variable = { sanction_power_rank = 5 }
+		}
+		else = {
+			set_temp_variable = { sanction_power_rank = 6 }
+		}
+		set_temp_variable = { sanction_force = sanction_power_rank }
+		add_to_temp_variable = { sanction_force = influence_sanction }
+		subtract_from_temp_variable = { sanction_force = influence_sanction_fight }
+		add_to_temp_variable = { sanction_force = sanction_valute }
+		multiply_temp_variable = { sanction_force = 0.5	}
+		clamp_temp_variable = {
+			var = sanction_force
+			min = sanction_power_rank
+			max = 25
+		}
+		set_temp_variable = { modify_capitalization = sanction_force }
+		multiply_temp_variable = { modify_capitalization = -0.001 }
+		modify_capitalization_support = yes
+		set_temp_variable = { temp_opinion = sanction_force }
+		multiply_temp_variable = { temp_opinion = -1 }
+		change_oligarchs_opinion = yes
+		change_small_medium_business_owners_opinion = yes
+		change_international_bankers_opinion = yes
+		change_fossil_fuel_industry_opinion = yes
+		set_temp_variable = { protest_strength_change = sanction_force }
+		modify_protest_effect = yes
+		add_to_array = { sanctions_targets = PREV }
+		add_to_array = { sanctions_feedback = sanction_force }
+		add_to_variable = { sum_sanctions_feedback_force = sanction_force }
+	}
+	add_opinion_modifier = {
+		target = ROOT
+		modifier = sanctions
+	}
+	calculate_sanctions_modifier = yes
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = sanctions_dynamic_modifier } } }
+		add_dynamic_modifier = { modifier = sanctions_dynamic_modifier }
+	}
+	ROOT = {
+		calculate_sanctions_feedback_modifier = yes
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = sanctions_feedback_dynamic_modifier } } }
+			add_dynamic_modifier = { modifier = sanctions_feedback_dynamic_modifier }
+		}
+	}
+}
+
+issued_sanctions_update = {
+
+	for_each_loop = {
+		array = sanctioneers
+		value = v
+		index = i
+		subtract_from_variable = { sum_sanctions_force = sanctions^i }
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { influence_array^0 = v }
+						check_variable = { influence_array_val^0 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = v }
+						check_variable = { influence_array_val^1 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^2 = v }
+						check_variable = { influence_array_val^2 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^3 = v }
+						check_variable = { influence_array_val^3 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^4 = v }
+						check_variable = { influence_array_val^4 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^5 = v }
+						check_variable = { influence_array_val^5 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^6 = v }
+						check_variable = { influence_array_val^6 > 9.999 }
+					}
+				}
+				NOT = {
+					AND = {
+							check_variable = { influence_array^0 = v }
+							check_variable = { influence_array_val^0 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^1 = v }
+							check_variable = { influence_array_val^1 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^2 = v }
+							check_variable = { influence_array_val^2 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^3 = v }
+							check_variable = { influence_array_val^3 > 19.999 }
+					}
+				}
+			}
+			set_temp_variable = { influence_sanction = 5 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+							check_variable = { influence_array^0 = v }
+							check_variable = { influence_array_val^0 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^1 = v }
+							check_variable = { influence_array_val^1 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^2 = v }
+							check_variable = { influence_array_val^2 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^3 = v }
+							check_variable = { influence_array_val^3 > 19.999 }
+					}
+				}
+				NOT = {
+						AND = {
+							check_variable = { influence_array^0 = v }
+							check_variable = { influence_array_val^0 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^1 = v }
+							check_variable = { influence_array_val^1 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^2 = v }
+							check_variable = { influence_array_val^2 > 29.999 }
+						}
+				}
+			}
+			set_temp_variable = { influence_sanction = 10 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+						AND = {
+							check_variable = { influence_array^0 = v }
+							check_variable = { influence_array_val^0 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^1 = v }
+							check_variable = { influence_array_val^1 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^2 = v }
+							check_variable = { influence_array_val^2 > 29.999 }
+						}
+				}
+				NOT = {
+					AND = {
+						check_variable = { influence_array^0 = v }
+						check_variable = { influence_array_val^0 > 39.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = v }
+						check_variable = { influence_array_val^1 > 39.999 }
+					}
+				}
+			}
+			set_temp_variable = { influence_sanction = 15 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { influence_array^0 = v }
+						check_variable = { influence_array_val^0 > 39.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = v }
+						check_variable = { influence_array_val^1 > 39.999 }
+					}
+				}
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 49.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 20 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 49.999 }
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 59.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 25 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 59.999 }
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 69.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 30 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 69.999 }
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 79.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 35 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 79.999 }
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 89.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 40 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 89.999 }
+			}
+			set_temp_variable = { influence_sanction = 45 }
+		}
+		if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.09 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.2 }
+			}
+			set_temp_variable = { influence_sanction_fight = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.19 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.3 }
+			}
+			set_temp_variable = { influence_sanction_fight = 2 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.29 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.4 }
+			}
+			set_temp_variable = { influence_sanction_fight = 3 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.39 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.5 }
+			}
+			set_temp_variable = { influence_sanction_fight = 4 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.49 }
+			}
+			set_temp_variable = { influence_sanction_fight = 5 }
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_idea = GENERIC_petrodollar_idea
+						var:v = { has_idea = GENERIC_usapetrodollar_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petroeuro_idea
+						var:v = { has_idea = GENERIC_petroeuro_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petrorublik_idea
+						var:v = { has_idea = GENERIC_petroruble_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petroyuanik_idea
+						var:v = { has_idea = GENERIC_petroyuan_idea }
+					}
+				}
+			}
+			set_temp_variable = { sanction_valute = 15 }
+		}
+		if = {
+			limit = {
+				var:v = { has_idea = non_power }
+			}
+			set_temp_variable = { sanction_power_rank = 1 }
+		}
+		else_if = {
+			limit = {
+				var:v = { has_idea = minor_power }
+			}
+			set_temp_variable = { sanction_power_rank = 2 }
+		}
+		else_if = {
+			limit = {
+				var:v = { has_idea = regional_power }
+			}
+			set_temp_variable = { sanction_power_rank = 3 }
+		}
+		else_if = {
+			limit = {
+				var:v = { has_idea = large_power }
+			}
+			set_temp_variable = { sanction_power_rank = 4 }
+		}
+		else_if = {
+			limit = {
+				var:v = { has_idea = great_power }
+			}
+			set_temp_variable = { sanction_power_rank = 5 }
+		}
+		else = {
+			set_temp_variable = { sanction_power_rank = 6 }
+		}
+		if = {
+			limit = { var:v = { has_idea = modest_corruption } }
+			set_temp_variable = { sanctions_corruption_value = 1 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = medium_corruption } }
+			set_temp_variable = { sanctions_corruption_value = 2 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = widespread_corruption } }
+			set_temp_variable = { sanctions_corruption_value = 3 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = systematic_corruption } }
+			set_temp_variable = { sanctions_corruption_value = 3 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = unrestrained_corruption } }
+			set_temp_variable = { sanctions_corruption_value = 4 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = rampant_corruption } }
+			set_temp_variable = { sanctions_corruption_value = 5 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = crippling_corruption } }
+			set_temp_variable = { sanctions_corruption_value = 6 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = paralyzing_corruption } }
+			set_temp_variable = { sanctions_corruption_value = 7 }
+		}
+		if = {
+			limit = { var:v = { has_idea = md_closed_economy } }
+			set_temp_variable = { sanctions_economy = -1 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = consumption_economy } }
+			set_temp_variable = { sanctions_economy = 1 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = semi_consumption_economy } }
+			set_temp_variable = { sanctions_economy = 2 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = mixed_economy } }
+			set_temp_variable = { sanctions_economy = 3 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = export_economy } }
+			set_temp_variable = { sanctions_economy = 4 }
+		}
+		else_if = {
+			limit = { var:v = { has_idea = globalized_trade_economy } }
+			set_temp_variable = { sanctions_economy = 5 }
+		}
+		if = {
+			limit = { var:v = { has_idea = rentier_state } }
+			set_temp_variable = { sanctions_rentier_state = 1 }
+		}
+		set_temp_variable = { sanction_force = sanction_power_rank }
+		add_to_temp_variable = { sanction_force = influence_sanction }
+		subtract_from_temp_variable = { sanction_force = influence_sanction_fight }
+		add_to_temp_variable = { sanction_force = sanction_valute }
+		subtract_from_temp_variable = { sanction_force = sanctions_corruption_value }
+		add_to_temp_variable = { sanction_force = sanctions_economy }
+		add_to_temp_variable = { sanction_force = sanctions_rentier_state }
+		set_temp_variable = { sanction_force = sanction_power_rank }
+		add_to_temp_variable = { sanction_force = influence_sanction }
+		subtract_from_temp_variable = { sanction_force = influence_sanction_fight }
+		add_to_temp_variable = { sanction_force = sanction_valute }
+		clamp_temp_variable = {
+			var = sanction_force
+			min = sanction_power_rank
+			max = 25
+		}
+		set_variable = { sanctions^i = sanction_force }
+		add_to_variable = { sum_sanctions_force = sanction_force }
+	}
+
+	for_each_loop = {
+		array = sanctions_targets
+		value = v
+		subtract_from_variable = { sum_sanctions_feedback_force = sanctions_feedback^index }
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { influence_array^0 = v }
+						check_variable = { influence_array_val^0 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = v }
+						check_variable = { influence_array_val^1 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^2 = v }
+						check_variable = { influence_array_val^2 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^3 = v }
+						check_variable = { influence_array_val^3 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^4 = v }
+						check_variable = { influence_array_val^4 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^5 = v }
+						check_variable = { influence_array_val^5 > 9.999 }
+					}
+					AND = {
+						check_variable = { influence_array^6 = v }
+						check_variable = { influence_array_val^6 > 9.999 }
+					}
+				}
+				NOT = {
+					AND = {
+							check_variable = { influence_array^0 = v }
+							check_variable = { influence_array_val^0 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^1 = v }
+							check_variable = { influence_array_val^1 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^2 = v }
+							check_variable = { influence_array_val^2 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^3 = v }
+							check_variable = { influence_array_val^3 > 19.999 }
+					}
+				}
+			}
+			set_temp_variable = { influence_sanction = 5 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+							check_variable = { influence_array^0 = v }
+							check_variable = { influence_array_val^0 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^1 = v }
+							check_variable = { influence_array_val^1 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^2 = v }
+							check_variable = { influence_array_val^2 > 19.999 }
+					}
+					AND = {
+							check_variable = { influence_array^3 = v }
+							check_variable = { influence_array_val^3 > 19.999 }
+					}
+				}
+				NOT = {
+						AND = {
+							check_variable = { influence_array^0 = v }
+							check_variable = { influence_array_val^0 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^1 = v }
+							check_variable = { influence_array_val^1 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^2 = v }
+							check_variable = { influence_array_val^2 > 29.999 }
+						}
+				}
+			}
+			set_temp_variable = { influence_sanction = 10 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+						AND = {
+							check_variable = { influence_array^0 = v }
+							check_variable = { influence_array_val^0 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^1 = v }
+							check_variable = { influence_array_val^1 > 29.999 }
+						}
+						AND = {
+							check_variable = { influence_array^2 = v }
+							check_variable = { influence_array_val^2 > 29.999 }
+						}
+				}
+				NOT = {
+					AND = {
+						check_variable = { influence_array^0 = v }
+						check_variable = { influence_array_val^0 > 39.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = v }
+						check_variable = { influence_array_val^1 > 39.999 }
+					}
+				}
+			}
+			set_temp_variable = { influence_sanction = 15 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { influence_array^0 = v }
+						check_variable = { influence_array_val^0 > 39.999 }
+					}
+					AND = {
+						check_variable = { influence_array^1 = v }
+						check_variable = { influence_array_val^1 > 39.999 }
+					}
+				}
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 49.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 20 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 49.999 }
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 59.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 25 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 59.999 }
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 69.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 30 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 69.999 }
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 79.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 35 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 79.999 }
+				NOT = {
+					check_variable = { influence_array^0 = v }
+					check_variable = { influence_array_val^0 > 89.999 }
+				}
+			}
+			set_temp_variable = { influence_sanction = 40 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^0 = v }
+				check_variable = { influence_array_val^0 > 89.999 }
+			}
+			set_temp_variable = { influence_sanction = 45 }
+		}
+		if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.09 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.2 }
+			}
+			set_temp_variable = { influence_sanction_fight = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.19 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.3 }
+			}
+			set_temp_variable = { influence_sanction_fight = 2 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.29 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.4 }
+			}
+			set_temp_variable = { influence_sanction_fight = 3 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.39 }
+				check_variable = { modifier@foreign_influence_defense_modifier < 0.5 }
+			}
+			set_temp_variable = { influence_sanction_fight = 4 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { modifier@foreign_influence_defense_modifier > 0.49 }
+			}
+			set_temp_variable = { influence_sanction_fight = 5 }
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_idea = GENERIC_petrodollar_idea
+						var:v = { has_idea = GENERIC_usapetrodollar_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petroeuro_idea
+						var:v = { has_idea = GENERIC_petroeuro_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petrorublik_idea
+						var:v = { has_idea = GENERIC_petroruble_idea }
+					}
+					AND = {
+						has_idea = GENERIC_petroyuanik_idea
+						var:v = { has_idea = GENERIC_petroyuan_idea }
+					}
+				}
+			}
+			set_temp_variable = { sanction_valute = 15 }
+		}
+		if = {
+			limit = {
+				var:v = { has_idea = non_power }
+			}
+			set_temp_variable = { sanction_power_rank = 1 }
+		}
+		else_if = {
+			limit = {
+				var:v = { has_idea = minor_power }
+			}
+			set_temp_variable = { sanction_power_rank = 2 }
+		}
+		else_if = {
+			limit = {
+				var:v = { has_idea = regional_power }
+			}
+			set_temp_variable = { sanction_power_rank = 3 }
+		}
+		else_if = {
+			limit = {
+				var:v = { has_idea = large_power }
+			}
+			set_temp_variable = { sanction_power_rank = 4 }
+		}
+		else_if = {
+			limit = {
+				var:v = { has_idea = great_power }
+			}
+			set_temp_variable = { sanction_power_rank = 5 }
+		}
+		else = {
+			set_temp_variable = { sanction_power_rank = 6 }
+		}
+		set_temp_variable = { sanction_force = sanction_power_rank }
+		add_to_temp_variable = { sanction_force = influence_sanction }
+		subtract_from_temp_variable = { sanction_force = influence_sanction_fight }
+		add_to_temp_variable = { sanction_force = sanction_valute }
+		multiply_temp_variable = { sanction_force = 0.5 }
+		clamp_temp_variable = {
+			var = sanction_force
+			min = sanction_power_rank
+			max = 25
+		}
+		set_variable = { sanctions_feedback^index = sanction_force }
+		add_to_temp_variable = { index = 1 }
+		add_to_variable = { sum_sanctions_feedback_force = sanction_force }
+	}
+	calculate_sanctions_modifier = yes
+	calculate_sanctions_feedback_modifier = yes
+}
+
+fighting_sanctions_help = {
+	if = {
+		limit = {
+			has_idea = non_power
+		}
+		set_temp_variable = { fighting_sanctions_help_power_rank = 1 }
+	}
+	else_if = {
+		limit = {
+			has_idea = minor_power
+		}
+		set_temp_variable = { fighting_sanctions_help_power_rank = 2 }
+	}
+	else_if = {
+		limit = {
+			has_idea = regional_power
+		}
+		set_temp_variable = { fighting_sanctions_help_power_rank = 3 }
+	}
+	else_if = {
+		limit = {
+			has_idea = large_power
+		}
+		set_temp_variable = { fighting_sanctions_help_power_rank = 4 }
+	}
+	else_if = {
+		limit = {
+			has_idea = great_power
+		}
+		set_temp_variable = { fighting_sanctions_help_power_rank = 5 }
+	}
+	else = {
+		set_temp_variable = { fighting_sanctions_help_power_rank = 6 }
+	}
+
+	ROOT = {
+		add_to_array = { sanctions_evade_helpers = PREV }
+		add_to_array = { sanctions_evade_helpers_value = fighting_sanctions_help_power_rank }
+		add_to_variable = { sum_fighting_sanctions_help = fighting_sanctions_help_power_rank }
+		add_opinion_modifier = {
+			target = PREV
+			modifier = helps_fighting_sanctions
+		}
+	}
+	set_variable = { i = 0 }
+	for_each_scope_loop = {
+		array = influence_array
+		break = break
+		if = {
+			limit = {
+				intel_level_over = {
+					target = PREV
+					civilian_intel > 0.5
+				}
+				check_variable = { influence_array_val^PREV.i > 9.999 }
+				is_in_array = { ROOT.sanctioneers = THIS }
+                NOT = { has_opinion_modifier = helps_evade_sanctions }
+			}
+			random = {
+				chance = 25
+				country_event = sanctions.1
+				add_opinion_modifier = {
+					target = PREV
+					modifier = helps_evade_sanctions
+				}
+			}
+		}
+		add_to_variable = { PREV.i = 1 }
+		if = {
+			limit = { check_variable = { PREV.i = 2 } }
+			set_temp_variable = { break = 1 }
+		}
+	}
+	clear_variable = i
+	ROOT = { calculate_sanctions_modifier = yes }
+}
+
+revoke_sanctions = {
+	set_variable = { i = 0 }
+	set_variable = { i1 = 0 }
+	while_loop_effect = {
+		limit = { always = yes }
+		break = break
+		if = {
+			limit = { check_variable = { sanctioneers^i = ROOT } }
+            remove_from_array = {
+				array = sanctioneers
+				index = i
+			}
+			subtract_from_variable = { sum_sanctions_force = sanctions^i }
+			remove_from_array = {
+				array = sanctions
+				index = i
+			}
+			remove_opinion_modifier = {
+				target = ROOT
+				modifier = sanctions
+			}
+			while_loop_effect = {
+				limit = { always = yes }
+				break = break1
+				if = {
+					limit = { check_variable = { ROOT.sanctions_targets^i1 = THIS } }
+					remove_from_array = {
+						array = ROOT.sanctions_targets
+						index = i1
+					}
+					subtract_from_variable = { ROOT.sum_sanctions_feedback_force = ROOT.sanctions_feedback^i1 }
+					remove_from_array = {
+						array = ROOT.sanctions_feedback
+						index = i1
+					}
+					set_temp_variable = { break1 = 1 }
+				}
+				add_to_variable = { i1 = 1 }
+			}
+			set_temp_variable = { break = 1 }
+		}
+		add_to_variable = { i = 1 }
+	}
+	clear_variable = i
+	clear_variable = i1
+
+	if = {
+		limit = {
+			NOT = {
+				any_country = {
+					is_in_array = { PREV.sanctioneers = THIS }
+				}
+			}
+		}
+		for_each_scope_loop = {
+			array = global.countries
+			PREV = {
+				remove_opinion_modifier = {
+					target = PREV
+					modifier = helps_fighting_sanctions
+				}
+				clear_array = sanctions_evade_helpers
+				clear_array = sanctions_evade_helpers_value
+			}
+		}
+		remove_dynamic_modifier = {	modifier = sanctions_dynamic_modifier }
+		clear_variable = sum_sanctions_force
+		clear_variable = sum_fighting_sanctions_help
+		clear_variable = sanctions_modifier_value
+		clear_variable = sanctions_modifier_value_minus
+		clear_variable = sanctions_modifier_value_first
+	}
+
+	if = {
+		limit = {
+			NOT = {
+				any_country = {
+					is_in_array = { ROOT.sanctions_targets = THIS }
+				}
+			}
+		}
+		ROOT = {
+			remove_dynamic_modifier = {	modifier = sanctions_feedback_dynamic_modifier }
+			clear_variable = sanctions_feedback_modifier_value
+			clear_variable = sanctions_feedback_modifier_value_minus
+		}
+	}
+	calculate_sanctions_modifier = yes
+	ROOT = { calculate_sanctions_feedback_modifier = yes }
+}
+
+revoke_sanctions_help_prev = {
+	set_variable = { i = 0 }
+	while_loop_effect = {
+		limit = { always = yes }
+		break = break
+		if = {
+			limit = { check_variable = { sanctions_evade_helpers^i = PREV } }
+            remove_from_array = {
+				array = sanctions_evade_helpers
+				index = i
+			}
+			subtract_from_variable = { sum_fighting_sanctions_help = sanctions_evade_helpers_value^i }
+			remove_from_array = {
+				array = sanctions_evade_helpers_value
+				index = i
+			}
+			remove_opinion_modifier = {
+				target = PREV
+				modifier = helps_evade_sanctions
+			}
+			set_temp_variable = { break = 1 }
+		}
+		add_to_variable = { i = 1 }
+	}
+	clear_variable = i
+	calculate_sanctions_modifier = yes
+}
+
+revoke_sanctions_help = {
+	set_variable = { i = 0 }
+	while_loop_effect = {
+		limit = { always = yes }
+		break = break
+		if = {
+			limit = { check_variable = { sanctions_evade_helpers^i = ROOT } }
+            remove_from_array = {
+				array = sanctions_evade_helpers
+				index = i
+			}
+			subtract_from_variable = { sum_fighting_sanctions_help = sanctions_evade_helpers_value^i }
+			remove_from_array = {
+				array = sanctions_evade_helpers_value
+				index = i
+			}
+			remove_opinion_modifier = {
+				target = ROOT
+				modifier = helps_evade_sanctions
+			}
+			set_temp_variable = { break = 1 }
+		}
+		add_to_variable = { i = 1 }
+	}
+	clear_variable = i
+	ROOT = { clr_country_flag = shadow_fleet_hunt@PREV }
+	calculate_sanctions_modifier = yes
+}
+
+revoke_sanctions_non_exist_country = {
+	every_country = {
+		if = {
+			limit = { is_in_array = { sanctioneers = PREV } }
+			for_each_loop = {
+				array = sanctioneers
+				value = v
+				index = i
+				break = break
+				if = {
+					limit = { var:v = { tag = PREV.PREV } }
+					set_temp_variable = { break = 1 }
+				}
+			}
+			remove_from_array = {
+				array = sanctioneers
+				index = i
+			}
+			subtract_from_variable = { sum_sanctions_force = sanctions^i }
+			remove_from_array = {
+				array = sanctions
+				index = i
+			}
+			remove_opinion_modifier = {
+				target = PREV
+				modifier = sanctions
+			}
+			if = {
+				limit = { NOT = { any_other_country = { is_in_array = { PREV.sanctioneers = THIS } } } }
+				remove_dynamic_modifier = {	modifier = sanctions_dynamic_modifier }
+				clear_variable = sanctions_modifier_value
+				clear_variable = sanctions_modifier_value_minus
+				clear_variable = sanctions_modifier_value_first
+			}
+			else = { calculate_sanctions_modifier = yes }
+		}
+		if = {
+			limit = { is_in_array = { sanctions_targets = PREV } }
+			for_each_loop = {
+				array = sanctions_targets
+				value = v
+				index = i
+				break = break
+				if = {
+					limit = { var:v = { tag = PREV.PREV } }
+					set_temp_variable = { break = 1 }
+				}
+			}
+			remove_from_array = {
+				array = sanctions_targets
+				index = i
+			}
+			subtract_from_variable = { sum_sanctions_feedback_force = sanctions_feedback^i }
+			remove_from_array = {
+				array = sanctions_feedback
+				index = i
+			}
+			if = {
+				limit = { NOT = { any_other_country = { is_in_array = { PREV.sanctions_targets = THIS } } } }
+				remove_dynamic_modifier = {	modifier = sanctions_feedback_dynamic_modifier }
+				clear_variable = sanctions_feedback_modifier_value
+				clear_variable = sanctions_feedback_modifier_value_minus
+			}
+			else = { calculate_sanctions_feedback_modifier = yes }
+		}
+		if = {
+			limit = { is_in_array = { sanctions_evade_helpers = PREV } }
+			for_each_loop = {
+				array = sanctions_evade_helpers
+				value = v
+				index = i
+				break = break
+				if = {
+					limit = { var:v = { tag = PREV.PREV } }
+					set_temp_variable = { break = 1 }
+				}
+			}
+			remove_from_array = {
+				array = sanctions_evade_helpers
+				index = i
+			}
+			subtract_from_variable = { v.sum_fighting_sanctions_help = sanctions_evade_helpers_value^i }
+			remove_from_array = {
+				array = sanctions_evade_helpers_value
+				index = i
+			}
+			remove_opinion_modifier = {
+				target = PREV
+				modifier = helps_fighting_sanctions
+			}
+			calculate_sanctions_modifier = yes
+		}
+		if = {
+			limit = {
+				has_opinion_modifier = helps_evade_sanctions
+			}
+			remove_opinion_modifier = {
+				target = PREV
+				modifier = helps_evade_sanctions
+			}
+		}
+		if = {
+			limit = { has_country_flag = shadow_fleet_hunt@PREV }
+			clr_country_flag = shadow_fleet_hunt@PREV
+		}
+	}
+	clear_array = sanctioneers
+	clear_array = sanctions
+	clear_array = sanctions_evade_helpers
+	clear_array = sanctions_evade_helpers_value
+	clear_array = sanctions_targets
+	clear_array = sanctions_feedback
+	remove_dynamic_modifier = {	modifier = sanctions_dynamic_modifier }
+	remove_dynamic_modifier = {	modifier = sanctions_feedback_dynamic_modifier }
+	clear_variable = sanctions_feedback_modifier_value
+	clear_variable = sanctions_feedback_modifier_value_minus
+	clear_variable = sanctions_modifier_value_first
+	clear_variable = sanctions_modifier_value
+	clear_variable = sanctions_modifier_value_minus
+}
+
+calculate_sanctions_modifier = {
+	set_variable = { sanctions_modifier_value = sum_sanctions_force }
+	if = {
+		limit = {
+			check_variable = {
+    			var = sum_fighting_sanctions_help
+    			value = 0
+    			compare = less_than_or_equals
+			}
+		}
+		clear_variable = sum_fighting_sanctions_help
+	}
+	else = {
+		subtract_from_variable = { sanctions_modifier_value = sum_fighting_sanctions_help }
+	}
+	if = {
+		limit = { has_idea = modest_corruption }
+		add_to_variable = { sanctions_modifier_value = -1 }
+	}
+	else_if = {
+		limit = { has_idea = medium_corruption }
+		add_to_variable = { sanctions_modifier_value = -2 }
+	}
+	else_if = {
+		limit = { has_idea = widespread_corruption }
+		add_to_variable = { sanctions_modifier_value = -3 }
+	}
+	else_if = {
+		limit = { has_idea = systematic_corruption }
+		add_to_variable = { sanctions_modifier_value = -3 }
+	}
+	else_if = {
+		limit = { has_idea = unrestrained_corruption }
+		add_to_variable = { sanctions_modifier_value = -4 }
+	}
+	else_if = {
+		limit = { has_idea = rampant_corruption }
+		add_to_variable = { sanctions_modifier_value = -5 }
+	}
+	else_if = {
+		limit = { has_idea = crippling_corruption }
+		add_to_variable = { sanctions_modifier_value = -6 }
+	}
+	else_if = {
+		limit = { has_idea = paralyzing_corruption }
+		add_to_variable = { sanctions_modifier_value = -7 }
+	}
+	if = {
+		limit = { has_idea = md_closed_economy }
+		add_to_variable = { sanctions_modifier_value = -1 }
+	}
+	else_if = {
+		limit = { has_idea = consumption_economy }
+		add_to_variable = { sanctions_modifier_value = 1 }
+	}
+	else_if = {
+		limit = { has_idea = semi_consumption_economy }
+		add_to_variable = { sanctions_modifier_value = 2 }
+	}
+	else_if = {
+		limit = { has_idea = mixed_economy }
+		add_to_variable = { sanctions_modifier_value = 3 }
+	}
+	else_if = {
+		limit = { has_idea = export_economy }
+		add_to_variable = { sanctions_modifier_value = 4 }
+	}
+	else_if = {
+		limit = { has_idea = globalized_trade_economy }
+		add_to_variable = { sanctions_modifier_value = 5 }
+	}
+	if = {
+		limit = { has_idea = rentier_state }
+		add_to_variable = { sanctions_modifier_value = 1 }
+	}
+	if = {
+		limit = {
+			has_idea = regional_power
+		}
+		add_to_variable = { sanctions_modifier_value = -1 }
+	}
+	else_if = {
+		limit = {
+			has_idea = large_power
+		}
+		add_to_variable = { sanctions_modifier_value = -2 }
+	}
+	else_if = {
+		limit = {
+			has_idea = great_power
+		}
+		add_to_variable = { sanctions_modifier_value = -3 }
+	}
+	else_if = {
+		limit = {
+			has_idea = superpower
+		}
+		add_to_variable = { sanctions_modifier_value = -4 }
+	}
+	for_each_loop = {
+		array = subjects
+		add_to_variable = { sanctions_modifier_value = -1 }
+	}
+
+	set_temp_variable = { sanctions_modifier_value_multiplyer = modifier@sanctions_defence_modifier }
+	multiply_temp_variable = { sanctions_modifier_value_multiplyer = 100 }
+
+	set_temp_variable = { sanctions_modifier_value_modifier = quarters_since_sanctions }
+	add_to_temp_variable = { sanctions_modifier_value_modifier = sanctions_modifier_value_multiplyer }
+	multiply_temp_variable = { sanctions_modifier_value_modifier = -0.01 }
+	add_to_temp_variable = { sanctions_modifier_value_modifier = 1 }
+	multiply_variable = { sanctions_modifier_value = sanctions_modifier_value_modifier }
+	clamp_variable = {
+		var = sanctions_modifier_value
+		min = 1
+		max = 25
+	}
+	set_variable = { sanctions_modifier_value_first = sanctions_modifier_value }
+	multiply_variable = { sanctions_modifier_value_first = 0.25 }
+	multiply_variable = { sanctions_modifier_value = 0.01 }
+	set_variable = { sanctions_modifier_value_minus = sanctions_modifier_value }
+	multiply_variable = { sanctions_modifier_value_minus = -1 }
+}
+
+calculate_sanctions_feedback_modifier = {
+	set_variable = { sanctions_feedback_modifier_value = sum_sanctions_feedback_force }
+	if = {
+		limit = { has_idea = md_closed_economy }
+		add_to_variable = { sanctions_feedback_modifier_value = -1 }
+	}
+	else_if = {
+		limit = { has_idea = consumption_economy }
+		add_to_variable = { sanctions_feedback_modifier_value = 1 }
+	}
+	else_if = {
+		limit = { has_idea = semi_consumption_economy }
+		add_to_variable = { sanctions_feedback_modifier_value = 2 }
+	}
+	else_if = {
+		limit = { has_idea = mixed_economy }
+		add_to_variable = { sanctions_feedback_modifier_value = 3 }
+	}
+	else_if = {
+		limit = { has_idea = export_economy }
+		add_to_variable = { sanctions_feedback_modifier_value = 4 }
+	}
+	else_if = {
+		limit = { has_idea = globalized_trade_economy }
+		add_to_variable = { sanctions_feedback_modifier_value = 5 }
+	}
+	if = {
+		limit = { has_idea = rentier_state }
+		add_to_variable = { sanctions_feedback_modifier_value = 1 }
+	}
+	if = {
+		limit = {
+			has_idea = regional_power
+		}
+		add_to_variable = { sanctions_feedback_modifier_value = -1 }
+	}
+	else_if = {
+		limit = {
+			has_idea = large_power
+		}
+		add_to_variable = { sanctions_feedback_modifier_value = -2 }
+	}
+	else_if = {
+		limit = {
+			has_idea = great_power
+		}
+		add_to_variable = { sanctions_feedback_modifier_value = -3 }
+	}
+	else_if = {
+		limit = {
+			has_idea = superpower
+		}
+		add_to_variable = { sanctions_feedback_modifier_value = -4 }
+	}
+	set_temp_variable = { sanctions_feedback_modifier_value_modifier = quarters_since_issued_sanctions }
+	multiply_temp_variable = { sanctions_feedback_modifier_value_modifier = -0.01 }
+	add_to_temp_variable = { sanctions_feedback_modifier_value_modifier = 1 }
+	multiply_variable = { sanctions_feedback_modifier_value = sanctions_feedback_modifier_value_modifier }
+	clamp_variable = {
+		var = sanctions_feedback_modifier_value
+		min = 1
+		max = 25
+	}
+	multiply_variable = { sanctions_feedback_modifier_value = 0.01 }
+	set_variable = { sanctions_feedback_modifier_value_minus = sanctions_feedback_modifier_value }
+	multiply_variable = { sanctions_feedback_modifier_value_minus = -1 }
+}

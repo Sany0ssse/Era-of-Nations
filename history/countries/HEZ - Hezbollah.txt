@@ -1,0 +1,386 @@
+﻿capital = 201
+2000.1.1 = {
+	set_country_flag = is_civil_war_faction
+	set_variable = { civil_war_original_tag = LEB.id }
+	set_country_flag = AS_disabled_arab_spring
+	if = {
+		limit = { has_dlc = "No Step Back" }
+
+		set_oob = "HEZ_2000_nsb"
+		else = {
+			set_oob = "HEZ_2000_nonnsb"
+		}
+	}
+
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency
+	}
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency_trade
+	}
+
+
+	set_variable = { gdp_per_capita = 9.972 }
+	set_variable = { capitalization = 0.010 }
+	set_variable = { count_companies = 0 }
+	
+	# Calculate weekly income with variables
+	# X = Sum of Hezbollah influence in all countries (except AoR members) (total_influence_in_countries)
+	# manpower = X
+	# money = X*0.001
+	# small arms = X*2
+	# C&C = X*0.5 (Round)
+	# MANPADS = X*0.25 (Round)
+	# ATGM = X*0.25 (Round)
+	# MBT = X*0.004 (Round)
+	# APC = X*0.01 (Round)
+	# IFV = X*0.008 (Round)
+	# Utility Vehicle = X*0.02 (Round)
+	#MANPOWER
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_variable = { x = 1 }
+	round_temp_variable = x
+	add_manpower = x
+	set_variable = { hezbollah_weekly_manpower = x }
+
+	#MONEY
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_temp_variable = { x = 0.001 }
+	set_temp_variable = { treasury_change = x }
+	modify_treasury_effect = yes
+	set_variable = { hezbollah_weekly_money = x }
+	#SMALL ARMS
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_temp_variable = { x = 2 }
+	round_temp_variable = x
+	set_variable = { hezbollah_weekly_small_arms = x }
+	# C&C
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_temp_variable = { x = 0.5 }
+	round_temp_variable = x
+	set_variable = { hezbollah_weekly_cnc = x }
+	# MANPADS
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_temp_variable = { x = 0.25 }
+	round_temp_variable = x
+	set_variable = { hezbollah_weekly_manpads = x }
+	# ATGM
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_temp_variable = { x = 0.25 }
+	round_temp_variable = x
+	set_variable = { hezbollah_weekly_atgm = x }
+	# MBT
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_temp_variable = { x = 0.004 }
+	round_temp_variable = x
+	set_variable = { hezbollah_weekly_mbt = x }
+	# APC
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_temp_variable = { x = 0.01 }
+	round_temp_variable = x
+	set_variable = { hezbollah_weekly_apc = x }
+	# IFV
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_temp_variable = { x = 0.008 }
+	round_temp_variable = x
+	set_variable = { hezbollah_weekly_ifv = x }
+	# Utility Vehicle
+	set_temp_variable = { x = total_influence_in_countries }
+	multiply_temp_variable = { x = 0.015 }
+	round_temp_variable = x
+	set_variable = { hezbollah_weekly_mrf = x }
+
+	add_manpower = 10000
+
+	set_technology = {
+		integrated_transportation_system = 1
+		post_conventional_rail = 1
+		early_freight_locomotive = 1
+
+
+		infantry_mass_assault = 1
+		early_guerilla_warfare = 1
+
+		infantry_weapons = 1
+
+		combat_eng_equipment = 1
+
+		night_vision_1 = 1
+		night_vision_2 = 1
+
+		command_control_equipment = 1
+
+		util_vehicle_0 = 1
+
+		Anti_tank_0 = 1
+		Heavy_Anti_tank_0 = 1
+
+		basic_computing = 1
+		integrated_circuit = 1
+		computing1 = 1
+		decryption1 = 1
+		encryption1 = 1
+
+		radar = 1
+		internet1 = 1 	#1G
+		internet2 = 1 	#2G
+		gprs = 1
+		fuel_silos = 1
+
+		industrial_electrospun_polymeric_nanofibers = 1
+		stereolitography = 1
+		fuel_refining = 1
+		construction1 = 1
+		stronghold_building_1 = 1
+	}
+	if = {
+		limit = { has_dlc = "No Step Back" }
+
+		set_technology = {
+			mbt_tech_ops = 1
+			mbt_tech = 1
+			nsb_artillery_0 = 1
+			nsb_Anti_Air_0 = 1
+		}
+
+		else = {
+			set_technology = {
+				MBT_1 = 1
+				Early_APC = 1 #Vehicle Design
+				APC_1 = 1
+				IFV_1 = 1
+				artillery_0 = 1
+				SP_arty_0 = 1
+				SP_R_arty_0 = 1
+				Anti_Air_0 = 1
+			}
+		}
+	}
+
+	add_ideas = {		#Freedom Laws
+		censorship_03
+		assembly_03
+		freedom_religion_04
+		lgbt_laws_04
+		freedom_trade_unions_03
+		internet_02
+
+		rampant_corruption
+		shia
+		Non_State_Actor
+		defence_06
+		edu_02
+		health_04
+		social_02
+		bureau_02
+		police_03
+		iranian_aid
+		volunteer_army
+		no_women_in_military
+		intervention_regional_interventionism
+		the_military
+		the_ulema
+		iranian_quds_force
+		katib_hezbollah
+		syrian_hezbollah
+		HEZ_militant_group
+		officer_advanced_training
+		faction_resistance_axis_member
+		full_isr_boycotte
+		GENERIC_structures_idea3
+		GENERIC_structures_idea1
+		GENERIC_structures_idea2
+		GENERIC_no_rest_idea
+		frontier_market
+		population_pyramid_2
+		GENERIC_petrodollar_idea
+	}
+
+	# Opinion Modifiers
+	add_opinion_modifier = { target = ISR modifier = full_blockades_isr }
+	add_opinion_modifier = { target = ISR modifier = ISR_Arab_Conflict }
+	reverse_add_opinion_modifier = { target = ISR modifier = ISR_Arab_Conflict }
+	add_opinion_modifier = { target = ISR modifier = death_to_israel }
+	reverse_add_opinion_modifier = { target = ISR modifier = death_to_israel_ISR }
+	if = {
+		limit = { has_dlc = "By Blood Alone" }
+		send_embargo = ISR
+	}
+
+	country_event = {
+		id = israel.33
+		days = 280 #Raid
+	}
+
+	#UAR
+	add_to_array = { global.arabic_countries = THIS }	#From is_arabic_nation trigger
+
+	#Influence system
+	init_influence = yes
+	set_variable = { domestic_influence_amount = 20 }
+	add_to_array = { influence_array = LEB.id }
+	add_to_array = { influence_array_val = 25 }
+	add_to_array = { influence_array = PER.id }
+	add_to_array = { influence_array_val = 120 }
+	add_to_array = { influence_array = SYR.id }
+	add_to_array = { influence_array_val = 25 }
+	add_to_array = { influence_array = SOV.id }
+	add_to_array = { influence_array_val = 5 }
+	startup_influence = yes
+
+	### Economy
+	set_variable = { var = debt value = 0 }
+	set_variable = { var = treasury value = 0.0025 }
+	set_variable = { var = int_investments value = 0 }
+	set_variable = { var = corporate_tax_rate value = 20 }
+	set_variable = { var = population_tax_rate value = 20 }
+
+	set_popularities = {
+		democratic = 0.0
+		communism = 100.0
+		fascism = 0.0
+		neutrality = 0.0
+		nationalist = 0.0
+	}
+	set_politics = {
+		ruling_party = communism
+		last_election = "1990.12.11"
+		election_frequency = 60
+		elections_allowed = no
+	}
+
+	start_politics_input = yes
+
+	set_variable = { party_pop_array^0 = 0 } #Western_Autocracy
+	set_variable = { party_pop_array^1 = 0 } #conservatism
+	set_variable = { party_pop_array^2 = 0 } #liberalism
+	set_variable = { party_pop_array^3 = 0 } #socialism
+	set_variable = { party_pop_array^4 = 0 } #Communist-State
+	set_variable = { party_pop_array^5 = 0 } #anarchist_communism
+	set_variable = { party_pop_array^6 = 0 } #Conservative
+	set_variable = { party_pop_array^7 = 0 } #Autocracy
+	set_variable = { party_pop_array^8 = 0 } #Mod_Vilayat_e_Faqih
+	set_variable = { party_pop_array^9 = 1.0 } #Vilayat_e_Faqih
+	set_variable = { party_pop_array^10 = 0 } #Kingdom
+	set_variable = { party_pop_array^11 = 0 } #Caliphate
+	set_variable = { party_pop_array^12 = 0 } #Neutral_Muslim_Brotherhood
+	set_variable = { party_pop_array^13 = 0 } #Neutral_Autocracy
+	set_variable = { party_pop_array^14 = 0 } #Neutral_conservatism
+	set_variable = { party_pop_array^15 = 0 } #oligarchism
+	set_variable = { party_pop_array^16 = 0 } #Neutral_Libertarian
+	set_variable = { party_pop_array^17 = 0 } #Neutral_green
+	set_variable = { party_pop_array^18 = 0 } #neutral_Social
+	set_variable = { party_pop_array^19 = 0 } #Neutral_Communism
+	set_variable = { party_pop_array^20 = 0 } #Nat_Populism
+	set_variable = { party_pop_array^21 = 0 } #Nat_Fascism
+	set_variable = { party_pop_array^22 = 0 } #Nat_Autocracy
+	set_variable = { party_pop_array^23 = 0 } #Monarchist
+
+	### Ruling Party
+	add_to_array = { ruling_party = 9 }
+
+	startup_politics = yes
+
+	create_country_leader = {
+		name = "Hassan Nasrallah"
+		picture = "hassan_nasrallah.dds"
+		ideology = Vilayat_e_Faqih
+		traits = {
+			cleric
+			emerging_Vilayat_e_Faqih
+			pro_iranian
+			political_dancer
+			geopolitical_thinker
+			tech_savy
+			honest
+			stubborn
+			sly
+			rational
+			anti_zionist
+		}
+	}
+	# IRGC Generals (Available only if the I.R. collapses)
+	recruit_character = HEZ_qasem_soleimani
+	recruit_character = HEZ_mostafa_izadi
+	recruit_character = HEZ_ali_najafi
+	recruit_character = HEZ_mohammad_jafari
+	# Hezbollah Generals
+	recruit_character = HEZ_imad_mugniyeh
+	recruit_character = HEZ_mustafa_badreddine
+	recruit_character = HEZ_hamza_ibrahim_haidar
+	recruit_character = HEZ_ali_ahmad_fayyad
+	recruit_character = HEZ_samir_avazeh
+	recruit_character = HEZ_talal_hamia
+	recruit_character = HEZ_muhammad_yusuf_ahmad_mansur
+	recruit_character = HEZ_ali_musa_daqduq
+	recruit_character = HEZ_air_chief
+
+	diplomatic_relation = {
+		country = LEB
+		relation = military_access
+		active = yes
+	}
+	diplomatic_relation = {
+		country = LEB
+		relation = guarantee
+		active = yes
+	}
+
+	#Hezbollah's Gains from Influence
+	set_variable = { total_influence_in_countries = 0 }
+	every_country = {
+		limit = {
+			NOT = { is_ally_with = HEZ original_tag = HEZ }
+			is_influencer = yes
+		}
+		if = {
+			limit = {
+				check_variable = { influence_array^0 = HEZ }
+			}
+			HEZ = { add_to_variable = { total_influence_in_countries = PREV.influence_array_val^0 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^1 = HEZ }
+			}
+			HEZ = { add_to_variable = { total_influence_in_countries = PREV.influence_array_val^1 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^2 = HEZ }
+			}
+			HEZ = { add_to_variable = { total_influence_in_countries = PREV.influence_array_val^2 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^3 = HEZ }
+			}
+			HEZ = { add_to_variable = { total_influence_in_countries = PREV.influence_array_val^3 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^4 = HEZ }
+			}
+			HEZ = { add_to_variable = { total_influence_in_countries = PREV.influence_array_val^4 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^5 = HEZ }
+			}
+			HEZ = { add_to_variable = { total_influence_in_countries = PREV.influence_array_val^5 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { influence_array^6 = HEZ }
+			}
+			HEZ = { add_to_variable = { total_influence_in_countries = PREV.influence_array_val^6 } }
+		}
+	}
+	set_variable = { overall_productivity = 466 }
+}
+
+201 = {
+	add_dynamic_modifier = { modifier = HEZ_hezbollah_state_dyanic_modifiers }
+}

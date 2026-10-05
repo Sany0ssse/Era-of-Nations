@@ -1,0 +1,23 @@
+on_actions = {
+    on_monthly_POL = {
+        effect = {
+            if = {
+                limit = { has_country_flag = POL_UKR_migration }
+                set_temp_variable = { POL_current_UKR_inrest_change = 0.02 }
+		        calculate_poland_ukranian_unrest = yes
+            }
+            random_poland_sejm_demands = yes
+            if = {
+                limit = {
+                    nationalist_right_wing_populists_are_not_in_power = yes
+                    has_power_balance = {
+                        id = POL_konfederacija_balance_bop
+                    }
+                }
+                remove_power_balance = {
+                    id = POL_konfederacija_balance_bop
+                }
+            }
+        }
+    }
+}

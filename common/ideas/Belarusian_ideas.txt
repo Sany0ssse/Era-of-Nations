@@ -1,0 +1,3745 @@
+#Made by Lord Bogdanoff
+ideas = {
+	country = {
+		#MAIN IDEAS
+		#Outdated Army
+		BLR_army_idea = {
+			picture = blr_vs_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = BLR_army_idea_tt
+			}
+		}
+		#Belarusian agriculture
+		BLR_agriculture = {
+			picture = blr_agro_culture_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				monthly_population = 0.05
+				agricolture_productivity_modifier = 0.20
+				agriculture_tax_modifier = 0.10
+			}
+		}
+		#Belarusian agriculture
+		BLR_agriculture_1 = {
+			picture = blr_agro_culture_idea
+			allowed_civil_war = { always = yes }
+			cancel = {
+				NOT = { BLR = {	is_subject_of = SOV	} }
+			}
+			name = BLR_agriculture
+			modifier = {
+				monthly_population = 0.09
+				agricolture_productivity_modifier = 0.20
+				agriculture_tax_modifier = 0.10
+				agriculture_district_income_tax_modifier = 0.10
+			}
+		}
+		#Belarusian agriculture
+		BLR_agriculture_2 = {
+			picture = blr_agro_culture_idea
+			allowed_civil_war = { always = yes }
+			name = BLR_agriculture
+			cancel = {
+				NOT = { SOV = { owns_state = 703 } }
+			}
+			modifier = {
+				monthly_population = 0.09
+				agricolture_productivity_modifier = 0.20
+				agriculture_tax_modifier = 0.10
+				agriculture_district_income_tax_modifier = 0.10
+			}
+		}
+		#Well-preserved Agro-industry
+		BLR_agro_industry = {
+			picture = blr_agro_industry_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				trade_opinion_factor = 0.2
+			}
+			equipment_bonus = {
+				util_vehicle_equipment = {
+					instant = yes
+					reliability = 0.05
+					armor_value = 0.05
+					build_cost_ic = -0.1
+				}
+			}
+		}
+		BLR_agro_industry_1 = {
+			picture = blr_agro_industry_idea
+			allowed_civil_war = { always = yes }
+			name = BLR_agro_industry
+			cancel = {
+				NOT = { BLR = {	is_subject_of = SOV	} }
+			}
+			equipment_bonus = {
+				util_vehicle_equipment = {
+					instant = yes
+					reliability = 0.05
+					armor_value = 0.05
+					build_cost_ic = -0.1
+				}
+			}
+		}
+		BLR_agro_industry_2 = {
+			picture = blr_agro_industry_idea
+			name = BLR_agro_industry
+			allowed_civil_war = { always = yes }
+			cancel = {
+				NOT = { SOV = { owns_state = 703 } }
+			}
+			equipment_bonus = {
+				util_vehicle_equipment = {
+					instant = yes
+					reliability = 0.05
+					armor_value = 0.05
+					build_cost_ic = -0.1
+				}
+			}
+		}
+		#Revision of Soviet engineering
+		BLR_revision_soviet = {
+			picture = blr_good_agroindustry
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				trade_opinion_factor = 0.1
+			}
+		}
+		#Kal
+		BLR_kal_with = {
+			picture = blr_kal
+
+			allowed_civil_war = { always = yes }
+			cancel = {
+				OR = {
+					NOT = { country_exists = BLR }
+					BLR = { has_war_with = SOV }
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = BLR_with_tt
+			}
+		}
+		#Kal Sov
+		SOV_kal_with = {
+			picture = blr_kal
+
+			name = BLR_kal_with
+			allowed_civil_war = { always = yes }
+			cancel = {
+				OR = {
+					NOT = { country_exists = BLR }
+					BLR = { has_war_with = SOV }
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = BLR_with_tt
+			}
+		}
+		BLR_kal_without = {
+			picture = blr_kal
+
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = BLR_without_tt
+			}
+		}
+		#Tourism
+		BLR_tourism = {
+			picture = foreign_capital
+
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = BLR_tourism_tt
+			}
+		}
+		#Tourism
+		BLR_tourism2 = {
+			picture = foreign_capital
+
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = BLR_tourism2_tt
+			}
+		}
+
+		#Country for Life
+		BLR_country_for_life = {
+			picture = blr_country_for_life_politic
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.3
+				monthly_population = 0.01
+				political_power_gain = 0.01
+				democratic_drift = 0.02
+				expected_mil_modifier = -1.00
+				expected_police_modifier = -2.00
+			}
+		}
+		#Poles goes
+		BLR_Poles_goes = {
+			picture = blr_poles_goes_govern
+			allowed_civil_war = { always = yes }
+			modifier = {
+				monthly_population = -0.02
+			}
+			targeted_modifier = {
+				tag = POL
+				attack_bonus_against = 0.02
+				defense_bonus_against = 0.02
+				breakthrough_bonus_against = 0.01
+			}
+		}
+
+		
+		BLR_Poles_attack_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_Poles_attack_idea"
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = POL }
+				set_temp_variable = { influence_target = BLR }
+				change_influence_percentage = yes
+				hidden_effect = {
+					POL = {
+						add_ai_strategy = {
+							type = antagonize
+							id = BLR
+							value = 300
+						}
+						add_ai_strategy = {
+							type = contain
+							id = BLR
+							value = 300
+						}
+					}
+				}
+			}
+			cancel = {
+				OR = {
+					has_war_with = POL
+					is_in_faction_with = POL
+					is_subject_of = POL
+					NOT = {
+						country_exists = POL
+						country_exists = BLR
+					}
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					POL = {
+						add_ai_strategy = {
+							type = antagonize
+							id = BLR
+							value = -300
+						}
+						add_ai_strategy = {
+							type = contain
+							id = BLR
+							value = -300
+						}
+					}
+				}
+			}
+			picture = blr_polish_attack_idea
+			allowed_civil_war = { always = yes }
+			targeted_modifier = {
+				tag = POL
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.03
+				trade_opinion_factor = -1
+			}
+		}
+
+		BLR_belarus_iranish_oil_idea = {
+			cancel = {
+				OR = {
+					has_war_with = PER
+					has_war_with = BLR
+					NOT = { country_exists = PER }
+					NOT = { country_exists = BLR }
+				}
+			}
+
+			picture = blr_iran_oil_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				country_resource_oil = 2
+			}
+		}
+
+		BLR_belarus_russian_military_coop_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_belarus_russian_military_coop_idea"
+				add_offsite_building = {
+					type = arms_factory
+					level = 1
+				}
+				add_offsite_building = { type = arms_factory level = 2 }
+			}
+			cancel = {
+				OR = {
+					has_war_with = SOV
+					has_war_with = BLR
+					NOT = { country_exists = SOV }
+					NOT = { country_exists = BLR }
+				}
+			}
+
+			on_remove = {
+				add_offsite_building = { type = arms_factory level = -2 }
+			}
+
+			picture = blr_rus_vpk_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				military_factories_productivity = 0.05
+			}
+		}
+
+		BLR_iranish_attack_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_iranish_attack_idea"
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = PER }
+				set_temp_variable = { influence_target = BLR }
+				change_influence_percentage = yes
+				hidden_effect = {
+					PER = {
+						add_ai_strategy = {
+							type = antagonize
+							id = BLR
+							value = 300
+						}
+						add_ai_strategy = {
+							type = contain
+							id = BLR
+							value = 300
+						}
+					}
+				}
+			}
+			cancel = {
+				OR = {
+					has_war_with = PER
+					is_in_faction_with = PER
+					is_subject_of = PER
+					NOT = { country_exists = PER }
+					NOT = { country_exists = BLR }
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					PER = {
+						add_ai_strategy = {
+							type = antagonize
+							id = BLR
+							value = -300
+						}
+						add_ai_strategy = {
+							type = contain
+							id = BLR
+							value = -300
+						}
+					}
+				}
+			}
+			picture = blr_iran_attack_idea
+			allowed_civil_war = { always = yes }
+			targeted_modifier = {
+				tag = PER
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.03
+				trade_opinion_factor = -1
+			}
+		}
+
+		BLR_tamojnya_russia_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_tamojnya_russia_idea"
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = BLR }
+				change_influence_percentage = yes
+				hidden_effect = {
+					SOV = {
+						add_ai_strategy = {
+							type = antagonize
+							id = BLR
+							value = 300
+						}
+						add_ai_strategy = {
+							type = contain
+							id = BLR
+							value = 300
+						}
+					}
+				}
+			}
+			cancel = {
+				OR = {
+					has_war_with = SOV
+					is_in_faction_with = SOV
+					is_subject_of = SOV
+					NOT = { country_exists = SOV }
+					NOT = { country_exists = BLR }
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					SOV = {
+						add_ai_strategy = {
+							type = antagonize
+							id = BLR
+							value = -300
+						}
+						add_ai_strategy = {
+							type = contain
+							id = BLR
+							value = -300
+						}
+					}
+				}
+			}
+			picture = blr_tamojvya_idea
+			allowed_civil_war = { always = yes }
+			targeted_modifier = {
+				tag = SOV
+				trade_opinion_factor = -1
+			}
+		}
+		
+		
+		#Internet Cencorship
+		BLR_Internet_Cencorship = {
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_internet_cencorship_economic
+			modifier = {
+				stability_factor = 0.02
+				drift_defence_factor = 0.04
+			}
+		}
+		#Kommunarka invest
+		BLR_Kommunarka_invest = {
+			allowed = {
+				original_tag = BLR
+				BLR = { owns_state = 703 }
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_kommunarka_industry
+			modifier = {
+				stability_factor = 0.001
+			}
+		}
+		#Kommunarka invest in CIS
+		BLR_Kommunarka_invest_cis = {
+			allowed = {
+				original_tag = BLR
+				BLR = { owns_state = 703 }
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_kommunarka_industry
+			modifier = {
+				stability_factor = 0.002
+			}
+		}
+		#New electoral law
+		BLR_electoral_law = {
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			picture = SPA_crusade_against_democracy
+			allowed_civil_war = { always = yes }
+			modifier = {
+				drift_defence_factor = 0.08
+			}
+		}
+		#Decree number 3
+		BLR_decree_number_3 = {
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			picture = blr_decree_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				social_cost_multiplier_modifier = -0.45
+				stability_factor = -0.04
+				production_speed_buildings_factor = 0.1
+			}
+		}
+		###RPLJ###
+		#Main#
+		BLR_rplj_idea = {
+			allowed = { original_tag = BLR }
+			picture = blr_labour_justice_idea
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+			    custom_modifier_tooltip = BLR_Trud_idea_loc
+			}
+		}
+		##POZNIAK
+		#Belarusian National State
+		BLR_national_state_idea = {
+			cancel = { 
+				western_autocrats_are_not_in_power = yes 
+			}
+			picture = belarusian_national_state
+			modifier = {
+				custom_modifier_tooltip = BLR_national_state_tt
+			}
+		}
+
+		#De-Sovietization
+		BLR_de_sovetization = {
+			cancel = { 
+				western_autocrats_are_not_in_power = yes 
+			}
+			picture = sov_comm_angry
+			modifier = {
+				communism_drift = -0.07
+				democratic_drift = 0.03
+				nationalist_drift = 0.03
+				stability_factor = -0.07
+			}
+		}
+		#SEZ
+		BLR_sez_idea = {
+			cancel = { 
+				western_autocrats_are_not_in_power = yes 
+			}
+			picture = sez_idea
+			modifier = {
+				econ_cycle_upg_cost_multiplier_modifier = -0.1
+				tax_rate_change_multiplier_modifier = -0.15
+				agriculture_district_worker_requirement_modifier = -0.15
+				offices_worker_requirement_modifier = -0.15
+				agriculture_district_income_tax_modifier = -0.07
+				office_park_income_tax_modifier = -0.07
+			}
+		}
+		#Nationalisation Russian Enterprises
+		BLR_nationalisatuion_russian_enterprises_idea = {
+			cancel = { 
+				western_autocrats_are_not_in_power = yes 
+			}
+			picture = nationalisation_russian_enterprice
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.05
+				country_productivity_growth_modifier = 0.03
+				buildings_worker_requirement_modifier = 0.07
+				trade_opinion_factor = -0.35
+			}
+		}
+		#Taler
+		BLR_taler = {
+			picture = blr_taler_money
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				consumer_goods_factor = -0.02
+				nationalist_drift = 0.03
+				political_power_factor = 0.10
+				nationalist_acceptance = 20
+			}
+		}
+		#Support nationalism
+		BLR_support_nationalism = {
+			picture = nationalism
+			allowed_civil_war = { always = yes }
+			modifier = {
+				nationalist_drift = 0.02
+
+			}
+		}
+		#Revansh
+		BLR_revanshh = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			picture = blr_revansh_idea
+			modifier = {
+				political_power_factor = 0.01
+				nationalist_drift = 0.04
+			}
+			targeted_modifier = {
+				tag = POL
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = SOV
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+		}
+		#Revansh
+		BLR_revanshh1 = {
+			name = BLR_revanshh
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			picture = blr_revansh_idea
+			modifier = {
+				nationalist_drift = 0.02
+			}
+			targeted_modifier = {
+				tag = POL
+				attack_bonus_against = 0.02
+				defense_bonus_against = 0.02
+			}
+			targeted_modifier = {
+				tag = SOV
+				attack_bonus_against = 0.02
+				defense_bonus_against = 0.02
+			}
+			on_remove = {
+				add_ideas = BLR_revanshh
+			}
+		}
+		
+		#Russofobia
+		BLR_Russofobia = {
+			picture = blr_russofobia_ideology
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = -0.10
+				monthly_population = -0.03
+			}
+		}
+		#Denied rus language
+		BLR_Denied_Rus_Language = {
+			picture = blr_denied_rus_language_ideology
+
+			modifier = {
+				stability_factor = -0.08
+				monthly_population = -0.02
+			}
+		}
+		#Patriotism
+		BLR_patriotism = {
+			picture = blr_patriotism_ideology
+			allowed_civil_war = { always = yes }
+			modifier = {
+				nationalist_drift = 0.03
+			}
+		}
+		#Belarusization
+		BLR_Belarusization = {
+			picture = blr_belarusization_ideology
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = -0.03
+				nationalist_drift = 0.05
+			}
+		}
+		#Lustration
+		BLR_Lustration_enemy = {
+			picture = blr_belarusization_ideology
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = -0.02
+				neutrality_drift = -0.02
+				communism_drift = -0.02
+				stability_factor = -0.2
+			}
+		}
+		#Closed border with Russia
+		BLR_Closed_border_russia = {
+			picture = blr_russia_border_close_idea
+			cancel = {
+				has_government = communism
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				monthly_population = 0.02
+				stability_factor = 0.08
+				police_cost_multiplier_modifier = 0.1
+			}
+		}
+		#Religion separate from state
+		BLR_separate_rel = {
+			removal_cost = -1
+			picture = christian_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.15
+				political_power_gain = 0.03
+				army_core_defence_factor = 0.05
+			}
+		}
+		#Religion unite with state
+		BLR_state_rel = {
+			removal_cost = -1
+			picture = orthodox
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.20
+				army_core_defence_factor = 0.1
+			}
+		}
+		##WESTERN
+		#The employer is always right
+		BLR_employer_right = {
+			picture = central_management
+			allowed_civil_war = { always = yes }
+			modifier = {
+				tax_rate_change_multiplier_modifier = -0.03
+				social_cost_multiplier_modifier = -0.2
+				monthly_population = -0.09
+				industrial_capacity_factory = 0.10
+				productivity_growth_modifier = 0.5
+			}
+		}
+		#Market_economics
+		BLR_market_economics = {
+			picture = foreign_capital
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = 0.05
+				consumer_goods_factor = -0.05
+				local_resources_factor = 0.10
+				industrial_capacity_factory = 0.10
+			}
+		}
+		#Encourage Exchange Students
+		BLR_Encourage_Exchange_Students = {
+			picture = EU_Roundel
+			allowed_civil_war = { always = yes }
+			modifier = {
+				research_speed_factor = 0.05
+				education_budget_cost_factor = -0.10
+			}
+		}
+		#Encourage Exchange Students
+		BLR_Encourage_Exchange_Students_2 = {
+			picture = EU_Roundel
+			allowed_civil_war = { always = yes }
+			modifier = {
+				research_speed_factor = 0.09
+				education_budget_cost_factor = -0.20
+				monthly_population = -0.01
+			}
+		}
+		#Pro western government
+		BLR_pro_western_government = {
+			picture = west_dominant
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.10
+				democratic_drift = 0.20
+				communism_drift = -0.10
+				nationalist_drift = -0.10
+				drift_defence_factor = 0.20
+			}
+		}
+		#People rights
+		BLR_idea_rights = {
+			picture = GFX_ukr_neglect_of_state_interests
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.09
+			}
+		}
+		#Freedom Meeting
+		BLR_Freedom_Meeting = {
+			picture = political_freedom
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.01
+				monthly_population = 0.01
+			}
+		}
+		#Intellectual Property Laws
+		BLR_idea_intellectual = {
+			picture = pos_braindr
+			allowed_civil_war = { always = yes }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+		#NATO Integration
+		BLR_idea_NATO_integration = {
+			picture = idea_NATO_member
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_infantry_attack_factor = 0.08
+				army_infantry_defence_factor = 0.07
+				army_speed_factor = 0.09
+			}
+		}
+		#Wind farms
+		BLR_wind_farms = {
+			picture = solar_energy
+			allowed_civil_war = { always = yes }
+			modifier = {
+				base_fuel_gain = 4.5
+				stability_factor = 0.010
+			}
+		}
+		###Soviet
+		#Five year Plan
+		BLR_five_year_plans = {
+			picture = blr_five_year_plan
+			allowed_civil_war = { always = yes }
+			modifier = {
+				consumer_goods_factor = -0.05
+				production_speed_buildings_factor = 0.25
+
+			}
+		}
+		#Clean social network
+		BLR_clean_soc_net = {
+			picture = blr_internet_cencorship_economic
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.02
+				DRIFT_DEFENCE_FACTOR = 0.04
+			}
+		}
+		#Rotaion KGB
+		BLR_rotation_KGB = {
+			picture = blr_kgb_org
+			allowed_civil_war = { always = yes }
+			modifier = {
+				drift_defence_factor = -0.04
+				commando_trait_chance_factor = 0.15
+				Intelligence_agency_defense = -0.05
+			}
+		}
+		#NKO Workers
+		BLR_North_Korea_workers = {
+			cancel = {
+				NOT = {
+					has_government = communism
+				}
+			}
+			picture = blr_north_korea_workers
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_buildings_factor = 0.09
+				political_power_gain = -0.02
+				civ_facs_worker_requirement_modifier = -0.03
+			}
+		}
+		###ECONOMIC
+		#Privatisation Effect
+		BLR_privatisation_effect = {
+		picture = pos_braindr
+		allowed_civil_war = { always = yes }
+		modifier = {
+			army_attack_factor = -0.10
+			army_defence_factor = -0.10
+			industrial_capacity_factory = -0.25
+		}
+	}
+	############ECONOMIC IDEAS
+	#Belarusian agriculture
+	BLR_agriculture2 = {
+
+		picture = blr_agro_culture_idea
+		allowed = {
+			OR = {
+				original_tag = SOV
+				original_tag = BLR
+			}
+		}
+		allowed_civil_war = { always = yes }
+		modifier = {
+			monthly_population = 0.08
+			agricolture_productivity_modifier = 0.25
+			agriculture_tax_modifier = 0.15
+		}
+	}
+	BLR_agriculture3 = {
+
+		picture = blr_agro_culture_idea
+		name = BLR_agriculture2
+		allowed = {
+			OR = {
+				original_tag = SOV
+				original_tag = BLR
+			}
+		}
+		allowed_civil_war = { always = yes }
+		modifier = {
+			monthly_population = 0.12
+			agricolture_productivity_modifier = 0.30
+			agriculture_tax_modifier = 0.20
+		}
+	}
+	#Tracktors export
+	BLR_agro_export = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_tracktors
+		modifier = {
+		monthly_population = 0.02
+		local_resources_factor = 0.03
+		}
+	}
+	#Well-preserved Agro-industry
+	BLR_agro_industry1 = {
+
+		picture = blr_agro_industry_idea
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		modifier = {
+			trade_opinion_factor = 0.2
+		}
+		equipment_bonus = {
+			util_vehicle_equipment = {
+				instant = yes
+				reliability = 0.08
+				armor_value = 0.08
+				build_cost_ic = -0.12
+			}
+		}
+	}
+	#Azot ferilizers
+	BLR_azot_fertilizers_idea = {
+
+		picture = blr_grodno_idea
+		cancel = {
+			OR = {
+				NOT = { BLR = { owns_state = 704 } }
+				NOT = { country_exists = BLR }
+			}
+		}
+		allowed_civil_war = { always = yes }
+		modifier = {
+			agricolture_productivity_modifier = 0.11
+		}
+	}
+	#Tourism
+	BLR_tourism3 = {
+		picture = blr_tourism_economic
+
+		allowed_civil_war = { always = yes }
+		modifier = {
+			custom_modifier_tooltip = BLR_tourism3_tt
+			stability_factor = 0.02
+		}
+	}
+	#Tourism
+	BLR_tourism4 = {
+		picture = blr_tourism_economic
+
+		allowed_civil_war = { always = yes }
+		modifier = {
+			custom_modifier_tooltip = BLR_tourism4_tt
+			stability_factor = 0.03
+			political_power_gain = 0.01
+		}
+	}
+	#Tourism
+	BLR_tourism5 = {
+		picture = blr_tourism_economic
+
+		allowed_civil_war = { always = yes }
+		modifier = {
+			custom_modifier_tooltip = BLR_tourism5_tt
+			stability_factor = 0.04
+			political_power_gain = 0.02
+			war_support_factor = 0.02
+		}
+	}
+	#Minotor for Russia
+	BLR_minotor_servise_sov = {
+
+		cancel = {
+			SOV = { has_opinion = { target = BLR value < 10 } }
+		}
+		picture = blr_minotorservis_idea
+		allowed_civil_war = { always = yes }
+		modifier = {
+			custom_modifier_tooltip = SOV_minotor_tt
+		}
+
+	}
+	#Minotor for Belarus
+	BLR_minotor_servise_blr = {
+
+		cancel = {
+			SOV = { has_opinion = { target = BLR value < 10 } }
+			NOT = { country_exists = BLR }
+		}
+		picture = blr_minotorservis_idea
+		allowed_civil_war = { always = yes }
+		modifier = {
+			custom_modifier_tooltip = BLR_minotor_tt
+		}
+	}
+	#558 zavod
+	BLR_558zadov_contract = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_558_zavod_idea
+		cancel = {
+			NOT = { country_exists = BLR }
+		}
+		equipment_bonus = {
+			medium_plane_airframe = {
+				reliability = 0.045
+
+			}
+			small_plane_strike_airframe = {
+				reliability = 0.045
+
+			}
+			medium_plane_fighter_airframe = {
+				reliability = 0.045
+
+			}
+			medium_plane_airframe = {
+				reliability = 0.045
+
+			}
+			cv_medium_plane_airframe = {
+				reliability = 0.045
+
+			}
+			cv_small_plane_strike_airframe = {
+				reliability = 0.045
+
+			}
+		}
+	}
+	#Peleng
+	BLR_peleng_contract = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_peleng_idea
+		cancel = {
+			NOT = { country_exists = BLR }
+		}
+		equipment_bonus = {
+			L_AT_Equipment = {
+				hard_attack = 0.05
+			}
+			H_AT_Equipment = {
+				hard_attack = 0.05
+			}
+		}
+	}
+	#Peleng
+	BLR_peleng_union_state = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_peleng_idea
+		cancel = {
+			NOT = { BLR = {	is_subject_of = SOV	} }
+		}
+		equipment_bonus = {
+			L_AT_Equipment = {
+				hard_attack = 0.05
+			}
+			H_AT_Equipment = {
+				hard_attack = 0.05
+			}
+		}
+	}
+	BLR_peleng_union_state1 = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_peleng_idea
+		name = BLR_peleng_union_state
+		cancel = {
+			NOT = { SOV = { owns_state = 703 } }
+		}
+		equipment_bonus = {
+			L_AT_Equipment = {
+				hard_attack = 0.05
+			}
+			H_AT_Equipment = {
+				hard_attack = 0.05
+			}
+		}
+	}
+	#MZKT
+	BLR_mzkt_contract = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_mzkt_idea
+		cancel = {
+			SOV = { has_opinion = { target = BLR value < 10 } }
+			NOT = { country_exists = BLR }
+		}
+		modifier = {
+		custom_modifier_tooltip = SOV_mzkt_tt
+		}
+
+	}
+	#MZKT
+	BLR_mzkt_contract_another = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_mzkt_idea
+		cancel = {
+			NOT = { country_exists = BLR }
+		}
+
+	}
+	#MZKT
+	BLR_mzkt_contract_blr = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_mzkt_idea
+		cancel = {
+			SOV = { has_opinion = { target = BLR value < 10 } }
+		}
+		modifier = {
+		custom_modifier_tooltip = BLR_mzkt_tt
+		}
+	}
+	#MZKT
+	BLR_mzkt_union_state = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_mzkt_idea
+		cancel = {
+			NOT = { BLR = {	is_subject_of = SOV	} }
+		}
+
+	}
+	#MZKT
+	BLR_mzkt_union_state1 = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_mzkt_idea
+		name = BLR_mzkt_union_state
+		cancel = {
+			NOT = { SOV = { owns_state = 703 } }
+		}
+
+	}
+	
+	#140 Zavod
+	BLR_140_zavod_union_state = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_140_idea
+		cancel = {
+			NOT = { BLR = {	is_subject_of = SOV	} }
+		}
+	}
+	BLR_140_zavod_union_state1 = {
+
+		allowed_civil_war = { always = yes }
+		picture = blr_140_idea
+		name = BLR_140_zavod_union_state
+		cancel = {
+			NOT = { SOV = { owns_state = 703 } }
+		}
+	}
+	
+	#Internet Cencorship
+	BLR_Batka_policy = {
+
+		cancel = {
+			NOT = {
+				emerging_reactionaries_are_in_power = yes
+			}
+		}
+		allowed_civil_war = { always = yes }
+		picture = blr_internet_cencorship_economic
+		modifier = {
+			stability_factor = 0.02
+			drift_defence_factor = 0.04
+		}
+	}
+	#Decree number 3
+	BLR_Batka_policy1 = {
+
+		cancel = {
+			NOT = {
+				emerging_reactionaries_are_in_power = yes
+			}
+		}
+		picture = social_liberalism
+		allowed_civil_war = { always = yes }
+		modifier = {
+			social_cost_multiplier_modifier = -0.45
+			stability_factor = -0.04
+			production_speed_buildings_factor = 0.1
+		}
+	}
+	#Decree number 3 and Cencorship
+	BLR_Batka_policy2 = {
+
+		cancel = {
+			NOT = {
+				emerging_reactionaries_are_in_power = yes
+			}
+		}
+		picture = blr_internet_cencorship_economic
+		allowed_civil_war = { always = yes }
+		modifier = {
+			social_cost_multiplier_modifier = -0.45
+			stability_factor = -0.02
+			production_speed_buildings_factor = 0.1
+			drift_defence_factor = 0.04
+		}
+	}
+	#Pension Reform
+	BLR_pension_reform = {
+
+		cancel = {
+			NOT = {
+				emerging_reactionaries_are_in_power = yes
+			}
+		}
+		allowed_civil_war = { always = yes }
+		picture = blr_pensions_reform_govern
+		modifier = {
+			monthly_population = -0.01
+			industrial_capacity_factory = 0.03
+			social_cost_multiplier_modifier = -0.10
+		}
+	}
+	############UNION STATE
+	#Lukashenko Prime-Minister
+	BLR_luka_prime = {
+
+		picture = luka_prime
+		cancel = {
+			country_exists = BLR
+		}
+		allowed_civil_war = { always = yes }
+		modifier = {
+			political_power_gain = 0.02
+			communism_drift = 0.03
+			industrial_capacity_factory = 0.07
+			production_speed_buildings_factor = 0.07
+		}
+	}
+	############SOVIET
+	#New Red Army
+	BLR_the_new_red_army1 = {
+
+		cancel = {
+			NOT = {
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+			}
+		}
+		picture = blr_red_army_org
+		allowed_civil_war = { always = yes }
+		modifier = {
+			justify_war_goal_time = -0.25
+			army_attack_factor = 0.15
+			conscription_factor = 0.10
+			army_org_factor = 0.15
+			army_defence_factor = 0.15
+
+			army_fuel_consumption_factor = -0.15
+			out_of_supply_factor = -0.10
+		}
+	}
+	#New Red Army
+	BLR_the_new_red_army2 = {
+
+		cancel = {
+			NOT = {
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+			}
+		}
+		picture = blr_red_army_org
+		allowed_civil_war = { always = yes }
+		modifier = {
+			justify_war_goal_time = -0.25
+			army_attack_factor = 0.20
+			conscription_factor = 0.10
+			army_org_factor = 0.15
+			army_defence_factor = 0.15
+			army_fuel_consumption_factor = -0.15
+			out_of_supply_factor = -0.10
+
+			land_reinforce_rate = 0.03
+			breakthrough_factor = 0.03
+			dig_in_speed_factor = 0.05
+			terrain_penalty_reduction = 0.02
+			recon_factor = 0.05
+		}
+	}
+	#New Red Army
+	BLR_the_new_red_army4 = {
+
+		cancel = {
+			NOT = {
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+			}
+		}
+		picture = blr_red_army_org
+		allowed_civil_war = { always = yes }
+		modifier = {
+			justify_war_goal_time = -0.25
+			army_attack_factor = 0.20
+			conscription_factor = 0.10
+			army_org_factor = 0.15
+			army_defence_factor = 0.15
+			army_fuel_consumption_factor = -0.15
+			out_of_supply_factor = -0.10
+
+			land_reinforce_rate = 0.03
+			breakthrough_factor = 0.03
+			dig_in_speed_factor = 0.05
+			terrain_penalty_reduction = 0.02
+			recon_factor = 0.05
+			send_volunteer_size = 2
+			send_volunteers_tension = -0.25
+		}
+	}
+	#New Red Army
+	BLR_the_new_red_army3 = {
+
+		cancel = {
+			NOT = {
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+			}
+		}
+		picture = blr_red_army_org
+		allowed_civil_war = { always = yes }
+		modifier = {
+			justify_war_goal_time = -0.25
+			army_attack_factor = 0.15
+			conscription_factor = 0.10
+			army_org_factor = 0.15
+			army_defence_factor = 0.20
+			army_fuel_consumption_factor = -0.15
+			out_of_supply_factor = -0.10
+
+
+			land_reinforce_rate = 0.03
+			dig_in_speed_factor = 0.15
+			breakthrough_factor = 0.03
+			terrain_penalty_reduction = 0.02
+			recon_factor = 0.05
+		}
+	}
+	#New Red Army
+	#New Red Army
+	BLR_the_new_red_army = {
+		picture = blr_red_army_org
+		allowed_civil_war = { always = yes }
+		modifier = {
+			justify_war_goal_time = -0.25
+			army_attack_factor = 0.15
+			conscription_factor = 0.10
+			army_org_factor = 0.15
+			army_defence_factor = 0.15
+		}
+	}
+	BLR_the_new_red_army5 = {
+
+		cancel = {
+			NOT = {
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+			}
+		}
+		picture = blr_red_army_org
+		allowed_civil_war = { always = yes }
+		modifier = {
+			justify_war_goal_time = -0.25
+			army_attack_factor = 0.15
+			conscription_factor = 0.10
+			army_org_factor = 0.15
+			army_defence_factor = 0.20
+			army_fuel_consumption_factor = -0.15
+			out_of_supply_factor = -0.10
+			land_reinforce_rate = 0.03
+			dig_in_speed_factor = 0.15
+			breakthrough_factor = 0.03
+			terrain_penalty_reduction = 0.02
+			recon_factor = 0.05
+			send_volunteers_tension = -0.25
+			send_volunteer_size = 2
+		}
+	}
+	############GAYDUKEVICH
+	#Belarusian national law
+	BLR_Belarusian_national_law = {
+
+		picture = blr_accounting_chamber_union_state
+		allowed = {	always = yes }
+		cancel = {
+			NOT = {
+				neutrality_neutral_oligarch_are_in_power = yes
+			}
+		}
+		removal_cost = -1
+		modifier = {
+			stability_factor = 0.03
+			neutrality_drift = 0.02
+		}
+	}
+	#Belarusian national law
+	BLR_Belarusian_national_law1 = {
+
+		picture = blr_accounting_chamber_union_state
+		allowed = {	always = yes }
+		name = BLR_Belarusian_national_law
+		cancel = {
+			NOT = {
+				neutrality_neutral_oligarch_are_in_power = yes
+			}
+		}
+		removal_cost = -1
+		modifier = {
+			stability_factor = 0.03
+			neutrality_drift = 0.02
+			army_attack_factor = 0.05
+			army_defence_factor = 0.05
+			war_support_factor = 0.01
+			conscription_factor = 0.01
+		}
+	}
+	#Belarusian national law
+	BLR_Belarusian_national_law2 = {
+
+		picture = blr_accounting_chamber_union_state
+		allowed = {	always = yes }
+		name = BLR_Belarusian_national_law
+		cancel = {
+			NOT = {
+				neutrality_neutral_oligarch_are_in_power = yes
+			}
+		}
+		removal_cost = -1
+		modifier = {
+			stability_factor = 0.03
+			neutrality_drift = 0.02
+			army_attack_factor = 0.05
+			army_defence_factor = 0.05
+			war_support_factor = 0.01
+			conscription_factor = 0.01
+			research_speed_factor = 0.08
+			research_sharing_per_country_bonus_factor = 0.06
+			production_speed_industrial_complex_factor = 0.03
+		}
+	}
+	#Belarusian agriculture 2
+	BLR_agriculture1 = {
+
+		picture = agricultural_reforms
+		allowed = {
+			OR = {
+				original_tag = SOV
+				original_tag = BLR
+			}
+		}
+		allowed_civil_war = { always = yes }
+		modifier = {
+			monthly_population = 0.02
+			agricolture_productivity_modifier = 0.20
+			agriculture_tax_modifier = 0.10
+		}
+	}
+	#FSB
+	BLR_fsb = {
+
+		allowed_civil_war = { always = yes }
+		cancel = {
+			SOV = { has_opinion = { target = BLR value < 20 } }
+		}
+		modifier = {
+			encryption_factor = 0.15
+			foreign_influence_defense_modifier = 0.10
+		}
+	}
+	#Sadam Oil
+	BLR_sadam_oil = {
+
+		allowed_civil_war = { always = yes }
+		picture = oil_profits
+		cancel = {
+			IRQ = { has_opinion = { target = BLR value < 10 } }
+		}
+
+		modifier = {
+			country_resource_oil = 4
+		}
+	}
+	#China related
+	BLR_military_exercises_CHI_idea = {
+
+		allowed_civil_war = { always = yes }
+		removal_cost = -1
+		picture = pla
+		modifier = {
+			experience_gain_army_unit = 0.025
+			experience_gain_army_factor = 0.25
+			army_org_factor = 0.1
+			war_support_factor = 0.05
+			war_support_weekly = 0.01
+		}
+	}
+	BLR_Socialist_Market_Economy = {
+
+		name = Socialist_Market_Economy
+		allowed_civil_war = { always = yes }
+		picture = well_balanced
+		cancel = {
+			NOT = {
+				has_government = communism
+			}
+		}
+		modifier = {
+			communism_drift = 0.02
+			research_speed_factor = -0.02
+			production_factory_efficiency_gain_factor = -0.02
+			production_speed_industrial_complex_factor = -0.02
+			trade_opinion_factor = -0.02
+			consumer_goods_factor = -0.02
+			production_speed_arms_factory_factor = 0.02
+			drift_defence_factor = 0.02
+			corruption_cost_factor = -0.02
+		}
+	}
+	#NAZBOLS IDEAS
+		#Interbrigades
+		BLR_nazbol_interbrigades_idea = {
+			cancel = {
+				NOT = {
+					nationalist_fascist_are_in_power = yes
+				}
+			}
+			picture = intervention_interbrigades
+			allowed_civil_war = { always = yes }
+			modifier = {
+				send_volunteers_tension = -0.15
+				send_volunteer_size = 1
+			}
+		}
+		#Serp 
+		BLR_nazbol_serp_idea = {
+			cancel = {
+				NOT = {
+					nationalist_fascist_are_in_power = yes
+				}
+			}
+			picture = blr_nazbol_sepr_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = -0.04
+				neutrality_drift = -0.04
+				communism_drift = -0.04
+			}
+		}
+		#Molot 
+		BLR_nazbol_molot_idea = {
+			cancel = {
+				NOT = {
+					nationalist_fascist_are_in_power = yes
+				}
+			}
+			picture = blr_nazbol_molot_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				nationalist_drift = 0.04
+				nationalist_acceptance = 100
+				propaganda_campaign_cost_modifier = -0.15
+			}
+		}
+		#Serp Molot 
+		BLR_nazbol_serp_molot_idea = {
+			cancel = {
+				NOT = {
+					nationalist_fascist_are_in_power = yes
+				}
+			}
+			picture = blr_nazbol_molot_sepr_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				nationalist_drift = 0.04
+				nationalist_acceptance = 100
+				propaganda_campaign_cost_modifier = -0.15
+				democratic_drift = -0.04
+				neutrality_drift = -0.04
+				communism_drift = -0.04
+				production_factory_max_efficiency_factor = 0.21
+				production_speed_buildings_factor = 0.21
+				industry_repair_factor = 0.12
+			}
+		}
+		#Serp Molot 
+		BLR_nazbol_serp_molot_idea1 = {
+			name = BLR_nazbol_serp_molot_idea
+			cancel = {
+				NOT = {
+					nationalist_fascist_are_in_power = yes
+				}
+			}
+			picture = blr_nazbol_molot_sepr_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				political_power_gain = 0.09
+				nationalist_drift = 0.06
+				nationalist_acceptance = 100
+				propaganda_campaign_cost_modifier = -0.15
+				democratic_drift = -0.06
+				neutrality_drift = -0.06
+				communism_drift = -0.06
+				production_factory_max_efficiency_factor = 0.21
+				production_speed_buildings_factor = 0.21
+				industry_repair_factor = 0.12
+			}
+		}
+		#Serp Molot 
+		BLR_nazbol_serp_molot_idea2 = {
+			name = BLR_nazbol_serp_molot_idea
+			cancel = {
+				NOT = {
+					nationalist_fascist_are_in_power = yes
+				}
+			}
+			picture = blr_nazbol_molot_sepr_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				political_power_gain = 0.09
+				nationalist_drift = 0.06
+				nationalist_acceptance = 100
+				propaganda_campaign_cost_modifier = -0.15
+				democratic_drift = -0.06
+				neutrality_drift = -0.06
+				communism_drift = -0.06
+				production_factory_max_efficiency_factor = 0.21
+				production_speed_buildings_factor = 0.21
+				industry_repair_factor = 0.12
+				send_volunteer_divisions_required = -0.10
+				send_volunteer_size = 1
+				send_volunteers_tension = -0.10
+			}
+		}
+		#Firewall
+		BLR_nazbol_firewall_idea = {
+			cancel = {
+				NOT = {
+					nationalist_fascist_are_in_power = yes
+				}
+			}
+			picture = blr_nazbol_firewall_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				political_power_factor = 0.25
+				drift_defence_factor = 0.1
+				encryption_factor = 0.1
+				stability_factor = 0.125
+				research_speed_factor = -0.1
+			}
+		}
+		#RNE and Sobor
+		BLR_nazbol_radicals_idea = {
+			cancel = {
+				NOT = { 
+					nationalist_fascist_are_in_power = yes 
+				}
+			}
+			picture = blr_nazbol_rne_sobor_idea
+			modifier = {
+				mobilization_speed = 0.03
+				war_support_factor = 0.05
+				training_time_army_factor = -0.04
+				army_attack_factor = 0.10
+				stability_factor = 0.03
+				surrender_limit = 0.1
+				army_core_attack_factor = 0.07
+				army_core_defence_factor = 0.09
+			}
+			targeted_modifier = {
+				tag = ISR
+				attack_bonus_against = 0.03
+				defense_bonus_against = 0.03
+				breakthrough_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = USA
+				attack_bonus_against = 0.03
+				defense_bonus_against = 0.03
+				breakthrough_bonus_against = 0.05
+			}
+		}
+		#Anti West
+		BLR_nazbol_anti_west_idea = {
+			picture = blr_nazbol_antiwest_idea
+			
+			cancel = {
+				NOT = {
+					nationalist_fascist_are_in_power = yes
+				}
+			}
+			modifier = {
+				democratic_drift = -0.08
+			}
+			targeted_modifier = {
+				tag = ENG
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.03
+			}
+			targeted_modifier = {
+				tag = USA
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.03
+			}
+			targeted_modifier = {
+				tag = GER
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.03
+			}
+			targeted_modifier = {
+				tag = FRA
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.03
+			}
+			targeted_modifier = {
+				tag = SPR
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.03
+			}
+		}
+
+	#LUKASHENKO IDEAS
+	#Luka Tiran
+	BLR_luka_tiran_idea = {
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_lukaka_idea
+		cancel = {
+			NOT = {
+				emerging_reactionaries_are_in_power = yes 
+			}
+		}
+		modifier = {
+			custom_modifier_tooltip = BLR_luka_idea_tt
+		}
+	}
+	
+	#MONARCHIST IDEAS
+	#Identity - Lithuania
+	BLR_lithuania_identity_idea = {
+		picture = BLR_lit_culture
+		allowed = { 
+			original_tag = BLR
+			nationalist_monarchists_are_in_power = yes
+		}
+		allowed_civil_war = { always = yes }
+		modifier = {
+			corruption_cost_factor = -0.1
+			civilian_industry_tax_modifier = 0.07
+			production_speed_buildings_factor = -0.1
+		}
+	}
+	#Identity - Belarus
+	BLR_bielorus_identity_idea = {
+		picture = BLR_bel_culture
+		allowed = { 
+			original_tag = BLR
+			nationalist_monarchists_are_in_power = yes
+		}
+		allowed_civil_war = { always = yes }
+		modifier = {
+			agriculture_tax_modifier = 0.15
+			agriculture_workers_modifier = 0.1
+			corruption_cost_factor = 0.05
+		}
+	}
+	#Identity - Polish
+	BLR_bielorus_identity_polish_idea = {
+		picture = BLR_bel_culture
+		allowed = { 
+			original_tag = BLR
+			nationalist_monarchists_are_in_power = yes
+		}
+		allowed_civil_war = { always = yes }
+		modifier = {
+			agriculture_tax_modifier = 0.15
+			agriculture_workers_modifier = 0.1
+			corruption_cost_factor = -0.05
+			civilian_industry_tax_modifier = 0.03
+			production_speed_buildings_factor = -0.05
+		}
+	}
+	#Identity - Polish
+	BLR_lithuania_identity_polish_idea = {
+		picture = BLR_lit_culture
+		allowed = { 
+			original_tag = BLR
+			nationalist_monarchists_are_in_power = yes
+		}
+		allowed_civil_war = { always = yes }
+		modifier = {
+			corruption_cost_factor = -0.15
+			civilian_industry_tax_modifier = 0.12
+			production_speed_buildings_factor = -0.15
+		}
+	}
+	#Magdeburg Rights
+	BLR_magdeburg_rights_idea = {
+		cancel = {
+			nationalist_monarchists_are_not_in_power = yes
+		}
+		picture = BLR_magdeburg_law
+		modifier = {
+			civilian_factories_productivity = 0.05
+			trade_laws_cost_factor = -0.05
+			expected_adm_modifier = -1
+			bureaucracy_cost_factor -0.09
+			internal_factions_cost_factor = 0.05
+			drift_defence_factor = -0.05
+		}
+	}
+	#COMMUNISTS IDEAS
+	#Internal politics of communism
+	BLR_commi_politics = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_politic_communism
+		modifier = {
+			foreign_influence_defense_modifier = 0.1
+			drift_defence_factor = 0.1
+			communism_drift = 0.03
+		}
+	}
+
+	BLR_commi_politics1 = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_politic_communism2
+		modifier = {
+			foreign_influence_defense_modifier = 0.1
+			drift_defence_factor = 0.1
+			communism_drift = 0.03
+			stability_factor = 0.05
+			productivity_growth_modifier = 0.03
+			state_productivity_growth_modifier = 0.05
+		}
+	}
+
+	#State Atheism
+	BLR_boc_protest_idea = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = BLR_boc_protest
+		modifier = {
+			stability_factor = -0.15
+			war_support_factor = -0.20
+		}
+	}
+
+	#Propaganda
+	BLR_propaganda_idea = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_commi_propaganda
+		modifier = {
+			stability_factor = 0.05
+			political_power_gain = 0.7
+			communism_drift = 0.03
+			foreign_influence_defense_modifier = 0.1
+			propaganda_campaign_cost_modifier = -0.15
+		}
+	}
+
+	
+
+	#Five-Year Plan
+	BLR_five_year_plan_idea = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_fiveyears_idea
+		modifier = {
+			production_speed_buildings_factor = 0.25
+			projects_cost_modifier = -0.1
+			buildings_worker_requirement_modifier = 0.03
+			country_productivity_growth_modifier = 0.07
+			agricolture_productivity_modifier = 0.15
+			civilian_factories_productivity = 0.15
+			corporate_tax_income_multiplier_modifier = -0.25
+		}
+
+	}
+
+	#Red Army
+	BLR_red_army_idea = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_red_army
+		modifier = {
+			army_attack_factor = 0.03
+			army_defence_factor = 0.03
+			army_core_attack_factor = 0.05
+			army_core_defence_factor = 0.07
+		}
+	}
+
+	#People Militia
+	BLR_red_army_idea2 = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_red_army2
+		modifier = {
+			army_attack_factor = 0.03
+			army_defence_factor = 0.03
+			army_core_attack_factor = 0.05
+			army_core_defence_factor = 0.07
+			conscription_factor = 0.02
+			experience_gain_army = 0.03
+			training_time_factor = -0.05
+		}
+	}
+
+	#Cyber Troops
+	BLR_red_army_idea3 = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_red_army3
+		modifier = {
+			army_attack_factor = 0.03
+			army_defence_factor = 0.03
+			army_core_attack_factor = 0.05
+			army_core_defence_factor = 0.07
+			conscription_factor = 0.02
+			experience_gain_army = 0.03
+			training_time_factor = -0.05
+			decryption_factor = 0.15
+			intel_network_gain_factor = 0.1
+			operation_cost = -0.1
+			operation_risk = -0.1
+		}
+	}
+
+	#Trudarmy
+	BLR_trudarmy_mobilize = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = communism
+		modifier = {
+			conscription_factor = 0.01
+			weekly_manpower = 5
+			experience_gain_army = 0.01
+			command_power_gain = 0.01
+			industry_repair_factor = 0.2
+		}
+	}
+
+	#Lithuanian workers
+	BLR_lit_workers = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_lithuanian_workers
+		modifier = {
+			buildings_worker_requirement_modifier = -0.05
+			country_productivity_growth_modifier = 0.02
+		}
+	}
+
+	#Lithuanian-Belarussian Communistic Party
+	BLR_litbel_cp = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_litbel_cp
+		modifier = {
+			political_power_factor = 0.07
+			communism_drift = 0.07
+		}
+	}
+
+	#Lithuanian-Belarussian Passport
+	BLR_litbel_passport = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_litbel_passpor
+		modifier = {
+			bureaucracy_cost_multiplier_modifier = -0.1
+			stability_factor = 0.05
+		}
+	}
+
+	#Lithuanian-Belarussian Constitution
+	BLR_litbel_constitution = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_litbel_constitution
+		modifier = {
+			political_power_factor = 0.15
+			bureaucracy_cost_multiplier_modifier = -0.15
+		}
+	}
+
+	#Lithuanian protests
+	BLR_lit_protests = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_lithuanian_protests
+		modifier = {
+			stability_factor = -0.2
+			stability_weekly = -0.1
+			political_power_factor = -0.1
+			bureaucracy_cost_multiplier_modifier = 0.4
+			police_cost_multiplier_modifier = 0.6
+		}
+	}
+
+	#Rublitas
+	BLR_rublit = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_rublitas
+		modifier = {
+			stability_factor = 0.15
+			bureaucracy_cost_multiplier_modifier = -0.05
+			tax_gain_multiplier_modifier = 0.07
+			offices_productivity = 0.05
+		}
+	}
+
+	#Lithuanian-Belarussian Army
+	BLR_red_army_idea4 = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_red_army4
+		modifier = {
+			army_attack_factor = 0.03
+			army_defence_factor = 0.03
+			army_core_attack_factor = 0.05
+			army_core_defence_factor = 0.07
+			conscription_factor = 0.03
+			experience_gain_army = 0.05
+			training_time_factor = -0.05
+			decryption_factor = 0.15
+			intel_network_gain_factor = 0.1
+			operation_cost = -0.1
+			operation_risk = -0.1
+			army_morale_factor = 0.15
+			army_org_factor = 0.1
+			coordination_bonus = 0.05
+			planning_speed = 0.05
+			max_planning_factor = 0.07
+		}
+	}
+
+	#Soviet Education
+	BLR_soviet_education = {
+		cancel = {
+			emerging_communist_state_are_not_in_power = yes
+		}
+		picture = blr_soviet_education 
+		modifier = {
+			scientist_research_bonus_factor = 0.05
+			scientist_breakthrough_bonus_factor = 0.07
+			research_speed_factor = 0.07
+			education_cost_multiplier_modifier = 0.1
+		}
+	}
+
+	#ECONOMY IDEAS
+	#Belarus VPK
+	BLR_vpk_full_idea = {
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_vpk_idea
+		modifier = {
+			custom_modifier_tooltip = BLR_vpk_idea_tt
+		}
+	}
+	##Shyshkevich
+	#Damaged image
+	BLR_dameged_image_idea = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_shush_damaged_idea
+		modifier = {
+			stability_factor = -0.05
+			neutrality_drift = -0.04
+			propaganda_campaign_cost_modifier = 0.04
+		}
+	}
+	BLR_dameged_image1_idea = {
+		name = BLR_dameged_image
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_shush_damaged_idea
+		modifier = {
+			stability_factor = -0.03
+			neutrality_drift = -0.03
+		}
+	}
+	BLR_shuskevich_constitution_idea = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_shush_constitution_idea
+		modifier = {
+			stability_factor = 0.05
+			neutrality_drift = 0.04
+			democratic_drift = 0.02
+			police_cost_multiplier_modifier = -0.07
+		}
+	}
+	BLR_shuskevich_constitution1_idea = {
+		name = BLR_shuskevich_constitution
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_shush_constitution_idea
+		modifier = {
+			stability_factor = 0.06
+			neutrality_drift = 0.04
+			democratic_drift = 0.02
+			police_cost_multiplier_modifier = -0.07
+			drift_defence_factor = -0.04
+			bureaucracy_cost_multiplier_modifier = 0.04
+		}
+	}
+	BLR_shuskevich_system_idea = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_shush_system_idea
+		modifier = {
+			stability_factor = 0.09
+			neutrality_drift = 0.08
+			police_cost_multiplier_modifier = -0.1
+			drift_defence_factor = -0.07
+			bureaucracy_cost_multiplier_modifier = 0.06
+			political_power_gain = 0.05
+		}
+	}
+	BLR_zmagar_intergration = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_new_patriotism
+		modifier = {
+			democratic_drift = 0.03
+			nationalist_drift = 0.03
+			political_power_gain = -0.06
+			war_support_factor = -0.04
+		}
+	}
+	BLR_lukashenko_integration = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_lukaka_idea
+		modifier = {
+			communism_drift = 0.05
+			political_power_gain = -0.06
+			bureaucracy_cost_multiplier_modifier = 0.07
+		}
+	}
+	BLR_Healthcare_Reform = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_shush_health_idea
+		modifier = {
+			health_cost_multiplier_modifier = 0.07
+			monthly_population = 0.04
+			conscription_factor = 0.02
+		}
+	}
+	BLR_Healthcare_Reform1 = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_shush_health_idea
+		modifier = {
+			health_cost_multiplier_modifier = 0.07
+			monthly_population = 0.04
+			conscription_factor = 0.02
+			social_cost_multiplier_modifier = -0.06
+			neutrality_drift = 0.03
+			investment_cost_modifier = 0.05
+			productivity_growth_modifier = 0.12
+			expected_welfare_modifier = -0.1
+		}
+	}
+	BLR_third_way_idea = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_shush_thirdway_idea
+		modifier = {
+			expected_education_modifier = -0.1
+			expected_healthcare_modifier = -0.1
+			expected_welfare_modifier = -0.1
+			education_budget_cost_factor = -0.05
+			health_cost_multiplier_modifier = -0.04
+			corporate_tax_income_multiplier_modifier = 0.04
+		}
+	}
+	BLR_belarusian_neutrality_idea = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_zmagar_neultrality
+		modifier = {
+			neutrality_drift = 0.03
+			political_power_factor = 0.1
+			stability_factor = 0.07
+		}
+	}
+	BLR_belarusian_neutrality1_idea = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		name = BLR_belarusian_neutrality_idea
+		picture = blr_zmagar_neultrality
+		modifier = {
+			neutrality_drift = 0.03
+			join_faction_tension = 1
+			lend_lease_tension = 1
+			send_volunteers_tension = 1
+			political_power_factor = 0.1
+			stability_factor = 0.07
+		}
+	}
+	BLR_belarusian_neutrality2_idea = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		name = BLR_belarusian_neutrality_idea
+		picture = blr_zmagar_neultrality
+		modifier = {
+			neutrality_drift = 0.05
+			democratic_drift = 0.01
+			communism_drift = 0.01
+			join_faction_tension = 1
+			lend_lease_tension = 1
+			send_volunteers_tension = 1
+			political_power_factor = 0.1
+			stability_factor = 0.07
+			foreign_influence_defense_modifier = 0.12
+		}
+	}
+	BLR_economic_reorganization = {
+		cancel = {
+			neutrality_neutral_social_are_not_in_power = yes
+		}
+		allowed = { original_tag = BLR }
+		allowed_civil_war = { always = yes }
+		picture = blr_shush_reorg_idea
+		modifier = {
+			bureaucracy_cost_multiplier_modifier = 0.2
+			social_cost_multiplier_modifier = 0.1
+			econ_cycle_upg_cost_multiplier_modifier = -0.25
+			migration_rate_value_factor = -0.15
+			return_on_investment_modifier = 0.12
+		}
+	}
+
+
+	####LIBERALS####
+
+	#Lukashists Opposition
+	BLR_lukashists_opposition = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes }
+		}
+		picture = blr_lukashist_opposition_idea
+		modifier = {
+			stability_factor = -0.25
+			communism_drift = 0.05
+			democratic_drift = -0.03
+			political_power_factor = -0.25
+			police_cost_multiplier_modifier = 0.25
+			bureaucracy_cost_multiplier_modifier = 0.25
+		}
+	}
+	#Fight Against Totalitarianism
+	BLR_lukashists_opposition2 = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes }
+		}
+		name = BLR_lukashists_opposition
+		picture = blr_lukashist_opposition_idea
+		modifier = {
+			stability_factor = -0.20
+			communism_drift = 0.02
+			nationalist_drift = -0.01
+			political_power_factor = -0.25
+			police_cost_multiplier_modifier = 0.25
+			bureaucracy_cost_multiplier_modifier = 0.25
+		}
+	}
+
+	#Administration Purge
+	BLR_lukashists_opposition3 = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes }
+		}
+		name = BLR_lukashists_opposition
+		picture = blr_lukashist_opposition_idea
+		modifier = {
+			stability_factor = -0.15
+			democratic_drift = 0.03
+			communism_drift = -0.03
+			nationalist_drift = -0.01
+			political_power_factor = -0.20
+			police_cost_multiplier_modifier = 0.25
+			bureaucracy_cost_multiplier_modifier = 0.25
+		}
+	}
+
+	#Free Political Prisoners
+	BLR_lukashists_opposition4 = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes }
+		}
+		name = BLR_lukashists_opposition
+		picture = blr_lukashist_opposition_idea
+		modifier = {
+			stability_factor = -0.10
+			democratic_drift = 0.05
+			communism_drift = -0.03
+			nationalist_drift = -0.01
+			political_power_factor = -0.15
+			police_cost_multiplier_modifier = 0.25
+			bureaucracy_cost_multiplier_modifier = 0.25
+		}
+	}
+
+	#Bring siloviks to justice
+	BLR_lukashists_opposition5 = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes }
+		}
+		name = BLR_lukashists_opposition
+		picture = blr_lukashist_opposition_idea
+		modifier = {
+			stability_factor = -0.05
+			democratic_drift = 0.05
+			communism_drift = -0.03
+			nationalist_drift = -0.01
+			political_power_factor = -0.15
+			police_cost_multiplier_modifier = 0.10
+			bureaucracy_cost_multiplier_modifier = 0.15
+		}
+	}
+
+	#Administration Purge
+	BLR_administration_purge = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes }
+		}
+		picture = blr_zmagar_admin_purge
+		modifier = {
+			drift_defence_factor = 0.1
+			democratic_drift = 0.01
+			political_power_factor = 0.1
+			bureaucracy_cost_multiplier_modifier = 0.25
+		}
+	}
+
+	#Strong President
+	BLR_strong_president_idea = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes }
+		}
+		picture = blr_strong_president
+		modifier = {
+			stability_factor = 0.10
+			democratic_drift = 0.01
+			political_power_factor = 0.07
+			foreign_influence_defense_modifier = 0.05
+			bureaucracy_cost_multiplier_modifier = -0.05
+		}
+	}
+
+	#Economic Reform
+	BLR_new_economic_of_belarus = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes }
+		}
+		picture = democratic
+		modifier = {
+			custom_modifier_tooltip = BLR_new_economic_of_belarus_tt
+		}
+	}
+
+	#Efficient bureaucratic system
+	BLR_efficient_bureaucratic_system = {
+		cancel = { 
+			NOT = { western_liberals_are_in_power = yes } 
+		} 
+		picture = blr_efficient_bureaucratic_system
+		modifier = {
+			stability_factor = 0.03
+			political_power_gain = 0.25
+			bureaucracy_cost_multiplier_modifier = 0.07
+		}
+	}
+
+	#New Patriotism
+	BLR_new_patriotism_idea = {
+		cancel = { 
+			NOT = { western_liberals_are_in_power = yes } 
+		} 
+		picture = blr_new_patriotism
+		modifier = {
+			drift_defence_factor = 0.1
+			democratic_drift = 0.01
+			stability_factor = 0.07
+		}
+	}
+
+	#New Patriotism
+	BLR_new_patriotism_idea2 = {
+		cancel = { 
+			NOT = { western_liberals_are_in_power = yes } 
+		} 
+		name = BLR_new_patriotism_idea
+		picture = blr_new_patriotism
+		modifier = {
+			political_power_factor = 0.07
+			drift_defence_factor = 0.15
+			democratic_drift = 0.03
+			stability_factor = 0.1
+		}
+	}
+
+	#United people
+	BLR_united_people_idea = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes } 
+		}
+		picture = blr_united_people
+		modifier = {
+			democratic_drift = 0.03
+			stability_factor = 0.03
+			war_support_factor = 0.07
+		}
+	}
+
+	#Parliamentary dominace
+	BLR_parliamentary_dominance_idea = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes } 
+		}
+		picture = blr_zmagar_parlament_dominance
+		modifier = {
+			drift_defence_factor = 0.1
+			foreign_influence_defense_modifier = 0.07
+			political_power_factor = -0.05
+		}
+	}
+
+	#Moderate economic reforms
+	BLR_moderate_economic_reforms = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes } 
+		}
+		picture = blr_zmagar_economic
+		modifier = {
+			stability_factor = 0.07
+			education_cost_multiplier_modifier = -0.05
+			health_cost_multiplier_modifier = -0.05
+			social_cost_multiplier_modifier = -0.05
+			econ_cycle_upg_cost_multiplier_modifier = 0.07
+			interest_rate_multiplier_modifier = -0.09
+			tax_rate_change_multiplier_modifier = 0.30
+		}
+	}
+
+	#STANAG
+	BLR_stanag_accepted = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes } 
+		}
+		picture = nato
+		modifier = {
+			army_attack_factor = 0.07
+			army_defence_factor = 0.07
+			army_org_factor = 0.05
+			army_speed_factor = 0.07
+			production_factory_efficiency_gain_factor = 0.15
+		}
+	}
+
+	#NATO Doctrine
+	BLR_nato_doctrine = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes } 
+		}
+		picture = nato
+		targeted_modifier = {
+			tag = SOV
+			attack_bonus_against = 0.07
+			defense_bonus_against = 0.09
+			breakthrough_bonus_against = 0.05
+		}
+		targeted_modifier = {
+			tag = CHI
+			attack_bonus_against = 0.07
+			defense_bonus_against = 0.09
+			breakthrough_bonus_against = 0.05
+		}
+		targeted_modifier = {
+			tag = PER
+			attack_bonus_against = 0.07
+			defense_bonus_against = 0.09
+			breakthrough_bonus_against = 0.05
+		}
+		targeted_modifier = {
+			tag = CHE
+			attack_bonus_against = 0.07
+			defense_bonus_against = 0.09
+			breakthrough_bonus_against = 0.05
+		}
+	}
+
+	#Neutrality Politic
+	BLR_neutrality_politic = {
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes } 
+		}
+		picture = blr_zmagar_neultrality
+		modifier = {
+			ai_get_ally_desire_factor = -300
+			ai_join_ally_desire_factor = -300
+		}
+		rule = {
+			can_join_factions = no
+			can_create_factions = no
+			can_join_opposite_factions = no
+		}
+	}
+
+	#Rights of Russians
+	BLR_rights_of_russians = {
+		picture = blr_zmagar_neultrality
+		cancel = {
+			NOT = { western_liberals_are_in_power = yes } 
+		}
+		modifier = {
+			stability_factor = 0.07
+			communism_drift = 0.01
+			war_support_factor = -0.07
+			monthly_population = 0.03
+		}
+	}
+}
+
+	hidden_ideas = {
+		#POZNYAK IDEAS
+		#Constitution 1994
+		BLR_poznyak_constitution_1994 = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_1994_constitution"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_poznyak_constitution_1994
+						}
+					}
+					add_ideas = BLR_poznyak_constitution_1994
+				}
+			}
+			cancel = { western_autocrats_are_not_in_power = yes }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = 0.03
+				stability_factor = 0.07
+				bureaucracy_cost_multiplier_modifier = 0.05
+			}
+		}
+
+		#Legacy of the BPR
+		BLR_bpr_legacy = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_bpr_legacy"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_bpr_legacy
+						}
+					}
+					add_ideas = BLR_bpr_legacy
+				}
+			}
+			cancel = { western_autocrats_are_not_in_power = yes }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				war_support_factor = 0.07
+				political_power_factor = 0.05
+				nationalist_drift = 0.03
+				foreign_influence_defense_modifier = 0.03
+			}
+		}
+
+		#Monolingual state
+		BLR_monolingual_state = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_monolingual_state"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_monolingual_state
+						}
+					}
+					add_ideas = BLR_monolingual_state
+				}
+			}
+			cancel = { western_autocrats_are_not_in_power = yes }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				foreign_influence_defense_modifier = 0.01
+				stability_factor = 0.05
+				political_power_factor = 0.03
+				bureaucracy_cost_multiplier_modifier = -0.3
+			}
+		}
+
+		#Patriotism
+		BLR_national_patriotism = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_national_patriotism"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_national_patriotism
+						}
+					}
+					add_ideas = BLR_national_patriotism
+				}
+			}
+			cancel = { western_autocrats_are_not_in_power = yes }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_core_attack_factor = 0.05
+				army_core_defence_factor = 0.07
+				drift_defence_factor = 0.07
+				war_support_factor = 0.1
+			}
+		}
+
+		#Freedom Spirit
+		BLR_freedom_spirit_idea = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_freedom_spirit_idea"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_freedom_spirit_idea
+						}
+					}
+					add_ideas = BLR_freedom_spirit_idea
+				}
+			}
+			cancel = { western_autocrats_are_not_in_power = yes }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = 0.07
+				communism_drift = -0.01
+				nationalist_drift = -0.01
+				fascism_drift = -0.03
+				political_power_factor = 0.1
+				monthly_population = 0.03
+			}
+		}
+
+		#LUKASHENKO IDEAS
+		#Economic Growth
+		BLR_growthpromise_idea = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_growthpromise_idea"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_brsm_org
+			modifier = {
+				econ_cycle_upg_cost_multiplier_modifier = -0.1
+				production_speed_buildings_factor = 0.1
+			}
+		}
+		#Anti Corruption
+		BLR_anticorrupt_idea = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_anticorrupt_idea"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_brsm_org
+			modifier = {
+				corruption_cost_factor = -0.20
+				political_power_factor = -0.02
+			}
+		}
+		#Dosaaf
+		BLR_Dosaaf_idea = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_Dosaaf_idea"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_brsm_org
+			modifier = {
+				war_support_factor = 0.03
+				communism_drift = 0.04
+				political_power_gain = 0.01
+			}
+		}
+		#Supress Shuskevich
+		BLR_supress_shuskevich_idea = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_supress_shuskevich_idea"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes 
+				}
+			}
+			picture = blr_national_library_org
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = -0.05
+				corruption_cost_factor = -0.10
+			}
+		}
+		#Supress Oppostion
+		BLR_supress_opposition_idea = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_supress_opposition_idea"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+				emerging_reactionaries_are_in_power = yes 
+				}
+			}
+			picture = blr_national_library_org
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = -0.04
+				neutrality_drift = -0.04
+				nationalist_drift = -0.04
+			}
+		}
+		#National library
+		BLR_national_library = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_national_library"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes 
+				}
+			}
+			picture = blr_national_library_org
+			allowed_civil_war = { always = yes }
+			modifier = {
+				political_power_gain = 0.03
+				research_speed_factor = 0.02
+			}
+		}
+		#New land code
+		BLR_new_land_code_idea = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_new_land_code_idea"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes 
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_pensions_reform_govern
+			modifier = {
+				agricolture_productivity_modifier = 0.10
+				productivity_growth_modifier = 0.09
+			}
+		}
+		#Concept national security
+		BLR_Concept_national_security = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_Concept_national_security"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			picture = blr_concept_national_security_org
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_core_attack_factor = 0.08
+				stability_factor = 0.04
+			}
+		}
+		#Concept national security
+		BLR_Concept_national_security2 = {
+			picture = blr_concept_national_security_org
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_core_attack_factor = 0.12
+				stability_factor = 0.08
+			}
+		}
+		#Belarus - Partisan country
+		BLR_Concept_national_security3 = {
+			picture = blr_concept_national_security_org
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_core_attack_factor = 0.18
+				stability_factor = 0.12
+			}
+		}
+		#Potato Exporter
+		BLR_potato_empire_idea = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_potato_empire_idea"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes 
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_potato_empire_economic
+			modifier = {
+				stability_factor = 0.04
+				agriculture_tax_modifier = 0.15
+				agricolture_productivity_modifier = 0.10
+			}
+		}
+		#Azarenok
+		BLR_azarenok_idea = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_azarenok_idea"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_brsm_org
+			modifier = {
+				drift_defence_factor = 0.15
+				communism_drift = 0.05
+			}
+		}
+		#BRSM
+		BLR_BRSM = {
+			on_add = { 
+				log = "[GetDateText]: [Root.GetName]: add idea BLR_BRSM"
+				if = {
+					limit = {
+						NOT = {
+							has_idea = BLR_luka_tiran_idea
+						}
+					}
+					add_ideas = BLR_luka_tiran_idea
+				}
+			}
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_brsm_org
+			modifier = {
+				monthly_population = 0.01
+				drift_defence_factor = 0.03
+				political_power_gain = 0.01
+			}
+		}
+		#BRSM STROY
+		BLR_BRSM1 = {
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_brsm_org
+			name = BLR_BRSM
+			modifier = {
+				monthly_population = 0.01
+				drift_defence_factor = 0.03
+				political_power_gain = 0.01
+				production_speed_industrial_complex_factor = 0.02
+				production_speed_arms_factory_factor = 0.02
+				tax_gain_multiplier_modifier = -0.01
+			}
+		}
+		#BRSM 100 DNEY
+		BLR_BRSM2 = {
+			cancel = {
+				NOT = {
+					emerging_reactionaries_are_in_power = yes
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_brsm_org
+			name = BLR_BRSM
+			modifier = {
+				monthly_population = 0.02
+				drift_defence_factor = 0.05
+				political_power_gain = 0.03
+				production_speed_industrial_complex_factor = 0.03
+				production_speed_arms_factory_factor = 0.03
+				tax_gain_multiplier_modifier = -0.01
+				research_speed_factor = 0.06
+			}
+		}
+		
+		#ECONOMY IDEAS
+		#Azot ferilizers
+		BLR_azot_fertilizers_income = {
+			picture = blr_grodno_idea
+			allowed = { original_tag = BLR }
+			cancel = {
+				OR = {
+					NOT = { BLR = { owns_state = 704 } }
+					NOT = { country_exists = BLR }
+				}
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = BLR_fertil_tt
+			}
+		}
+		#Chelnochnaya trade
+		BLR_cheln_trade = {
+			picture = blr_cheltrade_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = -0.05
+				population_tax_income_multiplier_modifier = -0.15
+			}
+		}
+		#Hi Tech Park
+		BLR_economy_hitech_park_idea = {
+			picture = arm_old_doctrine
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			cancel = {
+				NOT = {
+					owns_state = 703
+				}
+			}
+			modifier = {
+				research_speed_factor = 0.12
+				research_sharing_per_country_bonus_factor = 0.08
+			}
+		}
+		#MZKT
+		BLR_economy_mzkt_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_economy_mzkt_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_vpk_full_idea
+						}
+					}
+					add_ideas = BLR_vpk_full_idea
+				}
+			}
+			picture = arm_old_doctrine
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			equipment_bonus = {
+				heavy_tank_chassis = {
+					build_cost_ic = -0.05
+				}
+				medium_tank_artillery_chassis = {
+					build_cost_ic = -0.05
+				}
+				util_vehicle_equipment = {
+					defense = 0.05
+					reliability = 0.02
+				}
+			}
+		}
+		#MTZ
+		BLR_economy_mtz_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_economy_mtz_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_vpk_full_idea
+						}
+					}
+					add_ideas = BLR_vpk_full_idea
+				}
+			}
+			picture = arm_old_doctrine
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			equipment_bonus = {
+				util_vehicle_equipment = {
+					instant = yes
+					reliability = 0.04
+					armor_value = 0.04
+					build_cost_ic = -0.05
+				}
+			}
+		}
+				
+		#ARMY IDEAS
+		#Army sso
+		BLR_army_sso_idea = {
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			picture = sov_sso_idea
+			modifier = {
+				special_forces_attack_factor = 0.05
+				special_forces_defence_factor = 0.05
+				special_forces_training_time_factor = -0.10
+			}
+		}
+		#Army Engineer
+		BLR_army_engineer_idea = {
+			picture = sov_mto_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				army_speed_factor = 0.10
+				army_core_defence_factor = 0.10
+			}
+		}
+		#Army Transport
+		BLR_army_transport_idea = {
+			picture = sov_mto_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				initiative_factor = 0.05
+				supply_consumption_factor = -0.07
+				repair_speed_rail_way_factor = 0.15
+			}
+		}
+		#Border Troops
+		BLR_pogranci = {
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			picture = SOV_pograntsy_idea
+			modifier = {
+				foreign_influence_defense_modifier = 0.06
+				army_core_defence_factor = 0.04
+			}
+		}
+		#Army AntiAir
+		BLR_army_anti_air_vvs_idea = {
+			picture = sov_mto_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				static_anti_air_damage_factor = 0.15
+				static_anti_air_hit_chance_factor = 0.15
+				navy_anti_air_attack_factor = 0.10
+				air_accidents_factor = -0.05
+				airforce_personnel_cost_multiplier_modifier = 0.03
+			}
+		}
+		#PeaceKeepers
+		BLR_peackekeepers_idea = {
+
+			picture = spy_intel
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				send_volunteer_size = 1
+			}
+		}
+		#Radio-Technical Troops
+		BLR_radio_technical_troops_idea = {
+			picture = spy_intel
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_intel_factor = 0.10
+				airforce_intel_factor = 0.10
+			}
+		}
+		#Territorial Defence
+		BLR_teroborona_idea = {
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			picture = ukr_teroborona_idea
+			modifier = {
+				mobilization_speed = 0.05
+				army_core_defence_factor = 0.07
+				war_support_factor = 0.04
+				training_time_army_factor = -0.04
+			}
+		}
+		#BelSpecTech
+		BLR_belspectech_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_belspectech_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_vpk_full_idea
+						}
+					}
+					add_ideas = BLR_vpk_full_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			equipment_bonus = {
+				artillery_equipment = {
+					build_cost_ic = -0.10
+				}
+				AA_Equipment = {
+					build_cost_ic = -0.10
+				}
+				medium_tank_artillery_chassis = {
+					build_cost_ic = -0.05
+				}
+				heavy_tank_chassis = {
+					build_cost_ic = -0.05
+				}
+				heavy_tank_amphibious_chassis = {
+					build_cost_ic = -0.075
+				}
+			}
+		}
+		#558 zavod
+		BLR_558zavod_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_558zavod_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_vpk_full_idea
+						}
+					}
+					add_ideas = BLR_vpk_full_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			equipment_bonus = {
+				medium_plane_airframe = {
+					reliability = 0.05
+				}
+				small_plane_strike_airframe = {
+					reliability = 0.05
+				}
+				medium_plane_fighter_airframe = {
+					reliability = 0.05
+
+				}
+				cv_medium_plane_airframe = {
+					reliability = 0.05
+
+				}
+			}
+		}
+		#Peleng
+		BLR_peleng_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_peleng_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_vpk_full_idea
+						}
+					}
+					add_ideas = BLR_vpk_full_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			equipment_bonus = {
+				L_AT_Equipment = {
+					hard_attack = 0.05
+				}
+				H_AT_Equipment = {
+					hard_attack = 0.05
+				}
+			}
+		}
+		#Minotor
+		BLR_minotor_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_minotor_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_vpk_full_idea
+						}
+					}
+					add_ideas = BLR_vpk_full_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			equipment_bonus = {
+				medium_tank_amphibious_chassis = {
+					reliability = 0.09
+				}
+				medium_tank_flame_chassis = {
+					reliability = 0.09
+				}
+				medium_tank_chassis = {
+					reliability = 0.09
+				}
+				medium_tank_destroyer_chassis = {
+					reliability = 0.09
+				}
+			}
+		}
+		#140 Zavod
+		BLR_140_zavod_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_140_zavod_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_vpk_full_idea
+						}
+					}
+					add_ideas = BLR_vpk_full_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+			equipment_bonus = {
+				medium_tank_amphibious_chassis = {
+					reliability = 0.05
+				}
+				medium_tank_chassis = {
+					reliability = 0.05
+				}
+			}
+		}
+		#Outdated Army
+		BLR_outdated_army_idea = {
+			picture = sov_outdated_army_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				army_attack_factor = -0.20
+				army_defence_factor = -0.20
+				army_org_factor = -0.15
+				personnel_cost_multiplier_modifier = 0.07
+			}
+		}
+		#Outdated Army
+		BLR_outdated_army_idea_1 = {
+			name = BLR_outdated_army_idea
+			picture = sov_outdated_army_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				army_attack_factor = -0.15
+				army_defence_factor = -0.15
+				army_org_factor = -0.10
+				personnel_cost_multiplier_modifier = 0.03
+			}
+		}
+		#Outdated Army
+		BLR_outdated_army_idea_2 = {
+			name = BLR_outdated_army_idea
+			picture = sov_outdated_army_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				army_attack_factor = -0.10
+				army_defence_factor = -0.10
+				army_org_factor = -0.05
+			}
+		}
+		#Outdated Army
+		BLR_outdated_army_idea_3 = {
+			name = BLR_outdated_army_idea
+			picture = sov_outdated_army_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				army_attack_factor = -0.05
+				army_defence_factor = -0.05
+			}
+		}
+		#Navy
+		BLR_navy_idea = {
+			picture = sov_outdated_army_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				naval_accidents_chance = -0.02
+				positioning = 0.02
+				naval_mine_hit_chance = -0.02
+				industrial_capacity_dockyard = 0.02
+				naval_speed_factor = 0.02
+				navy_max_range_factor = 0.02
+				navy_anti_air_attack_factor = 0.02
+			}
+		}
+		#Sea Troops
+		BLR_morpehi_idea = {
+			picture = sov_outdated_army_idea
+			allowed = { original_tag = BLR }
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				naval_invasion_penalty = -0.03
+				naval_invasion_capacity = 1
+				invasion_preparation = -0.05
+			}
+		}
+
+		#Liberal NEW ECONOMIC
+
+		#Price liberalization
+		BLR_price_liberalization_idea = {
+			allowed = { original_tag = BLR }
+			cancel = { 
+				NOT = { western_liberals_are_in_power = yes }
+			}
+			modifier = {
+				democratic_drift = 0.01
+				political_power_factor = -0.05
+				expected_welfare_modifier = 2
+				corruption_cost_factor = 0.05
+				social_cost_multiplier_modifier = -0.07
+				education_cost_multiplier_modifier = -0.07
+				bureaucracy_cost_multiplier_modifier = -0.07
+				econ_cycle_upg_cost_multiplier_modifier = 0.5
+			}
+		}
+
+		#Partial privatization
+		BLR_partial_privatisation_idea = {
+			allowed = { original_tag = BLR }
+			cancel = { 
+				NOT = { western_liberals_are_in_power = yes }
+			}
+			modifier = {
+				democratic_drift = 0.01
+				political_power_factor = -0.03
+				stability_factor = 0.15
+				social_cost_multiplier_modifier = -0.15
+				return_on_investment_modifier = 0.10
+				country_productivity_growth_modifier = 0.07
+			}
+		}
+
+		#Denomination
+		BLR_denomination_idea = {
+			allowed = { original_tag = BLR }
+			cancel = { 
+				NOT = { western_liberals_are_in_power = yes }
+			}
+			modifier = {
+				stability_factor = 0.07
+				return_on_investment_modifier = 0.05
+				corruption_cost_factor = -0.15
+				bureaucracy_cost_multiplier_modifier = -0.12
+			}
+		}
+
+		#Progressive tax
+		BLR_progressive_tax = {
+			allowed = { original_tag = BLR }
+			cancel = { 
+				NOT = { western_liberals_are_in_power = yes }
+			}
+			modifier = {
+				country_productivity_growth_modifier = 0.05
+				population_tax_income_multiplier_modifier = 0.25
+				corporate_tax_income_multiplier_modifier = 0.1
+				bureaucracy_cost_multiplier_modifier = 0.07
+			}
+		}
+
+		###RPLJ###
+		#USSR Legacy
+		BLR_ussr_leagcy_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_ussr_leagcy_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_rplj_idea
+						}
+					}
+					add_ideas = BLR_rplj_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+			    political_power_factor = 0.2
+			    communism_drift = 0.03
+			    propaganda_campaign_cost_modifier = -0.10
+			}
+		}
+		#Patriotic Union
+		BLR_national_patriotic_union_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_national_patriotic_union_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_rplj_idea
+						}
+					}
+					add_ideas = BLR_rplj_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+				stability_factor = 0.02
+				war_support_factor = 0.05
+				conscription_factor = 0.05
+			}
+		}
+		#National Bank reform
+		BLR_national_bank_reform_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_National_Bank_reform_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_rplj_idea
+						}
+					}
+					add_ideas = BLR_rplj_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+				production_speed_buildings_factor = 0.1
+				corporate_tax_income_multiplier_modifier = 0.04
+				tax_rate_change_multiplier_modifier = 0.1
+			}
+		}
+		#Strong Parliement
+		BLR_parliamentary_supervision_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_parliamentary_supervision_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_rplj_idea
+						}
+					}
+					add_ideas = BLR_rplj_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+				stability_factor = 0.05
+				bureaucracy_cost_factor = 0.10
+				foreign_influence_defense_modifier = 0.05
+			}
+		}
+		#State Domination
+		BLR_state_property_domination_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_state_property_domination_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_rplj_idea
+						}
+					}
+					add_ideas = BLR_rplj_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+				production_speed_buildings_factor = 0.05
+				bureaucracy_cost_factor = -0.05
+			}
+		}
+		#Free Medicine
+		BLR_real_free_medicine_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_real_free_medicine_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_rplj_idea
+						}
+					}
+					add_ideas = BLR_rplj_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+				health_cost_multiplier_modifier = 0.10
+				expected_healthcare_modifier = -1
+				communism_drift = 0.02
+				conscription_factor = 0.02
+			}
+		}
+
+		#Social Justice Economy
+		BLR_social_justice_economy_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_social_justice_economy_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_rplj_idea
+						}
+					}
+					add_ideas = BLR_rplj_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+				social_cost_multiplier_modifier = -0.10
+				health_cost_multiplier_modifier = -0.05
+				bureaucracy_cost_factor = -0.07
+			}
+		}
+		#Democratic patriotism
+		BLR_democratic_patriotism_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_democratic_patriotism_idea"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_rplj_idea
+						}
+					}
+					add_ideas = BLR_rplj_idea
+				}
+			}
+			allowed = { original_tag = BLR }
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+				communism_drift = 0.03
+			    propaganda_campaign_cost_modifier = -0.05
+				foreign_influence_defense_modifier = 0.07
+				drift_defence_factor = 0.05
+			}
+		}
+		#Democratic patriotism
+		BLR_democratic_patriotism_idea1 = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_democratic_patriotism_idea1"
+				if = {
+					limit = { 
+						NOT = {
+							has_idea = BLR_rplj_idea
+						}
+					}
+					add_ideas = BLR_rplj_idea
+				}
+			}
+			name = BLR_democratic_patriotism_idea
+			allowed = { original_tag = BLR }
+			cancel = {
+				NOT = { emerging_anarchist_communism_are_in_power = yes }
+			}
+			modifier = {
+				communism_drift = 0.05
+			    propaganda_campaign_cost_modifier = -0.07
+				foreign_influence_defense_modifier = 0.10
+				drift_defence_factor = 0.10
+				police_cost_multiplier_modifier = -0.05
+			}
+		}
+	}
+}

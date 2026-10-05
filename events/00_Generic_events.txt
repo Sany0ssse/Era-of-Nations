@@ -1,0 +1,1848 @@
+add_namespace = redux_generic
+add_namespace = redux_generic_news
+add_namespace = five_year_plan
+add_namespace = f_invest
+add_namespace = generic_nato
+add_namespace = generic_csto
+add_namespace = generic_muslims
+add_namespace = generic_salafists
+add_namespace = generic_sanctions
+add_namespace = generic_puppet
+
+#MDC Start Event
+country_event = {
+	id = redux_generic_news.1
+	title = redux_generic_news.1.t
+	desc = redux_generic_news.1.d
+	picture = GFX_mdc_start_logo
+	is_triggered_only = yes
+	option = {
+		name = redux_generic_news.1.a
+		log = "[GetDateText]: [This.GetName]: redux_generic_news.1.a executed"
+		hidden_effect = {
+			country_event = { id = redux_generic_news.2 }
+		}
+	}
+	#option = {
+	#	name = redux_generic_news.1.b
+	#	log = "[GetDateText]: [This.GetName]: redux_generic_news.1.b executed"
+	#	hidden_effect = {
+	#		country_event = { id = redux_generic_news.5 }
+	#	}
+	#}
+	option = {
+		name = redux_generic_news.1.c
+		log = "[GetDateText]: [This.GetName]: redux_generic_news.1.c executed"
+	}
+}
+#MDC Start Event - CFE
+country_event = {
+	id = redux_generic_news.2
+	title = redux_generic_news.2.t
+	desc = redux_generic_news.2.d
+	picture = GFX_mdc_start_cfe
+	is_triggered_only = yes
+	option = {
+		name = redux_generic_news.2.a
+		log = "[GetDateText]: [This.GetName]: redux_generic_news.2.a executed"
+		hidden_effect = {
+			country_event = { id = redux_generic_news.3 }
+		}
+	}
+}
+#MDC Start Event - Departments
+country_event = {
+	id = redux_generic_news.3
+	title = redux_generic_news.3.t
+	desc = redux_generic_news.3.d
+	picture = GFX_mdc_start_departments
+	is_triggered_only = yes
+	option = {
+		name = redux_generic_news.3.a
+		log = "[GetDateText]: [This.GetName]: redux_generic_news.3.a executed"
+		hidden_effect = {
+			country_event = { id = redux_generic_news.4 }
+		}
+	}
+}
+#MDC Start Event - Companies and Branches
+country_event = {
+	id = redux_generic_news.4
+	title = redux_generic_news.4.t
+	desc = redux_generic_news.4.d
+	picture = GFX_mdc_start_companies_branches
+	is_triggered_only = yes
+	option = {
+		name = redux_generic_news.4.a
+		log = "[GetDateText]: [This.GetName]: redux_generic_news.4.a executed"
+	}
+}
+
+#MDC TNO Event - Poop
+country_event = {
+	id = redux_generic_news.5
+	title = redux_generic_news.5.t
+	desc = redux_generic_news.5.d
+	picture = GFX_generic_tno_event
+	is_triggered_only = yes
+	option = {
+		name = redux_generic_news.5.a
+		log = "[GetDateText]: [This.GetName]: redux_generic_news.5.a executed"
+		hidden_effect = {
+			country_event = { id = redux_generic_news.6 days = 40 }
+		}
+	}
+}
+#MDC TNO Event - HotDog
+country_event = {
+	id = redux_generic_news.6
+	title = redux_generic_news.6.t
+	desc = redux_generic_news.6.d
+	picture = GFX_generic_tno_event
+	is_triggered_only = yes
+	option = {
+		name = redux_generic_news.6.a
+		log = "[GetDateText]: [This.GetName]: redux_generic_news.6.a executed"
+		hidden_effect = {
+			country_event = { id = redux_generic_news.7 days = 40 }
+		}
+	}
+}
+#MDC TNO Event - Bicycle
+country_event = {
+	id = redux_generic_news.7
+	title = redux_generic_news.7.t
+	desc = redux_generic_news.7.d
+	picture = GFX_generic_tno_event
+	is_triggered_only = yes
+	option = {
+		name = redux_generic_news.7.a
+		log = "[GetDateText]: [This.GetName]: redux_generic_news.7.a executed"
+	}
+}
+#Our Interests
+country_event = {
+	id = redux_generic.1
+	title = redux_generic.1.t
+	desc = redux_generic.1.d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.1.a
+		add_ideas = GENERIC_external_politic
+		ai_chance = {
+			factor = 1
+		}
+	}
+
+	option = {
+		name = redux_generic.1.b
+		add_ideas = GENERIC_internal_politic
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+#Class Matter
+country_event = {
+	id = redux_generic.2
+	title = redux_generic.2.t
+	desc = redux_generic.2.d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.2.a
+		set_gov_unions = yes
+		set_temp_variable = { temp_opinion = 10 }
+		change_labour_unions_opinion = yes
+		add_ideas = GENERIC_workers_power
+		ai_chance = {
+			factor = 1
+		}
+	}
+
+	option = {
+		name = redux_generic.2.b
+		add_ideas = GENERIC_class_equality
+		set_temp_variable = { arg_popularity = 0.1 }
+		add_ruling_outlook_popularity = yes
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+#New Culture
+country_event = {
+	id = redux_generic.3
+	title = redux_generic.3.t
+	desc = redux_generic.3.d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.3.a
+		set_temp_variable = { temp_opinion = 10 }
+		change_labour_unions_opinion = yes
+		if = {
+			limit = { 
+				has_idea = GENERIC_class_equality
+			}
+			swap_ideas = {
+				remove_idea = GENERIC_class_equality
+				add_idea = GENERIC_class_equality1
+			}
+		}
+		if = {
+			limit = { 
+				has_idea = GENERIC_workers_power
+			}
+			swap_ideas = {
+				remove_idea = GENERIC_workers_power
+				add_idea = GENERIC_workers_power1
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+
+	option = {
+		name = redux_generic.3.b
+		if = {
+			limit = { 
+				has_idea = GENERIC_class_equality
+			}
+			swap_ideas = {
+				remove_idea = GENERIC_class_equality
+				add_idea = GENERIC_class_equality2
+			}
+		}
+		if = {
+			limit = { 
+				has_idea = GENERIC_workers_power
+			}
+			swap_ideas = {
+				remove_idea = GENERIC_workers_power
+				add_idea = GENERIC_workers_power2
+			}
+		}
+		add_political_power = -200
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+#New Culture
+country_event = {
+	id = redux_generic.4
+	title = redux_generic.4.t
+	desc = redux_generic.4.d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.4.a
+		set_country_flag = GENERIC_stabilization_govern_start
+	}
+}
+
+#Petrodollar End
+country_event = {
+	id = redux_generic.5
+	title = redux_generic.5.t
+	desc = redux_generic.5.d
+	picture = GFX_MDDC_petrodollar
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.5.a
+	}
+}
+
+#Petrodollar End - USA
+country_event = {
+	id = redux_generic.6
+	title = redux_generic.6.t
+	desc = redux_generic.6.d
+	picture = GFX_MDDC_petrodollar
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.6.a
+		add_opinion_modifier = { target = FROM modifier = reduced_our_influence }
+		reverse_add_opinion_modifier = { target = FROM modifier = reduced_our_influence }
+		set_country_flag = { flag = sanctions_prepared@FROM value = 1 days = 365 }
+        FROM = { PREV = { custom_effect_tooltip = sanction_prepared_PREV_tt } }
+		create_wargoal = {
+    		type = puppet_wargoal_focus
+    		target = FROM
+			expire = 365
+		}
+	}
+}
+
+
+#Epoch - Terrorism
+country_event = {
+	id = redux_generic.7
+	title = redux_generic.7.t
+	desc = redux_generic.7.d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.7.a
+		if = {
+			limit = {
+				OR = {
+					has_idea = shia
+					has_idea = shia_iranian_school
+					has_idea = sufi_islam
+				}
+			}
+			add_popularity = {
+				ideology = fascism
+				popularity = 0.05
+			}
+		}
+	}
+}
+
+#Petroruble
+country_event = {
+	id = redux_generic.8
+	title = redux_generic.8.t
+	desc = redux_generic.8.d
+	picture = GFX_MDDC_petroruble
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.8.a
+	}
+}
+
+#Petroyuan
+country_event = {
+	id = redux_generic.9
+	title = redux_generic.9.t
+	desc = redux_generic.9.d
+	picture = GFX_MDDC_petroyuan
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.9.a
+	}
+}
+
+#CFE end
+country_event = {
+	id = redux_generic.10
+	title = redux_generic.10.t
+	desc = redux_generic.10.d
+	picture = GFX_MDDC_cfe
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.9.a
+		swap_ideas = {
+			remove_idea = GENERIC_cfe_idea
+			add_idea = GENERIC_no_rest_idea
+		}
+		if = {
+			limit = { 
+				OR = {
+					has_idea = superpower
+					has_idea = great_power
+					has_idea = large_power
+				}
+ 			}
+			ROOT = {
+				add_named_threat = {
+					name = cfe_threat_tension
+					threat = 1
+				}
+			}
+		}
+	}
+}
+
+#Petrocurrency - Russia
+country_event = {
+	id = redux_generic.11
+	title = redux_generic.11.t
+	desc = redux_generic.11.d
+	picture = GFX_MDDC_petroruble
+	
+	is_triggered_only = yes
+	
+	option = { name = redux_generic.11.a }
+	
+}
+
+#Petrocurrency - Yuan
+country_event = {
+	id = redux_generic.12
+	title = redux_generic.12.t
+	desc = redux_generic.12.d
+		picture = GFX_MDDC_petroyuan
+	
+	is_triggered_only = yes
+	
+	option = { name = redux_generic.12.a }
+}
+
+#Petrocurrency - Euro
+country_event = {
+	id = redux_generic.13
+	title = redux_generic.13.t
+	desc = redux_generic.13.d
+		picture = GFX_MDDC_petroeuro
+	
+	is_triggered_only = yes
+	
+	option = { name = redux_generic.13.a }
+}
+
+
+#Petrocurrency - End Massive
+country_event = {
+	id = redux_generic.14
+	title = redux_generic.14.t
+	desc = redux_generic.14.d
+	picture = GFX_MDDC_petrodollar
+	
+	is_triggered_only = yes
+	
+	option = { name = redux_generic.14.a }
+}
+
+
+#Companies
+country_event = {
+	id = redux_generic.15
+	title = redux_generic.15.t
+	desc = redux_generic.15.d
+	picture = GFX_stock_market
+	
+	is_triggered_only = yes
+	
+	option = { name = redux_generic.15.a }
+}
+
+#Companies - Count
+country_event = {
+	id = redux_generic.16
+	title = redux_generic.16.t
+	desc = redux_generic.16.d
+	picture = GFX_stock_market
+	
+	is_triggered_only = yes
+	
+	option = { 
+		name = redux_generic.16.a
+		increase_economic_growth = yes 
+	}
+	
+}
+
+#Brigde Artsakh - Start
+country_event = {
+	id = redux_generic.17
+	title = redux_generic.17.t
+	desc = redux_generic.17.d
+	picture = GFX_arm_nkr_army
+	
+	is_triggered_only = yes
+	
+	option = { 
+		name = redux_generic.17.a
+		NKR = { country_event = { id = redux_generic.18 days = 1 } }
+		add_opinion_modifier = { target = AZE modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = AZE modifier = recent_actions_negative }
+		ai_chance = {
+			factor = 50
+		}
+	}
+
+	option = { 
+		name = redux_generic.17.b
+		NKR = { country_event = { id = redux_generic.19 days = 1 } }
+		ai_chance = {
+			factor = 50
+		}
+	}
+	
+}
+
+#Brigde Artsakh - Win
+country_event = {
+	id = redux_generic.18
+	title = redux_generic.18.t
+	desc = redux_generic.18.d
+	picture = GFX_arm_nkr_army
+	
+	is_triggered_only = yes
+	
+	option = { 
+		name = redux_generic.18.a
+		set_country_flag = ARM_approves_branches
+		custom_effect_tooltip = NKR_open_branches_tt
+		add_opinion_modifier = { target = AZE modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = AZE modifier = recent_actions_negative }
+	}
+}
+
+#Brigde Artsakh - Loss
+country_event = {
+	id = redux_generic.19
+	title = redux_generic.19.t
+	desc = redux_generic.19.d
+	picture = GFX_arm_nkr_army
+	
+	is_triggered_only = yes
+	
+	option = { 
+		name = redux_generic.19.a
+	}
+}
+
+#Economic Companies - Oil Companies
+country_event = {
+	id = redux_generic.20
+	title = redux_generic.20.t
+	desc = redux_generic.20.d
+	picture = GFX_oil_refinery
+	
+	is_triggered_only = yes
+
+	option = { 
+		name = redux_generic.20.a
+		set_temp_variable = { base_inflation_percent_change = 0.15 }
+		modify_base_inflation_effect = yes
+		decrease_economic_growth = yes
+		GENERIC_income_negative_script = yes
+		add_timed_idea = { idea = GENERIC_economic_crisis_oil_idea days = 365 }
+	}
+}
+
+#Economic Companies - Dotcome Companies
+country_event = {
+	id = redux_generic.21
+	title = redux_generic.21.t
+	desc = redux_generic.21.d
+	picture = GFX_stock_market
+	
+	is_triggered_only = yes
+
+	option = { 
+		name = redux_generic.21.a
+		set_temp_variable = { base_inflation_percent_change = 0.05 }
+		modify_base_inflation_effect = yes
+		decrease_economic_growth = yes
+		GENERIC_income_negative_script = yes
+		add_timed_idea = { idea = GENERIC_dotcome_crisis_idea days = 365 }
+	}
+}
+
+#Economic Companies - Mortgage
+country_event = {
+	id = redux_generic.22
+	title = redux_generic.22.t
+	desc = redux_generic.22.d
+	picture = GFX_house
+	
+	is_triggered_only = yes
+
+	option = { 
+		name = redux_generic.22.a
+		set_temp_variable = { base_inflation_percent_change = 0.1 }
+		modify_base_inflation_effect = yes
+		decrease_economic_growth = yes
+		GENERIC_income_negative_script = yes
+		add_timed_idea = { idea = GENERIC_mortgage_crisis_idea days = 365 }
+	}
+}
+
+#Economic Companies - Grain
+country_event = {
+	id = redux_generic.23
+	title = redux_generic.23.t
+	desc = redux_generic.23.d
+	picture = GFX_grain_silo_investments
+	
+	is_triggered_only = yes
+
+	option = { 
+		name = redux_generic.23.a
+		set_temp_variable = { base_inflation_percent_change = 0.2 }
+		modify_base_inflation_effect = yes
+		decrease_economic_growth = yes
+		GENERIC_income_negative_script = yes
+		add_timed_idea = { idea = GENERIC_grain_crisis_idea days = 365 }
+	}
+}
+
+#Economic - Oil
+country_event = {
+	id = redux_generic.29
+	title = redux_generic.29.t
+	desc = redux_generic.29.d
+	picture = GFX_oil_refinery
+	
+	is_triggered_only = yes
+
+	option = { 
+		name = redux_generic.29.a
+		set_temp_variable = { base_inflation_percent_change = 0.25 }
+		modify_base_inflation_effect = yes
+		decrease_economic_growth = yes
+		GENERIC_income_negative_script = yes
+		add_timed_idea = { idea = GENERIC_economic_crisis_oil_idea2 days = 365 }
+	}
+}
+
+
+#Recognize Country - Ask
+country_event = {
+	id = redux_generic.24
+	title = redux_generic.24.t
+	desc = redux_generic.24.d
+	picture = GFX_recognize_unn_event
+	
+	is_triggered_only = yes
+
+	option = { 
+		name = redux_generic.24.a
+		set_country_flag = generic_recognize_state@FROM
+		FROM = { country_event = redux_generic.25 }
+		ai_chance = { 
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = FROM
+					value > 100
+				}
+			}
+		}
+	}
+	
+	option = { 
+		name = redux_generic.24.b
+		FROM = { country_event = redux_generic.26 }
+		ai_chance = { 
+			base = 0
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = FROM
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = FROM
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = FROM
+					value < -100
+				}
+			}
+		}
+	}
+}
+
+#Recognize Country - Agree
+country_event = {
+	id = redux_generic.25
+	title = redux_generic.25.t
+	desc = redux_generic.25.d
+	picture = GFX_recognize_unn_event
+	
+	is_triggered_only = yes
+
+	option = { 
+		name = redux_generic.25.a
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = FROM }
+		set_temp_variable = { influence_target = THIS }
+		change_influence_percentage = yes
+		hidden_effect = {
+			set_temp_variable = { modify_recognize_country = 1 }
+			modify_recognize_country_support = yes
+		}
+	}
+}
+
+#Recognize Country - Disagree
+country_event = {
+	id = redux_generic.26
+	title = redux_generic.26.t
+	desc = redux_generic.26.d
+	picture = GFX_recognize_unn_event
+	
+	is_triggered_only = yes
+
+	option = { 
+		name = redux_generic.26.a
+	}
+}
+
+
+#Petrocurrency - Escudo
+country_event = {
+	id = redux_generic.27
+	title = redux_generic.27.t
+	desc = redux_generic.27.d
+	picture = GFX_MDDC_petroescudo
+	
+	is_triggered_only = yes
+	
+	option = { name = redux_generic.27.a }
+}
+#PetroEscudo
+country_event = {
+	id = redux_generic.28
+	title = redux_generic.28.t
+	desc = redux_generic.28.d
+	picture = GFX_MDDC_petroescudo
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = redux_generic.28.a
+	}
+}
+#FIVE YEAR PLAN
+#FIVE YEAR PLAN FAILED
+country_event = {
+	id = five_year_plan.1
+	title = five_year_plan.1.t
+	desc = five_year_plan.1.desc
+	picture = GFX_declined_offer_no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = five_year_plan.1.a
+		add_timed_idea = { 
+			idea = GENERIC_plan_failed
+			days = 360
+		}
+		clr_country_flag = GENERIC_start_five_year_plan
+		remove_ideas = GENERIC_five_year_plan_idea
+		set_variable = { five_year_plan_progress = 0 }
+		decrease_economic_growth = yes
+	}
+}
+
+#FIVE YEAR PLAN ACCOMPLISHED
+country_event = {
+	id = five_year_plan.2
+	title = five_year_plan.2.t
+	desc = five_year_plan.2.desc
+	picture = GFX_fathers_of_communism
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = five_year_plan.2.a
+		add_timed_idea = { 
+			idea = GENERIC_plan_complete
+			days = 360
+		}
+		clr_country_flag = GENERIC_start_five_year_plan
+		remove_ideas = GENERIC_five_year_plan_idea
+		set_variable = { five_year_plan_progress = 0 }
+		increase_economic_growth = yes
+	}
+}
+
+#FOREIGN INVESTMENTS
+country_event = {
+	id = f_invest.1
+	title = f_invest.1.t
+	desc = f_invest.1.desc
+	picture = GFX_treaty
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = f_invest.1.a
+		set_temp_variable = { treasury_change = -5.00 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = FROM }
+		change_influence_percentage = yes
+		FROM = {
+			country_event = f_invest.2
+			set_temp_variable = { treasury_change = 5.00 }
+			modify_treasury_effect = yes
+		}
+
+		ai_chance = {
+			base = 20
+			modifier = {
+				add = 40
+				has_opinion = {
+					target = FROM
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = f_invest.1.b
+		FROM = {
+			country_event = f_invest.3
+		}
+
+		ai_chance = {
+			base = 20
+			modifier = {
+				add = 20
+				has_opinion = {
+					target = FROM
+					value < 70
+				}
+			}
+			
+			modifier = {
+				factor = 3
+				check_variable = { treasury < 5.00 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = f_invest.2
+	title = f_invest.2.t
+	desc = f_invest.2.desc
+	picture = GFX_handshake_black
+	
+	is_triggered_only = yes
+	
+	option = { name = f_invest.2.a }
+}
+
+country_event = {
+	id = f_invest.3
+	title = f_invest.3.t
+	desc = f_invest.3.desc
+	picture = GFX_declined_offer_no
+	
+	is_triggered_only = yes
+	
+	option = { name = f_invest.3.a }
+}
+
+
+
+#PfP Application
+country_event = {
+	id = generic_nato.1
+	title = generic_nato.1.t
+	desc = generic_nato.1.desc
+	picture = GFX_NATO_picture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = generic_nato.1.a
+		FROM = { 
+			country_event = generic_nato.7
+			set_country_flag = nato_pfp
+			add_ideas = GENERIC_nato_pfp_idea
+		}
+		add_opinion_modifier = { target = FROM modifier = pfp_status }
+		reverse_add_opinion_modifier = { target = FROM modifier = pfp_status }
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 50
+				has_opinion ={
+					target = FROM
+					value > 70
+				}
+			}
+		}
+	}
+
+	option = {
+		name = generic_nato.1.b
+		FROM = {
+			country_event = generic_nato.6
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+#Accelerated Dialogue
+country_event = {
+	id = generic_nato.12
+	title = generic_nato.12.t
+	desc = generic_nato.12.desc
+	picture = GFX_NATO_picture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = generic_nato.12.a
+		FROM = { 
+			country_event = generic_nato.7
+			set_country_flag = nato_accelerated_dialogue
+			custom_effect_tooltip = {
+				localization_key = GENERIC_nato_accelerated_dialogue_tt
+			}
+		}
+		add_opinion_modifier = { target = FROM modifier = acceleration_dialog }
+		reverse_add_opinion_modifier = { target = FROM modifier = acceleration_dialog }
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 50
+				has_opinion ={
+					target = FROM
+					value > 70
+				}
+			}
+			modifier = {
+				add = 30
+				SOV = { has_added_tension_amount > 10 }
+			}
+			modifier = {
+				add = 50
+				SOV = { has_added_tension_amount > 30 }
+			}
+		}
+	}
+	option = {
+		name = generic_nato.12.b
+		FROM = {
+			country_event = generic_nato.6
+		}
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+country_event = {
+	id = generic_nato.6
+	title = generic_nato.6.t
+	desc = generic_nato.6.desc
+	picture = GFX_NATO_picture
+	
+	is_triggered_only = yes
+
+	option = { name = generic_nato.6.a }
+}
+
+country_event = {
+	id = generic_nato.7
+	title = generic_nato.7.t
+	desc = generic_nato.7.desc
+	picture = GFX_NATO_picture
+	
+	is_triggered_only = yes
+
+	option = { name = generic_nato.7.a }
+}
+
+#CSTO
+
+country_event = {
+	id = generic_csto.1
+	title = generic_csto.1.t
+	desc = generic_csto.1.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = { 
+		name = generic_csto.1.a
+		set_temp_variable = { receiver_nation = FROM.id }
+		set_temp_variable = { sender_nation = ROOT.id }
+		set_improved_trade_agreement = yes
+		give_military_access = FROM
+		FROM = {
+			country_event = generic_csto.2
+			give_military_access = ROOT
+		}
+	}
+
+	option = {
+		name = generic_csto.1.b
+		FROM = { country_event = genric_csto.3 }
+	}
+}
+
+country_event = {
+	id = generic_csto.2
+	title = generic_csto.2.t
+	desc = generic_csto.2.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = { name = generic_csto.2.a }
+}
+
+country_event = {
+	id = generic_csto.3
+	title = generic_csto.3.t
+	desc = generic_csto.3.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = { name = generic_csto.3.a }
+}
+
+country_event = {
+	id = generic_csto.4
+	title = generic_csto.4.t
+	desc = generic_csto.4.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.4.a
+		give_guarantee = FROM
+		FROM = {
+			give_guarantee = ROOT
+			country_event = generic_csto.6
+		}
+	}
+	option = {
+		name = generic_csto.4.b
+		FROM = {
+			country_event = generic_csto.7
+		}
+	}
+}
+
+country_event = {
+	id = generic_csto.5
+	title = generic_csto.5.t
+	desc = generic_csto.5.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.5.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.5.a"
+		FROM = {
+			country_event = generic_csto.23
+			news_event = generic_csto.9
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = generic_csto.5.b
+		FROM = {
+			country_event = generic_csto.8
+		}
+	}
+}
+
+country_event = {
+	id = generic_csto.8
+	title = generic_csto.8.t
+	desc = generic_csto.8.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.8.a
+	}
+}
+
+news_event = {
+	id = generic_csto.9
+	title = generic_csto.9.t
+	desc = generic_csto.9.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.9.a
+	}
+}
+
+country_event = {
+	id = generic_csto.6
+	title = generic_csto.6.t
+	desc = generic_csto.6.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = { name = generic_csto.6.a }
+}
+
+country_event = {
+	id = generic_csto.7
+	title = generic_csto.7.t
+	desc = generic_csto.7.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = { name = generic_csto.7.a }
+}
+
+country_event = {
+	id = generic_csto.10
+	title = generic_csto.10.t
+	desc = generic_csto.10.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.10.a
+		FROM = {
+			country_event = generic_csto.11
+			add_ideas = GENERIC_csto_research_sharing_idea
+			set_country_flag = csto_research_sharing
+		}
+	}
+
+	option = {
+		name = generic_csto.10.b
+		country_event = generic_csto.12
+	}
+}
+
+country_event = {
+	id = generic_csto.11
+	title = generic_csto.11.t
+	desc = generic_csto.11.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = { name = generic_csto.11.a }
+}
+
+country_event = {
+	id = generic_csto.12
+	title = generic_csto.12.t
+	desc = generic_csto.12.desc
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = { name = generic_csto.12.a }
+}
+
+country_event = {	
+	id = generic_csto.13
+	title = generic_csto.13.t
+	desc = generic_csto.13.d
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.13.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.13.a executed" 
+		add_ideas = CSTO_intervention_active
+		FROM = { country_event = generic_csto.14 }
+		FROM = {
+			every_enemy_country = {
+				ROOT = {
+					declare_war_on = {
+						target = PREV
+						type = puppet_wargoal_focus
+					}
+				}
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = 20
+				has_idea = the_military
+			}
+		}
+	}
+	option = {
+		name = generic_csto.13.b
+		log = "[GetDateText]: [This.GetName]: generic_csto.13.b executed"
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 50
+				FROM = {
+					any_enemy_country = {
+						ROOT = {
+							has_opinion = {
+    						target = PREV
+    						value > 0
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				add = 25
+				OR = {
+					has_idea = intervention_isolation
+					has_idea = intervention_local_security
+				}
+			}
+			modifier = {
+				add = 25
+				has_war_support < 0.5
+			}
+			modifier = {
+				add = 25
+				OR = {
+					has_idea = defence_00
+					has_idea = defence_01
+					has_idea = defence_02
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = generic_csto.14
+	title = generic_csto.14.t
+	desc = generic_csto.14.d
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.14.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.14.a executed" 
+	}
+}
+
+country_event = {
+	id = generic_csto.15
+	title = generic_csto.15.t
+	desc = generic_csto.15.d
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.15.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.15.a executed"
+		set_variable = { stabilization_target = FROM }
+		FROM = { country_event = generic_csto.16 }
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = 5
+				has_idea = intervention_regional_interventionism
+			}
+			modifier = {
+				add = 10
+				has_idea = intervention_global_interventionism
+			}
+			modifier = {
+				add = 15
+				has_idea = intervention_neo_imperialism
+			}
+		}
+	}
+	option = {
+		name = generic_csto.15.b
+		log = "[GetDateText]: [This.GetName]: generic_csto.15.b executed"
+		ai_chance = {
+			base = 25
+			modifier = {
+				add = 15
+				has_opinion = { target = FROM value < 50 }
+			}
+			modifier = {
+				add = 5
+				has_idea = intervention_local_security
+			}
+			modifier = {
+				add = 10
+				has_idea = intervention_isolation
+			}
+		}
+	}
+}
+
+country_event = {
+	id = generic_csto.16
+	title = generic_csto.16.t
+	desc = generic_csto.16.d
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.16.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.16.a executed"
+	}
+}
+
+#Military Exercise
+country_event = {
+	id = generic_csto.17
+	title = generic_csto.17.t
+	desc = generic_csto.17.d
+	picture = GFX_CSTO_military_exercise
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.17.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.17.a executed"
+		FROM.FROM = {
+			country_event = generic_csto.18
+		}
+	}
+	option = {
+		name = generic_csto.17.b
+		log = "[GetDateText]: [This.GetName]: generic_csto.17.b executed"
+		FROM.FROM = {
+			country_event = generic_csto.19
+		}
+	}
+	option = {
+		name = generic_csto.17.c
+		log = "[GetDateText]: [This.GetName]: generic_csto.17.c executed"
+		trigger = {
+			any_owned_state = {
+				is_coastal = yes
+			}
+			FROM.FROM = {
+				any_owned_state = {
+					is_coastal = yes
+				}
+			}
+		}
+		FROM.FROM = {
+			country_event = generic_csto.20
+		}
+	}
+}
+
+country_event = {	#Army exercise
+	id = generic_csto.18
+	title = generic_csto.18.t
+	desc = generic_csto.18.d
+	picture = GFX_CSTO_military_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.18.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.18.a executed"
+		army_experience = 15
+		set_country_flag = {
+			flag = recent_csto_exercises
+			days = 360
+		}
+		add_timed_idea = {
+			idea = recent_csto_army_exercises
+			days = 180
+		}
+		FROM = {
+			army_experience = 15
+			country_event = generic_csto.21
+			set_country_flag = {
+				flag = recent_csto_exercises
+				days = 360
+			}
+			add_timed_idea = {
+				idea = recent_csto_army_exercises
+				days = 180
+			}
+		}
+	}
+	option = {
+		name = generic_csto.18.b
+		log = "[GetDateText]: [This.GetName]: generic_csto.18.b executed"
+		FROM = {
+			country_event = generic_csto.22
+		}
+	}
+}
+country_event = {	#Air exercise
+	id = generic_csto.19
+	title = generic_csto.19.t
+	desc = generic_csto.19.d
+	picture = GFX_CSTO_air_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.19.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.19.a executed"
+		air_experience = 15
+		set_country_flag = {
+			flag = recent_csto_exercises
+			days = 360
+		}
+		add_timed_idea = {
+			idea = recent_csto_air_exercises
+			days = 240
+		}
+		FROM = {
+			air_experience = 15
+			country_event = generic_csto.21
+			set_country_flag = {
+				flag = recent_csto_exercises
+				days = 360
+			}
+			add_timed_idea = {
+				idea = recent_csto_air_exercises
+				days = 240
+			}
+		}
+	}
+	option = {
+		name = generic_csto.19.b
+		log = "[GetDateText]: [This.GetName]: generic_csto.19.b executed"
+		FROM = {
+			country_event = generic_csto.22
+		}
+	}
+}
+country_event = {	#Navy exercise
+	id = generic_csto.20
+	title = generic_csto.20.t
+	desc = generic_csto.20.d
+	picture = GFX_CSTO_navy_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.20.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.20.a executed"
+		navy_experience = 15
+		set_country_flag = {
+			flag = recent_csto_exercises
+			days = 360
+		}
+		add_timed_idea = {
+			idea = recent_csto_navy_exercises
+			days = 240
+		}
+		FROM = {
+			navy_experience = 15
+			country_event = generic_csto.21
+			set_country_flag = {
+				flag = recent_csto_exercises
+				days = 360
+			}
+			add_timed_idea = {
+				idea = recent_csto_navy_exercises
+				days = 240
+			}
+		}
+	}
+	option = {
+		name = generic_csto.20.b
+		log = "[GetDateText]: [This.GetName]: generic_csto.20.b executed"
+		FROM = {
+			country_event = generic_csto.22
+		}
+	}
+}
+
+country_event = {	#Agree exercise
+	id = generic_csto.21
+	title = generic_csto.21.t
+	desc = generic_csto.21.d
+	picture = GFX_CSTO_military_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.21.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.21.a executed"
+		
+	}
+}
+country_event = {	#Refused exercise
+	id = generic_csto.22
+	title = generic_csto.22.t
+	desc = generic_csto.22.d
+	picture = GFX_CSTO_military_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_csto.22.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.22.a executed"
+		
+	}
+}
+country_event = {	#Join CSTO
+	id = generic_csto.23
+	title = generic_csto.23.t
+	desc = generic_csto.23.d
+	picture = GFX_csto_event
+
+	is_triggered_only = yes
+
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_idea = NATO_member }
+			NATO_leave = yes
+		}
+		else = {
+			leave_faction = yes
+		}
+		CSTO_join = yes
+	}
+
+	option = {
+		name = generic_csto.23.a
+		log = "[GetDateText]: [This.GetName]: generic_csto.23.a executed"
+	}
+}
+
+
+#MUSLIMS
+
+#Qatar Foundations
+country_event = {
+	id = generic_muslims.1
+	title = generic_muslims.1.t
+	desc = generic_muslims.1.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_muslims.1.a
+		FROM = {
+			country_event = generic_muslims.2
+			add_ideas = GENRIC_qatar_founds
+		}
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = QAT }
+		set_temp_variable = { influence_target = FROM }
+		change_influence_percentage = yes
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_opinion = {
+					target = FROM
+					value > 100
+				}
+			}
+		}
+	}
+
+	option = {
+		name = generic_muslims.1.b
+		FROM = {
+			country_event = generic_muslims.3
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_opinion = {
+					target = FROM
+					value < 0
+				}
+			}
+		}
+	}
+}
+
+#Qatar accept
+country_event = {
+	id = generic_muslims.2
+	title = generic_muslims.2.t
+	desc = generic_muslims.2.desc
+
+	is_triggered_only = yes
+
+	option = { name = generic_muslims.2.a }
+}
+
+#Qatar refused
+country_event = {
+	id = generic_muslims.3
+	title = generic_muslims.3.t
+	desc = generic_muslims.3.desc
+
+	is_triggered_only = yes
+
+	option = { name = generic_muslims.3.a }
+}
+
+#HAMAS SUPPORT
+country_event = {
+	id = generic_muslims.4
+	title = generic_muslims.4.t
+	desc = generic_muslims.4.desc
+
+	is_triggered_only = yes
+
+	option = { name = generic_muslims.4.a }
+}
+
+#SALAFISTS
+#Crush Mushriqs
+country_event = {
+	id = generic_salafists.1
+	title = generic_salafists.1.t
+	desc = generic_salafists.1.d
+
+	picture = GFX_SYR_tahrir_al_sham
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_salafists.1.a
+		add_ideas = GENERIC_crush_mushriqs_idea
+		set_temp_variable = { modify_terrorism = 10 }
+		add_to_variable = { terrorism_mana = 20 }
+		clamp_variable = {
+			var = terrorism_mana
+			min = 1
+			max = 100
+		}
+		modify_terrorism_support = yes
+		set_temp_variable = { temp_modify_social_con_government = 8 }
+		modify_social_conservatism_government = yes
+	}
+}
+
+#Cooperation with the Saudis
+country_event = {
+	id = generic_salafists.2
+	title = generic_salafists.2.t
+	desc = generic_salafists.2.desc
+
+	picture = GFX_treaty
+
+	is_triggered_only = yes
+
+	option = {
+		name = generic_salafists.2.a
+		set_temp_variable = { percent_change = 15 }
+		set_temp_variable = { tag_index = SAU }
+		set_temp_variable = { influence_target = FROM }
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = -15.00 }
+		modify_treasury_effect = yes
+		FROM = {
+			set_temp_variable = { treasury_change = 15.00 }
+			modify_treasury_effect = yes
+			add_popularity = {
+				ideology = fascism
+				popularity = 0.15
+			}
+		}
+		give_guarantee = FROM
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_opinion = {
+					target = FROM
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = generic_salafists.2.b
+		set_temp_variable = { percent_change = 7 }
+		set_temp_variable = { tag_index = SAU }
+		set_temp_variable = { influence_target = FROM }
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = -15.00 }
+		modify_treasury_effect = yes
+		FROM = {
+			set_temp_variable = { treasury_change = 15.00 }
+			modify_treasury_effect = yes
+			add_popularity = {
+				ideology = fascism
+				popularity = 0.07
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_opinion = {
+					target = FROM
+					value < 70
+				}
+			}
+		}
+	}
+	option = {
+		name = generic_salafists.2.c
+		set_temp_variable = { percent_change = 7 }
+		set_temp_variable = { tag_index = SAU }
+		set_temp_variable = { influence_target = FROM }
+		change_influence_percentage = yes
+		FROM = {
+			add_popularity = {
+				ideology = fascism
+				popularity = 0.07
+			}
+		}
+		give_guarantee = FROM
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_opinion = {
+					target = FROM
+					value < 70
+				}
+			}
+		}
+	}
+	option = {
+		name = generic_salafists.2.d
+		set_temp_variable = { percent_change = -4 }
+		set_temp_variable = { tag_index = SAU }
+		set_temp_variable = { influence_target = FROM }
+		change_influence_percentage = yes
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_opinion = {
+					target = FROM
+					value < 20
+				}
+			}
+		}
+	}
+}
+# Invite all Salafist Countries to the Islamic States Faction
+country_event = {
+	id = generic_salafists.3
+	title = generic_salafists.3.t
+	desc = generic_salafists.3.d
+	picture = GFX_politics_salafism
+	is_triggered_only = yes
+
+	option = {
+		name = generic_salafists.3.a
+		log = "[GetDateText]: [This.GetName]: generic_salafists.3.a executed"
+		PREV = {
+			add_to_faction = ROOT
+			country_event = { id = diplomatic_response.1 }
+		}
+
+		ai_chance = {
+			base = 75
+		}
+	}
+	option = {
+		name = generic_salafists.3.b
+		log = "[GetDateText]: [This.GetName]: generic_salafists.3.b executed"
+		PREV = { country_event = diplomatic_response.2 }
+
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+country_event = {
+	id = generic_salafists.4
+	title = generic_salafists.4.t
+	desc = generic_salafists.4.d
+	picture = GFX_politics_salafism
+	is_triggered_only = yes
+
+	option = {
+		name = generic_salafists.4.a
+		log = "[GetDateText]: [This.GetName]: generic_salafists.4.a executed"
+		add_ideas = GENERIC_jihad_retribution_idea
+		every_other_country = {
+			limit = {
+				capital_scope = { is_on_continent = europe }
+				NOT = { has_government = fascism }
+			}
+			ROOT = {
+				create_wargoal = {
+					type = annex_everything
+					target = PREV
+				}
+				set_country_flag = declared_jihad_against@PREV
+			}
+			add_opinion_modifier = { target = ROOT modifier = declared_jihad_opinion }
+		}
+	}
+}
+news_event = {
+    id = generic_salafists.5
+    title = generic_salafists.5.t
+    desc = generic_salafists.5.d
+    picture = GFX_news_peninsula_shield_intervention
+    major = yes
+    is_triggered_only = yes
+	fire_only_once = yes
+
+    option = {
+		trigger = {
+           has_government = fascism
+        }
+		name = generic_salafists.5.a
+    }
+	option = {
+		trigger = {
+           NOT = { has_government = fascism }
+        }
+		name = generic_salafists.5.b
+    }
+}
+
+country_event = {
+	id = generic_puppet.1
+	title = generic_puppet.1.t
+	desc = generic_puppet.1.d
+	picture = GFX_raid_retaliation
+	is_triggered_only = yes
+
+	option = {
+		name = generic_puppet.1.a
+		log = "[GetDateText]: [This.GetName]: generic_puppet.1.a executed"
+	}
+}

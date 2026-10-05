@@ -1,0 +1,411 @@
+# Written by Hiddengearz, Improved by Bird, KyCb(rockon)
+# Intelligence Agency AI Strategies moved to intelligence_agency.txt --Bird
+# Default Unit Production
+ask_foreign_manpower_as_major = {
+	enable = {
+		is_major = yes
+		garrison_manpower_need > 200000
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = asking_foreign_garrison
+		value = 100
+		# id = ITA # id is optionnal. If it is filled, the value will just apply for this country. If not, the value will apply for all countries.
+	}
+}
+
+default_build_a_civilian_rd_facility = {
+	enable = {
+		num_of_civilian_factories > 25
+		nuclear_facility < 1  # one is enough
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = build_building
+		id = nuclear_facility
+		value = 100
+	}
+}
+
+default_build_a_nav_facility = {
+	enable = {
+		num_of_naval_factories > 25 # Only Naval Powers should bother with these unless specifically told to do otherwise
+		naval_facility < 1 # one is enough
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = naval_facility
+		value = 100
+	}
+}
+
+default_build_a_lw_facility = {
+	enable = {
+		is_major = yes
+		OR = {
+			num_of_civilian_factories > 40
+			num_of_military_factories > 40
+		}
+		land_facility < 1 # one is enough
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = land_facility
+		value = 100
+	}
+}
+
+default_build_an_air_facility = {
+	enable = {
+		is_major = yes # Minors don't bother until strong enough to be considered major
+		num_of_military_factories > 25 # We should first build up our military industry
+		air_facility < 1 # one is enough
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = air_facility
+		value = 100
+	}
+}
+
+
+default_recruit_land_scientist = {
+	enable = {
+		OR = {
+			can_assign_supportive_scientist_to_faction = specialization_land
+			land_facility > 0
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = recruit_scientist
+		id = specialization_land
+		value = 150
+	}
+}
+
+default_recruit_nuclear_scientist = {
+	enable = {
+		OR = {
+			can_assign_supportive_scientist_to_faction = specialization_nuclear
+			nuclear_facility > 0
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = recruit_scientist
+		id = specialization_nuclear
+		value = 150
+	}
+}
+
+default_recruit_naval_scientist = {
+	enable = {
+		OR = {
+			can_assign_supportive_scientist_to_faction = specialization_naval
+			naval_facility > 0
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = recruit_scientist
+		id = specialization_naval
+		value = 150
+	}
+}
+
+default_recruit_air_scientist = {
+	enable = {
+		OR = {
+			can_assign_supportive_scientist_to_faction = specialization_air
+			air_facility > 0
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = recruit_scientist
+		id = specialization_air
+		value = 150
+	}
+}
+
+default_build_sams = {
+	allowed = { ai_for_units_is_not_disabled = yes }
+	enable = {
+		has_tech = SAM0
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = sam_missile_equipment
+		value = 1
+	}
+}
+
+default_build_glcm = {
+	allowed = { ai_for_units_is_not_disabled = yes }
+	enable = {
+		has_tech = GLCM1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = guided_missile_equipment
+		value = 1
+	}
+}
+
+default_build_asm = {
+	allowed = { ai_for_units_is_not_disabled = yes }
+	enable = {
+		has_tech = ASM1
+		any_owned_state = { is_coastal = yes }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = anti_ship_missile_equipment
+		value = 1
+	}
+}
+
+default_build_irbm = {
+	allowed = { ai_for_units_is_not_disabled = yes }
+	enable = {
+		has_tech = IRBM1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ballistic_missile_equipment
+		value = 1
+	}
+}
+
+default_build_nirbm = {
+	allowed = { ai_for_units_is_not_disabled = yes }
+	enable = {
+		has_tech = NIRBM1
+		NOT = { has_tech = ICBM1 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = nuclear_ballistic_missile_equipment
+		value = 1
+	}
+}
+
+default_build_icbm = {
+	allowed = { ai_for_units_is_not_disabled = yes }
+	enable = {
+		has_tech = ICBM1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = nuclear_missile_equipment
+		value = 1
+	}
+}
+
+default_add_faction_facility = {
+	enable = {
+		always = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = spent_faction_initiative_priority
+		id = program
+		value = 5
+	}
+}
+
+default_unlock_doctrine_sharing = {
+	enable = {
+		always = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = spent_faction_initiative_priority
+		id = unlock_doctrine_sharing
+		value = 10
+	}
+}
+
+default_assign_supportive_scientist = {
+	enable = {
+		OR = {
+			can_assign_supportive_scientist_to_faction = specialization_land
+			can_assign_supportive_scientist_to_faction = specialization_nuclear
+			can_assign_supportive_scientist_to_faction = specialization_naval
+			can_assign_supportive_scientist_to_faction = specialization_naval
+		}
+		has_political_power > 250  # mainly to add some time padding for the player to react, and to not spend pp on it if there are cheaper things that we could want to do
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = pp_spend_priority
+		id = supportive_scientist
+		value = 10
+	}
+}
+
+default_become_spymaster_major = {
+	allowed = { has_dlc = "La Resistance" }
+	enable = {
+		is_major = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = become_spymaster
+		value = 30
+	}
+}
+
+default_become_spymaster_minor = {
+	allowed = { has_dlc = "La Resistance" }
+	enable = {
+		is_major = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = become_spymaster
+		value = -20
+	}
+}
+
+default_become_head_of_crypto = {
+	allowed = {
+		has_dlc = "No Compromise, No Surrender"
+		has_dlc = "La Resistance"
+	}
+	enable = {
+		always = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = become_head_of_crypto
+		value = 2
+	}
+}
+
+default_become_head_of_operations = {
+	allowed = {
+		has_dlc = "No Compromise, No Surrender"
+		has_dlc = "La Resistance"
+	}
+	enable = {
+		always = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = become_head_of_operations
+		value = 2
+	}
+}
+
+default_become_counter_intel = {
+	allowed = {
+		has_dlc = "No Compromise, No Surrender"
+		has_dlc = "La Resistance"
+	}
+	enable = {
+		always = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = become_head_of_counter_intel
+		value = 2
+	}
+}
+
+default_become_supreme_commander = {
+	allowed = {
+		has_dlc = "No Compromise, No Surrender"
+		has_dlc = "La Resistance"
+	}
+	enable = {
+		always = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = spent_faction_initiative_priority
+		id = unlock_faction_commander
+		value = 2
+	}
+}
+
+default_become_faction_leader = {
+	enable = {
+		is_major = yes
+		OR = {
+			any_allied_country = {
+				is_faction_leader = yes
+				check_variable = { gdp_total < PREV.gdp_total }
+			}
+			any_allied_country = {
+				is_faction_leader = yes
+				strength_ratio = {
+					tag = PREV
+					ratio < 1.0
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = pp_spend_priority
+		id = become_faction_leader
+		value = 100
+	}
+}
+
+default_convoy_production = {
+	allowed = { ai_for_units_is_not_disabled = yes }
+	enable = {
+		naval_base > 0
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = unit_ratio
+		id = convoy
+		value = 20 # 15 vanilla; slightly higher to ensure AI maintains convoy supply
+	}
+	ai_strategy = {
+		type = equipment_production_min_factories
+		id = convoy
+		value = 1 # 1 vanilla; guarantees at least 1 dockyard on convoys
+	}
+}
+
+default_convoy_threat_response = {
+	allowed = { ai_for_units_is_not_disabled = yes }
+	enable = {
+		convoy_threat > 0.2
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = unit_ratio
+		id = convoy
+		value = 50 # 50 vanilla; boost convoy production when being raided
+	}
+}

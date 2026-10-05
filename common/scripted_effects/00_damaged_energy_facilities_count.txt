@@ -1,0 +1,366 @@
+calculate_damaged_energy_facilities_count = {
+    hidden_effect = {
+        set_temp_variable = { hit_chance = modifier@industry_air_damage_factor }
+        multiply_temp_variable = { hit_chance = 100 }
+        add_to_temp_variable = { hit_chance = 10 }
+        clamp_temp_variable = {
+                var = hit_chance
+                min = 10
+                max = 90
+        }
+        random_controlled_state = {
+                limit = {
+                    OR = {
+                        tungsten > 8
+                        steel > 24
+                        aluminium > 24
+                        chromium > 8
+                    }
+                    OR = {
+                        has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+                        days_since_last_strategic_bombing < 60
+                    }
+                    PREV = { has_war = yes }
+                        }
+                if = { limit = { tungsten > 8 }
+                  random = {
+                  chance = hit_chance
+                  add_dynamic_modifier = {
+                    modifier = tech_metal_refining_modifier
+                    days = 27
+                                         }
+                           }
+                }
+                if = { limit = { chromium > 8 }
+                 random = {
+                 chance = hit_chance
+                 add_dynamic_modifier = {
+                   modifier = rare_metal_refining_modifier
+                   days = 27
+                                        }
+                          }
+                }
+                if = { limit = { OR = { aluminium > 24 steel > 24 } }
+                 random = {
+                 chance = hit_chance
+                 add_dynamic_modifier = {
+                   modifier = metal_refining_modifier
+                   days = 27
+                                        }
+                          }
+                }
+                if = { limit = { oil > 18 }
+                 random = {
+                 chance = hit_chance
+                 add_dynamic_modifier = {
+                   modifier = oil_refining_modifier
+                   days = 27
+                                        }
+                          }
+                }
+        }
+        
+        random_controlled_state = {
+         limit = {
+            check_variable = { number_of_battery_parks_state_var > 0 }
+            OR = {
+                has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+                days_since_last_strategic_bombing < 60
+            }
+            PREV = { has_war = yes }
+         }
+          random_list = {
+           40 = {}
+           hit_chance = {
+                 if = {
+                         limit = { PREV = { check_variable = { number_of_damaged_battery_parks > 0 } } }
+                         state_event = destroy_building.1
+                 }
+                }
+           hit_chance = {
+                 state_event = damage_building.1
+                }
+          }
+        }
+       
+        random_controlled_state = {
+         limit = {
+                  check_variable = { enrichment_facilities > 0 }
+                  check_variable = { building_level@nuclear_reactor > 0 }
+                  OR = {
+                   has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+                   days_since_last_strategic_bombing < 60
+                  }
+                  PREV = { has_war = yes }
+                 }
+           random_list = {
+                 40 = {}
+                 hit_chance = {
+                         if = {
+                                 limit = { PREV = { check_variable = { number_of_damaged_enrichment_facilities > 0 } } }
+                                 state_event = destroy_building.2
+                         }
+                      }
+                 hit_chance = {
+                         state_event = damage_building.2
+                      }
+                         }
+                                  }
+       
+        random_controlled_state = {
+         limit = {
+          OR = {
+           has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+           days_since_last_strategic_bombing < 60
+          }
+          PREV = { has_war = yes }
+          has_variable = hydroelectric_energy_production_var
+          NOT = { has_state_flag = expand_local_hydroelectric_infrastructure }
+                 }
+          random_list = {
+           70 = {}
+           hit_chance = {
+                state_event = damage_building.3
+                }
+           hit_chance = {
+                 if = {
+                         limit = { PREV = { check_variable = { number_of_damaged_hydroelectric > 0 } } }
+                         state_event = destroy_building.3
+                 }
+               }
+                       }
+                                   }
+       
+         random_controlled_state = {
+         limit = {
+          OR = {
+           has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+           days_since_last_strategic_bombing < 60
+          }
+          PREV = { has_war = yes }
+          has_variable = geothermal_energy_production_var
+          NOT = { has_state_flag = expand_local_geothermal_infrastructure }
+                 }
+          random_list = {
+           70 = {}
+           hit_chance = {
+                state_event = damage_building.4
+                }
+           hit_chance = {
+                 if = {
+                         limit = { PREV = { check_variable = { number_of_damaged_geothermal > 0 } } }
+                         state_event = destroy_building.4
+                 }
+               }
+                       }
+                                   }
+       
+         random_controlled_state = {
+          limit = {
+           OR = {
+            has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+            days_since_last_strategic_bombing < 60
+           }
+           PREV = { has_war = yes }
+           industrial_complex > 0
+           check_variable = { damaged_building_level@industrial_complex > 0 }
+          }
+          random = {
+           chance = hit_chance
+           state_event = destroy_building.5
+                   }
+                                  }
+       
+         random_controlled_state = {
+          limit = {
+           OR = {
+            has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+            days_since_last_strategic_bombing < 60
+           }
+           PREV = { has_war = yes }
+           arms_factory > 0
+           check_variable = { damaged_building_level@arms_factory > 0 }
+          }
+          random = {
+           chance = hit_chance
+           state_event = destroy_building.6
+                   }
+                                   }
+       
+         random_controlled_state = {
+          limit = {
+           OR = {
+            has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+            days_since_last_strategic_bombing < 60
+           }
+           PREV = { has_war = yes }
+           dockyard > 0
+           check_variable = { damaged_building_level@dockyard > 0 }
+          }
+          random = {
+           chance = hit_chance
+           state_event = destroy_building.7
+                   }
+                                  }
+       
+         random_controlled_state = {
+          limit = {
+           OR = {
+            has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+            days_since_last_strategic_bombing < 60
+           }
+           PREV = { has_war = yes }
+           offices > 0
+           check_variable = { damaged_building_level@offices > 0 }
+          }
+          random = {
+           chance = hit_chance
+           state_event = destroy_building.8
+                   }
+                                  }
+       
+         random_controlled_state = {
+          limit = {
+           OR = {
+            has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+            days_since_last_strategic_bombing < 60
+           }
+           PREV = { has_war = yes }
+           rubber_refinery > 0
+           check_variable = { damaged_building_level@rubber_refinery > 0 }
+          }
+          random = {
+           chance = hit_chance
+           state_event = destroy_building.9
+                   }
+                                   }
+       
+         random_controlled_state = {
+          limit = {
+           OR = {
+            has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+            days_since_last_strategic_bombing < 60
+           }
+           PREV = { has_war = yes }
+           agriculture_district > 0
+           check_variable = { damaged_building_level@agriculture_district > 0 }
+          }
+          random = {
+           chance = hit_chance
+           state_event = destroy_building.10
+                   }
+                                  }
+       
+         random_controlled_state = {
+          limit = {
+           OR = {
+            has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+            days_since_last_strategic_bombing < 60
+           }
+           PREV = { has_war = yes }
+           nuclear_reactor > 0
+           check_variable = { damaged_building_level@nuclear_reactor > 0 }
+          }
+          random = {
+           chance = hit_chance
+           state_event = destroy_building.11
+                   }
+                                  }
+       
+         random_controlled_state = {
+          limit = {
+           OR = {
+            has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+            days_since_last_strategic_bombing < 60
+           }
+           PREV = { has_war = yes }
+           synthetic_refinery > 0
+           check_variable = { damaged_building_level@synthetic_refinery > 0 }
+          }
+          random = {
+           chance = hit_chance
+           state_event = destroy_building.12
+                   }
+                                  }
+       
+         random_controlled_state = {
+          limit = {
+           OR = {
+            has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+            days_since_last_strategic_bombing < 60
+           }
+           PREV = { has_war = yes }
+           fossil_powerplant > 0
+           check_variable = { damaged_building_level@fossil_powerplant > 0 }
+          }
+          random = {
+           chance = hit_chance
+           state_event = destroy_building.13
+          }
+        }
+
+  every_controlled_state = {
+        limit = {
+                days_since_last_strategic_bombing < 60
+                PREV = { has_war = yes }
+        }
+        if = {
+            limit = {
+                NOT = { has_dynamic_modifier = { modifier = nuclear_fallout } }
+                NOT = { has_dynamic_modifier = { modifier = nuclear_fallout1 } }
+                NOT = { has_dynamic_modifier = { modifier = nuclear_fallout2 } }
+                NOT = { has_dynamic_modifier = { modifier = nuclear_fallout3 } }
+            }
+            if = {
+                limit = {
+                        NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        NOT = { civil_bunker > 0 }
+                }
+                add_dynamic_modifier = {
+                        modifier = dependents_productivity_modifier
+                        days = 30
+                }
+                add_to_variable = { state_damage = 1 }
+		calculate_damaged_state = yes
+            }
+            else_if = {
+                limit = {
+                        has_dynamic_modifier = { modifier = Underground_modifier }
+                        NOT = { civil_bunker > 0 }
+                }
+                add_dynamic_modifier = {
+                        modifier = dependents_productivity_modifier1
+                        days = 30
+                }
+                add_to_variable = { state_damage = 1 }
+		calculate_damaged_state = yes
+            }
+            else_if = {
+                limit = {
+                        NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        civil_bunker > 0
+                }
+                add_dynamic_modifier = {
+                        modifier = dependents_productivity_modifier2
+                        days = 30
+                }
+                add_to_variable = { state_damage = 1 }
+		calculate_damaged_state = yes
+            }
+            else = {
+                add_dynamic_modifier = {
+                        modifier = dependents_productivity_modifier3
+                        days = 30
+                }
+                add_to_variable = { state_damage = 1 }
+		calculate_damaged_state = yes
+            }
+        }
+        multiply_variable = { productivity_state_var = 0.9 }
+	clamp_variable = {
+		var = productivity_state_var
+		min = 100
+	}
+  }
+ }
+}

@@ -1,0 +1,1212 @@
+add_namespace = sov_gru
+add_namespace = arm_foreign_legion
+add_namespace = pol_rutkowski
+add_namespace = sof_nko
+add_namespace = gdr_werwolf
+add_namespace = jihadis_volunteers
+#Russian Special Service
+#GRU start
+country_event = {
+	id = sov_gru.1
+	title = sov_gru.1.t
+	desc = sov_gru.1.d
+	is_triggered_only = yes
+	picture = GFX_sov_gru_event
+	option = {
+		name = sov_gru.1.a
+		log = "[GetDateText]: [This.GetName]: sov_gru.1.a executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				NOT = {
+					has_idea = SOV_gru_foreign
+				}
+			}
+		}
+		add_ideas = SOV_gru_foreign
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		SOV = { country_event = sov_gru.2 }
+		custom_effect_tooltip = SOV_decision_gru_brigade_tt
+		hidden_effect = {
+			division_template = {
+				name = "GRU Brigade"
+				is_locked = yes
+				regiments = {
+					Special_Forces = { x = 0 y = 0 }
+					Special_Forces = { x = 0 y = 1 }
+				}
+				support = {
+					L_Engi_Comp = { x = 0 y = 0 }
+					L_Recce_Comp = { x = 0 y = 0 }
+				}
+				priority = 2
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[Russia] 2nd Guards Spetsnaz Brigade\" division_template = \"GRU Brigade\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[Russia] 14th Spetsnaz Brigade\" division_template = \"GRU Brigade\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[Russia] 16th Guards Spetsnaz Brigade\" division_template = \"GRU Brigade\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+		}
+		
+		ai_chance = { 
+			base = 100
+		}
+	}
+	option = {
+		name = sov_gru.1.b
+		log = "[GetDateText]: [This.GetName]: sov_gru.1.b executed"
+		SOV = { country_event = sov_gru.3 }
+		ai_chance = { 
+			base = 0
+		}
+	}
+}
+
+#GRU accept
+country_event = {
+	id = sov_gru.2
+	title = sov_gru.2.t
+	desc = sov_gru.2.d
+	is_triggered_only = yes
+	picture = GFX_sov_gru_event
+	option = {
+		name = sov_gru.2.a
+		log = "[GetDateText]: [This.GetName]: sov_gru.2.a executed"
+		set_country_flag = SOV_gru_active
+	}
+}
+#GRU Decline
+country_event = {
+	id = sov_gru.3
+	title = sov_gru.3.t
+	desc = sov_gru.3.d
+	is_triggered_only = yes
+	picture = GFX_sov_gru_event
+	option = {
+		name = sov_gru.3.a
+		log = "[GetDateText]: [This.GetName]: sov_gru.3.a executed"
+	}
+}
+#GRU Go Home
+country_event = {
+	id = sov_gru.4
+	title = sov_gru.4.t
+	desc = sov_gru.4.d
+	is_triggered_only = yes
+	picture = GFX_sov_gru_event
+	option = {
+		name = sov_gru.4.a
+		log = "[GetDateText]: [This.GetName]: sov_gru.4.a executed"
+		clr_country_flag = SOV_gru_active
+	}
+}
+#GRU start
+country_event = {
+	id = sov_gru.15
+	title = sov_gru.15.t
+	desc = sov_gru.15.d
+	is_triggered_only = yes
+	picture = GFX_sov_gru_event
+	option = {
+		name = sov_gru.15.a
+		log = "[GetDateText]: [This.GetName]: sov_gru.15.a executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+			}
+			ROOT = {
+				NOT = {
+					has_idea = SOV_gru_foreign
+				}
+			}
+		}
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 4 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = FROM.FROM.id }
+			change_influence_percentage = yes
+			FROM.FROM = {
+				add_ideas = SOV_gru_foreign
+				custom_effect_tooltip = SOV_decision_gru_brigade_tt
+			}
+		}
+		FROM.FROM = { #Targeted Influencer should receive this
+			country_event = { id = sov_gru.1 } #Send GRU
+		}
+		ai_chance = { 
+			base = 100
+		}
+	}
+	option = {
+		name = sov_gru.15.b
+		log = "[GetDateText]: [This.GetName]: sov_gru.15.b executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+			}
+			ROOT = {
+				NOT = {
+					has_idea = SOV_gru_foreign
+				}
+			}
+		}
+		ai_chance = { 
+			base = 0
+		}
+	}
+}
+#Wagner start
+country_event = {
+	id = sov_gru.16
+	title = sov_gru.16.t
+	desc = sov_gru.16.d
+	is_triggered_only = yes
+	picture = GFX_wagner_events
+	option = {
+		name = sov_gru.16.a
+		log = "[GetDateText]: [This.GetName]: sov_gru.16.a executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+			}
+			ROOT = {
+				NOT = {
+					has_idea = SOV_wagner_foreign
+				}
+			}
+		}
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 4 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = FROM.FROM.id }
+			change_influence_percentage = yes
+			FROM.FROM = {
+				add_ideas = SOV_wagner_foreign
+				custom_effect_tooltip = SOV_decision_gru_brigade_tt
+			}
+		}
+		FROM.FROM = { #Targeted Influencer should receive this
+			country_event = { id = sov_gru.6 } #Send Wagner
+		}
+		ai_chance = { 
+			base = 100
+		}
+	}
+	option = {
+		name = sov_gru.16.b
+		log = "[GetDateText]: [This.GetName]: sov_gru.16.b executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+			}
+			ROOT = {
+				NOT = {
+					has_idea = SOV_wagner_foreign
+				}
+			}
+		}
+		ai_chance = { 
+			base = 0
+		}
+	}
+}
+#Armenian Special Service
+#Armenia Send To Us Foreign Legion
+country_event = {
+	id = arm_foreign_legion.3
+	title = arm_foreign_legion.3.t
+	desc = arm_foreign_legion.3.d
+	picture = GFX_arm_foreign_legion
+	is_triggered_only = yes
+	option = {
+		name = arm_foreign_legion.3.a
+		log = "[GetDateText]: [This.GetName]: arm_foreign_legion.3.a executed"
+		add_ideas = ARM_armenian_foreign_legion_moblize_idea
+		ARM = {
+			country_event = arm_foreign_legion.4
+		}
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = ARM }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		hidden_effect = {
+			division_template = {
+				name = "Foreign Legion Brigade"
+				is_locked = yes
+				regiments = {
+					Special_Forces = { x = 0 y = 0 }
+					Special_Forces = { x = 0 y = 1 }
+				}
+				support = {
+					L_Engi_Comp = { x = 0 y = 0 }
+					L_Recce_Comp = { x = 0 y = 0 }
+				}
+				priority = 2
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[Armenia] Foreign Legion Brigade\" division_template = \"Foreign Legion Brigade\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = ARM
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = arm_foreign_legion.3.b
+		log = "[GetDateText]: [This.GetName]: arm_foreign_legion.3.b executed"
+		ARM = {
+			country_event = arm_foreign_legion.5
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = ARM
+					value < 0
+				}
+			}
+		}
+	}
+}
+#They Agree for Our Foreign Legion
+country_event = {
+	id = arm_foreign_legion.4
+	title = arm_foreign_legion.4.t
+	desc = arm_foreign_legion.4.d
+	picture = GFX_arm_foreign_legion
+	is_triggered_only = yes
+	option = {
+		name = arm_foreign_legion.4.a
+		log = "[GetDateText]: [This.GetName]: arm_foreign_legion.4.a executed"
+		remove_ideas = ARM_armenian_foreign_legion_idea
+		FROM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_positive
+				target = ARM
+			}
+		}
+		ARM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_positive
+				target = FROM
+			}
+		}
+	}
+}
+#They Disagree for Our Foreign Legion
+country_event = {
+	id = arm_foreign_legion.5
+	title = arm_foreign_legion.5.t
+	desc = arm_foreign_legion.5.d
+	picture = GFX_arm_foreign_legion
+	is_triggered_only = yes
+	option = {
+		name = arm_foreign_legion.5.a
+		log = "[GetDateText]: [This.GetName]: arm_foreign_legion.5.a executed"
+		FROM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_negative
+				target = ARM
+			}
+		}
+		ARM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_negative
+				target = FROM
+			}
+		}
+	}
+}
+
+#Our Foreign Legion Return to Homeland
+country_event = {
+	id = arm_foreign_legion.6
+	title = arm_foreign_legion.6.t
+	desc = arm_foreign_legion.6.d
+	picture = GFX_arm_foreign_legion
+	is_triggered_only = yes
+	option = {
+		name = arm_foreign_legion.6.a
+		log = "[GetDateText]: [This.GetName]: arm_foreign_legion.6.a executed"
+		custom_effect_tooltip = ARM_add_idea_to_army_idea_tt
+		add_ideas = ARM_armenian_foreign_legion_idea
+	}
+}
+#Foreign Legion start
+country_event = {
+	id = arm_foreign_legion.7
+	title = arm_foreign_legion.7.t
+	desc = arm_foreign_legion.7.d
+	is_triggered_only = yes
+	picture = GFX_arm_foreign_legion
+	option = {
+		name = arm_foreign_legion.7.a
+		log = "[GetDateText]: [This.GetName]: arm_foreign_legion.7.a executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+			}
+			ROOT = {
+				NOT = {
+					has_idea = ARM_armenian_foreign_legion_moblize_idea
+				}
+			}
+		}
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 4 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = FROM.FROM.id }
+			change_influence_percentage = yes
+			FROM.FROM = {
+				add_ideas = ARM_armenian_foreign_legion_moblize_idea
+			}
+		}
+		FROM.FROM = { #Targeted Influencer should receive this
+			country_event = { id = arm_foreign_legion.3 } #Send Foreign Legion
+		}
+		ai_chance = { 
+			base = 100
+		}
+	}
+	option = {
+		name = arm_foreign_legion.7.b
+		log = "[GetDateText]: [This.GetName]: arm_foreign_legion.7.b executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+			}
+			ROOT = {
+				NOT = {
+					has_idea = ARM_armenian_foreign_legion_moblize_idea
+				}
+			}
+		}
+		ai_chance = { 
+			base = 0
+		}
+	}
+}
+#Poland Special Service
+#Poland Send To Us Rutkowsky Patrol
+country_event = {
+	id = pol_rutkowski.3
+	title = pol_rutkowski.3.t
+	desc = pol_rutkowski.3.d
+	picture = GFX_POL_event_rutkowskipatrol
+	is_triggered_only = yes
+	option = {
+		name = pol_rutkowski.3.a
+		log = "[GetDateText]: [This.GetName]: pol_rutkowski.3.a executed"
+		add_ideas = POL_rutkowski_patrol_idea
+		POL = {
+			country_event = pol_rutkowski.4
+		}
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = POL }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		hidden_effect = {
+			division_template = {
+				name = "Rutkowski Patrol Brigade"
+				is_locked = yes
+				regiments = {
+					Special_Forces = { x = 0 y = 0 }
+					Special_Forces = { x = 0 y = 1 }
+				}
+				support = {
+					L_Engi_Comp = { x = 0 y = 0 }
+					L_Recce_Comp = { x = 0 y = 0 }
+				}
+				priority = 2
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[Poland] Rutkowski Patrol Brigade\" division_template = \"Rutkowski Patrol Brigade\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = POL
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = pol_rutkowski.3.b
+		log = "[GetDateText]: [This.GetName]: pol_rutkowski.3.b executed"
+		POL = {
+			country_event = pol_rutkowski.5
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = ARM
+					value < 0
+				}
+			}
+		}
+	}
+}
+#They Agree for Our Rutkowski Patrol
+country_event = {
+	id = pol_rutkowski.4
+	title = pol_rutkowski.4.t
+	desc = pol_rutkowski.4.d
+	picture = GFX_POL_event_rutkowskipatrol
+	is_triggered_only = yes
+	option = {
+		name = pol_rutkowski.4.a
+		set_country_flag = ruthkowski_patrol_active
+		log = "[GetDateText]: [This.GetName]: pol_rutkowski.4.a executed"
+		FROM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_positive
+				target = POL
+			}
+		}
+		POL = {
+			add_opinion_modifier = {
+				modifier = recent_actions_positive
+				target = FROM
+			}
+		}
+	}
+}
+#They Disagree for Our Rutkowski Patrol
+country_event = {
+	id = pol_rutkowski.5
+	title = pol_rutkowski.5.t
+	desc = pol_rutkowski.5.d
+	picture = GFX_POL_event_rutkowskipatrol
+	is_triggered_only = yes
+	option = {
+		name = pol_rutkowski.5.a
+		log = "[GetDateText]: [This.GetName]: pol_rutkowski.5.a executed"
+		FROM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_negative
+				target = POL
+			}
+		}
+		POL = {
+			add_opinion_modifier = {
+				modifier = recent_actions_negative
+				target = FROM
+			}
+		}
+	}
+}
+
+#Our Rutkowski Patrol Return to Homeland
+country_event = {
+	id = pol_rutkowski.6
+	title = pol_rutkowski.6.t
+	desc = pol_rutkowski.6.d
+	picture = GFX_POL_event_rutkowskipatrol
+	is_triggered_only = yes
+	option = {
+		name = pol_rutkowski.6.a
+		log = "[GetDateText]: [This.GetName]: pol_rutkowski.6.a executed"
+		clr_country_flag = ruthkowski_patrol_active
+	}
+}
+#Rutkowski Patrol start
+country_event = {
+	id = pol_rutkowski.7
+	title = pol_rutkowski.7.t
+	desc = pol_rutkowski.7.d
+	is_triggered_only = yes
+	picture = GFX_POL_event_rutkowskipatrol
+	option = {
+		name = pol_rutkowski.7.a
+		log = "[GetDateText]: [This.GetName]: pol_rutkowski.7.a executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+				NOT = {
+					has_idea = POL_rutkowski_patrol_idea
+				}
+			}
+		}
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 4 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = FROM.FROM.id }
+			change_influence_percentage = yes
+			FROM.FROM = {
+				add_ideas = POL_rutkowski_patrol_idea
+			}
+		}
+		FROM.FROM = { #Targeted Influencer should receive this
+			country_event = { id = pol_rutkowski.3 } #Rutkowski Patrol
+		}
+		ai_chance = { 
+			base = 100
+		}
+	}
+	option = {
+		name = pol_rutkowski.7.b
+		log = "[GetDateText]: [This.GetName]: pol_rutkowski.7.b executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+				NOT = {
+					has_idea = POL_rutkowski_patrol_idea
+				}
+			}
+		}
+		ai_chance = { 
+			base = 0
+		}
+	}
+}
+#SOF NKO
+#SOF NKO Start
+country_event = {
+	id = sof_nko.1
+	title = sof_nko.1.t
+	desc = sof_nko.1.d
+	is_triggered_only = yes
+	picture = GFX_nko_sof
+	option = {
+		name = sof_nko.1.a
+		log = "[GetDateText]: [This.GetName]: sof_nko.1.a executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+			}
+			ROOT = {
+				NOT = {
+					has_idea = sof_nko
+				}
+			}
+		}
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 4 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = FROM.FROM.id }
+			change_influence_percentage = yes
+			FROM.FROM = {
+				add_ideas = sof_nko
+			}
+			custom_effect_tooltip = NKO_decision_sof_tt
+		}
+		FROM.FROM = { #Targeted Influencer should receive this
+			country_event = { id = sof_nko.2 } #Send Green Berets
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = sof_nko.1.b
+		log = "[GetDateText]: [This.GetName]: sof_nko.1.b executed"
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+#SOF NKO Start
+
+country_event = {
+	id = sof_nko.2
+	title = sof_nko.2.t
+	desc = sof_nko.2.d
+	is_triggered_only = yes
+	picture = GFX_nko_sof
+	option = {
+		name = sof_nko.2.a
+		log = "[GetDateText]: [This.GetName]: sof_nko.2.a executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				NOT = {
+					has_idea = sof_nko
+				}
+			}
+		}
+		add_ideas = sof_nko
+		NKO = {
+			diplomatic_relation = {
+				country = PREV
+				relation = send_attache
+				active = yes
+			}
+		}
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = NKO }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		NKO = { country_event = sof_nko.3 }
+		custom_effect_tooltip = NKO_decision_sof_tt
+		hidden_effect = {
+			division_template = {
+				name = "NKO SOF Brigade"
+				is_locked = yes
+				regiments = {
+					Special_Forces = { x = 0 y = 0 }
+					Special_Forces = { x = 0 y = 1 }
+					Special_Forces = { x = 0 y = 2 }
+					Special_Forces = { x = 1 y = 0 }
+					Special_Forces = { x = 1 y = 1 }
+					Special_Forces = { x = 1 y = 2 }
+					Special_Forces = { x = 2 y = 0 }
+					Special_Forces = { x = 2 y = 1 }
+					Special_Forces = { x = 2 y = 2 }
+				}
+				support = {
+					L_Recce_Comp = { x = 0 y = 0 }
+				}
+				priority = 2
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[NKO] 1st Spetsnaz Brigade\" division_template = \"NKO SOF Brigade\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[NKO] 2nd Spetsnaz Brigade\" division_template = \"NKO SOF Brigade\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[NKO] 2rd Spetsnaz Brigade\" division_template = \"NKO SOF Brigade\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[NKO] 4th Spetsnaz Brigade\" division_template = \"NKO SOF Brigade\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+		}
+		
+		ai_chance = { 
+			base = 100
+		}
+	}
+	option = {
+		name = sof_nko.2.b
+		log = "[GetDateText]: [This.GetName]: sof_nko.2.b executed"
+		NKO = { country_event = sof_nko.4 }
+		ai_chance = { 
+			base = 0
+		}
+	}
+}
+
+#SOF NKO accept
+country_event = {
+	id = sof_nko.3
+	title = sof_nko.3.t
+	desc = sof_nko.3.d
+	is_triggered_only = yes
+	picture = GFX_nko_sof
+	option = {
+		name = sof_nko.3.a
+		log = "[GetDateText]: [This.GetName]: sof_nko.3.a executed"
+		set_country_flag = NKO_sof_active
+	}
+}
+#SOF NKO decline
+country_event = {
+	id = sof_nko.4
+	title = sof_nko.4.t
+	desc = sof_nko.4.d
+	is_triggered_only = yes
+	picture = GFX_nko_sof
+	option = {
+		name = sof_nko.4.a
+		log = "[GetDateText]: [This.GetName]: sof_nko.4.a executed"
+	}
+}
+#SOF NKO Go Home
+country_event = {
+	id = sof_nko.5
+	title = sof_nko.5.t
+	desc = sof_nko.5.d
+	is_triggered_only = yes
+	picture = GFX_nko_sof
+	option = {
+		name = sof_nko.5.a
+		log = "[GetDateText]: [This.GetName]: sof_nko.5.a executed"
+		clr_country_flag = NKO_sof_active
+		army_experience = 100
+	}
+}
+
+
+#GDR Special Service
+#GDR Send To Us Werwolf Battalion
+country_event = {
+	id = gdr_werwolf.3
+	title = gdr_werwolf.3.t
+	desc = gdr_werwolf.3.d
+	picture = GFX_event_stasi_werwolf
+	is_triggered_only = yes
+	option = {
+		name = gdr_werwolf.3.a
+		log = "[GetDateText]: [This.GetName]: gdr_werwolf.3.a executed"
+		add_ideas = GDR_werwolf_battalion_idea
+		GDR = {
+			country_event = gdr_werwolf.4
+		}
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = GDR }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		hidden_effect = {
+			division_template = {
+				name = "Battalion Werwolf"
+				is_locked = yes
+				regiments = {
+					Special_Forces = { x = 0 y = 0 }
+					Special_Forces = { x = 0 y = 1 }
+				}
+				support = {
+					L_Engi_Comp = { x = 0 y = 0 }
+					L_Recce_Comp = { x = 0 y = 1 }
+				}
+				priority = 2
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"[GDR] 101st Stasi Battalion Werwolf\" division_template = \"Battalion Werwolf\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = GDR
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = gdr_werwolf.3.b
+		log = "[GetDateText]: [This.GetName]: gdr_werwolf.3.b executed"
+		GDR = {
+			country_event = gdr_werwolf.5
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = GDR
+					value < 0
+				}
+			}
+		}
+	}
+}
+#They Agree for Our Werwolf Battalion
+country_event = {
+	id = gdr_werwolf.4
+	title = gdr_werwolf.4.t
+	desc = gdr_werwolf.4.d
+	picture = GFX_event_stasi_werwolf
+	is_triggered_only = yes
+	option = {
+		name = gdr_werwolf.4.a
+		set_country_flag = gdr_werwolf_active
+		log = "[GetDateText]: [This.GetName]: gdr_werwolf.4.a executed"
+		FROM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_positive
+				target = GDR
+			}
+		}
+		GDR = {
+			add_opinion_modifier = {
+				modifier = recent_actions_positive
+				target = FROM
+			}
+		}
+	}
+}
+#They Disagree for Our Werwolf Battalion
+country_event = {
+	id = gdr_werwolf.5
+	title = gdr_werwolf.5.t
+	desc = gdr_werwolf.5.d
+	picture = GFX_event_stasi_werwolf
+	is_triggered_only = yes
+	option = {
+		name = gdr_werwolf.5.a
+		log = "[GetDateText]: [This.GetName]: gdr_werwolf.5.a executed"
+		FROM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_negative
+				target = GDR
+			}
+		}
+		GDR = {
+			add_opinion_modifier = {
+				modifier = recent_actions_negative
+				target = FROM
+			}
+		}
+	}
+}
+
+#Our Werwolf Battalion Return to Homeland
+country_event = {
+	id = gdr_werwolf.6
+	title = gdr_werwolf.6.t
+	desc = gdr_werwolf.6.d
+	picture = GFX_event_stasi_werwolf
+	is_triggered_only = yes
+	option = {
+		name = gdr_werwolf.6.a
+		log = "[GetDateText]: [This.GetName]: gdr_werwolf.6.a executed"
+		clr_country_flag = gdr_werwolf_active
+	}
+}
+#Werwolf Battalion start
+country_event = {
+	id = gdr_werwolf.7
+	title = gdr_werwolf.7.t
+	desc = gdr_werwolf.7.d
+	is_triggered_only = yes
+	picture = GFX_event_stasi_werwolf
+	option = {
+		name = gdr_werwolf.7.a
+		log = "[GetDateText]: [This.GetName]: gdr_werwolf.7.a executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+				NOT = {
+					has_idea = GDR_werwolf_battalion_idea
+				}
+			}
+		}
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 4 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = FROM.FROM.id }
+			change_influence_percentage = yes
+			FROM.FROM = {
+				add_ideas = GDR_werwolf_battalion_idea
+			}
+		}
+		FROM.FROM = { #Targeted Influencer should receive this
+			country_event = { id = gdr_werwolf.3 } #Werwolf Battalion
+		}
+		ai_chance = { 
+			base = 100
+		}
+	}
+	option = {
+		name = gdr_werwolf.7.b
+		log = "[GetDateText]: [This.GetName]: gdr_werwolf.7.b executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+				NOT = {
+					has_idea = GDR_werwolf_battalion_idea
+				}
+			}
+		}
+		ai_chance = { 
+			base = 0
+		}
+	}
+}
+
+
+#Jihadis Volunteers Service
+#FROM Send To Us Jihadis Volunteers
+country_event = {
+	id = jihadis_volunteers.3
+	title = jihadis_volunteers.3.t
+	desc = jihadis_volunteers.3.d
+	picture = GFX_jihadis_volunteers_event
+	is_triggered_only = yes
+	option = {
+		name = jihadis_volunteers.3.a
+		log = "[GetDateText]: [This.GetName]: jihadis_volunteers.3.a executed"
+		add_ideas = GENERIC_jihadis_volunteers_active_idea
+		FROM = {
+			country_event = jihadis_volunteers.4
+		}
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = FROM }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		hidden_effect = {
+			division_template = {
+				name = "Foreign Jihadis"
+				is_locked = yes
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+					Arty_Bat = { x = 0 y = 3 }
+				}
+				support = {
+					L_Recce_Comp = { x = 0 y = 0 }
+					L_Engi_Comp = { x = 0 y = 1 }
+				}
+				priority = 2
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Foreign Jihadis\" division_template = \"Foreign Jihadis\" start_experience_factor = 1.0"
+					count = 1
+					owner = ROOT
+				}
+			}
+			set_variable = { jihadis_volunteers_from = FROM }
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = FROM
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = jihadis_volunteers.3.b
+		log = "[GetDateText]: [This.GetName]: jihadis_volunteers.3.b executed"
+		FROM = {
+			country_event = jihadis_volunteers.5
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = FROM
+					value < 0
+				}
+			}
+		}
+	}
+}
+#They Agree for Our Jihadis Volunteers
+country_event = {
+	id = jihadis_volunteers.4
+	title = jihadis_volunteers.4.t
+	desc = jihadis_volunteers.4.d
+	picture = GFX_jihadis_volunteers_event
+	is_triggered_only = yes
+	option = {
+		name = jihadis_volunteers.4.a
+		set_country_flag = jihadis_volunteers_active
+		log = "[GetDateText]: [This.GetName]: jihadis_volunteers.4.a executed"
+		FROM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_positive
+				target = ROOT
+			}
+		}
+		add_opinion_modifier = {
+			modifier = recent_actions_positive
+			target = FROM
+		}
+	}
+}
+#They Disagree for Our Werwolf Battalion
+country_event = {
+	id = jihadis_volunteers.5
+	title = jihadis_volunteers.5.t
+	desc = jihadis_volunteers.5.d
+	picture = GFX_jihadis_volunteers_event
+	is_triggered_only = yes
+	option = {
+		name = jihadis_volunteers.5.a
+		log = "[GetDateText]: [This.GetName]: jihadis_volunteers.5.a executed"
+		FROM = {
+			add_opinion_modifier = {
+				modifier = recent_actions_negative
+				target = ROOT
+			}
+		}
+		add_opinion_modifier = {
+			modifier = recent_actions_negative
+			target = FROM
+		}
+	}
+}
+
+#Our Jihadis Volunteers Return to Homeland
+country_event = {
+	id = jihadis_volunteers.6
+	title = jihadis_volunteers.6.t
+	desc = jihadis_volunteers.6.d
+	picture = GFX_jihadis_volunteers_event
+	is_triggered_only = yes
+	option = {
+		name = jihadis_volunteers.6.a
+		log = "[GetDateText]: [This.GetName]: gdr_werwolf.6.a executed"
+		clr_country_flag = jihadis_volunteers_active
+	}
+}
+#Jihadis Volunteers start
+country_event = {
+	id = jihadis_volunteers.7
+	title = jihadis_volunteers.7.t
+	desc = jihadis_volunteers.7.d
+	is_triggered_only = yes
+	picture = GFX_jihadis_volunteers_event
+	option = {
+		name = jihadis_volunteers.7.a
+		log = "[GetDateText]: [This.GetName]: jihadis_volunteers.7.a executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+				NOT = {
+					has_idea = GENERIC_jihadis_volunteers_active_idea
+				}
+			}
+		}
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 3 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = FROM.FROM.id }
+			change_influence_percentage = yes
+			FROM.FROM = {
+				add_ideas = GENERIC_jihadis_volunteers_active_idea
+			}
+		}
+		FROM.FROM = { #Targeted Influencer should receive this
+			country_event = { id = jihadis_volunteers.3 } #Werwolf Battalion
+		}
+		ai_chance = { 
+			base = 100
+		}
+	}
+	option = {
+		name = jihadis_volunteers.7.b
+		log = "[GetDateText]: [This.GetName]: jihadis_volunteers.7.b executed"
+		trigger = {
+			FROM.FROM = {
+				OR = {
+					has_civil_war = yes
+					has_war = yes
+				}
+				exists = yes
+				NOT = {
+					has_idea = GENERIC_jihadis_volunteers_active_idea
+				}
+			}
+		}
+		ai_chance = { 
+			base = 0
+		}
+	}
+}

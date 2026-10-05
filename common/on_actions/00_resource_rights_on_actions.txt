@@ -1,0 +1,143 @@
+on_actions = {
+    on_state_control_changed = {
+        effect = {
+            FROM.FROM = {
+                if = {
+                    limit = {
+					    NOT = {
+						    OR = {
+							    state = 423
+							    state = 301
+							    state = 283
+							    state = 647
+							    state = 288
+							    state = 763
+							    state = 304
+							    state = 436
+							    state = 452
+							    state = 580
+							    state = 326
+							    state = 210
+							    state = 172
+							    state = 180
+							    state = 179
+							    state = 174
+							    state = 175
+							    state = 176
+							    state = 1120
+							    state = 275
+							    state = 279
+							    state = 1006
+							    state = 322
+						    }
+					    }
+                    }
+                    FROM  = {
+					    random_country = {
+						    limit = {
+							    has_resources_rights = {
+  								    state = PREV.PREV
+							    }
+						    }
+						    set_variable = { remove_resource_rights_state = PREV.PREV }
+						    remove_resource_rights = PREV.PREV
+						    count_resource_rights_nongiven_resources = yes
+						    country_event = resource_rights.1
+						    remove_opinion_modifier = {
+							    target = FROM
+							    modifier = resource_rights_agreement
+						    }
+						    remove_opinion_modifier = {
+							    target = FROM
+							    modifier = resource_rights_agreement_trade
+						    }
+						    FROM = {
+							    remove_opinion_modifier = {
+								    target = PREV
+								    modifier = resource_rights_agreement
+							    }
+							    remove_opinion_modifier = {
+								    target = PREV
+								    modifier = resource_rights_agreement_trade
+							    }
+						    }
+					    }
+                    }
+                }
+            }
+        }
+    }
+    on_subject_autonomy_level_change = {
+        effect = {
+            ROOT = {
+                every_controlled_state = {
+                    limit = {
+					    NOT = {
+						    OR = {
+							    state = 423
+							    state = 301
+							    state = 283
+							    state = 647
+							    state = 288
+							    state = 763
+							    state = 304
+							    state = 436
+							    state = 452
+							    state = 580
+							    state = 326
+							    state = 210
+							    state = 172
+							    state = 180
+							    state = 179
+							    state = 174
+							    state = 175
+							    state = 176
+							    state = 1120
+							    state = 275
+							    state = 279
+							    state = 1006
+							    state = 322
+						    }
+					    }
+                    }
+                    ROOT = {
+					    random_country = {
+						    limit = {
+							    has_resources_rights = {
+  								    state = PREV.PREV
+							    }
+								NOT = { tag = FROM }
+								NOT = { tag = ROOT }
+						    }
+						    set_variable = { remove_resource_rights_state = PREV.PREV }
+						    remove_resource_rights = PREV.PREV
+						    count_resource_rights_nongiven_resources = yes
+							PREV = {
+								save_event_target_as = resource_rights_cancel_target_FROM
+								PREV = { country_event = resource_rights.1 }
+							}
+						    remove_opinion_modifier = {
+							    target = ROOT
+							    modifier = resource_rights_agreement
+						    }
+						    remove_opinion_modifier = {
+							    target = ROOT
+							    modifier = resource_rights_agreement_trade
+						    }
+						    ROOT = {
+							    remove_opinion_modifier = {
+								    target = PREV
+								    modifier = resource_rights_agreement
+							    }
+							    remove_opinion_modifier = {
+								    target = PREV
+								    modifier = resource_rights_agreement_trade
+							    }
+						    }
+					    }
+                    }
+                }
+            }
+        }
+    }
+}

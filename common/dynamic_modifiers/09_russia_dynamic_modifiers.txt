@@ -1,0 +1,205 @@
+#example_dynamic_modifier = {
+#		icon = "GFX_idea_unknown" # optional, will show up in guis if icon is specified
+#		enable = { always = yes } #optional, the modifier won't apply if not enabled
+#		remove_trigger = { always = no } #optional, will remove the modifier if true
+#
+#		# list of modifiers
+#		fuel_cost = 321
+#		max_fuel = var_max_fuel # will be taken from a variable
+#	}
+
+#RUSSIAN DYNAMIC MODIFIERS
+SOV_npp_modifier = {
+	icon = "GFX_idea_sov_npp_ideas"
+	enable = {
+		original_tag = SOV
+		has_completed_focus = SOV_npp
+	}
+	monthly_population = SOV_npp_population
+	research_speed_factor = SOV_npp_research
+	production_speed_infrastructure_factor = SOV_npp_infrastructure_factor
+	production_speed_offices_factor = SOV_npp_offices
+	production_speed_arms_factory_factor = SOV_npp_arms_factory
+	bureaucracy_cost_multiplier_modifier = SOV_npp_bureaucracy_cost
+	education_cost_multiplier_modifier = SOV_npp_education_cost
+	health_cost_multiplier_modifier = SOV_npp_health_cost
+}
+SOV_western_sanctions_modifier = {
+	icon = "GFX_idea_sov_western_sanctions_idea"
+	enable = {
+		original_tag = SOV
+		has_country_flag = SOV_western_sanctions
+	}
+	remove_trigger = {
+		NOT = {
+			has_country_flag = SOV_western_sanctions
+		}
+	}
+	production_speed_buildings_factor = SOV_sanctions_construction_speed
+	receiving_investment_cost_modifier = SOV_sanctions_invest_cost
+	return_on_investment_modifier = SOV_sanctions_roi
+	opinion_gain_monthly_same_ideology_factor = SOV_sanctions_opinion_gain
+	research_speed_factor = SOV_sanctions_research_speed
+	consumer_goods_factor = SOV_sanctions_tax_cost
+	office_park_income_tax_modifier = SOV_sanctions_office_tax_gain
+}
+
+SOV_russian_oligarchs_modifier = {
+	icon = "GFX_idea_SOV_the_true_tsars"
+	remove_trigger = {
+		NOT = {
+			neutrality_neutral_oligarch_are_in_power = yes
+		}
+	}
+	corruption_cost_factor = SOV_oligarchs_corruption_cost_factor
+	production_speed_buildings_factor = SOV_oligarchs_construction_speed_factor
+	receiving_investment_duration_modifier = SOV_oligarchs_investment_duration_factor
+	receiving_investment_cost_modifier = SOV_oligarchs_investment_cost_factor
+	consumer_goods_factor = SOV_oligarchs_tax_cost_factor
+	office_park_income_tax_modifier = SOV_oligarchs_office_income_factor
+	political_power_factor = SOV_oligarchs_political_power_factor
+	neutrality_drift = SOV_oligarchs_neutrality_drift_factor
+	local_resources_factor = SOV_oligarchs_local_resources_factor
+}
+
+# Author(s): LordBogdanoff
+SOV_liberals_modifier = {
+	icon = "GFX_idea_Provisional_Council_of_the_Russian_Republic"
+	remove_trigger = {
+		NOT = {
+			OR = {
+				western_liberals_are_in_power = yes
+				western_conservatism_are_in_power = yes
+				western_social_democrats_are_in_power = yes
+			}
+		}
+	}
+	political_power_factor = SOV_liberals_political_power_factor
+	stability_factor = SOV_liberals_stability_factor
+	party_popularity_stability_factor = SOV_liberals_party_popularity_stability_factor
+	democratic_drift = SOV_liberals_democratic_drift
+	nationalist_drift = SOV_liberals_nationalist_drift
+	monthly_population = SOV_liberals_monthly_population
+	tax_gain_multiplier_modifier = SOV_liberals_tax_gain_multiplier_modifier
+	bureaucracy_cost_multiplier_modifier = SOV_liberals_bureaucracy_cost_multiplier_modifier
+	expected_adm_modifier = SOV_liberals_expected_adm_modifier
+	expected_police_modifier = SOV_liberals_expected_police_modifier
+	expected_welfare_modifier = SOV_liberals_expected_welfare_modifier
+	expected_healthcare_modifier = SOV_liberals_expected_healthcare_modifier
+	drift_defence_factor = SOV_liberals_drift_defence_factor
+	population_tax_income_multiplier_modifier = SOV_liberals_population_tax_income_multiplier_modifier
+	police_cost_multiplier_modifier = SOV_liberals_police_cost_multiplier_modifier
+	productivity_growth_modifier = SOV_liberals_productivity_growth_modifier
+	intel_network_gain_factor = SOV_liberals_intel_network_gain_factor
+	army_personnel_cost_multiplier_modifier = SOV_liberals_army_personnel_cost_multiplier
+	research_speed_factor = SOV_liberals_research_speed_factor
+	foreign_influence_defense_modifier = SOV_liberals_foreign_influence_defense_modifier
+	health_cost_multiplier_modifier = SOV_liberals_health_cost_multiplier_modifier
+	social_cost_multiplier_modifier = SOV_liberals_social_cost_multiplier_modifier
+	education_cost_multiplier_modifier = SOV_liberals_education_cost_multiplier_modifier
+	corruption_cost_factor = SOV_liberals_corruption_cost_factor
+	migration_rate_value_factor = SOV_liberals_migration_rate_value_factor
+	production_speed_infrastructure_factor = SOV_liberals_production_speed_infrastructure_factor
+	production_speed_synthetic_refinery_factor = SOV_liberals_production_speed_synthetic_refinery_factor
+	renewable_energy_gain_multiplier = SOV_liberals_renewable_energy_gain_multiplier
+	fossil_pp_energy_generation_modifier = SOV_liberals_fossil_pp_energy_generation_modifier
+	local_resources_factor = SOV_liberals_local_resources_factor
+	companies_salary_multiplier_modifier = SOV_liberals_companies_salary_multiplier_modifier
+	production_speed_buildings_factor = SOV_liberals_production_speed_buildings_factor
+	production_speed_offices_factor = SOV_liberals_production_speed_offices_factor
+	consumer_goods_factor = SOV_liberals_consumer_goods_factor
+	companies_tax_gain_multiplier_modifier = SOV_liberals_companies_tax_gain_multiplier_modifier
+	small_businesses_productivity_modifier = SOV_liberals_small_businesses_productivity_modifier
+	agricolture_productivity_modifier = SOV_liberals_agricolture_productivity_modifier
+	offices_productivity = SOV_liberals_offices_productivity
+	civilian_factories_productivity = SOV_liberals_civilian_factories_productivity
+	return_on_investment_modifier = SOV_liberals_return_on_investment_modifier
+}
+#Navalny Free Enterprise Zone
+SOV_free_enterprise_zone_modifier = {
+	icon = GFX_idea_construction
+	state_production_speed_offices_factor = 0.10
+	state_production_speed_buildings_factor = 0.10
+	state_productivity_growth_modifier = 0.10
+}
+SOV_koba_politic_modifier = {
+	icon = "GFX_idea_sov_kob_politics"
+	enable = {
+		original_tag = SOV
+		has_completed_focus = SOV_kob_party_start
+	}
+	custom_modifier_tooltip = SOV_koba_attack_tooltip
+	remove_trigger = {
+		NOT = {
+		nationalist_military_junta_are_in_power = yes
+			has_country_leader = {
+				name = "Constantine Petrov"
+				ruling_only = yes
+			}
+		}
+	}
+	political_power_factor = SOV_koba_politic_political_power_factor
+	drift_defence_factor = SOV_koba_politic_drift_defence_factor
+	nationalist_drift = SOV_koba_politic_nationalist_drift
+	stability_factor = SOV_koba_politic_stability_factor
+	conscription_factor = SOV_koba_politic_conscription_factor
+	police_cost_multiplier_modifier = SOV_koba_politic_police_cost_multiplier_modifier
+	tax_gain_multiplier_modifier = SOV_koba_politic_tax_gain_multiplier_modifier
+	personnel_cost_multiplier_modifier = SOV_koba_politic_personnel_cost_multiplier_modifier
+	bureaucracy_cost_multiplier_modifier = SOV_koba_politic_bureaucracy_cost_multiplier_modifier
+	democratic_drift = SOV_koba_politic_democratic_drift
+	research_speed_factor = SOV_koba_politic_research_speed_factor
+	communism_drift = SOV_koba_politic_communism_drift
+	air_volunteer_cap = SOV_koba_politic_air_volunteer_cap
+	air_chief_cost_factor = SOV_koba_politic_air_chief_cost_factor
+	airforce_personnel_cost_multiplier_modifier = SOV_koba_politic_airforce_personnel_cost_multiplier_modifier
+}
+
+BSH_ufa_modifier = {
+	icon = "GFX_idea_construction"
+	enable = {
+		original_tag = BSH
+		has_completed_focus = BSH_souverginity
+	}
+	tax_gain_multiplier_modifier = BSH_ufa_modifier_tax_gain_multiplier_modifier
+	local_resources_factor = BSH_ufa_modifier_local_resources_factor
+	country_resource_oil = BSH_ufa_modifier_country_resource_oil
+	monthly_population = BSH_ufa_modifier_monthly_population
+	corporate_tax_income_multiplier_modifier = BSH_ufa_modifier_corporate_tax_income_multiplier_modifier
+}
+
+MLR_ukr_modifier = {
+	icon = "GFX_idea_mlr_reform"
+	enable = {
+		original_tag = MLR
+		has_completed_focus = MLR_start
+	}
+	political_power_factor = MLR_ukr_modifier_political_power_factor
+	stability_factor = MLR_ukr_modifier_stability_factor
+	encryption_factor = MLR_ukr_encryption_factor
+	army_core_defence_factor = MLR_ukr_army_core_defence_factor
+	resistance_growth = MLR_ukr_police_resistance_growth
+	police_cost_multiplier_modifier = MLR_ukr_police_cost_multiplier_modifier
+	foreign_influence_defense_modifier = MLR_ukr_foreign_influence_defense_modifier
+	personnel_cost_multiplier_modifier = MLR_ukr_personnel_cost_multiplier_modifier
+	army_defence_factor = MLR_ukr_army_defence_factor
+	army_org_factor = MLR_ukr_personnel_army_org_factor
+	army_attack_factor = MLR_ukr_army_attack_factor
+	training_time_army_factor = MLR_ukr_training_time_army_factor
+}
+#CONSTANTINOPLE STATE MODIFIERS
+SOV_const_rebels = {
+	enable = { always = yes }
+	remove_trigger = {
+		NOT = {
+			SOV = {
+				controls_state = 934
+			}
+		}
+	}
+	icon = GFX_idea_tur_militar_idea
+	state_resources_factor = -0.40
+	resistance_growth = 0.15
+	local_building_slots_factor = -0.10
+}
+

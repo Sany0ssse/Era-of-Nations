@@ -1,0 +1,76 @@
+on_actions = {
+	on_monthly_JAP = {
+		effect = {
+			if = {
+				limit = {
+					NOT = { has_idea = JAP_break_the_deflation_idea  }
+					check_variable = { inflation_percent_display > -5 }
+				}
+				set_temp_variable = { base_inflation_percent_change = -0.01 }
+				modify_base_inflation_effect = yes
+			}
+		}
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					check_variable = { base_inflation_percent > 0 }
+					has_positive_economy_vibe = yes
+					has_negative_economy_vibe = no
+				}
+				if = {
+					limit = { check_variable = { base_inflation_percent > 0.01 } }
+					set_temp_variable = { base_inflation_percent_change = -0.01 }
+					modify_base_inflation_effect = yes
+				}
+				else = { set_variable = { base_inflation_percent_from_effect = 0 } }
+			}
+			else_if = {
+				limit = {
+					check_variable = { base_inflation_percent < 0 }
+					has_positive_economy_vibe = no
+					has_negative_economy_vibe = yes
+				}
+				if = {
+					limit = { check_variable = { base_inflation_percent < -0.01 } }
+					set_temp_variable = { base_inflation_percent_change = 0.01 }
+					modify_base_inflation_effect = yes
+				}
+				else = { set_variable = { base_inflation_percent_from_effect = 0 } }
+			}
+		}
+	}
+
+	on_monthly = { #This scrtipt is sponsored by Haski - Deflation Arbuzer
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						check_variable = { global.month = 3 }
+						check_variable = { global.month = 6 }
+						check_variable = { global.month = 9 }
+						check_variable = { global.month = 12 }
+					}
+					has_idea = deflation_01
+					has_positive_economy_vibe = yes
+				}
+				random_list = {
+					5 = { country_event = { id = econvent.5 random_days = 15 } }
+					5 = { country_event = { id = econvent.11 random_days = 15 } }
+					5 = { country_event = { id = econvent.4 random_days = 15 } }
+					5 = { country_event = { id = econvent.16 random_days = 15 } }
+					1 = { country_event = { id = econvent.100 random_days = 15 } }
+					1 = { country_event = { id = econvent.101 random_days = 15 } }
+					1 = {
+						if = {
+							limit = { check_variable = { base_unemployment_percent < 0.15 } }
+							country_event = { id = econvent.17 random_days = 15 }
+						}
+					}
+					77 = {}
+				}
+			}
+		}
+	}
+}

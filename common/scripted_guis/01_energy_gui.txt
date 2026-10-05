@@ -1,0 +1,1536 @@
+scripted_gui = {
+
+	open_energy_window = {
+		window_name = "open_energy_gui"
+		context_type = player_context
+		parent_window_token = construction_tab
+
+		dirty = global.update_energy_ui
+
+		effects = {
+			open_energy_window_click = {
+				if = {
+					limit = { NOT = { has_country_flag = open_energy_screen } }
+					set_country_flag = open_energy_screen
+					update_energy_dirty_variable = yes
+				}
+				else = {
+					clr_country_flag = open_energy_screen
+				}
+			}
+		}
+	}
+
+	energy_scripted_gui = {
+		window_name = "energy_scripted_gui"
+		context_type = player_context
+
+		dirty = global.update_energy_ui
+
+		visible = {
+			ROOT = {
+				has_country_flag = open_energy_screen
+			}
+		}
+
+		properties = {
+			heavy_power_restrictions_button = { image = "[heavy_power_restrictions_button]" }
+			some_power_restrictions_button = { image = "[some_power_restrictions_button]" }
+			no_power_rules_button = { image = "[no_power_rules_button]" }
+			some_additional_consumption_button = { image = "[some_additional_consumption_button]" }
+			heavy_additional_consumption_button = { image = "[heavy_additional_consumption_button_image]" }
+
+			toggle_nuclear_power_plant_generation = { image = "[nuclear_power_plant_toggle]" }
+			toggle_fossil_fuel_power_plant_generation = { image = "[fossil_fuel_power_planet_toggle]" }
+
+			country_view_flag_button = {
+				image = "[?energy_selling_selected_TAG.GetFlag]"
+			}
+			country_view_flag_button1 = {
+				image = "[?nuclear_fuel_selling_selected_TAG.GetFlag]"
+			}
+		}
+
+		triggers = {
+			build_enrichment_facility_button_click_enabled = {
+				NOT = { has_active_mission = bankruptcy_incoming_collapse }
+				NOT = { has_active_mission = energy_building_enrichment_facilities }
+			}
+			build_enrichment_facility_button_shift_click_enabled = {
+				NOT = { has_active_mission = bankruptcy_incoming_collapse }
+				NOT = { has_active_mission = energy_building_enrichment_facilities }
+			}
+			build_battery_park_button_click_enabled = {
+				NOT = { has_active_mission = bankruptcy_incoming_collapse }
+				NOT = { has_active_mission = energy_building_battery_parks }
+				has_tech = utility_scale_battery_storage
+			}
+			build_battery_park_button_shift_click_enabled = {
+				NOT = { has_active_mission = bankruptcy_incoming_collapse }
+				NOT = { has_active_mission = energy_building_battery_parks }
+				has_tech = utility_scale_battery_storage
+			}
+			buy_fuel_for_money_button_click_enabled = {
+				NOT = { has_active_mission = bankruptcy_incoming_collapse }
+				if = { limit = { has_country_flag = recently_bought_fuel }
+					custom_trigger_tooltip = {
+						tooltip = recently_bought_fuel_tt
+						NOT = { has_country_flag = recently_bought_fuel }
+					}
+				}
+			}
+			enable_nuclear_reactor_fuel_production_click_enabled = {
+				has_tech = reactor1
+				has_enrichment_facilities = yes
+			}
+			increase_energy_ammount_number_click_enabled = {
+				var:energy_selling_selected_TAG = {
+					check_variable = { energy_balance > PREV.temp_energy_ammount }
+				}
+			}
+			decrease_energy_ammount_number_click_enabled = {
+				set_temp_variable = { energy_balance_check = energy_balance }
+				multiply_temp_variable = { energy_balance_check = -1 }
+				check_variable = { temp_energy_ammount > energy_balance_check }
+			}
+			decrease_energy_price_number_click_enabled = {
+				check_variable = { temp_energy_price > 0 }
+			}
+			increase_nuclear_fuel_ammount_number_click_enabled = {
+				var:nuclear_fuel_selling_selected_TAG = {
+					check_variable = { var_reactor_material_stockpile > PREV.temp_nuclear_fuel_ammount }
+				}
+			}
+			decrease_nuclear_fuel_ammount_number_click_enabled = {
+				set_temp_variable = { nuclear_fuel_check = var_reactor_material_stockpile }
+				multiply_temp_variable = { nuclear_fuel_check = -1 }
+				check_variable = { temp_nuclear_fuel_ammount > nuclear_fuel_check }
+			}
+			decrease_nuclear_fuel_price_number_click_enabled = {
+				check_variable = { temp_nuclear_fuel_price > 0 }
+			}
+			confirm_energy_sell_click_enabled = {
+				NOT = { has_country_flag = question_about_contract }
+				NOT = { tag = energy_selling_selected_TAG }
+				has_variable = energy_selling_selected_TAG
+				var:energy_selling_selected_TAG = { NOT = { has_country_flag = question_about_contract } }
+			}
+			confirm_nuclear_fuel_sell_click_enabled = {
+				NOT = { has_country_flag = currently_considering_an_offer }
+				NOT = { tag = nuclear_fuel_selling_selected_TAG }
+				has_variable = nuclear_fuel_selling_selected_TAG
+				var:nuclear_fuel_selling_selected_TAG = { NOT = { has_country_flag = currently_considering_an_offer } }
+			}
+
+			total_ffp_bg_visible = { has_country_flag = energy_main }
+			total_ffp_amount_visible = { has_country_flag = energy_main }
+			total_ffp_visible = { has_country_flag = energy_main }
+			total_nuclear_reactor_bg_visible = { has_country_flag = energy_main }
+			total_nuclear_reactor_amount_visible = { has_country_flag = energy_main }
+			total_nuclear_reactor_visible = { has_country_flag = energy_main }
+			total_renewable_energy_bg_visible = { has_country_flag = energy_main }
+			total_renewable_energy_amount_visible = { has_country_flag = energy_main }
+			total_renewable_energy_visible = { has_country_flag = energy_main }
+			total_fuel_silo_bg_visible = { has_country_flag = energy_main }
+			total_fuel_silo_amount_visible = { has_country_flag = energy_main }
+			total_fuel_silo_visible = { has_country_flag = energy_main }
+			energy_generation_total_visible = { has_country_flag = energy_main }
+			energy_consumption_total_visible = { has_country_flag = energy_main }
+			energy_fulfillment_total_visible = { has_country_flag = energy_main }
+			net_energy_balance_visible = { has_country_flag = energy_main }
+			total_energy_misc_value_headers_visible = { has_country_flag = energy_main }
+			total_hourly_fuel_consumption_values_visible = { has_country_flag = energy_main }
+			total_hourly_population_fuel_consumption_values_visible = { has_country_flag = energy_main }
+			total_weekly_nuclear_material_production_values_visible = { has_country_flag = energy_main }
+			stored_energy_visible = { has_country_flag = energy_main }
+			heavy_power_restrictions_button_visible = { has_country_flag = energy_main }
+			some_power_restrictions_button_visible = { has_country_flag = energy_main }
+			no_power_rules_button_visible = { has_country_flag = energy_main }
+			some_additional_consumption_button_visible = { has_country_flag = energy_main }
+			heavy_additional_consumption_button_visible = { has_country_flag = energy_main }
+			build_enrichment_facility_button_visible = { has_country_flag = energy_main }
+			enable_nuclear_reactor_fuel_production_visible = { has_country_flag = energy_main }
+			uranium_enrichment_visible = { has_country_flag = energy_main }
+			nuclear_energy_button_visible = { has_country_flag = energy_main }
+			ongoing_energy_anim_visible = { has_country_flag = energy_main }
+			nuclear_energy_prod_visible = { has_country_flag = energy_main }
+			build_battery_park_button_visible = { has_country_flag = energy_main }
+			buy_fuel_for_money_button_visible = { has_country_flag = energy_main }
+			toggle_power_production_type_visible = { has_country_flag = energy_main }
+			toggle_fossil_fuel_power_plant_generation_visible = { has_country_flag = energy_main }
+			toggle_nuclear_power_plant_generation_visible = { has_country_flag = energy_main }
+			refresh_energy_screen_bg_visible = { has_country_flag = energy_main }
+			refresh_energy_screen_text_visible = { has_country_flag = energy_main }
+			refresh_energy_screen_sell_bg_visible = { has_country_flag = energy_sell }
+			refresh_energy_screen_sell_text_visible = { has_country_flag = energy_sell }
+			energy_selling_text_visible = { has_country_flag = energy_sell }
+			selected_country_view_visible = { has_country_flag = energy_sell }
+			country_view_flag_button_visible = { has_country_flag = energy_sell }
+			nuclear_fuel_selling_text_visible = { has_country_flag = energy_sell }
+			selected_country_view1_visible = { has_country_flag = energy_sell }
+			country_view_flag_button1_visible = { has_country_flag = energy_sell }
+			ammount_visible = { has_country_flag = energy_sell }
+			energy_ammount_visible = { has_country_flag = energy_sell }
+			energy_ammount_number_visible = { has_country_flag = energy_sell }
+			increase_energy_ammount_number_visible = { has_country_flag = energy_sell }
+			decrease_energy_ammount_number_visible = { has_country_flag = energy_sell }
+			energy_ammount_bg_visible = { has_country_flag = energy_sell }
+			price_visible = { has_country_flag = energy_sell }
+			energy_price_visible = { has_country_flag = energy_sell }
+			energy_price_number_visible = { has_country_flag = energy_sell }
+			increase_energy_price_number_visible = { has_country_flag = energy_sell }
+			decrease_energy_price_number_visible = { has_country_flag = energy_sell }
+			energy_price_bg_visible = { has_country_flag = energy_sell }
+			confirm_energy_sell_visible = { has_country_flag = energy_sell }
+			ammount1_visible = { has_country_flag = energy_sell }
+			nuclear_fuel_ammount_visible = { has_country_flag = energy_sell }
+			nuclear_fuel_ammount_number_visible = { has_country_flag = energy_sell }
+			increase_nuclear_fuel_ammount_number_visible = { has_country_flag = energy_sell }
+			decrease_nuclear_fuel_ammount_number_visible = { has_country_flag = energy_sell }
+			nuclear_fuel_ammount_bg_visible = { has_country_flag = energy_sell }
+			price1_visible = { has_country_flag = energy_sell }
+			nuclear_fuel_price_visible = { has_country_flag = energy_sell }
+			nuclear_fuel_price_number_visible = { has_country_flag = energy_sell }
+			increase_nuclear_fuel_price_number_visible = { has_country_flag = energy_sell }
+			decrease_nuclear_fuel_price_number_visible = { has_country_flag = energy_sell }
+			nuclear_fuel_price_bg_visible = { has_country_flag = energy_sell }
+			confirm_nuclear_fuel_sell_visible = { has_country_flag = energy_sell }
+		}
+
+		effects = {
+			# Refresh Energy Screen
+			refresh_energy_screen_bg_click = {
+				log = "[GetDateText]: [THIS.GetName]: DEBUG: 1049 Triggered Energy Refresh"
+				if = {
+					limit = { NOT = { has_country_flag = question_about_contract } }
+					clear_variable = temp_energy_ammount
+					clear_variable = temp_energy_price
+					clear_variable = energy_selling_selected_TAG
+				}
+				if = {
+					limit = { NOT = { has_country_flag = currently_considering_an_offer } }
+					clear_variable = temp_nuclear_fuel_ammount
+					clear_variable = temp_nuclear_fuel_price
+					clear_variable = nuclear_fuel_selling_selected_TAG
+				}
+				ingame_update_setup = yes
+				if = {
+					limit = { is_ai = no }
+					force_update_dynamic_modifier = yes
+				}
+			}
+			refresh_energy_screen_sell_bg_click = {
+				log = "[GetDateText]: [THIS.GetName]: DEBUG: 1049 Triggered Energy Refresh"
+				if = {
+					limit = { NOT = { has_country_flag = question_about_contract } }
+					clear_variable = temp_energy_ammount
+					clear_variable = temp_energy_price
+					clear_variable = energy_selling_selected_TAG
+				}
+				if = {
+					limit = { NOT = { has_country_flag = currently_considering_an_offer } }
+					clear_variable = temp_nuclear_fuel_ammount
+					clear_variable = temp_nuclear_fuel_price
+					clear_variable = nuclear_fuel_selling_selected_TAG
+				}
+				ingame_update_setup = yes
+				if = {
+					limit = { is_ai = no }
+					force_update_dynamic_modifier = yes
+				}
+			}
+			close_energy_screen_button_click = {
+				if = {
+					limit = { NOT = { has_country_flag = question_about_contract } }
+					clear_variable = temp_energy_ammount
+					clear_variable = temp_energy_price
+					clear_variable = energy_selling_selected_TAG
+				}
+				if = {
+					limit = { NOT = { has_country_flag = currently_considering_an_offer } }
+					clear_variable = temp_nuclear_fuel_ammount
+					clear_variable = temp_nuclear_fuel_price
+					clear_variable = nuclear_fuel_selling_selected_TAG
+				}
+				clr_country_flag = open_energy_screen
+			}
+			main_category_button_click = {
+				if = {
+					limit = { has_country_flag = energy_sell }
+					clr_country_flag = energy_sell
+				}
+				if = {
+					limit = { NOT = { has_country_flag = energy_main } }
+					set_country_flag = energy_main
+				}
+				if = {
+					limit = { NOT = { has_country_flag = question_about_contract } }
+					clear_variable = temp_energy_ammount
+					clear_variable = temp_energy_price
+					clear_variable = energy_selling_selected_TAG
+				}
+				if = {
+					limit = { NOT = { has_country_flag = currently_considering_an_offer } }
+					clear_variable = temp_nuclear_fuel_ammount
+					clear_variable = temp_nuclear_fuel_price
+					clear_variable = nuclear_fuel_selling_selected_TAG
+				}
+				ingame_update_setup = yes
+			}
+			sell_category_button_click = {
+				if = {
+					limit = { has_country_flag = energy_main }
+					clr_country_flag = energy_main
+				}
+				if = {
+					limit = { NOT = { has_country_flag = energy_sell } }
+					set_country_flag = energy_sell
+				}
+				ingame_update_setup = yes
+			}
+			# Restrictions/Encouragement
+			heavy_power_restrictions_button_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI  heavy_power_restrictions_button_click"
+				add_ideas = heavy_power_restrictions_spirit
+				remove_ideas = {
+					some_power_restrictions_spirit
+					some_additional_consumption_spirit
+					heavy_additional_consumption_spirit
+				}
+				ingame_update_setup = yes
+			}
+			some_power_restrictions_button_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI  some_power_restrictions_button_click"
+				add_ideas = some_power_restrictions_spirit
+				remove_ideas = {
+					heavy_power_restrictions_spirit
+					some_additional_consumption_spirit
+					heavy_additional_consumption_spirit
+				}
+				ingame_update_setup = yes
+			}
+			no_power_rules_button_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI  no_power_rules_button_click"
+				remove_ideas = {
+					heavy_power_restrictions_spirit
+					some_power_restrictions_spirit
+					some_additional_consumption_spirit
+					heavy_additional_consumption_spirit
+				}
+				ingame_update_setup = yes
+			}
+			some_additional_consumption_button_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI  some_additional_consumption_button_click"
+				add_ideas = some_additional_consumption_spirit
+				remove_ideas = {
+					some_power_restrictions_spirit
+					heavy_power_restrictions_spirit
+					heavy_additional_consumption_spirit
+				}
+				ingame_update_setup = yes
+			}
+			heavy_additional_consumption_button_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI  heavy_additional_consumption_button_click"
+				add_ideas = heavy_additional_consumption_spirit
+				remove_ideas = {
+					some_power_restrictions_spirit
+					some_additional_consumption_spirit
+					heavy_power_restrictions_spirit
+				}
+				ingame_update_setup = yes
+			}
+			# Other Buttons
+			build_enrichment_facility_button_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI build_enrichment_facility_button"
+				clr_country_flag = build_three_enrichment_facility
+				clr_country_flag = single_enrichment_facility
+				set_country_flag = single_enrichment_facility
+				set_variable = { enrichment_facility_time = 120 }
+				activate_mission = energy_building_enrichment_facilities
+				if = { limit = { NOT = { is_in_array = { global.enrichment_countries = THIS.id } } }
+					random_list = {
+						30 = {
+							random_country = {
+								limit = {
+									OR = {
+										has_idea = superpower
+										has_idea = large_power
+										has_idea = great_power
+									}
+									has_enrichment_facilities = yes
+									OR = {
+										AND = {
+											PREV = { has_government = democratic }
+											NOT = { has_government = democratic }
+										}
+										AND = {
+											PREV = { has_government = neutrality }
+											NOT = { has_government = neutrality }
+										}
+										AND = {
+											PREV = { has_government = communism }
+											NOT = { has_government = communism }
+										}
+										AND = {
+											PREV = { has_government = nationalist }
+											NOT = { has_government = nationalist }
+										}
+										AND = {
+											PREV = { has_government = fascism }
+											NOT = { has_government = fascism }
+										}
+									}
+								}
+								set_variable = { new_enrichment_country = PREV.id }
+								country_event = energy.4
+							}
+						}
+						70 = { }
+					}
+				}
+			}
+			build_enrichment_facility_button_shift_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI build_enrichment_facility_button"
+				clr_country_flag = build_three_enrichment_facility
+				clr_country_flag = single_enrichment_facility
+				set_country_flag = build_three_enrichment_facility
+				set_variable = { enrichment_facility_time = 290 }
+				activate_mission = energy_building_enrichment_facilities
+				if = { limit = { NOT = { is_in_array = { global.enrichment_countries = THIS.id } } }
+					random_list = {
+						30 = {
+							random_country = {
+								limit = {
+									OR = {
+										has_idea = superpower
+										has_idea = large_power
+										has_idea = great_power
+									}
+									has_enrichment_facilities = yes
+									OR = {
+										AND = {
+											PREV = { has_government = democratic }
+											NOT = { has_government = democratic }
+										}
+										AND = {
+											PREV = { has_government = neutrality }
+											NOT = { has_government = neutrality }
+										}
+										AND = {
+											PREV = { has_government = communism }
+											NOT = { has_government = communism }
+										}
+										AND = {
+											PREV = { has_government = nationalist }
+											NOT = { has_government = nationalist }
+										}
+										AND = {
+											PREV = { has_government = fascism }
+											NOT = { has_government = fascism }
+										}
+									}
+								}
+								set_variable = { new_enrichment_country = PREV.id }
+								country_event = energy.4
+							}
+						}
+						70 = { }
+					}
+				}
+			}
+			build_battery_park_button_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI build_battery_park_button_click"
+				set_country_flag = single_battery_park
+				set_variable = { ROOT.battery_park_time = 30 }
+				activate_mission = energy_building_battery_parks
+			}
+			build_battery_park_button_shift_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI build_battery_park_button_shift_click"
+				set_country_flag = build_three_battery_parks
+				set_variable = { ROOT.battery_park_time = 60 }
+				activate_mission = energy_building_battery_parks
+			}
+			buy_fuel_for_money_button_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI buy_fuel_for_money_button_click"
+				buy_fuel_from_the_market_effect = yes
+				set_country_flag = { flag = recently_bought_fuel value = 1 days = 28 }
+			}
+			enable_nuclear_reactor_fuel_production_click = {
+				log = "[GetDateText]: [Root.GetName]: Energy GUI enable_nuclear_reactor_fuel_production_click"
+				if = {
+					limit = { has_country_flag = enabled_nuclear_reactor_fuel_production }
+					clr_country_flag = enabled_nuclear_reactor_fuel_production
+				}
+				else = {
+					set_country_flag = enabled_nuclear_reactor_fuel_production
+				}
+				ingame_update_setup = yes
+			}
+
+			# Power Generation Toggles
+			toggle_fossil_fuel_power_plant_generation_click = {
+				if = {
+					limit = { has_country_flag = disable_fossil_fuel_power_plant_flag }
+					clr_country_flag = disable_fossil_fuel_power_plant_flag
+					custom_effect_tooltip = toggle_fossil_fuel_power_plant_generation_one_tt
+				}
+				else = {
+					set_country_flag = disable_fossil_fuel_power_plant_flag
+					custom_effect_tooltip = toggle_fossil_fuel_power_plant_generation_two_tt
+				}
+				ingame_update_setup = yes
+			}
+			toggle_nuclear_power_plant_generation_click = {
+				if = {
+					limit = { has_country_flag = disable_nuclear_power_plant_flag }
+					clr_country_flag = disable_nuclear_power_plant_flag
+					custom_effect_tooltip = toggle_nuclear_power_plant_generation_one_tt
+				}
+				else = {
+					set_country_flag = disable_nuclear_power_plant_flag
+					custom_effect_tooltip = toggle_nuclear_power_plant_generation_two_tt
+				}
+				ingame_update_setup = yes
+			}
+			country_view_flag_button_click = {
+				clear_variable = energy_selling_selected_TAG
+				clear_array = temp_energy_sell_selection_countries
+				every_other_country = {
+					if = {
+						limit = {
+							has_country_flag = energy_agreement@ROOT
+							NOT = { has_country_flag = question_about_contract }
+						}
+						ROOT = { add_to_array = { temp_energy_sell_selection_countries = PREV.id } }
+					}
+				}
+				set_country_flag = open_energy_sell_country_selection
+				ingame_update_setup = yes
+			}
+			country_view_flag_button1_click = {
+				clear_variable = nuclear_fuel_selling_selected_TAG
+				clear_array = temp_nuclear_fuel_sell_selection_countries
+				every_other_country = {
+					if = {
+						limit = { has_nuclear_reactors = yes }
+						ROOT = { add_to_array = { temp_nuclear_fuel_sell_selection_countries = PREV.id } }
+					}
+				}
+				set_country_flag = open_nuclear_fuel_sell_country_selection
+				ingame_update_setup = yes
+			}
+			increase_energy_ammount_number_click = {
+				add_to_variable = { temp_energy_ammount = 1 }
+				ingame_update_setup = yes
+			}
+			decrease_energy_ammount_number_click = {
+				add_to_variable = { temp_energy_ammount = -1 }
+				ingame_update_setup = yes
+			}
+			increase_energy_price_number_click = {
+				add_to_variable = { temp_energy_price = 0.01 }
+				ingame_update_setup = yes
+			}
+			decrease_energy_price_number_click = {
+				add_to_variable = { temp_energy_price = -0.01 }
+				ingame_update_setup = yes
+			}
+			increase_nuclear_fuel_ammount_number_click = {
+				add_to_variable = { temp_nuclear_fuel_ammount = 100 }
+				ingame_update_setup = yes
+			}
+			decrease_nuclear_fuel_ammount_number_click = {
+				add_to_variable = { temp_nuclear_fuel_ammount = -100 }
+				ingame_update_setup = yes
+			}
+			increase_nuclear_fuel_price_number_click = {
+				add_to_variable = { temp_nuclear_fuel_price = 0.01 }
+				ingame_update_setup = yes
+			}
+			decrease_nuclear_fuel_price_number_click = {
+				add_to_variable = { temp_nuclear_fuel_price = -0.01 }
+				ingame_update_setup = yes
+			}
+			confirm_energy_sell_click = {
+				if = {
+					limit = { check_variable = { temp_energy_ammount > 0 } }
+					if = {
+						limit = { is_ai = yes }
+						set_country_flag = { flag = energy_recall_calldown@energy_selling_selected_TAG days = 365 value = 1 }
+					}
+					if = {
+						limit = {
+							NOT = {
+								is_in_array = {
+									array = energy_contractors
+									value = energy_selling_selected_TAG
+								}
+							}
+						}
+						set_country_flag = question_about_contract
+						var:energy_selling_selected_TAG = {
+							country_event = energy_selling.4
+							set_country_flag = question_about_contract
+						}
+					}
+					else = {
+						for_each_loop = {
+							array = energy_contractors
+							value = v
+							index = i
+							break = break
+							if = {
+								limit = { check_variable = { v = energy_selling_selected_TAG } }
+								if = {
+									limit = {
+										OR = {
+											NOT = { check_variable = { energy_contracts_ammount^i = temp_energy_ammount } }
+											NOT = { check_variable = { energy_contracts_price^i = temp_energy_price } }
+										}
+									}
+									set_variable = { index_to_remove = i }
+									add_to_variable = { break = 1 }
+								}
+								else = {
+									add_to_variable = { break = 1 }
+								}
+							}
+						}
+						if = {
+							limit = { has_variable = index_to_remove }
+							remove_from_array = {
+								array = energy_contractors
+								index = index_to_remove
+							}
+							remove_from_array = {
+								array = energy_contracts_ammount
+								index = index_to_remove
+							}
+							remove_from_array = {
+								array = energy_contracts_price
+								index = index_to_remove
+							}
+							clear_variable = index_to_remove
+							set_country_flag = question_about_contract
+							var:energy_selling_selected_TAG = {
+								for_each_loop = {
+									array = energy_contractors
+									value = v
+									index = i
+									break = break
+									if = {
+										limit = { check_variable = { v = PREV } }
+										set_variable = { index_to_remove = i }
+										add_to_variable = { break = 1 }
+									}
+								}
+								remove_from_array = {
+									array = energy_contractors
+									index = index_to_remove
+								}
+								remove_from_array = {
+									array = energy_contracts_ammount
+									index = index_to_remove
+								}
+								remove_from_array = {
+									array = energy_contracts_price
+									index = index_to_remove
+								}
+								clear_variable = index_to_remove
+								set_country_flag = question_about_contract
+								country_event = energy_selling.4
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = { check_variable = { temp_energy_ammount < 0 } }
+					if = {
+						limit = { is_ai = yes }
+						set_country_flag = { flag = energy_recall_calldown@energy_selling_selected_TAG days = 365 value = 1 }
+					}
+					if = {
+						limit = {
+							NOT = {
+								is_in_array = {
+									array = energy_contractors
+									value = energy_selling_selected_TAG
+								}
+							}
+						}
+						set_country_flag = question_about_contract
+						var:energy_selling_selected_TAG = {
+							country_event = energy_selling.1
+							set_country_flag = question_about_contract
+						}
+					}
+					else = {
+						for_each_loop = {
+							array = energy_contractors
+							value = v
+							index = i
+							break = break
+							if = {
+								limit = { check_variable = { v = energy_selling_selected_TAG } }
+								if = {
+									limit = {
+										OR = {
+											NOT = { check_variable = { energy_contracts_ammount^i = temp_energy_ammount } }
+											NOT = { check_variable = { energy_contracts_price^i = temp_energy_price } }
+										}
+									}
+									set_variable = { index_to_remove = i }
+									add_to_variable = { break = 1 }
+								}
+								else = {
+									add_to_variable = { break = 1 }
+								}
+							}
+						}
+						if = {
+							limit = { has_variable = index_to_remove }
+							remove_from_array = {
+								array = energy_contractors
+								index = index_to_remove
+							}
+							remove_from_array = {
+								array = energy_contracts_ammount
+								index = index_to_remove
+							}
+							remove_from_array = {
+								array = energy_contracts_price
+								index = index_to_remove
+							}
+							clear_variable = index_to_remove
+							set_country_flag = question_about_contract
+							var:energy_selling_selected_TAG = {
+								for_each_loop = {
+									array = energy_contractors
+									value = v
+									index = i
+									break = break
+									if = {
+										limit = { check_variable = { v = PREV } }
+										set_variable = { index_to_remove = i }
+										add_to_variable = { break = 1 }
+									}
+								}
+								remove_from_array = {
+									array = energy_contractors
+									index = index_to_remove
+								}
+								remove_from_array = {
+									array = energy_contracts_ammount
+									index = index_to_remove
+								}
+								remove_from_array = {
+									array = energy_contracts_price
+									index = index_to_remove
+								}
+								clear_variable = index_to_remove
+								set_country_flag = question_about_contract
+								country_event = energy_selling.1
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						check_variable = { temp_energy_ammount = 0 }
+						is_in_array = {
+							array = energy_contractors
+							value = energy_selling_selected_TAG
+						}
+					}
+					if = {
+						limit = { is_ai = yes }
+						set_country_flag = { flag = energy_recall_calldown@energy_selling_selected_TAG days = 365 value = 1 }
+					}
+					for_each_loop = {
+						array = energy_contractors
+						value = v
+						index = i
+						break = break
+						if = {
+							limit = { check_variable = { v = energy_selling_selected_TAG } }
+							set_variable = { index_to_remove = i }
+							add_to_variable = { break = 1 }
+						}
+					}
+					if = {
+						limit = { has_variable = index_to_remove }
+						remove_from_array = {
+							array = energy_contractors
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_ammount
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_price
+							index = index_to_remove
+						}
+						clear_variable = index_to_remove
+						set_country_flag = question_about_contract
+						var:energy_selling_selected_TAG = {
+							for_each_loop = {
+								array = energy_contractors
+								value = v
+								index = i
+								break = break
+								if = {
+									limit = { check_variable = { v = PREV } }
+									set_variable = { index_to_remove = i }
+									add_to_variable = { break = 1 }
+								}
+							}
+							remove_from_array = {
+								array = energy_contractors
+								index = index_to_remove
+							}
+							remove_from_array = {
+								array = energy_contracts_ammount
+								index = index_to_remove
+							}
+							remove_from_array = {
+								array = energy_contracts_price
+								index = index_to_remove
+							}
+							clear_variable = index_to_remove
+							set_country_flag = question_about_contract
+							country_event = energy_selling.5
+						}
+					}
+				}
+			}
+			confirm_nuclear_fuel_sell_click = {
+				if = {
+					limit = { check_variable = { temp_nuclear_fuel_ammount > 0 } }
+					set_country_flag = currently_considering_an_offer
+					var:nuclear_fuel_selling_selected_TAG = {
+						set_country_flag = currently_considering_an_offer
+						country_event = energy.1
+					}
+					if = {
+						limit = { is_ai = yes }
+						set_country_flag = { flag = energy_nuclear_calldown@nuclear_fuel_selling_selected_TAG days = 365 value = 1 }
+					}
+				}
+				else_if = {
+					limit = { check_variable = { temp_nuclear_fuel_ammount < 0 } }
+					set_country_flag = currently_considering_an_offer
+					var:nuclear_fuel_selling_selected_TAG = {
+						set_country_flag = currently_considering_an_offer
+						country_event = energy.10
+					}
+					if = {
+						limit = { is_ai = yes }
+						set_country_flag = { flag = energy_nuclear_calldown@nuclear_fuel_selling_selected_TAG days = 365 value = 1 }
+					}
+				}
+			}
+		}
+
+		# AI Section
+		# Note: 3 days - 72 Hrs
+		# Functional Notes:
+		# ai_enabled - triggers that engage the AI for this GUI
+		# ai_test_interval - time frame between AI checks
+		# ai_check - trigger the AI looks for to determine if it needs to look at a button
+		# ai_weights - modifiers to determine AI habits
+		# ai_max_weight_taken_per_test - Determines the number of elements to check for the GUI
+
+		# If you wish to see the values outputted from this. enable human_ai and view ai.log in the logs
+		ai_enabled = { always = yes }
+		ai_test_interval = 168 # 7 Days
+		ai_test_variance = 0
+		ai_max_weight_taken_per_test = 4
+
+		ai_check = {
+			# Need to Check Energy Sum Against Consumption
+			OR = {
+				has_fuel < 350000
+				AND = {
+					is_in_array = { global.enrichment_countries = ROOT.id }
+					check_variable = { var_reactor_material_stockpile < 5000 }
+				}
+
+				# Check this
+				OR = {
+					check_variable = { energy_balance_value_display > 1.05 }
+					check_variable = { energy_balance_value_display < 0.95 }
+				}
+			}
+		}
+
+		ai_weights = {
+			buy_fuel_for_money_button_click = {
+				ai_will_do = {
+					factor = 100
+					modifier = {
+						factor = 0
+						has_fuel > 1000000
+					}
+				}
+			}
+			build_battery_park_button_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						add = 5
+						synthetic_refinery > 0
+						NOT = {
+							has_active_mission = bankruptcy_incoming_collapse
+						}
+					}
+					modifier = {
+						add = 100
+						set_temp_variable = { battery_parks_to_renewable_ratio = number_of_battery_parks }
+						if = {
+							limit = {
+								check_variable = { biofuel_refineries = 0 }
+							}
+							set_temp_variable = { battery_parks_to_renewable_ratio = 100 }
+						}
+						else = {
+							divide_temp_variable = { battery_parks_to_renewable_ratio = biofuel_refineries }
+						}
+						check_variable = { battery_parks_to_renewable_ratio < 0.07 }
+						NOT = {
+							has_active_mission = bankruptcy_incoming_collapse
+						}
+					}
+					modifier = {
+						factor = 0
+						set_temp_variable = { battery_parks_to_renewable_ratio = number_of_battery_parks }
+						if = {
+							limit = {
+								check_variable = { biofuel_refineries = 0 }
+							}
+							set_temp_variable = { battery_parks_to_renewable_ratio = 100 }
+						}
+						else = {
+							divide_temp_variable = { battery_parks_to_renewable_ratio = biofuel_refineries }
+						}
+						check_variable = { battery_parks_to_renewable_ratio > 0.07 }
+					}
+				}
+			}
+			build_enrichment_facility_button_click = {
+				ai_will_do = {
+					factor = 1
+					modifier = {
+						add = 20
+						is_in_array = { global.enrichment_countries = ROOT.id }
+						check_variable = { var_reactor_material_stockpile < 5000 }
+					}
+					modifier = {
+						factor = 5
+						check_variable = { nuclear_fuel_consumption > nuclear_reactor_fuel_production }
+					}
+					modifier = {
+						factor = 3
+						check_variable = { nuclear_reactors > 10 }
+					}
+					modifier = {
+						factor = 3
+						check_variable = { nuclear_reactors > 15 }
+					}
+					modifier = {
+						factor = 3
+						check_variable = { nuclear_reactors > 20 }
+					}
+					modifier = {
+						factor = 0
+						OR = {
+							has_active_mission = bankruptcy_incoming_collapse
+							check_variable = { nuclear_fuel_consumption < nuclear_reactor_fuel_production }
+							check_variable = { nuclear_reactors < 10 }
+							NOT = { has_idea = non_nuclear_power }
+						}
+					}
+				}
+			}
+			# Power Consumption
+			heavy_power_restrictions_button_click = {
+				ai_will_do = {
+					base = 1
+					modifier = {
+						add = 100
+						check_variable = { energy_balance_value_display < 0.75 }
+						has_idea = some_additional_consumption_spirit
+						NOT = {
+							has_idea = some_additional_consumption_spirit
+							has_idea = heavy_additional_consumption_spirit
+						}
+					}
+					# DO NOT GO TO HEAVY POWER RESTRICTION UNLESS NEED BE
+					modifier = {
+						factor = 0
+						check_variable = { energy_balance_value_display > 0.75 }
+					}
+					modifier = {
+						add = 500
+						check_variable = { energy_balance_value_display < 0 }
+						has_idea = some_power_restrictions_spirit
+					}
+				}
+			}
+			some_power_restrictions_button_click = {
+				ai_will_do = {
+					base = 1
+					# Power has recovered, add up the restrictions
+					modifier = {
+						add = 100
+						check_variable = { energy_balance_value_display > 1.05 }
+						has_idea = heavy_power_restrictions_spirit
+						NOT = {
+							has_idea = some_additional_consumption_spirit
+							has_idea = heavy_additional_consumption_spirit
+						}
+					}
+					modifier = {
+						add = 150
+						check_variable = { energy_balance_value_display < 0.85 }
+						NOT = {
+							has_idea = some_additional_consumption_spirit
+							has_idea = heavy_additional_consumption_spirit
+						}
+					}
+					modifier = {
+						factor = 0
+						check_variable = { energy_balance_value_display > 0.95 }
+					}
+					modifier = {
+						add = 500
+						check_variable = { energy_balance_value_display < 0 }
+						NOT = {	has_idea = heavy_power_restrictions_spirit	}
+						NOT = {	has_idea = some_additional_consumption_spirit	}
+						NOT = {	has_idea = heavy_additional_consumption_spirit	}
+					}
+				}
+			}
+			no_power_rules_button_click = {
+				ai_will_do = {
+					base = 100
+					modifier = {
+						add = 100
+						check_variable = { energy_balance_value_display > 1.15 }
+						OR = {
+							has_idea = heavy_power_restrictions_spirit
+							has_idea = some_power_restrictions_spirit
+						}
+					}
+					modifier = {
+						add = 100
+						check_variable = { energy_balance_value_display > 1.10 }
+						has_idea = some_power_restrictions_spirit
+					}
+					modifier = {
+						add = 100
+						check_variable = { energy_balance_value_display < 0.90 }
+						has_idea = some_additional_consumption_spirit
+					}
+					modifier = {
+						factor = 0
+						NOT = {
+							has_idea = heavy_power_restrictions_spirit
+							has_idea = some_power_restrictions_spirit
+							has_idea = some_additional_consumption_spirit
+							has_idea = heavy_additional_consumption_spirit
+						}
+					}
+					modifier = {
+						factor = 0
+						OR = {
+							has_idea = some_additional_consumption_spirit
+							has_idea = heavy_additional_consumption_spirit
+						}
+					}
+					modifier = {
+						factor = 0
+						original_tag = USA
+					}
+					modifier = {
+						add = 500
+						check_variable = { energy_balance_value_display < 0 }
+						has_idea = some_additional_consumption_button_click
+					}
+				}
+			}
+			some_additional_consumption_button_click = {
+				ai_will_do = {
+					base = 1
+					modifier = {
+						add = 50
+						check_variable = { energy_balance_value_display > 1.15 }
+						NOT = {
+							has_idea = heavy_power_restrictions_spirit
+							has_idea = some_power_restrictions_spirit
+							has_idea = heavy_additional_consumption_spirit
+						}
+					}
+					modifier = {
+						add = 50
+						check_variable = { energy_balance_value_display < 0.90 }
+						has_idea = heavy_additional_consumption_spirit
+						NOT = {
+							has_idea = heavy_power_restrictions_spirit
+							has_idea = some_power_restrictions_spirit
+						}
+					}
+					modifier = {
+						factor = 0
+						check_variable = { energy_balance_value_display > 1.15 }
+						has_idea = heavy_additional_consumption_spirit
+						NOT = {
+							has_idea = heavy_power_restrictions_spirit
+							has_idea = some_power_restrictions_spirit
+						}
+					}
+					modifier = {
+						factor = 0
+						check_variable = { energy_balance_value_display > 0.95 }
+						check_variable = { energy_balance_value_display < 1.15 }
+					}
+					modifier = {
+						factor = 0
+						check_variable = { energy_balance_value_display < 0.95 }
+						NOT = {
+							has_idea = heavy_additional_consumption_spirit
+							has_idea = heavy_power_restrictions_spirit
+							has_idea = some_power_restrictions_spirit
+						}
+					}
+					modifier = {
+						add = 100
+						original_tag = USA
+					}
+					modifier = {
+						add = 500
+						check_variable = { energy_balance_value_display < 0 }
+						has_idea = heavy_additional_consumption_spirit
+					}
+				}
+			}
+			heavy_additional_consumption_button_click = {
+				ai_will_do = {
+					base = 1
+					modifier = {
+						add = 50
+						check_variable = { energy_balance_value_display > 1.15 }
+						has_idea = some_additional_consumption_spirit
+						NOT = {
+							has_idea = heavy_power_restrictions_spirit
+							has_idea = some_power_restrictions_spirit
+						}
+					}
+					modifier = {
+						factor = 0
+						check_variable = { energy_balance_value_display > 0.95 }
+						check_variable = { energy_balance_value_display < 1.15 }
+					}
+					modifier = {
+						factor = 0
+						check_variable = { energy_balance_value_display < 0.95 }
+					}
+					modifier = {
+						add = 100
+						original_tag = USA
+					}
+				}
+			}
+			confirm_energy_sell_click = {
+				ai_will_do = {
+					base = 10000
+					modifier = {
+						factor = 0
+						has_country_flag = energy_recall_calldown@energy_selling_selected_TAG
+					}
+				}
+			}
+			confirm_nuclear_fuel_sell_click = {
+				ai_will_do = {
+					base = 10000
+					modifier = {
+						factor = 0
+						has_country_flag = energy_nuclear_calldown@nuclear_fuel_selling_selected_TAG
+					}
+				}
+			}
+		}
+	}
+
+	energy_sell_country_selection_gui = {
+		window_name = energy_sell_country_selection
+		context_type = player_context
+		#context_type = selected_country_context
+		parent_window_token = energy_scripted_gui
+
+		dirty = global.update_energy_ui
+
+		visible = {
+			ROOT = {
+				has_country_flag = open_energy_screen
+				has_country_flag = energy_sell
+				has_country_flag = open_energy_sell_country_selection
+			}
+		}
+		effects = {
+			country_list_flag_button_click = {
+				set_variable = { energy_selling_selected_TAG = ROOT.temp_energy_sell_selection_countries^i }
+				if = {
+					limit = {
+						is_in_array = {
+							array = energy_contractors
+							value = energy_selling_selected_TAG
+						}
+					}
+					for_each_loop = {
+						array = energy_contractors
+						value = v
+						index = i
+						break = break
+						if = {
+							limit = {
+								check_variable = { v = energy_selling_selected_TAG }
+							}
+							set_variable = { temp_energy_ammount = energy_contracts_ammount^i }
+							set_variable = { temp_energy_price = energy_contracts_price^i }
+							add_to_variable = { break = 1 }
+						}
+					}
+				}
+				else = { set_variable = { temp_energy_price = 0.05 } }
+				clr_country_flag = open_energy_sell_country_selection
+				ingame_update_setup = yes
+			}
+			close_button_click = {
+				if = {
+					limit = {
+						has_country_flag = open_energy_sell_country_selection
+					}
+					clr_country_flag = open_energy_sell_country_selection
+				}
+				clear_array = ROOT.temp_energy_sell_selection_countries
+				set_variable = { temp_energy_price = 0 }
+				ingame_update_setup = yes
+			}
+		}
+
+		dynamic_lists = {
+			country_list_gridbox = {
+				array = temp_energy_sell_selection_countries
+				entry_container = country_list_entry
+			}
+		}
+		properties = {
+			country_list_flag_button = {
+				image = "[?ROOT.temp_energy_sell_selection_countries^i.GetFlag]"
+			}
+		}
+	}
+
+	nuclear_fuel_sell_country_selection_gui = {
+		window_name = nuclear_fuel_sell_country_selection
+		context_type = player_context
+		#context_type = selected_country_context
+		parent_window_token = energy_scripted_gui
+
+		dirty = global.update_energy_ui
+
+		visible = {
+			ROOT = {
+				has_country_flag = open_energy_screen
+				has_country_flag = energy_sell
+				has_country_flag = open_nuclear_fuel_sell_country_selection
+			}
+		}
+		effects = {
+			country_list_flag_button_click = {
+				set_variable = { nuclear_fuel_selling_selected_TAG = ROOT.temp_nuclear_fuel_sell_selection_countries^i }
+				set_variable = { temp_nuclear_fuel_price = 0.05 }
+				clr_country_flag = open_nuclear_fuel_sell_country_selection
+				ingame_update_setup = yes
+			}
+			close_button_click = {
+				if = {
+					limit = {
+						has_country_flag = open_nuclear_fuel_sell_country_selection
+					}
+					clr_country_flag = open_nuclear_fuel_sell_country_selection
+				}
+				clear_array = ROOT.temp_nuclear_fuel_sell_selection_countries
+				set_variable = { temp_nuclear_fuel_price = 0 }
+				ingame_update_setup = yes
+			}
+		}
+
+		dynamic_lists = {
+			country_list_gridbox = {
+				array = temp_nuclear_fuel_sell_selection_countries
+				entry_container = country_list_entry
+			}
+		}
+		properties = {
+			country_list_flag_button = {
+				image = "[?ROOT.temp_nuclear_fuel_sell_selection_countries^i.GetFlag]"
+			}
+		}
+	}
+
+	economic_state_view = {
+		context_type = selected_state_context
+		window_name = "state_economic_ui_view"
+
+		triggers = {
+			resource_rights_button_click_enabled = {
+				ROOT = { has_political_power > 249 }
+				if = {
+					limit = {
+						CONTROLLER = {
+							NOT = { tag = ROOT }
+						}
+					}
+					OR = {
+						CONTROLLER = { is_subject = no }
+						CONTROLLER = { is_subject_of = ROOT }
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = resource_rights_is_top_3_influencer
+					if = {
+						limit = {
+							CONTROLLER = {
+								NOT = { tag = ROOT }
+							}
+						}
+						CONTROLLER = { is_top3_influencer = yes }
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = not_custom_resource_rights_content
+					NOT = {
+						OR = {
+							state = 423
+							state = 301
+							state = 283
+							state = 647
+							state = 288
+							state = 763
+							state = 304
+							state = 436
+							state = 452
+							state = 580
+							state = 326
+							state = 210
+							state = 172
+							state = 180
+							state = 179
+							state = 174
+							state = 175
+							state = 176
+							state = 1120
+							state = 275
+							state = 279
+							state = 1006
+							state = 322
+						}
+					}
+					NOT = {
+						CONTROLLER = {
+							OR = {
+								has_idea = GRE_resources
+								has_dynamic_modifier = { modifier = libya_oil_nationalisation_dynamic_modifier }
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = has_more_effective_resource_extraction
+					OR = {
+						CONTROLLER = { check_variable = { modifier@local_resources_factor < ROOT.modifier@local_resources_factor } }
+						CONTROLLER = { tag = ROOT }
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = resource_rights_negotiations_active
+					NOT = { CONTROLLER = { has_country_flag = resource_rights_negotiations } }
+					NOT = { ROOT = { has_country_flag = resource_rights_negotiations } }
+				}
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = resource_rights_avaliable
+						CONTROLLER = { NOT = { tag = ROOT } }
+						OR = {
+							oil > 0
+							aluminium > 0
+							rubber > 0
+							tungsten > 0
+							steel > 0
+							chromium > 0
+						}
+						NOT = {
+							CONTROLLER = {
+								any_other_country = {
+									has_resources_rights = {
+  										state = PREV.PREV
+									}
+									influence_higher_30 = no
+								}
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = resource_rights_who_provides
+						CONTROLLER = { tag = ROOT }
+						OR = {
+							oil > 0
+							aluminium > 0
+							rubber > 0
+							tungsten > 0
+							steel > 0
+							chromium > 0
+						}
+						CONTROLLER = {
+							any_other_country = {
+								has_resources_rights = {
+  									state = PREV.PREV
+								}
+								influence_higher_30 = no
+							}
+						}
+					}
+				}
+			}
+		}
+
+		effects = {
+			resource_rights_button_click = {
+				if = {
+					limit = { CONTROLLER = { tag = ROOT } }
+					CONTROLLER = {
+						add_political_power = -250
+						random_country = {
+							limit = {
+								has_resources_rights = {
+  									state = PREV.PREV
+								}
+								NOT = { tag = ROOT }
+							}
+							set_variable = { remove_resource_rights_state = PREV.PREV }
+							remove_resource_rights = PREV.PREV
+							count_resource_rights_nongiven_resources = yes
+							PREV = {
+								save_event_target_as = resource_rights_cancel_target_FROM
+								PREV = { country_event = resource_rights.1 }
+							}
+							remove_opinion_modifier = {
+								target = PREV
+								modifier = resource_rights_agreement
+							}
+							remove_opinion_modifier = {
+								target = PREV
+								modifier = resource_rights_agreement_trade
+							}
+							PREV = {
+								remove_opinion_modifier = {
+									target = PREV
+									modifier = resource_rights_agreement
+								}
+								remove_opinion_modifier = {
+									target = PREV
+									modifier = resource_rights_agreement_trade
+								}
+							}
+						}
+					}
+            		remove_dynamic_modifier = { modifier = foreign_resource_rights_in_state }
+				}
+				else = {
+					set_country_flag = resource_rights_negotiations
+					ROOT = { add_political_power = -250 }
+					CONTROLLER = {
+						set_variable = { resource_rights_state = PREV }
+						country_event = resource_rights.2
+						set_country_flag = resource_rights_negotiations
+					}
+				}
+			}
+		}
+
+		ai_enabled = { always = yes }
+		ai_test_interval = 2880 # 120 Days
+		ai_max_weight_taken_per_test = 1
+
+		ai_weights = {
+			resource_rights_button_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						add = 100
+						CONTROLLER = {
+							tag = ROOT
+							any_other_country = {
+								has_resources_rights = {
+  									state = PREV.PREV
+								}
+								OR = {
+									PREV = { has_opinion = { target = PREV value < 0 } }
+									PREV = {
+										AND = {
+											is_subject = yes
+											NOT = { is_subject_of = PREV }
+										}
+									}
+								}
+							}
+						}
+					}
+					modifier = {
+						add = 100
+						CONTROLLER = {
+							NOT = { tag = ROOT }
+							OR = {
+								AND = {
+									OR = {
+										ROOT = { oil < 0 }
+										ROOT = { fuel_ratio < 0 }
+									}
+									PREV = { oil > 0 }
+								}
+								AND = {
+									ROOT = { aluminium < 0 }
+									PREV = { aluminium > 0 }
+								}
+								AND = {
+									ROOT = { tungsten < 0 }
+									PREV = { tungsten > 0 }
+								}
+								AND = {
+									ROOT = { rubber < 0 }
+									PREV = { rubber > 0 }
+								}
+								AND = {
+									ROOT = { steel < 0 }
+									PREV = { steel > 0 }
+								}
+								AND = {
+									ROOT = { chromium < 0 }
+									PREV = { chromium > 0 }
+								}
+							}
+							has_opinion = {
+								target = ROOT
+								value > 99
+							}
+						}
+					}
+				}
+			}
+		}
+
+		parent_window_token = selected_state_view
+	}
+}

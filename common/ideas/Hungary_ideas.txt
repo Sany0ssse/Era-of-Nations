@@ -1,0 +1,2538 @@
+ideas = {
+	country = {
+		### BASE ###
+		#Millitary
+		HUN_hungarian_army = {
+			picture = HUN_armed_forces
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = HUN_hungarian_army_tt
+			}
+		}
+		#Purchase of Hungarian Agricultural Products
+		HUN_purchase_of_hungarian_agricultural_products_idea = {
+			picture = hungarian_agricultural_products
+			cancel = {
+				NOT = { country_exists = HUN }
+			}
+			on_remove = {
+				add_to_variable = { HUN.HUN_agricultural_products_buyers = -1 }
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = HUN_purchase_of_hungarian_agricultural_products_idea_tt
+				agricolture_productivity_modifier = 0.07
+				agriculture_tax_modifier = 0.05
+			}
+		}
+		#Chinese Companies
+		HUN_chinese_companies = {
+			picture = HUN_chinese_companies
+			cancel = {
+				OR = {
+					NOT = { country_exists = CHI }
+					CHI = {
+						has_opinion = {
+							target = HUN
+							value < 0
+						}
+					}
+				}
+			}
+			modifier = {
+				country_productivity_growth_modifier = 0.03
+				production_speed_buildings_factor = 0.12
+				corporate_tax_income_multiplier_modifier = 0.05
+				communism_drift = 0.01
+			}
+		}
+		#Millitary Exercise Russia-Hungary
+		HUN_hungary_russia_ex = {
+			picture = hungary_russia_exercises
+			modifier = {
+				army_attack_factor = 0.03
+				army_defence_factor = 0.03
+				army_speed_factor = 0.03
+				army_morale = 0.3
+				army_org_factor = 0.08
+				experience_gain_army = 0.07
+			}
+		}
+		#Anti-Russian Coalition
+		anti_russian_coalition_member = {
+			picture = HUN_anti_russian_pact
+			modifier = {
+				army_core_attack_factor = 0.05
+				army_core_defence_factor = 0.07
+				cas_damage_reduction = 0.1
+			} 
+			targeted_modifier = {
+				tag = SOV
+				defense_bonus_against = 0.05
+			}
+		}
+		#FEG
+		HUN_feg_idea = {
+			picture = HUN_hungary_feg
+			allowed_civil_war = { always = yes }
+			equipment_bonus = {
+				Inf_equipment = {
+					build_cost_ic = -0.12
+				}
+				AA_Equipment = {
+					build_cost_ic = -0.09
+				}
+				L_AT_Equipment = {
+					build_cost_ic = -0.09
+				}
+			}
+		}
+
+		### ORBAN ###
+
+		#Orban Era
+		HUN_orban_era_idea = {
+			picture = orban_era
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.01
+				political_power_gain = 0.02
+			}
+		}
+		HUN_orban_era_idea1 = {
+			name = HUN_orban_era_idea
+			picture = orban_era
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.01
+				political_power_gain = 0.03
+				econ_cycle_upg_cost_multiplier_modifier = -0.05
+				tax_gain_multiplier_modifier = 0.03
+			}   
+		}
+		HUN_orban_era_idea2 = {
+			name = HUN_orban_era_idea
+			picture = orban_era
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.01
+				political_power_gain = 0.03
+				econ_cycle_upg_cost_multiplier_modifier = -0.05
+				tax_gain_multiplier_modifier = 0.05
+				inflation_multiplier_modifier = -0.03
+				stability_factor = 0.02
+				inflation_from_dept_multiplier_modifier = -0.02
+			}   
+		}
+		HUN_orban_era_idea3 = {
+			name = HUN_orban_era_idea
+			picture = orban_era
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift  = 0.03
+				communism_acceptance = 20
+				neutrality_acceptance = 20
+				political_power_gain = 0.03
+				political_power_factor = 0.07
+				econ_cycle_upg_cost_multiplier_modifier = -0.05
+				tax_gain_multiplier_modifier = 0.05
+				inflation_multiplier_modifier = -0.03
+				inflation_from_dept_multiplier_modifier = -0.02
+			}   
+		}
+		HUN_orban_era_idea4 = {
+			name = HUN_orban_era_idea
+			picture = orban_era
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift  = 0.03
+				communism_acceptance = 20
+				neutrality_acceptance = 20
+				political_power_gain = 0.03
+				political_power_factor = 0.1
+				corruption_cost_factor = -0.15
+				econ_cycle_upg_cost_multiplier_modifier = -0.05
+				tax_gain_multiplier_modifier = 0.05
+				inflation_multiplier_modifier = -0.03
+				inflation_from_dept_multiplier_modifier = -0.02
+			}   
+		}
+		HUN_orban_era_idea5 = {
+			name = HUN_orban_era_idea
+			picture = orban_era
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				war_support_factor = 0.03
+				neutrality_drift  = 0.05
+				communism_acceptance = 20
+				neutrality_acceptance = 20
+				political_power_gain = 0.05
+				political_power_factor = 0.1
+				corruption_cost_factor = -0.15
+				econ_cycle_upg_cost_multiplier_modifier = -0.05
+				tax_gain_multiplier_modifier = 0.05
+				inflation_multiplier_modifier = -0.03
+				inflation_from_dept_multiplier_modifier = -0.02
+			}   
+		}
+		HUN_orban_era_idea6 = {
+			name = HUN_orban_era_idea
+			picture = orban_era
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				war_support_factor = 0.03
+				neutrality_drift  = 0.05
+				communism_acceptance = 20
+				neutrality_acceptance = 20
+				political_power_gain = 0.07
+				political_power_factor = 0.12
+				corruption_cost_factor = -0.15
+				econ_cycle_upg_cost_multiplier_modifier = -0.05
+				tax_gain_multiplier_modifier = 0.05
+				inflation_multiplier_modifier = -0.03
+				inflation_from_dept_multiplier_modifier = -0.02
+			}   
+		}
+		#Stabilization program
+		HUN_stabilization_idea = {
+			picture = hungary_stabilization
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = 0.03
+				country_productivity_growth_modifier = 0.03
+				econ_cycle_upg_cost_multiplier_modifier = -0.07
+			}
+		}
+		#Orban's social program
+		HUN_social_program_idea = {
+			picture = orbans_social_program
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = 0.03
+				social_cost_multiplier_modifier = -0.01
+				health_cost_multiplier_modifier = -0.01
+				expected_welfare_modifier = -1
+				expected_healthcare_modifier = -1
+			}
+		}
+		HUN_social_program_idea1 = {
+			picture = orbans_social_program
+			name = HUN_social_program_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				social_cost_multiplier_modifier = -0.05
+				health_cost_multiplier_modifier = -0.05
+				expected_welfare_modifier = -1
+				expected_healthcare_modifier = -1
+			}
+		}
+		HUN_social_program_idea2 = {
+			picture = orbans_social_program
+			name = HUN_social_program_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = 0.03
+				monthly_population = 0.01
+				social_cost_multiplier_modifier = -0.03
+				health_cost_multiplier_modifier = -0.03
+				expected_welfare_modifier = -1
+				expected_healthcare_modifier = -1
+			}
+		}
+		HUN_social_program_idea3 = {
+			picture = orbans_social_program
+			name = HUN_social_program_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = 0.05
+				monthly_population = 0.03
+				social_cost_multiplier_modifier = -0.03
+				health_cost_multiplier_modifier = -0.01
+				expected_welfare_modifier = -1
+				expected_healthcare_modifier = -1
+			}
+		}
+		HUN_unemployment_subsidies_idea = {
+			picture = unemployment_subsidies
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = 0.05
+				social_cost_multiplier_modifier = 0.02
+				high_unemployment_threshold_modifier = 0.03
+			}
+		}
+		#New Constitution
+		HUN_new_constitution_idea = {
+			picture = new_constitution
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = -0.03
+				political_power_factor = 0.1
+			}
+		}
+		HUN_new_constitution_idea1 = {
+			name = HUN_new_constitution_idea
+			picture = new_constitution
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.1
+				communism_drift = 0.02
+				neutrality_drift = 0.01
+				stability_factor = 0.01
+				foreign_influence_defense_modifier = 0.03
+			}
+		}
+		#Central Bank reforms
+		HUN_central_bank_reforms_idea = {
+			picture = central_bank_reforms
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				econ_cycle_upg_cost_multiplier_modifier = -0.12
+				bureaucracy_cost_multiplier_modifier = -0.07
+				inflation_defence_multiplier_modifier = 0.03
+			}
+		}
+		HUN_central_bank_reforms_idea1 = {
+			picture = central_bank_reforms
+			name = HUN_central_bank_reforms_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				econ_cycle_upg_cost_multiplier_modifier = -0.12
+				bureaucracy_cost_multiplier_modifier = -0.07
+				inflation_defence_multiplier_modifier = 0.03
+				tax_rate_change_multiplier_modifier = -0.1
+				tax_gain_multiplier_modifier = 0.07
+			}
+		}
+		HUN_central_bank_reforms_idea2 = {
+			picture = central_bank_reforms
+			name = HUN_central_bank_reforms_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = 0.03
+				econ_cycle_upg_cost_multiplier_modifier = -0.12
+				bureaucracy_cost_multiplier_modifier = -0.07
+				inflation_defence_multiplier_modifier = 0.03
+				tax_rate_change_multiplier_modifier = -0.12
+				social_cost_multiplier_modifier = -0.04
+				tax_gain_multiplier_modifier = 0.12
+				army_personnel_cost_multiplier_modifier = -0.02
+				police_cost_multiplier_modifier = -0.02
+			}
+		}
+		HUN_central_bank_reforms_idea3 = {
+			picture = central_bank_reforms
+			name = HUN_central_bank_reforms_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = -0.07
+				econ_cycle_upg_cost_multiplier_modifier = -0.12
+				bureaucracy_cost_multiplier_modifier = -0.07
+				inflation_defence_multiplier_modifier = 0.03
+				tax_rate_change_multiplier_modifier = -0.12
+				social_cost_multiplier_modifier = -0.04
+				tax_gain_multiplier_modifier = 0.17
+				army_personnel_cost_multiplier_modifier = -0.02
+				police_cost_multiplier_modifier = -0.02
+				research_speed_factor = -0.03
+				office_park_income_tax_modifier = 0.2
+			}
+		}
+		#Christian Illiberalism
+		HUN_christian_illiberalism_idea = {
+			picture = christian_illiberalism
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.04
+				nationalist_drift = 0.01
+				fascism_drift = -0.03
+				democratic_drift = -0.01
+			}
+		}
+		HUN_christian_illiberalism_idea1 = {
+			picture = christian_illiberalism
+			name = HUN_christian_illiberalism_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.07
+				nationalist_drift = 0.03
+				fascism_drift = -0.05
+				democratic_drift = -0.01
+				drift_defence_factor = 0.05
+			}
+		}
+		#Protests
+		HUN_protests = {
+			picture = anti_const_protest
+			modifier = {
+				stability_factor = -0.3
+				political_power_factor = -0.2
+				democratic_drift = 0.03
+				foreign_influence_defense_modifier -0.3
+				drift_defence_factor = -0.15
+				police_cost_multiplier_modifier = 0.15
+			}
+		}
+		#Orbanism
+		HUN_orbanism = {
+			picture = orbanism
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				communism_drift = 0.01
+				drift_defence_factor = 0.15
+				foreign_influence_defense_modifier = 0.03
+				stability_factor = 0.1
+			}
+		}
+		#Cabinet Economists
+		HUN_orba_cabinet_economists_idea = {
+			picture = hun_orban_cabinet_econ_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+            	social_cost_multiplier_modifier = -0.09
+				health_cost_multiplier_modifier = -0.09
+				expected_welfare_modifier = 1
+				expected_healthcare_modifier = 1
+			}
+		}
+		#Christian Market
+		HUN_orba_cabinet_economists_idea1 = {
+			name = HUN_orba_cabinet_economists_idea
+			picture = hun_orban_cabinet_econ_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+            	social_cost_multiplier_modifier = -0.09
+				health_cost_multiplier_modifier = -0.09
+				expected_welfare_modifier = 1
+				expected_healthcare_modifier = 1
+				min_export = 0.05
+				trade_opinion_factor = 0.05
+			}
+		}
+		#Retire
+		HUN_orba_cabinet_economists_idea2 = {
+			name = HUN_orba_cabinet_economists_idea
+			picture = hun_orban_cabinet_econ_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+            	social_cost_multiplier_modifier = -0.07
+				health_cost_multiplier_modifier = -0.09
+				expected_welfare_modifier = 1
+				expected_healthcare_modifier = 1
+				min_export = 0.05
+				trade_opinion_factor = 0.05
+				monthly_population = 0.01
+				bureaucracy_cost_multiplier_modifier = -0.1
+				stability_factor = 0.05
+				high_unemployment_threshold_modifier = 0.01
+			}
+		}
+		#Germans
+		HUN_orba_cabinet_economists_idea3 = {
+			name = HUN_orba_cabinet_economists_idea
+			picture = hun_orban_cabinet_econ_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+            	social_cost_multiplier_modifier = -0.07
+				health_cost_multiplier_modifier = -0.09
+				expected_welfare_modifier = 1
+				expected_healthcare_modifier = 1
+				min_export = 0.05
+				trade_opinion_factor = 0.05
+				monthly_population = 0.01
+				bureaucracy_cost_multiplier_modifier = -0.1
+				stability_factor = 0.05
+				high_unemployment_threshold_modifier = 0.01
+				production_factory_efficiency_gain_factor = 0.10
+				industrial_capacity_factory = 0.10
+			}
+		}
+		#Farmers
+		HUN_orba_cabinet_economists_idea4 = {
+			name = HUN_orba_cabinet_economists_idea
+			picture = hun_orban_cabinet_econ_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+            	social_cost_multiplier_modifier = -0.07
+				health_cost_multiplier_modifier = -0.09
+				expected_welfare_modifier = 1
+				expected_healthcare_modifier = 1
+				min_export = 0.05
+				trade_opinion_factor = 0.05
+				monthly_population = 0.01
+				bureaucracy_cost_multiplier_modifier = -0.1
+				stability_factor = 0.05
+				high_unemployment_threshold_modifier = 0.01
+				production_factory_efficiency_gain_factor = 0.10
+				industrial_capacity_factory = 0.10
+				agricolture_productivity_modifier = 0.10
+				agriculture_workers_modifier = -0.15
+			}
+		}
+        #Cabinet Reformers
+		HUN_orba_cabinet_reforms_idea = {
+			picture = hun_orban_cabinet_reform_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.02
+			}
+		}
+        #Privatization
+		HUN_orba_cabinet_reforms_idea1 = {
+            name = HUN_orba_cabinet_reforms_idea
+			picture = hun_orban_cabinet_reform_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.03
+                production_speed_industrial_complex_factor = 0.1
+				consumer_goods_factor = -0.03
+			}
+		}
+        #People Constituion
+		HUN_orba_cabinet_reforms_idea2 = {
+            name = HUN_orba_cabinet_reforms_idea
+			picture = hun_orban_cabinet_reform_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.02
+                production_speed_industrial_complex_factor = 0.1
+				consumer_goods_factor = -0.03
+                party_popularity_stability_factor = 0.05
+                stability_factor = 0.05
+			}
+		}
+        #Christ Ethics
+		HUN_orba_cabinet_reforms_idea3 = {
+            name = HUN_orba_cabinet_reforms_idea
+			picture = hun_orban_cabinet_reform_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.04
+                production_speed_industrial_complex_factor = 0.1
+				consumer_goods_factor = -0.03
+                party_popularity_stability_factor = 0.05
+                stability_factor = 0.10
+                monthly_population = 0.02
+				fascism_drift = -0.1
+			}
+		}
+        #Digitalization
+		HUN_orba_cabinet_reforms_idea4 = {
+            name = HUN_orba_cabinet_reforms_idea
+			picture = hun_orban_cabinet_reform_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.06
+                production_speed_industrial_complex_factor = 0.1
+				consumer_goods_factor = -0.03
+                party_popularity_stability_factor = 0.05
+                stability_factor = 0.10
+                monthly_population = 0.02
+				fascism_drift = -0.1
+                research_speed_factor = 0.10
+				production_factory_efficiency_gain_factor = 0.10
+				production_factory_max_efficiency_factor = 0.1
+				production_speed_buildings_factor = 0.07
+			}
+		}
+        #Jesus
+		HUN_orba_cabinet_reforms_idea5 = {
+            name = HUN_orba_cabinet_reforms_idea
+			picture = hun_orban_cabinet_reform_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.08
+                production_speed_industrial_complex_factor = 0.1
+				consumer_goods_factor = -0.03
+                party_popularity_stability_factor = 0.05
+                stability_factor = 0.11
+                monthly_population = 0.04
+				fascism_drift = -0.15
+                research_speed_factor = 0.10
+				production_factory_efficiency_gain_factor = 0.10
+				production_factory_max_efficiency_factor = 0.1
+				production_speed_buildings_factor = 0.07
+			}
+		}
+        #Jesus
+		HUN_orba_cabinet_reforms_idea6 = {
+            name = HUN_orba_cabinet_reforms_idea
+			picture = hun_orban_cabinet_reform_idea
+			cancel = {
+				neutrality_neutral_conservatism_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.12
+                production_speed_industrial_complex_factor = 0.1
+				consumer_goods_factor = -0.03
+                party_popularity_stability_factor = 0.05
+                stability_factor = 0.12
+                monthly_population = 0.04
+				fascism_drift = -0.18
+                research_speed_factor = 0.10
+                foreign_influence_defense_modifier = 0.03
+				production_factory_efficiency_gain_factor = 0.10
+				production_factory_max_efficiency_factor = 0.1
+				production_speed_buildings_factor = 0.07
+			}
+		}
+
+		### MONARCHISTS ###
+
+		#Decommunisation
+		HUN_decommunisation = {
+			picture = hungarian_decommunisation
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				communism_drift = -0.03
+				stability_factor = -0.03
+				nationalist_drift = 0.01
+			}
+		}
+		#Conservative system
+		HUN_conservative_system = {
+			picture = hungarian_conservative_system
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			on_remove = {
+				if = {
+					limit = { has_idea = HUN_royal_guard_idea }
+					remove_ideas = HUN_royal_guard_idea
+				}
+			}
+			modifier = {
+				nationalist_drift = 0.03
+				stability_factor = 0.03
+				drift_defence_factor = 0.02
+				foreign_influence_defense_modifier = 0.05
+			}
+		}
+		#Defending Christian Values
+		HUN_defend_christian_values = {
+			picture = hun_defend_christian_values
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				fascism_drift = -0.03
+				nationalist_drift = 0.01
+				stability_factor = 0.07
+			}
+		}
+		#Absolute power of the monarch
+		HUN_absolute_power_of_monarch = {
+			picture = hungary_absolute_power_of_monarch
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.15
+				stability_factor = 0.04
+				drift_defence_factor = 0.1
+				foreign_influence_defense_modifier = 0.07
+			}
+		}
+		HUN_absolute_power_of_monarch1 = {
+			picture = hungary_absolute_power_of_monarch
+			name =  HUN_absolute_power_of_monarch
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.2
+				stability_factor = 0.07
+				drift_defence_factor = 0.12
+				foreign_influence_defense_modifier = 0.12
+			}
+		}
+		HUN_absolute_power_of_monarch2 = {
+			picture = hungary_absolute_power_of_monarch
+			name =  HUN_absolute_power_of_monarch
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.2
+				stability_factor = 0.12
+				nationalist_drift = 0.03
+				drift_defence_factor = 0.15
+				foreign_influence_defense_modifier = 0.15
+				war_support_factor = 0.12
+				army_core_defence_factor = 0.03
+			}
+		}
+		HUN_absolute_power_of_monarch3 = {
+			picture = hungary_absolute_power_of_monarch
+			name =  HUN_absolute_power_of_monarch
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.25
+				stability_factor = 0.12
+				nationalist_drift = 0.05
+				drift_defence_factor = 0.18
+				foreign_influence_defense_modifier = 0.2
+				war_support_factor = 0.15
+				army_core_defence_factor = 0.03
+				nationalist_outlook_campaign_cost_modifier = -0.12
+				bureaucracy_cost_multiplier_modifier = -0.05
+			}
+		}
+		#Constitutional Monarchy
+		HUN_const_monarchy_idea = {
+			picture = hungary_const_monarchy
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.03
+				democratic_drift = 0.01
+				stability_factor = 0.1
+				foreign_influence_defense_modifier = 0.02
+			}
+		}
+		HUN_const_monarchy_idea1 = {
+			picture = hungary_const_monarchy
+			name = HUN_const_monarchy_idea
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.05
+				democratic_drift = 0.01
+				stability_factor = 0.13
+				foreign_influence_defense_modifier = 0.02
+				bureaucracy_cost_multiplier_modifier = -0.05
+				corruption_cost_factor = -0.15
+			}
+		}
+		HUN_const_monarchy_idea2 = {
+			picture = hungary_const_monarchy
+			name = HUN_const_monarchy_idea
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.07
+				democratic_drift = 0.03
+				stability_factor = 0.15
+				political_power_cost = -0.04
+				foreign_influence_defense_modifier = 0.02
+				bureaucracy_cost_multiplier_modifier = -0.05
+				corruption_cost_factor = -0.2
+			}
+		}
+		HUN_const_monarchy_idea3 = {
+			picture = hungary_const_monarchy
+			name = HUN_const_monarchy_idea
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.1
+				democratic_drift = 0.05
+				democratic_acceptance = 15
+				stability_factor = 0.2
+				political_power_cost = -0.04
+				foreign_influence_defense_modifier = 0.02
+				bureaucracy_cost_multiplier_modifier = -0.05
+				corruption_cost_factor = -0.2
+				migration_rate_value_factor = 0.01
+				popularity_boost_modifier = 0.05
+			}
+		}
+		#Neo-aristocratism
+		HUN_neo_aristocratism = {
+			picture = hun_neo_aristocratism
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				neutrality_drift = 0.01
+				nationalist_drift = 0.03
+				foreign_influence_defense_modifier = -0.01
+				bureaucracy_cost_multiplier_modifier = -0.15
+				tax_gain_multiplier_modifier = 0.04
+			}
+		}
+		#Cabinet of Ministers
+		HUN_cabinet_of_ministers = {
+			picture = hun_cabinet_of_ministers
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.02
+				stability_factor = 0.05
+				corruption_cost_factor = 0.07
+				bureaucracy_cost_factor = -0.15
+				bureaucracy_cost_multiplier_modifier = 0.05
+			}
+		}
+		#Protectionist Economy
+		HUN_protectionist_economy_idea = {
+			picture = HUN_protectionist_economy_icon
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				inflation_defence_multiplier_modifier = 0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.1
+				projects_cost_modifier = -0.03
+				return_on_investment_modifier = -0.02
+				country_productivity_growth_modifier = 0.04
+				resource_export_multiplier_modifier = -0.07
+				production_speed_buildings_factor = 0.05
+			}
+		}
+		#Liberal Economy
+		HUN_liberal_economy_idea = {
+			picture = HUN_liberal_economy_icon
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			modifier = {
+				inflation_defence_multiplier_modifier = -0.05
+				econ_cycle_upg_cost_multiplier_modifier = 0.07
+				return_on_investment_modifier = 0.05
+				country_productivity_growth_modifier = 0.07
+				production_speed_buildings_factor = 0.07
+				democratic_drift = 0.01
+				foreign_influence_defense_modifier = -0.05
+			}
+		}
+
+		### Jobbik ###
+
+		#Party program
+		HUN_party_program = {
+			picture = jobbik_party_program
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.03
+				communism_drift = 0.01
+				nationalist_drift = 0.03
+				bureaucracy_cost_multiplier_modifier = -0.05
+				foreign_influence_defense_modifier = 0.03
+			}
+		}
+		HUN_party_program1 = {
+			picture = jobbik_party_program
+			name = HUN_party_program
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.03
+				communism_drift = 0.01
+				nationalist_drift = 0.03
+				drift_defence_factor = 0.05
+				bureaucracy_cost_multiplier_modifier = -0.05
+				foreign_influence_defense_modifier = 0.07
+				foreign_influence_modifier = 0.03
+			}
+		}
+		#Nationalist propaganda
+		HUN_hard_national_populism = {
+			picture = generic_nationalists_power_idea
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.07
+				nationalist_drift = 0.03
+				propaganda_campaign_cost_modifier = -0.12
+				migration_rate_value_factor = -0.01
+			}
+		}
+		HUN_hard_national_populism1 = {
+			picture = generic_nationalists_power_idea
+			name =  HUN_hard_national_populism
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.07
+				political_power_gain = 0.04
+				war_support_factor = 0.08
+				stability_factor = -0.03
+				nationalist_drift = 0.05
+				fascism_drift = -0.05
+				propaganda_campaign_cost_modifier = -0.12
+				migration_rate_value_factor = -0.01
+			}
+		}
+		HUN_hard_national_populism2 = {
+			picture = generic_nationalists_power_idea
+			name =  HUN_hard_national_populism
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.07
+				political_power_gain = 0.07
+				war_support_factor = 0.12
+				nationalist_drift = 0.05
+				stability_factor = -0.03
+				fascism_drift = -0.05
+				propaganda_campaign_cost_modifier = -0.12
+				migration_rate_value_factor = -0.05
+				foreign_influence_defense_modifier = 0.07
+				drift_defence_factor = 0.03
+			}
+		}
+		HUN_hard_national_populism3 = {
+			picture = generic_nationalists_power_idea
+			name =  HUN_hard_national_populism
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.1
+				political_power_gain = 0.1
+				war_support_factor = 0.15
+				nationalist_drift = 0.08
+				stability_factor = -0.03
+				fascism_drift = -0.05
+				propaganda_campaign_cost_modifier = -0.15
+				migration_rate_value_factor = -0.07
+				foreign_influence_defense_modifier = 0.12
+				drift_defence_factor = 0.03
+			}
+		}
+		#Protectionism
+		HUN_protectionism_idea = {
+			picture = HUN_protectionism_fas_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				inflation_defence_multiplier_modifier = 0.07
+				econ_cycle_upg_cost_multiplier_modifier = -0.12
+				return_on_investment_modifier = -0.02
+				country_productivity_growth_modifier = 0.06
+				resource_export_multiplier_modifier = -0.07
+				production_speed_buildings_factor = 0.05
+			}
+		}
+		HUN_protectionism_idea1 = {
+			name = HUN_protectionism_idea
+			picture = HUN_protectionism_fas_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				inflation_defence_multiplier_modifier = 0.07
+				econ_cycle_upg_cost_multiplier_modifier = -0.12
+				return_on_investment_modifier = -0.02
+				country_productivity_growth_modifier = 0.06
+				resource_export_multiplier_modifier = -0.1
+				min_export = -0.15
+				foreign_influence_defense_modifier = 0.05
+				production_speed_buildings_factor = 0.05
+			}
+		}
+		#Protection of National Values
+		HUN_protect_nat_values = {
+			picture = HUN_protect_nat_val_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.25
+				stability_factor = 0.03
+				monthly_population = 0.02
+				foreign_influence_defense_modifier = 0.03
+			}
+		}
+		#Workers Unions
+		HUN_workers_unions = {
+			picture = HUN_workers_union_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = 0.04
+				production_speed_buildings_factor = 0.05
+				country_productivity_growth_modifier = 0.03
+				production_factory_max_efficiency_factor = 0.06
+				production_factory_efficiency_gain_factor = 0.03
+				social_cost_multiplier_modifier = 0.02
+				total_workforce_modifier = -0.04
+			}
+		}
+		#Global Law enforcement reform
+		HUN_global_police_reform = {
+			picture = HUN_police_reform_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_cost = 0.07
+				stability_factor = -0.08
+				bureaucracy_cost_multiplier_modifier = 0.3
+				police_cost_multiplier_modifier = 0.15
+			}
+		}
+		HUN_global_police_reform1 = {
+			name = HUN_global_police_reform
+			picture = HUN_police_reform_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_cost = 0.03
+				stability_factor = -0.02
+				bureaucracy_cost_multiplier_modifier = 0.23
+				police_cost_multiplier_modifier = 0.1
+			}
+		}
+		HUN_global_police_reform2 = {
+			name = HUN_global_police_reform
+			picture = HUN_police_reform_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.03
+				stability_factor = 0.05
+				bureaucracy_cost_multiplier_modifier = 0.23
+				police_cost_multiplier_modifier = 0.05
+			}
+		}
+		HUN_global_police_reform3 = {
+			name = HUN_global_police_reform
+			picture = HUN_police_reform_complete_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.05
+				stability_factor = 0.1
+				corruption_cost_factor = -0.06
+				root_out_resistance_effectiveness_factor = 0.05
+				foreign_subversive_activites = -0.05
+				compliance_growth = 0.05
+				encryption_factor = 0.01
+				police_cost_multiplier_modifier = 0.03
+			}
+		}
+		#Anti-corruption raids
+		HUN_anti_corrupt_raids = {
+			picture = HUN_anti_corrupt_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.02
+				stability_factor = 0.07
+				corruption_cost_factor = -0.1
+				bureaucracy_cost_multiplier_modifier = -0.03
+				police_cost_multiplier_modifier = 0.03
+			}
+		}
+		#Anti-Gypsy Compaign
+		HUN_anti_gypsy_comp = {
+			picture = HUN_anti_gypsy_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = -0.03
+				nationalist_drift = 0.03
+				monthly_population = -0.02
+				total_workforce_modifier = 0.01
+				social_cost_multiplier_modifier = -0.01
+			}
+		}
+		#Suppression of publicity
+		HUN_suppression_of_publicity = {
+			picture = HUN_supress_public_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.1
+				nationalist_drift = 0.07
+				democratic_drift = -0.03
+				democratic_acceptance = -15
+				stability_factor = 0.04
+			}
+		}
+		#Personality cult
+		HUN_personality_cult = {
+			picture = HUN_cult_of_vona_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.4
+				nationalist_drift = 0.05
+				foreign_influence_defense_modifier = 0.12
+				drift_defence_factor = 0.03
+				nationalist_outlook_campaign_cost_modifier = -0.05
+			}
+		}
+		#Hungarian Patriotism
+		HUN_patriotism_idea = {
+			picture = HUN_patriotism_icon
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				army_core_attack_factor = 0.03
+				army_core_defence_factor = 0.05
+				foreign_influence_defense_modifier = 0.03
+			}
+		}
+		#Militarization of society
+		HUN_militarization = {
+			picture = GENERIC_military_reform_idea
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				production_speed_arms_factory_factor = 0.1
+				production_factory_efficiency_gain_factor = 0.05
+				production_factory_max_efficiency_factor = 0.1
+				conscription_factor = 0.04
+				Military_Spending_cost_factor = -0.12
+				Conscription_Law_cost_factor = -0.15
+				army_personnel_cost_multiplier_modifier = 0.07
+			}
+		}
+
+		### MSZP ###
+
+		#Socialist Governemnt
+		HUN_socialist_gov = {
+			picture = HUN_socialist_gov_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.03
+				democratic_drift = 0.01
+				social_cost_multiplier_modifier = -0.01
+			}
+		}
+		HUN_socialist_gov_2idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.05
+				democratic_drift = 0.03
+				social_cost_multiplier_modifier = -0.01
+				stability_factor = 0.03
+				tax_gain_multiplier_modifier = 0.01
+			}
+		}
+		HUN_socialist_gov_3idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.05
+				democratic_drift = 0.03
+				social_cost_multiplier_modifier = -0.01
+				stability_factor = 0.03
+				tax_gain_multiplier_modifier = 0.05
+				foreign_influence_modifier = 0.03
+				receiving_investment_cost_modifier = -0.05
+				receiving_investment_duration_modifier = -0.05
+			}
+		}
+		HUN_socialist_gov_4idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.05
+				democratic_drift = 0.03
+				social_cost_multiplier_modifier = -0.01
+				stability_factor = 0.03
+				tax_gain_multiplier_modifier = 0.05
+				foreign_influence_modifier = 0.03
+				receiving_investment_cost_modifier = -0.05
+				receiving_investment_duration_modifier = -0.05
+				bureaucracy_cost_multiplier_modifier = -0.06
+				civilian_industry_tax_modifier = 0.07
+			}
+		}
+		HUN_socdem_gov_idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.05
+				democratic_drift = 0.03
+				social_cost_multiplier_modifier = -0.03
+				stability_factor = 0.04
+				tax_gain_multiplier_modifier = 0.08
+				foreign_influence_modifier = 0.03
+				receiving_investment_cost_modifier = -0.02
+				receiving_investment_duration_modifier = -0.02
+				bureaucracy_cost_multiplier_modifier = -0.03
+				civilian_industry_tax_modifier = 0.03
+				inflation_multiplier_modifier = 0.03
+			}
+		}
+		HUN_socdem1_gov_idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.06
+				democratic_drift = 0.05
+				social_cost_multiplier_modifier = 0.01
+				stability_factor = 0.05
+				tax_gain_multiplier_modifier = 0.06
+				foreign_influence_modifier = 0.03
+				receiving_investment_cost_modifier = -0.02
+				receiving_investment_duration_modifier = -0.02
+				bureaucracy_cost_multiplier_modifier = -0.01
+				civilian_industry_tax_modifier = -0.05
+				productivity_growth_modifier = 0.04
+				inflation_multiplier_modifier = 0.06
+			}
+		}
+		HUN_ferenc_gov_idea = {
+			picture = HUN_ferenc_gov
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+				NOT = {
+					has_country_leader = { name = "Ferenc Gyurcsány" ruling_only = yes }
+				}
+			}
+			modifier = {
+				democratic_drift = 0.01
+				social_cost_multiplier_modifier = -0.03
+				health_cost_multiplier_modifier = -0.03
+				education_cost_multiplier_modifier = -0.03
+				stability_factor = -0.01
+				tax_gain_multiplier_modifier = 0.09
+				foreign_influence_modifier = 0.05
+				receiving_investment_cost_modifier = -0.06
+				receiving_investment_duration_modifier = -0.06
+				bureaucracy_cost_multiplier_modifier = -0.06
+				civilian_industry_tax_modifier = 0.03
+				population_tax_income_multiplier_modifier = -0.04
+				inflation_defence_multiplier_modifier = 0.05
+				treasury_to_gdp_inflation_multiplier_modifier = -0.03
+			}
+		}
+		HUN_ferenc1_gov_idea = {
+			picture = HUN_ferenc_gov
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+				NOT = {
+					has_country_leader = { name = "Ferenc Gyurcsány" ruling_only = yes }
+				}
+			}
+			modifier = {
+				democratic_drift = -0.03
+				social_cost_multiplier_modifier = -0.05
+				health_cost_multiplier_modifier = -0.05
+				education_cost_multiplier_modifier = -0.05
+				stability_factor = -0.06
+				tax_gain_multiplier_modifier = 0.1
+				foreign_influence_modifier = 0.07
+				receiving_investment_cost_modifier = -0.07
+				receiving_investment_duration_modifier = -0.07
+				bureaucracy_cost_multiplier_modifier = -0.07
+				civilian_industry_tax_modifier = 0.06
+				population_tax_income_multiplier_modifier = -0.08
+				productivity_growth_modifier = -0.04
+				inflation_defence_multiplier_modifier = 0.1
+				treasury_to_gdp_inflation_multiplier_modifier = -0.06
+			}
+		}
+		#War Against Nationalism
+		HUN_war_against_nationalismus = {
+			picture = HUN_no_nat_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				nationalist_drift = -0.03
+				popularity_attack_modifier = 0.04
+				western_outlook_campaign_cost_modifier = -0.04
+			}
+		}
+		#Towards to Liberal Society
+		HUN_liberal_society = {
+			picture = HUN_lib_sos
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				nationalist_drift = -0.03
+				drift_defence_factor = 0.04
+				popularity_attack_modifier = 0.05
+				western_outlook_campaign_cost_modifier = -0.07
+			}
+		}
+		#Independent EU member
+		HUN_independence = {
+			picture = HUN_euro_independt
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				foreign_influence_defense_modifier = 0.05
+				stability_factor = 0.02
+				internal_investments_money_cost_modifier = 0.04
+			}
+		}
+		#Unchecked Powers
+		HUN_unauthorised_powers = {
+			picture = HUN_unform_power
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				tax_rate_change_multiplier_modifier = 0.04
+				political_power_gain = 0.05
+				political_power_cost = 0.06
+			}
+		}
+		#Stimulus Checks
+		HUN_stimulus_bonus = {
+			picture = HUN_stimulus_check_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				social_cost_multiplier_modifier = 0.1
+				productivity_growth_modifier = 0.05
+				production_factory_efficiency_gain_factor 0.1
+				high_unemployment_threshold_modifier = 0.1
+			}
+		}
+		#Progressive Propaganda
+		HUN_progressive_propaganda = {
+			picture = HUN_progressive_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				democratic_drift = 0.05
+				stability_factor = 0.06
+				bureaucracy_cost_factor = 0.1
+				total_workforce_modifier = 0.06
+			}
+		}
+		#New Local Governance System
+		HUN_refreashed_local_governance = {
+			picture = HUN_municipalities
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = 0.04
+				bureaucracy_cost_factor = 0.04
+				internal_investments_pp_cost_modifier = 0.03
+				internal_investments_money_cost_modifier = -0.05
+				productivity_growth_modifier = 0.04
+			}
+		}
+		#Heaven for Minorities
+		HUN_minorities_saved = {
+			picture = HUN_support_minorities
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				migration_rate_value_factor = 0.05
+				tax_gain_multiplier_modifier = 0.05
+				democratic_drift = 0.02
+				bureaucracy_cost_multiplier_modifier = 0.04
+			}
+		}
+		#People's Cpnstitution
+		HUN_supper_new_constitution_idea = {
+			picture = HUN_people_constitution_id
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				migration_rate_value_factor = 0.06
+				tax_gain_multiplier_modifier = 0.07
+				democratic_drift = 0.03
+				bureaucracy_cost_multiplier_modifier = 0.06
+				stability_factor = 0.06
+				bureaucracy_cost_factor = 0.04
+				internal_investments_pp_cost_modifier = 0.06
+				internal_investments_money_cost_modifier = -0.08
+				productivity_growth_modifier = 0.05
+			}
+		}
+		HUN_liberal_socdem_gov_idea = {
+			picture = HUN_ferenc_gov
+			name = HUN_liberal_socdem_gov_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				democratic_drift = -0.01
+				social_cost_multiplier_modifier = -0.07
+				health_cost_multiplier_modifier = -0.07
+				education_cost_multiplier_modifier = -0.07
+				stability_factor = -0.03
+				tax_gain_multiplier_modifier = 0.1
+				foreign_influence_modifier = 0.09
+				receiving_investment_cost_modifier = -0.09
+				receiving_investment_duration_modifier = -0.09
+				bureaucracy_cost_multiplier_modifier = -0.09
+				civilian_industry_tax_modifier = 0.03
+				population_tax_income_multiplier_modifier = -0.1
+				productivity_growth_modifier = -0.02
+				inflation_defence_multiplier_modifier = 0.1
+				treasury_to_gdp_inflation_multiplier_modifier = 0.06
+			}
+		}
+		HUN_liberal_socdem1_gov_idea = {
+			picture = HUN_ferenc_gov
+			name = HUN_liberal_socdem_gov_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				democratic_drift = 0.01
+				social_cost_multiplier_modifier = -0.03
+				health_cost_multiplier_modifier = -0.07
+				education_cost_multiplier_modifier = -0.07
+				stability_factor = 0.03
+				tax_gain_multiplier_modifier = 0.14
+				foreign_influence_modifier = 0.09
+				receiving_investment_cost_modifier = -0.09
+				receiving_investment_duration_modifier = -0.09
+				bureaucracy_cost_multiplier_modifier = -0.03
+				civilian_industry_tax_modifier = 0.03
+				population_tax_income_multiplier_modifier = -0.05
+				productivity_growth_modifier = 0.04
+				inflation_defence_multiplier_modifier = 0.1
+				treasury_to_gdp_inflation_multiplier_modifier = 0.06
+				offices_productivity = 0.05
+			}
+		}
+		HUN_liberal_socdem2_gov_idea = {
+			picture = HUN_ferenc_gov
+			name = HUN_liberal_socdem_gov_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				democratic_drift = 0.04
+				social_cost_multiplier_modifier = -0.03
+				health_cost_multiplier_modifier = -0.07
+				education_cost_multiplier_modifier = -0.07
+				stability_factor = 0.03
+				tax_gain_multiplier_modifier = 0.14
+				foreign_influence_modifier = 0.09
+				receiving_investment_cost_modifier = -0.11
+				receiving_investment_duration_modifier = -0.11
+				bureaucracy_cost_multiplier_modifier = -0.06
+				civilian_industry_tax_modifier = 0.03
+				population_tax_income_multiplier_modifier = -0.05
+				productivity_growth_modifier = 0.04
+				inflation_defence_multiplier_modifier = 0.1
+				treasury_to_gdp_inflation_multiplier_modifier = 0.06
+				offices_productivity = 0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.06
+			}
+		}
+			HUN_liberal_socdem3_gov_idea = {
+			picture = HUN_ferenc_gov
+			name = HUN_liberal_socdem_gov_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				democratic_drift = 0.05
+				social_cost_multiplier_modifier = -0.03
+				health_cost_multiplier_modifier = -0.15
+				education_cost_multiplier_modifier = -0.07
+				stability_factor = 0.06
+				tax_gain_multiplier_modifier = 0.14
+				foreign_influence_modifier = 0.09
+				receiving_investment_cost_modifier = -0.13
+				receiving_investment_duration_modifier = -0.13
+				bureaucracy_cost_multiplier_modifier = -0.1
+				civilian_industry_tax_modifier = 0.03
+				population_tax_income_multiplier_modifier = -0.02
+				productivity_growth_modifier = 0.07
+				inflation_defence_multiplier_modifier = 0.1
+				treasury_to_gdp_inflation_multiplier_modifier = 0.06
+				offices_productivity = 0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.06
+			}
+		}
+		HUN_liberal_socdem4_gov_idea = {
+			picture = HUN_ferenc_gov
+			name = HUN_liberal_socdem_gov_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				democratic_drift = 0.05
+				social_cost_multiplier_modifier = -0.03
+				health_cost_multiplier_modifier = -0.15
+				education_cost_multiplier_modifier = -0.07
+				stability_factor = 0.06
+				tax_gain_multiplier_modifier = 0.14
+				foreign_influence_modifier = 0.09
+				receiving_investment_cost_modifier = -0.13
+				receiving_investment_duration_modifier = -0.13
+				bureaucracy_cost_multiplier_modifier = -0.14
+				civilian_industry_tax_modifier = 0.05
+				population_tax_income_multiplier_modifier = -0.02
+				productivity_growth_modifier = 0.1
+				inflation_defence_multiplier_modifier = 0.1
+				treasury_to_gdp_inflation_multiplier_modifier = 0.06
+				offices_productivity = 0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.08
+				civilian_factories_productivity = 0.07
+			}
+		}
+		HUN_liberal_socdem5_gov_idea = {
+			picture = HUN_ferenc_gov
+			name = HUN_liberal_socdem_gov_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				democratic_drift = 0.05
+				social_cost_multiplier_modifier = -0.03
+				health_cost_multiplier_modifier = -0.15
+				education_cost_multiplier_modifier = -0.07
+				stability_factor = 0.08
+				tax_gain_multiplier_modifier = 0.15
+				foreign_influence_modifier = 0.09
+				receiving_investment_cost_modifier = -0.13
+				receiving_investment_duration_modifier = -0.13
+				bureaucracy_cost_multiplier_modifier = -0.14
+				civilian_industry_tax_modifier = 0.05
+				population_tax_income_multiplier_modifier = -0.02
+				productivity_growth_modifier = 0.1
+				inflation_defence_multiplier_modifier = 0.15
+				treasury_to_gdp_inflation_multiplier_modifier = 0.1
+				offices_productivity = 0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.08
+				civilian_factories_productivity = 0.07
+			}
+		}
+		HUN_corporate_tax = {
+			picture = HUN_corp_tax
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				civilian_industry_tax_modifier = 0.05
+				office_park_income_tax_modifier = 0.07
+				bureaucracy_cost_multiplier_modifier = 0.1
+			}
+		}
+		HUN_business_bonus = {
+			picture = HUN_business_support
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				civilian_industry_tax_modifier = 0.06
+				office_park_income_tax_modifier = 0.06
+				corporate_tax_income_multiplier_modifier = 0.07
+				offices_productivity = 0.1
+				civilian_factories_productivity = 0.1
+				production_speed_offices_factor = 0.1 
+			}
+		}
+		HUN_hungarian_third_way = {
+			picture = HUN_lib_soc_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				democratic_drift = 0.06
+				social_cost_multiplier_modifier = -0.04
+				health_cost_multiplier_modifier = -0.15
+				education_cost_multiplier_modifier = -0.09
+				stability_factor = 0.1
+				tax_gain_multiplier_modifier = 0.15
+				foreign_influence_modifier = 0.09
+				receiving_investment_cost_modifier = -0.17
+				receiving_investment_duration_modifier = -0.17
+				bureaucracy_cost_multiplier_modifier = -0.17
+				civilian_industry_tax_modifier = 0.05
+				population_tax_income_multiplier_modifier = 0.04
+				productivity_growth_modifier = 0.13
+				inflation_defence_multiplier_modifier = 0.16
+				treasury_to_gdp_inflation_multiplier_modifier = 0.12
+				offices_productivity = 0.08
+				econ_cycle_upg_cost_multiplier_modifier = -0.1
+				civilian_factories_productivity = 0.1
+			}
+		}
+		HUN_socdem2_gov_idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.07
+				democratic_drift = 0.06
+				social_cost_multiplier_modifier = 0.04
+				stability_factor = 0.07
+				tax_gain_multiplier_modifier = 0.08
+				foreign_influence_modifier = 0.03
+				receiving_investment_cost_modifier = -0.02
+				receiving_investment_duration_modifier = -0.02
+				bureaucracy_cost_multiplier_modifier = 0.06
+				civilian_industry_tax_modifier = -0.05
+				productivity_growth_modifier = 0.06
+				inflation_multiplier_modifier = 0.08
+			}
+		}
+		HUN_socdem3_gov_idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.07
+				democratic_drift = 0.06
+				social_cost_multiplier_modifier = 0.06
+				health_cost_multiplier_modifier = 0.05
+				stability_factor = 0.07
+				tax_gain_multiplier_modifier = 0.1
+				bureaucracy_cost_multiplier_modifier = 0.08
+				civilian_industry_tax_modifier = -0.02
+				productivity_growth_modifier = 0.1
+				inflation_multiplier_modifier = 0.1
+				population_tax_income_multiplier_modifier = 0.04
+				production_factory_max_efficiency_factor = 0.06
+			}
+		}
+		HUN_socdem4_gov_idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.09
+				democratic_drift = 0.06
+				social_cost_multiplier_modifier = 0.09
+				health_cost_multiplier_modifier = 0.07
+				stability_factor = 0.09
+				tax_gain_multiplier_modifier = 0.12
+				bureaucracy_cost_multiplier_modifier = 0.1
+				civilian_industry_tax_modifier = -0.08
+				productivity_growth_modifier = 0.12
+				inflation_multiplier_modifier = 0.12
+				population_tax_income_multiplier_modifier = 0.07
+				production_factory_max_efficiency_factor = 0.1
+			}
+		}
+		HUN_socdem5_gov_idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.09
+				democratic_drift = 0.06
+				social_cost_multiplier_modifier = 0.1
+				health_cost_multiplier_modifier = 0.09
+				stability_factor = 0.1
+				tax_gain_multiplier_modifier = 0.13
+				bureaucracy_cost_multiplier_modifier = 0.13
+				civilian_industry_tax_modifier = 0.02
+				productivity_growth_modifier = 0.16
+				inflation_multiplier_modifier = 0.12
+				population_tax_income_multiplier_modifier = 0.07
+				production_factory_max_efficiency_factor = 0.11
+				production_speed_Infrastructure_factor = 0.05
+				civilian_factories_productivity = 0.05
+			}
+		}
+		HUN_socdem6_gov_idea = {
+			picture = HUN_socialist_gov_idea
+			name = HUN_socialist_gov
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.1
+				democratic_drift = 0.07
+				social_cost_multiplier_modifier = 0.12
+				health_cost_multiplier_modifier = 0.1
+				stability_factor = 0.1
+				tax_gain_multiplier_modifier = 0.13
+				bureaucracy_cost_multiplier_modifier = 0.15
+				productivity_growth_modifier = 0.18
+				inflation_multiplier_modifier = 0.14
+				population_tax_income_multiplier_modifier = 0.08
+				production_factory_max_efficiency_factor = 0.13
+				production_speed_Infrastructure_factor = 0.06
+				civilian_factories_productivity = 0.06
+			}
+		}
+		#Progressive European Society
+		HUN_progressivism_society = {
+			picture = HUN_europe_soc_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				nationalist_drift = -0.04
+				drift_defence_factor = 0.06
+				popularity_attack_modifier = 0.07
+				western_outlook_campaign_cost_modifier = -0.09
+			}
+		}
+		HUN_progressivism1_society = {
+			picture = HUN_europe_soc_idea
+			name = HUN_progressivism_society
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				nationalist_drift = -0.05
+				drift_defence_factor = 0.06
+				popularity_attack_modifier = 0.07
+				western_outlook_campaign_cost_modifier = -0.1
+				education_cost_multiplier_modifier = 0.05
+				education_budget_cost_factor = -0.05
+			}
+		}
+		HUN_progressivism2_society = {
+			picture = HUN_europe_soc_idea
+			name = HUN_progressivism_society
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				nationalist_drift = -0.06
+				drift_defence_factor = 0.08
+				popularity_attack_modifier = 0.09
+				western_outlook_campaign_cost_modifier = -0.12
+				education_cost_multiplier_modifier = 0.08
+				education_budget_cost_factor = -0.08
+				bureaucracy_cost_multiplier_modifier = -0.04
+			}
+		}
+		#Socialist Hungary
+		HUN_socialist_hungary = {
+			picture = HUN_europe_soc_idea
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_gain = 0.12
+				democratic_drift = 0.08
+				nationalist_drift = -0.07
+				drift_defence_factor = 0.08
+				social_cost_multiplier_modifier = 0.12
+				health_cost_multiplier_modifier = 0.12
+				education_cost_multiplier_modifier = 0.1
+				education_budget_cost_factor = -0.1
+				stability_factor = 0.12
+				tax_gain_multiplier_modifier = 0.15
+				bureaucracy_cost_multiplier_modifier = 0.19
+				productivity_growth_modifier = 0.2
+				inflation_multiplier_modifier = 0.17
+				population_tax_income_multiplier_modifier = 0.12
+				production_factory_max_efficiency_factor = 0.15
+				production_speed_Infrastructure_factor = 0.1
+				civilian_factories_productivity = 0.1
+				popularity_attack_modifier = 0.1
+				western_outlook_campaign_cost_modifier = -0.12
+			}
+		}
+		#Constitution of National Devolution
+		HUN_supper_new_constitution_devolution_idea = {
+			picture = HUN_devolut
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				migration_rate_value_factor = 0.06
+				tax_gain_multiplier_modifier = 0.07
+				democratic_drift = 0.05
+				bureaucracy_cost_multiplier_modifier = 0.1
+				stability_factor = 0.06
+				bureaucracy_cost_factor = 0.06
+				internal_investments_pp_cost_modifier = 0.08
+				internal_investments_money_cost_modifier = -0.1
+				productivity_growth_modifier = 0.1
+				police_cost_multiplier_modifier = -0.06
+			}
+		}
+		#Comfortable and Affordable Hungary
+		HUN_comfortable_affordable_hungary = {
+			picture = HUN_comfortable
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				production_speed_Infrastructure_factor = 0.1
+				production_speed_internet_station_factor = 0.1
+				productivity_growth_modifier = 0.1
+			}
+		}
+		#Fight Against the Church
+		HUN_no_church_influence = {
+			picture = HUN_church_no
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = -0.1
+				police_cost_multiplier_modifier = 0.1
+				democratic_drift = 0.03
+				propaganda_campaign_cost_modifier = -0.1
+			}
+		}
+		#Recent Exercises with US
+		HUN_recent_exercises = {
+			picture = HUN_recent_exercises_us_icon
+			modifier = {
+				army_attack_factor = 0.03
+				army_defence_factor = 0.03
+				army_speed_factor = 0.03
+				army_morale = 0.3
+				army_org_factor = 0.08
+				experience_gain_army = 0.07
+			}
+		}
+		#American investments
+		HUN_us_investments = {
+			picture = HUN_us_invest_icon
+			modifier = {
+				econ_cycle_upg_cost_multiplier_modifier = -0.04
+				country_productivity_growth_modifier = 0.02
+				tax_gain_multiplier_modifier = 0.03
+				foreign_influence_defense_modifier = -0.03
+			}
+		}
+		#USAID
+		HUN_USAID = {
+			picture = HUN_usaid_icon
+			cancel = {
+				OR = {
+					NOT = { country_exists = USA }
+					USA = {
+						has_opinion = {
+							target = HUN
+							value < 0
+						}
+					}
+				}
+			}
+			modifier = {
+				foreign_influence_defense_modifier = -0.1
+				drift_defence_factor = 0.12
+				democratic_drift = 0.03
+				intelligence_agency_defense = 0.2
+				intel_network_gain_factor = 0.08
+			}
+		}
+		#Hungarian-Kazakh Joint Research
+		HUN_KAZ_joint_research = {
+			picture = HUN_kaz_joint_research_icon
+			modifier = {
+				education_cost_multiplier_modifier = -0.04
+				research_speed_factor = 0.05
+				scientist_research_bonus_factor = 0.03
+			}
+		}
+		#Kuwait Oil
+		HUN_kuwait_oil = {
+			picture = HUN_kuw_oil_icon
+			cancel = {
+				OR = {
+					NOT = { country_exists = KUW }
+					KUW = {
+						has_opinion = {
+							target = HUN
+							value < 0
+						}
+					}
+				}
+			}
+			modifier = {
+				country_resource_oil = 8
+			}
+		}
+		#Korean Companies
+		HUN_korean_companies = {
+			picture = korean_invest
+			cancel = {
+				OR = {
+					NOT = { country_exists = KOR }
+					KOR = {
+						has_opinion = {
+							target = HUN
+							value < 0
+						}
+					}
+				}
+			}
+			modifier = {
+				country_productivity_growth_modifier = 0.03
+				production_speed_buildings_factor = 0.07
+				corporate_tax_income_multiplier_modifier = 0.05
+				offices_productivity = 0.08
+			}
+		}
+		#North Korean Workers
+		HUN_korean_workers_idea = {
+			picture = sov_korean_workers_idea
+			cancel = {
+				OR = {
+					NOT = { country_exists = NKO }
+					NKO = {
+						has_opinion = {
+							target = HUN
+							value < 0
+						}
+					}
+				}
+			}
+			modifier = {
+				production_speed_infrastructure_factor = 0.10
+				production_speed_buildings_factor = 0.07
+				total_workforce_modifier = -0.03
+				civilian_factories_productivity = 0.05
+			}
+		}
+		#Britain University
+		HUN_england_university = {
+			picture = HUN_england_university_icon
+			modifier = {
+				education_cost_multiplier_modifier = -0.07
+				research_speed_factor = 0.07
+				scientist_research_bonus_factor = 0.05
+				scientist_xp_gain_factor = 0.03
+			}
+		}
+		#Recent Exercises with Russia
+		HUN_recent_exercises_russia = {
+			picture = hungary_russia_exercises
+			modifier = {
+				army_attack_factor = 0.03
+				army_defence_factor = 0.03
+				army_speed_factor = 0.03
+				army_morale = 0.3
+				army_org_factor = 0.08
+				experience_gain_army = 0.07
+			}
+		}
+
+		#COMMI
+
+		#Economy reorganization
+		HUN_economy_reorg = {
+			picture = HUN_economy_reorg_icon
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				econ_cycle_upg_cost_multiplier_modifier = 0.1
+				tax_gain_multiplier_modifier = -0.03
+				production_speed_buildings_factor = -0.03
+				civilian_factories_productivity = -0.02
+			}
+		}
+		#Planned Economy
+		HUN_plan_economy = {
+			picture = planning_economy
+			on_remove = {
+				if = {
+					limit = { 
+						has_idea = HUN_avh_idea
+						emerging_communist_state_are_not_in_power = yes
+					}
+					remove_ideas = HUN_avh_idea
+				}
+			}
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				interest_rate_multiplier_modifier = -1
+				econ_cycle_upg_cost_multiplier_modifier = -0.03
+				tax_gain_multiplier_modifier = 0.03
+				production_speed_buildings_factor = 0.05
+				civilian_factories_productivity = 0.02
+				projects_cost_modifier = -0.07
+			}
+		}
+		HUN_plan_economy1 = {
+			picture = planning_economy
+			name = HUN_plan_economy
+			on_remove = {
+				if = {
+					limit = { 
+						has_idea = HUN_avh_idea
+						emerging_communist_state_are_not_in_power = yes
+					}
+					remove_ideas = HUN_avh_idea
+				}
+			}
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				interest_rate_multiplier_modifier = -1
+				econ_cycle_upg_cost_multiplier_modifier = -0.03
+				tax_gain_multiplier_modifier = 0.03
+				production_speed_buildings_factor = 0.07
+				civilian_factories_productivity = 0.06
+				projects_cost_modifier = -0.07
+			}
+		}
+		HUN_plan_economy2 = {
+			picture = planning_economy
+			name = HUN_plan_economy
+			on_remove = {
+				if = {
+					limit = { 
+						has_idea = HUN_avh_idea
+						emerging_communist_state_are_not_in_power = yes
+					}
+					remove_ideas = HUN_avh_idea
+				}
+			}
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				interest_rate_multiplier_modifier = -1
+				local_resources_factor = 0.07
+				econ_cycle_upg_cost_multiplier_modifier = -0.03
+				tax_gain_multiplier_modifier = 0.03
+				production_speed_buildings_factor = 0.07
+				civilian_factories_productivity = 0.06
+				projects_cost_modifier = -0.07
+				resource_sector_workers_modifier = 0.03
+				resource_export_multiplier_modifier = -0.1
+				gdp_from_resource_sector_modifier = 0.12
+			}
+		}
+		#Anti-Migrant policy
+		HUN_anti_migrant = {
+			picture = HUN_anti_migrant_icon
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				migration_rate_value_factor = -0.03
+				total_workforce_modifier = 0.02
+				nationalist_drift = 0.01
+			}
+		}
+		#Labour Unions
+		HUN_labour_unions = {
+			picture = HUN_labour_union
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.03
+				communism_drift = 0.01
+				total_workforce_modifier = 0.07
+				agricolture_productivity_modifier = 0.03
+				civilian_factories_productivity = 0.03
+				tax_gain_multiplier_modifier = 0.05
+				social_cost_multiplier_modifier = 0.02
+			}
+		}
+		#Proletarian power
+		HUN_proletarian_power = {
+			picture = dictatorship_of_proletariat
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				communism_drift = 0.03
+				country_productivity_growth_modifier = 0.07
+				total_workforce_modifier = 0.15
+				political_power_factor = 0.05
+			}
+		}
+		HUN_proletarian_power1 = {
+			picture = dictatorship_of_proletariat
+			name = HUN_proletarian_power
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				communism_drift = 0.03
+				corruption_cost_factor = -0.15
+				country_productivity_growth_modifier = 0.07
+				total_workforce_modifier = 0.15
+				political_power_factor = 0.07
+				police_cost_multiplier_modifier = 0.03
+				bureaucracy_cost_multiplier_modifier = -0.05
+			}
+		}
+		#Purges among officials
+		HUN_admin_purge = {
+			picture = pol_falanga_admin_purges
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.1
+				communism_drift = 0.03
+				stability_factor = -0.05
+				drift_defence_factor = 0.07
+				foreign_influence_defense_modifier = 0.1
+				bureaucracy_cost_multiplier_modifier = 0.04
+				police_cost_multiplier_modifier = 0.07
+			}
+		}
+		#True Socialism
+		HUN_true_socialism_idea = {
+			picture = generic_commi_workers_idea
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				communism_drift = 0.02
+				communism_acceptance = 20
+				stability_factor = 0.03
+				econ_cycle_upg_cost_multiplier_modifier = -0.03
+				political_power_factor = 0.03
+				tax_gain_multiplier_modifier = 0.02
+			}
+		}
+		HUN_true_socialism_idea1 = {
+			name = HUN_true_socialism_idea
+			picture = generic_commi_workers_idea
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				communism_drift = 0.05
+				communism_acceptance = 20
+				stability_factor = 0.03
+				econ_cycle_upg_cost_multiplier_modifier = -0.03
+				emerging_outlook_campaign_cost_modifier = -0.1
+				democratic_drift = -0.01
+				political_power_factor = 0.05
+				tax_gain_multiplier_modifier = 0.02
+			}
+		}
+		HUN_true_socialism_idea2 = {
+			name = HUN_true_socialism_idea
+			picture = generic_commi_workers_idea
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				communism_drift = 0.07
+				communism_acceptance = 20
+				stability_factor = 0.03
+				econ_cycle_upg_cost_multiplier_modifier = -0.03
+				emerging_outlook_campaign_cost_modifier = -0.1
+				democratic_drift = -0.01
+				political_power_factor = 0.05
+				tax_gain_multiplier_modifier = 0.02
+				health_cost_multiplier_modifier = -0.07
+				social_cost_multiplier_modifier = -0.05
+				expected_healthcare_modifier = -1
+				expected_welfare_modifier = -1
+			}
+		}
+		#Communist activity
+		HUN_communist_activity = {
+			picture = rise_communism
+			modifier = {
+				communism_drift = 0.05
+				democratic_drift = -0.03
+				stability_factor = -0.1
+				foreign_influence_defense_modifier = -0.05
+			}
+		}
+		#CESU Member
+		HUN_cesu_member = {
+			picture = HUN_cesu_member_icon
+			cancel = {
+				NOT = { is_in_faction = yes }
+			}
+			modifier = {
+				communism_drift = 0.03
+				democratic_drift = -0.01
+				war_support_factor = 0.02
+				stability_factor = 0.05
+			}
+		}
+		#Cut defense spending
+		HUN_decrease_mil_spend = {
+			picture = HUN_cut_def_spend_icon
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				army_personnel_cost_multiplier_modifier = -0.12
+				stability_factor = 0.07
+				military_factories_productivity = -0.07
+				civilian_factories_productivity = 0.04
+				country_productivity_growth_modifier = 0.07
+				production_speed_buildings_factor = 0.05
+				expected_mil_modifier = -1
+			}
+		}
+		#Iron Curtain
+		HUN_iron_curtain_idea = {
+			picture = HUN_dictatorship_icon
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.1
+				foreign_influence_defense_modifier = 0.12
+				drift_defence_factor = 0.07
+			}
+		}
+		HUN_iron_curtain_idea1 = {
+			name = HUN_iron_curtain_idea
+			picture = HUN_dictatorship_icon
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				political_power_factor = 0.12
+				communism_drift = 0.05
+				democratic_drift = -0.03
+				democratic_acceptance = -10
+				foreign_influence_defense_modifier = 0.15
+				drift_defence_factor = 0.07
+			}
+		}
+		#Strengthening the police
+		HUN_strenghing_police = {
+			picture = GENERIC_police_reform_idea
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				stability_factor = 0.15
+				expected_police_modifier = -1
+				corruption_cost_factor = -0.25
+				foreign_subversive_activites = -0.07
+				political_power_factor = 0.03
+				police_cost_multiplier_modifier = 0.07
+				bureaucracy_cost_multiplier_modifier = 0.05
+			}
+		}
+		#Education Support
+		HUN_edu_support = {
+			picture = blr_soviet_education
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			modifier = {
+				research_speed_factor = 0.1
+				scientist_research_bonus_factor = 0.12
+				scientist_xp_gain_factor = 0.07
+				scientist_breakthrough_bonus_factor	= 0.05
+				expected_education_modifier = -1
+				education_cost_multiplier_modifier = 0.1
+			}
+		}
+	}
+
+	hidden_ideas = {
+
+		#### ECONOMY ####
+
+		#Forint
+		HUN_forint_idea = {
+			cancel = {
+				OR = {
+					has_idea = VG_visegrad_euro
+					has_idea = the_euro
+				}
+			}
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				interest_rate_multiplier_modifier = -2
+				bureaucracy_cost_multiplier_modifier = -0.07
+				econ_cycle_upg_cost_multiplier_modifier = -0.12
+				inflation_defence_multiplier_modifier = 0.15
+				foreign_influence_defense_modifier = 0.2
+			}
+		}
+		#National Bank
+		HUN_national_bank_idea = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				interest_rate_multiplier_modifier = -1
+				econ_cycle_upg_cost_multiplier_modifier = -0.12
+				inflation_defence_multiplier_modifier = 0.09
+				foreign_influence_defense_modifier = 0.04
+				tax_gain_multiplier_modifier = 0.05
+			}
+		}
+		HUN_high_government_debt_idea = {
+			cancel = {
+				check_variable = { debt_rate < 10 }
+			}
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				interest_rate_multiplier_modifier = 2
+				stability_factor = -0.15
+				inflation_defence_multiplier_modifier = -0.2
+				return_on_investment_modifier = -0.03
+			}
+		}
+		HUN_subsidiary_reflex_idea = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = -0.15
+				expected_welfare_modifier = 1
+				expected_healthcare_modifier = 1
+				social_cost_multiplier_modifier = 0.2
+			}
+		}
+		HUN_brain_drain_idea = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				monthly_population = -0.2
+				stability_factor = -0.1
+				research_speed_factor = -0.2
+				productivity_growth_modifier = -1
+			}
+		}
+		HUN_energy_problem = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				energy_gain_multiplier = -0.2
+				energy_use_multiplier = 0.07
+				pop_energy_use_multiplier = 0.07
+				fossil_pp_energy_generation_modifier = -0.3
+				fossil_pp_fuel_consumption_modifier = 0.15
+				inflation_multiplier_modifier = 0.02
+			}
+		}
+		HUN_energy_problem1 = { 
+			name = HUN_energy_problem
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				energy_gain_multiplier = -0.1
+				energy_use_multiplier = 0.05
+				pop_energy_use_multiplier = 0.05
+				fossil_pp_energy_generation_modifier = -0.12
+				fossil_pp_fuel_consumption_modifier = 0.15
+				inflation_multiplier_modifier = 0.01
+			}
+		}
+		HUN_gas_import = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				fossil_pp_energy_generation_modifier = 0.05
+				fossil_pp_fuel_consumption_modifier = -0.09
+				fuel_gain_factor = 0.07
+				foreign_influence_defense_modifier = -0.07
+			}
+		}
+		HUN_subsidies_from_IMF = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = HUN_subsidies_from_IMF_tt
+			}
+		}
+		HUN_tourism_idea = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = HUN_tourism_idea_tt
+				small_businesses_productivity_modifier = 0.02
+				migration_rate_value_factor = 0.02
+				monthly_population = 0.01
+			}
+		}
+
+		### ARMY ###
+
+		#Outdated Army
+		HUN_outdate_army = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_attack_factor = -0.12
+				army_defence_factor = -0.12
+				army_org_factor = -0.07
+				max_planning_factor = -0.09
+			}
+		}
+		HUN_outdate_army1 = {
+			name = HUN_outdate_army
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_attack_factor = -0.08
+				army_defence_factor = -0.08
+				army_org_factor = -0.05
+				max_planning_factor = -0.05
+			}
+		}
+		#Trained battalions
+		HUN_trained_battalion = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_attack_factor = 0.03
+				breakthrough_factor = 0.04
+				army_defence_factor = 0.05
+			}
+		}
+		HUN_trained_battalion1 = {
+			name = HUN_trained_battalion
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.07
+				army_defence_factor = 0.07
+			}
+		}
+		#New Naval Doctrine
+		HUN_new_naval_doctrine = {
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				naval_damage_factor = 0.03
+				naval_defense_factor = 0.09
+				naval_morale_factor = 0.05
+				navy_org_factor = 0.07
+				spotting_chance = 0.05
+				naval_accidents_chance = -0.04
+				naval_mine_hit_chance = -0.08
+				industrial_capacity_dockyard = 0.07
+				naval_speed_factor = 0.04
+				navy_max_range_factor = 0.04
+				navy_anti_air_attack_factor = 0.04
+			}
+		}
+		HUN_new_naval_doctrine1 = {
+			name = HUN_new_naval_doctrine
+			allowed = { original_tag = HUN }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				naval_damage_factor = 0.05
+				naval_defense_factor = 0.12
+				naval_morale_factor = 0.07
+				navy_org_factor = 0.09
+				spotting_chance = 0.07
+				naval_accidents_chance = -0.05
+				naval_mine_hit_chance = -0.12
+				industrial_capacity_dockyard = 0.09
+				naval_speed_factor = 0.05
+				navy_max_range_factor = 0.05
+				navy_anti_air_attack_factor = 0.05
+			}
+		}
+	}
+}

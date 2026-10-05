@@ -1,0 +1,692 @@
+﻿add_namespace = abkh
+add_namespace = abkh_news
+
+### Start
+
+country_event = {
+	id = abkh.1
+	title = abkh.1.t
+	desc = abkh.1.d
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.1.a
+		log = "[GetDateText]: [This.GetName]: abkh.1.a executed"
+		ABK = {
+			country_event = abkh.6
+			add_ideas = ABK_cis_observer_member_state_idea
+		}
+		GEO = {
+			add_opinion_modifier = { target = SOO modifier = recognises_them_rival }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		log = "[GetDateText]: [This.GetName]: abkh.1.b executed"
+		name = abkh.1.b
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Dialogue with Georgia
+country_event = {
+	id = abkh.5
+	title = abkh.5.t
+	desc = abkh.5.d
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	picture = GFX_abk_event_georgia
+
+	option = {
+		name = abkh.5.a
+		log = "[GetDateText]: [This.GetName]: abkh.5.a executed"
+		ABK = {
+			country_event = abkh.6
+			add_opinion_modifier = { target = GEO modifier = diplomatic_support }
+			reverse_add_opinion_modifier = { target = ABK modifier = diplomatic_support }
+			reverse_add_opinion_modifier = { target = GEO modifier = diplomatic_support }
+			add_political_power = 50
+		}
+		add_political_power = 50
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	option = {
+		name = abkh.5.b
+		log = "[GetDateText]: [This.GetName]: abkh.5.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+#They Agree
+country_event = {
+	id = abkh.6
+	title = abkh.6.t
+	desc = abkh.6.d
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.6.a
+		log = "[GetDateText]: [This.GetName]: abkh.6.a executed"
+		ABK = {
+			country_event = abkh.6
+		}
+	}
+}
+#They Disagree
+country_event = {
+	id = abkh.7
+	title = abkh.7.t
+	desc = abkh.7.d
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.7.a
+		log = "[GetDateText]: [This.GetName]: abkh.7.a executed"
+	}
+}
+#Negotiate large Autonomy with Georgia
+country_event = {
+	id = abkh.8
+	title = abkh.8.t
+	desc = abkh.8.d
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	picture = GFX_abk_event_georgia
+
+	option = {
+		name = abkh.8.a
+		log = "[GetDateText]: [This.GetName]: abkh.8.a executed"
+		ABK = {
+			country_event = abkh.6
+			give_guarantee = GEO
+			give_military_access = GEO
+		}
+		give_guarantee = ABK
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	option = {
+		name = abkh.8.b
+		log = "[GetDateText]: [This.GetName]: abkh.8.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+#Federalisation with Georgia
+country_event = {
+	id = abkh.9
+	title = abkh.9.t
+	desc = abkh.9.d
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	picture = GFX_abk_event_georgia
+
+	option = {
+		name = abkh.9.a
+		log = "[GetDateText]: [This.GetName]: abkh.9.a executed"
+		ABK = {
+			country_event = abkh.6
+			set_country_flag = GENERIC_autonomy_federation_flag
+		}
+		set_autonomy = {
+			target = ABK
+			autonomous_state = autonomy_puppet_federation
+		}
+		hidden_effect = {
+			news_event = {
+				hours = 6
+				id = abkh_news.2
+			}
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	option = {
+		name = abkh.9.b
+		log = "[GetDateText]: [This.GetName]: abkh.9.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+#Protect From Russia
+country_event = {
+	id = abkh.10
+	title = abkh.10.t
+	desc = abkh.10.d
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	picture = GFX_abk_event_russia
+
+	option = {
+		name = abkh.10.a
+		log = "[GetDateText]: [This.GetName]: abkh.10.a executed"
+		ABK = {
+			country_event = abkh.6
+			give_guarantee = SOV
+			give_military_access = SOV
+		}
+		give_guarantee = ABK
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	option = {
+		name = abkh.10.b
+		log = "[GetDateText]: [This.GetName]: abkh.10.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+#Union with Monadire
+country_event = {
+	id = abkh.11
+	title = abkh.11.t
+	desc = abkh.11.d
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.11.a
+		log = "[GetDateText]: [This.GetName]: abkh.11.a executed"
+		ABK = {
+			country_event = abkh.6
+			give_guarantee = MND
+			give_military_access = MND
+		}
+		white_peace = MND
+		give_guarantee = ABK
+		give_military_access = ABK
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	option = {
+		name = abkh.11.b
+		log = "[GetDateText]: [This.GetName]: abkh.11.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+#Union with South Ossetia
+country_event = {
+	id = abkh.12
+	title = abkh.12.t
+	desc = abkh.12.d
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.12.a
+		log = "[GetDateText]: [This.GetName]: abkh.12.a executed"
+		ABK = {
+			country_event = abkh.6
+			give_guarantee = SOO
+			give_military_access = SOO
+		}
+		give_guarantee = ABK
+		give_military_access = ABK
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	option = {
+		name = abkh.12.b
+		log = "[GetDateText]: [This.GetName]: abkh.12.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+#Iberian Federation
+country_event = {
+	id = abkh.13
+	title = abkh.13.t
+	desc = abkh.13.d
+
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.13.a
+		log = "[GetDateText]: [This.GetName]: abkh.13.a executed"
+		set_country_flag = GENERIC_autonomy_federation_flag
+		ABK = {
+			country_event = abkh.6
+			set_autonomy = {
+				target = ROOT
+				autonomous_state = autonomy_puppet_federation
+			}
+		}
+		ai_chance = {
+			base = 80
+		}
+	}
+
+	option = {
+		name = abkh.13.b
+		log = "[GetDateText]: [This.GetName]: abkh.13.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# Russian Union state
+country_event = {
+	id = abkh.14
+	title = abkh.14.t
+	desc = abkh.14.d
+
+	is_triggered_only = yes
+	picture = GFX_abk_event_russia
+
+	option = {
+		name = abkh.14.a
+		log = "[GetDateText]: [This.GetName]: abkh.14.a executed"
+		ABK = { 
+			set_country_flag = BLR_unionstate_agree 
+			add_ideas = USR_eternal_commitie_idea
+			add_ideas = USR_money_palata_idea
+			add_ideas = USR_council_ministers_idea
+			add_ideas = USR_gos_sovet_idea
+			add_ideas = USR_parlament_idea
+		}
+		SOV = {
+			set_autonomy = {
+				target = ABK
+				autonomous_state = autonomy_union_state
+			}
+		}
+		hidden_effect = {
+			news_event = {
+				hours = 6
+				id = union_state_news.6
+			}
+		}
+		ai_chance = {
+			base = 95
+		}
+ 	}
+
+ 	option = {
+		name = abkh.14.b
+		log = "[GetDateText]: [This.GetName]: abkh.14.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 5
+		}
+	}
+}
+
+#Russian Troops in Abkhazia
+country_event =  {
+	id = abkh.15
+	title = abkh.15.t
+	desc = abkh.15.d
+
+	is_triggered_only = yes
+	picture = GFX_abk_event_russia
+
+	option = {
+		name = abkh.15.a
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		ABK = {
+			add_manpower = 5000
+			add_war_support = 0.15
+			ABK_genocide_army_script = yes
+		}
+		ai_chance = {
+			base = 80
+		}
+
+	}
+
+	option = {
+		name = abkh.15.b
+		ABK = {
+			country_event = abkh.7
+		}
+
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+#UN Mandate
+country_event = {
+	id = abkh.17
+	title = abkh.17.t
+	desc = abkh.17.d
+
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.17.a
+		log = "[GetDateText]: [This.GetName]: abkh.17.a executed"
+		ABK = {
+           add_opinion_modifier = { target = MND modifier = diplomatic_support }
+		   add_opinion_modifier = { target = GEO modifier = diplomatic_support }
+        }
+        MND = {
+            add_opinion_modifier = { target = ABK modifier = diplomatic_support }
+			add_opinion_modifier = { target = GEO modifier = diplomatic_support }
+        }
+    }
+}
+
+#Money from Russia (request aid)
+country_event = {
+	id = abkh.18
+	title = abkh.18.t
+	desc = abkh.18.d
+
+	is_triggered_only = yes
+	picture = GFX_abk_event_russia
+
+	option = {
+		name = abkh.18.a
+		log = "[GetDateText]: [This.GetName]: abkh.18.a executed"
+		ABK = {
+			country_event = abkh.6
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+		}
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				add = 99
+				SOV = { has_opinion = { target = ABK value > 94 } }
+			}
+		}
+	}
+
+	option = {
+		name = abkh.18.b
+		log = "[GetDateText]: [This.GetName]: abkh.18.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				add = 99
+				SOV = { has_opinion = { target = ABK value < 94 } }
+			}
+		}
+	}
+}
+
+#Big Brother?
+country_event = {
+	id = abkh.19
+	title = abkh.19.t
+	desc = abkh.19.d
+
+	is_triggered_only = yes
+	picture = GFX_abk_event_russia
+
+    option = {
+		name = abkh.19.a
+		log = "[GetDateText]: [This.GetName]: abkh.19.a executed"
+		ABK = {
+			country_event = abkh.6
+			set_temp_variable = { treasury_change = 2.5 }
+			modify_treasury_effect = yes
+		}
+		set_temp_variable = { percent_change = 6.5 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = -2.5 }
+		modify_treasury_effect = yes
+		ai_chance = {
+			base = 99
+		}
+	}
+
+	option = {
+		name = abkh.19.b
+		log = "[GetDateText]: [This.GetName]: abkh.19.b executed"
+		ABK = { country_event = abkh.7 }
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Abkhazo Armenian State (Armenia)
+country_event = {
+	id = abkh.20
+	title = abkh.20.t
+	desc = abkh.20.d
+
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.20.a
+		log = "[GetDateText]: [This.GetName]: abkh.20.a executed"
+		ARM = {
+			change_tag_from = ABK
+		}
+		ABK = {
+			every_core_state = { add_core_of = ARM }
+		}
+		annex_country = {
+			target = ABK
+			transfer_troops = yes
+		}
+		ARM = {
+			set_cosmetic_tag = ARM_Abkhaz
+		}
+		hidden_effect = {
+			news_event = {
+				hours = 6
+				id = abkh_news.1
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				add = 99
+				ARM = { has_opinion = { target = ABK value > 101 } }
+			}
+		}
+	}
+
+	option = {
+		name = abkh.20.b
+		log = "[GetDateText]: [This.GetName]: abkh.20.b executed"
+		ABK = { country_event = abkh.7 }
+		ai_chance = {
+			base = 1
+			modifier = {
+				add = 99
+				ARM = { has_opinion = { target = ABK value < 101 } }
+			}
+		}
+	}
+}
+#CIS
+country_event = {
+	id = abkh.21
+	title = abkh.21.t
+	desc = abkh.21.d
+
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.21.a
+		log = "[GetDateText]: [This.GetName]: abkh.21.a executed"
+		ABK = {
+			country_event = abkh.6
+			if = {
+				limit = {
+					NOT = {
+						has_idea = CIS_two_member_state_idea
+					}
+				}
+				add_ideas = CIS_two_member_state_idea
+			}
+		}
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = ABK }
+		set_temp_variable = { influence_target = THIS }
+		change_influence_percentage = yes
+		add_ideas = CIS_two_member_state_idea
+
+		ai_chance = {
+			base = 99
+		}
+	}
+
+	option = {
+		name = abkh.21.b
+		log = "[GetDateText]: [This.GetName]: abkh.21.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Go to war
+country_event = {
+	id = abkh.22
+	title = abkh.22.t
+	desc = abkh.22.d
+
+	is_triggered_only = yes
+	picture = GFX_abk_main_event
+
+	option = {
+		name = abkh.22.a
+		log = "[GetDateText]: [This.GetName]: abkh.22.a executed"
+		declare_war_on = {
+			target = GEO
+			type = puppet_wargoal_focus
+		}
+
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = {
+		name = abkh.22.b
+		log = "[GetDateText]: [This.GetName]: abkh.22.b executed"
+		ABK = {
+			country_event = abkh.7
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Abkhazo Armenian State
+news_event = {
+	id = abkh_news.1
+	title = abkh_news.1.t
+	desc = abkh_news.1.d
+	picture = GFX_abk_armyane_news
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = abkh_news.1.a
+		log = "[GetDateText]: [This.GetName]: abkh_news.1.a executed"
+	}
+}
+#Georgia Federalization
+news_event = {
+	id = abkh_news.2
+	title = abkh_news.2.t
+	desc = abkh_news.2.d
+	picture = GFX_abk_gruzia_news
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = abkh_news.2.a
+		log = "[GetDateText]: [This.GetName]: abkh_news.2.a executed"
+	}
+}

@@ -1,0 +1,3384 @@
+GENERIC_economic_category = {
+	national_messenger = {
+		icon = generic_independence
+		fixed_random_seed = no
+
+		visible = {
+			has_idea = svyazi_pizda_idea
+		}
+
+		days_remove = 120
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 20 }
+		}
+
+		custom_cost_text = cost_20_0
+
+		complete_effect = {
+			set_temp_variable = { treasury_change = -20 }
+			modify_treasury_effect = yes
+			log = "[GetDateText]: [This.GetName]: decision national_messenger executed"
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision national_messenger"
+			random_list = {
+				55 = {
+					remove_ideas = svyazi_pizda_idea
+					set_country_flag = national_messenger_flag
+					effect_tooltip = { add_ideas = National_Messenger_idea }
+				}
+				0 = {
+					modifier = {
+						add = corruption_factor
+						set_temp_variable = { corruption_factor = 0 }
+						if = {
+							limit = { has_idea = slight_corruption }
+							add_to_temp_variable = { corruption_factor = 5 }
+						}
+						if = {
+							limit = { has_idea = modest_corruption }
+							add_to_temp_variable = { corruption_factor = 10 }
+						}
+						if = {
+							limit = { has_idea = medium_corruption }
+							add_to_temp_variable = { corruption_factor = 15 }
+						}
+						if = {
+							limit = { has_idea = widespread_corruption }
+							add_to_temp_variable = { corruption_factor = 20 }
+						}
+						if = {
+							limit = { has_idea = systematic_corruption }
+							add_to_temp_variable = { corruption_factor = 25 }
+						}
+						if = {
+							limit = { has_idea = unrestrained_corruption }
+							add_to_temp_variable = { corruption_factor = 30 }
+						}
+						if = {
+							limit = { has_idea = rampant_corruption }
+							add_to_temp_variable = { corruption_factor = 35 }
+						}
+						if = {
+							limit = { has_idea = crippling_corruption }
+							add_to_temp_variable = { corruption_factor = 40 }
+						}
+						if = {
+							limit = { has_idea = paralyzing_corruption }
+							add_to_temp_variable = { corruption_factor = 45 }
+						}
+					}
+					country_event = sanctions.4 #Художественный фильм Спиздили
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 500
+		}
+	}
+	AC_project_0_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^0 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^0
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^0 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_0_decision"
+			hidden_effect = {
+				set_variable = { project = 0 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_1_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^1 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^1
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^1 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_1_decision"
+			hidden_effect = {
+				set_variable = { project = 1 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_2_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^2 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^2
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^2 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_2_decision"
+			hidden_effect = {
+				set_variable = { project = 2 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_3_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^3 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^3
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^3 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_3_decision"
+			hidden_effect = {
+				set_variable = { project = 3 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_4_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^4 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^4
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^4 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_4_decision"
+			hidden_effect = {
+				set_variable = { project = 4 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_5_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^5 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^5
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^5 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_5_decision"
+			hidden_effect = {
+				set_variable = { project = 5 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_6_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^6 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^6
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^6 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_6_decision"
+			hidden_effect = {
+				set_variable = { project = 6 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_7_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^7 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^7
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^7 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_7_decision"
+			hidden_effect = {
+				set_variable = { project = 7 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_8_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^8 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^8
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^8 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_8_decision"
+			hidden_effect = {
+				set_variable = { project = 8 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_9_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^9 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^9
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^9 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_9_decision"
+			hidden_effect = {
+				set_variable = { project = 9 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_10_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^10 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^10
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^10 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_10_decision"
+			hidden_effect = {
+				set_variable = { project = 10 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_11_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^11 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^11
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^11 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_11_decision"
+			hidden_effect = {
+				set_variable = { project = 11 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_12_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^12 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^12
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^12 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_12_decision"
+			hidden_effect = {
+				set_variable = { project = 12 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_13_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^13 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^13
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^13 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_13_decision"
+			hidden_effect = {
+				set_variable = { project = 13 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_14_decision = {
+		icon = GFX_decision_category_generic_industry
+
+		priority = 5
+
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { ROOT.project_array^14 = THIS.id }
+			}
+		}
+
+		visible = { always = no }
+
+		days_remove = project_construction_duration^14
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { ROOT.project_array^14 < 0 } } } }
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_14_decision"
+			hidden_effect = {
+				set_variable = { project = 14 }
+				country_event = AC_event.0
+			}
+		}
+	}
+	AC_project_0_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^0 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^0 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_0_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 0 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+
+	AC_project_1_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^1 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+		cancel_trigger = {
+			hidden_trigger = { NOT = { check_variable = { FROM.project_array^1 < 0 } } }
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_1_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 1 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_2_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^2 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^2 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_2_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 2 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_3_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^3 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^3 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_3_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 3 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_4_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^4 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^4 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_4_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 4 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_5_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^5 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^5 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_5_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 5 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_6_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^6 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^6 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_6_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 6 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_7_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^7 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^7 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_7_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 7 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_8_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^8 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^8 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_8_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 8 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_9_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^9 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^9 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_9_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 9 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_10_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^10 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^10 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_10_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 10 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_11_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^11 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^11 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_11_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 11 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_12_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^12 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^12 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_12_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 12 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_13_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^13 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^13 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_0_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 13 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	AC_project_14_target_decision = {
+		highlight_states = {
+			highlight_states_trigger = {
+				check_variable = { FROM.project_array^14 = THIS.id }
+			}
+		}
+
+		allowed = { always = no }
+
+		days_mission_timeout = project_target_construction_duration
+
+		is_good = yes
+		fire_only_once = yes
+
+		selectable_mission = yes
+
+
+
+		cancel_trigger = { hidden_trigger = { NOT = { check_variable = { FROM.project_array^14 < 0 } } } }
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AC_project_14_target_decision"
+			hidden_effect = {
+				FROM = {
+					set_variable = { project = 14 }
+					country_event = AC_event.1
+				}
+			}
+		}
+	}
+	#FOREIGN INVESTMENTS
+	#FOREIGN INVESTMENTS - RUSSIAN
+	GENERIC_russian_investments = {
+		icon = GFX_decision_generic_investl_button
+		days_remove = 1
+		days_re_enable = 60
+		available = {
+			SOV = {
+				has_opinion = {
+					target = ROOT
+					value > 49
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = GENERIC_eastern_investments
+			emerging_autocracy_are_in_power = yes
+		}
+
+		cost = 50
+
+		complete_effect = {
+			SOV = {
+				country_event = f_invest.1
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = 60
+				check_variable = { treasury < 5 }
+			}
+			modifier = {
+				add = -70
+				SOV = {
+					is_ai = no
+				}
+			}
+		}
+	}
+	#FOREIGN INVESTMENTS - CHINA
+	GENERIC_china_investments = {
+		icon = GFX_decision_generic_investl_button
+		days_remove = 1
+		days_re_enable = 60
+		available = {
+			CHI = {
+				has_opinion = {
+					target = ROOT
+					value > 49
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = GENERIC_eastern_investments
+			emerging_autocracy_are_in_power = yes
+		}
+
+		cost = 50
+
+		complete_effect = {
+			CHI = {
+				country_event = f_invest.1
+			}
+		}
+
+		ai_will_do = {
+			base = 1 
+			modifier = {
+				add = 60
+				check_variable = { treasury < 5 }
+			}
+			modifier = {
+				add = -70
+				CHI = {
+					is_ai = no
+				}
+			}
+		}
+	}
+	#FOREIGN INVESTMENTS - INDIA
+	GENERIC_india_investments = {
+		icon = GFX_decision_generic_investl_button
+		days_remove = 1
+		days_re_enable = 60
+		available = {
+			RAJ = {
+				has_opinion = {
+					target = ROOT
+					value > 49
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = GENERIC_eastern_investments
+			emerging_autocracy_are_in_power = yes
+		}
+
+		cost = 50
+
+		complete_effect = {
+			RAJ = {
+				country_event = f_invest.1
+			}
+		}
+
+		ai_will_do = {
+			base = 1 
+			modifier = {
+				add = 50
+				check_variable = { treasury < 5 }
+			}
+			modifier = {
+				add = -70
+				RAJ = {
+					is_ai = no
+				}
+			}
+		}
+	}
+	#FOREIGN INVESTMENTS - IRAN
+	GENERIC_iran_investments = {
+		icon = GFX_decision_generic_investl_button
+		days_remove = 1
+		days_re_enable = 60
+		available = {
+			PER = {
+				has_opinion = {
+					target = ROOT
+					value > 49
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = GENERIC_eastern_investments
+			emerging_autocracy_are_in_power = yes
+		}
+
+		cost = 50
+
+		complete_effect = {
+			PER = {
+				country_event = f_invest.1
+			}
+		}
+
+		ai_will_do = {
+			base = 1 
+			modifier = {
+				add = 60
+				check_variable = { treasury < 5 }
+			}
+			modifier = {
+				add = -70
+				PER = {
+					is_ai = no
+				}
+			}
+		}
+	}
+	#FOREIGN INVESTMENTS - USA
+	GENERIC_usa_investments = {
+		icon = GFX_decision_generic_investl_button
+		days_remove = 1
+		days_re_enable = 60
+		available = {
+			USA = {
+				has_opinion = {
+					target = ROOT
+					value > 49
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = GENERIC_western_investments
+			western_autocrats_are_in_power = yes
+		}
+
+		cost = 50
+
+		complete_effect = {
+			USA = {
+				country_event = f_invest.1
+			}
+		}
+
+		ai_will_do = {
+			base = 1 
+			modifier = {
+				add = 60
+				check_variable = { treasury < 5 }
+			}
+			modifier = {
+				add = -70
+				USA = {
+					is_ai = no
+				}
+			}
+		}
+	}
+	#FOREIGN INVESTMENTS - FRANCE
+	GENERIC_france_investments = {
+		icon = GFX_decision_generic_investl_button
+		days_remove = 1
+		days_re_enable = 60
+		available = {
+			FRA = {
+				has_opinion = {
+					target = ROOT
+					value > 49
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = GENERIC_western_investments
+			western_autocrats_are_in_power = yes
+		}
+
+		cost = 50
+
+		complete_effect = {
+			FRA = {
+				country_event = f_invest.1
+			}
+		}
+
+		ai_will_do = {
+			base = 1 
+			modifier = {
+				add = 60
+				check_variable = { treasury < 5 }
+			}
+			modifier = {
+				add = -70
+				FRA = {
+					is_ai = no
+				}
+			}
+		}
+	}
+	#FOREIGN INVESTMENTS - GERMAN
+	GENERIC_german_investments = {
+		icon = GFX_decision_generic_investl_button
+		days_remove = 1
+		days_re_enable = 60
+		available = {
+			GER = {
+				has_opinion = {
+					target = ROOT
+					value > 49
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = GENERIC_western_investments
+			western_autocrats_are_in_power = yes
+		}
+
+		cost = 50
+
+		complete_effect = {
+			GER = {
+				country_event = f_invest.1
+			}
+		}
+
+		ai_will_do = {
+			base = 1 
+			modifier = {
+				add = 60
+				check_variable = { treasury < 5 }
+			}
+			modifier = {
+				add = -70
+				GER = {
+					is_ai = no
+				}
+			}
+		}
+	}
+	#FOREIGN INVESTMENTS - BAD TOOTH
+	GENERIC_british_investments = {
+		icon = GFX_decision_generic_investl_button
+		days_remove = 1
+		days_re_enable = 60
+		available = {
+			ENG  = {
+				has_opinion = {
+					target = ROOT
+					value > 49
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = GENERIC_western_investments
+			western_autocrats_are_in_power = yes
+		}
+
+		cost = 50
+
+		complete_effect = {
+			ENG = {
+				country_event = f_invest.1
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = 60
+				check_variable = { treasury < 5 }
+			}
+			modifier = {
+				add = -70
+				ENG = {
+					is_ai = no
+				}
+			}
+		}
+	}
+	#BATTERY PARKS
+	energy_building_battery_parks = {
+		icon = GFX_decision_energy_build_button
+		allowed = { always = no }
+		available = { always = yes }
+
+		days_mission_timeout = ROOT.battery_park_time
+		fire_only_once = no
+		selectable_mission = yes
+
+		timeout_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision energy_building_battery_parks"
+			if = { limit = { has_country_flag = single_battery_park }
+				set_temp_variable = { temp_change = 1 }
+				build_battery_park_effect = yes
+			}
+			else = {
+				set_temp_variable = { temp_change = 3 }
+				build_battery_park_effect = yes
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision energy_building_battery_parks"
+			clear_variable = ROOT.battery_park_time
+			clr_country_flag = build_three_battery_parks
+			clr_country_flag = single_battery_park
+		}
+	}
+	#NUCLEAR ENERGY
+	#NUCLEAR ENERGY - BUILD FACILITIES
+	energy_building_enrichment_facilities = {
+		icon = GFX_decision_energy_build_button
+		allowed = { always = no }
+		available = { always = yes }
+
+		days_mission_timeout = ROOT.enrichment_facility_time
+		fire_only_once = no
+		selectable_mission = yes
+
+		timeout_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision energy_building_enrichment_facilities"
+			if = { limit = { has_country_flag = single_enrichment_facility }
+				set_temp_variable = { temp_change = 1 }
+				build_enrichment_facilities_effect = yes
+			}
+			else = {
+				set_temp_variable = { temp_change = 3 }
+				build_enrichment_facilities_effect = yes
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision energy_building_enrichment_facilities"
+			clear_variable = ROOT.enrichment_facility_time
+			clr_country_flag = build_three_enrichment_facility
+			clr_country_flag = single_enrichment_facility
+		}
+	}
+	###########ECONOMIC - ARMENIA###########
+	ARM_repatriate_armenians = {
+		icon = GFX_decision_arm_repatriation_button
+
+		cost = 100
+		fire_only_once = yes
+		days_remove = 100
+
+		available = {
+			has_idea = ARM_diaspora_links
+			OR = {
+				has_idea = ARM_high_emigration_2
+				has_idea = ARM_high_emigration_1
+				has_idea = ARM_high_emigration_0
+				has_idea = ARM_immigration
+			}
+			NOT = {
+				has_country_flag = four_repat_done
+			}
+		}
+
+		visible = {
+			tag = ARM
+			has_idea = ARM_diaspora_links
+			NOT = {
+				has_country_flag = four_repat_done
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = ARM
+				is_capital = no
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_repatriate_armenians"
+			custom_effect_tooltip = effect_app_if_migr_lev_tt
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = first_repat_done
+					}
+					has_idea = ARM_high_emigration_2
+				}
+				random_owned_controlled_state = {
+					add_manpower = 90000
+				}
+				random_owned_controlled_state = {
+					add_manpower = 10000
+				}
+				set_country_flag = first_repat_done
+				set_temp_variable = { treasury_change = -5 }
+				modify_treasury_effect = yes
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = second_repat_done
+					}
+					has_idea = ARM_high_emigration_1
+				}
+				random_owned_controlled_state = {
+					add_manpower = 200000
+				}
+				random_owned_controlled_state = {
+					add_manpower = 10000
+				}
+				set_country_flag = second_repat_done
+				set_temp_variable = { treasury_change = -10 }
+				modify_treasury_effect = yes
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = third_repat_done
+					}
+					has_idea = ARM_high_emigration_0
+				}
+				random_owned_controlled_state = {
+					add_manpower = 200000
+				}
+				random_owned_controlled_state = {
+					add_manpower = 10000
+				}
+				set_country_flag = third_repat_done
+				set_temp_variable = { treasury_change = -10 }
+				modify_treasury_effect = yes
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = four_repat_done
+					}
+					has_idea = ARM_immigration
+				}
+				random_owned_controlled_state = {
+					add_manpower = 500000
+				}
+				random_owned_controlled_state = {
+					add_manpower = 10000
+				}
+				set_country_flag = four_repat_done
+				set_temp_variable = { treasury_change = -20 }
+				modify_treasury_effect = yes
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	ARM_ask_diaspora_invest = {
+		icon = GFX_decision_syr_money_button
+		cost = 75
+		days_remove = 500
+
+		visible = {
+			tag = ARM
+			has_idea = ARM_diaspora_links
+			NOT = {
+				has_idea = ARM_high_emigration_2
+				has_idea = ARM_high_emigration_1
+				has_idea = ARM_high_emigration_0
+				has_idea = ARM_immigration
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = ARM
+				is_capital = no
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_ask_diaspora_invest"
+			random_list = {
+				20 = {
+					random_owned_controlled_state = {
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				20 = {
+					random_owned_controlled_state = {
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = offices
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				20 = {
+					random_owned_controlled_state = {
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = agriculture_district
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				20 = {
+					random_owned_controlled_state = {
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = infrastructure
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				20 = {
+					set_temp_variable = { treasury_change = 10 }
+					modify_treasury_effect = yes
+				}
+			}
+			set_temp_variable = { percent_change = -6.5 }
+			change_domestic_influence_percentage = yes
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	ARM_fix_water_yerevan = {
+		icon = GFX_decision_fixes_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 1 }
+		}
+		highlight_states = {
+			highlight_state_targets = {
+				state = 709
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+		custom_cost_text = more_than_treasury_4
+		fire_only_once = yes
+		days_remove = 60
+
+		visible = {
+			tag = ARM
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_fix_water_yerevan"
+			set_temp_variable = { treasury_change = -4 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_fix_water_yerevan"
+			709 = {
+				remove_dynamic_modifier = {
+					modifier = ARM_rural_water_issues
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	ARM_fix_water_gegharkunik = {
+		icon = GFX_decision_fixes_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 1 }
+		}
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1034
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+		custom_cost_text = more_than_treasury_4
+		fire_only_once = yes
+		days_remove = 60
+
+		visible = {
+			tag = ARM
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_fix_water_gegharkunik"
+			set_temp_variable = { treasury_change = -4 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_fix_water_gegharkunik"
+			1034 = {
+				remove_dynamic_modifier = {
+					modifier = ARM_rural_water_issues
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	ARM_fix_water_syunik = {
+		icon = GFX_decision_fixes_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 1 }
+		}
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1035
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+		custom_cost_text = more_than_treasury_4
+		fire_only_once = yes
+		days_remove = 60
+
+		visible = {
+			tag = ARM
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_fix_water_syunik"
+			set_temp_variable = { treasury_change = -4 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_fix_water_syunik"
+			1035 = {
+				remove_dynamic_modifier = {
+					modifier = ARM_rural_water_issues
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	###########COMMIES MECHANIC###########
+	#INFRASTRUCTURE
+	ARM_develop_infrusture = {
+		icon = decision_generic_construction
+		cost = 100
+
+		fire_only_once = yes
+
+		days_remove = 65
+
+		modifier = {
+			production_speed_buildings_factor = -0.35
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = ARM
+				is_capital = no
+			}
+		}
+
+		available = {
+			has_completed_focus = ARM_reindustr_country
+			has_communist_government = yes
+			NOT = { has_country_flag = arm_strike_build_in_progress }
+		}
+
+		visible = {
+			tag = ARM
+			has_completed_focus = ARM_reindustr_country
+			has_communist_government = yes
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_develop_infrusture"
+			set_country_flag = arm_strike_build_in_progress
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_develop_infrusture"
+			one_random_infrastructure = yes
+			clr_country_flag = arm_strike_build_in_progress
+		}
+
+	}
+	#SLOTS
+	ARM_build_house = {
+		icon = GFX_decision_hol_inundate_water_lines
+
+		cost = 100
+		fire_only_once = yes
+		days_remove = 80
+
+		modifier = {
+			production_speed_buildings_factor = -0.35
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = ARM
+				is_capital = no
+			}
+		}
+
+		available = {
+			has_completed_focus = ARM_reindustr_country
+			has_communist_government = yes
+			NOT = { has_country_flag = arm_strike_build_in_progress }
+		}
+
+		visible = {
+			tag = ARM
+			has_completed_focus = ARM_reindustr_country
+			has_communist_government = yes
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_build_house"
+			set_temp_variable = { treasury_change = -1 }
+			modify_treasury_effect = yes
+			set_country_flag = arm_strike_build_in_progress
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_build_house"
+			random_owned_state = {
+				add_extra_state_shared_building_slots = 1
+			}
+			ARM_decrease_high_emigration = yes
+			clr_country_flag = arm_strike_build_in_progress
+		}
+
+	}
+	#FACTORIES
+	ARM_build_factory = {
+		icon = decision_generic_factory
+		cost = 150
+
+		fire_only_once = yes
+
+		days_remove = 150
+
+		modifier = {
+			production_speed_buildings_factor = -0.35
+		}
+
+		available = {
+			has_completed_focus = ARM_reindustr_country
+			has_communist_government = yes
+			NOT = { has_country_flag = arm_strike_build_in_progress }
+		}
+
+		visible = {
+			tag = ARM
+			has_completed_focus = ARM_reindustr_country
+			has_communist_government = yes
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = ARM
+				is_capital = no
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_build_factory"
+			set_country_flag = arm_strike_build_in_progress
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_build_factory"
+			one_random_industrial_complex = yes
+			clr_country_flag = arm_strike_build_in_progress
+		}
+
+	}
+	###########PIPELINES MECHANIC###########
+	#EXPAND PIPELINE
+	ARM_expand_pipeline = {
+		icon = GFX_decision_iran
+		cost = 75
+		fire_only_once = yes
+		days_remove = 56
+
+		available = {
+			has_country_flag = per_gas_accepted
+			has_completed_focus = ARM_ratify_iran_pipeline
+			PER = {
+				has_opinion = {
+					target = ARM
+					value > 34
+				}
+			}
+		}
+
+		visible = {
+			tag = ARM
+			has_country_flag = per_gas_accepted
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1035
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_expand_pipeline"
+			1035 = {
+				remove_dynamic_modifier = {
+					modifier = ARM_syunik_pipeline
+				}
+				add_dynamic_modifier = {
+					modifier = ARM_syunik_pipeline_two
+				}
+			}
+			add_resource = {
+				type = oil
+				amount = 2
+				state = 1035
+			}
+			PER = {
+				country_event = arme.30
+			}
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	#CLOSE PIPELINE
+	ARM_cancel_pipeline = {
+		icon = GFX_decision_iran
+		cost = 75
+
+		fire_only_once = yes
+
+		days_remove = 56
+
+		available = {
+			has_country_flag = per_gas_accepted
+			has_completed_focus = ARM_ratify_iran_pipeline
+			ARM = {
+				has_opinion = {
+					target = PER
+					value < -10
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1035
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		visible = {
+			tag = ARM
+			has_country_flag = per_gas_accepted
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_cancel_pipeline"
+			clr_country_flag = per_gas_accepted
+			if = {
+				limit = {
+					1035 = {
+						has_dynamic_modifier = {
+							modifier = ARM_syunik_pipeline
+						}
+					}
+				}
+				remove_dynamic_modifier = {
+					modifier = ARM_syunik_pipeline
+				}
+				add_resource = {
+					type = oil
+					amount = -2
+					state = 1035
+				}
+			}
+			if = {
+				limit = {
+					1035 = {
+						has_dynamic_modifier = {
+							modifier = ARM_syunik_pipeline_two
+						}
+					}
+				}
+				remove_dynamic_modifier = {
+					modifier = ARM_syunik_pipeline_two
+				}
+				add_resource = {
+					type = oil
+					amount = -4
+					state = 1035
+				}
+			}
+			PER = {
+				country_event = arme.31
+			}
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	###########TOURISM MECHANIC###########
+	#RUSSIAN TOURISTS HERE
+	ARM_economy_russian_tourists = {
+		icon = GFX_decision_arm_tourism_button
+		cost = 75
+
+		fire_only_once = yes
+
+		days_remove = 30
+
+		available = {
+			SOV = {
+				NOT = {
+					OR = {
+						has_idea = SOV_broken_economy_idea_1
+						has_idea = SOV_broken_economy_idea_2
+						has_idea = SOV_broken_economy_idea_3
+					}
+				}
+			}
+		}
+
+		visible = {
+			tag = ARM
+			NOT = {
+				has_war_with = SOV
+			}
+			country_exists = SOV
+			has_completed_focus = ARM_economy_hotels
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = ARM
+				is_capital = no
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_economy_russian_tourists"
+			custom_effect_tooltip = ARM_tourism_expand_TT
+			set_country_flag = ARM_tourism_russian_tourists
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	#INTEGRATE ABKHAZIA
+	ARM_economy_tourism_integrate_abkhazia = {
+		icon = GFX_decision_arm_tourism_button
+		cost = 75
+		fire_only_once = yes
+		days_remove = 30
+
+		visible = {
+			owns_state = 706
+			NOT = {
+				country_exists = ABK
+			}
+			has_completed_focus = ARM_economy_hotels
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 706
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_economy_tourism_integrate_abkhazia"
+			custom_effect_tooltip = ARM_tourism_expand_territories_ABK_TT
+			set_country_flag = ARM_economy_tourism_abkhazia
+		}
+
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	#INTEGRATE AZERI
+	ARM_economy_tourism_integrate_azer = {
+		icon = GFX_decision_arm_tourism_button
+		cost = 75
+		fire_only_once = yes
+		days_remove = 30
+
+		visible = {
+			tag = ARM
+			owns_state = 713
+			NOT = {
+				country_exists = AZE
+			}
+			has_completed_focus = ARM_economy_hotels
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 713
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_economy_tourism_integrate_azer"
+			custom_effect_tooltip = ARM_tourism_expand_territories_AZE_TT
+			set_country_flag = ARM_economy_tourism_azer
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	#SHADOW ECONOMIC MECHANIC
+	ARM_economy_shadow_economy_destroy = {
+		icon = GFX_decision_arm_economy_button
+		days_remove = 35
+		cost = 100
+
+		visible = {
+			OR = {
+				has_idea = ARM_economy_shady_idea
+				has_idea = ARM_economy_shady_idea1
+				has_idea = ARM_economy_shady_idea2
+				has_idea = ARM_economy_shady_idea3
+			}
+			has_completed_focus = ARM_economy_shady
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = ARM
+				is_capital = no
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove ARM_economy_shadow_economy_destroy"
+			ARM_shadow_economy_script = yes
+		}
+
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	#ARTSAKH
+	NKR_bridge_artsakh = {
+		icon = GFX_decision_arm_economy_button
+		days_remove = 100
+		cost = 100
+
+		visible = {
+			tag = NKR
+			NKR = { is_subject_of = ARM }
+			country_exists = ARM
+			NOT = {
+				has_country_flag = ARM_approves_branches
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = NKR
+				is_capital = no
+			}
+		}
+		complete_effect = {
+			ARM = { country_event = { id = redux_generic.17 days = 1 } }
+		}
+
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	Damaged_battery_park = {
+	    icon = GFX_decision_generic_energy_stopbuy_button
+		activation = { check_variable = { number_of_damaged_battery_parks > 0 } }
+		available = { always = no }
+		days_mission_timeout = 32
+		timeout_effect = {
+		 custom_effect_tooltip = Damaged_battery_parks_TT
+		 set_variable = { number_of_damaged_battery_parks = 0 }
+		}
+	}
+	Damaged_nuclear_refinery = {
+		icon = GFX_decision_generic_energy_stopbuy_button
+		activation = { check_variable = { number_of_damaged_enrichment_facilities > 0 } }
+		available = { always = no }
+		days_mission_timeout = 32
+		timeout_effect = {
+		 custom_effect_tooltip = Damaged_nuclear_facilities_TT
+		 set_variable = { number_of_damaged_enrichment_facilities = 0 }
+		}
+	}
+	Damaged_hydro_plant = {
+	   icon = GFX_decision_generic_energy_stopbuy_button
+	   activation = { check_variable = { number_of_damaged_hydroelectric > 0 } }
+	   available = { always = no }
+	   days_mission_timeout = 32
+	   timeout_effect = {
+		 custom_effect_tooltip = Damaged_hydroelectric_TT
+		 for_each_scope_loop = {
+			array = states_to_damage_hydroelectric
+			multiply_variable = { THIS.hydroelectric_energy_production_var = 2 }
+	        multiply_variable = { THIS.hydroelectric_energy_storage_var = 2 }
+		 }
+		 clear_array = states_to_damage_hydroelectric
+		 set_variable = { number_of_damaged_hydroelectric = 0 }
+		}
+	}
+	Damager_geotermal_plant = {
+	   icon = GFX_decision_generic_energy_stopbuy_button
+	   activation = { check_variable = { number_of_damaged_geothermal > 0 } }
+	   available = { always = no }
+	   days_mission_timeout = 32
+	   timeout_effect = {
+		custom_effect_tooltip = Damaged_geothermal_TT
+		for_each_scope_loop = {
+		   array = states_to_damage_geothermal
+		   multiply_variable = { THIS.geothermal_energy_production_var = 2 }
+		}
+		clear_array = states_to_damage_geothermal
+		set_variable = { number_of_damaged_geothermal = 0 }
+		}
+	}
+}
+GENERIC_militarization_category = {
+	#Military propaganda
+	GENERIC_military_propaganda = {
+		icon = GFX_decision_generic_militarization_propaganda_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 0.9 }
+		}
+		custom_cost_text = cost_1_0
+
+		days_remove = 60
+
+		modifier = {
+			conscription = 0.02
+			nationalist_drift = 0.01
+			war_support_weekly_factor = 0.03
+			army_morale_factor = 0.01
+			weekly_manpower = 10
+		}
+		
+		remove_effect = {
+			set_temp_variable = { treasury_change = -1 }
+			modify_treasury_effect = yes
+			if = {
+				limit = { 
+					check_variable = {
+						var = war_preparedness
+						value = 100 
+					}
+				}
+				add_to_variable = { war_preparedness = 10 }
+				custom_effect_tooltip = war_preparedness10_tt 
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 90
+				has_war = yes
+			}
+		}
+	}
+
+	#Expand recruitment centers
+	GENERIC_expand_recruitment_centers = {
+		icon = GFX_decision_generic_militarization_recruit_button
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 2.9 }
+		}
+		custom_cost_text = cost_3_0
+
+		days_re_enable = 60
+		days_remove = 30
+		modifier = {
+			personnel_cost_multiplier_modifier = 0.2
+			political_power_gain = -0.5
+			conscription = 0.03
+		}
+
+		
+		remove_effect = {
+			set_temp_variable = { treasury_change = -3 }
+			modify_treasury_effect = yes
+			add_manpower = 10000
+			if = {
+				limit = { 
+					check_variable = {
+						var = war_preparedness 
+						value = 100
+					}
+				}
+				add_to_variable = { war_preparedness = 15 }
+				custom_effect_tooltip = war_preparedness15_tt 
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 90
+				has_war = yes
+			}
+		}
+	}
+
+	#Militarization of industry
+	GENERIC_militarization_industry = {
+		icon = GFX_decision_generic_militarization_indusrty_button
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 6.9 }
+		}
+		custom_cost_text = cost_7_0
+
+		days_re_enable = 180
+		days_remove = 90
+
+		modifier = {
+			military_factories_productivity = 0.1
+			production_speed_arms_factory_factor = 0.1
+			production_cost_arms_factory_factor = -0.1
+			industry_repair_factor = 0.07
+			equipment_conversion_speed = 0.2
+			equipment_cost_multiplier_modifier = 0.2
+			personnel_cost_multiplier_modifier = 0.2
+			expected_welfare_modifier = 2
+		}
+		remove_effect = {
+			set_temp_variable = { treasury_change = -7 }
+			modify_treasury_effect = yes
+			if = {
+				limit = { 
+					check_variable = {
+						var = war_preparedness 
+						value = 100
+					}
+				}
+				add_to_variable = { war_preparedness = 15 }
+				custom_effect_tooltip = war_preparedness15_tt 
+			}
+		}
+		
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 95
+				has_war = yes
+			}
+		}
+   }
+
+   #Military Training
+   GENERIC_military_training = {
+		icon = GFX_decision_generic_militarization_recruit_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 2.9 }
+		}
+		custom_cost_text = cost_3_0
+
+		days_remove = 30
+		days_re_enable = 60
+
+		modifier = {
+			max_planning_factor = 0.1
+			planning_speed = 0.05
+			training_time_factor = -0.1
+			experience_gain_army = 0.03
+			army_personnel_cost_multiplier_modifier = 0.05
+		}
+
+		remove_effect = {
+			set_temp_variable = { treasury_change = -3 }
+			modify_treasury_effect = yes
+			if = {
+				limit = { 
+					check_variable = {
+						var = war_preparedness 
+						value = 100
+					}
+				}
+				add_to_variable = { war_preparedness = 10 }
+				custom_effect_tooltip = war_preparedness10_tt 
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = 90
+				has_war = yes
+			}
+		}
+   }
+
+	#NO STEP BACK
+	GENERIC_no_step_back = {
+		icon = GFX_decision_generic_militarization_militia_button
+		custom_cost_trigger = {
+			command_power > 20
+		}
+		custom_cost_text = command_power_more_than_20
+
+		days_remove = 15
+		days_re_enable = 30
+
+		modifier = {
+			war_support_weekly_factor = -0.03
+			army_org_factor = 0.07
+			army_defence_factor = 0.05
+			army_core_defence_factor = 0.07
+			surrender_limit = 0.1
+		}
+
+		available = {
+			has_war = yes
+			check_variable = { war_preparedness > 49 }
+			custom_trigger_tooltip = { tooltip = mil_buff_tt }
+		}
+
+		complete_effect = {
+			add_command_power = -20
+			add_to_variable = { war_preparedness = -20 }
+			custom_effect_tooltip = mil_buff_cost_tt  
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+   }
+
+
+   #Victory or death
+   GENERIC_victory_or_death_dec = {
+		icon = GFX_decision_generic_militarization_militia_button
+		custom_cost_trigger = {
+			command_power > 30
+		}
+		custom_cost_text = command_power_more_than_30
+
+		days_remove = 15
+		days_re_enable = 60
+
+		modifier = {
+			war_support_weekly_factor = -0.03
+			army_org_factor = -0.05
+			army_attack_factor = 0.03
+			army_core_attack_factor = 0.05
+		}
+
+		available = {
+			has_war = yes
+			check_variable = { war_preparedness > 49 }
+			custom_trigger_tooltip = { tooltip = mil_buff_tt }
+		}
+
+		complete_effect = {
+			add_command_power = -30
+			add_to_variable = { war_preparedness = -20 }
+			custom_effect_tooltip = mil_buff_cost_tt
+		}
+		
+		ai_will_do = {
+			base = 50
+		}
+   }
+
+   #Raise the militias
+   GENERIC_raise_militias = {
+		icon = GFX_decision_generic_militarization_militia_button
+		custom_cost_trigger = {
+			command_power > 20
+		}
+		custom_cost_text = command_power_more_than_20
+
+		days_remove = 7
+		days_re_enable = 30
+		
+		available = {
+			has_war = yes 
+			check_variable = { war_preparedness > 79 }
+			custom_trigger_tooltip = { tooltip = militias_raise_tt }
+		}
+		
+		remove_effect = {
+			set_country_flag = GENERIC_create_division
+			division_template = {
+				name = "National Militia"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+				priority = 2
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"National Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+					owner = ROOT
+				}
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"National Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+					owner = ROOT
+				}
+			}
+		}
+
+		complete_effect = {
+			add_command_power = -30
+			custom_effect_tooltip = militias_raise_cost_tt
+			add_to_variable = { war_preparedness = -30 }
+			add_manpower = -2000
+		}
+
+		ai_will_do = {
+			base = 10
+		}
+   }
+}
+
+#FIVE YEAR PLAN
+GENERIC_five_year_plan_category = {
+	GENERIC_start_five_year_plan = {
+		icon = GFX_decision_generic_5year_start_button
+		days_remove = 1
+		available = {
+			NOT = {
+				has_war = yes
+				has_idea = GENERIC_five_year_plan_idea	
+				has_idea = GENERIC_plan_complete
+				has_idea = GENERIC_plan_failed
+			}
+		}
+
+		visible = {
+			NOT = {
+				has_idea = GENERIC_five_year_plan_idea	
+			}
+		}
+
+		cost = 300
+
+		complete_effect = {
+			add_timed_idea = {
+				idea = GENERIC_five_year_plan_idea
+				days = 1820
+			}
+			set_temp_variable = { five_year_plan_progress = 0 }
+			clamp_temp_variable = {
+				var = five_year_plan_progress
+				max = 100
+			}
+			set_country_flag = GENERIC_start_five_year_plan
+			activate_mission = five_year_plan_mission
+		}
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = 50
+				check_variable = { treasury > 20 }
+			}
+		}
+	}
+
+	five_year_plan_mission = {
+		icon = GFX_decision_generic_5year_timer_button
+
+		activation = {
+			has_country_flag = GENERIC_start_five_year_plan
+		}
+
+		cancel_trigger = {
+			has_war = yes
+			hidden_trigger = {
+				OR = {
+					NOT = { has_country_flag = GENERIC_start_five_year_plan }
+					NOT = { has_idea = GENERIC_five_year_plan_idea }
+				}
+			}
+		}
+		is_good = no
+		available = {
+			check_variable = { five_year_plan_progress > 99 }
+		}
+		days_mission_timeout = 1820
+		complete_effect = {
+			country_event = five_year_plan.2
+			set_variable = { five_year_plan_progress = 0 }
+		}
+		timeout_effect = {
+			country_event = five_year_plan.1
+			set_variable = { five_year_plan_progress = 0 }
+		}
+	}
+
+	GENERIC_support_workers = {
+		icon = GFX_decision_generic_5year_workers_button
+		days_remove = 30
+		available = {
+			check_variable = { treasury > 1.9 }
+			has_war = no
+		}
+		visible = {
+			has_country_flag = GENERIC_start_five_year_plan
+		}
+		custom_cost_trigger = {
+			check_variable = { treasury > 1.9 }
+		}
+		custom_cost_text = cost_2_0
+
+		modifier = {
+			civilian_industry_tax_modifier = -0.2
+			civilian_factories_productivity = 0.15
+			military_factories_productivity = 0.05
+			production_speed_buildings_factor = 0.1
+			total_workforce_modifier = 0.03
+		}
+		remove_effect = {
+			set_temp_variable = { treasury_change = -2 }
+			modify_treasury_effect = yes
+			add_to_variable = { five_year_plan_progress = 2 }
+		}
+		ai_will_do ={
+			base = 10
+		}
+	}
+
+	GENERIC_increase_industry_turnover = {
+		icon = GFX_decision_generic_5year_expand_button
+		days_remove = 60
+		days_re_enable = 30
+		available = {
+			check_variable = { treasury > 4.9 }
+			has_war = no
+		}
+		visible = {
+			has_country_flag = GENERIC_start_five_year_plan
+		}
+		custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+		custom_cost_text = cost_5_0
+
+		modifier = {
+			military_factories_productivity = 0.15
+			agricolture_productivity_modifier = 0.15
+			country_productivity_growth_modifier = 0.05
+			production_factory_efficiency_gain_factor = 0.15
+			production_factory_max_efficiency_factor = 0.2
+		}
+		remove_effect = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			add_to_variable = { five_year_plan_progress = 2 }
+		}
+		ai_will_do ={
+			base = 10
+		}
+		
+	}
+
+	GENERIC_expand_industry = {
+		icon = GFX_decision_generic_5year_industry_button
+		days_remove = 180
+		available = {
+			check_variable = { treasury > 7.4 }
+			has_war = no
+		}
+		visible = {
+			has_country_flag = GENERIC_start_five_year_plan
+		}
+		custom_cost_trigger = {
+			check_variable = { treasury > 3.75 }
+		}
+		custom_cost_text = cost_4_0
+
+		remove_effect = {
+			set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			random_owned_controlled_state = {
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_to_variable = { five_year_plan_progress = 3 }
+		}
+
+		ai_will_do ={
+			base = 10
+		}
+	}
+
+	GENERIC_expand_agriculture = {
+		icon = GFX_decision_generic_5year_agro_button
+		days_remove = 120
+		available = {
+			check_variable = { treasury > 3.9 }
+			has_war = no
+		}
+		visible = {
+			has_country_flag = GENERIC_start_five_year_plan
+		}
+		custom_cost_trigger = {
+			check_variable = { treasury > 2 }
+		}
+		custom_cost_text = cost_2_0
+
+		remove_effect = {
+			set_temp_variable = { treasury_change = -2 }
+			modify_treasury_effect = yes
+			random_owned_controlled_state = {
+				add_building_construction = {
+					type = agriculture_district
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_to_variable = { five_year_plan_progress = 3 }
+		}
+
+		ai_will_do ={
+			base = 10
+		}
+	}
+
+	GENERIC_expand_energetic = {
+		icon = GFX_decision_generic_5year_energy_button
+		days_remove = 120
+		available = {
+			check_variable = { treasury > 2.4 }
+			has_war = no
+		}
+		visible = {
+			has_country_flag = GENERIC_start_five_year_plan
+		}
+		custom_cost_trigger = {
+			check_variable = { treasury > 2 }
+		}
+		custom_cost_text = cost_2_0
+
+		remove_effect = {
+			set_temp_variable = { treasury_change = -2 }
+			modify_treasury_effect = yes
+			random_owned_controlled_state = {
+				add_building_construction = {
+					type = fossil_powerplant
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_to_variable = { five_year_plan_progress = 3 }
+		}
+
+		ai_will_do ={
+			base = 10
+		}
+	}
+}
+
+#CSTO
+GENERIC_csto_ratification_category = {
+
+	GENERIC_csto_exercises = {
+		icon = GFX_decision_csto_exercises_button
+		days_re_enable = 360
+		custom_cost_trigger = {
+			command_power > 49
+		}
+		custom_cost_text = command_power_more_than_50
+
+		target_array = allies
+
+		target_root_trigger = {
+			has_idea = CSTO_member
+			NOT = {
+				has_country_flag = recent_csto_exercises
+				has_idea = recent_csto_army_exercises
+				has_idea = recent_csto_air_exercises
+				has_idea = recent_csto_navy_exercises
+			}
+		}
+
+		target_trigger = {
+			FROM = {
+				has_war = no
+				OR = {
+					has_idea = CSTO_member
+					AND = {
+						is_subject = yes
+						OVERLORD = { has_idea = CSTO_member }
+					}
+				}
+			}
+		}
+		complete_effect = {
+			country_event = generic_csto.17
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+	GENERIC_csto_friendship_treaty = {
+		icon = GFX_decision_csto_treaty_button
+		fire_only_once = yes
+		visible = {
+			emerging_autocracy_are_in_power = yes
+			has_completed_focus = GENERIC_east
+			NOT = { has_idea = CSTO_member }
+			SOV = { has_idea = CSTO_member }
+			NOT = {
+				has_country_flag = generic_csto_friend_treaty
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = TT_ALL_CSTO_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				country_event = generic_csto.1
+			}
+			for_each_scope_loop = {
+				array = global.CSTO_member
+				country_event = generic_csto.1
+			}
+			set_country_flag = generic_csto_friend_treaty
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+	GENERIC_csto_defence = {
+		icon = GFX_decision_csto_treaty_button
+		fire_only_once = yes
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = csto_no_western_influence
+				USA = {
+					NOT = {
+						ROOT = { influence_higher_40 = yes }
+					}
+				}
+				ENG = {
+					NOT = {
+						ROOT = { influence_higher_40 = yes }
+					}
+				}
+				FRA = {
+					NOT = {
+						ROOT = { influence_higher_40 = yes }
+					}
+				}
+				GER = {
+					NOT = {
+						ROOT = { influence_higher_40 = yes }
+					}
+				}
+			}
+		}
+		visible = {
+			emerging_autocracy_are_in_power = yes
+			has_completed_focus = GENERIC_east
+			NOT = { has_idea = CSTO_member }
+			SOV = { has_idea = CSTO_member }
+			NOT = {
+				has_country_flag = GENERIC_csto_defence
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = TT_ALL_CSTO_MEMBER_NATIONS_GAIN
+			effect_tooltip = {
+				country_event = generic_csto.4
+			}
+			for_each_scope_loop = {
+				array = global.CSTO_member
+				country_event = generic_csto.4
+			}
+			set_country_flag = GENERIC_csto_defence
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	GENERIC_csto_research_sharing = {
+		icon = GFX_decision_csto_treaty_button
+		fire_only_once = yes
+		visible = {
+			emerging_autocracy_are_in_power = yes
+			has_completed_focus = GENERIC_east
+			has_idea = CSTO_member
+			SOV = {
+				has_idea = CSTO_member
+				is_faction_leader = yes
+			}
+			NOT = {
+				has_country_flag = GENERIC_csto_research
+			}
+		}
+		complete_effect = {
+			SOV = {
+				country_event = generic_csto.10
+			}
+			set_country_flag = GENERIC_csto_research
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	GENERIC_csto_join_to_faction = {
+		icon = GFX_decision_csto_treaty_button
+		days_re_enable = 180
+		visible = {
+			emerging_autocracy_are_in_power = yes
+			has_completed_focus = GENERIC_east
+			NOT = {
+				has_idea = CSTO_member
+			}
+			SOV = {
+				has_idea = CSTO_member
+				is_faction_leader = yes
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = csto_join_tt
+				has_country_flag = GENERIC_csto_defence
+				has_country_flag = generic_csto_friend_treaty
+
+			}
+		}
+		complete_effect = {
+			SOV = { country_event = { id = generic_csto.5 } }
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+	#CSTO joint operation
+	CSTO_joint_operation = {
+		icon = GFX_decision_csto_operation_button
+		cost = 125
+		visible = {
+			has_idea = CSTO_member 
+			has_offensive_war = yes
+			NOT = { has_idea = CSTO_intervention_active }
+			NOT = {
+				any_country = {
+					has_idea = CSTO_intervention_active
+				}
+			}
+			SOV = {
+				has_completed_focus = SOV_dimon_csto
+			}
+			NOT = { has_global_flag = CSTO_intervention_cooldown }
+		}
+		complete_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						has_idea = CSTO_member
+						OVERLORD = { has_idea = CSTO_member }
+					}
+					has_war = no
+				}
+				country_event = { id = generic_csto.13 days = 1 random_hours = 12 }
+			}
+			hidden_effect = { add_ideas = CSTO_operation_active }
+			set_global_flag = { flag = CSTO_intervention_cooldown days = 365 value = 1 }
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+	CSTO_stabilization = {
+		icon = GFX_decision_csto_protests_button
+		cost = 100
+		days_remove = 30
+		visible = {
+			has_idea = CSTO_member
+			NOT = {
+				has_global_flag = CSTO_stabilization_active
+				has_global_flag = CSTO_stabilization_calldown
+				OR = {
+					has_war = yes
+					any_allied_country = {
+						has_war = yes
+					}
+				}
+			}
+			OR = {
+				has_stability < 0.5
+				AND = {
+					check_variable = { protest_strength > 25 }
+					check_variable = { protest_radicalisation > 3 }
+				}
+			}
+			any_allied_country = {
+				OR = {
+					is_ai = no
+					tag = SOV
+					tag = ARM
+					tag = BLR
+					tag = KAZ
+					tag = KYR
+					tag = TAJ
+					tag = UZB
+					tag = TRK
+					tag = GEO
+					tag = AZE
+					tag = FIN
+					tag = EST
+					tag = LAT
+					tag = LIT
+					tag = UKR
+					tag = MLV
+					tag = POL
+					tag = CZE
+					tag = SLO
+					tag = HUN
+					tag = ROM
+					tag = BUL
+					tag = GER
+					tag = TUR
+					tag = ALB
+					tag = SER
+					tag = FYR
+					tag = KOS
+					tag = BOS
+					tag = CRO
+					tag = SLO
+					tag = PMR
+					tag = GRE
+				}
+			}
+		}
+		complete_effect = {
+			set_global_flag = CSTO_stabilization_active
+			add_to_variable = { CSTO_stabilizations_count = 1 }
+			every_allied_country = {
+				limit = {
+					OR = {
+						is_ai = no
+						tag = SOV
+						tag = ARM
+						tag = BLR
+						tag = KAZ
+						tag = KYR
+						tag = TAJ
+						tag = UZB
+						tag = TRK
+						tag = GEO
+						tag = AZE
+						tag = FIN
+						tag = EST
+						tag = LAT
+						tag = LIT
+						tag = UKR
+						tag = MLV
+						tag = POL
+						tag = CZE
+						tag = SLO
+						tag = HUN
+						tag = ROM
+						tag = BUL
+						tag = GER
+						tag = TUR
+						tag = ALB
+						tag = SER
+						tag = FYR
+						tag = KOS
+						tag = BOS
+						tag = CRO
+						tag = SLO
+						tag = PMR
+						tag = GRE
+					}
+				}
+				country_event = { id = generic_csto.15 days = 1 random_hours = 12 }
+			}
+		}
+		remove_effect = {
+			clr_global_flag = CSTO_stabilization_active
+			set_global_flag = { flag = CSTO_stabilization_calldown value = 1 days = 365 }
+			for_each_loop = {
+				array = THIS.allies
+				value = v
+				if = {
+					limit = {
+						var:v = {
+							check_variable = { stabilization_target = PREV }
+						}
+					}
+					set_temp_variable = { protest_strength_change = -5 }
+					modify_protest_effect = yes
+					set_temp_variable = { protest_radicalisation_change = -5 }
+					modify_protest_radicalisation_effect = yes
+					if = {
+						limit = { has_stability < 0.75 }
+						add_stability = 0.025
+					}
+					set_party_index_to_ruling_party = yes
+					set_temp_variable = { party_popularity_increase = 0.025 }
+					set_temp_variable = { temp_outlook_increase = 0.025 }
+					add_relative_party_popularity = yes
+					var:v = { set_variable = { stabilization_target = 0 } }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { CSTO_stabilizations_count < 1 }
+				tag = KAZ
+				date > 2022.01.01
+			}
+			modifier = {
+				add = 50
+				has_stability < 0.1
+			}
+		}
+	}
+}
+
+GENERIC_stabilization_govern_category = {
+
+	GENERIC_the_start_stabilization = {
+
+		icon = GFX_decision_generic_stabilize_timer_button
+
+		days_mission_timeout = 60
+
+		fire_only_once = yes
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			original_tag = ROOT
+			has_country_flag = GENERIC_stabilization_govern_start
+			NOT = {
+				has_country_flag = GENERIC_stabilization_govern_again
+			}
+		}
+
+		is_good = no
+
+		cancel_trigger = {
+			original_tag = ROOT
+			has_country_flag = GENERIC_stabilization_govern_start
+			has_country_flag = GENERIC_stabilization_govern_army
+			has_country_flag = GENERIC_stabilization_govern_govern
+			has_country_flag = GENERIC_stabilization_govern_society
+			hidden_trigger = {
+				NOT = {
+					has_country_flag = GENERIC_stabilization_govern_again
+				}
+			}
+		}
+
+		cancel_effect = {
+			clr_country_flag = GENERIC_stabilization_govern_start
+			set_country_flag = GENERIC_stabilization_govern_again
+			add_political_power = 100
+			add_stability = 0.10
+		}
+
+		timeout_effect = {
+			clr_country_flag = GENERIC_stabilization_govern_start
+			set_country_flag = GENERIC_stabilization_govern_again
+			hidden_effect = {
+				GENERIC_stabilize_government_civil_war_script = yes
+			}
+		}
+	}
+	GENERIC_the_stabilization_army = {
+		icon = GFX_decision_generic_stabilize_army_button
+		cost = 50
+		days_re_enable = 20
+		visible = {
+			has_country_flag = GENERIC_stabilization_govern_start
+			NOT = { has_country_flag = GENERIC_stabilization_govern_army }
+		}
+		complete_effect = {
+			set_country_flag = GENERIC_stabilization_govern_army
+		}
+		ai_will_do = {
+			base = 1000000
+		}
+	}
+	GENERIC_the_stabilization_govern = {
+		icon = GFX_decision_generic_stabilize_govenr_button
+		cost = 50
+		days_re_enable = 20
+		visible = {
+			has_country_flag = GENERIC_stabilization_govern_start
+			NOT = { has_country_flag = GENERIC_stabilization_govern_govern }
+		}
+		complete_effect = {
+			set_country_flag = GENERIC_stabilization_govern_govern
+		}
+		ai_will_do = {
+			base = 1000000
+		}
+	}
+	GENERIC_the_stabilization_society = {
+		icon = GFX_decision_generic_stabilize_smi_button
+		cost = 50
+		days_re_enable = 20
+		visible = {
+			has_country_flag = GENERIC_stabilization_govern_start
+			NOT = { has_country_flag = GENERIC_stabilization_govern_society }
+		}
+		complete_effect = {
+			set_country_flag = GENERIC_stabilization_govern_society
+		}
+		ai_will_do = {
+			base = 1000000
+		}
+	}
+}
+
+#HAMAS SUPPORT
+GENERIC_hamas_support_category = {
+	#Political Support
+	GENERIC_political_support = {
+		icon = GFX_decision_generic_hamas_politicalsupport_button
+		visible = {
+			country_exists = HAM
+		}
+		days_remove = 30
+		days_re_enable = 30
+		custom_cost_trigger = {
+			check_variable = { treasury > 0.9 }
+		}
+		custom_cost_text = cost_1_0
+		targeted_modifier = {
+			tag = HAM
+			political_power_factor = 0.05
+			war_support_factor = 0.07
+			bureaucracy_cost_multiplier_modifier = -0.05
+			police_cost_multiplier_modifier = -0.05
+		}
+		complete_effect = {
+			add_political_power = -100
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = ROOT }
+			set_temp_variable = { influence_target = HAM }
+			change_influence_percentage = yes
+			HAM = {
+				country_event = generic_muslims.4
+				add_political_power = 100
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	#Economic Support
+	GENERIC_economic_support = {
+		icon = GFX_decision_generic_hamas_economicsupport_button
+		visible = {
+			country_exists = HAM
+		}
+		days_re_enable = 30
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+		custom_cost_text = cost_5_0
+
+		complete_effect = {
+			country_event = generic_muslims.4
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = ROOT }
+			set_temp_variable = { influence_target = HAM }
+			change_influence_percentage = yes
+			HAM = {
+				country_event = generic_muslims.4
+				set_temp_variable = { treasury_change = 5.00 }
+				modify_treasury_effect = yes
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	#Humanitarian support
+	GENERIC_humanitarian_support = {
+		icon = GFX_decision_generic_hamas_humanitariansupport_button
+		visible = {
+			country_exists = HAM
+		}
+		days_re_enable = 30
+		days_remove = 30
+		custom_cost_trigger = {
+			check_variable = { treasury > 2.9 }
+		}
+		custom_cost_text = cost_3_0
+		targeted_modifier = {
+			tag = HAM
+			health_cost_multiplier_modifier = -0.07
+			social_cost_multiplier_modifier = -0.07
+			monthly_population = 0.03
+		}
+		complete_effect = {
+			HAM = {
+				country_event = generic_muslims.4
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	#Military support
+	GENERIC_military_support = {
+		icon = GFX_decision_generic_hamas_weaponsupport_button
+		visible = {
+			country_exists = HAM
+		}
+		days_re_enable = 90
+		days_remove = 30
+
+		available = {
+			has_equipment = {
+				Inf_equipment > 499
+			}
+			has_equipment = {
+				command_control_equipment > 199
+			}
+			has_equipment = {
+				util_vehicle_equipment > 99
+			}
+		}
+
+		targeted_modifier = {
+			tag = HAM
+			army_core_attack_factor = 0.01
+			army_core_defence_factor = 0.03
+		}
+
+		custom_cost_trigger = {
+			command_power > 30
+		}
+		custom_cost_text = command_power_more_than_30
+
+		complete_effect = {
+			send_equipment = {
+				equipment = Inf_equipment
+				amount = 500
+				target = HAM
+			}
+			send_equipment = {
+				equipment = command_control_equipment
+				amount = 200
+				target = HAM
+			}
+			send_equipment = {
+				equipment = util_vehicle_equipment
+				amount = 100
+				target = HAM
+			}
+			HAM = {
+				country_event = generic_muslims.4
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	#Send Army
+	GENERIC_send_peacekeepers = {
+		icon = GFX_decision_generic_hamas_peacekeeperssupport_button
+		visible = {
+			country_exists = HAM
+		}
+		available = {
+			HAM = {
+				has_war = yes
+			}
+		}
+		custom_cost_trigger = {
+			command_power > 50
+		}
+		custom_cost_text = command_power_more_than_50
+
+		fire_only_once = yes
+
+		complete_effect = {
+			add_manpower = -4500
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = -1500
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = command_control_equipment
+				amount = -100
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = -30
+				producer = ROOT
+			}
+			HAM = {
+				division_template = {
+					name = "Foreign Peacekeepers"
+					is_locked = yes
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						L_Inf_Bat = { x = 1 y = 0 }
+						L_Inf_Bat = { x = 1 y = 1 }
+						L_Inf_Bat = { x = 1 y = 2 }
+						Arty_Bat = { x = 2 y = 0 }
+						Arty_Bat = { x = 2 y = 1 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0}
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+					priority = 2
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \" Peacekeepers Battalion\" division_template = \"Foreign Peacekeepers\" start_experience_factor = 0.4"
+						owner = HAM
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	#United Front
+	GENERIC_united_front = {
+		icon = GFX_decision_generic_hamas_defencesupport_button
+		visible = {
+			country_exists = HAM
+		}
+		available = {
+			HAM = {
+				has_opinion = {
+					target = PREV
+					value > 119
+				}
+			}
+			has_war_support > 0.6
+		}
+		custom_cost_trigger = {
+			command_power > 30
+		}
+		custom_cost_text = command_power_more_than_30
+
+		fire_only_once = yes
+
+		complete_effect = {
+			give_guarantee = HAM
+			give_military_access = HAM
+			HAM = { give_military_access = ROOT }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	#Challenge Israel
+	GENERIC_challenge_israel = {
+		icon = GFX_decision_generic_hamas_israel_button
+		available = {
+			has_war_support > 0.8
+			has_stability > 0.6
+			ISR = {
+				OR = {
+					has_war_with = PAL
+					has_war_with = HAM
+				}
+				NOT = {
+					fighting_army_strength_ratio = {
+						tag = PREV
+						ratio > 0.5
+					}
+				}
+			}
+			NOT = {
+				country_exists = PAL
+				country_exists = HAM
+			}
+		}
+		fire_only_once = yes
+		custom_cost_trigger = {
+			command_power > 50
+		}
+		custom_cost_text = command_power_more_than_50
+
+		complete_effect = {
+			add_political_power = -100
+			declare_war_on = {
+				target = ISR
+				type = liberate_wargoal
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

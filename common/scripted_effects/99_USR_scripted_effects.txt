@@ -1,0 +1,1941 @@
+modify_union_state_support = {
+	add_to_variable = { union_state = modify_union_state }
+
+	custom_effect_tooltip = UNS_union_state_TT
+
+	clamp_variable = {
+		var = union_state
+		min = 0
+		max = 100
+	}
+}
+###########UNION STATE - ADDED FIRST TIER MINISTRY###########
+USR_first_tier_ministry_added = {
+	if = {
+		limit = {
+			NOT = {
+				has_idea = USR_eternal_commitie_idea
+			}
+		}
+		add_ideas = USR_eternal_commitie_idea
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_idea = USR_money_palata_idea
+			}
+		}
+		add_ideas = USR_money_palata_idea
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_idea = USR_council_ministers_idea
+			}
+		}
+		add_ideas = USR_council_ministers_idea
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_idea = USR_gos_sovet_idea
+			}
+		}
+		add_ideas = USR_gos_sovet_idea
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_idea = USR_parlament_idea
+			}
+		}
+		add_ideas = USR_parlament_idea
+	}
+}
+###########UNION STATE - ADDED SECOND TIER MINISTRY###########
+USR_second_tier_ministry_added = {
+	if = {
+		limit = {
+			NOT = {
+				has_idea = USR_valute_idea
+			}
+		}
+		add_ideas = USR_valute_idea
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_idea = USR_civils_idea
+			}
+		}
+		add_ideas = USR_civils_idea
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_idea = USR_economic_space_idea
+			}
+		}
+		add_ideas = USR_economic_space_idea
+	}
+}
+###########UNION STATE - ADDED SECOND TIER MINISTRY###########
+USR_leave_union_state_script = {
+	if = {
+		limit = {
+			has_idea = USR_valute_idea
+		}
+		remove_ideas = USR_valute_idea
+	}
+	if = {
+		limit = {
+			has_idea = USR_civils_idea
+		}
+		remove_ideas = USR_civils_idea
+	}
+	if = {
+		limit = {
+			has_idea = USR_economic_space_idea
+		}
+		remove_ideas = USR_economic_space_idea
+	}
+	if = {
+		limit = {
+			has_idea = USR_eternal_commitie_idea
+		}
+		remove_ideas = USR_eternal_commitie_idea
+	}
+	if = {
+		limit = {
+			has_idea = USR_money_palata_idea
+		}
+		remove_ideas = USR_money_palata_idea
+	}
+	if = {
+		limit = {
+			has_idea = USR_council_ministers_idea
+		}
+		remove_ideas = USR_council_ministers_idea
+	}
+	if = {
+		limit = {
+			has_idea = USR_gos_sovet_idea
+		}
+		remove_ideas = USR_gos_sovet_idea
+	}
+	if = {
+		limit = {
+			has_idea = USR_parlament_idea
+		}
+		remove_ideas = USR_parlament_idea
+	}
+}
+###########UNION STATE - BELARUS BECOME UNION STATE###########
+USR_union_state_blr_create = {
+	hidden_effect = {
+		news_event = {
+			hours = 6
+			id = union_state_news.1
+		}
+		BLR = {
+			set_country_flag = BLR_unionstate_agree
+		}
+		SOV = {
+			country_event = union_state.4
+			set_autonomy = {
+				target = BLR
+				autonomy_state = autonomy_union_state
+			}
+		}
+		if = {
+			limit = {
+				BLR = { has_government = communism } 
+				SOV = { has_government = communism }
+			}
+			BLR = {
+				create_dynamic_country = {
+					original_tag = BLR
+					copy_tag = BLR
+					transfer_state = 1093
+					transfer_state = 702
+					set_politics = {
+						ruling_party = nationalist
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 20
+						neutrality = 20
+						fascism = 0
+						communism = 0
+						nationalist = 60
+					}
+					inherit_technology = BLR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 20
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^20
+					}
+					subtract_from_variable = {
+						party_pop_array^20 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = belorussia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					BLR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = BLR
+						type = civil_war
+					}
+					add_civil_war_target = BLR
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				BLR = { has_government = communism }
+				SOV = { NOT = { has_government = communism } }
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+			BLR = {
+				create_dynamic_country = {
+					original_tag = BLR
+					copy_tag = BLR
+					transfer_state = 1093
+					transfer_state = 702
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = BLR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = belorussia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					BLR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = BLR
+						type = civil_war
+					}
+					add_civil_war_target = BLR
+				}
+			}
+		}
+		if = {
+			limit = {
+				BLR = { has_government = democratic }
+				SOV = { has_government = democratic }
+			}
+			BLR = {
+				create_dynamic_country = {
+					original_tag = BLR
+					copy_tag = BLR
+					transfer_state = 1093
+					transfer_state = 702
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = BLR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = belorussia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					BLR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = BLR
+						type = civil_war
+					}
+					add_civil_war_target = BLR
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				BLR = { has_government = democratic }
+				SOV = { NOT = { has_government = democratic } }
+			}
+			BLR = {
+				create_dynamic_country = {
+					original_tag = BLR
+					copy_tag = BLR
+					transfer_state = 1093
+					transfer_state = 702
+					set_politics = {
+						ruling_party = democratic
+						elections_allowed = yes
+					}
+					set_popularities = {
+						democratic = 60
+						neutrality = 20
+						fascism = 0
+						communism = 0
+						nationalist = 20
+					}
+					inherit_technology = BLR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 2
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^2
+					}
+					subtract_from_variable = {
+						party_pop_array^2 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = belorussia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					BLR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = BLR
+						type = civil_war
+					}
+					add_civil_war_target = BLR
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				BLR = { has_government = neutrality }
+				SOV = { has_government = neutrality }
+			}
+			BLR = {
+				create_dynamic_country = {
+					original_tag = BLR
+					copy_tag = BLR
+					transfer_state = 1093
+					transfer_state = 702
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = BLR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = belorussia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					BLR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = BLR
+						type = civil_war
+					}
+					add_civil_war_target = BLR
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				BLR = { has_government = neutrality }
+				SOV = { NOT = { has_government = neutrality } }
+			}
+			BLR = {
+				create_dynamic_country = {
+					original_tag = BLR
+					copy_tag = BLR
+					transfer_state = 1093
+					transfer_state = 702
+					set_politics = {
+						ruling_party = neutrality
+						elections_allowed = yes
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 60
+						fascism = 0
+						communism = 20
+						nationalist = 20
+					}
+					inherit_technology = BLR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 15
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^15
+					}
+					subtract_from_variable = {
+						party_pop_array^15 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = belorussia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					BLR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = BLR
+						type = civil_war
+					}
+					add_civil_war_target = BLR
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				BLR = { has_government = nationalist }
+				SOV = { has_government = nationalist }
+			}
+			BLR = {
+				create_dynamic_country = {
+					original_tag = BLR
+					copy_tag = BLR
+					transfer_state = 1093
+					transfer_state = 702
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = BLR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = belorussia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					BLR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = BLR
+						type = civil_war
+					}
+					add_civil_war_target = BLR
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				BLR = { has_government = nationalist }
+				SOV = { NOT = { has_government = nationalist } }
+			}
+			BLR = {
+				create_dynamic_country = {
+					original_tag = BLR
+					copy_tag = BLR
+					transfer_state = 1093
+					transfer_state = 702
+					set_politics = {
+						ruling_party = nationalist
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 20
+						neutrality = 20
+						fascism = 0
+						communism = 0
+						nationalist = 60
+					}
+					inherit_technology = BLR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 20
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^20
+					}
+					subtract_from_variable = {
+						party_pop_array^20 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = belorussia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					BLR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = BLR
+						type = civil_war
+					}
+					add_civil_war_target = BLR
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = BLR }
+			change_influence_percentage = yes
+		}
+	}
+}
+###########UNION STATE - UKRAINE BECOME UNION STATE###########
+USR_union_state_ukr_create = {
+	hidden_effect = {
+		news_event = {
+			hours = 6
+			id = union_state_news.3
+		}
+		UKR = {
+			set_country_flag = BLR_unionstate_agree
+		}
+		SOV = {
+			country_event = union_state.4
+			set_autonomy = {
+				target = UKR
+				autonomy_state = autonomy_union_state
+			}
+		}
+		if = {
+			limit = {
+				UKR = { has_government = communism } 
+				SOV = { has_government = communism }
+			}
+			UKR = {
+				set_country_flag = ukr_revoult_bilo
+				country_event = { id = ukraine_maidan_west.19 days = 1 }
+				create_dynamic_country = {
+					original_tag = UKR
+					copy_tag = UKR
+					transfer_state = 699
+					transfer_state = 701
+					
+					transfer_state = 335
+					transfer_state = 1111
+					
+					set_politics = {
+						ruling_party = nationalist
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 20
+						neutrality = 20
+						fascism = 0
+						communism = 0
+						nationalist = 60
+					}
+					inherit_technology = UKR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 21
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^21
+					}
+					subtract_from_variable = {
+						party_pop_array^21 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = ukraine_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					UKR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = UKR
+						type = civil_war
+					}
+					add_civil_war_target = UKR
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = UKR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				UKR = { has_government = communism }
+				SOV = { NOT = { has_government = communism } }
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = UKR }
+			change_influence_percentage = yes
+			UKR = {
+				set_country_flag = ukr_revoult_bilo
+				country_event = { id = ukraine_maidan_west.19 days = 1 }
+				create_dynamic_country = {
+					original_tag = UKR
+					copy_tag = UKR
+					transfer_state = 699
+					transfer_state = 701
+					
+					transfer_state = 335
+					transfer_state = 1111
+					
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = UKR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = ukraine_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					UKR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = UKR
+						type = civil_war
+					}
+					add_civil_war_target = UKR
+				}
+			}
+		}
+		if = {
+			limit = {
+				UKR = { has_government = democratic }
+				SOV = { has_government = democratic }
+			}
+			UKR = {
+				set_country_flag = ukr_revoult_bilo
+				country_event = { id = ukraine_maidan_west.19 days = 1 }
+				create_dynamic_country = {
+					original_tag = UKR
+					copy_tag = UKR
+					transfer_state = 699
+					transfer_state = 701
+					
+					transfer_state = 335
+					transfer_state = 1111
+					
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = UKR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = ukraine_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					UKR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = UKR
+						type = civil_war
+					}
+					add_civil_war_target = UKR
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = UKR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				UKR = { has_government = democratic }
+				SOV = { NOT = { has_government = democratic } }
+			}
+			UKR = {
+				set_country_flag = ukr_revoult_bilo
+				country_event = { id = ukraine_maidan_west.19 days = 1 }
+				create_dynamic_country = {
+					original_tag = UKR
+					copy_tag = UKR
+					transfer_state = 699
+					transfer_state = 701
+					
+					transfer_state = 335
+					transfer_state = 1111
+					
+					set_politics = {
+						ruling_party = democratic
+						elections_allowed = yes
+					}
+					set_popularities = {
+						democratic = 60
+						neutrality = 20
+						fascism = 0
+						communism = 0
+						nationalist = 20
+					}
+					inherit_technology = UKR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 2
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^2
+					}
+					subtract_from_variable = {
+						party_pop_array^2 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = ukraine_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					UKR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = UKR
+						type = civil_war
+					}
+					add_civil_war_target = UKR
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = UKR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				UKR = { has_government = neutrality }
+				SOV = { has_government = neutrality }
+			}
+			UKR = {
+				set_country_flag = ukr_revoult_bilo
+				country_event = { id = ukraine_maidan_west.19 days = 1 }
+				create_dynamic_country = {
+					original_tag = UKR
+					copy_tag = UKR
+					transfer_state = 699
+					transfer_state = 701
+					
+					transfer_state = 335
+					transfer_state = 1111
+					
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = UKR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = ukraine_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					UKR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = UKR
+						type = civil_war
+					}
+					add_civil_war_target = UKR
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = UKR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				UKR = { has_government = neutrality }
+				SOV = { NOT = { has_government = neutrality } }
+			}
+			UKR = {
+				set_country_flag = ukr_revoult_bilo
+				country_event = { id = ukraine_maidan_west.19 days = 1 }
+				create_dynamic_country = {
+					original_tag = UKR
+					copy_tag = UKR
+					transfer_state = 699
+					transfer_state = 701
+					
+					transfer_state = 335
+					transfer_state = 1111
+					
+					set_politics = {
+						ruling_party = neutrality
+						elections_allowed = yes
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 60
+						fascism = 0
+						communism = 20
+						nationalist = 20
+					}
+					inherit_technology = UKR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 15
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^15
+					}
+					subtract_from_variable = {
+						party_pop_array^15 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = ukraine_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					UKR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = UKR
+						type = civil_war
+					}
+					add_civil_war_target = UKR
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = UKR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				UKR = { has_government = nationalist }
+				SOV = { has_government = nationalist }
+			}
+			UKR = {
+				set_country_flag = ukr_revoult_bilo
+				country_event = { id = ukraine_maidan_west.19 days = 1 }
+				create_dynamic_country = {
+					original_tag = UKR
+					copy_tag = UKR
+					transfer_state = 699
+					transfer_state = 701
+					
+					transfer_state = 335
+					transfer_state = 1111
+					
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = UKR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = ukraine_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					UKR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.5
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = UKR
+						type = civil_war
+					}
+					add_civil_war_target = UKR
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = UKR }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				UKR = { has_government = nationalist }
+				SOV = { NOT = { has_government = nationalist } }
+			}
+			UKR = {
+				set_country_flag = ukr_revoult_bilo
+				country_event = { id = ukraine_maidan_west.19 days = 1 }
+				create_dynamic_country = {
+					original_tag = UKR
+					copy_tag = UKR
+					transfer_state = 699
+					transfer_state = 701
+					
+					transfer_state = 335
+					transfer_state = 1111
+					
+					set_politics = {
+						ruling_party = nationalist
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 20
+						neutrality = 20
+						fascism = 0
+						communism = 0
+						nationalist = 60
+					}
+					inherit_technology = UKR
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 21
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^21
+					}
+					subtract_from_variable = {
+						party_pop_array^21 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = ukraine_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					UKR = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = UKR
+						type = civil_war
+					}
+					add_civil_war_target = UKR
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = UKR }
+			change_influence_percentage = yes
+		}
+	}
+}
+###########UNION STATE - PRO UNION STATE REVOULT IN ARMENIA###########
+USR_union_state_arm_create = {
+	hidden_effect = {
+		news_event = {
+			hours = 6
+			id = union_state_news.4
+		}
+		ARM = {
+			set_country_flag = BLR_unionstate_agree
+		}
+		SOV = {
+			country_event = union_state.4
+			set_autonomy = {
+				target = ARM
+				autonomy_state = autonomy_union_state
+			}
+		}
+		if = {
+			limit = {
+				ARM = { has_government = communism } 
+				SOV = { has_government = communism }
+			}
+			ARM = {
+				create_dynamic_country = {
+					original_tag = ARM
+					copy_tag = ARM
+					transfer_state = 1035
+					set_politics = {
+						ruling_party = nationalist
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 20
+						neutrality = 20
+						fascism = 0
+						communism = 0
+						nationalist = 60
+					}
+					inherit_technology = ARM
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 20
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^20
+					}
+					subtract_from_variable = {
+						party_pop_array^20 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = armenia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					if = {
+						limit = {
+							country_exists = NKR
+							NKR = { is_ai = yes }
+						}
+						set_autonomy = {
+							target = NKR
+							autonomy_state = autonomy_union_state
+						}
+					}
+					ARM = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = ARM
+						type = civil_war
+					}
+					add_civil_war_target = ARM
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ARM }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				ARM = { has_government = communism }
+				SOV = { NOT = { has_government = communism } }
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ARM }
+			change_influence_percentage = yes
+			ARM = {
+				create_dynamic_country = {
+					original_tag = ARM
+					copy_tag = ARM
+					transfer_state = 1035
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = ARM
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = armenia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					if = {
+						limit = {
+							country_exists = NKR
+							NKR = { is_ai = yes }
+						}
+						set_autonomy = {
+							target = NKR
+							autonomy_state = autonomy_union_state
+						}
+					}
+					ARM = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = ARM
+						type = civil_war
+					}
+					add_civil_war_target = ARM
+				}
+			}
+		}
+		if = {
+			limit = {
+				ARM = { has_government = democratic }
+				SOV = { has_government = democratic }
+			}
+			ARM = {
+				create_dynamic_country = {
+					original_tag = ARM
+					copy_tag = ARM
+					transfer_state = 1035
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = ARM
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = armenia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					if = {
+						limit = {
+							country_exists = NKR
+							NKR = { is_ai = yes }
+						}
+						set_autonomy = {
+							target = NKR
+							autonomy_state = autonomy_union_state
+						}
+					}
+					ARM = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = ARM
+						type = civil_war
+					}
+					add_civil_war_target = ARM
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ARM }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				ARM = { has_government = democratic }
+				SOV = { NOT = { has_government = democratic } }
+			}
+			ARM = {
+				create_dynamic_country = {
+					original_tag = ARM
+					copy_tag = ARM
+					transfer_state = 1035
+					set_politics = {
+						ruling_party = democratic
+						elections_allowed = yes
+					}
+					set_popularities = {
+						democratic = 60
+						neutrality = 20
+						fascism = 0
+						communism = 0
+						nationalist = 20
+					}
+					inherit_technology = ARM
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 2
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^2
+					}
+					subtract_from_variable = {
+						party_pop_array^2 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = armenia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					if = {
+						limit = {
+							country_exists = NKR
+							NKR = { is_ai = yes }
+						}
+						set_autonomy = {
+							target = NKR
+							autonomy_state = autonomy_union_state
+						}
+					}
+					ARM = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = ARM
+						type = civil_war
+					}
+					add_civil_war_target = ARM
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ARM }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				ARM = { has_government = neutrality }
+				SOV = { has_government = neutrality }
+			}
+			ARM = {
+				create_dynamic_country = {
+					original_tag = ARM
+					copy_tag = ARM
+					transfer_state = 1035
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = ARM
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = armenia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					if = {
+						limit = {
+							country_exists = NKR
+							NKR = { is_ai = yes }
+						}
+						set_autonomy = {
+							target = NKR
+							autonomy_state = autonomy_union_state
+						}
+					}
+					ARM = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = ARM
+						type = civil_war
+					}
+					add_civil_war_target = ARM
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ARM }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				ARM = { has_government = neutrality }
+				SOV = { NOT = { has_government = neutrality } }
+			}
+			ARM = {
+				create_dynamic_country = {
+					original_tag = ARM
+					copy_tag = ARM
+					transfer_state = 1035
+					set_politics = {
+						ruling_party = neutrality
+						elections_allowed = yes
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 60
+						fascism = 0
+						communism = 20
+						nationalist = 20
+					}
+					inherit_technology = ARM
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 15
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^15
+					}
+					subtract_from_variable = {
+						party_pop_array^15 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = armenia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					if = {
+						limit = {
+							country_exists = NKR
+							NKR = { is_ai = yes }
+						}
+						set_autonomy = {
+							target = NKR
+							autonomy_state = autonomy_union_state
+						}
+					}
+					ARM = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = ARM
+						type = civil_war
+					}
+					add_civil_war_target = ARM
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ARM }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				ARM = { has_government = nationalist }
+				SOV = { has_government = nationalist }
+			}
+			ARM = {
+				create_dynamic_country = {
+					original_tag = ARM
+					copy_tag = ARM
+					transfer_state = 1035
+					set_politics = {
+						ruling_party = communism
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 0
+						neutrality = 20
+						fascism = 0
+						communism = 60
+						nationalist = 20
+					}
+					inherit_technology = ARM
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 4
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^4
+					}
+					subtract_from_variable = {
+						party_pop_array^4 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = armenia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					if = {
+						limit = {
+							country_exists = NKR
+							NKR = { is_ai = yes }
+						}
+						set_autonomy = {
+							target = NKR
+							autonomy_state = autonomy_union_state
+						}
+					}
+					ARM = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = ARM
+						type = civil_war
+					}
+					add_civil_war_target = ARM
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ARM }
+			change_influence_percentage = yes
+		}
+		if = {
+			limit = {
+				ARM = { has_government = nationalist }
+				SOV = { NOT = { has_government = nationalist } }
+			}
+			ARM = {
+				create_dynamic_country = {
+					original_tag = ARM
+					copy_tag = ARM
+					transfer_state = 1035
+					set_politics = {
+						ruling_party = nationalist
+						elections_allowed = no
+					}
+					set_popularities = {
+						democratic = 20
+						neutrality = 20
+						fascism = 0
+						communism = 0
+						nationalist = 60
+					}
+					inherit_technology = ARM
+					clear_array = ruling_party
+					clear_array = gov_coalition_array
+					add_to_array = {
+						ruling_party = 20
+					}
+					set_temp_variable = {
+						current_cons_popularity = party_pop_array^20
+					}
+					subtract_from_variable = {
+						party_pop_array^20 = current_cons_popularity
+					}
+					recalculate_party = yes
+					update_government_coalition_strength = yes
+					update_party_name = yes
+					set_coalition_drift = yes
+					set_ruling_leader = yes
+					set_leader = yes
+					retire_country_leader = yes
+					load_focus_tree = armenia_focus
+					set_temp_variable = { percent_change = -22.2 }
+					set_temp_variable = { tag_index = SOV }
+					set_temp_variable = { influence_target = THIS }
+					change_influence_percentage = yes
+					if = {
+						limit = {
+							country_exists = NKR
+							NKR = { is_ai = yes }
+						}
+						set_autonomy = {
+							target = NKR
+							autonomy_state = autonomy_union_state
+						}
+					}
+					ARM = {
+						transfer_units_fraction = {
+							target = PREV
+							size = 0.4
+							stockpile_ratio = 0.1
+							army_ratio = 0.1
+							navy_ratio = 0.1
+							air_ratio = 0.1
+						}
+					}
+					declare_war_on = {
+						target = ARM
+						type = civil_war
+					}
+					add_civil_war_target = ARM
+				}
+			}
+			set_temp_variable = { percent_change = -22.2 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ARM }
+			change_influence_percentage = yes
+		}
+	}
+}

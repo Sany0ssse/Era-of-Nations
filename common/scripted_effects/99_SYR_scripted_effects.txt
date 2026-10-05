@@ -1,0 +1,913 @@
+# Author(s): AngriestBird, Viruce
+SYR_decrease_divided_syria = {
+	if = { limit = { has_idea = divided_syria_3 }
+		remove_ideas = divided_syria_3
+	}
+	else_if = { limit = { has_idea = divided_syria_2 }
+		swap_ideas = {
+			add_idea = divided_syria_3
+			remove_idea = divided_syria_2
+		}
+	}
+	else_if = { limit = { has_idea = divided_syria_1 }
+		swap_ideas = {
+			add_idea = divided_syria_2
+			remove_idea = divided_syria_1
+		}
+	}
+	else_if = { limit = { has_idea = divided_syria }
+		swap_ideas = {
+			add_idea = divided_syria_1
+			remove_idea = divided_syria
+		}
+	}
+}
+SYR_state_of_regions_calculate = {
+
+	#Daraa
+	if = {
+		limit = {
+			184 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_daraa_state = 0 }
+		if = {
+			limit = {
+				184 = {
+					industrial_complex > 0
+				}
+			}
+				add_to_variable = { syrian_daraa_state = 1 }
+		}
+		if = {
+			limit = {
+				184 = {
+					infrastructure > 4
+				}
+			}
+				add_to_variable = { syrian_daraa_state = 3 }
+		}
+		else_if = {
+			limit = {
+				184 = {
+					infrastructure > 1
+				}
+			}
+				add_to_variable = { syrian_daraa_state = 1 }
+		}
+		if = {
+			limit = {
+				184 = {
+					agriculture_district > 0
+				}
+			}
+				add_to_variable = { syrian_daraa_state = 1 }
+		}
+		if = {
+			limit = {
+				184 = {
+					offices > 0
+				}
+			}
+				add_to_variable = { syrian_daraa_state = 1 }
+		}
+		if = {
+			limit = {
+				185 = {
+					internet_station > 0
+				}
+			}
+				add_to_variable = { syrian_daraa_state = 2 }
+		}
+		set_variable = { syrian_daraa_separatism = DRU.separatism }
+		multiply_variable = { syrian_daraa_separatism = -0.05 }
+		add_to_variable = { syrian_daraa_state =  syrian_daraa_separatism }
+		add_to_variable = { syrian_daraa_state = syrian_daraa_state_from_effect }
+	}
+	#Al-Suwayda
+	if = {
+		limit = {
+			185 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_suweida_state = 0 }
+		if = {
+			limit = {
+				185 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_suweida_state = 1 }
+		}
+		if = {
+			limit = {
+				185 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_suweida_state = 3 }
+		}
+		else_if = {
+			limit = {
+				185 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_suweida_state = 1 }
+		}
+		if = {
+			limit = {
+				185 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_suweida_state = 1 }
+		}
+		if = {
+			limit = {
+				185 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_suweida_state = 1 }
+		}
+		if = {
+			limit = {
+				185 = {
+					internet_station > 0
+				}
+			}
+			add_to_variable = { syrian_suweida_state = 2 }
+		}
+		add_to_variable = { syrian_suweida_state = syrian_suweida_state_from_effect }
+	}
+	#South Deir ez-Zor
+	if = {
+		limit = {
+			192 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_south_der_az_zor_state = 1 }
+		if = {
+			limit = {
+				192 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_south_der_az_zor_state = 1 }
+		}
+		if = {
+			limit = {
+				192 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_south_der_az_zor_state = 3 }
+		}
+		else_if = {
+			limit = {
+				192 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_south_der_az_zor_state = 1 }
+		}
+		if = {
+			limit = {
+				192 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_south_der_az_zor_state = 1 }
+		}
+		if = {
+			limit = {
+				192 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_south_der_az_zor_state = 1 }
+		}
+		if = {
+			limit = {
+				192 = {
+					internet_station > 0
+				}
+			}
+			add_to_variable = { syrian_south_der_az_zor_state = 2 }
+		}
+		add_to_variable = { syrian_south_der_az_zor_state = syrian_south_der_az_zor_state_from_effect }
+	}
+	#Damascus
+	if = {
+		limit = {
+			186 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_damascus_state = 2 }
+		if = {
+			limit = {
+				186 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_damascus_state = 1 }
+		}
+		if = {
+			limit = {
+				186 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_damascus_state = 3 }
+		}
+		else_if = {
+			limit = {
+				186 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_damascus_state = 1 }
+		}
+		if = {
+			limit = {
+				186 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_damascus_state = 1 }
+		}
+		if = {
+			limit = {
+				186 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_damascus_state = 1 }
+		}
+		if = {
+			limit = {
+				186 = {
+					internet_station > 0
+				}
+			}
+				add_to_variable = { syrian_damascus_state = 2 }
+		}
+		add_to_variable = { syrian_damascus_state =syrian_damascus_state_from_effect }
+	}
+	#North Deir ez-Zor
+	if = {
+		limit = {
+			995 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_north_deir_es_zor_state = 1 }
+		if = {
+			limit = {
+				995 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_north_deir_es_zor_state = 1 }
+		}
+		if = {
+			limit = {
+				995 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_north_deir_es_zor_state = 3 }
+		}
+		else_if = {
+			limit = {
+					infrastructure > 1
+				995 = {
+				}
+			}
+			add_to_variable = { syrian_north_deir_es_zor_state = 1 }
+		}
+		if = {
+			limit = {
+				995 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_north_deir_es_zor_state = 1 }
+		}
+		if = {
+			limit = {
+				995 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_north_deir_es_zor_state = 1 }
+		}
+		if = {
+			limit = {
+				995 = {
+					internet_station > 0
+				}
+			}
+			add_to_variable = { syrian_north_deir_es_zor_state = 2 }
+		}
+		add_to_variable = { syrian_north_deir_es_zor_state = syrian_north_deir_es_zor_state_from_effect }
+	}
+	#Al-Hasakah
+	if = {
+		limit = {
+			193 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_hasakah_state = 0 }
+		if = {
+			limit = {
+				193 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_hasakah_state = 1 }
+		}
+		if = {
+			limit = {
+				193 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_hasakah_state = 3 }
+		}
+		else_if = {
+			limit = {
+				193 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_hasakah_state = 1 }
+		}
+		if = {
+			limit = {
+				193 = {
+					agriculture_district > 0
+				}
+			}
+				add_to_variable = { syrian_hasakah_state = 1 }
+		}
+		if = {
+			limit = {
+				193 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_hasakah_state = 1 }
+		}
+		if = {
+			limit = {
+				193 = {
+					internet_station > 0
+				}
+			}
+			add_to_variable = { syrian_hasakah_state = 2 }
+		}
+		add_to_variable = { syrian_hasakah_state = syrian_hasakah_state_from_effect }
+	}
+	#Central Desert
+	if = {
+		limit = {
+			561 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_central_desert_state = 0 }
+		if = {
+			limit = {
+				561 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_central_desert_state = 1 }
+		}
+		if = {
+			limit = {
+				561 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_central_desert_state = 3 }
+		}
+		else_if = {
+			limit = {
+				561 = {
+					infrastructure > 1
+				}
+			}
+				add_to_variable = { syrian_central_desert_state = 1 }
+		}
+		if = {
+			limit = {
+				561 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_central_desert_state = 1 }
+		}
+		if = {
+			limit = {
+				561 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_central_desert_state = 1 }
+		}
+		if = {
+			limit = {
+				561 = {
+					internet_station > 0
+				}
+			}
+			add_to_variable = { syrian_central_desert_state = 2 }
+		}
+		add_to_variable = { syrian_central_desert_state = syrian_central_desert_state_from_effect }
+	}
+	#South Raqqa
+	if = {
+		limit = {
+			994 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_south_raqqa_state = 1 }
+		if = {
+			limit = {
+				994 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_south_raqqa_state = 1 }
+		}
+		if = {
+			limit = {
+				994 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_south_raqqa_state = 3 }
+		}
+		else_if = {
+			limit = {
+				994 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_south_raqqa_state = 1 }
+		}
+		if = {
+			limit = {
+				994 = {
+					agriculture_district > 0
+				}
+			}
+				add_to_variable = { syrian_south_raqqa_state = 1 }
+		}
+		if = {
+			limit = {
+				994 = {
+					offices > 0
+				}
+			}
+				add_to_variable = { syrian_south_raqqa_state = 1 }
+		}
+		if = {
+			limit = {
+				994 = {
+					internet_station > 0
+				}
+			}
+			add_to_variable = { syrian_south_raqqa_state = 2 }
+		}
+		add_to_variable = { syrian_south_raqqa_state = syrian_south_raqqa_state_from_effect }
+	}
+	#Homs
+	if = {
+		limit = {
+			188 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_homs_state = 1 }
+		if = {
+			limit = {
+				188 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_homs_state = 1 }
+		}
+		if = {
+			limit = {
+				188 = {
+					infrastructure > 4
+				}
+			}
+				add_to_variable = { syrian_homs_state = 3 }
+		}
+		else_if = {
+			limit = {
+				188 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_homs_state = 1 }
+		}
+		if = {
+			limit = {
+				188 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_homs_state = 1 }
+		}
+		if = {
+			limit = {
+				188 = {
+					offices > 0
+				}
+			}
+				add_to_variable = { syrian_homs_state = 1 }
+		}
+		if = {
+			limit = {
+				188 = {
+					internet_station > 0
+				}
+			}
+			add_to_variable = { syrian_homs_state = 2 }
+		}
+		add_to_variable = { syrian_homs_state = syrian_homs_state_from_effect }
+	}
+	#Aleppo
+	if = {
+		limit = {
+			566 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_aleppo_state = 1 }
+		if = {
+			limit = {
+				566 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_aleppo_state = 1 }
+		}
+		if = {
+			limit = {
+				566 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_aleppo_state = 3 }
+		}
+		else_if = {
+			limit = {
+				566 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_aleppo_state = 1 }
+		}
+		if = {
+			limit = {
+				566 = {
+					agriculture_district > 0
+				}
+			}
+				add_to_variable = { syrian_aleppo_state = 1 }
+		}
+		if = {
+			limit = {
+				566 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_aleppo_state = 1 }
+		}
+		if = {
+			limit = {
+				566 = {
+					internet_station > 0
+				}
+			}
+				add_to_variable = { syrian_aleppo_state = 2 }
+		}
+		add_to_variable = { syrian_aleppo_state = syrian_aleppo_state_from_effect }
+	}
+	#Azaz
+	if = {
+		limit = {
+			575 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_azaz_state = 1 }
+		if = {
+			limit = {
+				575 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_azaz_state = 1 }
+		}
+		if = {
+			limit = {
+				575 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_azaz_state = 3 }
+		}
+		else_if = {
+			limit = {
+				575 = {
+					infrastructure > 1
+				}
+			}
+				add_to_variable = { syrian_azaz_state = 1 }
+		}
+		if = {
+			limit = {
+				575 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_azaz_state = 1 }
+		}
+		if = {
+			limit = {
+				575 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_azaz_state = 1 }
+		}
+		if = {
+			limit = {
+				575 = {
+					internet_station > 0
+				}
+			}
+				add_to_variable = { syrian_azaz_state = 2 }
+		}
+		add_to_variable = { syrian_azaz_state = syrian_azaz_state_from_effect }
+	}
+	#Latakia
+	if = {
+		limit = {
+			189 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_latakia_state = 0 }
+		if = {
+			limit = {
+				189 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_latakia_state = 1 }
+		}
+		if = {
+			limit = {
+				189 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_latakia_state = 3 }
+		}
+		else_if = {
+			limit = {
+				189 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_latakia_state = 1 }
+		}
+		if = {
+			limit = {
+				189 = {
+					agriculture_district > 0
+				}
+			}
+				add_to_variable = { syrian_latakia_state = 1 }
+		}
+		if = {
+			limit = {
+				189 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_latakia_state = 1 }
+		}
+		if = {
+			limit = {
+				189 = {
+					internet_station > 0
+				}
+			}
+				add_to_variable = { syrian_latakia_state = 2 }
+		}
+		set_variable = { syrian_latakia_separatism = ALA.separatism }
+		multiply_variable = { syrian_latakia_separatism = -0.05 }
+		add_to_variable = { syrian_latakia_state =  syrian_latakia_separatism }
+		add_to_variable = { syrian_latakia_state = syrian_latakia_state_from_effect }
+	}
+	#Idlib
+	if = {
+		limit = {
+			190 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_idlib_state = 1 }
+		if = {
+			limit = {
+				190 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_idlib_state = 1 }
+		}
+		if = {
+			limit = {
+				190 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_idlib_state = 3 }
+		}
+		else_if = {
+			limit = {
+				190 = {
+					infrastructure > 1
+				}
+			}
+				add_to_variable = { syrian_idlib_state = 1 }
+		}
+		if = {
+			limit = {
+				190 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_idlib_state = 1 }
+		}
+		if = {
+			limit = {
+				190 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_idlib_state = 1 }
+		}
+		if = {
+			limit = {
+				190 = {
+					internet_station > 0
+				}
+			}
+				add_to_variable = { syrian_idlib_state = 2 }
+		}
+		add_to_variable = { syrian_idlib_state = syrian_idlib_state_from_effect }
+	}
+	#Hama
+	if = {
+		limit = {
+			571 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_hama_state = 1 }
+		if = {
+			limit = {
+				571 = {
+					industrial_complex > 0
+				}
+			}
+				add_to_variable = { syrian_hama_state = 1 }
+		}
+		if = {
+			limit = {
+				571 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_hama_state = 3 }
+		}
+		else_if = {
+			limit = {
+				571 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_hama_state = 1 }
+		}
+		if = {
+			limit = {
+				571 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_hama_state = 1 }
+		}
+		if = {
+			limit = {
+				571 = {
+					offices > 0
+				}
+			}
+			add_to_variable = { syrian_hama_state = 1 }
+		}
+		if = {
+			limit = {
+				571 = {
+					internet_station > 0
+				}
+			}
+				add_to_variable = { syrian_hama_state = 2 }
+		}
+		add_to_variable = { syrian_hama_state = syrian_hama_state_from_effect }
+	}
+	#North Raqqa
+	if = {
+		limit = {
+			191 = {
+				is_owned_and_controlled_by = SYR
+			}
+		}
+		set_variable = { syrian_norraqqa_state = 1 }
+		if = {
+			limit = {
+				191 = {
+					industrial_complex > 0
+				}
+			}
+			add_to_variable = { syrian_norraqqa_state = 1 }
+		}
+		if = {
+			limit = {
+				191 = {
+					infrastructure > 4
+				}
+			}
+			add_to_variable = { syrian_norraqqa_state = 3 }
+		}
+		else_if = {
+			limit = {
+				191 = {
+					infrastructure > 1
+				}
+			}
+			add_to_variable = { syrian_norraqqa_state = 1 }
+		}
+		if = {
+			limit = {
+				191 = {
+					agriculture_district > 0
+				}
+			}
+			add_to_variable = { syrian_norraqqa_state = 1 }
+		}
+		if = {
+			limit = {
+				191 = {
+					offices > 0
+				}
+			}
+				add_to_variable = { syrian_norraqqa_state = 1 }
+		}
+		if = {
+			limit = {
+				191 = {
+					internet_station > 0
+				}
+			}
+			add_to_variable = { syrian_norraqqa_state = 2 }
+		}
+		add_to_variable = { syrian_norraqqa_state = syrian_norraqqa_state_from_effect }
+	}
+	update_syria_dirty = yes
+}
+
+update_syria_dirty = {
+	if = { limit = { NOT = { has_variable = global.update_syria_ui } }
+		set_variable = { global.update_syria_ui = 0 }
+	}
+	else = {
+		add_to_variable = { global.update_syria_ui = 1 }
+	}
+}

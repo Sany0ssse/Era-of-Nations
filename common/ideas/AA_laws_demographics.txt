@@ -1,0 +1,184 @@
+ideas = {
+	#Population Pyramids
+    pop_pyramid = {
+		law = yes
+		use_list_view = yes
+
+		population_pyramid_1 = {
+			allowed_civil_war = { always = yes }
+			available = { always = no }
+			picture = generic_pyramide_up
+			modifier = {
+				war_support_factor = 0.1
+				social_cost_multiplier_modifier = -0.1
+				health_cost_multiplier_modifier = -0.1
+				education_cost_multiplier_modifier = 0.1
+				total_workforce_modifier = 0.125
+				monthly_population = 0.25
+				foreign_influence_defense_modifier = -0.15
+				drift_defence_factor = -0.15
+			}
+			cancel_if_invalid = no
+		}
+		population_pyramid_2 = {
+			allowed_civil_war = { always = yes }
+			available = { always = no }
+			picture = generic_pyramide_middle
+			modifier = {
+				stability_factor = 0.05
+			}
+			default = yes
+			cancel_if_invalid = no
+		}
+		population_pyramid_3 = {
+			allowed_civil_war = { always = yes }
+			available = { always = no }
+			picture = generic_pyramide_down
+			modifier = {
+				war_support_factor = -0.1
+				social_cost_multiplier_modifier = 0.1
+				health_cost_multiplier_modifier = 0.1
+				education_cost_multiplier_modifier = -0.1
+				total_workforce_modifier = -0.125
+				monthly_population = -0.25
+				foreign_influence_defense_modifier = 0.15
+				drift_defence_factor = 0.15
+			}
+			cancel_if_invalid = no
+		}
+	}
+	#Birth Policy
+    birth_policy = {
+		law = yes
+		use_list_view = yes
+
+		encourage_birth = {
+			allowed_civil_war = { always = yes }
+			available = { NOT = { has_idea = encourage_abortion } }
+			removal_cost = -1
+			picture = generic_birth_up
+			modifier = {
+				custom_modifier_tooltip = encourage_birth_idea_TT
+				health_cost_multiplier_modifier = 0.25
+			}
+			on_add = {
+				hidden_effect = {
+					set_variable = { encourage_birth_var = 0.01 }
+					add_dynamic_modifier = { modifier = encourage_birth_dynamic_modifier }
+				}
+			}
+			cancel_if_invalid = no
+
+			ai_will_do = {
+				base = 0
+				modifier = {
+					add = 150
+					has_idea = population_pyramid_3
+				}
+			}
+		}
+		no_birth_control = {
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_birth_middle
+			modifier = {
+				stability_factor = 0.05
+			}
+			default = yes
+			cancel_if_invalid = no
+		}
+		discourage_birth = {
+			allowed_civil_war = { always = yes }
+			available = {
+				AND = {
+					NOT = {
+						has_idea = ban_abortion
+					}
+					NOT = {
+						has_idea = NOR_restrictive_abortions
+					}
+					NOT = {
+						has_idea = NOR_restrictive_abortions2
+					}
+				}
+			}
+			removal_cost = -1
+			picture = generic_birth_bad
+			modifier = {
+				custom_modifier_tooltip = discourage_birth_idea_TT
+				health_cost_multiplier_modifier = 0.25
+			}
+			on_add = {
+				hidden_effect = {
+					set_variable = { discourage_birth_var = 0.01 }
+					add_dynamic_modifier = { modifier = discourage_birth_dynamic_modifier }
+				}
+			}
+			cancel_if_invalid = no
+		}
+	}
+	#Abortion Policy
+    abortion_policy = {
+		law = yes
+		use_list_view = yes
+
+		ban_abortion = {
+			allowed_civil_war = { always = yes }
+			available = {
+				AND = {
+					NOT = {
+						has_idea = discourage_birth
+					}
+					NOT = {
+						has_idea = NOR_restrictive_abortions
+					}
+					NOT = {
+						has_idea = NOR_restrictive_abortions2
+					}
+				}
+			}
+			removal_cost = -1
+			picture = generic_abort_disagree
+			modifier = {
+				monthly_population = 0.15
+				health_cost_multiplier_modifier = 0.15
+				stability_factor = -0.05
+			}
+			cancel_if_invalid = no
+		}
+		no_abortion_control = {
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_abort_middle
+			modifier = {
+				stability_factor = 0.05
+			}
+			default = yes
+			cancel_if_invalid = no
+		}
+		encourage_abortion = {
+			allowed_civil_war = { always = yes }
+			available = {
+				AND = {
+					NOT = {
+						has_idea = encourage_birth
+					}
+					NOT = {
+						has_idea = NOR_restrictive_abortions
+					}
+					NOT = {
+						has_idea = NOR_restrictive_abortions2
+					}
+				}
+			}
+			removal_cost = -1
+			picture = generic_abort_agree
+			modifier = {
+				monthly_population = -0.15
+				health_cost_multiplier_modifier = 0.15
+				stability_factor = -0.05
+			}
+			cancel_if_invalid = no
+		}
+	}
+}

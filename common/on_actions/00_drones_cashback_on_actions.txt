@@ -1,0 +1,50 @@
+on_actions = {
+	on_war = {
+		effect = {
+			drones_cashback_start = yes
+		}
+	}
+	on_peace = {
+		effect = {
+			drones_cashback_end = yes
+		}
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					has_war = yes
+					has_capitulated = no
+				}
+			drones_cashback = yes
+			}
+		}
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					has_capitulated = no
+					OR = {
+					air_base > 0
+					check_variable = { deployed_airforce_manpower_k > 0 }
+					     }
+			            }
+			airbase_service_manpower = yes
+			}
+		}
+	}
+	on_startup = {
+		effect = {
+			every_country = {
+				limit = {
+					OR = {
+					air_base > 0
+					check_variable = { deployed_airforce_manpower_k > 0 }
+					     }
+			            }
+			airbase_service_manpower = yes
+			}
+		}
+	}
+}

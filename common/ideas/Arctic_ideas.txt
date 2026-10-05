@@ -1,0 +1,92 @@
+ideas = {
+	country = {
+		arctic_council_chairman = {
+			picture = arctic_council_chairman_idea
+			on_remove = {
+				news_event = arctic.45
+			}
+			cancel = {
+				NOT = { has_idea = arctic_council_member }
+			}
+			modifier = {
+                political_power_factor = 0.05
+				receiving_investment_duration_modifier = -0.05
+				receiving_investment_cost_modifier = -0.05
+                investment_cost_modifier = -0.05
+				investment_duration_modifier = -0.05
+			}
+		}
+		arctic_council_member = {
+			picture = arctic_council_member_idea
+			on_add = {
+				if = {
+					limit = { has_global_flag = arctic_trade_route_created }
+					add_ideas = arctic_trade_route
+				}
+			}
+			modifier = {
+                political_power_factor = 0.15
+				receiving_investment_duration_modifier = -0.1
+				receiving_investment_cost_modifier = -0.1
+                investment_cost_modifier = -0.1
+				investment_duration_modifier = -0.1
+				research_speed_factor = 0.02
+			}
+		}
+        arctic_council_observer = {
+			picture = arctic_council_observer_idea
+            cancel = {
+                has_idea = arctic_council_member
+            }
+			modifier = {
+                political_power_factor = 0.05
+				receiving_investment_duration_modifier = -0.05
+				receiving_investment_cost_modifier = -0.05
+                investment_cost_modifier = -0.05
+				investment_duration_modifier = -0.05
+				research_speed_factor = 0.01
+			}
+		}
+		#Recent Arctic Exercises
+		recent_arctic_exercises = {
+			picture = arctic_exercises
+			on_remove = {
+				set_country_flag = { flag = arctic_excercises_cooldown days = 365 value = 1 }
+			}
+			modifier = {
+				acclimatization_cold_climate_gain_factor = 0.05
+				army_attack_factor = 0.02
+				army_defence_factor = 0.02
+				army_org_factor = 0.02
+				air_mission_efficiency = 0.02
+				navy_submarine_attack_factor = 0.02
+				navy_submarine_defence_factor = 0.02
+				navy_submarine_detection_factor = 0.02
+				experience_gain_army = 0.05
+				experience_gain_navy = 0.05
+				experience_gain_air = 0.05
+			}
+		}
+		arctic_trade_route = {
+			picture = arctic_trade_idea
+            cancel = {
+                any_country = {
+					has_idea = arctic_trade_route
+					any_country = {
+						has_idea = arctic_trade_route
+						has_war_with = PREV
+					}
+				}
+            }
+			on_remove = {
+                clr_global_flag = arctic_trade_route_created
+			}
+			modifier = {
+				custom_modifier_tooltip = ledokols_idea_TT
+				trade_opinion_factor = 0.25
+				consumer_goods_factor = -0.05
+				resource_export_multiplier_modifier = 0.25
+			}
+		}
+	}
+}

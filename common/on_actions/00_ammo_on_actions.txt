@@ -1,0 +1,193 @@
+on_actions = {
+    on_startup = {
+        effect = {
+            every_country = {
+                count_starting_ammo = yes
+                count_maximum_consumption = yes
+                if = {
+                    limit = { has_war = yes }
+                    count_current_consumption = yes
+                }
+                count_consumption_rating = yes
+                count_summarry_ammunition_effect = yes
+                count_ammo_stock_days = yes
+            }
+        }
+    }
+    on_send_volunteers = {
+        effect = { ROOT = { count_maximum_consumption = yes } }
+    }
+    on_war = {
+        effect = {
+            if = {
+                limit = { NOT = { has_country_flag = country_setuped } }
+                setup_new_country = yes
+            }
+            count_maximum_consumption = yes
+        }
+    }
+    on_liberate = {
+        effect = {
+            ROOT = {
+                count_starting_ammo = yes
+                count_maximum_consumption = yes
+                if = {
+                    limit = { has_war = yes }
+                    count_current_consumption = yes
+                }
+                count_consumption_rating = yes
+                count_summarry_ammunition_effect = yes
+                count_ammo_stock_days = yes
+            }
+        }
+    }
+    on_release_as_free = {
+        effect = {
+            ROOT = {
+                count_starting_ammo = yes
+                count_maximum_consumption = yes
+                if = {
+                    limit = { has_war = yes }
+                    count_current_consumption = yes
+                }
+                count_consumption_rating = yes
+                count_summarry_ammunition_effect = yes
+                count_ammo_stock_days = yes
+            }
+        }
+    }
+    on_release_as_puppet = {
+        effect = {
+            ROOT = {
+                count_starting_ammo = yes
+                count_maximum_consumption = yes
+                if = {
+                    limit = { has_war = yes }
+                    count_current_consumption = yes
+                }
+                count_consumption_rating = yes
+                count_summarry_ammunition_effect = yes
+                count_ammo_stock_days = yes
+            }
+        }
+    }
+    # Capitulations
+    on_capitulation = {
+        effect = {
+            set_temp_variable = { ammo_transferred = 0 }
+            ROOT = {
+                set_temp_variable      = { ammo_transferred   = ammo_stock }
+                multiply_temp_variable = { ammo_transferred   = 0.5 }
+                subtract_from_variable = { ammo_stock = ammo_transferred }
+            }
+            FROM = {
+                add_to_variable = { ammo_stock = ammo_transferred }
+                clamp_variable  = {
+                    var = ammo_stock
+                    max = max_ammo_limit
+                }
+            }
+        }
+    }
+    # Annexations
+    on_subject_annexed = {
+        effect = {
+            set_temp_variable = { ammo_transferred = 0 }
+            ROOT = {
+                set_temp_variable = { ammo_transferred = ammo_stock }
+            }
+            FROM = {
+                add_to_variable = { ammo_stock = ammo_transferred }
+                clamp_variable  = {
+                    var = ammo_stock
+                    max = max_ammo_limit
+                }
+            }
+        }
+    }
+    on_daily = {
+        effect = { add_produced_ammo = yes }
+    }
+    on_daily = {
+        effect = {
+            if = {
+                limit = {
+                    OR = {
+                        has_war = yes
+                        any_other_country = {
+                            has_volunteers_amount_from = {
+                                tag = PREV
+                                count > 0
+                            }
+                        }
+                    }
+                }
+                add_consumed_ammo = yes
+                count_ammo_stock_days = yes
+            }
+        }
+    }
+    on_monthly = {
+        effect = { count_ammo_production = yes }
+    }
+    on_daily = {
+        effect = {
+            if = {
+                limit = {
+					has_game_rule = {
+						rule = ammo_potato_mod
+						option = no
+					}
+                    OR = {
+                        has_war = yes
+                        any_other_country = {
+                            has_volunteers_amount_from = {
+                                tag = PREV
+                                count > 0
+                            }
+                        }
+                    }
+                }
+                count_current_consumption = yes
+                count_consumption_rating = yes
+                count_summarry_ammunition_effect = yes
+            }
+        }
+    }
+    on_monthly = {
+        effect = {
+            if = {
+                limit = {
+					has_game_rule = {
+						rule = ammo_potato_mod
+						option = yes
+					}
+                    OR = {
+                        has_war = yes
+                        any_other_country = {
+                            has_volunteers_amount_from = {
+                                tag = PREV
+                                count > 0
+                            }
+                        }
+                    }
+                }
+                count_current_consumption = yes
+                count_consumption_rating = yes
+                count_summarry_ammunition_effect = yes
+            }
+        }
+    }
+    on_monthly = {
+        effect = {
+            count_maximum_consumption = yes
+            count_current_consumption = yes
+        }
+    }
+    on_monthly = {
+        effect = { count_max_ammo_limit = yes }
+    }
+    on_peace = {
+        effect = { count_current_consumption = yes }
+    }
+}

@@ -1,0 +1,1104 @@
+ARM_soc_pac_bop_category = {
+	###########National Cause - Right Side###########
+	ARM_prioritize_national_cause = {
+		icon = GFX_decision_arm_bop2_button
+		days_remove = 60
+		available = {
+			NOT = {
+				has_decision = ARM_prioritize_propserity
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_national_cause"
+			add_power_balance_value = {
+				id = ARM_soc_pac_bop
+				value = 0.05
+				tooltip_side = ARM_soc_pac_bop_right_side
+			}
+		}
+		modifier = {
+			political_power_factor = -0.05
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 20
+				has_government = nationalist
+			}
+			modifier = {
+				add = 20
+				has_government = communism
+			}
+		}
+	}
+	###########Reform Anti Air - Right Side###########
+	ARM_prioritize_reform_pvo = {
+		icon = GFX_decision_arm_army_button
+		custom_cost_trigger = {
+			command_power > 100
+		}
+		custom_cost_text = command_power_more_than_100
+		days_remove = 60
+		fire_only_once = yes
+		available = {
+			has_idea = ARM_army_anti_air
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_reform_pvo"
+			add_command_power = -100
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_reform_pvo"
+			add_power_balance_value = {
+				id = ARM_soc_pac_bop
+				value = 0.10
+				tooltip_side = ARM_soc_pac_bop_right_side
+			}
+			swap_ideas = {
+				remove_idea = ARM_army_anti_air
+				add_idea = ARM_army_anti_air1
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 20
+				has_government = nationalist
+			}
+			modifier = {
+				add = 20
+				has_government = communism
+			}
+		}
+	}
+	###########Reform Airborne Troops - Right Side###########
+	ARM_prioritize_reform_vdv = {
+		icon = GFX_decision_arm_army_button
+		custom_cost_trigger = {
+			command_power > 100
+		}
+		custom_cost_text = command_power_more_than_100
+		fire_only_once = yes
+		days_remove = 60
+
+		available = {
+			has_idea = ARM_vdv_idea
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_reform_vdv"
+			add_command_power = -100
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_reform_vdv"
+			add_power_balance_value = {
+				id = ARM_soc_pac_bop
+				value = 0.10
+				tooltip_side = ARM_soc_pac_bop_right_side
+			}
+			swap_ideas = {
+				remove_idea = ARM_vdv_idea
+				add_idea = ARM_vdv_idea1
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 20
+				has_government = nationalist
+			}
+			modifier = {
+				add = 20
+				has_government = communism
+			}
+		}
+	}
+	###########Invest Davisur - Right Side###########
+	ARM_prioritize_invest_davisur = {
+		icon = GFX_decision_arm_army_button
+		custom_cost_trigger = {
+			command_power > 100
+		}
+		custom_cost_text = command_power_more_than_100
+		fire_only_once = yes
+		days_remove = 60
+		available = {
+			has_idea = ARM_davisur_arms
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_invest_davisur"
+			add_command_power = -100
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_invest_davisur"
+			add_power_balance_value = {
+				id = ARM_soc_pac_bop
+				value = 0.10
+				tooltip_side = ARM_soc_pac_bop_right_side
+			}
+			swap_ideas = {
+				remove_idea = ARM_davisur_arms
+				add_idea = ARM_davisur_arms1
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 20
+				has_government = nationalist
+			}
+			modifier = {
+				add = 20
+				has_government = communism
+			}
+		}
+	}
+	###########Prioritize Propserity - Left Side###########
+	ARM_prioritize_propserity = {
+		icon = GFX_decision_arm_bop1_button
+		days_remove = 60
+		available = {
+			NOT = {
+				has_decision = ARM_prioritize_national_cause
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_propserity"
+			add_power_balance_value = {
+				id = ARM_soc_pac_bop
+				value = -0.05
+				tooltip_side = ARM_soc_pac_bop_left_side
+			}
+		}
+		modifier = {
+			political_power_factor = -0.05
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 20
+				has_government = democratic
+			}
+			modifier = {
+				add = 20
+				has_government = neutrality
+			}
+		}
+	}
+	###########Reform Banking Sector - Left Side###########
+	ARM_prioritize_invest_banking = {
+		icon = GFX_decision_arm_economy_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		fire_only_once = yes
+		days_remove = 60
+
+		available = {
+			has_idea = ARM_economy_bank_sector_idea
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_invest_banking"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_invest_banking"
+			add_power_balance_value = {
+				id = ARM_soc_pac_bop
+				value = -0.10
+				tooltip_side = ARM_soc_pac_bop_right_side
+			}
+			swap_ideas = {
+				remove_idea = ARM_economy_bank_sector_idea
+				add_idea = ARM_economy_bank_sector_idea2
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 20
+				has_government = democratic
+			}
+			modifier = {
+				add = 20
+				has_government = neutrality
+			}
+		}
+	}
+	###########Reform Green Energy - Left Side###########
+	ARM_prioritize_invest_green_energy = {
+		icon = GFX_decision_arm_economy_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		fire_only_once = yes
+		days_remove = 60
+		available = {
+			has_idea = ARM_economy_green_energy_idea
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_invest_green_energy"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_invest_green_energy"
+			add_power_balance_value = {
+				id = ARM_soc_pac_bop
+				value = -0.10
+				tooltip_side = ARM_soc_pac_bop_right_side
+			}
+			swap_ideas = {
+				remove_idea = ARM_economy_green_energy_idea
+				add_idea = ARM_economy_green_energy_idea1
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 20
+				has_government = democratic
+			}
+			modifier = {
+				add = 20
+				has_government = neutrality
+			}
+		}
+	}
+	###########Reform Energy - Left Side###########
+	ARM_prioritize_invest_energy = {
+		icon = GFX_decision_arm_economy_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		fire_only_once = yes
+		days_remove = 60
+		available = {
+			has_idea = ARM_economy_cjsc_idea1
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_invest_energy"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_prioritize_invest_green_energy"
+			add_power_balance_value = {
+				id = ARM_soc_pac_bop
+				value = -0.10
+				tooltip_side = ARM_soc_pac_bop_right_side
+			}
+			add_ideas = ARM_economy_cjsc_idea2
+			clr_country_flag = ARM_economy_cjsc_idea1_yes 
+			set_country_flag = ARM_economy_cjsc_idea2_yes 
+			hidden_effect = {
+				remove_ideas = ARM_economy_cjsc_idea1
+			}
+			
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 20
+				has_government = democratic
+			}
+			modifier = {
+				add = 20
+				has_government = neutrality
+			}
+		}
+	}
+	###########Balance - Central###########
+	ARM_balanced_solution = {
+		icon = GFX_decision_arm_bop3_button
+		days_remove = 100
+
+		modifier = {
+			political_power_factor = -0.1
+		}
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 60_per_capita_or_more_tt
+				check_variable = { gdp_per_capita > 59.999 }
+			}
+			NOT = {
+				has_decision = ARM_prioritize_propserity
+				has_decision = ARM_prioritize_national_cause
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_balanced_solution"
+			set_country_flag = bop_arm_ded
+			remove_power_balance = {
+				id = ARM_soc_pac_bop
+			}
+			add_ideas = ARM_ideal_balance
+		}
+
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
+ARM_political_assassinations_category = {
+	arm_opposition_backlash_ticker_mission = {
+		available = {
+			always = no
+		}
+		activation = {
+			has_country_leader = {
+				name = "Robert Kocharyan"
+				ruling_only = yes
+			}
+		}
+		days_mission_timeout = 200
+		is_good = no
+		fire_only_once = yes
+		icon = GFX_decision_milocevic_revolution_button
+		cancel_trigger = {
+			has_country_flag = first_assasinat_done
+			has_country_flag = second_assasinat_done
+		}
+		visible = {
+			has_country_leader = {
+				name = "Robert Kocharyan"
+				ruling_only = yes
+			}
+		}
+		cancel_if_not_visible = yes
+		cancel_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision cancel arm_opposition_backlash_ticker_mission"
+			country_event = arme.13
+			hidden_effect = {
+				country_event = { id = arme.191 days = 500 random_days = 55 }
+			}
+		}
+		timeout_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision timeout arm_opposition_backlash_ticker_mission"
+			country_event = arme.15
+			hidden_effect = {
+				country_event = { id = arme.191 days = 500 random_days = 55 }
+			}
+		}
+	}
+	ARM_first_wave_of_assasinat = {
+		custom_cost_trigger = {
+			check_variable = { treasury > 1 }
+		}
+		custom_cost_text = more_than_treasury_1
+		icon = ISR_military_button
+
+		available = {
+			has_completed_focus = ARM_Kocharjan
+			NOT = { has_country_flag = first_assasinat_done }
+		}
+
+		fire_only_once = yes
+		days_remove = 100
+
+		modifier = {
+			stability_factor = -0.05
+			police_cost_multiplier_modifier = -0.1
+		}
+
+		visible = {
+			has_completed_focus = ARM_Kocharjan
+			NOT = { has_country_flag = first_assasinat_done }
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_first_wave_of_assasinat"
+			set_temp_variable = { treasury_change = -1 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_first_wave_of_assasinat"
+			custom_effect_tooltip = first_assasin_tt
+			set_country_flag = first_assasinat_done
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	ARM_second_wave_of_assasinat = {
+		custom_cost_trigger = {
+			check_variable = { treasury > 1 }
+		}
+		custom_cost_text = more_than_treasury_1
+		icon = ISR_military_button
+
+		available = {
+			has_idea = ARM_echoes_1999_pac
+			has_completed_focus = ARM_political_assassinations
+			NOT = { has_country_flag = second_assasinat_done }
+		}
+		fire_only_once = yes
+
+		days_remove = 100
+
+		modifier = {
+			stability_factor = -0.05
+			police_cost_multiplier_modifier = -0.1
+		}
+
+		visible = {
+			has_completed_focus = ARM_political_assassinations
+			NOT = { has_country_flag = second_assasinat_done }
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_second_wave_of_assasinat"
+			set_temp_variable = { treasury_change = -1 }
+			modify_treasury_effect = yes
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_second_wave_of_assasinat"
+			custom_effect_tooltip = second_assasin_tt
+			set_country_flag = second_assasinat_done
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
+###########ARMY DECISIONS###########
+ARM_army_category = {
+	###########Exercises - Armenia and Greece Exercises###########
+	ARM_exercises_with_greece = {
+		custom_cost_trigger = {
+			command_power > 20
+		}
+		custom_cost_text = command_power_more_than_20
+		icon = GFX_decision_arm_army_button
+		days_remove = 360
+		visible = {
+			has_country_flag = west_dec_open
+			GRE = {
+				has_opinion = {
+					target = ARM
+					value > 0
+				}
+			}
+			country_exists = GRE
+			ARM = {
+				has_completed_focus = ARM_military_coop_greece
+				NOT = {
+					has_war_with = GRE
+				}
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_exercises_with_greece"
+			add_command_power = -25
+			GRE = {
+				country_event = arme.160
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				GRE = {
+					is_ai = yes
+				}
+			}
+		}
+	}
+	###########Exercises - Armenia and France Exercises###########
+	ARM_exercises_with_france = {
+		custom_cost_trigger = {
+			command_power > 20
+		}
+		custom_cost_text = command_power_more_than_20
+		icon = GFX_decision_arm_army_button
+		days_remove = 360
+		visible = {
+			has_country_flag = west_dec_open
+			FRA = {
+				has_opinion = {
+					target = ARM
+					value > 0
+				}
+			}
+			country_exists = FRA
+			ARM = {
+				has_completed_focus = ARM_military_coop_fra
+				NOT = {
+					has_war_with = FRA
+				}
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_exercises_with_france"
+			add_command_power = -25
+			FRA = {
+				country_event = arme.160
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				FRA = {
+					is_ai = yes
+				}
+			}
+		}
+	}
+	###########Exercises - Armenia and Russia Exercises###########
+	ARM_exercises_with_russia = {
+		custom_cost_trigger = {
+			command_power > 20
+		}
+		custom_cost_text = command_power_more_than_20
+		icon = GFX_decision_arm_army_button
+		days_remove = 360
+		visible = {
+			has_country_flag = east_dec_open
+			SOV = {
+				has_opinion = {
+					target = ARM
+					value > 0
+				}
+			}
+			country_exists = SOV
+			ARM = {
+				has_completed_focus = ARM_expand_russian_base_time
+				NOT = {
+					has_war_with = SOV
+				}
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_exercises_with_russia"
+			add_command_power = -25
+			SOV = {
+				country_event = arme.160
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				SOV = {
+					is_ai = yes
+				}
+			}
+		}
+	}
+	###########Exercises - Armenia and Iran Exercises###########
+	ARM_exercises_with_iran = {
+		custom_cost_trigger = {
+			command_power > 20
+		}
+		custom_cost_text = command_power_more_than_20
+		icon = GFX_decision_arm_army_button
+		days_remove = 360
+
+		visible = {
+			has_country_flag = east_dec_open
+			PER = {
+				has_opinion = {
+					target = ARM
+					value > 0
+				}
+			}
+			country_exists = PER
+			ARM = {
+				has_completed_focus = ARM_covert_defense_agreement
+				NOT = {
+					has_war_with = PER
+				}
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_exercises_with_iran"
+			add_command_power = -25
+			PER = {
+				country_event = arme.160
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				PER = {
+					is_ai = yes
+				}
+			}
+		}
+	}
+	###########Remove FSB Borderguards###########
+	ARM_remove_fsb_borderguards = {
+		icon = GFX_decision_sov_fsb_button
+		allowed = {
+			original_tag = ARM
+		}
+		cost = 50
+
+		days_remove = 1
+		available = {
+			has_country_flag = fsb_deployed
+			original_tag = ARM
+			SOV = {
+				has_opinion = {
+					target = ARM
+					value < 0
+				}
+			}
+		}
+		visible = {
+			tag = ARM
+			has_country_flag = fsb_deployed
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_remove_fsb_borderguards"
+			add_opinion_modifier = {
+				target = SOV
+				modifier = drama
+			}
+			set_temp_variable = { percent_change = -5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ARM }
+			change_influence_percentage = yes
+			709 = {
+				remove_dynamic_modifier = {
+					modifier = ARM_fsb_borderguards
+				}
+			}
+			1034 = {
+				remove_dynamic_modifier = {
+					modifier = ARM_fsb_borderguards
+				}
+			}
+			1035 = {
+				remove_dynamic_modifier = {
+					modifier = ARM_fsb_borderguards
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	###########Cooperation West###########
+	ARM_coop_west = {
+		icon = GFX_decision_arm_army_button
+		allowed = { original_tag = ARM }
+
+		available = {
+			has_completed_focus = ARM_intern_cooperat
+		}
+
+		days_remove = 0
+
+		visible = {
+			has_completed_focus = ARM_intern_cooperat
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_coop_west"
+			if = {
+				limit = {
+					has_country_flag = west_dec_open
+				}
+				clr_country_flag = west_dec_open
+			}
+			if = {
+				limit = {
+					NOT = { has_country_flag = west_dec_open }
+				}
+				set_country_flag = west_dec_open
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				factor = 20
+				NOT = { has_country_flag = west_dec_open }
+			}
+		}
+	}
+	###########Cooperation East###########
+	ARM_coop_east = {
+		icon = GFX_decision_arm_army_button
+		allowed = { original_tag = ARM }
+		available = {
+			has_completed_focus = ARM_intern_cooperat
+		}
+
+		days_remove = 0
+
+		visible = {
+			has_completed_focus = ARM_intern_cooperat
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_coop_east"
+			if = {
+				limit = {
+					has_country_flag = east_dec_open
+				}
+				clr_country_flag = east_dec_open
+			}
+			if = {
+				limit = {
+					NOT = { has_country_flag = east_dec_open }
+				}
+				set_country_flag = east_dec_open
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				factor = 20
+				NOT = { has_country_flag = east_dec_open }
+			}
+		}
+	}
+}
+
+ARM_ministry_of_external_category = {
+	ARM_turkey_negotiations = {
+		icon = GFX_decision_negotiate_icon
+		cost = 100
+		fire_only_once = yes
+		days_remove = 30
+
+		visible = {
+			country_exists = TUR
+			NOT = {
+				has_war_with = TUR
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_turkey_negotiations"
+			if = {
+				limit = {
+					OR = {
+						emerging_anarchist_communism_are_in_coalition = yes
+						nationalist_fascist_are_in_coalition = yes
+					}
+				}
+				country_event = arme.201
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_turkey_negotiations"
+			country_event = arme.176
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+
+	ARM_shirvan_deal = {
+		icon = GFX_decision_negotiate_icon
+		cost = 100
+		fire_only_once = yes
+		days_remove = 30
+
+		available = {
+			has_stability > 0.10
+			ARM = {
+				controls_state = 1038
+			}
+			PER = {
+				controls_state = 1039
+			}
+		}
+
+		visible = {
+			country_exists = PER
+			NOT = {
+				has_war_with = PER
+			}
+			ARM = {
+				controls_state = 1038
+			}
+			PER = {
+				controls_state = 1039
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_shirvan_deal"
+			PER = {
+				country_event = arme.174
+			}
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+	#ANNEX STATES
+	ARM_annex_states = {
+		icon = GFX_decision_arm_govern_button
+		days_remove = 120
+		visible = {
+			OR = {
+				GEO = {
+					influence_higher_50 = yes
+					has_autonomy_state = autonomy_armenia_state
+				}
+				ABK = {
+					influence_higher_50 = yes
+					has_autonomy_state = autonomy_armenia_state
+				}
+				CHE = {
+					influence_higher_50 = yes
+					has_autonomy_state = autonomy_armenia_state
+				}
+				SOO = {
+					influence_higher_50 = yes
+					has_autonomy_state = autonomy_armenia_state
+				}
+				AZE = {
+					influence_higher_50 = yes
+					has_autonomy_state = autonomy_armenia_state
+				}
+				KUR = {
+					influence_higher_50 = yes
+					has_autonomy_state = autonomy_armenia_state
+				}
+				SYR = {
+					influence_higher_50 = yes
+					has_autonomy_state = autonomy_armenia_state
+				}
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_annex_states"
+			armenia_state_annex = yes
+		}
+		ai_will_do = {
+			factor = 350
+		}
+	}
+	#INTEGRATION NEW LANDS
+	ARM_integration_new_lands = {
+		icon = GFX_decision_arm_govern_button
+		days_remove = 120
+		visible = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = integr_stuff_tt
+				ARM_integration_lands_availables = yes
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_integration_new_lands"
+			ARM_integration_lands_script = yes
+		}
+		ai_will_do = {
+			factor = 350
+		}
+	}
+	ARM_new_crusade_israel = {
+		icon = GFX_decision_jerus_king
+
+		cost = 100
+		fire_only_once = yes
+		days_remove = 120
+
+		available = {
+			has_completed_focus = ARM_liberating_levant
+		}
+
+		visible = {
+			is_subject = no
+			country_exists = ISR
+			NOT = {
+				has_war_with = ISR
+			}
+			has_completed_focus = ARM_liberating_levant
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_new_crusade_israel"
+			ISR = { country_event = { id = md4.14 days = 2 } }
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+
+	ARM_new_crusade_hazbik = {
+		icon = GFX_decision_antioch_arm
+
+		cost = 100
+		fire_only_once = yes
+		days_remove = 120
+
+		available = {
+			has_completed_focus = ARM_liberating_levant
+		}
+
+		visible = {
+			OR = {
+				AND = {
+					country_exists = LEB
+					country_exists = HEZ
+				}
+				AND = {
+					NOT = {
+						has_war_with = LEB
+						has_war_with = HEZ
+					}
+				}
+			}
+			has_completed_focus = ARM_liberating_levant
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_new_crusade_hazbik"
+			if = {
+				limit = {
+					country_exists = LEB
+					NOT = {
+						has_war_with = LEB
+					}
+				}
+				LEB = { country_event = { id = md4.14 days = 2 } }
+			}
+			if = {
+				limit = {
+					country_exists = HEZ
+					NOT = {
+						has_war_with = HEZ
+					}
+				}
+				HEZ = { country_event = { id = md4.14 days = 2 } }
+			}
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+
+	ARM_new_crusade_palestine = {
+		icon = GFX_decision_palest_arm
+		cost = 100
+		fire_only_once = yes
+		days_remove = 120
+
+		available = {
+			has_completed_focus = ARM_liberating_levant
+		}
+		visible = {
+			OR = {
+				AND = {
+					country_exists = PAL
+					country_exists = HAM
+				}
+				AND = {
+					NOT = {
+						has_war_with = PAL
+						has_war_with = HAM
+					}
+				}
+			}
+			has_completed_focus = ARM_liberating_levant
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_new_crusade_palestine"
+			if = {
+				limit = {
+					country_exists = PAL
+					NOT = {
+						has_war_with = PAL
+					}
+				}
+				PAL = { country_event = { id = md4.14 days = 2 } }
+			}
+			if = {
+				limit = {
+					country_exists = HAM
+					NOT = {
+						has_war_with = HAM
+					}
+				}
+				HAM = { country_event = { id = md4.14 days = 2 } }
+			}
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+
+	ARM_italy_reclamation = {
+		icon = GFX_decision_italy_arm
+		cost = 100
+		fire_only_once = yes
+		days_remove = 120
+
+		available = {
+			ITA = {
+				OR = {
+					western_autocrats_are_in_power = yes
+					emerging_autocracy_are_in_power = yes
+					neutrality_neutral_oligarch_are_in_power = yes
+					nationalist_monarchists_are_in_power = yes
+					nationalist_military_junta_are_in_power = yes
+					neutrality_neutral_autocracy_are_in_power = yes
+				}
+				OR = {
+					has_completed_focus = ITA_reestablish_rome
+					has_completed_focus = ITA_empower_the_king
+				}
+			}
+		}
+
+		visible = {
+			NOT = {
+				has_war_with = ITA
+			}
+			country_exists = ITA
+			has_completed_focus = ARM_fate_of_italy
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ARM_italy_reclamation"
+			if = {
+				limit = {
+					country_exists = ITA
+					NOT = {
+						has_war_with = ITA
+					}
+				}
+				ITA = { country_event = { id = arm_empire.14 days = 2 } }
+			}
+		}
+		ai_will_do = {
+			factor = 355
+		}
+	}
+}
+###########ARTSAKH DECISIONS###########
+NKR_govern_category = {
+}

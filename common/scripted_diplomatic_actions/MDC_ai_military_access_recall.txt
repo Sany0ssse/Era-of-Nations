@@ -1,0 +1,90 @@
+scripted_diplomatic_actions = {
+	airecall_military_access = {
+		allowed = { always = yes }
+
+		visible = {
+			ROOT = {
+                is_ai = yes
+				NOT = { has_country_flag = ai_military_access_cooldown }
+            }
+			THIS = { gives_military_access_to = ROOT }
+		}
+
+		selectable = {
+			ROOT = { has_opinion = { target = PREV value < 0 } }
+        }
+
+		cost = 5
+
+		requires_acceptance = no
+		show_acceptance_on_action_button = yes
+
+		icon = 2
+
+		receive_description = AIRECALL_MILITARY_ACCESS_RECIEVER_LOC
+		accept_title = AIRECALL_MILITARY_ACCESS_ACCEPTED_TITLE
+		accept_description = AIRECALL_MILITARY_ACCESS_ACCEPTED_DESC
+
+		complete_effect = {
+			ROOT = {
+                diplomatic_relation = {
+                    country = PREV
+                    relation = military_access
+                    active = no
+                }
+				if = { limit = { is_major = yes }
+					set_country_flag = { flag = ai_military_access_cooldown days = 28 value = 1 }
+				}
+				else = {
+					set_country_flag = { flag = ai_military_access_cooldown days = 160 value = 1 }
+				}
+			}
+		}
+
+		ai_desire = {
+			base = 25
+			modifier = {
+				add = 50
+				ROOT = {
+					OR = {
+						any_allied_country = {
+							has_war_with = PREV
+						}
+						any_subject_country = {
+							has_war_with = PREV
+						}
+						any_enemy_country = {
+							OR = {
+								has_volunteers_amount_from = { tag = PREV.PREV count > 0 }
+								has_attache_from = PREV.PREV
+								PREV.PREV = { is_lend_leasing = PREV }
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				add = 50
+				OR = {
+					any_allied_country = {
+						has_war_with = ROOT
+					}
+					any_subject_country = {
+						has_war_with = ROOT
+					}
+					any_enemy_country = {
+						OR = {
+							has_volunteers_amount_from = { tag = ROOT count > 0 }
+							has_attache_from = ROOT
+							ROOT = { is_lend_leasing = PREV }
+						}
+					}
+				}
+			}
+		}
+
+		ai_acceptance = {
+			base = 100
+		}
+	}
+}

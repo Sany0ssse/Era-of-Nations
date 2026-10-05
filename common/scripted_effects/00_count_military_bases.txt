@@ -1,0 +1,29 @@
+count_granted_military_bases = {
+	set_variable = { granted_bases_count = 0 }
+	for_each_loop = {
+		array = global.countries
+		value = v
+		if = {
+			limit = {
+				gives_military_access_to = var:v
+			}
+			add_to_variable = { granted_bases_count = 1 }
+		}
+	}
+}
+
+count_leased_military_bases = {
+	set_variable = { leased_bases_count = 0 }
+	for_each_loop = {
+		array = global.countries
+		value = v
+		if = {
+			limit = {
+				var:v = {
+					gives_military_access_to = PREV
+				}
+			}
+			add_to_variable = { leased_bases_count = 1 }
+		}
+	}
+}

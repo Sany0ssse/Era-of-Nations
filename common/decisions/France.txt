@@ -1,0 +1,477 @@
+# Author(s): AngriestBird, Elra
+FRA_french_space_decision_category = {
+	FRA_run_support_campaigns_short = {
+		cost = 75
+		icon = political_actions
+
+		days_remove = 45
+		days_re_enable = 7
+		fire_only_once = no
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_run_support_campaigns_short"
+			set_temp_variable = { temp_change = 2.5 }
+			FRA_space_enthusiasm_effect = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_Variable = { treasury_change = -0.005 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 5
+		}
+	}
+
+	FRA_run_support_campaigns_long = {
+		cost = 75
+		icon = political_actions
+
+		days_remove = 90
+		days_re_enable = 14
+		fire_only_once = no
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_run_support_campaigns_long"
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_Variable = { treasury_change = -0.01 }
+			modify_treasury_effect = yes
+			set_temp_variable = { temp_change = 5 }
+			FRA_space_enthusiasm_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 5
+		}
+	}
+
+	FRA_balance_the_cnes_budget = {
+		cost = 100
+		icon = GFX_decision_Rebalance_CNES_Budget
+
+		days_remove = 45
+		fire_only_once = yes
+
+		available = {
+			has_completed_focus = FRA_cnes_budgeting
+			custom_trigger_tooltip = {
+				tooltip = fra_has_enough_space_support_tt
+				NOT = { check_variable = { FRA_peoples_support < 35 } }
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_balance_the_cnes_budget"
+			set_temp_variable = { treasury_change = -1 }
+			modify_treasury_effect = yes
+			set_temp_variable = { temp_change = 5 }
+			FRA_space_enthusiasm_effect = yes
+			set_temp_variable = { temp_change = 0.250 }
+			FRA_space_income_effect = yes
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FRA_balance_the_cnes_budget"
+			remove_ideas = FRA_idea_cnes_failing
+		}
+
+		ai_will_do = {
+			factor = 5
+			modifier = {
+				add = 20
+				has_idea = FRA_idea_cnes_failing
+			}
+		}
+	}
+
+	FRA_launch_commercial_satellite = {
+		cost = 150
+		icon = GFX_decision_Launch_Commercial_Satellite
+
+		days_remove = 120
+		days_re_enable = 25
+
+		available = {
+			has_completed_focus = FRA_french_space
+			custom_trigger_tooltip = {
+				tooltip = fra_has_enough_space_support_tt
+				NOT = { check_variable = { FRA_peoples_support < 35 } }
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FRA_launch_commercial_satellite"
+			set_temp_variable = { treasury_change = -3 }
+			modify_treasury_effect = yes
+			set_temp_variable = { temp_change = -5 }
+			FRA_space_enthusiasm_effect = yes
+			set_temp_variable = { temp_change = 0.350 }
+			FRA_space_income_effect = yes
+		}
+	}
+
+	FRA_prep_international_space_station = {
+		cost = 100
+		icon = GFX_decision_Prepare_an_ISS_Launch
+
+		days_remove = 30
+		days_re_enable = 120
+
+		available = {
+			has_completed_focus = FRA_french_space
+			NOT = { has_idea = FRA_idea_space_research }
+			custom_trigger_tooltip = {
+				tooltip = fra_has_enough_space_support_tt
+				NOT = { check_variable = { FRA_peoples_support < 35 } }
+			}
+		}
+
+		remove_Effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_prep_international_space_station"
+			set_country_flag = FRA_preparing_launch
+			add_timed_idea = {
+				idea = FRA_idea_prep_the_launch
+				days = 120
+			}
+			set_temp_variable = { temp_change = -5 }
+			FRA_space_enthusiasm_effect = yes
+		}
+	}
+
+	FRA_french_iss_launch = {
+		cost = 100
+		icon = GFX_decision_French_ISS_Launch
+
+		days_remove = 30
+		days_re_enable = 120
+
+		available = {
+			has_completed_focus = FRA_french_space
+			has_country_flag = FRA_preparing_launch
+			NOT = { has_idea = FRA_idea_prep_the_launch }
+			NOT = {	has_idea = FRA_idea_space_research }
+			custom_trigger_tooltip = {
+				tooltip = fra_has_enough_space_support_tt
+				NOT = { check_variable = { FRA_peoples_support < 35 } }
+			}
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_french_iss_launch"
+			add_timed_idea = {
+				idea = FRA_idea_space_research
+				days = 365
+			}
+			set_temp_variable = { temp_change = -5 }
+			FRA_space_enthusiasm_effect = yes
+			set_temp_variable = { temp_change = 0.350 }
+			FRA_space_income_effect = yes
+		}
+	}
+}
+
+FRA_invest_LEB_decision_category = {
+	FRA_LEB_invest_infrastructure_south = {
+		cost = 100
+		icon = political_actions
+
+		days_remove = 140
+		days_re_enable = 70
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_LEB_invest_infrastructure_south"
+			LEB = {
+				country_event = france_md.401
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = FRA_CHAOS_PATH
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+		}
+	}
+
+
+	FRA_LEB_invest_infrastructure_north = {
+		cost = 100
+		icon = political_actions
+
+		days_remove = 140
+		days_re_enable = 70
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_LEB_invest_infrastructure_north"
+			LEB = {
+				country_event = france_md.400
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = FRA_CHAOS_PATH
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+		}
+	}
+
+	FRA_LEB_invest_civilian_factory = {
+		cost = 250
+		icon = political_actions
+
+		days_remove = 200
+		days_re_enable = 70
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [ROOT.GetName]: Decision FRA_LEB_invest_civilian_factory"
+			LEB = {
+				country_event = france_md.402
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = FRA_CHAOS_PATH
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+		}
+	}
+
+	FRA_LEB_financial_help = {
+		available = {
+			LEB = { has_active_mission = bankruptcy_incoming_collapse }
+			NOT = { has_active_mission = bankruptcy_incoming_collapse }
+		}
+		cost = 150
+		icon = political_actions
+
+		days_remove = 70
+		days_re_enable = 140
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_LEB_financial_help"
+			LEB = {
+				country_event = france_md.403
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = FRA_CHAOS_PATH
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+		}
+	}
+}
+
+FRA_french_africa_decision_category = {
+	FRA_invest_in_NEPAD_education_decision = {
+		visible = {
+			has_completed_focus = FRA_NEPAD_development
+			has_global_flag = AFRICA_nepad_focus
+		}
+		cost = 100
+		icon = political_actions
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FRA_nepad_program_counter_currently_tt
+				has_global_flag = AFRICA_nepad_focus
+			}
+			NOT = {
+				has_decision = FRA_invest_in_NEPAD_healthcare_decision
+				has_decision = FRA_invest_in_NEPAD_social_care_decision
+				has_decision = FRA_invest_in_NEPAD_economic_program_decision
+			}
+		}
+
+		days_remove = 70
+		fire_only_once = yes
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_invest_in_french_africa_education_decision"
+			set_temp_variable = { temp_change = -0.05 }
+			FRA_nepad_education_cost_modifier_effect = yes
+			set_temp_variable = { temp_change = 0.15 }
+			FRA_nepad_cost_increase_cost_effect = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = -0.03 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = FRA_CHAOS_PATH
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+		}
+	}
+
+	FRA_invest_in_NEPAD_healthcare_decision = {
+		visible = {
+			has_completed_focus = FRA_NEPAD_development
+			has_global_flag = AFRICA_nepad_focus
+		}
+		cost = 100
+		icon = political_actions
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FRA_nepad_program_counter_currently_tt
+				has_global_flag = AFRICA_nepad_focus
+			}
+			NOT = {
+				has_decision = FRA_invest_in_NEPAD_education_decision
+				has_decision = FRA_invest_in_NEPAD_social_care_decision
+				has_decision = FRA_invest_in_NEPAD_economic_program_decision
+			}
+		}
+
+		days_remove = 70
+		fire_only_once = yes
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_invest_in_NEPAD_healthcare_decision"
+			set_temp_variable = { temp_change = -0.05 }
+			FRA_nepad_health_cost_modifier_effect = yes
+			set_temp_variable = { temp_change = 0.15 }
+			FRA_nepad_cost_increase_cost_effect = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = -0.03 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = FRA_CHAOS_PATH
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+		}
+	}
+
+	FRA_invest_in_NEPAD_social_care_decision = {
+		visible = {
+			has_completed_focus = FRA_NEPAD_development
+			has_global_flag = AFRICA_nepad_focus
+		}
+		cost = 100
+		icon = political_actions
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FRA_nepad_program_counter_currently_tt
+				has_global_flag = AFRICA_nepad_focus
+			}
+			NOT = {
+				has_decision = FRA_invest_in_NEPAD_education_decision
+				has_decision = FRA_invest_in_NEPAD_healthcare_decision
+				has_decision = FRA_invest_in_NEPAD_economic_program_decision
+			}
+		}
+
+		days_remove = 70
+		fire_only_once = yes
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_invest_in_NEPAD_social_care_decision"
+			set_temp_variable = { temp_change = -0.05 }
+			FRA_nepad_social_cost_modifier_effect = yes
+			set_temp_variable = { temp_change = 0.15 }
+			FRA_nepad_cost_increase_cost_effect = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = -0.03 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = FRA_CHAOS_PATH
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+		}
+	}
+
+	FRA_invest_in_NEPAD_economic_program_decision = {
+		visible = {
+			has_completed_focus = FRA_NEPAD_development
+			has_global_flag = AFRICA_nepad_focus
+		}
+		cost = 100
+		icon = political_actions
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FRA_nepad_program_counter_currently_tt
+				has_global_flag = AFRICA_nepad_focus
+			}
+			NOT = {
+				has_decision = FRA_invest_in_NEPAD_education_decision
+				has_decision = FRA_invest_in_NEPAD_healthcare_decision
+				has_decision = FRA_invest_in_NEPAD_social_care_decision
+			}
+		}
+
+		days_remove = 70
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FRA_invest_in_NEPAD_economic_program_decision"
+			set_temp_variable = { temp_change = 0.05 }
+			FRA_nepad_buildings_construction_modifier_effect = yes
+			set_temp_variable = { temp_change = 0.15 }
+			FRA_nepad_cost_increase_cost_effect = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = -0.03 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = FRA_CHAOS_PATH
+					has_government = communism
+					has_government = nationalist
+				}
+			}
+		}
+	}
+}

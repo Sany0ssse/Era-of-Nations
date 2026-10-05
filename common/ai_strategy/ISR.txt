@@ -1,0 +1,145 @@
+ISR_stop_selling_our_heavy_weapons_we_need_it_at_home = {
+	allowed = { original_tag = ISR }
+	enable = {
+		country_exists = ISR
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = equipment_market_for_sale_factor id = mechanized value = -100 }
+	ai_strategy = { type = equipment_market_for_sale_factor id = armor value = -100 }
+	ai_strategy = { type = equipment_market_for_sale_factor id = fighter value = -100 }
+	ai_strategy = { type = equipment_market_for_sale_factor id = tactical_bomber value = -100 }
+	ai_strategy = { type = equipment_market_for_sale_factor id = cas value = -100 }
+	ai_strategy = { type = equipment_market_for_sale_factor id = naval_bomber value = -100 }
+	ai_strategy = { type = equipment_market_for_sale_factor id = strategic_bomber value = -100 }
+}
+ISR_we_want_the_merkava4 = { #tell ISR AI to research these tech ahead of time to unlock the Merkava IV design
+	allowed = { original_tag = ISR }
+	enable = {
+		country_exists = ISR
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = research_tech id = era_tech_3 value = 100 }
+	ai_strategy = { type = research_tech id = armor_tech_3 value = 100 }
+	ai_strategy = { type = research_tech id = tank_components_tech_4 value = 100 }
+}
+
+ISR_arab_relations = {
+	allowed = { original_tag = ISR }
+	enable = {
+		has_opinion_modifier = ISR_Arab_Conflict
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = antagonize id = "LEB" value = 50 }
+	ai_strategy = { type = antagonize id = "HEZ" value = 50 }
+	ai_strategy = { type = antagonize id = "JOR" value = 50 }
+	ai_strategy = { type = antagonize id = "SYR" value = 50 }
+	ai_strategy = { type = antagonize id = "EGY" value = 50 }
+	ai_strategy = { type = antagonize id = "PER" value = 50 }
+	ai_strategy = { type = antagonize id = "SAU" value = 50 }
+	ai_strategy = { type = antagonize id = "QAT" value = 50 }
+	ai_strategy = { type = antagonize id = "UAE" value = 50 }
+	ai_strategy = { type = antagonize id = "YEM" value = 50 }
+	ai_strategy = { type = antagonize id = "HOU" value = 50 }
+}
+
+ISR_kurdistan_relations = {
+	allowed = { original_tag = ISR }
+	enable = {
+		country_exists = KUR
+		KUR = { has_war_with = IRQ }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = support id = "KUR" value = 200 }
+}
+
+ISR_kurdistan_puk_relations = {
+	allowed = { original_tag = ISR }
+	enable = {
+		country_exists = PUK
+		KUR = { has_war_with = IRQ }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = support id = "PUK" value = 200 }
+}
+
+ISR_support_druze_and_fsa = {
+	allowed = { original_tag = ISR }
+	enable = {
+		NOT = {
+			has_war_with = FSA
+			has_war_with = DRU
+		}
+		587 = {
+			OR = {
+				AND = {
+					NOT = { is_core_of = FSA }
+					NOT = { is_claimed_by = FSA }
+				}
+				AND = {
+					NOT = { is_core_of = DRU }
+					NOT = { is_claimed_by = DRU }
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = support id = "FSA" value = 200 }
+	ai_strategy = { type = send_volunteers_desire id = "FSA" value = 200 }
+	ai_strategy = { type = support id = "DRU" value = 200 }
+	ai_strategy = { type = send_volunteers_desire id = "DRU" value = 200 }
+}
+
+ISR_eliminate_hezbollah = {
+	allowed = { original_tag = ISR }
+	enable = {
+		country_exists = HEZ
+		HEZ = { owns_state = 184 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "HEZ" value = 200 }
+	ai_strategy = { type = antagonize id = "HEZ" value = 200 }
+	ai_strategy = { type = conquer id = "HEZ" value = 200 }
+}
+
+#Libya is supporting Hamas
+ISR_antagonize_libya = {
+	allowed = { original_tag = ISR }
+	enable = {
+		LBA = { has_completed_focus = LBA_approach_hamas }
+		NOT = { is_in_faction_with = LBA }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = antagonize id = "LBA" value = 50 }
+}
+#Libya is sending soldiers to Hamas
+ISR_contain_libya = {
+	allowed = { original_tag = ISR }
+	enable = {
+		LBA = { has_completed_focus = LBA_send_fighters_to_hamas }
+		NOT = { is_in_faction_with = LBA }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "LBA" value = 50 }
+}
+#Libya befriended Israel
+ISR_befriend_libya = {
+	allowed = { original_tag = ISR }
+
+	enable = {
+		LBA = { has_completed_focus = LBA_reconcile_with_israel }
+		NOT = { has_war_with = LBA }
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "LBA" value = 25 }
+}

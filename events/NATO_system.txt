@@ -1,0 +1,664 @@
+﻿add_namespace = NATO
+add_namespace = NATO_rework
+
+news_event = {
+
+	id = NATO.6
+
+	title = NATO.6.t
+	desc = NATO.6.d
+
+	picture = GFX_news_nato
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO.6.a
+		log = "[GetDateText]: [This.GetName]: NATO.6.a executed"
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+
+	id = NATO.7
+	title = NATO.7.t
+	desc = NATO.7.d
+
+	picture = GFX_NATO_picture
+	trigger = { has_idea = NATO_member }
+	is_triggered_only = yes
+
+	option = {
+		name = NATO.7.a
+		log = "[GetDateText]: [This.GetName]: NATO.7.a executed"
+		ai_chance = { factor = 100 }
+	}
+}
+
+news_event = {
+	id = NATO.8
+	title = NATO.8.t
+	desc = NATO.8.d
+
+	picture = GFX_news_nato
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO.8.a
+		log = "[GetDateText]: [This.GetName]: NATO.8.a executed"
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {	#We receive an invitation to NATO
+	id = NATO.9
+	title = NATO.9.t
+	desc = NATO.9.d
+	picture = GFX_NATO_picture
+
+	is_triggered_only = yes
+
+	option = {	#We accept!
+		name = NATO.9.a
+		log = "[GetDateText]: [This.GetName]: NATO.9.a executed"
+		set_country_flag = has_joined_NATO_by_event
+		NATO_join = yes
+		hidden_effect = { USA = { country_event = { id = NATO.10 } } }
+
+		ai_chance = {
+			factor = 90
+
+			modifier = {
+				add = 70
+				has_elections = yes
+			}
+
+			modifier = {
+				add = 70
+				original_tag = VIE
+				country_exists = CHI
+			}
+
+			modifier = {
+				factor = 0
+				OR = {
+					is_subject_of = CHI
+					has_government = communism
+				}
+			}
+		}
+	}
+
+	option = {	#We refuse
+		name = NATO.9.b
+		log = "[GetDateText]: [This.GetName]: NATO.9.b executed"
+		add_political_power = 50
+		USA = { country_event = NATO.11 }
+
+		ai_chance = {
+			factor = 10
+
+			modifier = {
+				add = 70
+				has_elections = no
+			}
+
+			modifier = {
+				factor = 0
+				OR = {
+					tag = EST
+					tag = LAT
+					tag = LIT
+					tag = SLO
+					tag = SLV
+					tag = ROM
+					tag = BUL
+					tag = ALB
+					tag = CRO
+				}
+			}
+		}
+	}
+}
+
+country_event = {	#They accept!
+	id = NATO.10
+	title = NATO.10.t
+	desc = NATO.10.d
+	picture = GFX_NATO_picture
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO.10.a
+		log = "[GetDateText]: [This.GetName]: NATO.10.a executed"
+		USA = {
+			add_opinion_modifier = {
+				target = FROM
+				modifier = NATO_member_modifier
+			}
+		}
+	}
+}
+
+country_event = {	#They refuse!
+	id = NATO.11
+	title = NATO.11.t
+	desc = NATO.11.d
+	picture = GFX_NATO_picture
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO.11.o1
+		log = "[GetDateText]: [This.GetName]: NATO.11.o1 executed"
+		effect_tooltip = {
+			add_opinion_modifier = {
+				target = FROM
+				modifier = recent_actions_negative
+			}
+		}
+	}
+}
+
+#News Event
+news_event = {
+	id = NATO.13
+	title = NATO.13.t
+	desc = NATO.13.d
+	picture = GFX_news_nato
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = NATO.13.o1
+		log = "[GetDateText]: [This.GetName]: NATO.13.o1 executed"
+	}
+}
+
+country_event = {	#(USA) [FROM.GetName] requests to join NATO
+	id = NATO.14
+	title = NATO.14.t
+	desc = NATO.14.d
+	picture = GFX_NATO_picture
+
+	is_triggered_only = yes
+
+	option = {	#We accept!
+		name = NATO.14.a
+		log = "[GetDateText]: [This.GetName]: NATO.14.a executed"
+		add_political_power = 25
+		FROM = { country_event = { id = NATO.9 hours = 6 } }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				add = 25
+				UKR = {
+					OR = {
+						has_idea = UKR_west_strengthened
+						has_idea = UKR_west_dominant
+					}
+				}
+			}
+		}
+	}
+
+	option = {	#We refuse
+		name = NATO.14.b
+		log = "[GetDateText]: [This.GetName]: NATO.14.b executed"
+		add_political_power = -25
+		FROM = { news_event = { id = NATO.15 hours = 6 } }
+
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+news_event = {	#[USA.GetName] refuses NATO membership request
+	id = NATO.15
+
+	title = NATO.15.t
+	desc = NATO.15.d
+	picture = GFX_news_nato
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO.15.a
+		log = "[GetDateText]: [This.GetName]: NATO.15.a executed"
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+#[Country] leaves NATO
+news_event = {
+	id = NATO.16
+
+	title = NATO.16.t
+	desc = NATO.16.d
+	picture = GFX_news_nato
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = NATO.16.o1
+		log = "[GetDateText]: [This.GetName]: NATO.16.o1 executed"
+		trigger = { original_tag = FROM }
+	}
+	option = {
+		name = NATO.16.o2
+		log = "[GetDateText]: [This.GetName]: NATO.16.o2 executed"
+		trigger = { NOT = { original_tag = FROM } }
+	}
+}
+
+#[Country] Shift in Politics
+country_event = {
+	id = NATO.17
+	title = NATO.17.t
+	desc = NATO.17.d
+	picture = GFX_NATO_picture
+	is_triggered_only = yes
+	trigger = {
+		has_idea = NATO_member
+		has_elections = no
+		NOT = { has_government = fascism }
+	}
+
+	option = {
+		name = NATO.17.o1
+		log = "[GetDateText]: [This.GetName]: NATO.17.o1 executed"
+		NATO_leave = yes
+		hidden_effect = {
+			news_event = NATO.16
+		}
+	}
+}
+
+#NATO REWORK
+
+#Military Exercise
+country_event = {
+	id = NATO_rework.1
+	title = NATO_rework.1.t
+	desc = NATO_rework.1.d
+	picture = GFX_NATO_military_exercise
+	is_triggered_only = yes
+
+	option = {
+		name = NATO_rework.1.a
+		log = "[GetDateText]: [This.GetName]: NATO_rework.1.a executed"
+		FROM.FROM = {
+			country_event = NATO_rework.2
+		}
+	}
+	option = {
+		name = NATO_rework.1.b
+		log = "[GetDateText]: [This.GetName]: NATO_rework.1.b executed"
+		FROM.FROM = {
+			country_event = NATO_rework.3
+		}
+	}
+	option = {
+		name = NATO_rework.1.c
+		log = "[GetDateText]: [This.GetName]: NATO_rework.1.c executed"
+		trigger = {
+			any_owned_state = {
+				is_coastal = yes
+			}
+			FROM.FROM = {
+				any_owned_state = {
+					is_coastal = yes
+				}
+			}
+		}
+		FROM.FROM = {
+			country_event = NATO_rework.4
+		}
+	}
+}
+
+country_event = {	#Army exercise
+	id = NATO_rework.2
+	title = NATO_rework.2.t
+	desc = NATO_rework.2.d
+	picture = GFX_NATO_military_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO_rework.2.a
+		log = "[GetDateText]: [This.GetName]: NATO_rework.2.a executed"
+		army_experience = 15
+		set_country_flag = {
+			flag = recent_nato_exercises
+			days = 360
+		}
+		add_timed_idea = {
+			idea = recent_nato_army_exercises
+			days = 180
+		}
+		FROM = {
+			army_experience = 15
+			country_event = NATO_rework.5
+			set_country_flag = {
+				flag = recent_nato_exercises
+				days = 360
+			}
+			add_timed_idea = {
+				idea = recent_nato_army_exercises
+				days = 180
+			}
+		}
+	}
+	option = {
+		name = NATO_rework.2.b
+		log = "[GetDateText]: [This.GetName]: NATO_rework.2.b executed"
+		FROM = {
+			country_event = NATO_rework.6
+		}
+	}
+}
+country_event = {	#Air exercise
+	id = NATO_rework.3
+	title = NATO_rework.3.t
+	desc = NATO_rework.3.d
+	picture = GFX_NATO_air_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO_rework.3.a
+		log = "[GetDateText]: [This.GetName]: NATO_rework.3.a executed"
+		air_experience = 15
+		set_country_flag = {
+			flag = recent_nato_exercises
+			days = 360
+		}
+		add_timed_idea = {
+			idea = recent_nato_air_exercises
+			days = 240
+		}
+		FROM = {
+			air_experience = 15
+			country_event = NATO_rework.5
+			set_country_flag = {
+				flag = recent_nato_exercises
+				days = 360
+			}
+			add_timed_idea = {
+				idea = recent_nato_air_exercises
+				days = 240
+			}
+		}
+	}
+	option = {
+		name = NATO_rework.3.b
+		log = "[GetDateText]: [This.GetName]: NATO_rework.3.b executed"
+		FROM = {
+			country_event = NATO_rework.6
+		}
+	}
+}
+country_event = {	#Navy exercise
+	id = NATO_rework.4
+	title = NATO_rework.4.t
+	desc = NATO_rework.4.d
+	picture = GFX_NATO_navy_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO_rework.4.a
+		log = "[GetDateText]: [This.GetName]: NATO_rework.4.a executed"
+		navy_experience = 15
+		set_country_flag = {
+			flag = recent_nato_exercises
+			days = 360
+		}
+		add_timed_idea = {
+			idea = recent_nato_navy_exercises
+			days = 240
+		}
+		FROM = {
+			navy_experience = 15
+			country_event = NATO_rework.5
+			set_country_flag = {
+				flag = recent_nato_exercises
+				days = 360
+			}
+			add_timed_idea = {
+				idea = recent_nato_navy_exercises
+				days = 240
+			}
+		}
+	}
+	option = {
+		name = NATO_rework.4.b
+		log = "[GetDateText]: [This.GetName]: NATO_rework.4.b executed"
+		FROM = {
+			country_event = NATO_rework.6
+		}
+	}
+}
+
+country_event = {	#Agree exercise
+	id = NATO_rework.5
+	title = NATO_rework.5.t
+	desc = NATO_rework.5.d
+	picture = GFX_NATO_military_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO_rework.5.a
+		log = "[GetDateText]: [This.GetName]: NATO_rework.5.a executed"
+		
+	}
+}
+country_event = {	#Refused exercise
+	id = NATO_rework.6
+	title = NATO_rework.6.t
+	desc = NATO_rework.6.d
+	picture = GFX_NATO_military_exercise
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO_rework.6.a
+		log = "[GetDateText]: [This.GetName]: NATO_rework.6.a executed"
+		
+	}
+}
+
+country_event = {	
+	id = NATO_rework.7
+	title = NATO_rework.7.t
+	desc = NATO_rework.7.d
+	picture = GFX_NATO_intervention
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO_rework.7.a
+		log = "[GetDateText]: [This.GetName]: NATO_rework.7.a executed"
+		add_ideas = NATO_intervention_active
+		FROM = {
+			every_enemy_country = {
+				ROOT = {
+					declare_war_on = {
+						target = PREV
+						type = puppet_wargoal_focus
+					}
+				}
+			}
+		}
+		ai_chance = {
+			base = 25
+			modifier = {
+				tag = USA
+				factor = 100
+			}
+		}
+	}
+	option = {
+		name = NATO_rework.7.b
+		log = "[GetDateText]: [This.GetName]: NATO_rework.7.b executed"
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+country_event = {	
+	id = NATO_rework.8
+	title = NATO_rework.8.t
+	desc = NATO_rework.8.d
+	picture = GFX_NATO_joint_operation
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO_rework.8.a
+		log = "[GetDateText]: [This.GetName]: NATO_rework.8.a executed" 
+		add_ideas = NATO_intervention_active
+		FROM = { country_event = NATO_rework.9 }
+		FROM = {
+			every_enemy_country = {
+				ROOT = {
+					declare_war_on = {
+						target = PREV
+						type = puppet_wargoal_focus
+					}
+				}
+			}
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 500
+				tag = POL
+				FROM = { has_war_with = IRQ }
+			}
+			modifier = {
+				add = 500
+				tag = ENG
+				FROM = { has_war_with = IRQ }
+			}
+			modifier = {
+				add = 500
+				tag = USA
+				FROM = { has_war_with = IRQ }
+			}
+			modifier = {
+				add = 500
+				tag = FRA
+				FROM = { has_war_with = LYB }
+			}
+			modifier = {
+				add = 500
+				tag = ENG
+				FROM = { has_war_with = LYB }
+			}
+			modifier = {
+				add = 500
+				tag = NOR
+				FROM = { has_war_with = LYB }
+			}
+			modifier = {
+				add = 500
+				tag = CAN
+				FROM = { has_war_with = LYB }
+			}
+			modifier = {
+				add = 500
+				tag = USA
+				FROM = { has_war_with = LYB }
+			}
+			modifier = {
+				add = 25
+				has_idea = fossil_fuel_industry
+				FROM = {
+					any_enemy_country = {
+						has_resources_in_country = {
+    						resource = oil
+    						amount > 10
+    						extracted = yes
+						}
+					}
+				}
+			}
+			modifier = {
+				add = 5
+				has_idea = maritime_industry
+			}
+			modifier = {
+				add = 15
+				has_idea = defense_industry
+			}
+			modifier = {
+				add = 20
+				has_idea = the_military
+			}
+		}
+	}
+	option = {
+		name = NATO_rework.8.b
+		log = "[GetDateText]: [This.GetName]: NATO_rework.8.b executed"
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 50
+				FROM = {
+					any_enemy_country = {
+						ROOT = {
+							has_opinion = {
+    						target = PREV
+    						value > 0
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				add = 25
+				OR = {
+					has_idea = intervention_isolation
+					has_idea = intervention_local_security
+				}
+			}
+			modifier = {
+				add = 25
+				has_war_support < 0.5
+			}
+			modifier = {
+				add = 25
+				OR = {
+					has_idea = defence_00
+					has_idea = defence_01
+					has_idea = defence_02
+				}
+			}
+		}
+	}
+}
+
+country_event = {	
+	id = NATO_rework.9
+	title = NATO_rework.9.t
+	desc = NATO_rework.9.d
+	picture = GFX_NATO_picture
+
+	is_triggered_only = yes
+
+	option = {
+		name = NATO_rework.9.a
+		log = "[GetDateText]: [This.GetName]: NATO_rework.8.a executed" 
+	}
+}

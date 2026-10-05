@@ -1,0 +1,594 @@
+add_namespace = pmc_events
+#BlackWater
+#BlackWater Goes
+country_event = {
+	id = pmc_events.8
+	title = pmc_events.8.t
+	desc = pmc_events.8.d
+	is_triggered_only = yes
+	picture = GFX_usa_blackwater_pmc
+	option = {
+		name = pmc_events.8.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.8.a executed"
+		set_temp_variable = { treasury_change = -10.5 }
+		modify_treasury_effect = yes
+		add_ideas = USA_blackwater_foreign
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		USA = { country_event = pmc_events.9 }
+		hidden_effect = {
+			division_template = {
+				name = "Blackwater Light Unit"
+				is_locked = yes
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+					L_Inf_Bat = { x = 0 y = 3 }
+					Arty_Bat = { x = 0 y = 4 }
+				}
+				support = {
+					L_Recce_Comp = { x = 0 y = 0 }
+					L_Engi_Comp = { x = 0 y = 1 }
+				}
+				priority = 2
+			}
+			spawn_light_infantry_blackwater = yes
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = USA
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = USA
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = USA
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = pmc_events.8.b
+		log = "[GetDateText]: [This.GetName]: pmc_events.8.b executed"
+		USA = { country_event = pmc_events.10 }
+		ai_chance = {
+			base = 0
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = USA
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = USA
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = USA
+					value < -100
+				}
+			}
+		}
+	}
+}
+
+#Blackwater accept
+country_event = {
+	id = pmc_events.9
+	title = pmc_events.9.t
+	desc = pmc_events.9.d
+	is_triggered_only = yes
+	picture = GFX_usa_blackwater_pmc
+	option = {
+		name = pmc_events.9.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.9.a executed"
+		set_temp_variable = { treasury_change = -7 }
+		modify_treasury_effect = yes
+	}
+}
+#Blackwater Decline
+country_event = {
+	id = pmc_events.10
+	title = pmc_events.10.t
+	desc = pmc_events.10.d
+	is_triggered_only = yes
+	picture = GFX_usa_blackwater_pmc
+	option = {
+		name = pmc_events.10.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.10.a executed"
+		hidden_effect = {
+			set_temp_variable = { modify_pmc_blackwater = 1 }
+			modify_pmc_blackwater_support = yes
+		}
+	}
+}
+#Blackwater Go Home
+country_event = {
+	id = pmc_events.11
+	title = pmc_events.11.t
+	desc = pmc_events.11.d
+	is_triggered_only = yes
+	picture = GFX_usa_blackwater_pmc
+	option = {
+		name = pmc_events.11.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.11.a executed"
+		hidden_effect = {
+			set_temp_variable = { modify_pmc_blackwater = 1 }
+			modify_pmc_blackwater_support = yes
+		}
+	}
+}
+#MRPI
+#MRPI Goes
+country_event = {
+	id = pmc_events.12
+	title = pmc_events.12.t
+	desc = pmc_events.12.d
+	is_triggered_only = yes
+	picture = GFX_usa_mrpi_pmc
+	option = {
+		name = pmc_events.12.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.12.a executed"
+		set_temp_variable = { treasury_change = -6.5 }
+		modify_treasury_effect = yes
+		add_timed_idea = { idea = USA_mrpi_foreign days = 365 }
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		USA = { country_event = pmc_events.13 }
+		ai_chance = { 
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = USA
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = USA
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = USA
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = pmc_events.12.b
+		log = "[GetDateText]: [This.GetName]: pmc_events.12.b executed"
+		USA = { country_event = pmc_events.14 }
+		ai_chance = { 
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = USA
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = USA
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = USA
+					value < -100
+				}
+			}
+		}
+	}
+}
+
+#MRPI accept
+country_event = {
+	id = pmc_events.13
+	title = pmc_events.13.t
+	desc = pmc_events.13.d
+	is_triggered_only = yes
+	picture = GFX_usa_mrpi_pmc
+	option = {
+		name = pmc_events.13.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.13.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 4 }
+			set_temp_variable = { tag_index = USA }
+			set_temp_variable = { influence_target = FROM }
+			change_influence_percentage = yes
+		}
+	}
+}
+#MRPI Decline
+country_event = {
+	id = pmc_events.14
+	title = pmc_events.14.t
+	desc = pmc_events.14.d
+	is_triggered_only = yes
+	picture = GFX_usa_mrpi_pmc
+	option = {
+		name = pmc_events.14.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.14.a executed"
+		hidden_effect = {
+			set_temp_variable = { modify_pmc_mrpi = 1 }
+			modify_pmc_mrpi_support = yes
+		}
+	}
+}
+#Gazprom
+#Gazprom Goes
+country_event = {
+	id = pmc_events.15
+	title = pmc_events.15.t
+	desc = pmc_events.15.d
+	is_triggered_only = yes
+	picture = GFX_sov_gazprom_pmc_event
+	option = {
+		name = pmc_events.15.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.15.a executed"
+		set_temp_variable = { treasury_change = -4.5 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		add_ideas = SOV_gazprom_pmc_idea
+		division_template = {
+			name = "Gazprom PMC"
+			is_locked = yes
+			regiments = {
+				L_Inf_Bat = { x = 0 y = 0 }
+				L_Inf_Bat = { x = 0 y = 1 }
+				L_Inf_Bat = { x = 0 y = 2 }
+				L_Inf_Bat = { x = 0 y = 3 }
+			}
+			support = {
+				L_Recce_Comp = { x = 0 y = 0 }
+				L_Engi_Comp = { x = 0 y = 1 }
+			}
+			priority = 2
+		}
+		random_owned_controlled_state = {
+			limit = { ROOT = { has_full_control_of_state = PREV } }
+			prioritize = { 666 }
+			create_unit = {
+				division = "name = \"[Russia] Gazprom PMC's Potok\" division_template = \"Gazprom PMC\" start_experience_factor = 0.1"
+				owner = ROOT
+			}
+		}
+		random_owned_controlled_state = {
+			limit = { ROOT = { has_full_control_of_state = PREV } }
+			prioritize = { 666 }
+			create_unit = {
+				division = "name = \"[Russia] Gazprom PMC's Fakel\" division_template = \"Gazprom PMC\" start_experience_factor = 0.1"
+				owner = ROOT
+			}
+		}
+		random_owned_controlled_state = {
+			limit = { ROOT = { has_full_control_of_state = PREV } }
+			prioritize = { 666 }
+			create_unit = {
+				division = "name = \"[Russia] Gazprom PMC's Plamya\" division_template = \"Gazprom PMC\" start_experience_factor = 0.1"
+				owner = ROOT
+			}
+		}
+		SOV = { country_event = pmc_events.16 }
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = SOV
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = SOV
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = SOV
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = pmc_events.15.b
+		log = "[GetDateText]: [This.GetName]: pmc_events.15.b executed"
+		SOV = { country_event = pmc_events.17 }
+		ai_chance = {
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = SOV
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = SOV
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = SOV
+					value < -100
+				}
+			}
+		}
+	}
+}
+
+#Gazprom accept
+country_event = {
+	id = pmc_events.16
+	title = pmc_events.16.t
+	desc = pmc_events.16.d
+	is_triggered_only = yes
+	picture = GFX_sov_gazprom_pmc_event
+	option = {
+		name = pmc_events.16.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.16.a executed"
+		set_temp_variable = { modify_capitalization = 0.035 }
+		modify_capitalization_support = yes
+	}
+}
+#Gazprom Decline
+country_event = {
+	id = pmc_events.17
+	title = pmc_events.17.t
+	desc = pmc_events.17.d
+	is_triggered_only = yes
+	picture = GFX_sov_gazprom_pmc_event
+	option = {
+		name = pmc_events.17.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.17.a executed"
+		hidden_effect = {
+			set_temp_variable = { modify_pmc_gazprom = 1 }
+			modify_pmc_gazprom_support = yes
+		}
+	}
+}
+#Lusitânia Security
+#Lusitânia Security Goes
+country_event = {
+	id = pmc_events.18
+	title = pmc_events.18.t
+	desc = pmc_events.18.d
+	is_triggered_only = yes
+	picture = GFX_por_lus_pmc_event
+	option = {
+		name = pmc_events.18.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.18.a executed"
+		set_temp_variable = { treasury_change = -4.5 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = POR }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		add_ideas = POR_lusitania_security_foreign
+		division_template = {
+			name = "Lusitânia Security PMC"
+			is_locked = yes
+			regiments = {
+				Mech_Marine_Bat = { x = 0 y = 0 }
+				Mech_Marine_Bat = { x = 0 y = 1 }
+				Arm_Marine_Bat = { x = 0 y = 2 }
+				armor_Bat = { x = 0 y = 3 }
+				attack_helo_bat = { x = 0 y = 4 }
+			}
+			support = {
+				L_Recce_Comp = { x = 0 y = 0 }
+				L_Engi_Comp = { x = 0 y = 1 }
+			}
+			priority = 2
+		}
+		random_owned_controlled_state = {
+			limit = { ROOT = { has_full_control_of_state = PREV } }
+			prioritize = { 666 }
+			create_unit = {
+				division = "name = \"[Portugal] Lusitânia Security PMC\" division_template = \"Lusitânia Security PMC\" start_experience_factor = 0.1"
+				owner = ROOT
+			}
+		}
+		POR = { country_event = pmc_events.19 }
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = POR
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = POR
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = POR
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = pmc_events.18.b
+		log = "[GetDateText]: [This.GetName]: pmc_events.18.b executed"
+		SOV = { country_event = pmc_events.20 }
+		ai_chance = {
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = POR
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = POR
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = POR
+					value < -100
+				}
+			}
+		}
+	}
+}
+
+#Lusitânia Security accept
+country_event = {
+	id = pmc_events.19
+	title = pmc_events.19.t
+	desc = pmc_events.19.d
+	is_triggered_only = yes
+	picture = GFX_por_lus_pmc_event
+	option = {
+		name = pmc_events.19.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.19.a executed"
+		set_temp_variable = { modify_capitalization = 0.005 }
+		modify_capitalization_support = yes
+	}
+}
+#Lusitânia Security Decline
+country_event = {
+	id = pmc_events.20
+	title = pmc_events.20.t
+	desc = pmc_events.20.d
+	is_triggered_only = yes
+	picture = GFX_por_lus_pmc_event
+	option = {
+		name = pmc_events.20.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.20.a executed"
+		hidden_effect = {
+			set_temp_variable = { modify_pmc_lus = 1 }
+			modify_pmc_lus_support = yes
+		}
+	}
+}
+# Constellis Forms
+news_event = {
+	id = pmc_events.7
+	title = pmc_events.7.t
+	desc = pmc_events.7.d
+	picture = GFX_trade_agreement # TODO: Need a better event picture here
+	is_triggered_only = yes
+	major = yes
+	trigger = {
+		NOT = { USA = { has_country_flag = collapsed_nation } }
+		NOT = { has_global_flag = constellis_pmc_formed }
+	}
+
+	option = {
+		name = pmc_events.7.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.7.a executed"
+		trigger = { original_tag = USA }
+		set_global_flag = constellis_pmc_formed
+	}
+
+	option = {
+		name = pmc_events.7.a
+		log = "[GetDateText]: [This.GetName]: pmc_events.7.a executed"
+		trigger = { NOT = { original_tag = USA } }
+	}
+}

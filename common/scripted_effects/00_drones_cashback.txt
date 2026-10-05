@@ -1,0 +1,91 @@
+drones_cashback_start = {
+	THIS = {
+     set_variable = { num_deployed_drones_prev = num_deployed_planes_with_type@suicide }
+	 set_variable = { num_equipment_drones_prev = num_equipment@suicide }
+	}
+	}
+
+drones_cashback = {
+	THIS = {
+	set_variable = { num_deployed_drones = num_deployed_planes_with_type@suicide }
+	set_variable = { num_equipment_drones = num_equipment@suicide }
+	if = {
+		limit = { check_variable = { num_equipment_drones > 0 } }
+		set_temp_variable = { drones_cashback = num_equipment_drones_prev }
+		subtract_from_temp_variable = { drones_cashback = num_equipment_drones }
+		clamp_temp_variable = {
+			var = drones_cashback
+			min = 0
+		}
+		add_to_variable = { manpower = drones_cashback }
+	}
+	else_if = {
+		limit = {
+			check_variable = { num_deployed_drones > 0 }
+			check_variable = { num_equipment_drones = 0 }
+		}
+		set_temp_variable = { drones_cashback = num_deployed_drones_prev }
+		subtract_from_temp_variable = { drones_cashback = num_deployed_drones }
+		clamp_temp_variable = {
+			var = drones_cashback
+			min = 0
+		}
+		add_to_variable = { manpower = drones_cashback }
+	}
+	set_variable = { num_deployed_drones_prev = num_deployed_planes_with_type@suicide }
+	set_variable = { num_equipment_drones_prev = num_equipment@suicide }
+	}
+	}
+	drones_cashback_end = {
+		THIS = {
+			set_variable = { num_deployed_drones = num_deployed_planes_with_type@suicide }
+			set_variable = { num_equipment_drones = num_equipment@suicide }
+			if = {
+				limit = { check_variable = { num_equipment_drones > 0 } }
+				set_temp_variable = { drones_cashback = num_equipment_drones_prev }
+				subtract_from_temp_variable = { drones_cashback = num_equipment_drones }
+				clamp_temp_variable = {
+					var = drones_cashback
+					min = 0
+				}
+				add_to_variable = { manpower = drones_cashback }
+			}
+			else_if = {
+				limit = {
+					check_variable = { num_deployed_drones > 0 }
+					check_variable = { num_equipment_drones = 0 }
+				}
+				set_temp_variable = { drones_cashback = num_deployed_drones_prev }
+				subtract_from_temp_variable = { drones_cashback = num_deployed_drones }
+				clamp_temp_variable = {
+					var = drones_cashback
+					min = 0
+				}
+				add_to_variable = { manpower = drones_cashback }
+			}
+		}
+		}
+		airbase_service_manpower = {
+			    multiply_variable = { number_of_service_manpower = -1}
+			    add_manpower = number_of_service_manpower
+			    set_variable = { number_of_service_manpower = 0 }
+				set_temp_variable = { service_manpover = num_deployed_planes_with_type@fighter }
+				add_to_temp_variable = { service_manpover = num_deployed_planes_with_type@cas }
+				add_to_temp_variable = { service_manpover = num_deployed_planes_with_type@tactical_bomber }
+				add_to_temp_variable = { service_manpover = num_deployed_planes_with_type@naval_bomber }
+				add_to_temp_variable = { service_manpover = num_deployed_planes_with_type@scout_plane }
+				add_to_temp_variable = { service_manpover = num_deployed_planes_with_type@interceptor }
+				add_to_temp_variable = { service_manpover = num_deployed_planes_with_type@air_transport }
+				add_to_temp_variable = { service_manpover = num_deployed_planes_with_type@strategic_bomber }
+				multiply_temp_variable = { service_manpover = 15 }
+				add_to_variable = { number_of_service_manpower = service_manpover }
+				set_variable = { non_changed_manpower = manpower }
+				set_variable = { changed_manpower = manpower }
+				subtract_from_variable = { changed_manpower = number_of_service_manpower }
+				clamp_variable = {
+					var = number_of_service_manpower
+					max = non_changed_manpower
+				}
+				multiply_variable = { number_of_service_manpower = -1}
+				add_manpower = number_of_service_manpower
+		}

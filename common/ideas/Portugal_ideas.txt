@@ -1,0 +1,2168 @@
+ideas = {
+	country = {
+        ### CPLP Organization - Portugal ###
+		CPLP_member_POR = {
+			name = CPLP_member
+			picture = por_cplp
+			allowed_civil_war = { always = yes }
+			modifier = {
+				political_power_factor = 0.03
+				trade_opinion_factor = 0.03
+				stability_factor = 0.02
+				foreign_influence_modifier = 0.05
+				opinion_gain_monthly_same_ideology_factor = 0.1
+				custom_modifier_tooltip = POR_cplp_tt
+			}
+		}
+		CPLP_member1_POR = {
+			name = CPLP_member
+			picture = por_cplp
+			allowed_civil_war = { always = yes }
+			modifier = {
+				political_power_factor = 0.05
+				trade_opinion_factor = 0.10
+				stability_factor = 0.05
+				foreign_influence_modifier = 0.05
+				foreign_influence_continent_modifier = 0.10
+				opinion_gain_monthly_same_ideology_factor = 0.15
+				migration_rate_value_factor = 0.15
+				custom_modifier_tooltip = POR_cplp_tt
+			}
+		}
+		### CPLP Organization ###
+		CPLP_member = {
+			name = CPLP_member
+			picture = por_cplp
+			allowed_civil_war = { always = yes }
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea CPLP_member"
+				add_to_array = { global.CPLP_member = THIS }
+			}
+			on_remove = {
+				log = "[GetDateText]: [Root.GetName]: remove idea CPLP_member"
+				remove_from_array = { global.CPLP_member = THIS }
+			}
+			cancel = {
+				NOT = {
+					OR = {
+            			POR = { has_idea = CPLP_member_POR }
+            			POR = { has_idea = CPLP_member1_POR }
+        			}
+				}
+				has_war_with = POR
+			}
+			targeted_modifier = {
+				tag = POR
+				trade_opinion_factor = 0.05
+			}
+			modifier = {
+				political_power_factor = 0.02
+				trade_opinion_factor = 0.02
+				custom_modifier_tooltip = POR_cplp_tt
+			}
+		}
+		CPLP_member1 = {
+			name = CPLP_member
+			picture = por_cplp
+			allowed_civil_war = { always = yes }
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea CPLP_member1"
+				add_to_array = { global.CPLP_member = THIS }
+			}
+			on_remove = {
+				log = "[GetDateText]: [Root.GetName]: remove idea CPLP_member1"
+				remove_from_array = { global.CPLP_member = THIS }
+			}
+			cancel = {
+				NOT = {
+					POR = {
+						OR = {
+							has_idea = CPLP_member_POR
+							has_idea = CPLP_member1_POR
+						}
+					}
+				}
+				has_war_with = POR
+			}
+			targeted_modifier = {
+				tag = POR
+				trade_opinion_factor = 0.5
+			}
+			modifier = {
+				stability_factor = 0.05
+				trade_opinion_factor = 0.05
+				migration_rate_value_factor = 0.10
+				monthly_population = 0.05
+				foreign_influence_defense_modifier = -0.1
+				investment_cost_modifier = -0.05
+				return_on_investment_modifier = 0.02
+				custom_modifier_tooltip = POR_cplp_influence_tt
+				custom_modifier_tooltip = POR_cplp_tt
+			}
+		}
+		#Taiwan Best
+		POR_taiwan_best_idea = {
+			allowed_civil_war = { always = yes }
+			picture = generic_company_taiwan_tsmc_idea
+			cancel = {
+				has_war_with = TAI
+			}
+			modifier = {
+				production_speed_offices_factor = 0.10
+        		production_speed_internet_station_factor = 0.10
+        		research_speed_factor = 0.03
+			}
+		}
+		#Energy Aid from Spain
+		POR_energy_aid_spain_idea = {
+			allowed_civil_war = { always = yes }
+			picture = energy_security
+			cancel = {
+				has_war_with = SPR
+			}
+			modifier = {
+				stability_factor = 0.03
+				energy_gain_multiplier = 0.05
+				fossil_pp_fuel_consumption_modifier = -0.10
+				base_fuel_gain_factor = 0.15
+				country_resource_oil = 1
+			}
+		}
+		#Angola Deal
+		POR_angola_deal_idea = {
+			allowed_civil_war = { always = yes }
+			picture = por_deal_angola
+			cancel = {
+				OR = {
+					AND = {
+						AGL = { has_idea = POR_portuguese_deal_idea }
+						OR = {
+							NOT = { country_exists = AGL }
+							has_war_with = AGL
+							has_opinion = {
+								target = AGL
+								value < 15
+							}
+						}
+					}
+					AND = {
+						UNI = { has_idea = POR_portuguese_deal_idea }
+						OR = {
+							NOT = { country_exists = UNI }
+							has_war_with = UNI
+							has_opinion = {
+								target = UNI
+								value < 15
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				country_resource_oil = 5
+			}
+		}
+		#Angola Deal
+		POR_portuguese_deal_idea = {
+			name = POR_angola_deal_idea
+			allowed_civil_war = { always = yes }
+			picture = por_deal_angola
+			cancel = {
+				OR = {
+					has_war_with = POR
+					NOT = {
+						country_exists = POR
+					}
+					has_opinion = {
+						target = POR
+						value < 15
+					}
+					POR = {
+						NOT = {
+							has_idea = POR_angola_deal_idea
+						}
+					}
+				}
+			}
+			modifier = {
+				country_resource_oil = -5
+				oil_export_multiplier_modifier = 0.20
+			}
+		}
+		POR_bra_cooperation_idea = {
+			allowed_civil_war = { always = yes }
+			picture = por_deal_brazil
+			cancel = {
+				OR = {
+					has_war_with = POR
+					has_war_with = BRA
+					NOT = {
+						country_exists = POR
+					}
+					NOT = {
+						country_exists = BRA
+					}
+				}
+			}
+			modifier = {
+				research_speed_factor = 0.04
+				scientist_research_bonus_factor = 0.03
+				education_cost_multiplier_modifier = 0.02
+			}
+		}
+		POR_JAP_cooperation_idea = {
+			allowed_civil_war = { always = yes }
+			picture = por_deal_japan
+			cancel = {
+				OR = {
+					has_war_with = POR
+					has_war_with = JAP
+					NOT = {
+						country_exists = JAP
+					}
+					NOT = {
+						country_exists = POR
+					}
+				}
+			}
+			modifier = {
+				research_speed_factor = 0.05
+				renewable_energy_gain_multiplier = 0.05
+				production_speed_synthetic_refinery_factor = 0.10
+			}
+			research_bonus = {
+        		CAT_renewable = 0.15
+      		}
+		}
+		POR_RAJ_cooperation_idea = {
+			allowed_civil_war = { always = yes }
+			picture = por_deal_india
+			cancel = {
+				OR = {
+					has_war_with = POR
+					has_war_with = RAJ
+					NOT = {
+						country_exists = RAJ
+					}
+					NOT = {
+						country_exists = POR
+					}
+				}
+			}
+			modifier = {
+				dockyard_productivity = 0.05
+				dockyard_income_tax_modifier = 0.10
+				production_speed_dockyard_factor = 0.10
+			}
+			equipment_bonus = {
+				cruiser = {
+					instant = yes
+					build_cost_ic = -0.15
+				}
+				destroyer = {
+					instant = yes
+					build_cost_ic = -0.15
+				}
+				frigate = {
+					instant = yes
+					build_cost_ic = -0.15
+				}
+				corvette = {
+					instant = yes
+					build_cost_ic = -0.15
+				}
+			}
+		}
+		#Red Tide from Lisbon
+		POR_red_tide_lisbon = {
+			allowed_civil_war = { always = yes }
+			picture = por_red_tide_lissabon_idea
+			cancel = {
+				OR = {
+        			has_government = communism
+        			POR = {
+            			emerging_communist_state_are_not_in_power = yes
+        			}
+    			}
+			}
+			modifier = {
+				stability_factor = -0.025
+				communism_drift = 0.05
+				democratic_drift = -0.02
+				nationalist_drift = -0.02
+				foreign_influence_defense_modifier = -0.04
+			}
+		}
+		#China Deal
+		POR_china_steel_deal_idea = {
+			allowed_civil_war = { always = yes }
+			picture = por_deal_china
+			cancel = {
+				OR = {
+					has_war_with = CHI
+					NOT = {
+						country_exists = CHI
+					}
+					has_opinion = {
+						target = CHI
+						value < 15
+					}
+				}
+			}
+			modifier = {
+				country_resource_steel = 10
+			}
+		}
+		POR_portuguese_steel_deal_idea = {
+			name = POR_china_steel_deal_idea
+			allowed_civil_war = { always = yes }
+			picture = por_deal_china
+			cancel = {
+				OR = {
+					has_war_with = POR
+					NOT = {
+						country_exists = POR
+					}
+					has_opinion = {
+						target = POR
+						value < 15
+					}
+					POR = {
+						NOT = {
+							has_idea = POR_china_steel_deal_idea
+						}
+					}
+				}
+			}
+			modifier = {
+				country_resource_steel = -10
+			}
+		}
+        #Army
+        POR_army_idea = {
+            picture = por_army_all
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = POR_army_tt
+			}
+        }
+		#PNR
+		POR_flame_of_rebirth_idea = {
+			picture = por_party_pnr
+			allowed_civil_war = { always = yes }
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			modifier = {
+				custom_modifier_tooltip = POR_flame_of_rebirth_tt
+			}
+        }
+		POR_suppress_multiculturalism_idea = {
+			picture = ban_totalitarism
+			allowed_civil_war = { always = yes }
+			modifier = {
+				migration_rate_value_factor = -0.05
+				communism_drift = -0.02
+				communism_acceptance = -15
+				democratic_drift = -0.02
+				democratic_acceptance  = -15
+			}
+		}
+		#Chega
+		POR_rise_of_chega_idea = {
+			picture = por_party_chega
+			allowed_civil_war = { always = yes }
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			modifier = {
+				custom_modifier_tooltip = POR_rise_of_chega_idea_tt
+			}
+        }
+		POR_hijab_ban_idea = {
+			picture = por_hijab_ban
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.04
+				nationalist_drift = 0.01
+				police_cost_multiplier_modifier = -0.05
+				migration_rate_value_factor = -0.05
+				fascism_drift = -0.1
+			}
+        }
+		POR_mosque_funding_ban_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+            picture = islam_denied_idea
+			modifier = {
+				foreign_influence_defense_modifier = 0.03
+				social_budget_cost_factor = -0.03
+				bureaucracy_cost_multiplier_modifier = -0.03
+				fascism_drift = -0.01
+				fascism_acceptance = -10
+			}
+        }
+		POR_no_privileges_gypsies_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+            picture = HUN_anti_gypsy_icon
+			modifier = {
+				tax_gain_multiplier_modifier = 0.03
+				nationalist_drift = 0.01
+				stability_factor = -0.03
+				social_budget_cost_factor = -0.03
+			}
+        }
+		POR_preventive_punishment_law_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			picture = por_cut_balls
+			modifier = {
+				stability_factor = 0.03
+				health_cost_multiplier_modifier = -0.03
+				police_cost_multiplier_modifier = -0.03
+				monthly_population = -0.03
+			}
+        }
+		#Braganza
+		POR_house_of_braganza_idea = {
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+            picture = por_party_braganza
+			modifier = {
+				custom_modifier_tooltip = POR_house_of_braganza_idea_tt
+			}
+        }
+		POR_BEN_fifth_empire_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+				OR = {
+					NOT = { country_exists = BEN }
+					BEN = { is_subject_of = POR }
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = idea_por_the_fifth_empire
+			targeted_modifier = {
+				tag = BEN
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.10
+			}
+		}
+		POR_PER_fifth_empire_idea = {
+			name = POR_BEN_fifth_empire_idea
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+				OR = {
+					NOT = { country_exists = PER }
+					PER = { is_subject_of = POR }
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = idea_por_the_fifth_empire
+			targeted_modifier = {
+				tag = PER
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.10
+			}
+		}
+		POR_EGY_fifth_empire_idea = {
+			name = POR_BEN_fifth_empire_idea
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+				OR = {
+					NOT = { country_exists = EGY }
+					EGY = { is_subject_of = POR }
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = idea_por_the_fifth_empire
+			targeted_modifier = {
+				tag = EGY
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.10
+			}
+		}
+		POR_GAH_fifth_empire_idea = {
+			name = POR_BEN_fifth_empire_idea
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+				OR = {
+					NOT = { country_exists = GAH }
+					GAH = { is_subject_of = POR }
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = idea_por_the_fifth_empire
+			targeted_modifier = {
+				tag = GAH
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.10
+			}
+		}
+		POR_OMA_BHR_fifth_empire_idea = {
+			name = POR_BEN_fifth_empire_idea
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+				AND = {
+					OR = {
+						NOT = { country_exists = OMA }
+						OMA = { is_subject_of = POR }
+					}
+					OR = {
+						NOT = { country_exists = BHR }
+						BHR = { is_subject_of = POR }
+					}
+				}
+			}
+			allowed_civil_war = { always = yes }
+			picture = idea_por_the_fifth_empire
+			targeted_modifier = {
+				tag = OMA
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.10
+			}
+			targeted_modifier = {
+				tag = BHR
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.10
+			}
+		}
+		#PPM
+		POR_popular_monarchy_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+            picture = por_party_ppm
+			modifier = {
+				custom_modifier_tooltip = POR_popular_monarchy_idea_tt
+			}
+        }
+		#PCP
+		POR_red_portugal_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+            picture = por_red_portugal_idea
+			modifier = {
+				custom_modifier_tooltip = POR_red_portugal_idea_tt
+			}
+        }
+		#PS
+		POR_socialism_in_freedom_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+            picture = por_party_ps
+			modifier = {
+				custom_modifier_tooltip = POR_socialism_in_freedom_idea_tt
+			}
+        }
+		#PSD
+		POR_socdem_revival_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+            picture = por_party_psd
+			modifier = {
+				custom_modifier_tooltip = POR_socdem_revival_idea_tt
+			}
+        }
+		#Drugs
+		POR_drug_strategy_idea = {
+			on_remove = {
+				add_stability = 0.02
+            	swap_ideas = {
+					remove_idea = POR_narcos_idea
+					add_idea = POR_narcos0_idea
+				}
+			}
+            picture = marijuana
+			modifier = {
+				political_power_factor = -0.05
+            	bureaucracy_cost_multiplier_modifier = 0.10
+			}
+        }
+		POR_fight_against_drugs_idea = {
+			on_remove = {
+				add_stability = 0.02
+            	if = {
+					limit = { has_idea = POR_narcos0_idea }
+					swap_ideas = {
+						remove_idea = POR_narcos0_idea
+						add_idea = POR_narcos1_idea
+					}
+				}
+				else = {
+					swap_ideas = {
+                		remove_idea = POR_narcos1_idea
+                		add_idea = POR_narcos2_idea
+            		}
+				}
+			}
+            picture = marijuana
+			modifier = {
+				stability_factor = 0.05
+            	social_cost_multiplier_modifier = 0.15
+            	health_cost_multiplier_modifier = 0.15
+        	}
+        }
+		POR_international_drug_coop_idea = {
+			on_remove = {
+				add_stability = 0.05
+            	remove_ideas = POR_narcos2_idea
+				96 = {
+					remove_dynamic_modifier = {
+						modifier = POR_lisbon_heroin_capital
+					}
+				}
+			}
+            picture = marijuana
+			modifier = {
+            	political_power_factor = -0.05
+            	bureaucracy_cost_multiplier_modifier = 0.25
+            	police_cost_multiplier_modifier = 0.25
+       		}
+        }
+		POR_decriminalization_drug_idea = {
+			allowed_civil_war = { always = yes }
+			picture = marijuana
+			modifier = {
+				stability_factor = 0.05
+				health_cost_multiplier_modifier = 0.02
+				police_cost_multiplier_modifier = -0.05
+			}
+		}
+		POR_sport_nation_idea = {
+			allowed_civil_war = { always = yes }
+            picture = arm_sport
+			modifier = {
+				monthly_population = 0.03
+        		stability_factor = 0.03
+				training_time_factor = -0.03
+				expected_healthcare_modifier = -1
+			}
+        }
+    }
+    hidden_ideas = {
+
+        #ECONOMIC DEBUFF
+        POR_last_centurys_infrastructure = {
+            modifier = {
+                production_speed_buildings_factor = -0.15
+                country_productivity_growth_modifier = -0.10
+                local_resources_factor = -0.15
+                migration_rate_value_factor = -0.10
+            }
+        }
+		POR_last_centurys_infrastructure1 = {
+            modifier = {
+                production_speed_buildings_factor = -0.075
+                country_productivity_growth_modifier = -0.05
+                local_resources_factor = -0.075
+                migration_rate_value_factor = -0.05
+            }
+        }
+        POR_brain_drain = {
+            modifier = {
+            	monthly_population = -0.2
+				stability_factor = -0.05
+				research_speed_factor = -0.1
+				productivity_growth_modifier = -0.5
+            }
+        }
+		POR_brain_drain1 = {
+			name = POR_brain_drain
+            modifier = {
+                monthly_population = -0.1
+				stability_factor = -0.025
+				research_speed_factor = -0.05
+				productivity_growth_modifier = -0.25
+            }
+        }
+        POR_regional_development_gap = {
+            modifier = {
+				stability_factor = -0.05
+                production_speed_infrastructure_factor = -0.15
+				political_power_factor = -0.05
+				tax_gain_multiplier_modifier = -0.15
+            }
+        }
+        POR_energy_dependency = {
+            modifier = {
+				energy_gain_multiplier = -0.15
+				energy_use_multiplier = 0.1
+				pop_energy_use_multiplier = 0.1
+            }
+        }
+		POR_energy_dependency1 = {
+			name = POR_energy_dependency
+            modifier = {
+				energy_gain_multiplier = -0.075
+				energy_use_multiplier = 0.05
+				pop_energy_use_multiplier = 0.05
+            }
+        }
+		POR_narcos_idea = {
+            modifier = {
+				political_power_factor = -0.05
+				stability_factor = -0.10
+				monthly_population = -0.2
+				population_tax_income_multiplier_modifier = -0.20
+				consumer_goods_factor = 0.10
+				health_cost_multiplier_modifier = 0.25
+				expected_healthcare_modifier = 1
+            }
+        }
+		POR_narcos0_idea = {
+			name = POR_narcos_idea
+            modifier = {
+				political_power_factor = -0.04
+				stability_factor = -0.075
+				monthly_population = -0.15
+				population_tax_income_multiplier_modifier = -0.15
+				consumer_goods_factor = 0.075
+				health_cost_multiplier_modifier = 0.20
+				expected_healthcare_modifier = 1
+            }
+        }
+		POR_narcos1_idea = {
+			name = POR_narcos_idea
+            modifier = {
+				political_power_factor = -0.025
+				stability_factor = -0.05
+				monthly_population = -0.1
+				population_tax_income_multiplier_modifier = -0.10
+				consumer_goods_factor = 0.05
+				health_cost_multiplier_modifier = 0.15
+				expected_healthcare_modifier = 1
+            }
+        }
+		POR_narcos2_idea = {
+			name = POR_narcos_idea
+            modifier = {
+				political_power_factor = -0.010
+				stability_factor = -0.05
+				monthly_population = -0.05
+				population_tax_income_multiplier_modifier = -0.05
+				consumer_goods_factor = 0.025
+				health_cost_multiplier_modifier = 0.05
+				expected_healthcare_modifier = 1
+            }
+        }
+		#ECONOMIC BUFF
+		POR_tourism_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				small_businesses_productivity_modifier = 0.05
+				migration_rate_value_factor = 0.07
+				monthly_population = 0.05
+			}
+		}
+		POR_tourism_idea1 = {
+			allowed_civil_war = { always = yes }
+			name = POR_tourism_idea
+			modifier = {
+				small_businesses_productivity_modifier = 0.05
+				migration_rate_value_factor = 0.10
+				monthly_population = 0.1
+				migrant_workforce_modifier = 0.05
+				maximum_migrant_workforce_percent_modifier = 0.10
+				custom_modifier_tooltip = POR_tourism_idea_tt
+			}
+		}
+		POR_it_workers_paradise = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.03
+				offices_productivity = 0.03
+				offices_worker_requirement_modifier = -0.03
+			}
+		}
+		POR_it_workers_paradise1 = {
+			name = POR_it_workers_paradise
+			allowed_civil_war = { always = yes }
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.06
+				offices_productivity = 0.06
+				offices_worker_requirement_modifier = -0.06
+				production_speed_offices_factor = 0.05
+				research_speed_factor = 0.03
+			}
+		}
+		POR_pnec_2030_idea = {
+			allowed_civil_war = { always = yes }
+			picture = eco_factories
+			modifier = {
+				renewable_energy_gain_multiplier = 0.15
+				production_speed_synthetic_refinery_factor = 0.10
+				renewable_energy_gain = 0.20
+			}
+			research_bonus = {
+        		CAT_renewable = 0.15
+      		}
+		}
+		POR_pnec_2030_1_idea = {
+			name = POR_pnec_2030_idea
+			allowed_civil_war = { always = yes }
+			picture = eco_factories
+			modifier = {
+				renewable_energy_gain_multiplier = 0.25
+				production_speed_synthetic_refinery_factor = 0.30
+				renewable_energy_gain = 0.20
+			}
+			research_bonus = {
+        		CAT_renewable = 0.30
+      		}
+		}
+		POR_infrastructure_development_idea = {
+			picture = economic_road_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_rail_way_factor = 0.10
+				production_cost_rail_way_factor = -0.10
+				production_speed_infrastructure_factor = 0.075
+				production_cost_infrastructure_factor = -0.075
+			}
+		}
+		POR_digitalisation_bank_idea = {
+			picture = improved_per_capita_productivity_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.05
+				offices_worker_requirement_modifier = -0.05
+				productivity_growth_modifier = 0.05
+				interest_rate_multiplier_modifier = -1
+				energy_use_modifier_offices = 0.05
+			}
+		}
+		#ARMY
+		POR_outdated_force_structure_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_org_factor = -0.10
+				army_speed_factor = -0.10
+				max_planning_factor = -0.10
+				training_time_factor = 0.25
+				experience_gain_army_factor = -0.25
+			}
+		}
+		POR_chronic_underfunding_idea = {
+			picture = army_tank_bad
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_arms_factory_factor = -0.20
+				military_factories_productivity = -0.20
+				dockyard_productivity = -0.20
+				production_speed_air_base_factor = -0.20
+				army_personnel_cost_multiplier_modifier = -0.10
+				expected_mil_modifier = -1.00
+			}
+			research_bonus = {
+				CAT_Military = -0.15
+			}
+		}
+		POR_outdated_equipment_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_armor_attack_factor = -0.15
+				army_armor_defence_factor = -0.15
+				army_armor_speed_factor = -0.15
+				static_anti_air_damage_factor = -0.15
+				static_anti_air_hit_chance_factor = -0.15
+				army_artillery_attack_factor = -0.15
+				army_artillery_defence_factor = -0.15
+			}
+		}
+		POR_outdated_equipment1_idea = {
+			name = POR_outdated_equipment_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_armor_attack_factor = -0.075
+				army_armor_defence_factor = -0.075
+				army_armor_speed_factor = -0.075
+				static_anti_air_damage_factor = -0.075
+				static_anti_air_hit_chance_factor = -0.075
+				army_artillery_attack_factor = -0.075
+				army_artillery_defence_factor = -0.075
+			}
+		}
+		POR_incomplete_naval_modernization_idea  = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				naval_damage_factor = -0.05
+				naval_defense_factor = -0.05
+				naval_morale_factor = -0.05
+				navy_org_factor = -0.05
+				spotting_chance = -0.05
+				naval_accidents_chance = 0.10
+				naval_mine_hit_chance = 0.10
+				naval_speed_factor = -0.15
+				naval_hit_chance = -0.15
+				naval_retreat_chance = -0.15
+				navy_intel_to_others = 5
+			}
+		}
+		POR_incomplete_naval_modernization1_idea  = {
+			name = POR_incomplete_naval_modernization_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				naval_damage_factor = -0.025
+				naval_defense_factor = -0.025
+				naval_morale_factor = -0.025
+				navy_org_factor = -0.025
+				spotting_chance = -0.025
+				naval_accidents_chance = 0.05
+				naval_mine_hit_chance = 0.05
+				naval_speed_factor = -0.075
+				naval_hit_chance = -0.075
+				naval_retreat_chance = -0.075
+				navy_intel_to_others = 2.5
+			}
+		}
+		POR_obsolete_aircraft_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				air_attack_factor = -0.20
+				air_defence_factor = -0.20
+				air_agility_factor = -0.15
+				air_maximum_speed_factor = -0.15
+				air_range_factor = -0.25
+				air_accidents_factor = 0.30
+				air_mission_efficiency = -0.20
+				army_bonus_air_superiority_factor = -0.15
+				air_cas_efficiency = -0.15
+			}
+		}
+		POR_obsolete_aircraft1_idea = {
+			name = POR_obsolete_aircraft_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				air_attack_factor = -0.10
+				air_defence_factor = -0.10
+				air_agility_factor = -0.075
+				air_maximum_speed_factor = -0.075
+				air_range_factor = -0.125
+				air_accidents_factor = 0.15
+				air_mission_efficiency = -0.10
+				army_bonus_air_superiority_factor = -0.075
+				air_cas_efficiency = -0.075
+			}
+		}
+		POR_corpo_de_fuzileiros_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				invasion_preparation = -0.10
+       			amphibious_invasion = 0.05
+        		naval_invasion_planning_bonus_speed = 0.10
+        		naval_invasion_penalty = -0.10
+        		naval_invasion_capacity = 3
+       			marines_special_forces_contribution_factor = -0.15
+			}
+		}
+		POR_maritime_power_doctrine_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				naval_damage_factor = 0.05
+				naval_defense_factor = 0.12
+				naval_morale_factor = 0.07
+				navy_org_factor = 0.09
+				spotting_chance = 0.07
+				naval_accidents_chance = -0.05
+				naval_mine_hit_chance = -0.12
+				industrial_capacity_dockyard = 0.09
+				naval_speed_factor = 0.05
+				navy_max_range_factor = 0.05
+				navy_anti_air_attack_factor = 0.05
+			}
+		}
+		POR_army_commandos_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				special_forces_attack_factor = 0.05
+				special_forces_defence_factor = 0.05
+				special_forces_out_of_supply_factor = -0.05
+				special_forces_training_time_factor = -0.10
+				special_forces_cap = 0.01
+				send_volunteer_size = 1
+				acclimatization_hot_climate_gain_factor = 0.3
+			}
+		}
+		POR_professional_army_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_speed_factor = 0.02
+				army_attack_factor = 0.02
+				army_defence_factor = 0.02
+				breakthrough_factor = 0.04
+				army_org_factor = 0.04
+			}
+		}
+		POR_professional_army1_idea = {
+			name = POR_professional_army_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_speed_factor = 0.05
+				army_attack_factor = 0.05
+				army_defence_factor = 0.05
+				breakthrough_factor = 0.07
+				army_org_factor = 0.07
+			}
+		}
+		POR_air_surveillance_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				air_attack_factor = 0.05
+				air_defence_factor = 0.05
+				air_maximum_speed_factor = 0.10
+				air_cas_efficiency = 0.10
+			}
+		}
+		POR_drone_idea = {
+			allowed_civil_war = { always = yes }
+			equipment_bonus = {
+				medium_plane_suicide_airframe = {
+					build_cost_ic = -0.10
+					instant = yes
+				}
+			}
+		}
+		POR_foreign_equipment_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				license_production_speed = 0.30
+				max_planning_factor = 0.05
+				planning_speed = 0.10
+			}
+		}
+		POR_lusitanian_red_guard_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_infantry_attack_factor = 0.05
+    			breakthrough_factor = 0.05
+				army_artillery_attack_factor = 0.10
+				army_artillery_defence_factor = 0.05
+				mobilization_speed = 0.05
+				max_planning_factor = -0.05
+				planning_speed = -0.10
+			}
+		}
+		POR_veriatos_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_infantry_attack_factor = 0.05
+				recon_factor = 0.05
+				send_volunteer_size = 2
+				send_volunteer_divisions_required = -0.15
+				send_volunteers_tension = -0.15
+			}
+		}
+		POR_portuguese_legion_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				recruitable_population_factor = 0.02
+				army_core_attack_factor = 0.075
+				army_core_defence_factor = 0.075
+			}
+		}
+		POR_order_aviz_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_attack_factor = 0.05
+				army_morale = 0.5
+				army_org_factor = 0.10
+			}
+		}
+		#PNR
+		POR_nation_and_labour_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				civilian_industry_tax_modifier = 0.05
+				total_workforce_modifier = 0.03
+				buildings_worker_requirement_modifier = -0.03
+			}
+		}
+		POR_nation_and_labour1_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			name = POR_nation_and_labour_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				civilian_industry_tax_modifier = 0.05
+				total_workforce_modifier = 0.03
+				buildings_worker_requirement_modifier = -0.03
+				productivity_growth_modifier = 0.05
+				inflation_defence_multiplier_modifier = 0.1
+				foreign_influence_defense_modifier = 0.1
+				investment_cost_modifier = 0.15
+			}
+		}
+		POR_national_reneval_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				nationalist_drift = 0.03
+				nationalist_acceptance = 25
+				political_power_factor = 0.05
+				propaganda_campaign_cost_modifier = -0.1
+				drift_defence_factor = 0.05
+			}
+		}
+		POR_juventude_nacionalista_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				recruitable_population_factor = 0.01
+				monthly_population = 0.05
+				research_speed_factor = 0.05
+			}
+		}
+		POR_juventude_nacionalista1_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			name = POR_juventude_nacionalista_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				recruitable_population_factor = 0.02
+				monthly_population = 0.05
+				research_speed_factor = 0.05
+				army_attack_factor = 0.05
+				army_defence_factor = 0.05
+				training_time_army_factor = -0.10
+			}
+		}
+		POR_portugal_for_portuguese_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_core_attack_factor = 0.075
+				army_core_defence_factor = 0.075
+			}
+		}
+		POR_memories_of_greatness_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				war_support_factor = 0.15
+				production_speed_arms_factory_factor = 0.15
+			}
+		}
+		POR_estado_novo_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				political_power_factor = 0.25
+				nationalist_drift = 0.03
+				democratic_drift = -0.03
+				min_export = -0.10
+				expected_police_modifier = 2
+				police_cost_multiplier_modifier = 0.10
+			}
+		}
+		POR_era_of_corporatism_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_buildings_factor = 0.15
+				corporate_tax_income_multiplier_modifier = 0.05
+				inflation_defence_multiplier_modifier = 0.10
+				consumer_goods_factor = -0.05
+			}
+		}
+		POR_lusotropicalism_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				non_core_manpower = 0.20
+				subjects_autonomy_gain = 0.05
+				resistance_growth = -0.05
+				resistance_damage_to_garrison = -0.05
+			}
+		}
+		POR_march_on_madrid_idea = {
+			cancel = {
+				nationalist_fascist_are_not_in_power = yes
+				OR = {
+					NOT = { country_exists = SPR }
+					SPR = { is_subject_of = POR }
+				}
+			}
+			allowed_civil_war = { always = yes }
+			targeted_modifier = {
+				tag = SPR
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.10
+			}
+		}
+		#Chega
+		POR_revised_constitution_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				corruption_cost_factor = -0.10
+				bureaucracy_cost_multiplier_modifier = -0.10
+				expected_adm_modifier = -2
+			}
+		}
+		POR_national_liberalism_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				country_productivity_growth_modifier = 0.05
+			}
+		}
+		POR_national_liberalism1_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			name = POR_national_liberalism_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				country_productivity_growth_modifier = 0.05
+				investment_cost_modifier = -0.05
+				inflation_defence_multiplier_modifier = -0.03
+			}
+		}
+		POR_national_liberalism2_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			name = POR_national_liberalism_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				country_productivity_growth_modifier = 0.05
+				investment_cost_modifier = -0.05
+				inflation_defence_multiplier_modifier = -0.03
+				production_speed_offices_factor = 0.05
+				offices_worker_requirement_modifier = -0.05
+			}
+		}
+		POR_ministry_family_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.03
+				monthly_population = 0.07
+				population_tax_income_multiplier_modifier = 0.05
+			}
+		}
+		POR_ministry_family1_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			name = POR_ministry_family_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.03
+				monthly_population = 0.12
+				population_tax_income_multiplier_modifier = 0.05
+				social_cost_multiplier_modifier = -0.05
+			}
+		}
+		POR_law_and_order_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				police_cost_multiplier_modifier = 0.10
+				foreign_influence_defense_modifier = 0.10
+			}
+		}
+		POR_law_and_order1_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			name = POR_law_and_order_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				police_cost_multiplier_modifier = 0.10
+				foreign_influence_defense_modifier = 0.10
+				migration_rate_value_factor = -0.10
+				drift_defence_factor = 0.10
+			}
+		}
+		POR_law_and_order2_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			name = POR_law_and_order_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.15
+				police_cost_multiplier_modifier = 0.15
+				foreign_influence_defense_modifier = 0.20
+				migration_rate_value_factor = -0.20
+				drift_defence_factor = 0.20
+			}
+		}
+		POR_god_country_family_work_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			name = POR_god_country_family_work_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				nationalist_drift = 0.03
+				high_unemployment_threshold_modifier = 0.07
+			}
+		}
+		POR_god_country_family_work1_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			name = POR_god_country_family_work_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				nationalist_drift = 0.03
+				high_unemployment_threshold_modifier = 0.07
+				research_speed_factor = 0.07
+			}
+		}
+		POR_juventude_chega_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				recruitable_population_factor = 0.02
+				war_support_factor = 0.10
+				minimum_training_level = -0.10
+			}
+		}
+		POR_fourth_republic_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				political_power_factor = 0.25
+				productivity_growth_modifier = 0.20
+				offices_productivity = 0.10
+				treasury_to_gdp_inflation_multiplier_modifier = -0.10
+				return_on_investment_modifier = 0.03
+			}
+		}
+		POR_presidential_system_transition_idea = {
+			cancel = {
+				nationalist_right_wing_populists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				political_power_factor = -0.25
+				stability_factor = -0.05
+				production_speed_buildings_factor = -0.15
+			}
+		}
+		#Braganza
+		POR_unstable_monarchy_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = -0.20
+				political_power_gain = -0.40
+				population_tax_income_multiplier_modifier = -0.20
+			}
+		}
+		POR_unstable_monarchy1_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			name = POR_unstable_monarchy_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = -0.15
+				political_power_gain = -0.30
+				population_tax_income_multiplier_modifier = -0.15
+			}
+		}
+		POR_unstable_monarchy2_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			name = POR_unstable_monarchy_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = -0.10
+				political_power_gain = -0.20
+				population_tax_income_multiplier_modifier = -0.10
+			}
+		}
+		POR_unstable_monarchy3_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			name = POR_unstable_monarchy_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = -0.05
+				political_power_gain = -0.10
+				population_tax_income_multiplier_modifier = -0.05
+			}
+		}
+		POR_braganza_dragons_idea = {
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				special_forces_attack_factor = 0.075
+				special_forces_defence_factor = 0.075
+				special_forces_training_time_factor = -0.10
+				special_forces_cap = 0.01
+			}
+		}
+		POR_order_christ_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_attack_factor = 0.03
+				army_core_attack_factor =  0.03
+				army_core_defence_factor =  0.03
+				recruitable_population_factor = 0.03
+			}
+		}
+		POR_portuguese_crown_idea = {
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.10
+				political_power_gain = 0.10
+				population_tax_income_multiplier_modifier = 0.10
+			}
+		}
+		POR_portuguese_crown1_idea = {
+			name = POR_portuguese_crown_idea
+			cancel = {
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.20
+				political_power_gain = 0.25
+				population_tax_income_multiplier_modifier = 0.15
+			}
+		}
+		POR_spirit_of_tradition_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				monthly_population = 0.05
+			}
+		}
+		POR_spirit_of_tradition1_idea = {
+			name = POR_spirit_of_tradition_idea
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.15
+				monthly_population = 0.10
+				research_speed_factor = -0.1
+				fascism_drift = -0.1
+			}
+		}
+		#PPM
+		POR_constitutional_throne_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.15
+				democratic_drift = 0.03
+				democratic_acceptance = 10
+			}
+		}
+		POR_monarchist_agrarianism_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				agricolture_productivity_modifier = 0.05
+			}
+		}
+		POR_monarchist_agrarianism1_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+				nationalist_monarchists_are_not_in_power = yes
+			}
+			name = POR_monarchist_agrarianism_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				agricolture_productivity_modifier = 0.05
+				agriculture_tax_modifier = 0.25
+				agriculture_workers_modifier = 0.05
+			}
+		}
+		POR_royal_council_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.05
+				tax_rate_change_multiplier_modifier = -0.15
+				corruption_cost_factor = 0.10
+				bureaucracy_cost_multiplier_modifier = 0.05
+			}
+		}
+		POR_royal_council1_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.075
+				political_power_gain = 0.10
+				tax_rate_change_multiplier_modifier = -0.30
+				corruption_cost_factor = 0.10
+				bureaucracy_cost_multiplier_modifier = 0.05
+			}
+		}
+		POR_anti_salazarism_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				nationalist_drift = -0.05
+				corruption_cost_factor = -0.10
+				expected_police_modifier = -2
+				police_cost_multiplier_modifier = -0.10
+			}
+		}
+		POR_padroado_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.05
+				political_power_factor = 0.05
+				foreign_influence_modifier = 0.05
+			}
+		}
+		POR_parliamentary_assembly_idea = {
+			cancel = {
+				NOT = {
+					OR = {
+						has_idea = CPLP_member
+						has_idea = CPLP_member1
+					}
+      			}
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = 0.02
+				democratic_acceptance = 20
+				bureaucracy_cost_multiplier_modifier = -0.05
+			}
+		}
+		POR_diplomatic_missions_idea = {
+			cancel = {
+				NOT = {
+					OR = {
+						has_idea = CPLP_member
+						has_idea = CPLP_member1
+					}
+      			}
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				trade_opinion_factor = 0.05
+				opinion_gain_monthly_same_ideology_factor = 0.05
+				migration_rate_value_factor = 0.05
+			}
+			targeted_modifier = {
+				tag = POR
+				foreign_influence_modifier = 0.025
+			}
+		}
+		POR_atlantic_lusophone_fleet_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				naval_morale_factor = 0.05
+				naval_hit_chance = 0.05
+				experience_gain_navy = 0.05
+				experience_gain_navy_factor = 0.05
+				navy_org_factor = 0.07
+				navy_max_range_factor = 0.10
+				convoy_escort_efficiency = 0.10
+				convoy_retreat_speed = 0.10
+			}
+		}
+		POR_portuguese_escudo_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				interest_rate_multiplier_modifier = -2
+				econ_cycle_upg_cost_multiplier_modifier = -0.10
+				foreign_influence_defense_modifier = 0.2
+				resource_export_multiplier_modifier = 0.10
+				inflation_from_export_multiplier_modifier = -0.10
+				inflation_defence_multiplier_modifier = 0.15
+				inflation_multiplier_modifier = 0.05
+			}
+		}
+		POR_transatlantic_monarchy_idea = {
+			cancel = {
+				western_autocrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.10
+				democratic_drift = 0.02
+				drift_defence_factor = 0.5
+				trade_opinion_factor = 0.25
+				migration_rate_value_factor = 0.15
+			}
+		}
+		#COMMI
+		POR_antifa_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				nationalist_drift = -0.03
+				nationalist_acceptance = -25
+			}
+		}
+		POR_alvaro_cunhal_legacy_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				communism_drift = 0.03
+				communism_acceptance = 25
+				foreign_influence_modifier = 0.05
+			}
+		}
+		POR_planned_economy_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_buildings_factor  = 0.10
+				industry_repair_factor  = 0.10
+				inflation_defence_multiplier_modifier = 0.20
+				consumer_goods_factor = 0.05
+			}
+		}
+		POR_proletarian_spirit_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				total_workforce_modifier = 0.07
+				civilian_factories_productivity = 0.07
+				expected_welfare_modifier = 1.00
+			}
+		}
+		POR_proletarian_spirit1_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			name = POR_proletarian_spirit_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				total_workforce_modifier = 0.07
+				civilian_factories_productivity = 0.07
+				agricolture_productivity_modifier = 0.07
+				expected_welfare_modifier = 1.00
+			}
+		}
+		POR_proletarian_spirit2_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			name = POR_proletarian_spirit_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				total_workforce_modifier = 0.07
+				civilian_factories_productivity = 0.07
+				civ_facs_worker_requirement_modifier = -0.07
+				agricolture_productivity_modifier = 0.07
+				expected_welfare_modifier = 1.00
+			}
+		}
+		POR_education_for_all_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				research_speed_factor = 0.07
+				education_cost_multiplier_modifier = 0.03
+				expected_education_modifier = 1.00
+			}
+		}
+		POR_education_for_all1_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				research_speed_factor = 0.14
+				education_cost_multiplier_modifier = 0.06
+				expected_education_modifier = 2.00
+			}
+		}
+		POR_shore_of_freedom_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.10
+				civilian_industry_tax_modifier = 0.10
+				local_resources_factor = 0.10
+				min_export = -0.10
+			}
+		}
+		POR_green_communism_idea = {
+			cancel = {
+				emerging_communist_state_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				renewable_energy_gain_multiplier = 0.20
+				production_speed_synthetic_refinery_factor = 0.10
+			}
+		}
+		#PS
+		POR_fiscal_discipline_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				social_cost_multiplier_modifier = -0.05
+				health_cost_multiplier_modifier = -0.05
+			}
+		}
+		POR_fiscal_discipline1_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			name = POR_fiscal_discipline_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				social_cost_multiplier_modifier = -0.10
+				health_cost_multiplier_modifier = -0.10
+				inflation_from_dept_multiplier_modifier = -0.05
+			}
+		}
+		POR_health_over_incarceration_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				police_cost_multiplier_modifier = -0.10
+				total_workforce_modifier = 0.03
+				health_cost_multiplier_modifier = 0.05
+			}
+		}
+		POR_local_government_reform_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = -0.15
+				bureaucracy_cost_factor = 0.15
+				population_tax_income_multiplier_modifier = -0.05
+				production_speed_infrastructure_factor = 0.10
+				expected_adm_modifier = -1.00
+			}
+		}
+		POR_local_government_reform1_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			name = POR_local_government_reform_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = -0.25
+				bureaucracy_cost_factor = 0.15
+				population_tax_income_multiplier_modifier = -0.10
+				production_speed_infrastructure_factor = 0.10
+				production_speed_buildings_factor = 0.10
+				productivity_growth_modifier = 0.07
+				expected_adm_modifier = -1.00
+			}
+		}
+		POR_religious_freedom_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.03
+				party_popularity_stability_factor = 0.03
+				internal_factions_cost_factor = -0.05
+				bureaucracy_cost_multiplier_modifier = 0.02
+				neutrality_drift = -0.01
+			}
+		}
+		POR_cplp_migrants_idea = {
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = -0.02
+				migrant_workforce_modifier = 0.10
+				migration_rate_value_factor = 0.10
+				country_productivity_growth_modifier = -0.02
+				civ_facs_worker_requirement_modifier = -0.05
+				production_speed_buildings_factor = 0.05
+			}
+		}
+		POR_technological_plan_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_internet_station_factor = 0.05
+				country_productivity_growth_modifier = 0.03
+			}
+		}
+		POR_technological_plan1_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			name = POR_technological_plan_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_internet_station_factor = 0.05
+				country_productivity_growth_modifier = 0.05
+				civilian_factories_productivity = 0.02
+				civ_facs_worker_requirement_modifier = -0.02
+			}
+		}
+		POR_technological_plan2_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			name = POR_technological_plan_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_internet_station_factor = 0.05
+				country_productivity_growth_modifier = 0.05
+				civilian_factories_productivity = 0.05
+				civ_facs_worker_requirement_modifier = -0.05
+				research_speed_factor = 0.04
+				education_cost_multiplier_modifier = 0.02
+				expected_education_modifier = 1.00
+			}
+		}
+		POR_minimum_wage_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				consumer_goods_factor = 0.05
+				high_unemployment_threshold_modifier = 0.05
+				population_tax_income_multiplier_modifier = -0.05
+				productivity_growth_modifier = 0.01
+			}
+		}
+		POR_invest_sns_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				monthly_population = 0.10
+				health_cost_multiplier_modifier = 0.10
+			}
+		}
+		POR_estado_social_forte_idea = {
+			cancel = {
+				western_social_democrats_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.07
+				high_unemployment_threshold_modifier = 0.07
+				democratic_drift = 0.03
+				monthly_population = 0.12
+				political_power_factor = -0.15
+			}
+		}
+		#PSD
+		POR_sa_carneiro_legacy_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = 0.01
+				democratic_acceptance = 15
+				neutrality_drift = 0.01
+				drift_defence_factor = 0.03
+			}
+		}
+		POR_sa_carneiro_legacy1_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			name = POR_sa_carneiro_legacy_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				democratic_drift = 0.02
+				democratic_acceptance = 25
+				neutrality_drift = 0.02
+				neutrality_acceptance = 10
+				drift_defence_factor = 0.05
+			}
+		}
+		POR_estado_mais_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				custom_modifier_tooltip = law_cost_tt
+				hidden_modifier = {
+					corruption_cost_factor = -0.10
+        			economic_cycles_cost_factor = -0.10
+        			internal_factions_cost_factor = -0.10
+       		 		bureaucracy_cost_factor = -0.10
+       		 		Military_Spending_cost_factor = -0.10
+        			crime_fighting_cost_factor = -0.10
+        			education_budget_cost_factor = -0.10
+        			health_budget_cost_factor = -0.10
+        			social_budget_cost_factor = -0.10
+        			trade_laws_cost_factor = -0.10
+        			Nuclear_Status_cost_factor = -0.10
+        			Nuclear_Stance_cost_factor = -0.10
+        			Conscription_Law_cost_factor = -0.10
+        			Military_Status_Women_cost_factor = -0.10
+        			Foreign_Intervention_Law_cost_factor = -0.10
+        			Officer_Training_Law_cost_factor = -0.10
+        			materiel_manufacturer_cost_factor = -0.10
+        			tank_manufacturer_cost_factor = -0.10
+        			aircraft_manufacturer_cost_factor = -0.10
+        			naval_manufacturer_cost_factor = -0.10
+        			tax_rate_change_multiplier_modifier = -0.10
+        			migration_laws_cost_factor = -0.10
+				}
+			}
+		}
+		POR_ajustamento_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			name = POR_ajustamento_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				consumer_goods_factor = -0.10
+				education_cost_multiplier_modifier = -0.05
+				police_cost_multiplier_modifier = -0.05
+			}
+		}
+		POR_ajustamento1_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			name = POR_ajustamento_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				consumer_goods_factor = -0.10
+				education_cost_multiplier_modifier = -0.05
+				police_cost_multiplier_modifier = -0.05
+				health_cost_multiplier_modifier = -0.15
+				expected_healthcare_modifier = 2
+			}
+		}
+		POR_simplex_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_internet_station_factor = 0.10
+				bureaucracy_cost_multiplier_modifier = -0.10
+				expected_adm_modifier = -1.00
+			}
+		}
+		POR_simplex1_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			name = POR_simplex_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_internet_station_factor = 0.10
+				research_speed_factor = 0.05
+				productivity_growth_modifier = 0.05
+				bureaucracy_cost_multiplier_modifier = -0.10
+				expected_adm_modifier = -1.00
+			}
+		}
+		POR_simplex2_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			name = POR_simplex_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				production_speed_internet_station_factor = 0.10
+				research_speed_factor = 0.10
+				productivity_growth_modifier = 0.10
+				offices_productivity = 0.05
+				offices_worker_requirement_modifier = -0.05
+				bureaucracy_cost_multiplier_modifier = -0.15
+				expected_adm_modifier = -1.00
+			}
+		}
+		POR_christian_values_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			name = POR_simplex_idea
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				neutrality_drift = 0.01
+				neutrality_acceptance = 10
+			}
+		}
+		POR_siadap_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				total_workforce_modifier = 0.02
+				buildings_worker_requirement_modifier = -0.02
+			}
+		}
+		POR_siadap1_idea = {
+			name = POR_siadap_idea
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				total_workforce_modifier = 0.07
+				buildings_worker_requirement_modifier = -0.05
+				democratic_drift = -0.01
+			}
+		}
+		POR_liberal_market_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				return_on_investment_modifier = 0.04
+				investment_cost_modifier = -0.10
+				investment_duration_modifier = -0.15
+				treasury_to_gdp_inflation_multiplier_modifier = 0.10
+			}
+		}
+		POR_new_portugal_idea = {
+			cancel = {
+				western_conservatism_are_not_in_power = yes
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				econ_cycle_upg_cost_multiplier_modifier = -0.10
+				corporate_tax_income_multiplier_modifier = 0.10
+				offices_productivity = 0.05
+				interest_rate_multiplier_modifier = -1
+			}
+		}
+    }
+}

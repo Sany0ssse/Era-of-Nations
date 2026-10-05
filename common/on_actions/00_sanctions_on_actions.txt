@@ -1,0 +1,215 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			USA = {
+				BRM = { issued_sanctions_prev = yes }
+				PER = { issued_sanctions_prev = yes }
+				CUB = { issued_sanctions_prev = yes }
+			}
+		}
+	}
+    on_monthly = {
+        effect = {
+            if = {
+                limit = {
+					OR = {
+						check_variable = { global.month = 3 }
+						check_variable = { global.month = 6 }
+						check_variable = { global.month = 9 }
+						check_variable = { global.month = 12 }
+					}
+                }
+				if = {
+					limit = {
+						OR = {
+							has_idea = international_sanctions
+							has_idea = Massive_International_Sanctions
+							has_idea = NKO_international_sanctions_idea
+							has_idea = NKO_international_sanctions_idea1
+							has_idea = NKO_international_sanctions_idea2
+							has_idea = NKO_international_sanctions_idea3
+							has_idea = NKO_international_sanctions_idea4
+							has_idea = IRQ_international_sanctions
+							has_idea = IRQ_international_sanctions2
+							has_idea = IRQ_international_sanctions3
+							has_idea = IRQ_international_sanctions4
+							has_idea = SER_International_Isolation
+							has_idea = SER_International_Isolation_1
+						}
+					}
+					add_to_variable = { quarters_since_sanctions = 1 }
+				}
+                if = {
+                    limit = { has_dynamic_modifier = { modifier = sanctions_dynamic_modifier } }
+                    add_to_variable = { quarters_since_sanctions = 1 }
+					clamp_variable = { var = quarters_since_sanctions max = 50 }
+					if = {
+						limit = { check_variable = { sanctions_modifier_value > 0.1 } }
+						if = {
+							limit = {
+								has_idea = open_cash_flow
+							}
+							random_list = {
+								96 = {}
+								2 = {
+									random = {
+										chance = 1
+										country_event = { id = sanctions.2 random_days = 120 }
+									}
+								}
+								2 = {
+									random = {
+										chance = 1
+										country_event = { id = sanctions.3 random_days = 120 }
+									}
+								}
+							}
+						}
+						if = {
+							limit = { has_idea = restricted_cash_flow }
+							random_list = {
+								98 = {}
+								1 = {
+									random = {
+										chance = 1
+										country_event = { id = sanctions.2 random_days = 120 }
+									}
+								}
+								1 = {
+									random = {
+										chance = 1
+										country_event = { id = sanctions.3 random_days = 120 }
+									}
+								}
+							}
+						}
+					}
+					if = {
+						limit = {
+							has_equipment = {
+    							convoy > 0
+							}
+							any_other_country = { has_country_flag = shadow_fleet_hunt@PREV }
+						}
+						every_other_country = {
+							limit = { has_country_flag = shadow_fleet_hunt@PREV }
+							if = {
+								limit = { NOT = { has_idea = naval_power_of_the_continent } }
+								clr_country_flag = shadow_fleet_hunt@PREV
+							}
+						}
+						random_other_country = {
+							limit = { has_country_flag = shadow_fleet_hunt@PREV }
+							set_temp_variable = { pirate_chance = THIS.civilian_intel@PREV }
+							multiply_temp_variable = { pirate_chance = 100 }
+							clamp_temp_variable = { var = pirate_chance min = 0 max = 100 }
+							if = {
+								limit = { check_variable = { pirate_chance > 0 } }
+								if = {
+									limit = { PREV = { has_country_flag = PMC_shadow_fleet } }
+									random_list = {
+										99 = {
+											random = {
+												chance = pirate_chance
+												PREV = { country_event = { id = sanctions.5 random_days = 120 }  }
+											}
+										}
+										1 = {
+											random = {
+												chance = 1
+												country_event = { id = sanctions.6 random_days = 120 }
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+                }
+                else_if = {
+                    limit = { has_dynamic_modifier = { modifier = sanctions_feedback_dynamic_modifier } }
+                    add_to_variable = { quarters_since_issued_sanctions = 1 }
+					clamp_variable = { var = quarters_since_issued_sanctions max = 75 }
+                }
+                if = {
+                    limit = {
+                        OR = {
+                            has_dynamic_modifier = { modifier = sanctions_dynamic_modifier }
+                            has_dynamic_modifier = { modifier = sanctions_feedback_dynamic_modifier }
+                        }
+                    }
+                    issued_sanctions_update = yes
+                }
+                every_other_country = {
+                    limit = { is_in_array = { sanctions_evade_helpers = PREV } }
+                    PREV = {
+                        set_variable = { i = 0 }
+	                    for_each_scope_loop = {
+		                    array = influence_array
+		                    break = break
+		                    if = {
+			                    limit = {
+				                    intel_level_over = {
+					                    target = PREV
+					                    civilian_intel > 0.5
+				                    }
+				                    check_variable = { influence_array_val^PREV.i > 9.999 }
+				                    is_in_array = { PREV.PREV.sanctioneers = THIS }
+                                    NOT = { has_opinion_modifier = helps_evade_sanctions }
+			                    }
+			                    random = {
+				                    chance = 25
+				                    country_event = sanctions.1
+				                    add_opinion_modifier = {
+					                    target = PREV
+					                    modifier = helps_evade_sanctions
+				                    }
+			                    }
+		                    }
+		                    add_to_variable = { PREV.i = 1 }
+		                    if = {
+			                    limit = { check_variable = { PREV.i = 2 } }
+			                    set_temp_variable = { break = 1 }
+		                    }
+	                    }
+	                    clear_variable = i
+                    }
+                }
+				if = {
+					limit = { has_idea = restricted_cash_flow }
+					random_list = {
+						50 = {
+							random = {
+								chance = 1
+								country_event = { id = econvent.14 random_days = 120 }
+							}
+						}
+						50 = {
+							random = {
+								chance = 1
+								country_event = { id = econvent.15 random_days = 120 }
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = { has_idea = closed_cash_flow }
+					random_list = {
+						50 = {
+							random = {
+								chance = 2
+								country_event = { id = econvent.14 random_days = 120 }
+							}
+						}
+						50 = {
+							random = {
+								chance = 2
+								country_event = { id = econvent.15 random_days = 120 }
+							}
+						}
+					}
+				}
+            }
+        }
+    }
+}

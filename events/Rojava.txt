@@ -1,0 +1,271 @@
+add_namespace = rojava
+
+country_event = {
+	id = rojava.1
+	title = rojava.1.t
+	desc = rojava.1.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.1.a
+		log = "[GetDateText]: [This.GetName]: rojava.1.a"
+	}
+	option = {
+		name = rojava.1.b
+		log = "[GetDateText]: [This.GetName]: rojava.1.b"
+	}
+}
+
+country_event = {
+	id = rojava.2
+	title = rojava.2.t
+	desc = rojava.2.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.2.a
+		log = "[GetDateText]: [This.GetName]: rojava.2.a"
+		ROJ = {
+			diplomatic_relation = {
+				country = SYR
+				relation = military_access
+				active = yes
+			}
+		}
+		diplomatic_relation = {
+			country = ROJ
+			relation = military_access
+			active = yes
+		}
+		ROJ = { country_event = rojava.3 }
+		ROJ = {
+			add_opinion_modifier = { target = SYR modifier = recent_actions_positive }
+			reverse_add_opinion_modifier = { target = SYR modifier = recent_actions_positive }
+		}
+	}
+	option = {
+		name = rojava.2.b
+		log = "[GetDateText]: [This.GetName]: rojava.2.b"
+		ROJ = { country_event = rojava.4 }
+	}
+}
+
+country_event = {
+	id = rojava.3
+	title = rojava.3.t
+	desc = rojava.3.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.3.a
+		log = "[GetDateText]: [This.GetName]: rojava.3.a"
+	}
+}
+
+country_event = {
+	id = rojava.4
+	title = rojava.4.t
+	desc = rojava.4.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.4.a
+		log = "[GetDateText]: [This.GetName]: rojava.4.a"
+	}
+}
+
+country_event = {
+	id = rojava.5
+	title = rojava.5.t
+	desc = rojava.5.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.5.a
+		log = "[GetDateText]: [This.GetName]: rojava.5.a"
+		if = {
+			limit = {
+				has_war_with = ROJ
+			}
+			white_peace = ROJ
+		}
+		diplomatic_relation = {
+			country = ROJ
+			relation = non_aggression_pact
+			active = yes
+		}
+		ROJ = { country_event = rojava.6 }
+	}
+	option = {
+		name = rojava.5.b
+		log = "[GetDateText]: [This.GetName]: rojava.5.b"
+		ROJ = { country_event = rojava.7 }
+	}
+}
+
+country_event = {
+	id = rojava.6
+	title = rojava.6.t
+	desc = rojava.6.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.6.a
+		log = "[GetDateText]: [This.GetName]: rojava.6.a"
+	}
+}
+
+country_event = {
+	id = rojava.7
+	title = rojava.7.t
+	desc = rojava.7.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.7.a
+		log = "[GetDateText]: [This.GetName]: rojava.7.a"
+	}
+}
+
+country_event = {
+	id = rojava.8
+	title = rojava.8.t
+	desc = rojava.8.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.8.a
+		log = "[GetDateText]: [This.GetName]: rojava.8.a"
+		ROJ = {
+			diplomatic_relation = {
+				country = SYR
+				relation = guarantee
+				active = yes
+			}
+		}
+		diplomatic_relation = {
+			country = ROJ
+			relation = guarantee
+			active = yes
+		}
+		ROJ = {
+			add_opinion_modifier = { target = SYR modifier = recent_actions_positive }
+			reverse_add_opinion_modifier = { target = SYR modifier = recent_actions_positive }
+		}
+		ROJ = { country_event = rojava.9 }
+	}
+	option = {
+		name = rojava.8.b
+		log = "[GetDateText]: [This.GetName]: rojava.8.b"
+		ROJ = { country_event = rojava.10 }
+	}
+}
+
+country_event = {
+	id = rojava.9
+	title = rojava.9.t
+	desc = rojava.9.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.9.a
+		log = "[GetDateText]: [This.GetName]: rojava.9.a"
+	}
+}
+
+country_event = {
+	id = rojava.10
+	title = rojava.10.t
+	desc = rojava.10.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.10.a
+		log = "[GetDateText]: [This.GetName]: rojava.10.a"
+	}
+}
+
+country_event = {
+	id = rojava.11
+	title = rojava.11.t
+	desc = rojava.11.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.11.a
+		log = "[GetDateText]: [This.GetName]: rojava.11.a"
+		add_equipment_to_stockpile = {
+			type = medium_tank_amphibious_chassis_0
+			amount = -80
+			producer = ISR
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_weapons1
+			amount = -2500
+			producer = ISR
+		}
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = ISR.id }
+		set_temp_variable = { influence_target = ROJ.id }
+		change_influence_percentage = yes
+		ROJ = {
+			add_opinion_modifier = { target = ISR modifier = recent_actions_positive }
+			reverse_add_opinion_modifier = { target = ISR modifier = recent_actions_positive }
+		}
+		effect_tooltip = {
+			ROJ = {
+				add_ideas = ISR_gulf_mossad_protecc
+			}
+		}
+		ROJ = { country_event = rojava.12 }
+	}
+	option = {
+		name = rojava.11.b
+		log = "[GetDateText]: [This.GetName]: rojava.11.b"
+		ROJ = { country_event = rojava.13 }
+	}
+}
+
+country_event = {
+	id = rojava.12
+	title = rojava.12.t
+	desc = rojava.12.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.12.a
+		log = "[GetDateText]: [This.GetName]: rojava.12.a"
+		add_equipment_to_stockpile = {
+			type = medium_tank_amphibious_chassis_0
+			amount = 80
+			producer = ISR
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_weapons1
+			amount = 2500
+			producer = ISR
+		}
+		add_ideas = ISR_gulf_mossad_protecc
+	}
+}
+
+country_event = {
+	id = rojava.13
+	title = rojava.13.t
+	desc = rojava.13.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.13.a
+		log = "[GetDateText]: [This.GetName]: rojava.13.a"
+	}
+}
+
+country_event = {
+	id = rojava.14
+	title = rojava.14.t
+	desc = rojava.14.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.14.a
+		log = "[GetDateText]: [This.GetName]: rojava.14.a"
+	}
+}
+
+country_event = {
+	id = rojava.15
+	title = rojava.15.t
+	desc = rojava.15.d
+	is_triggered_only = yes
+	option = {
+		name = rojava.15.a
+		log = "[GetDateText]: [This.GetName]: rojava.15.a"
+	}
+}

@@ -1,0 +1,379 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			#Wagner Russia - Africa Region
+			every_country = {
+				limit = { 
+					is_in_africa = yes
+					NOT = { 
+						original_tag = SOV 
+					} 
+				}
+				#Wagner Content
+				add_to_array = { global.wagner_africa = THIS }
+			}
+			#Blackwater USA - All World Region
+			every_country = {
+				limit = { 
+					NOT = { 
+						original_tag = USA 
+					} 
+				}
+				#Wagner Content
+				add_to_array = { global.blackwater_region = THIS }
+			}
+			every_country = {
+				country_event = { id = redux_generic_news.1 days = 1 }
+			}
+
+			#Counting ethernet for dotcome crisis
+
+			set_variable = { global.starting_ethernet_count = 0 }
+			for_each_loop = {
+				array = global.states
+				value = v
+				var:v = { add_to_variable = { global.starting_ethernet_count = building_level@internet_station } }
+			}
+
+			#Counting infrastructure for Mortgage crisis
+
+			set_variable = { global.starting_infrastructure_count = 0 }
+			for_each_loop = {
+				array = global.states
+				value = v
+				var:v = { add_to_variable = { global.starting_infrastructure_count = building_level@infrastructure } }
+			}
+
+			#Counting Euro Inflation
+			set_variable = { global.average_euro_inflation = 0 }
+			set_variable = { global.euro_members_count = 0 }
+			every_country = {
+				limit = { has_idea = the_euro }
+				add_to_variable = { global.average_euro_inflation = inflation_percent }
+				add_to_variable = { global.euro_members_count = 1 }
+			}
+			divide_variable = { global.average_euro_inflation = global.euro_members_count }
+			every_country = {
+				if = {
+					limit = { has_idea = the_euro }
+					count_euro_personal_inflation = yes
+				}
+			}
+		}
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					has_war = no
+				}
+				#Capitalization
+				GENERIC_capitalization_script = yes
+				GENERIC_capitalization_change_economy_negative_script = yes
+				GENERIC_capitalization_change_economy_positive_script = yes
+				GENERIC_income_positive_script = yes
+				GENERIC_income_negative_script = yes
+				#Separatism
+				GENERIC_separatism_stability_up = yes
+				GENERIC_separatism_protests_up = yes
+				GENERIC_separatism_police_down = yes
+				GENERIC_separatism_another_down = yes
+				GENERIC_update_separatism_rebellion = yes
+			}
+			if = {
+				limit = {
+					is_ai = yes
+				}
+				add_political_power = 150
+			}
+		}
+	}
+
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						check_variable = { global.month = 3 }
+						check_variable = { global.month = 6 }
+						check_variable = { global.month = 9 }
+						check_variable = { global.month = 12 }
+					}
+				}
+				#Oil Companies crisis
+				if = {
+					limit = {
+						check_variable = { USA.economic_crisis_oil > 100 }
+						NOT = { has_global_flag = start_oil_companies_crisis }
+						NOT = { has_global_flag = oil_companies_crisis_checked }
+						NOT = { has_global_flag = oil_crisises_interval }
+					}
+					set_global_flag = start_oil_companies_crisis
+					set_global_flag = { flag = oil_companies_crisis_countdown days = 7 value = 1}
+					set_global_flag = { flag = oil_companies_crisis_checked days = 7 value = 1}
+					set_global_flag = { flag = oil_crisises_interval days = 1825 value = 1}
+				}
+				#Dotcome crisis
+				if = {
+					limit = {
+						NOT = { has_global_flag = start_dotcome_crisis }
+						NOT = { has_global_flag = dotcome_crisis_checked }
+					}
+					set_temp_variable = { temp_ethernet_count = global.ethernet_count }
+					for_each_loop = {
+						array = global.states
+						value = v
+						var:v = { add_to_temp_variable = { PREV.temp_ethernet_count = building_level@internet_station } }
+					}
+					if = {
+						limit = {
+							set_temp_variable = { ethernet_divide = global.starting_ethernet_count }
+							divide_temp_variable = { ethernet_divide = temp_ethernet_count }
+							check_variable = { ethernet_divide < 0.5 }
+						}
+						set_global_flag = start_dotcome_crisis
+						set_global_flag = { flag = dotcome_crisis_countdown days = 7 value = 1}
+						clear_variable = global.starting_ethernet_count
+					}
+					set_global_flag = { flag = dotcome_crisis_checked days = 7 value = 1}
+				}
+				#Mortgage Crisis
+				if = {
+					limit = {
+						NOT = { has_global_flag = start_mortgage_crisis }
+						NOT = { has_global_flag = mortgage_crisis_checked }
+					}
+					set_temp_variable = { temp_infrastructure_count = global.infrastructure_count }
+					for_each_loop = {
+						array = global.states
+						value = v
+						var:v = { add_to_temp_variable = { PREV.temp_infrastructure_count = building_level@infrastructure } }
+					}
+					if = {
+						limit = {
+							set_temp_variable = { infrastructure_divide = global.starting_infrastructure_count }
+							divide_temp_variable = { infrastructure_divide = temp_infrastructure_count }
+							check_variable = { infrastructure_divide < 0.5 }
+						}
+						set_global_flag = start_mortgage_crisis
+						set_global_flag = { flag = mortgage_crisis_countdown days = 7 value = 1}
+						clear_variable = global.starting_infrastructure_count
+					}
+					set_global_flag = { flag = mortgage_crisis_checked days = 7 value = 1}
+				}
+				#Grain Crisis
+				if = {
+					limit = {
+						NOT = { has_global_flag = start_grain_crisis }
+						NOT = { has_global_flag = grain_crisis_checked }
+					}
+					for_each_loop = {
+						array = global.states
+						value = v
+						var:v = { add_to_variable = { global.grain_count = building_level@agriculture_district } }
+					}
+					for_each_loop = {
+						array = global.countries
+						value = v
+						add_to_variable = { global.grain_count = grain_count }
+					}
+					for_each_loop = {
+						array = global.countries
+						value = v
+						if = {
+							limit = {
+								var:v = { has_war = yes }
+							}
+							var:v = {
+								for_each_loop = {
+									array = controlled_states
+									value = v1
+									var:v1 = { add_to_variable = { global.grain_war_count = building_level@agriculture_district } }
+								}
+							}
+							add_to_variable = { global.grain_war_count = grain_count }
+						}
+					}
+					if = {
+						limit = {
+							set_temp_variable = { grain_count_rate = global.grain_war_count }
+							divide_temp_variable = { grain_count_rate = global.grain_count }
+							check_variable = { grain_count_rate > 0.25 }
+						}
+						set_global_flag = start_grain_crisis
+						set_global_flag = { flag = grain_crisis_countdown days = 7 value = 1}
+					}
+					set_global_flag = { flag = grain_crisis_checked days = 7 value = 1}
+					clear_variable = global.grain_war_count
+					clear_variable = global.grain_count
+				}
+				#Oil Crisis 2 If Oil Crisis made by Lord was so good why we have not Oil crisis 2?
+				if = {
+					limit = {
+						NOT = { has_global_flag = start_oil_crisis }
+						NOT = { has_global_flag = oil_crisis_checked }
+						NOT = { has_global_flag = oil_crisises_interval }
+					}
+					set_variable = { global.oil_count = 0 }
+					set_variable = { global.oil_war_count = 0 }
+					for_each_scope_loop = {
+						array = global.countries
+						add_to_variable = { global.oil_count = resource@oil }
+						add_to_variable = { global.oil_count = resource_consumed@oil }
+						add_to_variable = { global.oil_count = resource_exported@oil }
+						subtract_from_variable = { global.oil_count = resource_imported@oil }
+					}
+					for_each_scope_loop = {
+						array = global.countries
+						if = {
+							limit = { has_war = yes }
+							add_to_variable = { global.oil_war_count = resource@oil }
+							add_to_variable = { global.oil_war_count = resource_consumed@oil }
+							add_to_variable = { global.oil_war_count = resource_exported@oil }
+							subtract_from_variable = { global.oil_war_count = resource_imported@oil }
+						}
+					}
+					divide_variable = { global.oil_war_count = global.oil_count }
+					if = {
+						limit = { check_variable = { global.oil_war_count > 0.25 } }
+						set_global_flag = start_oil_crisis
+						set_global_flag = { flag = oil_crisis_countdown days = 7 value = 1}
+						set_global_flag = { flag = oil_crisises_interval days = 1825 value = 1}
+					}
+					clear_variable = global.oil_war_count
+					clear_variable = global.oil_count
+					set_global_flag = { flag = oil_crisis_checked days = 7 value = 1}
+				}
+				#Anti Map Paint Mechanic
+				add_to_variable = { anti_map_paint_var = -0.01 }
+                clamp_variable = { var = anti_map_paint_var min = 0 max = 0.95 }
+                set_variable = { anti_map_paint_minus_var = anti_map_paint_var }
+                multiply_variable = { anti_map_paint_minus_var = -1 }
+				if = {
+					limit = { NOT = { has_global_flag = on_qartal_done } }
+					set_global_flag = { flag = on_qartal_done days = 1 value = 1 }
+
+					#Calculating Valute Inflations
+					count_euro_inflation = yes
+					count_visegrad_euro_inflation = yes
+					count_khaleeji_inflation = yes
+					count_RAJ_BRICS_cur_inflation = yes
+					count_eco_cur_inflation = yes
+					count_au_cur_inflation = yes
+					count_USR_valute_inflation = yes
+					count_mercosur_valute_inflation = yes
+
+					every_country = {
+						#Valute Inflations
+						#EURO
+						if = {
+							limit = { has_idea = the_euro }
+							count_euro_personal_inflation = yes
+						}
+						#Visegrad
+						if = {
+							limit = { has_idea = VG_visegrad_euro }
+							count_visegrad_euro_personal_inflation = yes
+						}
+						#Arabian shit
+						if = {
+							limit = { has_idea = khaleeji }
+							count_khaleeji_personal_inflation = yes
+						}
+						#BRICS
+						if = {
+							limit = { has_idea = RAJ_BRICS_cur }
+							count_RAJ_BRICS_cur_personal_inflation = yes
+						}
+						#ECO
+						if = {
+							limit = { has_idea = the_eco }
+							count_eco_cur_personal_inflation = yes
+						}
+						#AU
+						if = {
+							limit = {
+								has_idea = AU_member
+								any_country = {
+									OR = {
+										has_completed_focus = AFRICAN_UNION_shared_focus_common_currency_south_african_rand
+										has_completed_focus = AFRICAN_UNION_shared_focus_common_currency_dinar
+										has_completed_focus = AFRICAN_UNION_shared_focus_common_central_african_franc
+										has_completed_focus = AFRICAN_UNION_shared_focus_common_afriq
+										has_completed_focus = AFRICAN_UNION_shared_focus_common_currency_west_african_franc
+									}
+								}
+							}
+							count_au_cur_personal_inflation = yes
+						}
+						#USR Valute
+						if = {
+							limit = { has_idea = USR_valute_idea }
+							count_USR_valute_personal_inflation = yes
+						}
+						#MERSOCUR Valute
+						if = {
+							limit = {
+								has_idea = BRA_idea_mercosur_member_state
+								any_country = {
+									has_completed_focus = BRA_discuss_currency
+								}
+							}
+							count_mercosur_valute_personal_inflation = yes
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						check_variable = { global.month = 3 }
+						check_variable = { global.month = 6 }
+						check_variable = { global.month = 9 }
+						check_variable = { global.month = 12 }
+					}
+				}
+				if = {
+					limit = {
+						has_global_flag = start_oil_companies_crisis
+						has_global_flag = oil_companies_crisis_countdown
+					}
+					country_event = { id = redux_generic.20 days = 1 }
+				}
+				if = {
+					limit = {
+						has_global_flag = start_oil_crisis
+						has_global_flag = oil_crisis_countdown
+					}
+					country_event = { id = redux_generic.29 days = 1 }
+				}
+				if = {
+					limit = {
+						has_global_flag = start_dotcome_crisis
+						has_global_flag = dotcome_crisis_countdown
+					}
+					country_event = { id = redux_generic.21 days = 1 }
+				}
+				if = {
+					limit = {
+						has_global_flag = start_mortgage_crisis
+						has_global_flag = mortgage_crisis_countdown
+					}
+					country_event = { id = redux_generic.22 days = 1 }
+				}
+				if = {
+					limit = {
+						has_global_flag = start_grain_crisis
+						has_global_flag = grain_crisis_countdown
+					}
+					country_event = { id = redux_generic.23 days = 1 }
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,5307 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			671 = {
+				add_dynamic_modifier = {
+					modifier = terrorists_activity
+					days = 32
+				}
+			}
+			1126 = {
+				add_dynamic_modifier = {
+					modifier = terrorists_activity
+					days = 32
+				}
+			}
+			674 = {
+				add_dynamic_modifier = {
+					modifier = terrorists_activity
+					days = 32
+				}
+			}
+			1125 = {
+				add_dynamic_modifier = {
+					modifier = terrorists_activity
+					days = 32
+				}
+			}
+		}
+	}
+    on_monthly = {
+        effect = {
+            if = {
+                limit = { NOT = { has_global_flag = on_monthly_terrorist_done } }
+                set_global_flag = { flag = on_monthly_terrorist_done value = 1 days = 28 }
+                if = {
+                    limit = {
+			            check_variable = { SYR.terrorism < 75 }
+						ISI = { NOT = { owns_state = 191 } }
+                    }
+					SYR = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { SYR = { has_war = yes } }
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = { SYR = { has_stability < 0.25 } }
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	191 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					if = {
+						limit = {
+							SYR = { has_idea = open_borders }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							SYR = { has_idea = slightly_regulated_immigration }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							SYR = { has_idea = heavily_regulated_immigration }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							SYR = { has_idea = closed_borders }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							SYR = { has_idea = police_01 }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							SYR = { has_idea = police_03 }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							SYR = { has_idea = police_04 }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							SYR = { has_idea = police_05 }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							SYR = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	SYR = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					#Modifier effect
+					SYR = {
+						set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						set_temp_variable = { resistance_add = 191.resistance }
+						multiply_temp_variable = { resistance_add = 0.1 }
+						round_temp_variable = resistance_add
+						add_to_temp_variable = { modify_terrorism = modify_terrorism_add }
+						add_to_temp_variable = { modify_terrorism = resistance_add }
+						if = {
+							limit = { any_unit_leader = { is_corps_commander = yes	191 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }	}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						modify_terrorism_support = yes
+						if = {
+							limit = { check_variable = { terrorism > 75 } }
+			    			hidden_effect = {
+				    			GENERIC_update_terrorism_rebellion_SYR = yes
+			    			}
+						}
+						else_if = {
+							limit = {
+			            		check_variable = { terrorism > 50 }
+							}
+							191 = {
+								add_dynamic_modifier = {
+									modifier = terrorists_activity
+									days = 32
+								}
+								damage_units = {
+									state = THIS
+									damage = 0.01
+								}
+								if = { limit = { tungsten > 8 }
+					  				random = {
+					  					chance = 1
+					  					add_dynamic_modifier = {
+											modifier = tech_metal_refining_modifier
+											days = 27
+										}
+									}
+								}
+								if = { limit = { chromium > 8 }
+					  				random = {
+					  					chance = 1
+					  					add_dynamic_modifier = {
+											modifier = rare_metal_refining_modifier
+											days = 27
+										}
+							   		}
+								}
+								if = { limit = { OR = { aluminium > 24 steel > 24 } }
+					  				random = {
+					  					chance = 1
+					  					add_dynamic_modifier = {
+											modifier = metal_refining_modifier
+											days = 27
+										}
+							   		}
+								}
+								if = { limit = { oil > 18 }
+					  				random = {
+					  					chance = 1
+					  					add_dynamic_modifier = {
+											modifier = oil_refining_modifier
+											days = 27
+										}
+							   		}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+			            check_variable = { IRQ.terrorism < 75 }
+						ISI = { NOT = { owns_state = 166 } }
+                    }
+					IRQ = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { IRQ = { has_war = yes } }
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = { IRQ = { has_stability < 0.25 } }
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	166 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					if = {
+						limit = {
+							IRQ = { has_idea = open_borders }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							IRQ = { has_idea = slightly_regulated_immigration }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							IRQ = { has_idea = heavily_regulated_immigration }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							IRQ = { has_idea = closed_borders }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							IRQ = { has_idea = police_01 }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							IRQ = { has_idea = police_03 }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							IRQ = { has_idea = police_04 }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							IRQ = { has_idea = police_05 }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							IRQ = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = iraq_terrorism_buff
+						}
+			        	IRQ = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					IRQ = {
+						set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						set_temp_variable = { resistance_add = 166.resistance }
+						multiply_temp_variable = { resistance_add = 0.1 }
+						round_temp_variable = resistance_add
+						add_to_temp_variable = { modify_terrorism = modify_terrorism_add }
+						add_to_temp_variable = { modify_terrorism = resistance_add }
+						if = {
+							limit = { any_unit_leader = { is_corps_commander = yes	166 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }	}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						modify_terrorism_support = yes
+						if = {
+							limit = { check_variable = { terrorism > 75 } }
+			    			hidden_effect = {
+				    			GENERIC_update_terrorism_rebellion_IRQ = yes
+			    			}
+						}
+						else_if = {
+							limit = {
+			            		check_variable = { terrorism > 50 }
+							}
+							166 = {
+								add_dynamic_modifier = {
+									modifier = terrorists_activity
+									days = 32
+								}
+								damage_units = {
+									state = THIS
+									damage = 0.01
+								}
+								if = { limit = { tungsten > 8 }
+					  				random = {
+					  					chance = 1
+					  					add_dynamic_modifier = {
+											modifier = tech_metal_refining_modifier
+											days = 27
+										}
+									}
+								}
+								if = { limit = { chromium > 8 }
+					  				random = {
+					  					chance = 1
+					  					add_dynamic_modifier = {
+											modifier = rare_metal_refining_modifier
+											days = 27
+										}
+							   		}
+								}
+								if = { limit = { OR = { aluminium > 24 steel > 24 } }
+					  				random = {
+					  					chance = 1
+					  					add_dynamic_modifier = {
+											modifier = metal_refining_modifier
+											days = 27
+										}
+							   		}
+								}
+								if = { limit = { oil > 18 }
+					  				random = {
+					  					chance = 1
+					  					add_dynamic_modifier = {
+											modifier = oil_refining_modifier
+											days = 27
+										}
+							   		}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+			            EGY = {
+				            owns_state = 216
+				            NOT = {
+					            has_government = fascism
+				            }
+			            }
+			            check_variable = { EGY.terrorism < 75 }
+                    }
+					EGY = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { EGY = { has_war = yes } }
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { EGY = { has_stability < 0.25 } }
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	216 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							EGY = { has_idea = open_borders }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							EGY = { has_idea = slightly_regulated_immigration }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	EGY = { has_idea = heavily_regulated_immigration }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	EGY = { has_idea = closed_borders }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							EGY = { has_idea = police_01 }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	EGY = { has_idea = police_03 }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	EGY = { has_idea = police_04 }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	EGY = { has_idea = police_05 }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							EGY = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	EGY = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					#Modifier effect
+					EGY = {
+						set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						set_temp_variable = { resistance_add = 216.resistance }
+						multiply_temp_variable = { resistance_add = 0.1 }
+						round_temp_variable = resistance_add
+						add_to_temp_variable = { modify_terrorism = modify_terrorism_add }
+						add_to_temp_variable = { modify_terrorism = resistance_add }
+						if = {
+							limit = { any_unit_leader = { is_corps_commander = yes	216 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }	}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						modify_terrorism_support = yes
+				        add_relative_party_popularity = yes
+					}
+					if = {
+						limit = { check_variable = { EGY.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_EGY = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { EGY.terrorism > 50 }
+						}
+						216 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+			            SAU = {
+				            owns_state = 177
+							no_jihadist_government = yes
+			            }
+			            check_variable = { SAU.terrorism < 75 }
+                    }
+					SAU = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { SAU = { has_war = yes } }
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = { SAU = { has_stability < 0.25 } }
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	177 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					if = {
+						limit = {
+							SAU = { has_idea = open_borders }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							SAU = { has_idea = slightly_regulated_immigration }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	SAU = { has_idea = heavily_regulated_immigration }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	SAU = { has_idea = closed_borders }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							SAU = { has_idea = police_01 }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	SAU = { has_idea = police_03 }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	SAU = { has_idea = police_04 }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	SAU = { has_idea = police_05 }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							SAU = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	SAU = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					#Modifier effect
+					SAU = {
+						set_temp_variable = { resistance_add = 177.resistance }
+						multiply_temp_variable = { resistance_add = 0.1 }
+						round_temp_variable = resistance_add
+						add_to_temp_variable = { modify_terrorism = resistance_add }
+						if = {
+							limit = { any_unit_leader = { is_corps_commander = yes	177 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }	}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						modify_terrorism_support = yes
+					}
+					if = {
+						limit = { check_variable = { SAU.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_SAU = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { SAU.terrorism > 50 }
+						}
+						177 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+			            UAE = {
+				            owns_state = 180
+							NOT = { has_government = fascism }
+			            }
+			            check_variable = { UAE.terrorism < 75 }
+                    }
+					UAE = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { UAE = { has_war = yes } }
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { UAE = { has_stability < 0.25 } }
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	180 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							UAE = { has_idea = open_borders }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							UAE = { has_idea = slightly_regulated_immigration }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	UAE = { has_idea = heavily_regulated_immigration }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	UAE = { has_idea = closed_borders }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							UAE = { has_idea = police_01 }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	UAE = { has_idea = police_03 }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	UAE = { has_idea = police_04 }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	UAE = { has_idea = police_05 }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							UAE = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	UAE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					#Modifier effect
+					UAE = {
+						set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						set_temp_variable = { resistance_add = 180.resistance }
+						multiply_temp_variable = { resistance_add = 0.1 }
+						round_temp_variable = resistance_add
+						add_to_temp_variable = { modify_terrorism = modify_terrorism_add }
+						add_to_temp_variable = { modify_terrorism = resistance_add }
+						if = {
+							limit = { any_unit_leader = { is_corps_commander = yes	180 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }	}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						modify_terrorism_support = yes
+				        add_relative_party_popularity = yes
+					}
+					if = {
+						limit = { check_variable = { UAE.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_UAE = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { UAE.terrorism > 50 }
+						}
+						180 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+			            check_variable = { NIG.terrorism < 75 }
+			            NIG = {
+				            owns_state = 338
+				            owns_state = 339
+				            owns_state = 340
+				            NOT = {
+					            has_government = fascism
+				            }
+			            }
+                    }
+					NIG = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { NIG = { has_war = yes } }
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { NIG = { has_stability < 0.25 } }
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							OR = {
+                        		338 = {
+									any_neighbor_state = {
+										controller = {
+											jihadist_government = yes
+										}
+									}
+								}
+                        		339 = {
+									any_neighbor_state = {
+										controller = {
+											jihadist_government = yes
+										}
+									}
+								}
+                        		340 = {
+									any_neighbor_state = {
+										controller = {
+											jihadist_government = yes
+										}
+									}
+								}
+							}
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							NIG = { has_idea = open_borders }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							NIG = { has_idea = slightly_regulated_immigration }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	NIG = { has_idea = heavily_regulated_immigration }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	NIG = { has_idea = closed_borders }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							NIG = { has_idea = police_01 }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	NIG = { has_idea = police_03 }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	NIG = { has_idea = police_04 }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	NIG = { has_idea = police_05 }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							NIG = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	NIG = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					NIG = {
+						set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						set_temp_variable = { resistance_add = 338.resistance }
+						add_to_temp_variable = { resistance_add = 339.resistance }
+						add_to_temp_variable = { resistance_add = 340.resistance }
+						multiply_temp_variable = { resistance_add = 0.1 }
+						round_temp_variable = resistance_add
+						add_to_temp_variable = { modify_terrorism = modify_terrorism_add }
+						add_to_temp_variable = { modify_terrorism = resistance_add }
+						if = {
+							limit = {
+								OR = {
+									any_unit_leader = { is_corps_commander = yes	338 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+									any_unit_leader = { is_corps_commander = yes	339 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+									any_unit_leader = { is_corps_commander = yes	340 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+								}
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						modify_terrorism_support = yes
+				        add_relative_party_popularity = yes
+					}
+					if = {
+						limit = { check_variable = { NIG.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_NIG = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { NIG.terrorism > 50 }
+						}
+						338 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+						339 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+						340 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+			            check_variable = { ALG.terrorism < 75 }
+			            ALG = {
+				            owns_state = 381
+				            NOT = {
+				            	has_government = fascism
+				            }
+			            }
+                    }
+					ALG = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { ALG = { has_war = yes } }
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { ALG = { has_stability < 0.25 } }
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	381 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							ALG = { has_idea = open_borders }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							ALG = { has_idea = slightly_regulated_immigration }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	ALG = { has_idea = heavily_regulated_immigration }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	ALG = { has_idea = closed_borders }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							ALG = { has_idea = police_01 }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	ALG = { has_idea = police_03 }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	ALG = { has_idea = police_04 }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	ALG = { has_idea = police_05 }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							ALG = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	ALG = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					ALG = {
+						set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						set_temp_variable = { resistance_add = 381.resistance }
+						multiply_temp_variable = { resistance_add = 0.1 }
+						round_temp_variable = resistance_add
+						add_to_temp_variable = { modify_terrorism = modify_terrorism_add }
+						add_to_temp_variable = { modify_terrorism = resistance_add }
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	381 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						modify_terrorism_support = yes
+				        add_relative_party_popularity = yes
+					}
+					if = {
+						limit = { check_variable = { ALG.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_ALG = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { ALG.terrorism > 50 }
+						}
+						381 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+			            check_variable = { TUN.terrorism < 75 }
+			            TUN = {
+				            owns_state = 390
+				            NOT = {
+					            has_government = fascism
+				            }
+			            }
+                    }
+					TUN = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { TUN = { has_war = yes } }
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { TUN = { has_stability < 0.25 } }
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	390 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							TUN = { has_idea = open_borders }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							TUN = { has_idea = slightly_regulated_immigration }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TUN = { has_idea = heavily_regulated_immigration }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TUN = { has_idea = closed_borders }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							TUN = { has_idea = police_01 }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TUN = { has_idea = police_03 }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TUN = { has_idea = police_04 }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TUN = { has_idea = police_05 }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							TUN = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	TUN = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					TUN = {
+						set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						set_temp_variable = { resistance_add = 390.resistance }
+						multiply_temp_variable = { resistance_add = 0.1 }
+						round_temp_variable = resistance_add
+						add_to_temp_variable = { modify_terrorism = modify_terrorism_add }
+						add_to_temp_variable = { modify_terrorism = resistance_add }
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	390 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						modify_terrorism_support = yes
+				        add_relative_party_popularity = yes
+					}
+					if = {
+						limit = { check_variable = { TUN.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_TUN = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { TUN.terrorism > 50 }
+						}
+						390 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+			            check_variable = { TAJ.terrorism < 75 }
+			            TAJ = {
+				            owns_state = 723
+				            NOT = {
+					            has_government = fascism
+				            }
+			            }
+                    }
+					TAJ = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { TAJ = { has_war = yes } }
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { TAJ = { has_stability < 0.25 } }
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	723 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							TAJ = { has_idea = open_borders }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							TAJ = { has_idea = slightly_regulated_immigration }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TAJ = { has_idea = heavily_regulated_immigration }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TAJ = { has_idea = closed_borders }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							TAJ = { has_idea = police_01 }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TAJ = { has_idea = police_03 }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TAJ = { has_idea = police_04 }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+                        	TAJ = { has_idea = police_05 }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							TAJ = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	TAJ = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					TAJ = {
+						set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						set_temp_variable = { resistance_add = 723.resistance }
+						multiply_temp_variable = { resistance_add = 0.1 }
+						round_temp_variable = resistance_add
+						add_to_temp_variable = { modify_terrorism = modify_terrorism_add }
+						add_to_temp_variable = { modify_terrorism = resistance_add }
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	723 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						modify_terrorism_support = yes
+				        add_relative_party_popularity = yes
+					}
+					if = {
+						limit = { check_variable = { TAJ.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_TAJ = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { TAJ.terrorism > 50 }
+						}
+						723 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+                        NOT = { country_exists = ING }
+			            check_variable = { ING.terrorism < 75 }
+                    }
+					ING = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { 1126 = { controller = { has_war = yes } } }
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { 1126 = { controller = { has_stability < 0.25 } } }
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	1126 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							1126 = { controller = { has_idea = open_borders } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1126 = { controller = { has_idea = slightly_regulated_immigration } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1126 = { controller = { has_idea = heavily_regulated_immigration } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1126 = { controller = { has_idea = closed_borders } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							1126 = { controller = { has_idea = police_01 } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1126 = { controller = { has_idea = police_03 } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1126 = { controller = { has_idea = police_04 } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1126 = { controller = { has_idea = police_05 } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							1126 = { controller = { has_idea = SOV_UGTNC_idea } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = -4 }
+			        	}
+					}
+					if = {
+						limit = {
+							1126 = { controller = { has_dynamic_modifier = { modifier = high_unemployment_modifier } } }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = kaukaz_terrorism_buff
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	ING = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					1126 = {
+						controller = {
+							set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+							multiply_temp_variable = { modify_terrorism_add = 100 }
+							round_temp_variable = modify_terrorism_add
+							clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+							set_temp_variable = { resistance_add = 1126.resistance }
+							multiply_temp_variable = { resistance_add = 0.1 }
+							round_temp_variable = resistance_add
+							add_to_temp_variable = { ING.modify_terrorism = modify_terrorism_add }
+							add_to_temp_variable = { ING.modify_terrorism = resistance_add }
+							if = {
+								limit = {
+									any_unit_leader = { is_corps_commander = yes	1126 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+								}
+								add_to_temp_variable = { ING.modify_terrorism = -1 }
+							}
+			        		ING = {
+				        		modify_terrorism_support = yes
+				        		add_relative_party_popularity = yes
+			        		}
+						}
+					}
+					if = {
+						limit = { check_variable = { ING.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_ING = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { ING.terrorism > 50 }
+						}
+						1126 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+                        NOT = { country_exists = KBK }
+			            check_variable = { KBK.terrorism < 75 }
+                    }
+					KBK = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { 674 = { controller = { has_war = yes } } }
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { 674 = { controller = { has_stability < 0.25 } } }
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	674 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							674 = { controller = { has_idea = open_borders } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							674 = { controller = { has_idea = slightly_regulated_immigration } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							674 = { controller = { has_idea = heavily_regulated_immigration } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							674 = { controller = { has_idea = closed_borders } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							674 = { controller = { has_idea = police_01 } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							674 = { controller = { has_idea = police_03 } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							674 = { controller = { has_idea = police_04 } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							674 = { controller = { has_idea = police_05 } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							674 = { controller = { has_idea = SOV_UGTNC_idea } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = -4 }
+			        	}
+					}
+					if = {
+						limit = {
+							674 = { controller = { has_dynamic_modifier = { modifier = high_unemployment_modifier } } }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = kaukaz_terrorism_buff
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	KBK = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					674 = {
+						controller = {
+							set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+							multiply_temp_variable = { modify_terrorism_add = 100 }
+							round_temp_variable = modify_terrorism_add
+							clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+							set_temp_variable = { resistance_add = 674.resistance }
+							multiply_temp_variable = { resistance_add = 0.1 }
+							round_temp_variable = resistance_add
+							add_to_temp_variable = { KBK.modify_terrorism = modify_terrorism_add }
+							add_to_temp_variable = { KBK.modify_terrorism = resistance_add }
+							if = {
+								limit = {
+									any_unit_leader = { is_corps_commander = yes	674 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+								}
+								add_to_temp_variable = { KBK.modify_terrorism = -1 }
+							}
+			        		KBK = {
+				        		modify_terrorism_support = yes
+				        		add_relative_party_popularity = yes
+			        		}
+						}
+					}
+					if = {
+						limit = { check_variable = { KBK.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_KBK = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { KBK.terrorism > 50 }
+						}
+						674 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+                        NOT = { country_exists = KCC }
+			            check_variable = { KCC.terrorism < 75 }
+                    }
+					KCC = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { 1125 = { controller = { has_war = yes } } }
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { 1125 = { controller = { has_stability < 0.25 } } }
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	1125 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							1125 = { controller = { has_idea = open_borders } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1125 = { controller = { has_idea = slightly_regulated_immigration } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1125 = { controller = { has_idea = heavily_regulated_immigration } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1125 = { controller = { has_idea = closed_borders } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							1125 = { controller = { has_idea = police_01 } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1125 = { controller = { has_idea = police_03 } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1125 = { controller = { has_idea = police_04 } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							1125 = { controller = { has_idea = police_05 } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							1125 = { controller = { has_idea = SOV_UGTNC_idea } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = -4 }
+			        	}
+					}
+					if = {
+						limit = {
+							1125 = { controller = { has_dynamic_modifier = { modifier = high_unemployment_modifier } } }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = kaukaz_terrorism_buff
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	KCC = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					1125 = {
+						controller = {
+							set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+							multiply_temp_variable = { modify_terrorism_add = 100 }
+							round_temp_variable = modify_terrorism_add
+							clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+							set_temp_variable = { resistance_add = 1125.resistance }
+							multiply_temp_variable = { resistance_add = 0.1 }
+							round_temp_variable = resistance_add
+							add_to_temp_variable = { KCC.modify_terrorism = modify_terrorism_add }
+							add_to_temp_variable = { KCC.modify_terrorism = resistance_add }
+							if = {
+								limit = {
+									any_unit_leader = { is_corps_commander = yes	1125 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+								}
+								add_to_temp_variable = { KCC.modify_terrorism = -1 }
+							}
+			        		KCC = {
+				        		modify_terrorism_support = yes
+				        		add_relative_party_popularity = yes
+			        		}
+						}
+					}
+					if = {
+						limit = { check_variable = { KCC.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_KCC = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { KCC.terrorism > 50 }
+						}
+						1125 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+                        NOT = { country_exists = DAG }
+			            check_variable = { DAG.terrorism < 75 }
+                    }
+					DAG = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { 671 = { controller = { has_war = yes } } }
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { 671 = { controller = { has_stability < 0.25 } } }
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	671 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							671 = { controller = { has_idea = open_borders } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							671 = { controller = { has_idea = slightly_regulated_immigration } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							671 = { controller = { has_idea = heavily_regulated_immigration } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							671 = { controller = { has_idea = closed_borders } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							671 = { controller = { has_idea = police_01 } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							671 = { controller = { has_idea = police_03 } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							671 = { controller = { has_idea = police_04 } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							671 = { controller = { has_idea = police_05 } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							671 = { controller = { has_idea = SOV_UGTNC_idea } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = -4 }
+			        	}
+					}
+					if = {
+						limit = {
+							671 = { controller = { has_dynamic_modifier = { modifier = high_unemployment_modifier } } }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = kaukaz_terrorism_buff
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	DAG = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					671 = {
+						controller = {
+							set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+							multiply_temp_variable = { modify_terrorism_add = 100 }
+							round_temp_variable = modify_terrorism_add
+							clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+							set_temp_variable = { resistance_add = 671.resistance }
+							multiply_temp_variable = { resistance_add = 0.1 }
+							round_temp_variable = resistance_add
+							add_to_temp_variable = { DAG.modify_terrorism = modify_terrorism_add }
+							add_to_temp_variable = { DAG.modify_terrorism = resistance_add }
+							if = {
+								limit = {
+									any_unit_leader = { is_corps_commander = yes	671 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+								}
+								add_to_temp_variable = { DAG.modify_terrorism = -1 }
+							}
+			        		DAG = {
+				        		modify_terrorism_support = yes
+				        		add_relative_party_popularity = yes
+			        		}
+						}
+					}
+					if = {
+						limit = { check_variable = { DAG.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_DAG = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { DAG.terrorism > 50 }
+						}
+						671 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+                if = {
+                    limit = {
+                        NOT = { country_exists = CHE }
+			            check_variable = { CHE.terrorism < 75 }
+                    }
+					CHE = {
+						set_temp_variable = { modify_terrorism = 0 }
+				        set_temp_variable = { party_index = 11 }
+				        set_temp_variable = { party_popularity_increase = 0 }
+				        set_temp_variable = { temp_outlook_increase = 0 }
+					}
+					if = {
+						limit = { 672 = { controller = { has_war = yes } } }
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					else_if = {
+						limit = { 672 = { controller = { has_stability < 0.25 } } }
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	672 = {
+								any_neighbor_state = {
+									controller = {
+										jihadist_government = yes
+									}
+								}
+							}
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+				        	add_to_temp_variable = { party_popularity_increase = 0.01 }
+				        	add_to_temp_variable = { temp_outlook_increase = 0.01 }
+			        	}
+					}
+					if = {
+						limit = {
+							672 = { controller = { has_idea = open_borders } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							672 = { controller = { has_idea = slightly_regulated_immigration } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							672 = { controller = { has_idea = heavily_regulated_immigration } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							672 = { controller = { has_idea = closed_borders } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							672 = { controller = { has_idea = police_01 } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							672 = { controller = { has_idea = police_03 } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							672 = { controller = { has_idea = police_04 } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							672 = { controller = { has_idea = police_05 } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							672 = { controller = { has_idea = SOV_UGTNC_idea } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = -4 }
+			        	}
+					}
+					if = {
+						limit = {
+							672 = { controller = { has_dynamic_modifier = { modifier = high_unemployment_modifier } } }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = kaukaz_terrorism_buff
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					if = {
+						limit = {
+							has_global_flag = age_has_begun_2
+							NOT = { has_global_flag = age_has_begun_3 }
+						}
+			        	CHE = {
+				        	add_to_temp_variable = { modify_terrorism = 5 }
+			        	}
+					}
+					#Modifier effect
+					672 = {
+						controller = {
+							set_temp_variable = { modify_terrorism_add = modifier@fascism_drift }
+							multiply_temp_variable = { modify_terrorism_add = 100 }
+							round_temp_variable = modify_terrorism_add
+							clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+							set_temp_variable = { resistance_add = 672.resistance }
+							multiply_temp_variable = { resistance_add = 0.1 }
+							round_temp_variable = resistance_add
+							add_to_temp_variable = { CHE.modify_terrorism = modify_terrorism_add }
+							add_to_temp_variable = { CHE.modify_terrorism = resistance_add }
+							if = {
+								limit = {
+									any_unit_leader = { is_corps_commander = yes	672 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+								}
+								add_to_temp_variable = { CHE.modify_terrorism = -1 }
+							}
+			        		CHE = {
+				        		modify_terrorism_support = yes
+				        		add_relative_party_popularity = yes
+			        		}
+						}
+					}
+					if = {
+						limit = { check_variable = { CHE.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_CHE = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { CHE.terrorism > 50 }
+						}
+						672 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+                }
+				every_country = {
+					if = {
+						limit = {
+							no_jihadist_government = yes
+							OR = {
+								any_other_country = {
+									OR = {
+										jihadist_government = yes
+										has_government = fascism
+										has_idea = sunni
+										has_idea = shia
+										has_idea = shia_iranian_school
+										has_idea = sufi_islam
+										has_idea = ibadi
+										has_idea = NIG_islamic_majority_1_idea
+										has_idea = NIG_islamic_majority_2_idea
+										has_idea = NIG_islamic_majority_3_idea
+										has_idea = NIG_islamic_majority_4_idea
+										has_idea = NIG_islamic_majority_5_idea
+										has_idea = NIG_islamic_majority_6_idea
+										has_idea = NIG_islamic_majority_7_idea
+										has_idea = NIG_islamic_majority_8_idea
+										has_idea = NIG_islamic_majority_9_idea
+										has_idea = NIG_islamic_majority_10_idea
+									}
+									any_other_country = {
+										has_volunteers_amount_from = {
+											tag = PREV.PREV
+											count > 0
+										}
+										has_war_with = PREV
+									}
+								}
+								any_other_country = {
+									has_war_with = PREV
+									OR = {
+										jihadist_government = yes
+										has_government = fascism
+										has_idea = sunni
+										has_idea = shia
+										has_idea = shia_iranian_school
+										has_idea = sufi_islam
+										has_idea = ibadi
+										has_idea = NIG_islamic_majority_1_idea
+										has_idea = NIG_islamic_majority_2_idea
+										has_idea = NIG_islamic_majority_3_idea
+										has_idea = NIG_islamic_majority_4_idea
+										has_idea = NIG_islamic_majority_5_idea
+										has_idea = NIG_islamic_majority_6_idea
+										has_idea = NIG_islamic_majority_7_idea
+										has_idea = NIG_islamic_majority_8_idea
+										has_idea = NIG_islamic_majority_9_idea
+										has_idea = NIG_islamic_majority_10_idea
+									}
+								}
+							}
+						}
+						add_to_variable = { terrorism_mana = 12 }
+						add_to_variable = { terrorism_hate = 12 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+					if = {
+						limit = {
+							no_jihadist_government = yes
+							any_other_country = {
+								fascism > 0.5
+								is_subject_of = PREV
+							}
+						}
+						add_to_variable = { terrorism_mana = 8 }
+						add_to_variable = { terrorism_hate = 8 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+					if = {
+						limit = {
+							no_jihadist_government = yes
+							any_other_country = {
+								jihadist_government = yes
+								any_core_state = {
+									check_variable = { controller = PREV.PREV }
+								}
+							}
+						}
+						add_to_variable = { terrorism_mana = 10 }
+						add_to_variable = { terrorism_hate = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+					if = {
+						limit = {
+							any_other_country = {
+								has_country_flag = anti_terror_agreement@PREV
+							}
+						}
+						add_to_variable = { terrorism_mana = 2 }
+						add_to_variable = { terrorism_hate = 2 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+					if = {
+						limit = {
+							any_other_country = {
+								has_country_flag = declared_jihad_against@PREV
+							}
+						}
+						add_to_variable = { terrorism_mana = 6 }
+						add_to_variable = { terrorism_hate = 6 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+					if = {
+						limit = {
+							any_other_country = {
+                            	meta_trigger = {
+                                	text = {
+                                    	has_idea = tribute_idea_[PREVTAG]
+                                	}
+                                	PREVTAG = "[PREV.GetTag]"
+                            	}
+								OR = {
+									jihadist_government = yes
+									has_government = fascism
+									has_idea = sunni
+									has_idea = shia
+									has_idea = shia_iranian_school
+									has_idea = sufi_islam
+									has_idea = ibadi
+									has_idea = NIG_islamic_majority_1_idea
+									has_idea = NIG_islamic_majority_2_idea
+									has_idea = NIG_islamic_majority_3_idea
+									has_idea = NIG_islamic_majority_4_idea
+									has_idea = NIG_islamic_majority_5_idea
+									has_idea = NIG_islamic_majority_6_idea
+									has_idea = NIG_islamic_majority_7_idea
+									has_idea = NIG_islamic_majority_8_idea
+									has_idea = NIG_islamic_majority_9_idea
+									has_idea = NIG_islamic_majority_10_idea
+								}
+							}
+						}
+						add_to_variable = { terrorism_mana = 6 }
+						add_to_variable = { terrorism_hate = 6 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+					if = {
+						limit = { check_variable = { terrorism_mana > 75 } }
+						complete_terrorism_event = yes
+					}
+				}
+				if = {
+					limit = {
+						ARM = { country_exists = yes }
+						NOT = {
+							country_exists = ARW
+							ARM = {
+								owns_state = 935
+							}
+						}
+			            check_variable = { ARW.terrorism < 75 }
+					}
+					ARW = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { 935 = { owner = { has_war_with = ARM } } }
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = 3 }
+			        	}
+					}
+					else_if = {
+						limit = { 935 = { owner = { has_war = yes } } }
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = { 935 = { owner = { has_stability < 0.25 } } }
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							935 = { owner = { has_idea = open_borders } }
+						}
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							935 = { owner = { has_idea = slightly_regulated_immigration } }
+						}
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							935 = { owner = { has_idea = heavily_regulated_immigration } }
+						}
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							935 = { owner = { has_idea = closed_borders } }
+						}
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							935 = { owner = { has_idea = police_01 } }
+						}
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							935 = { owner = { has_idea = police_03 } }
+						}
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							935 = { owner = { has_idea = police_04 } }
+						}
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							935 = { owner = { has_idea = police_05 } }
+						}
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							935 = { owner = { has_dynamic_modifier = { modifier = high_unemployment_modifier } } }
+						}
+			        	ARW = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					#Modifier effect
+					935 = {
+						owner = {
+							if = {
+								limit = { ARM = { is_influencer = yes } }
+								for_each_loop = {
+									array = influence_array
+									value = v
+									index = i
+									if = {
+										limit = { var:v = { tag = ARM } }
+										ARW = {
+											set_temp_variable = { modify_terrorism_add = influence_array_val^i }
+											multiply_temp_variable = { modify_terrorism_add = 100 }
+											round_temp_variable = modify_terrorism_add
+											clamp_temp_variable = { var = modify_terrorism_add max = 5 }
+										}
+									}
+								}
+							}
+							ARW = {
+								set_temp_variable = { resistance_add = 935.resistance }
+								multiply_temp_variable = { resistance_add = 0.1 }
+								round_temp_variable = resistance_add
+								add_to_temp_variable = { modify_terrorism = modify_terrorism_add }
+								add_to_temp_variable = { modify_terrorism = resistance_add }
+							}
+							if = {
+								limit = { any_unit_leader = { is_corps_commander = yes	935 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }	}
+								ARW = { add_to_temp_variable = { modify_terrorism = -1 } }
+							}
+							ARW = { modify_terrorism_support = yes }
+							add_to_variable = { terrorism_mana = ARW.modify_terrorism }
+							add_to_variable = { terrorism_hate = ARW.modify_terrorism }
+							clamp_variable = {
+								var = terrorism_mana
+								min = 1
+								max = 100
+							}
+							if = {
+								limit = { check_variable = { terrorism_mana > 75 } }
+								complete_terrorism_event = yes
+							}
+							if = {
+								limit = { check_variable = { ARW.terrorism > 75 } }
+			    				hidden_effect = {
+				    				GENERIC_update_terrorism_rebellion_ARW = yes
+			    				}
+							}
+							else_if = {
+								limit = {
+			            			check_variable = { ARW.terrorism > 50 }
+								}
+								935 = {
+									add_dynamic_modifier = {
+										modifier = terrorists_activity
+										days = 32
+									}
+									damage_units = {
+										state = THIS
+										damage = 0.01
+									}
+									if = { limit = { tungsten > 8 }
+					  					random = {
+					  						chance = 1
+					  						add_dynamic_modifier = {
+												modifier = tech_metal_refining_modifier
+												days = 27
+											}
+										}
+									}
+									if = { limit = { chromium > 8 }
+					  					random = {
+					  						chance = 1
+						  					add_dynamic_modifier = {
+												modifier = rare_metal_refining_modifier
+												days = 27
+											}
+								   		}
+									}
+									if = { limit = { OR = { aluminium > 24 steel > 24 } }
+					  					random = {
+					  						chance = 1
+					  						add_dynamic_modifier = {
+												modifier = metal_refining_modifier
+												days = 27
+											}
+								   		}
+									}
+									if = { limit = { oil > 18 }
+						  				random = {
+						  					chance = 1
+					  						add_dynamic_modifier = {
+												modifier = oil_refining_modifier
+												days = 27
+											}
+								   		}
+									}
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						ITA = {
+							owns_state = 81
+							owns_state = 78
+							owns_state = 1060
+							NOT = {
+								has_government = communism
+							}
+						}
+			            check_variable = { ITA.terrorism < 75 }
+					}
+					ITA = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { ITA = { has_war = yes } }
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = { ITA = { has_stability < 0.25 } }
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							ITA = { has_idea = open_borders }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							ITA = { has_idea = slightly_regulated_immigration }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							ITA = { has_idea = heavily_regulated_immigration }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							ITA = { has_idea = closed_borders }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							ITA = { has_idea = police_01 }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							ITA = { has_idea = police_03 }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							ITA = { has_idea = police_04 }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							ITA = { has_idea = police_05 }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							ITA = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					if = {
+						limit = {
+							ITA = { has_government = nationalist }
+						}
+			        	ITA = {
+				        	add_to_temp_variable = { modify_terrorism = 3 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	81 = {
+								any_neighbor_state = {
+									controller = {
+										emerging_communist_state_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	ITA = {
+				        	set_temp_variable = { party_index = 4 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	78 = {
+								any_neighbor_state = {
+									controller = {
+										emerging_communist_state_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	ITA = {
+				        	set_temp_variable = { party_index = 4 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	1060 = {
+								any_neighbor_state = {
+									controller = {
+										emerging_communist_state_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	ITA = {
+				        	set_temp_variable = { party_index = 4 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	81 = {
+								any_neighbor_state = {
+									controller = {
+										neutrality_neutral_communism_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	ITA = {
+				        	set_temp_variable = { party_index = 19 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	78 = {
+								any_neighbor_state = {
+									controller = {
+										neutrality_neutral_communism_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	ITA = {
+				        	set_temp_variable = { party_index = 19 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	1060 = {
+								any_neighbor_state = {
+									controller = {
+										neutrality_neutral_communism_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	ITA = {
+				        	set_temp_variable = { party_index = 19 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					ITA = {
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { emerging_communist_state_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 4 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        		add_relative_party_popularity = yes
+							}
+						}
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { neutrality_neutral_communism_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 19 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+							}
+						}
+					}
+					#Modifier effect
+					ITA = {
+						set_temp_variable = { modify_terrorism_add = modifier@communism_drift }
+						add_to_temp_variable = { modify_terrorism_add = modifier@neutrality_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	81 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	78 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	1060 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						add_to_variable = { terrorism_mana = modify_terrorism }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+						add_to_variable = { terrorism_hate = modify_terrorism }
+						modify_terrorism_support = yes
+						if = {
+							limit = { check_variable = { terrorism_mana > 75 } }
+							complete_terrorism_event = yes
+						}
+					}
+					if = {
+						limit = { check_variable = { ITA.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_ITA = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { ITA.terrorism > 50 }
+						}
+						81 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+						78 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+						1060 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						GER = {
+							owns_state = 44
+							NOT = {
+								has_government = communism
+							}
+						}
+			            check_variable = { GER.terrorism < 75 }
+					}
+					GER = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { GER = { has_war = yes } }
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = { GER = { has_stability < 0.25 } }
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							GER = { has_idea = open_borders }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							GER = { has_idea = slightly_regulated_immigration }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							GER = { has_idea = heavily_regulated_immigration }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							GER = { has_idea = closed_borders }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							GER = { has_idea = police_01 }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							GER = { has_idea = police_03 }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							GER = { has_idea = police_04 }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							GER = { has_idea = police_05 }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							GER = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					if = {
+						limit = {
+							GER = { has_government = nationalist }
+						}
+			        	GER = {
+				        	add_to_temp_variable = { modify_terrorism = 3 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	44 = {
+								any_neighbor_state = {
+									controller = {
+										emerging_communist_state_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	GER = {
+				        	set_temp_variable = { party_index = 4 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	44 = {
+								any_neighbor_state = {
+									controller = {
+										neutrality_neutral_communism_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	GER = {
+				        	set_temp_variable = { party_index = 19 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					GER = {
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { emerging_communist_state_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 4 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        		add_relative_party_popularity = yes
+							}
+						}
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { neutrality_neutral_communism_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 19 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+							}
+						}
+					}
+					#Modifier effect
+					GER = {
+						set_temp_variable = { modify_terrorism_add = modifier@communism_drift }
+						add_to_temp_variable = { modify_terrorism_add = modifier@neutrality_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	44 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						add_to_variable = { terrorism_mana = modify_terrorism }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+						add_to_variable = { terrorism_hate = modify_terrorism }
+						modify_terrorism_support = yes
+						if = {
+							limit = { check_variable = { terrorism_mana > 75 } }
+							complete_terrorism_event = yes
+						}
+					}
+					if = {
+						limit = { check_variable = { GER.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_GER = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { GER.terrorism > 50 }
+						}
+						44 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						NOR = {
+							owns_state = 30
+							NOT = {
+								has_government = communism
+							}
+						}
+			            check_variable = { NOR.terrorism < 75 }
+					}
+					NOR = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { NOR = { has_war = yes } }
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = { NOR = { has_stability < 0.25 } }
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							NOR = { has_idea = open_borders }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							NOR = { has_idea = slightly_regulated_immigration }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							NOR = { has_idea = heavily_regulated_immigration }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							NOR = { has_idea = closed_borders }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							NOR = { has_idea = police_01 }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							NOR = { has_idea = police_03 }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							NOR = { has_idea = police_04 }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							NOR = { has_idea = police_05 }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							NOR = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					if = {
+						limit = {
+							NOR = { has_government = nationalist }
+						}
+			        	NOR = {
+				        	add_to_temp_variable = { modify_terrorism = 3 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	30 = {
+								any_neighbor_state = {
+									controller = {
+										emerging_communist_state_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	NOR = {
+				        	set_temp_variable = { party_index = 4 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	30 = {
+								any_neighbor_state = {
+									controller = {
+										neutrality_neutral_communism_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	NOR = {
+				        	set_temp_variable = { party_index = 19 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					NOR = {
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { emerging_communist_state_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 4 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        		add_relative_party_popularity = yes
+							}
+						}
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { neutrality_neutral_communism_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 19 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+							}
+						}
+					}
+					#Modifier effect
+					NOR = {
+						set_temp_variable = { modify_terrorism_add = modifier@communism_drift }
+						add_to_temp_variable = { modify_terrorism_add = modifier@neutrality_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	30 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						add_to_variable = { terrorism_mana = modify_terrorism }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+						add_to_variable = { terrorism_hate = modify_terrorism }
+						modify_terrorism_support = yes
+						if = {
+							limit = { check_variable = { terrorism_mana > 75 } }
+							complete_terrorism_event = yes
+						}
+					}
+					if = {
+						limit = { check_variable = { NOR.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_NOR = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { NOR.terrorism > 50 }
+						}
+						30 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						CZE = {
+							owns_state = 1018
+							NOT = {
+								has_government = communism
+							}
+						}
+			            check_variable = { CZE.terrorism < 75 }
+					}
+					CZE = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { CZE = { has_war = yes } }
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = { CZE = { has_stability < 0.25 } }
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							CZE = { has_idea = open_borders }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							CZE = { has_idea = slightly_regulated_immigration }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							CZE = { has_idea = heavily_regulated_immigration }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							CZE = { has_idea = closed_borders }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							CZE = { has_idea = police_01 }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							CZE = { has_idea = police_03 }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							CZE = { has_idea = police_04 }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							CZE = { has_idea = police_05 }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							CZE = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					if = {
+						limit = {
+							CZE = { has_government = nationalist }
+						}
+			        	CZE = {
+				        	add_to_temp_variable = { modify_terrorism = 3 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	1018 = {
+								any_neighbor_state = {
+									controller = {
+										emerging_communist_state_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	CZE = {
+				        	set_temp_variable = { party_index = 4 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	1018 = {
+								any_neighbor_state = {
+									controller = {
+										neutrality_neutral_communism_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	CZE = {
+				        	set_temp_variable = { party_index = 19 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					CZE = {
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { emerging_communist_state_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 4 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        		add_relative_party_popularity = yes
+							}
+						}
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { neutrality_neutral_communism_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 19 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+							}
+						}
+					}
+					#Modifier effect
+					CZE = {
+						set_temp_variable = { modify_terrorism_add = modifier@communism_drift }
+						add_to_temp_variable = { modify_terrorism_add = modifier@neutrality_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	1018 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						add_to_variable = { terrorism_mana = modify_terrorism }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+						add_to_variable = { terrorism_hate = modify_terrorism }
+						modify_terrorism_support = yes
+						if = {
+							limit = { check_variable = { terrorism_mana > 75 } }
+							complete_terrorism_event = yes
+						}
+					}
+					if = {
+						limit = { check_variable = { CZE.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_CZE = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { CZE.terrorism > 50 }
+						}
+						1018 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						HUN = {
+							owns_state = 122
+							NOT = {
+								has_government = communism
+							}
+						}
+			            check_variable = { HUN.terrorism < 75 }
+					}
+					HUN = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { HUN = { has_war = yes } }
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = { HUN = { has_stability < 0.25 } }
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							HUN = { has_idea = open_borders }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							HUN = { has_idea = slightly_regulated_immigration }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							HUN = { has_idea = heavily_regulated_immigration }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							HUN = { has_idea = closed_borders }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							HUN = { has_idea = police_01 }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							HUN = { has_idea = police_03 }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							HUN = { has_idea = police_04 }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							HUN = { has_idea = police_05 }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							HUN = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					if = {
+						limit = {
+							HUN = { has_government = nationalist }
+						}
+			        	HUN = {
+				        	add_to_temp_variable = { modify_terrorism = 3 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	122 = {
+								any_neighbor_state = {
+									controller = {
+										emerging_communist_state_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	HUN = {
+				        	set_temp_variable = { party_index = 4 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	122 = {
+								any_neighbor_state = {
+									controller = {
+										neutrality_neutral_communism_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	HUN = {
+				        	set_temp_variable = { party_index = 19 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					HUN = {
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { emerging_communist_state_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 4 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        		add_relative_party_popularity = yes
+							}
+						}
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { neutrality_neutral_communism_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 19 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+							}
+						}
+					}
+					#Modifier effect
+					HUN = {
+						set_temp_variable = { modify_terrorism_add = modifier@communism_drift }
+						add_to_temp_variable = { modify_terrorism_add = modifier@neutrality_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	122 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						add_to_variable = { terrorism_mana = modify_terrorism }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+						add_to_variable = { terrorism_hate = modify_terrorism }
+						modify_terrorism_support = yes
+						if = {
+							limit = { check_variable = { terrorism_mana > 75 } }
+							complete_terrorism_event = yes
+						}
+					}
+					if = {
+						limit = { check_variable = { HUN.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_HUN = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { HUN.terrorism > 50 }
+						}
+						122 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						AUS = {
+							owns_state = 286
+							NOT = {
+								has_government = communism
+							}
+						}
+			            check_variable = { AUS.terrorism < 75 }
+					}
+					AUS = {
+						set_temp_variable = { modify_terrorism = 0 }
+					}
+					if = {
+						limit = { AUS = { has_war = yes } }
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = { AUS = { has_stability < 0.25 } }
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					if = {
+						limit = {
+							AUS = { has_idea = open_borders }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							AUS = { has_idea = slightly_regulated_immigration }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							AUS = { has_idea = heavily_regulated_immigration }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							AUS = { has_idea = closed_borders }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					if = {
+						limit = {
+							AUS = { has_idea = police_01 }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							AUS = { has_idea = police_03 }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = -1 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							AUS = { has_idea = police_04 }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = -2 }
+			        	}
+					}
+					else_if = {
+						limit = {
+							AUS = { has_idea = police_05 }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = -3 }
+			        	}
+					}
+					if = {
+						limit = {
+							AUS = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = 2 }
+			        	}
+					}
+					if = {
+						limit = {
+							AUS = { has_government = nationalist }
+						}
+			        	AUS = {
+				        	add_to_temp_variable = { modify_terrorism = 3 }
+			        	}
+					}
+					if = {
+						limit = {
+                        	286 = {
+								any_neighbor_state = {
+									controller = {
+										emerging_communist_state_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	AUS = {
+				        	set_temp_variable = { party_index = 4 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					if = {
+						limit = {
+                        	286 = {
+								any_neighbor_state = {
+									controller = {
+										neutrality_neutral_communism_are_in_power = yes
+									}
+								}
+							}
+						}
+			        	AUS = {
+				        	set_temp_variable = { party_index = 19 }
+				        	add_to_temp_variable = { modify_terrorism = 1 }
+				        	set_temp_variable = { party_popularity_increase = 0.01 }
+				        	set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+			        	}
+					}
+					AUS = {
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { emerging_communist_state_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 4 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        		add_relative_party_popularity = yes
+							}
+						}
+						for_each_loop = {
+							array = influence_array
+							value = v
+							index = i
+							if = {
+								limit = { var:v = { neutrality_neutral_communism_are_in_power = yes } }
+				        		set_temp_variable = { party_index = 19 }
+				        		add_to_temp_variable = { modify_terrorism = 1 }
+				        		set_temp_variable = { party_popularity_increase = 0.01 }
+				        		set_temp_variable = { temp_outlook_increase = 0.01 }
+				        	add_relative_party_popularity = yes
+							}
+						}
+					}
+					#Modifier effect
+					AUS = {
+						set_temp_variable = { modify_terrorism_add = modifier@communism_drift }
+						add_to_temp_variable = { modify_terrorism_add = modifier@neutrality_drift }
+						multiply_temp_variable = { modify_terrorism_add = 100 }
+						round_temp_variable = modify_terrorism_add
+						clamp_temp_variable = { var = modify_terrorism_add min = -5 max = 5 }
+						if = {
+							limit = {
+								any_unit_leader = { is_corps_commander = yes	286 = { PREV = { check_variable = { num_units_in_state@PREV > 0 } } } }
+							}
+							add_to_temp_variable = { modify_terrorism = -1 }
+						}
+						add_to_variable = { terrorism_mana = modify_terrorism }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+						add_to_variable = { terrorism_hate = modify_terrorism }
+						modify_terrorism_support = yes
+						if = {
+							limit = { check_variable = { terrorism_mana > 75 } }
+							complete_terrorism_event = yes
+						}
+					}
+					if = {
+						limit = { check_variable = { AUS.terrorism > 75 } }
+			    		hidden_effect = {
+				    		GENERIC_update_terrorism_rebellion_AUS = yes
+			    		}
+					}
+					else_if = {
+						limit = {
+			          		check_variable = { AUS.terrorism > 50 }
+						}
+						286 = {
+							add_dynamic_modifier = {
+								modifier = terrorists_activity
+								days = 32
+							}
+							damage_units = {
+								state = THIS
+								damage = 0.01
+							}
+							if = { limit = { tungsten > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = tech_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { chromium > 8 }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = rare_metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { OR = { aluminium > 24 steel > 24 } }
+								random = {
+									chance = 1
+									add_dynamic_modifier = {
+										modifier = metal_refining_modifier
+										days = 27
+									}
+					   			}
+							}
+							if = { limit = { oil > 18 }
+								random = {
+									chance = 1
+					  				add_dynamic_modifier = {
+										modifier = oil_refining_modifier
+										days = 27
+									}
+								}
+							}
+						}
+					}
+				}
+            }
+			#Social Conservatism: Swap ideas and adjustments (months 4, 8, 12)
+			if = {
+				limit = {
+					has_variable = social_conservatism_government
+					OR = {
+						check_variable = { global.month = 4 }
+						check_variable = { global.month = 8 }
+						check_variable = { global.month = 12 }
+					}
+				}
+				social_conservatism_adjust = yes
+			}
+        }
+    }
+	on_annex = {
+		effect = {
+			FROM = {
+				for_each_loop = {
+					array = global.countries
+					value = v
+					if = {
+						limit = { has_country_flag = declared_jihad_against@v }
+						clr_country_flag = declared_jihad_against@v
+						var:v = { remove_opinion_modifier = { target = PREV modifier = declared_jihad_opinion } }
+					}
+					if = {
+						limit = { has_country_flag = anti_terror_agreement@v }
+						clr_country_flag = anti_terror_agreement@v
+						var:v = { PREV = { remove_opinion_modifier = { target = PREV modifier = counter_terror_cooperation_opinion } } }
+						var:v = {
+							clr_country_flag = anti_terror_agreement@PREV
+							remove_opinion_modifier = { target = PREV modifier = counter_terror_cooperation_opinion }
+						}
+					}
+				}
+				clear_variable = terrorism_hate
+			}
+		}
+	}
+	on_subject_annexed = {
+		effect = {
+			ROOT = {
+				for_each_loop = {
+					array = global.countries
+					value = v
+					if = {
+						limit = { has_country_flag = declared_jihad_against@v }
+						clr_country_flag = declared_jihad_against@v
+						var:v = { remove_opinion_modifier = { target = PREV modifier = declared_jihad_opinion } }
+					}
+					if = {
+						limit = { has_country_flag = anti_terror_agreement@v }
+						clr_country_flag = anti_terror_agreement@v
+						var:v = { PREV = { remove_opinion_modifier = { target = PREV modifier = counter_terror_cooperation_opinion } } }
+						var:v = {
+							clr_country_flag = anti_terror_agreement@PREV
+							remove_opinion_modifier = { target = PREV modifier = counter_terror_cooperation_opinion }
+						}
+					}
+				}
+				clear_variable = terrorism_hate
+			}
+		}
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					USA = { has_country_flag = USA_911_happened }
+					NOT = { has_global_flag = big_caboom_checked }
+					no_jihadist_government = yes
+					NOT = {
+						any_other_country = {
+							check_variable = { terrorism_hate > PREV.terrorism_hate }
+						}
+					}
+					any_country = {
+						check_variable = { modifier@ct_effectiveness_modifier < -0.5 }
+						OR = {
+							check_variable = { enrichment_facilities > 0 }
+							any_controlled_state = { nuclear_reactor > 0 }
+							check_if_nuclear_weapons_in_stockpile = yes
+						}
+						OR = {
+							191 = { is_owned_and_controlled_by = PREV }
+							166 = { is_owned_and_controlled_by = PREV }
+							216 = { is_owned_and_controlled_by = PREV }
+							177 = { is_owned_and_controlled_by = PREV }
+							180 = { is_owned_and_controlled_by = PREV }
+							338 = { is_owned_and_controlled_by = PREV }
+							339 = { is_owned_and_controlled_by = PREV }
+							340 = { is_owned_and_controlled_by = PREV }
+							381 = { is_owned_and_controlled_by = PREV }
+							390 = { is_owned_and_controlled_by = PREV }
+							723 = { is_owned_and_controlled_by = PREV }
+							1126 = { is_owned_and_controlled_by = PREV }
+							674 = { is_owned_and_controlled_by = PREV }
+							1125 = { is_owned_and_controlled_by = PREV }
+							671 = { is_owned_and_controlled_by = PREV }
+							672 = { is_owned_and_controlled_by = PREV }
+						}
+					}
+				}
+				set_temp_variable = { big_caboom_chance = modifier@ct_effectiveness_modifier }
+				multiply_temp_variable = { big_caboom_chance = -100 }
+				add_to_temp_variable = { big_caboom_chance = 1 }
+				clamp_temp_variable = { var = big_caboom_chance min = 1 max = 99 }
+				random_list = {
+					98 = {  }
+					1 = {
+						if = {
+							limit = { check_variable = { modifier@ct_effectiveness_modifier > 0 } }
+							set_temp_variable = { anti_caboom_chance = modifier@ct_effectiveness_modifier }
+							multiply_temp_variable = { anti_caboom_chance = 100 }
+							clamp_temp_variable = { var = anti_caboom_chance max = 100 }
+							random = {
+								chance = anti_caboom_chance
+								news_event =  terracts.29
+								set_global_flag = big_caboom_checked
+							}
+						}
+						else = {
+							random = {
+								chance = 1
+								news_event =  terracts.29
+								set_global_flag = big_caboom_checked
+							}
+						}
+					}
+					1 = {
+						random = {
+							chance = big_caboom_chance
+							capital_scope = {
+								PREV = {
+									launch_nuke = {
+										state = PREV
+										use_nuke = no
+									}
+								}
+							}
+							news_event =  terracts.28
+							set_global_flag = big_caboom_checked
+						}
+					}
+				}
+			}
+		}
+	}
+}

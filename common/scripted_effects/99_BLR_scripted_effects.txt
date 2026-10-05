@@ -1,0 +1,1375 @@
+
+AGRO_idea_belarus = {
+	if = {
+		limit = { has_idea = BLR_agriculture2 }
+		swap_ideas = {
+			remove_idea = BLR_agriculture2
+			add_idea = BLR_agriculture3
+		}
+	}
+	else_if = {
+		limit = { has_idea = BLR_agriculture }
+		swap_ideas = {
+			remove_idea = BLR_agriculture
+			add_idea = BLR_agriculture2
+		}
+	}
+}
+###########BELARUS REFORM ARMY - SCRIPT###########
+BLR_reform_army_script = {
+	if = {
+		limit = { has_idea = BLR_outdated_army_idea_3 }
+		remove_ideas = BLR_outdated_army_idea_3
+	}
+	else_if = {
+		limit = { has_idea = BLR_outdated_army_idea_2 }
+		swap_ideas = {
+			remove_idea = BLR_outdated_army_idea_2
+			add_idea = BLR_outdated_army_idea_3
+		}
+	}
+	else_if = {
+		limit = { has_idea = BLR_outdated_army_idea_1 }
+		swap_ideas = {
+			remove_idea = BLR_outdated_army_idea_1
+			add_idea = BLR_outdated_army_idea_2
+		}
+	}
+	else_if = {
+		limit = { has_idea = BLR_outdated_army_idea }
+		swap_ideas = {
+			remove_idea = BLR_outdated_army_idea
+			add_idea = BLR_outdated_army_idea_1
+		}
+	}
+}
+###########BELARUS ECONOMIC FALL - SCRIPT###########
+BLR_economic_fall_script = {
+	if = {
+		limit = { owns_state = 1094 }
+		1094 = {
+			add_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { owns_state = 1092 }
+		1092 = {
+			add_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { owns_state = 1093 }
+		1093 = {
+			add_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { owns_state = 704 }
+		704 = {
+			add_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { owns_state = 702 }
+		702 = {
+			add_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { owns_state = 703 }
+		703 = {
+			add_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+}
+###########BELARUS ECONOMIC RESSURECTION - SCRIPT###########
+BLR_economic_resurrection_script = {
+	if = {
+		limit = { 
+			owns_state = 1094 
+			1094 = {
+				has_dynamic_modifier = {
+					modifier = BLR_post_luka_state
+					scope = BLR
+				}
+			}
+		}
+		add_political_power = -100
+		1094 = {
+			remove_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { 
+			owns_state = 1092
+			1092 = {
+				has_dynamic_modifier = {
+					modifier = BLR_post_luka_state
+					scope = BLR
+				}
+			}
+		}
+		add_political_power = -100
+		1092 = {
+			remove_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { 
+			owns_state = 1093
+			1093 = {
+				has_dynamic_modifier = {
+					modifier = BLR_post_luka_state
+					scope = BLR
+				}
+			}
+		}
+		add_political_power = -100
+		1093 = {
+			remove_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { 
+			owns_state = 704
+			704 = {
+				has_dynamic_modifier = {
+					modifier = BLR_post_luka_state
+					scope = BLR
+				}
+			}
+		}
+		add_political_power = -100
+		704 = {
+			remove_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { 
+			owns_state = 702
+			702 = {
+				has_dynamic_modifier = {
+					modifier = BLR_post_luka_state
+					scope = BLR
+				}
+			}
+		}
+		add_political_power = -100
+		702 = {
+			remove_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+	if = {
+		limit = { 
+			owns_state = 703
+			703 = {
+				has_dynamic_modifier = {
+					modifier = BLR_post_luka_state
+					scope = BLR
+				}
+			}
+		}
+		add_political_power = -100
+		703 = {
+			remove_dynamic_modifier = {
+				modifier = BLR_post_luka_state
+			}
+		}
+	}
+}
+###########GRU MECHANIC - MONARHISTS - REVOULT IN POLAND###########
+GRU_monarchy_poland_revoult_script = {
+	hidden_effect = {
+		BLR = {
+			set_province_controller = 14486
+			division_template = {
+				name = "Rebels"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+			}
+			1014 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 14486
+					owner = BLR
+				}
+			}
+		}
+		declare_war_on = {
+			target = BLR
+			type = annex_everything
+		}
+	}
+}
+###########GRU MECHANIC - MONARHISTS - REVOULT IN UKRAINE###########
+GRU_monarchy_ukraine_revoult_script = {
+	hidden_effect = {
+		BLR = {
+			set_province_controller = 6508
+			division_template = {
+				name = "Chernigov Cossacks"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+			}
+			697 = {
+				create_unit = {
+					division = "name = \"Chernigov Cossacks\" division_template = \"Chernigov Cossacks\" start_experience_factor = 0.1"
+					prioritize_location = 6508
+					owner = BLR
+				}
+			}
+		}
+		declare_war_on = {
+			target = BLR
+			type = annex_everything
+		}
+	}
+}
+###########GRU MECHANIC - MONARHISTS - REVOULT IN LATVIA###########
+GRU_monarchy_latvia_revoult_script = {
+	hidden_effect = {
+		BLR = {
+			set_province_controller = 13931
+			division_template = {
+				name = "Rebels"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+			}
+			1013 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 13931
+					owner = BLR
+				}
+			}
+		}
+		declare_war_on = {
+			target = BLR
+			type = annex_everything
+		}
+	}
+}
+###########GRU MECHANIC - MONARHISTS - REVOULT IN LITVA###########
+GRU_monarchy_litva_revoult_script = {
+	hidden_effect = {
+		BLR = {
+			set_province_controller = 13256
+			division_template = {
+				name = "Rebels"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+			}
+			110 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 13256
+					owner = BLR
+				}
+			}
+		}
+		declare_war_on = {
+			target = BLR
+			type = annex_everything
+		}
+	}
+}
+
+###########MONARCHY MECHANIC - UNCOMPLETE FOCUS BECAUSE KSB###########
+BLR_monarchy_ksb_script = {
+	hidden_effect = {
+		if = {
+			limit = { 
+				has_completed_focus = BLR_special_services_contr
+			}
+			uncomplete_national_focus = {
+				focus = BLR_special_services_contr
+			}
+		}
+		if = {
+			limit = { 
+				has_completed_focus = BLR_special_services_kgb
+			}
+			uncomplete_national_focus = {
+				focus = BLR_special_services_kgb
+			}
+		}
+		if = {
+			limit = { 
+				has_completed_focus = BLR_special_services_safety
+			}
+			uncomplete_national_focus = {
+				focus = BLR_special_services_safety
+			}
+		}
+	}
+}
+###########BELARUS - INTEGRATION LAND###########
+BLR_integration_lands_script = {
+	#110 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 110
+			NOT = { has_country_flag = BLR_state_110 }
+		}
+		add_state_core = 110
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_110
+		add_political_power = -100
+	}
+	#1044 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1044
+			NOT = { has_country_flag = BLR_state_1044 }
+		}
+		add_state_core = 1044
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1044
+		add_political_power = -100
+	}
+	#109 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 109
+			NOT = { has_country_flag = BLR_state_109 }
+		}
+		add_state_core = 109
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_109
+		add_political_power = -100
+	}
+	#1043 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1043
+			NOT = { has_country_flag = BLR_state_1043 }
+		}
+		add_state_core = 1043
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1043
+		add_political_power = -100
+	}
+	#642 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 642
+			NOT = { has_country_flag = BLR_state_642 }
+		}
+		add_state_core = 642
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_642
+		add_political_power = -100
+	}
+	#1013 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1013
+			NOT = { has_country_flag = BLR_state_1013 }
+		}
+		add_state_core = 1013
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1013
+		add_political_power = -100
+	}
+	#1110 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1110
+			NOT = { has_country_flag = BLR_state_1110 }
+		}
+		add_state_core = 1110
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1110
+		add_political_power = -100
+	}
+	#699 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 699
+			NOT = { has_country_flag = BLR_state_699 }
+		}
+		add_state_core = 699
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_699
+		add_political_power = -100
+	}
+	#700 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 700
+			NOT = { has_country_flag = BLR_state_700 }
+		}
+		add_state_core = 700
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_700
+		add_political_power = -100
+	}
+	#701 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 701
+			NOT = { has_country_flag = BLR_state_701 }
+		}
+		add_state_core = 701
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_701
+		add_political_power = -100
+	}
+	#335 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 335
+			NOT = { has_country_flag = BLR_state_335 }
+		}
+		add_state_core = 335
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_335
+		add_political_power = -100
+	}
+	#1111 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1111
+			NOT = { has_country_flag = BLR_state_1111 }
+		}
+		add_state_core = 1111
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1111
+		add_political_power = -100
+	}
+	#698 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 698
+			NOT = { has_country_flag = BLR_state_698 }
+		}
+		add_state_core = 698
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_698
+		add_political_power = -100
+	}
+	#697 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 697
+			NOT = { has_country_flag = BLR_state_697 }
+		}
+		add_state_core = 697
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_697
+		add_political_power = -100
+	}
+	#1091 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1091
+			NOT = { has_country_flag = BLR_state_1091 }
+		}
+		add_state_core = 1091
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1091
+		add_political_power = -100
+	}
+	#1089 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1089
+			NOT = { has_country_flag = BLR_state_1089 }
+		}
+		add_state_core = 1089
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1089
+		add_political_power = -100
+	}
+	#1088 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1088
+			NOT = { has_country_flag = BLR_state_1088 }
+		}
+		add_state_core = 1088
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1088
+		add_political_power = -100
+	}
+	#1090 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1090
+			NOT = { has_country_flag = BLR_state_1090 }
+		}
+		add_state_core = 1090
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1090
+		add_political_power = -100
+	}
+	#695 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 695
+			NOT = { has_country_flag = BLR_state_695 }
+		}
+		add_state_core = 695
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_695
+		add_political_power = -100
+	}
+	#1086 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1086
+			NOT = { has_country_flag = BLR_state_1086 }
+		}
+		add_state_core = 1086
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1086
+		add_political_power = -100
+	}
+	#1087 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1087
+			NOT = { has_country_flag = BLR_state_1087 }
+		}
+		add_state_core = 1087
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1087
+		add_political_power = -100
+	}
+	#696 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 696
+			NOT = { has_country_flag = BLR_state_696 }
+		}
+		add_state_core = 696
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_696
+		add_political_power = -100
+	}
+	#1076 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1076
+			NOT = { has_country_flag = BLR_state_1076 }
+		}
+		add_state_core = 1076
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1076
+		add_political_power = -100
+	}
+	#1172 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1172
+			NOT = { has_country_flag = BLR_state_1172 }
+		}
+		add_state_core = 1172
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1172
+		add_political_power = -100
+	}
+	#1173 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1173
+			NOT = { has_country_flag = BLR_state_1173 }
+		}
+		add_state_core = 1173
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1173
+		add_political_power = -100
+	}
+	#1174 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1174
+			NOT = { has_country_flag = BLR_state_1174 }
+		}
+		add_state_core = 1174
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1174
+		add_political_power = -100
+	}
+	#1181 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 1181
+			NOT = { has_country_flag = BLR_state_1181 }
+		}
+		add_state_core = 1181
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_1181
+		add_political_power = -100
+	}
+	#654 State
+	if = {
+		limit = {
+			has_completed_focus = BLR_young_goi_ministry
+			owns_state = 654
+			NOT = { has_country_flag = BLR_state_654 }
+		}
+		add_state_core = 654
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_country_flag = BLR_state_654
+		add_political_power = -100
+	}
+}
+
+###########GRU MECHANIC - NAZBOL - REVOULT IN DONBASS###########
+GRU_nazbol_donbass_revoult_script = {
+	hidden_effect = {
+		set_temp_variable = { percent_change = -2 }
+		set_temp_variable = { tag_index = BLR }
+		set_temp_variable = { influence_target = UKR }
+		change_influence_percentage = yes
+		DPR = {
+			transfer_state = 693
+			add_state_core = 693
+			division_template = {
+				name = "Rebels"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+			}
+			693 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 6474
+					owner = DPR
+				}
+			}
+			693 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 6474
+					owner = DPR
+				}
+			}
+		}
+		declare_war_on = {
+			target = UKR
+			type = annex_everything
+		}
+		BLR = {
+			set_autonomy = {
+				target = DPR
+				autonomy_state = autonomy_puppet_state
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+		DPR = {
+			set_cosmetic_tag = DPR_nazbols
+			clr_country_flag = dynamic_flag
+		}
+	}
+}
+###########GRU MECHANIC - NAZBOL - REVOULT IN LUGANSK###########
+GRU_nazbol_lugansk_revoult_script = {
+	hidden_effect = {
+		set_temp_variable = { percent_change = -2 }
+		set_temp_variable = { tag_index = BLR }
+		set_temp_variable = { influence_target = UKR }
+		change_influence_percentage = yes
+		LPR = {
+			transfer_state = 1075
+			add_state_core = 1075
+			division_template = {
+				name = "Rebels"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+			}
+			1075 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 9461
+					owner = LPR
+				}
+			}
+			1075 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 9461
+					owner = LPR
+				}
+			}
+		}
+		declare_war_on = {
+			target = UKR
+			type = annex_everything
+		}
+		BLR = {
+			set_autonomy = {
+				target = LPR
+				autonomy_state = autonomy_puppet_state
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+		LPR = {
+			set_cosmetic_tag = LPR_nazbols
+			clr_country_flag = dynamic_flag
+		}
+	}
+}
+###########GRU MECHANIC - NAZBOL - REVOULT IN KHARKIV###########
+GRU_nazbol_kharkiv_revoult_script = {
+	hidden_effect = {
+		set_temp_variable = { percent_change = -2 }
+		set_temp_variable = { tag_index = BLR }
+		set_temp_variable = { influence_target = UKR }
+		change_influence_percentage = yes
+		HPR = {
+			transfer_state = 696
+			add_state_core = 696
+			division_template = {
+				name = "Rebels"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+			}
+			696 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 9556
+					owner = HPR
+				}
+			}
+			696 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 9556
+					owner = HPR
+				}
+			}
+		}
+		declare_war_on = {
+			target = UKR
+			type = annex_everything
+		}
+		BLR = {
+			set_autonomy = {
+				target = HPR
+				autonomy_state = autonomy_puppet_state
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+		HPR = {
+			set_cosmetic_tag = HPR_nazbols
+			clr_country_flag = dynamic_flag
+		}
+	}
+}
+###########GRU MECHANIC - NAZBOL - REVOULT IN ODESSA###########
+GRU_nazbol_odessa_revoult_script = {
+	hidden_effect = {
+		set_temp_variable = { percent_change = -2 }
+		set_temp_variable = { tag_index = BLR }
+		set_temp_variable = { influence_target = UKR }
+		change_influence_percentage = yes
+		OPR = {
+			transfer_state = 695
+			add_state_core = 695
+			division_template = {
+				name = "Rebels"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+			}
+			695 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 11670
+					owner = OPR
+				}
+			}
+			695 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 11670
+					owner = OPR
+				}
+			}
+		}
+		declare_war_on = {
+			target = UKR
+			type = annex_everything
+		}
+		BLR = {
+			set_autonomy = {
+				target = OPR
+				autonomy_state = autonomy_puppet_state
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+		OPR = {
+			set_cosmetic_tag = OPR_nazbols
+			clr_country_flag = dynamic_flag
+		}
+	}
+}
+###########GRU MECHANIC - NAZBOL - REVOULT IN LATGALIA###########
+GRU_nazbol_latgale_revoult_script = {
+	hidden_effect = {
+		set_temp_variable = { percent_change = -2 }
+		set_temp_variable = { tag_index = BLR }
+		set_temp_variable = { influence_target = LAT }
+		change_influence_percentage = yes
+		LAG = {
+			transfer_state = 1013
+			add_state_core = 1013
+			division_template = {
+				name = "Rebels"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+				}
+			}
+			1013 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 310
+					owner = LAG
+				}
+			}
+			1013 = {
+				create_unit = {
+					division = "name = \"Rebels\" division_template = \"Rebels\" start_experience_factor = 0.1"
+					prioritize_location = 310
+					owner = LAG
+				}
+			}
+		}
+		declare_war_on = {
+			target = UKR
+			type = annex_everything
+		}
+		BLR = {
+			set_autonomy = {
+				target = LAG
+				autonomy_state = autonomy_puppet_state
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+		LAG = {
+			set_cosmetic_tag = LAG_nazbols
+			clr_country_flag = dynamic_flag
+		}
+	}
+}
+
+###########GRU MECHANIC - NAZBOL - REVOULT IN LATGALIA###########
+BLR_nationalisation_russian_enterprises_script = {
+	if = {
+				limit = { check_variable = { influence_array^0 = SOV } }
+				set_temp_variable = { belarusian_nationalisation = influence_array_val^0 }
+				multiply_temp_variable = {
+					var = belarusian_nationalisation
+					value = 1.2
+				}
+				set_temp_variable = { russian_lose_investment = influence_array_val^0 }
+				multiply_temp_variable = {
+					var = russian_lose_investment
+					value = -0.5
+				}
+				set_temp_variable = { russian_lose = influence_array_val^0 }
+				divide_temp_variable = {
+					var = russian_lose
+					value = 1.2
+				}
+				multiply_temp_variable = {
+					var = russian_lose
+					value = -1
+				}
+				set_temp_variable = { blr_nationalisation_industrial_level = influence_array_val^0 }
+				divide_temp_variable = {
+					var = blr_nationalisation_industrial_level
+					value = 12
+				}
+			}
+			else_if = {
+				limit = { check_variable = { influence_array^1 = SOV } }
+				set_temp_variable = { belarusian_nationalisation = influence_array_val^1 }
+				multiply_temp_variable = {
+					var = belarusian_nationalisation
+					value = 1.2
+				}
+				set_temp_variable = { russian_lose_investment = influence_array_val^1 }
+				multiply_temp_variable = {
+					var = russian_lose_investment
+					value = -0.5
+				}
+				set_temp_variable = { russian_lose = influence_array_val^1 }
+				divide_temp_variable = {
+					var = russian_lose
+					value = 1.2
+				}
+				multiply_temp_variable = {
+					var = russian_lose
+					value = -1
+				}
+				set_temp_variable = { blr_nationalisation_industrial_level = influence_array_val^1 }
+				divide_temp_variable = {
+					var = blr_nationalisation_industrial_level
+					value = 12
+				}
+			}
+			else_if = {
+				limit = { check_variable = { influence_array^2 = SOV } }
+				set_temp_variable = { belarusian_nationalisation = influence_array_val^2 }
+				multiply_temp_variable = {
+					var = belarusian_nationalisation
+					value = 1.2
+				}
+				set_temp_variable = { russian_lose_investment = influence_array_val^2 }
+				multiply_temp_variable = {
+					var = russian_lose_investment
+					value = -0.5
+				}
+				set_temp_variable = { russian_lose = influence_array_val^2 }
+				divide_temp_variable = {
+					var = russian_lose
+					value = 1.2
+				}
+				multiply_temp_variable = {
+					var = russian_lose
+					value = -1
+				}
+				set_temp_variable = { blr_nationalisation_industrial_level = influence_array_val^2 }
+				divide_temp_variable = {
+					var = blr_nationalisation_industrial_level
+					value = 12
+				}
+			}
+			else_if = {
+				limit = { check_variable = { influence_array^3 = SOV } }
+				set_temp_variable = { belarusian_nationalisation = influence_array_val^3 }
+				multiply_temp_variable = {
+					var = belarusian_nationalisation
+					value = 1.2
+				}
+				set_temp_variable = { russian_lose_investment = influence_array_val^3 }
+				multiply_temp_variable = {
+					var = russian_lose_investment
+					value = -0.5
+				}
+				set_temp_variable = { russian_lose = influence_array_val^3 }
+				divide_temp_variable = {
+					var = russian_lose
+					value = 1.2
+				}
+				multiply_temp_variable = {
+					var = russian_lose
+					value = -1
+				}
+				set_temp_variable = { blr_nationalisation_industrial_level = influence_array_val^3 }
+				divide_temp_variable = {
+					var = blr_nationalisation_industrial_level
+					value = 12
+				}
+			}
+			else_if = {
+				limit = { check_variable = { influence_array^4 = SOV } }
+				set_temp_variable = { belarusian_nationalisation = influence_array_val^4 }
+				multiply_temp_variable = {
+					var = belarusian_nationalisation
+					value = 1.2
+				}
+				set_temp_variable = { russian_lose_investment = influence_array_val^4 }
+				multiply_temp_variable = {
+					var = russian_lose_investment
+					value = -0.5
+				}
+				set_temp_variable = { russian_lose = influence_array_val^4 }
+				divide_temp_variable = {
+					var = russian_lose
+					value = 1.2
+				}
+				multiply_temp_variable = {
+					var = russian_lose
+					value = -1
+				}
+				set_temp_variable = { blr_nationalisation_industrial_level = influence_array_val^4 }
+				divide_temp_variable = {
+					var = blr_nationalisation_industrial_level
+					value = 12
+				}
+			}
+			else_if = {
+				limit = { check_variable = { influence_array^5 = SOV } }
+				set_temp_variable = { belarusian_nationalisation = influence_array_val^5 }
+				multiply_temp_variable = {
+					var = belarusian_nationalisation
+					value = 1.2
+				}
+				set_temp_variable = { russian_lose_investment = influence_array_val^5 }
+				multiply_temp_variable = {
+					var = russian_lose_investment
+					value = -0.5
+				}
+				set_temp_variable = { russian_lose = influence_array_val^5 }
+				divide_temp_variable = {
+					var = russian_lose
+					value = 1.2
+				}
+				multiply_temp_variable = {
+					var = russian_lose
+					value = -1
+				}
+				set_temp_variable = { blr_nationalisation_industrial_level = influence_array_val^5 }
+				divide_temp_variable = {
+					var = blr_nationalisation_industrial_level
+					value = 12
+				}
+			}
+			else_if = {
+				limit = { check_variable = { influence_array^6 = SOV } }
+				multiply_temp_variable = { belarusian_nationalisation = influence_array_val^6 }
+				divide_temp_variable = {
+					var = belarusian_nationalisation
+					value = 1.2
+				}
+				set_temp_variable = { russian_lose_investment = influence_array_val^6 }
+				multiply_temp_variable = {
+					var = russian_lose_investment
+					value = -0.5
+				}
+				set_temp_variable = { russian_lose = influence_array_val^6 }
+				divide_temp_variable = {
+					var = russian_lose
+					value = 1.2
+				}
+				multiply_temp_variable = {
+					var = russian_lose
+					value = -12
+				}
+				set_temp_variable = { blr_nationalisation_industrial_level = influence_array_val^6 }
+				divide_temp_variable = {
+					var = blr_nationalisation_industrial_level
+					value = 12
+				}
+			}
+			set_temp_variable = { party_index = 0 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes 
+			set_temp_variable = { treasury_change = belarusian_nationalisation }
+			modify_treasury_effect = yes
+			set_temp_variable = { industrial_russian_lose = 0 }
+			set_temp_variable = { industry_capital = blr_nationalisation_industrial_level }
+			set_temp_variable = { office_capital = blr_nationalisation_industrial_level }
+			set_temp_variable = { agriculture_capital = blr_nationalisation_industrial_level }
+			set_temp_variable = { powerplant_capital = blr_nationalisation_industrial_level }
+			set_temp_variable = { fuel_silo_capital = blr_nationalisation_industrial_level }
+			multiply_temp_variable = {
+				var = industry_capital
+				value = 7.5
+			}
+			multiply_temp_variable = {
+				var = office_capital
+				value = 12
+			}
+			multiply_temp_variable = {
+				var = agriculture_capital
+				value = 3.75
+			}
+			multiply_temp_variable = {
+				var = powerplant_capital
+				value = 2.25
+			}
+			multiply_temp_variable = {
+				var = fuel_silo_capital
+				value = 3.00
+			}
+			add_to_temp_variable = { industrial_russian_lose = industry_capital }
+			add_to_temp_variable = { industrial_russian_lose = office_capital }
+			add_to_temp_variable = { industrial_russian_lose = agriculture_capital }
+			add_to_temp_variable = { industrial_russian_lose = powerplant_capital }
+			add_to_temp_variable = { industrial_russian_lose = fuel_silo_capital }
+			multiply_temp_variable = {
+				var = industrial_russian_lose
+				value = -1
+			}
+			set_temp_variable = { general_russian_lose = russian_lose }
+			add_to_temp_variable = { general_russian_lose = russian_lose_investment }
+			add_to_temp_variable = { general_russian_lose = industrial_russian_lose }
+			SOV = {
+				set_temp_variable = { treasury_change = russian_lose }
+				modify_treasury_effect = yes
+				set_temp_variable = { int_investment_change = russian_lose_investment }
+				modify_international_investment_effect = yes
+				
+				add_opinion_modifier = {
+					target = BLR
+					modifier = nationalized_our_enterprises
+				}
+				country_event = belarus_poznyak.3
+			}
+			if = {
+				limit = { check_variable = { blr_nationalisation_industrial_level < 1} }
+				add_to_temp_variable = { blr_nationalisation_industrial_level = 1 }
+			}
+			if = {
+				limit = { russian_influence_higher_60 = yes }
+				capital_scope = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 5
+						instant_build = yes
+					} 
+					add_building_construction = {
+						type = offices
+						level = 5
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = agriculture_district
+						level = 5
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fossil_powerplant
+						level = 5
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fuel_silo
+						level = 5
+						instant_build = yes
+					}
+					add_extra_state_shared_building_slots = 25
+				}
+			}
+			else_if = {
+				limit = { russian_influence_higher_50 = yes }
+				capital_scope = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 4
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = offices
+						level = 4
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = agriculture_district
+						level = 4
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fossil_powerplant
+						level = 4
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fuel_silo
+						level = 4
+						instant_build = yes
+					}
+					add_extra_state_shared_building_slots = 20
+				}
+			}
+			else_if = {
+				limit = { russian_influence_higher_40 = yes }
+				capital_scope = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 3
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = offices
+						level = 3
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = agriculture_district
+						level = 3
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fossil_powerplant
+						level = 3
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fuel_silo
+						level = 3
+						instant_build = yes
+					}
+					add_extra_state_shared_building_slots = 15
+				}
+			}
+			else_if = {
+				limit = { russian_influence_higher_30 = yes }
+				capital_scope = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 2
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = offices
+						level = 2
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = agriculture_district
+						level = 2
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fossil_powerplant
+						level = 2
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fuel_silo
+						level = 2
+						instant_build = yes
+					}
+					add_extra_state_shared_building_slots = 10
+				}
+			}
+			else = {
+				capital_scope = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = offices
+						level = 1
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = agriculture_district
+						level = 1
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fossil_powerplant
+						level = 1
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = fuel_silo
+						level = 1
+						instant_build = yes
+					}
+					add_extra_state_shared_building_slots = 5
+				}
+			}
+			add_timed_idea = {
+				idea = BLR_nationalisatuion_russian_enterprises_idea
+				days = 365
+			}
+			custom_effect_tooltip = general_russian_lose_warning_tt
+			custom_effect_tooltip = general_russian_lose_tt 
+}

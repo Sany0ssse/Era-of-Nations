@@ -1,0 +1,291 @@
+on_actions = {
+    on_war_relation_added = {
+        effect = {
+            ROOT = {
+                every_controlled_state = {
+                    limit = {
+                        any_neighbor_state = {
+                            is_controlled_by = FROM
+                        }
+                    }
+                    add_dynamic_modifier = {
+                        modifier = dependents_productivity_modifier4
+                        days = 62
+                    }
+                    add_to_variable = { state_damage = 2 }
+				    calculate_damaged_state = yes
+                }
+            }
+            FROM = {
+                every_controlled_state = {
+                    limit = {
+                        any_neighbor_state = {
+                            is_controlled_by = ROOT
+                        }
+                    }
+                    add_dynamic_modifier = {
+                        modifier = dependents_productivity_modifier4
+                        days = 62
+                    }
+                    add_to_variable = { state_damage = 2 }
+				    calculate_damaged_state = yes
+                }
+            }
+        }
+    }
+    on_monthly = {
+        effect = {
+            if = {
+                limit = {
+                    has_war = yes
+                    any_neighbor_country = { has_war_with = PREV }
+                }
+                every_controlled_state = {
+                    limit = {
+                        OR = {
+                            any_neighbor_state = {
+                                CONTROLLER = { has_war_with = PREV.PREV.PREV }
+                            }
+                            NOT = { is_fully_controlled_by = PREV }
+                        }
+                        NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier7 } }
+                        NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier8 } }
+                    }
+                    if = {
+                        limit = {
+                            has_dynamic_modifier = { modifier = dependents_productivity_modifier6 }
+                        }
+                        remove_dynamic_modifier = { modifier = dependents_productivity_modifier6 }
+                    }
+                    if = {
+                        limit = { NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier5 } } }
+                        add_dynamic_modifier = {
+                            modifier = dependents_productivity_modifier4
+                            days = 62
+                        }
+                        add_to_variable = { state_damage = 2 }
+				        calculate_damaged_state = yes
+                    }
+                }
+            }
+        }
+    }
+    on_startup = {
+        effect = {
+            every_country = {
+                if = {
+                    limit = {
+                        has_war = yes
+                        any_neighbor_country = { has_war_with = PREV }
+                    }
+                    every_controlled_state = {
+                        limit = {
+                            OR = {
+                                any_neighbor_state = {
+                                    CONTROLLER = { has_war_with = PREV.PREV.PREV }
+                                }
+                                NOT = { is_fully_controlled_by = PREV }
+                            }
+                        }
+                        add_dynamic_modifier = {
+                            modifier = dependents_productivity_modifier4
+                            days = 62
+                        }
+                        add_to_variable = { state_damage = 2 }
+				        calculate_damaged_state = yes
+                    }
+                }
+            }
+        }
+    }
+    on_state_control_changed = {
+        effect = {
+            FROM.FROM = {
+                if = {
+                    limit = { has_dynamic_modifier = { modifier = dependents_productivity_modifier5 } }
+                    remove_dynamic_modifier = { modifier = dependents_productivity_modifier5 }
+                }
+                else_if = {
+                    limit = { has_dynamic_modifier = { modifier = dependents_productivity_modifier6 } }
+                    remove_dynamic_modifier = { modifier = dependents_productivity_modifier6 }
+                }
+            }
+        }
+    }
+    on_monthly = {
+        effect = {
+            if = {
+                limit = {
+                    has_war = no
+                }
+                if = {
+                    limit = { check_variable = { war_support_factor_var < 0 } }
+                    add_to_variable = { war_support_factor_var = 0.01 }
+                }
+                else_if = {
+                    limit = { check_variable = { war_support_factor_var > 0 } }
+                    add_to_variable = { war_support_factor_var = -0.01 }
+                }
+            }
+        }
+    }
+    on_state_control_changed = {
+        effect = {
+            ROOT = {
+                if = {
+                    limit = {
+                        has_war = yes
+                        FROM.FROM = { is_capital = yes }
+                    }
+                    add_to_variable = { war_support_factor_var = 0.02 }
+	                clamp_variable = { var = war_support_factor_var min = -1 max = 1 }
+                }
+                else_if = {
+                    limit = {
+                        has_war = yes
+                    }
+                    add_to_variable = { war_support_factor_var = 0.01 }
+	                clamp_variable = { var = war_support_factor_var min = -1 max = 1 }
+                }
+            }
+            FROM = {
+                if = {
+                    limit = {
+                        has_war = yes
+                        FROM.FROM = { is_capital = yes }
+                    }
+                    add_to_variable = { war_support_factor_var = -0.02 }
+	                clamp_variable = { var = war_support_factor_var min = -1 max = 1 }
+                }
+                else_if = {
+                    limit = {
+                        has_war = yes
+                    }
+                    add_to_variable = { war_support_factor_var = -0.01 }
+	                clamp_variable = { var = war_support_factor_var min = -1 max = 1 }
+                }
+            }
+        }
+    }
+    on_capitulation_immediate = {
+        effect = {
+            ROOT = {
+                every_allied_country = {
+                    if = {
+                        limit = { ROOT = { has_idea = superpower } }
+                        add_to_variable = { war_support_factor_var = -0.06 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = great_power } }
+                        add_to_variable = { war_support_factor_var = -0.05 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = large_power } }
+                        add_to_variable = { war_support_factor_var = -0.04 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = regional_power } }
+                        add_to_variable = { war_support_factor_var = -0.03 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = minor_power } }
+                        add_to_variable = { war_support_factor_var = -0.02 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = non_power } }
+                        add_to_variable = { war_support_factor_var = -0.01 }
+                    }
+                    if = {
+                        limit = { ROOT = { is_faction_leader = yes } }
+                        add_to_variable = { war_support_factor_var = -0.05 }
+                    }
+	                clamp_variable = { var = war_support_factor_var min = -1 max = 1 }
+                }
+            }
+            FROM = {
+                if = {
+                    limit = { ROOT = { has_idea = superpower } }
+                    add_to_variable = { war_support_factor_var = 0.06 }
+                }
+                else_if = {
+                    limit = { ROOT = { has_idea = great_power } }
+                    add_to_variable = { war_support_factor_var = 0.05 }
+                }
+                else_if = {
+                    limit = { ROOT = { has_idea = large_power } }
+                    add_to_variable = { war_support_factor_var = 0.04 }
+                }
+                else_if = {
+                    limit = { ROOT = { has_idea = regional_power } }
+                    add_to_variable = { war_support_factor_var = 0.03 }
+                }
+                else_if = {
+                    limit = { ROOT = { has_idea = minor_power } }
+                    add_to_variable = { war_support_factor_var = 0.02 }
+                }
+                else_if = {
+                    limit = { ROOT = { has_idea = non_power } }
+                    add_to_variable = { war_support_factor_var = 0.01 }
+                }
+                if = {
+                    limit = { ROOT = { is_faction_leader = yes } }
+                    add_to_variable = { war_support_factor_var = 0.05 }
+                }
+	            clamp_variable = { var = war_support_factor_var min = -1 max = 1 }
+                every_allied_country = {
+                    if = {
+                        limit = { ROOT = { has_idea = superpower } }
+                        add_to_variable = { war_support_factor_var = 0.06 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = great_power } }
+                        add_to_variable = { war_support_factor_var = 0.05 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = large_power } }
+                        add_to_variable = { war_support_factor_var = 0.04 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = regional_power } }
+                        add_to_variable = { war_support_factor_var = 0.03 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = minor_power } }
+                        add_to_variable = { war_support_factor_var = 0.02 }
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_idea = non_power } }
+                        add_to_variable = { war_support_factor_var = 0.01 }
+                    }
+                    if = {
+                        limit = { ROOT = { is_faction_leader = yes } }
+                        add_to_variable = { war_support_factor_var = 0.05 }
+                    }
+	                clamp_variable = { var = war_support_factor_var min = -1 max = 1 }
+                }
+            }
+        }
+    }
+    on_peace = {
+        effect = {
+            every_owned_state = {
+                limit = {
+                    NOT = { has_dynamic_modifier = { modifier = Damaged_state_1_level } }
+                    NOT = { has_dynamic_modifier = { modifier = Damaged_state_2_level } }
+                    NOT = { has_dynamic_modifier = { modifier = Damaged_state_3_level } }
+                    NOT = { has_dynamic_modifier = { modifier = Damaged_state_4_level } }
+                    NOT = { has_dynamic_modifier = { modifier = Damaged_state_5_level } }
+                }
+                clear_variable = state_damage
+            }
+        }
+    }
+    on_startup = {
+        effect = {
+            672 = {
+                add_dynamic_modifier = { modifier = Damaged_state_5_level }
+                set_variable = { state_damage = 100 }
+            }
+        }
+    }
+}

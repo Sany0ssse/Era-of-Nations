@@ -1,0 +1,733 @@
+add_namespace = mdc4
+
+#ROOT Receives Offer to Sign Free Trade Agreement and Mutual Investment Treaty
+country_event = {
+	id = mdc4.1
+	title = mdc4.1.t
+	desc = mdc4.1.d
+	picture = GFX_negotiations
+
+	immediate = {
+		hidden_effect = {
+			save_event_target_as = fta_applicant
+			FROM = {
+				save_event_target_as = fta_inviter
+			}
+		}
+	}
+
+	is_triggered_only = yes
+
+	option = { #Agree
+		name = mdc4.1.a
+		log = "[GetDateText]: [This.GetName]: mdc4.1.a executed"
+		ai_chance = {
+			base = 100
+		}
+		FROM = {
+			add_opinion_modifier = {
+				target = ROOT
+				modifier = free_trade_agreement
+			}
+			country_event = { id = mdc4.2 hours = 6 }
+		}
+		add_opinion_modifier = {
+			target = FROM
+			modifier = free_trade_agreement
+		}
+		set_temp_variable = { receiver_nation = ROOT.id }
+		set_temp_variable = { sender_nation = FROM.id }
+		set_improved_trade_agreement = yes
+		newline = yes
+		set_mutual_investment_treaty = yes
+		hidden_effect = {
+			set_country_flag = fta_applicant@ROOT
+			FROM = { set_country_flag = fta_inviter@ROOT }
+			#news_event = { id = news.1 hours = 12 }
+		}
+	}
+
+	option = { #Refuse
+		name = mdc4.1.b
+		log = "[GetDateText]: [This.GetName]: mdc4.1.b executed"
+		ai_chance = { factor = 0 }
+		FROM = {
+			country_event = { id = mdc4.3 hours = 6 }
+			add_opinion_modifier = {
+				target = ROOT
+				modifier = insult
+			}
+		}
+	}
+}
+#ROOT signed Free Trade Agreement and Mutual Investment Treaty
+country_event = {
+	id = mdc4.2
+	title = mdc4.2.t
+	desc = mdc4.2.d
+
+	picture = GFX_united_states_dollar
+
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.2.a
+		log = "[GetDateText]: [This.GetName]: mdc4.2.a executed"
+	}
+}
+#ROOT refused to sign Free Trade Agreement and Mutual Investment Treaty
+country_event = {
+	id = mdc4.3
+	title = mdc4.3.t
+	desc = mdc4.3.d
+
+	picture = GFX_negotiations
+
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.3.a
+		log = "[GetDateText]: [This.GetName]: mdc4.3.a executed"
+	}
+}
+# ROOT Military R&D Cooperation
+country_event = {
+	id = mdc4.4
+	title = mdc4.4.t
+	desc = mdc4.4.d
+	picture = GFX_generic_factory
+
+	is_triggered_only = yes
+
+	option = { #Agree
+		name = mdc4.4.a
+		log = "[GetDateText]: [This.GetName]: mdc4.4.a executed"
+		ai_chance = {
+			base = 100
+		}
+		add_opinion_modifier = {
+			target = FROM
+			modifier = military_cooperation
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = military_cooperation
+		}
+		FROM = { country_event = { id = mdc4.5 hours = 6 } }
+		newline = yes
+		add_tech_bonus = {
+			name = POR_military_professionalization
+			bonus = 0.10
+			uses = 2
+			category = CAT_Military
+			category = CAT_inf
+			category = CAT_artillery
+			category = CAT_support_weapons
+		}
+		add_breakthrough_progress = {
+			specialization = specialization_land
+			value = 0.05
+		}
+		add_timed_idea = {
+			idea = GENERIC_military_cooperation_idea
+			days = 365
+		}
+		set_temp_variable = { treasury_change = -4.00 }
+		modify_treasury_effect = yes
+	}
+	option = { #Refuse
+		name = mdc4.4.b
+		log = "[GetDateText]: [This.GetName]: mdc4.5.b executed"
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = -50
+				has_opinion = {
+					target = FROM
+					value > 25
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = FROM
+					value < 10
+				}
+			}
+		}
+		FROM = { country_event = { id = mdc4.6 hours = 6 } }
+	}
+}
+# ROOT Military R&D Cooperation Accept
+country_event = {
+	id = mdc4.5
+	title = mdc4.5.t
+	desc = mdc4.5.d
+
+	picture = GFX_generic_factory
+
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.5.a
+		log = "[GetDateText]: [This.GetName]: mdc4.5.a executed"
+		add_tech_bonus = {
+			name = POR_military_professionalization
+			bonus = 0.10
+			uses = 2
+			category = CAT_Military
+			category = CAT_inf
+			category = CAT_artillery
+			category = CAT_support_weapons
+		}
+		add_breakthrough_progress = {
+			specialization = specialization_land
+			value = 0.05
+		}
+		add_timed_idea = {
+			idea = GENERIC_military_cooperation_idea
+			days = 365
+		}
+		set_temp_variable = { treasury_change = -4.00 }
+		modify_treasury_effect = yes
+	}
+}
+# ROOT Military R&D Cooperation Accept  Refuse
+country_event = {
+	id = mdc4.6
+	title = mdc4.6.t
+	desc = mdc4.6.d
+
+	picture = GFX_negotiations
+
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.6.a
+		log = "[GetDateText]: [This.GetName]: mdc4.6.a executed"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+# ROOT Renewable Energy Investment Proposal
+country_event = {
+	id = mdc4.7
+	title = mdc4.7.t
+	desc = mdc4.7.d
+	picture = GFX_generic_solar_farms
+
+	is_triggered_only = yes
+
+	option = { # Agree
+		name = mdc4.7.a
+		log = "[GetDateText]: [This.GetName]: mdc4.7.a executed"
+		set_temp_variable = { treasury_change = -7.50 }
+		modify_treasury_effect = yes
+		set_temp_variable = { int_investment_change = 8.50 }
+		modify_international_investment_effect = yes
+		set_temp_variable = { percent_change = 1.5 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = FROM }
+		change_influence_percentage = yes
+		set_temp_variable = { modify_capitalization =  0.0025 }
+        modify_capitalization_support = yes  
+		add_tech_bonus = {
+        	name = CAT_renewable
+        	bonus = 0.15
+        	uses = 2
+        	category = CAT_renewable
+      	}
+		add_opinion_modifier = {
+			target = FROM
+			modifier = economic_mission
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = economic_mission
+		}	
+		FROM = {
+			random_owned_controlled_state = {
+				add_building_construction = {
+					type = synthetic_refinery
+					level = 1
+					instant_build = yes
+				}    
+		    }	
+			set_temp_variable = { debt_change = 1.0 }
+			modify_debt_effect = yes
+			country_event = { id = mdc4.8 days = 1 }
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 40
+				has_opinion = {
+					target = ROOT
+					value > 10
+				}
+			}
+			modifier = {
+				add = -30
+				has_opinion = {
+					target = ROOT
+					value < 0
+				}
+			}
+		}
+	}
+
+	option = { # Refuse
+		name = mdc4.7.b
+		log = "[GetDateText]: [This.GetName]: mdc4.7.b executed"
+		FROM = {
+			country_event = { id = mdc4.9 days = 1 }
+			add_opinion_modifier = {
+				target = ROOT
+				modifier = insult
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = -40
+				has_opinion = {
+					target = ROOT
+					value > 10
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = ROOT
+					value < 10
+				}
+			}
+		}
+	}
+}
+# Renewable Energy Investment Accepted
+country_event = {
+	id = mdc4.8
+	title = mdc4.8.t
+	desc = mdc4.8.d
+	picture = GFX_generic_solar_farms
+
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.8.a
+		log = "[GetDateText]: [This.GetName]: mdc4.8.a executed"
+	}
+}
+# Renewable Energy Investment Refused
+country_event = {
+	id = mdc4.9
+	title = mdc4.9.t
+	desc = mdc4.9.d
+	picture = GFX_treaty_rejected
+
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.9.a
+		log = "[GetDateText]: [This.GetName]: mdc4.9.a executed"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+#Ask USAID
+country_event = {
+	id = mdc4.10
+	title = mdc4.10.t
+	desc = mdc4.10.d
+	is_triggered_only = yes
+	picture = GFX_USA_generic
+
+	option = { # Agree
+		name = mdc4.10.a
+		log = "[GetDateText]: [This.GetName]: mdc4.10.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = FROM }
+		change_influence_percentage = yes
+		set_temp_variable = { temp_opinion = 2.5 }
+		change_international_bankers_opinion = yes
+		add_opinion_modifier = {
+			target = FROM
+			modifier = economic_mission
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = economic_mission
+		}
+		FROM = {
+			add_ideas = USA_usaid
+			set_temp_variable = { temp_opinion = 5 }
+			change_international_bankers_opinion = yes
+			country_event = { id = mdc4.11 days = 1 }
+		}
+
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 25
+				has_opinion = {
+					target = FROM
+					value > 25
+				}
+			}
+			 modifier = {
+        		add = 10
+        			FROM = {
+           				OR = {
+                			has_government = democratic
+                			has_government = neutrality
+            			}
+        			}
+    			}
+			modifier = {
+				add = -30
+				has_opinion = {
+					target = FROM
+					value < -15
+				}
+			}
+		}
+	}
+
+	option = { # Refuse
+		name = mdc4.10.b
+		log = "[GetDateText]: [This.GetName]: mdc4.10.b executed"
+		FROM = { country_event = { id = mdc4.12 days = 1 } }
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = FROM
+					value < 0
+				}
+			}
+			modifier = {
+        		add = 15  
+        			NOT = {
+            			FROM = {
+                			OR = {
+                    			has_government = democratic
+                    			has_government = neutrality
+                			}
+            			}
+       				}
+    			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = FROM
+					value < -25
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = FROM
+					value < -50
+				}
+			}
+
+		}
+	}
+}
+#USAID - Accepted
+country_event = {
+	id = mdc4.11
+	title = mdc4.11.t
+	desc = mdc4.11.d
+	is_triggered_only = yes
+	picture = GFX_USA_generic
+
+	option = {
+		name = mdc4.11.a
+		log = "[GetDateText]: [This.GetName]: mdc4.11.a executed"
+	}
+}
+#USAID - Refused
+country_event = {
+	id = mdc4.12
+	title = mdc4.12.t
+	desc = mdc4.12.d
+	is_triggered_only = yes
+	picture = GFX_USA_generic
+
+	option = {
+		name = mdc4.12.a
+		log = "[GetDateText]: [This.GetName]: mdc4.12.a executed"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+#Major Non-NATO Ally
+country_event = {
+	id = mdc4.13
+	title = mdc4.13.t
+	desc = mdc4.13.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+	
+	option = { # Agree
+		name = mdc4.13.a
+		log = "[GetDateText]: [This.GetName]: mdc4.13.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = FROM }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = FROM
+			modifier = poland_military_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = poland_military_partnership
+		}
+		FROM = {
+			add_ideas = Major_Non_NATO_Ally
+			set_country_flag = Major_Non_NATO_Ally
+			add_to_tech_sharing_group = Major_Non_NATO_Ally_Share
+			give_military_access = USA
+			every_other_country = {
+				limit = {
+					has_idea = NATO_member
+				}
+				add_opinion_modifier = { target = PREV modifier = Major_Non_NATO_Ally }
+				reverse_add_opinion_modifier = { target = PREV modifier = Major_Non_NATO_Ally }
+			}
+			country_event = { id = mdc4.14 days = 1 }
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 25
+				has_opinion = {
+					target = FROM
+					value > 25
+				}
+			}
+			 modifier = {
+        		add = 10
+        			FROM = {
+           				OR = {
+                			has_government = democratic
+                			has_government = neutrality
+            			}
+        			}
+    			}
+			modifier = {
+				add = -30
+				has_opinion = {
+					target = FROM
+					value < -15
+				}
+			}
+		}
+	}
+
+	option = { # Refuse
+		name = mdc4.13.b
+		log = "[GetDateText]: [This.GetName]: mdc4.13.b executed"
+		FROM = {
+			country_event = { id = mdc4.15 days = 1 }
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = FROM
+					value < 0
+				}
+			}
+			modifier = {
+        		add = 15  
+        			NOT = {
+            			FROM = {
+                			OR = {
+                    			has_government = democratic
+                    			has_government = neutrality
+                			}
+            			}
+       				}
+    			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = FROM
+					value < -25
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = FROM
+					value < -50
+				}
+			}
+
+		}
+	}
+}
+#Major Non-NATO Ally - Accepted
+country_event = {
+	id = mdc4.14
+	title = mdc4.14.t
+	desc = mdc4.14.d
+	picture = GFX_USA_event_nato_join
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.14.a
+		log = "[GetDateText]: [This.GetName]: mdc4.14.a executed"
+	}
+}
+#Major Non-NATO Ally - Refused
+country_event = {
+	id = mdc4.15
+	title = mdc4.15.t
+	desc = mdc4.15.d
+	picture = GFX_USA_event_nato_join
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.15.a
+		log = "[GetDateText]: [This.GetName]: mdc4.15.a executed"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+#Generic Refuse
+country_event = {
+	id = mdc4.16
+	title = mdc4.16.t
+	desc = mdc4.16.d
+	picture = GFX_treaty_rejected
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.16.a
+		log = "[GetDateText]: [This.GetName]: mdc4.16.a executed"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+#ROOT Genetic Research
+country_event = {
+	id = mdc4.17
+	title = mdc4.17.t
+	desc = mdc4.17.d
+	picture = GFX_handshake_black
+
+	is_triggered_only = yes
+
+	option = { #Agree
+		name = mdc4.17.a
+		log = "[GetDateText]: [This.GetName]: mdc4.17.a executed"
+		FROM = { country_event = { id = mdc4.18 hours = 6 } }
+		add_tech_bonus = {
+			name = POR_military_professionalization
+			bonus = 0.50
+			uses = 2
+			category = CAT_nfibers
+			category = CAT_genes
+		}
+		add_timed_idea = {
+			idea = GENERIC_genetic_research_idea
+			days = 250
+		}
+		set_temp_variable = { treasury_change = -4.00 }
+		modify_treasury_effect = yes
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 40
+				has_opinion = {
+					target = FROM
+					value > 10
+				}
+			}
+			modifier = {
+				add = -30
+				has_opinion = {
+					target = FROM
+					value < 0
+				}
+			}
+		}
+	}
+	option = { #Refuse
+		name = mdc4.4.b
+		log = "[GetDateText]: [This.GetName]: mdc4.19.b executed"
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = -40
+				has_opinion = {
+					target = FROM
+					value > 10
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = FROM
+					value < 10
+				}
+			}
+		}
+		FROM = {
+			country_event = { id = mdc4.6 hours = 6 }
+		}
+	}
+}
+#ROOT Genetic Research - Accept
+country_event = {
+	id = mdc4.18
+	title = mdc4.18.t
+	desc = mdc4.18.d
+
+	picture = GFX_united_states_dollar
+
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.18.a
+		log = "[GetDateText]: [This.GetName]: mdc4.18.a executed"
+		add_tech_bonus = {
+			name = POR_military_professionalization
+			bonus = 0.50
+			uses = 2
+			category = CAT_nfibers
+			category = CAT_genes
+		}
+		add_timed_idea = {
+			idea = GENERIC_genetic_research_idea
+			days = 250
+		}
+		set_temp_variable = { treasury_change = -4.00 }
+		modify_treasury_effect = yes
+	}
+}
+#ROOT Genetic Research - Refuse
+country_event = {
+	id = mdc4.19
+	title = mdc4.19.t
+	desc = mdc4.19.d
+
+	picture = GFX_treaty_rejected
+
+	is_triggered_only = yes
+
+	option = {
+		name = mdc4.19.a
+		log = "[GetDateText]: [This.GetName]: mdc4.19.a executed"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}

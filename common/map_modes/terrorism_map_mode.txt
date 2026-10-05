@@ -1,0 +1,43 @@
+scripted_map_modes = {
+    terrorism_map_mode = {
+        top = {
+            type = none
+        }
+
+        bottom = {
+            type = country
+            color = {
+                if = { limit = { FROM = { has_country_flag = declared_jihad_against@ROOT } }
+                    set_temp_variable = { r_clc = 1.0 }
+                    set_temp_variable = { g_clc = 0.196 }
+                    set_temp_variable = { b_clc = 0.196 }
+                }
+                else_if = { limit = { has_country_flag = declared_jihad_against@FROM }
+                    set_temp_variable = { r_clc = 1.0 }
+                    set_temp_variable = { g_clc = 0.84 }
+                    set_temp_variable = { b_clc = 0.0 }
+                }
+                else_if = { limit = { FROM = { has_country_flag = anti_terror_agreement@ROOT } }
+                    set_temp_variable = { r_clc = 0.137 }
+                    set_temp_variable = { g_clc = 0.808 }
+                    set_temp_variable = { b_clc = 0.176 }
+                }
+                else = {
+                    set_temp_variable = { r_clc = 0.5 }
+                    set_temp_variable = { g_clc = 0.5 }
+                    set_temp_variable = { b_clc = 0.5 }
+                }
+
+                set_temp_variable = { red = r_clc }
+                set_temp_variable = { green = g_clc }
+                set_temp_variable = { blue = b_clc }
+                set_temp_variable = { alpha = 1.00 }
+            }
+        }
+
+        far_text = country
+        near_text = none
+
+        update_daily = no
+    }
+}

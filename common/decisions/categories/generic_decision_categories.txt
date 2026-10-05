@@ -1,0 +1,75 @@
+GENERIC_economic_category = {
+	icon = GFX_decisions_category_economic
+	allowed = {	always = yes }
+	priority = 350
+}
+GENERIC_militarization_category = {
+	icon = GFX_decisions_category_militarization
+	allowed = {	always = yes }
+	priority = 50
+	visible = { 
+		OR = { 
+			nationalist_military_junta_are_in_power = yes 
+			nationalist_fascist_are_in_power = yes
+		}
+		NOT = {
+			has_country_flag = GENERIC_create_division
+		}
+		has_completed_focus = GENERIC_militarization_society 
+	}
+}
+
+GENERIC_five_year_plan_category = {
+	icon = GFX_decisions_category_5year_plan
+	allowed = { always = yes }
+	priority = 60
+	picture = GFX_five_year_plan_picture
+	visible = {
+		OR = { 
+			emerging_communist_state_are_in_power = yes
+			emerging_anarchist_communism_are_in_power = yes
+		}
+		has_completed_focus = GENERIC_five_year_plan
+		has_war = no
+	}
+}
+
+GENERIC_nato_ratification_category = {
+	icon = GFX_nato
+	allowed = { always = yes }
+	priority = 260
+	visible = {
+		western_autocrats_are_in_power = yes
+		has_completed_focus = GENERIC_west
+		NOT = { has_idea = NATO_member }
+	}
+}
+
+GENERIC_csto_ratification_category = {
+	icon = GFX_decisions_category_сsto
+	allowed = { always = yes }
+	priority = 260
+}
+
+GENERIC_stabilization_govern_category = {
+	icon = GFX_decisions_category_govern_stabilize
+	allowed = { always = yes }
+	priority = 400
+	visible = {
+		has_country_flag = GENERIC_stabilization_govern_start
+		NOT = {
+			has_country_flag = GENERIC_stabilization_govern_again
+		}
+	}
+}
+
+GENERIC_hamas_support_category = {
+	icon = GFX_decisions_category_hamas_support
+	allowed = { always = yes }
+	priority = 55
+	visible = {
+		neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+		has_completed_focus = GENERIC_support_hamas
+		country_exists = ISR
+	}
+}

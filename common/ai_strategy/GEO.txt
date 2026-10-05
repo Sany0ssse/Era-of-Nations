@@ -1,0 +1,138 @@
+GEO_support_afghanistan = {
+	allowed = { original_tag = GEO }
+	enable = {
+		NOT = { has_war_with = AFG }
+		AFG = { NOT = { has_country_flag = AFG_new_war } }
+		AFG = { NOT = { has_government = fascism } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "AFG" value = 50 }
+	ai_strategy = { type = support id = "AFG" value = 150 }
+	ai_strategy = { type = send_volunteers_desire id = "AFG" value = 100 }
+}
+
+GEO_breakaway_states = {
+	allowed = { original_tag = GEO }
+	enable = {
+		NOT = {
+			is_in_faction_with = ABK
+			is_in_faction_with = SOO
+		}
+		OR = {
+			country_exists = ABK
+			country_exists = SOO
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "SOV" value = 50 }
+	ai_strategy = { type = antagonize id = "SOV" value = 25 }
+	ai_strategy = { type = antagonize id = "ABK" value = 100 }
+	ai_strategy = { type = conquer id = "ABK" value = 100 }
+	ai_strategy = { type = antagonize id = "SOO" value = 100 }
+	ai_strategy = { type = conquer id = "SOO" value = 100 }
+}
+GEO_dont_declare_on_turkey = {
+	allowed = { original_tag = GEO }
+	enable = {
+		has_wargoal_against = TUR
+		strength_ratio = {
+			tag = TUR
+			ratio < 1.0
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = conquer id = "TUR" value = -300 }
+	ai_strategy = { type = declare_war id = "TUR" value = -300 }
+}
+GEO_dont_declare_on_azeri = {
+	allowed = { original_tag = GEO }
+	enable = {
+		has_wargoal_against = AZE
+		strength_ratio = {
+			tag = AZE
+			ratio < 1.0
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = conquer id = "AZE" value = -300 }
+	ai_strategy = { type = declare_war id = "AZE" value = -300 }
+}
+#Armenia Content
+GEO_anti_armenia_coalition = {
+	allowed = { original_tag = GEO }
+	enable = {
+		has_idea = GLOBAL_aze_prepare_anti_arm
+		country_exists = ARM
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "ARM" value = 50 }
+	ai_strategy = { type = antagonize id = "ARM" value = 50 }
+	ai_strategy = { type = befriend id = "ARM" value = -50 }
+}
+GEO_againts_armenian_expansion_azer_puppet = {
+	allowed = { tag = GEO }
+	enable = {
+		is_subject = no
+		has_war = no
+		AZE = { is_subject_of = ARM }
+		NOT = {
+			has_government = communism
+		}
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "ARM" value = -100 }
+	ai_strategy = { type = antagonize id = "ARM" value = 100 }
+	ai_strategy = { type = contain id = "ARM" value = 100 }
+	ai_strategy = { type = befriend id = "AZE" value = -100 }
+	ai_strategy = { type = antagonize id = "AZE" value = 100 }
+	ai_strategy = { type = contain id = "AZE" value = 100 }
+	ai_strategy = { type = influence id = "AZE" value = 200 }
+}
+
+GEO_send_troops_to_iraq_support = {
+	allowed = { original_tag = GEO }
+	enable = {
+		OR = {
+			has_completed_focus = GEO_send_troops_toiraq
+			has_completed_focus = GEO_iraq_stuff_prepare
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "USA" value = 15 }
+	ai_strategy = { type = support id = "USA" value = 25 }
+}
+
+GEO_USA_send_troops_to_iraq_support = {
+	allowed = { original_tag = USA }
+	enable = {
+		GEO = {
+			OR = {
+				has_completed_focus = GEO_send_troops_toiraq
+				has_completed_focus = GEO_iraq_stuff_prepare
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "GEO" value = 15 }
+	ai_strategy = { type = support id = "GEO" value = 25 }
+}
+
+GEO_USA_raid_rustavi_two = {
+	allowed = { original_tag = USA }
+	enable = {
+		GEO = { has_completed_focus = GEO_rustavitwo }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "GEO" value = 15 }
+	ai_strategy = { type = support id = "GEO" value = 25 }
+}

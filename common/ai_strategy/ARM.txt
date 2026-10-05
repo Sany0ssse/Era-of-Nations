@@ -1,0 +1,76 @@
+hostile_azerbaijani_relations = {
+	allowed = { original_tag = ARM }
+	enable = {
+		country_exists = AZE
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "AZE" value = 25 }
+	ai_strategy = { type = antagonize id = "AZE" value = 25 }
+	ai_strategy = { type = befriend id = "AZE" value = -25 }
+}
+
+love_artaskh = {
+	allowed = { original_tag = ARM }
+	enable = {
+		country_exists = NKR
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = befriend id = "NKR" value = 50 }
+	ai_strategy = { type = protect id = "NKR" value = 50 }
+	ai_strategy = { type = support id = "NKR" value = 50 }
+}
+
+ARM_okay_with_russia = {
+	allowed = { original_tag = ARM }
+	enable = {
+		country_exists = SOV
+		NOT = { has_war_with = SOV }
+		OR = {
+			is_guaranteed_by = SOV
+			is_in_faction_with = SOV
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SOV" value = 50 }
+	ai_strategy = { type = protect id = "SOV" value = 50 }
+	ai_strategy = { type = support id = "SOV" value = 50 }
+}
+
+
+#No suicide to Turkey
+ARM_cancel_war_TUR = {
+	allowed = { original_tag = ARM }
+	enable = {
+		ARM = {
+			has_war = yes
+			country_exists = TUR
+			strength_ratio = {
+				tag = TUR
+				ratio > 1
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = declare_war
+		id = TUR
+		value = -4000
+	}
+}
+
+ARM_pashiniyan_diplo_mission = {
+	allowed = { original_tag = ARM }
+	enable = {
+		SOV = { has_country_flag = SOV_pashinyan_agreed_to_diplo }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = alliance
+		id = "SOV"
+		value = 200
+	}
+}

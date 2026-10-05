@@ -1,0 +1,470 @@
+scripted_diplomatic_actions = {
+	### PREPARE SANCTIONS
+	prepare_sanctions = {
+		allowed = {
+			always = yes
+		}
+		visible = {
+			ROOT = { NOT = { has_country_flag = sanctions_prepared@PREV } }
+			NOT = { is_in_array = { ROOT.sanctions_targets = THIS } }
+			NOT = { has_idea = international_sanctions }
+			NOT = { has_idea = Massive_International_Sanctions }
+			NOT = { has_idea = IRQ_international_sanctions }
+			NOT = { has_idea = IRQ_international_sanctions2 }
+			NOT = { has_idea = IRQ_international_sanctions3 }
+			NOT = { has_idea = IRQ_international_sanctions4 }
+			NOT = { has_idea = NKO_international_sanctions_idea }
+			NOT = { has_idea = NKO_international_sanctions_idea1 }
+			NOT = { has_idea = NKO_international_sanctions_idea2 }
+			NOT = { has_idea = NKO_international_sanctions_idea3 }
+			NOT = { has_idea = NKO_international_sanctions_idea4 }
+			NOT = { has_idea = PAL_quartet_very_high_sanctions }
+			NOT = { has_idea = PAL_quartet_high_sanctions }
+			NOT = { has_idea = PAL_quartet_moderate_sanctions }
+			NOT = { has_idea = SER_International_Isolation }
+			NOT = { has_idea = SER_International_Isolation_1 }
+			ROOT = { is_subject = no }
+			is_subject = no
+		}
+		selectable = {
+			ROOT = {
+				has_political_power > 249
+				has_opinion = {
+					target = PREV
+					value < 0
+				}
+				NOT = { has_active_mission = preparing_sanctions }
+			}
+			THIS = {
+				NOT = {
+					is_in_faction_with = ROOT
+					is_subject_of = ROOT
+				}
+			}
+		}
+		cost = 250
+
+		requires_acceptance = no
+		show_acceptance_on_action_button = no
+
+		send_description = PREPARE_SANCTIONS_LOC
+		receive_description = PREPARE_SANCTIONS_RECIEVER_LOC
+		on_sent_effect = {
+            log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect prepare_sanctions"
+		}
+		complete_effect = {
+			ROOT = {
+				set_variable = { sanction_target = PREV }
+				activate_mission = preparing_sanctions
+			}
+		}
+
+		reject_effect = {
+		}
+		ai_desire = {
+			modifier = {
+				ROOT = {
+					has_opinion = { target = PREV value < -75 }
+				}
+				add = 50
+			}
+			modifier = {
+				ROOT = { has_war_with = PREV }
+				add = 100
+			}
+			modifier = {
+				has_added_tension_amount > 15
+				add = 100
+			}
+			modifier = {
+				add = 100
+				any_other_country = {
+					has_war_with = PREV
+					OR = {
+						is_in_faction_with = ROOT
+						has_volunteers_amount_from = {
+							tag = ROOT
+							count > 0
+						}
+						has_attache_from = ROOT
+						ROOT = { is_lend_leasing = PREV }
+						is_guaranteed_by = ROOT
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				ROOT = {
+					OR = {
+						has_idea = non_power
+						has_idea = minor_power
+					}
+				}
+			}
+			modifier = {
+				has_added_tension_amount < 1
+				factor = 0
+			}
+		}
+		ai_acceptance = {		# AI modifiers to accept this diplomatic action, not valid if requires_acceptance is set to NO.
+		}
+	}
+	### LIGHT SANCTIONS
+	light_sanctions = {
+		allowed = {
+			always = yes
+		}
+		visible = {
+			THIS = { ROOT = { has_country_flag = sanctions_prepared@PREV } }
+			NOT = { is_in_array = { ROOT.sanctions_targets = THIS } }
+			ROOT = { is_subject = no }
+			is_subject = no
+		}
+		selectable = {
+			ROOT = {
+				has_opinion = {
+					target = PREV
+					value < 0
+				}
+			}
+			THIS = {
+				NOT = {
+					is_in_faction_with = ROOT
+					is_subject_of = ROOT
+				}
+			}
+		}
+
+		requires_acceptance = no
+		show_acceptance_on_action_button = no
+
+		send_description = CHOOSE_SANCTIONS_LOC
+		receive_description = LIGHT_SANCTIONS_RECIEVER_LOC
+		on_sent_effect = {
+            log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect sanctions_imposed"
+		}
+		complete_effect = {
+			THIS = {
+				issued_sanctions = yes
+				every_other_country = {
+					revoke_sanctions_help_prev = yes
+				}
+			}
+			ROOT = {
+				add_named_threat = {
+					name = sanctions_treat
+					threat = 1
+				}
+			}
+		}
+
+		reject_effect = {
+		}
+		ai_desire = {
+			modifier = {
+				ROOT = {
+					has_opinion = { target = PREV value < -75 }
+				}
+				add = 50
+			}
+			modifier = {
+				ROOT = { has_war_with = PREV }
+				add = 100
+			}
+			modifier = {
+				has_added_tension_amount > 15
+				add = 100
+			}
+			modifier = {
+				add = 100
+				any_other_country = {
+					has_war_with = PREV
+					OR = {
+						is_in_faction_with = ROOT
+						has_volunteers_amount_from = {
+							tag = ROOT
+							count > 0
+						}
+						has_attache_from = ROOT
+						ROOT = { is_lend_leasing = PREV }
+						is_guaranteed_by = ROOT
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				ROOT = {
+					OR = {
+						has_idea = non_power
+						has_idea = minor_power
+					}
+				}
+			}
+			modifier = {
+				has_added_tension_amount < 1
+				factor = 0
+			}
+		}
+		ai_acceptance = {		# AI modifiers to accept this diplomatic action, not valid if requires_acceptance is set to NO.
+		}
+	}
+	### LIFT LIGHT SANCTIONS
+	lift_light_sanctions = {
+		#### CONDITIONS TO USE/SEE ACTION ###
+		allowed = {		#	Used for the send window, if not true player/AI wont be able to send the diplomatic request even if can_be_sent is true.
+			always = yes
+		}
+		visible = {
+			is_in_array = { ROOT.sanctions_targets = THIS }
+		}
+		selectable = {
+			ROOT = {
+				has_political_power > 249
+				NOT = {
+					has_opinion = {
+						target = PREV
+						value < 0
+					}
+				}
+			}
+		}
+		cost = 250
+
+		requires_acceptance = no		#	Does this diplomatic request requires acceptance, if set to NO reject_effect is invalid
+		show_acceptance_on_action_button = no #	Should accept/decline tooltip be shown in the user interface when using this diplomatic action on AI countries
+
+		#### ACTION LOCALISATION ###
+
+		send_description = LIFT_SANCTIONS_LOC		# The text the country that is executing the diplomatic action sees.
+		receive_description = LIFT_SANCTIONS_RECIEVER_LOC	# The text the target country sees when recieving the diplomation action.
+
+
+		#### EFFECTS ###
+
+		on_sent_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect sanctions_lifted"
+		}
+		complete_effect = {
+			THIS = { revoke_sanctions = yes }
+		}
+		reject_effect = {		#	An effect that can be applied the action is REJECTED (only valid if requires_acceptance is set to YES )
+		}
+		#### AI SECTION ###
+		ai_desire = {
+			modifier = {
+				ROOT = {
+					has_opinion = { target = PREV value > 75 }
+				}
+				add = 50
+			}
+			modifier = {
+				THIS = { has_added_tension_amount < 1 }
+				add = 5
+			}
+			modifier = {
+				THIS = {
+					has_same_ideology = yes
+				}
+				add = 15
+			}
+		}
+		ai_acceptance = {		# AI modifiers to accept this diplomatic action, not valid if requires_acceptance is set to NO.
+		}
+	}
+	### ASK SANCTIONS HELP
+	ask_sanctions_help = {
+		allowed = { always = yes }
+		visible = {
+			NOT = { is_in_array = { ROOT.sanctions_evade_helpers = THIS } }
+			NOT = { is_in_array = { ROOT.sanctions_targets = THIS } }
+			NOT = { is_in_array = { sanctions_targets = ROOT } }
+			ROOT = { has_dynamic_modifier = { modifier = sanctions_dynamic_modifier } }
+			NOT = { has_dynamic_modifier = { modifier = sanctions_dynamic_modifier } }
+			NOT = { has_idea = international_sanctions }
+			NOT = { has_idea = Massive_International_Sanctions }
+			NOT = { has_idea = IRQ_international_sanctions }
+			NOT = { has_idea = IRQ_international_sanctions2 }
+			NOT = { has_idea = IRQ_international_sanctions3 }
+			NOT = { has_idea = IRQ_international_sanctions4 }
+			NOT = { has_idea = NKO_international_sanctions_idea }
+			NOT = { has_idea = NKO_international_sanctions_idea1 }
+			NOT = { has_idea = NKO_international_sanctions_idea2 }
+			NOT = { has_idea = NKO_international_sanctions_idea3 }
+			NOT = { has_idea = NKO_international_sanctions_idea4 }
+			NOT = { has_idea = PAL_quartet_very_high_sanctions }
+			NOT = { has_idea = PAL_quartet_high_sanctions }
+			NOT = { has_idea = PAL_quartet_moderate_sanctions }
+			NOT = { has_idea = SER_International_Isolation }
+			NOT = { has_idea = SER_International_Isolation_1 }
+			ROOT = { is_subject = no }
+			is_subject = no
+		}
+		selectable = {
+			ROOT = {
+				has_political_power > 24
+			}
+			THIS = {
+				has_opinion = { target = ROOT value > 25 }
+			}
+		}
+		cost = 25
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		icon = 17
+		send_description = ASK_SANCTIONS_HELP_DESC
+
+		on_sent_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect ask_sanctions_help"
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect ask_sanctions_help"
+			THIS = { fighting_sanctions_help = yes }
+		}
+		reject_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect ask_sanctions_help"
+		}
+
+		accept_title = ASK_SANCTIONS_HELP_ACCEPT_TT
+		accept_description = ASK_SANCTIONS_HELP_ACCEPT_DESC
+		reject_title = ASK_SANCTIONS_HELP_REJECT_TT
+		reject_description = ASK_SANCTIONS_HELP_REJECT_DESC
+
+		ai_acceptance = {
+			base_desire = {
+				base = 0
+			}
+			has_influence_of_sanctioneer = {
+				base = 0
+				modifier = {
+					any_country = {
+						is_in_array = { ROOT.sanctioneers = THIS }
+						PREV = {
+							OR = {
+								AND = {
+									check_variable = { influence_array^0 = PREV }
+									check_variable = { influence_array_val^0 > 24.999 }
+								}
+								AND = {
+									check_variable = { influence_array^1 = PREV }
+									check_variable = { influence_array_val^1 > 24.999 }
+								}
+								AND = {
+									check_variable = { influence_array^2 = PREV }
+									check_variable = { influence_array_val^2 > 24.999 }
+								}
+								AND = {
+									check_variable = { influence_array^3 = PREV }
+									check_variable = { influence_array_val^3 > 24.999 }
+								}
+								AND = {
+									check_variable = { influence_array^4 = PREV }
+									check_variable = { influence_array_val^4 > 24.999 }
+								}
+								AND = {
+									check_variable = { influence_array^5 = PREV }
+									check_variable = { influence_array_val^5 > 24.999 }
+								}
+								AND = {
+									check_variable = { influence_array^6 = PREV }
+									check_variable = { influence_array_val^6 > 24.999 }
+								}
+								has_opinion = { target = PREV value > 50 }
+							}
+						}
+					}
+					add = -100
+				}
+			}
+			condition_three = {
+				base = 0
+				modifier = {
+					set_temp_variable = { opinion_calculator = opinion@ROOT }
+					multiply_temp_variable = { opinion_calculator = 0.05 }
+					check_variable = { opinion_calculator > -60 }
+					add = opinion_calculator
+				}
+			}
+			condition_six = {
+				base = 0
+				modifier = {
+					add = 25
+					ROOT = { is_in_faction_with = PREV }
+				}
+			}
+			condition_energy_five = {
+				base = 0
+				modifier = {
+					in_same_economic_faction = yes
+					add = 15
+				}
+			}
+			condition_seven = {
+				base = 0
+				modifier = {
+					add = 10
+					is_subject_of = ROOT
+				}
+			}
+			condition_eight = {
+				base = 0
+				modifier = {
+					add = 5
+					is_influencer = yes
+				}
+			}
+		}
+		ai_desire = {
+			base = 100
+		}
+	}
+	### LIFT LIGHT SANCTIONS
+	revoke_sanctions_help = {
+		#### CONDITIONS TO USE/SEE ACTION ###
+		allowed = {		#	Used for the send window, if not true player/AI wont be able to send the diplomatic request even if can_be_sent is true.
+			always = yes
+		}
+		visible = {
+			is_in_array = { sanctions_evade_helpers = ROOT }
+		}
+		selectable = {
+			ROOT = {
+				has_political_power > 24
+			}
+		}
+		cost = 25
+
+		requires_acceptance = no		#	Does this diplomatic request requires acceptance, if set to NO reject_effect is invalid
+		show_acceptance_on_action_button = no #	Should accept/decline tooltip be shown in the user interface when using this diplomatic action on AI countries
+
+		#### ACTION LOCALISATION ###
+
+		send_description = REVOKE_SANCTIONS_HELP_LOC		# The text the country that is executing the diplomatic action sees.
+		receive_description = REVOKE_SANCTIONS_HELP_RECEIVER_LOC	# The text the target country sees when recieving the diplomation action.
+
+
+		#### EFFECTS ###
+
+		on_sent_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect revoke_sanctions_help"
+		}
+		complete_effect = {
+			THIS = { revoke_sanctions_help = yes }
+		}
+		reject_effect = {		#	An effect that can be applied the action is REJECTED (only valid if requires_acceptance is set to YES )
+		}
+		#### AI SECTION ###
+		ai_desire = {
+			base = 0
+			modifier = {
+				THIS = {
+					ROOT = {
+						has_opinion = { target = PREV value < 0 }
+					}
+				}
+				add = 25
+			}
+		}
+		ai_acceptance = {		# AI modifiers to accept this diplomatic action, not valid if requires_acceptance is set to NO.
+		}
+	}
+}

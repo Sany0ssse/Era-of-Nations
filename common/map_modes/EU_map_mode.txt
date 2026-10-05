@@ -1,0 +1,100 @@
+scripted_map_modes = {
+	EU_map_mode = {
+		top = {
+			type = country
+			color = {
+				set_temp_variable = { red = 0.004 }
+				set_temp_variable = { blue = 0.882 }
+				set_temp_variable = { green = 0.004 }
+
+				FROM = {
+					is_in_array = {
+						array = global.EU_member
+						value = THIS
+					}
+					if = {
+						limit = {
+							OR = {
+								has_idea = EU_commission_president
+								has_idea = EU_parliament_president
+								has_idea = EU_council_president
+							}
+						}
+						set_temp_variable = { red = 1 }
+						set_temp_variable = { blue = 0.004 }
+						set_temp_variable = { green = 0.004 }
+					}
+					else_if = { limit = { has_idea = EUU_euronavy_sc }
+						set_temp_variable = { red = 0.471 }
+						set_temp_variable = { blue = 0.157 }
+						set_temp_variable = { green = 0.431 }
+					}
+					else_if = { limit = { has_idea = EU_foreign_minister }
+						set_temp_variable = { red = 0.294 }
+						set_temp_variable = { blue = 0.765 }
+						set_temp_variable = { green = 0.824 }
+					}
+					else_if = { limit = { has_idea = EUU_euroarmy_sc }
+						set_temp_variable = { red = 0.294 }
+						set_temp_variable = { blue = 0.373 }
+						set_temp_variable = { green = 0.275 }
+					}
+					else_if = { limit = { has_idea = ECB_president }
+						set_temp_variable = { red = 1 }
+						set_temp_variable = { blue = 0.137 }
+						set_temp_variable = { green = 1 }
+					}
+					else_if = { limit = { has_idea = EU_finance_minister }
+						set_temp_variable = { red = 0.529 }
+						set_temp_variable = { blue = 0.667 }
+						set_temp_variable = { green = 0.137 }
+					}
+					else_if = { limit = { has_idea = frontex_ExDir }
+						set_temp_variable = { red = 1 }
+						set_temp_variable = { blue = 0.667 }
+						set_temp_variable = { green = 0.137 }
+					}
+					else_if = { limit = { has_idea = EUU_ambassador_unsc }
+						set_temp_variable = { red = 1 }
+						set_temp_variable = { blue = 0.137 }
+						set_temp_variable = { green = 0.471 }
+					}
+					else_if = { limit = { has_idea = EU_president }
+						set_temp_variable = { red = 1 }
+						set_temp_variable = { blue = 0.706 }
+						set_temp_variable = { green = 0.471 }
+					}
+				}
+				set_temp_variable = { alpha = 1.0 }
+				set_temp_variable = { thickness = 10.0 }
+			}
+			targets = {
+				target_array = global.EU_potential
+			}
+		}
+		bottom = {
+			type = country
+			color = {
+				set_temp_variable = { red = 0.580 }
+				set_temp_variable = { blue = 0.808 }
+				set_temp_variable = { green = 0.612 }
+
+				set_temp_variable = { alpha = 1.0 }
+				FROM = {
+					is_in_array = {
+						array = global.EU_potential
+						value = THIS
+					}
+				}
+			}
+			targets = {
+				target_array = global.EU_potential
+			}
+		}
+
+		far_text = country
+		near_text = none
+
+		update_daily = no
+	}
+}

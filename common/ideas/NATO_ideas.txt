@@ -1,0 +1,213 @@
+ideas = {
+	country = {
+
+		NATO_ukraine_help = {
+			picture = GFX_idea_army_artillery_good
+			allowed = {
+				has_idea = NATO_member
+			}
+			modifier = {
+				industrial_capacity_factory = -0.2
+			}
+		}
+
+		NATO_stanag_ratified_idea = {
+			picture = NATO_stanag
+			cancel = {
+				NOT = { has_idea = NATO_member }
+			}
+			allowed = {
+				has_idea = NATO_member
+			}
+			modifier = {
+				personnel_cost_multiplier_modifier = 0.25
+				production_factory_start_efficiency_factor = -0.12
+				production_factory_efficiency_gain_factor = -0.02
+				license_production_speed = 0.12
+				army_org_factor = 0.05
+				coordination_bonus = 0.05
+				land_night_attack = 0.12
+				max_planning_factor = 0.09
+				recon_factor = 0.07
+				planning_speed = 0.07
+				naval_coordination = 0.04
+				naval_detection = 0.05
+				naval_night_attack = 0.12
+				navy_org_factor = 0.05
+				navy_max_range = 0.3
+				night_spotting_chance = 0.09
+				air_interception_detect_factor = 0.05
+				air_escort_efficiency = 0.05
+				air_night_penalty = -0.12
+				air_accidents_factor = -0.07
+			}
+		}
+		NATO_corps_north_idea = {
+			picture = nato_north_idea
+			cancel = {
+				NOT = { has_idea = NATO_member }
+			}
+			allowed = {
+				has_idea = NATO_member
+			}
+			modifier = {
+				army_org_factor = 0.08
+				coordination_bonus = 0.05
+				max_planning_factor = 0.03
+				recon_factor = 0.05
+				planning_speed = 0.03
+			}
+		}
+		NATO_corps_south_idea = {
+			picture = nato_south_idea
+			cancel = {
+				NOT = { has_idea = NATO_member }
+			}
+			allowed = {
+				has_idea = NATO_member
+			}
+			modifier = {
+				army_org_factor = 0.08
+				coordination_bonus = 0.05
+				max_planning_factor = 0.03
+				recon_factor = 0.05
+				planning_speed = 0.03
+			}
+		}
+		NATO_nrf_idea = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea NATO_nrf_idea"
+				division_template = {
+					name = "NATO Response Force"
+					is_locked = yes
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						L_Inf_Bat = { x = 0 y = 3 }
+						Arty_Bat = { x = 0 y = 4 }
+						L_Inf_Bat = { x = 1 y = 0 }
+						L_Inf_Bat = { x = 1 y = 1 }
+						L_Inf_Bat = { x = 1 y = 2 }
+						L_Inf_Bat = { x = 1 y = 3 }
+						Arty_Bat = { x = 1 y = 4 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+					priority = 2
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \" NATO Response Force\" division_template = \"NATO Response Force\" start_experience_factor = 0.4"
+						owner = ROOT
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \" NATO Response Force\" division_template = \"NATO Response Force\" start_experience_factor = 0.4"
+						owner = ROOT
+					}
+				}
+			}
+			picture = nato_nrf_button
+			cancel = {
+				OR = {
+					NOT = { has_idea = NATO_member }
+					has_war = no
+				}
+			}
+			allowed = {
+				has_idea = NATO_member
+			}
+			on_remove = {
+				delete_unit_template_and_units = {
+					division_template = "NATO Response Force"
+					disband = no
+				}
+				USA = {
+					clr_country_flag = NATO_nrf_mobilize
+				}
+			}
+			modifier = {
+				army_org_factor = 0.01
+				coordination_bonus = 0.01
+				max_planning_factor = 0.01
+				recon_factor = 0.01
+				planning_speed = 0.01
+			}
+		}
+		NATO_arf_idea = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea NATO_arf_idea"
+				division_template = {
+					name = "Allied Reaction Force"
+					is_locked = yes
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						L_Inf_Bat = { x = 0 y = 3 }
+						Arty_Bat = { x = 0 y = 4 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+					priority = 2
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \" Allied Reaction Force\" division_template = \"Allied Reaction Force\" start_experience_factor = 0.4"
+						owner = ROOT
+					}
+				}
+			}
+			picture = nato_arf_idea
+			cancel = {
+				OR = {
+					NOT = { has_idea = NATO_member }
+					has_war = no
+				}
+			}
+			allowed = {
+				has_idea = NATO_member
+			}
+			on_remove = {
+				delete_unit_template_and_units = {
+					division_template = "Allied Reaction Force"
+					disband = no
+				}
+				USA = {
+					clr_country_flag = NATO_arf_mobilize
+				}
+			}
+			modifier = {
+				army_org_factor = 0.01
+				coordination_bonus = 0.01
+				max_planning_factor = 0.01
+				recon_factor = 0.01
+				planning_speed = 0.01
+			}
+		}
+	}
+	hidden_ideas = {
+		NATO_intervention_active = {
+			cancel = {
+				has_war = no
+			}
+			modifier = {
+				surrender_limit = 0.25
+			}
+		}
+		NATO_operation_active = {
+			cancel = {
+				has_war = no
+			}
+			modifier = {
+				surrender_limit = 0.25
+			}
+		}
+	}
+}

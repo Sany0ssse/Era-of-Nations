@@ -1,0 +1,91 @@
+add_namespace = nuclear_ai_raid
+
+country_event = {
+	id = nuclear_ai_raid.1
+	title = nuclear_ai_raid.1.t
+	desc = nuclear_ai_raid.1.d
+	picture = GFX_full_nuke_strike
+	is_triggered_only = yes
+	immediate = {
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = sugomusus
+					exists = yes
+					has_capitulated = no
+				}
+				clr_country_flag = sugomusus
+				for_each_loop = {
+					array = enemies
+					value = v
+					if = {
+						limit = { exists = yes has_capitulated = no }
+					add_named_threat = {
+						threat = 100
+						name = strat_nuclear_strike_wt_tt
+						}
+			        send_equipment = {
+						equipment = nuclear_ballistic_missile_equipment
+						amount = 10
+						target = EUU
+					}
+			        send_equipment = {
+						equipment = nuclear_missile_equipment
+						amount = 10
+						target = EUU
+					}
+					if = {
+						limit = {
+							     var:v = { has_country_flag = perimetr_system }
+					            }
+						set_variable = { global.temp_arctic_nuclear_level = var:v.arctic_nuclear_level }
+						launch_nuclear_ai_country_strike = yes
+                        var:v = {
+							add_named_threat = {
+								threat = 100
+								name = strat_nuclear_strike_wt_tt
+								}
+							send_equipment = {
+								equipment = nuclear_ballistic_missile_equipment
+								amount = 10
+								target = EUU
+							}
+							send_equipment = {
+								equipment = nuclear_missile_equipment
+								amount = 10
+								target = EUU
+							}
+						}
+					}
+				}
+				}
+			}
+		}
+	}
+	option = {
+		name = nuclear_ai_raid.1.a
+		hidden_effect = {
+			every_country = {
+				set_variable = { nukes_strikes_count = 0 }
+			}
+			clear_variable = global.temp_arctic_nuclear_level
+			clear_variable = global.nuke_striker
+		}
+	}
+}
+
+country_event = {
+	id = nuclear_ai_raid.2
+	title = nuclear_ai_raid.2.t
+	desc = nuclear_ai_raid.2.d
+	picture = GFX_tactical_nuke
+	is_triggered_only = yes
+
+	option = {
+		name = nuclear_ai_raid.2.a
+		hidden_effect = {
+			clear_variable = global.temp_arctic_nuclear_level
+			clear_variable = global.nuke_striker
+		}
+	}
+}

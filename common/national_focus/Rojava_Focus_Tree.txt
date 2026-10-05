@@ -1,0 +1,2203 @@
+focus_tree = {
+    id = rojavan_focus
+    country = {
+		factor = 0
+		modifier = {
+			add = 100
+			original_tag = ROJ
+		}
+	}
+	default = no
+
+	continuous_focus_position = { x = 2500 y = 1000 }
+
+    #Focus Tree
+	focus = {
+		id = ROJ_arise
+		icon = rojava_arise
+		cost = 0.5
+		x = 16
+		y = 0
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_arise"
+			add_political_power = 100
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_SDF
+		icon = YPG_swords
+		cost = 2
+		x = -3
+		y = 1
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_arise }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_SDF"
+			army_experience = 15
+			add_equipment_to_stockpile = {
+				type = medium_tank_amphibious_chassis_0
+				variant_name = "BTR-a Rizgariya Gelên Bindest ên Rojava"
+				amount = 54
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_weapons1
+				amount = 2004
+				producer = SOV
+			}
+			custom_effect_tooltip = rojava_militia_tt
+			hidden_effect = {
+				division_template = {
+					name = "National Militia"
+					is_locked = yes
+					regiments = {
+						Militia_Bat = { x = 0 y = 0 }
+						Militia_Bat = { x = 0 y = 1 }
+						Militia_Bat = { x = 1 y = 0 }
+						Militia_Bat = { x = 1 y = 1 }
+						Militia_Bat = { x = 1 y = 2 }
+						Militia_Bat = { x = 2 y = 1 }
+						Arty_Bat = { x = 2 y = 0 }
+						Arty_Bat = { x = 2 y = 1 }
+						Arty_Bat = { x = 2 y = 2 }
+					}
+					support = {
+						Mot_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+				}
+				capital_scope = {
+					create_unit = {
+						division = "name = \"National Militia\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"National Militia\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+				}
+			}
+			add_manpower = 10004
+			army_experience = 10
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_1
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_1
+					add_idea = rojava_disorganized_militias_2
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_2
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_2
+					add_idea = rojava_disorganized_militias_3
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_3
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_3
+					add_idea = rojava_disorganized_militias_4
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_4
+				}
+				remove_ideas = rojava_disorganized_militias_4
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_protect_women
+		icon = ypj_wom
+		cost = 3
+		x = -5
+		y = 2
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_SDF }
+		prerequisite = { focus = ROJ_kurdish_supremacy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_protect_women"
+			custom_effect_tooltip = rojava_militia_tt
+			hidden_effect = {
+				capital_scope = {
+					create_unit = {
+						division = "name = \"Gulên Şoreşê Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Amazonên Rojava Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Tîma Mêvanên Nexwestî Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Periyên Barîkadê Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Xwişkên Rojê Azad Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_1
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_1
+					add_idea = rojava_disorganized_militias_2
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_2
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_2
+					add_idea = rojava_disorganized_militias_3
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_3
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_3
+					add_idea = rojava_disorganized_militias_4
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_4
+				}
+				remove_ideas = rojava_disorganized_militias_4
+			}
+			set_drafted_women_effect = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_manbij
+		icon = save_manbij
+		cost = 1
+		x = -3
+		y = 2
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_SDF }
+		prerequisite = { focus = ROJ_kurdish_supremacy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_manbij"
+			if = {
+				limit = {
+					ROJ = {
+						has_war = yes
+					}
+				}
+				575 = {
+					add_dynamic_modifier = {
+						modifier = ROJ_manbij_defense
+					}
+				}
+			}
+			custom_effect_tooltip = rojava_militia_tt
+			army_experience = 15
+			hidden_effect = {
+				575 = {
+					create_unit = {
+						division = "name = \"Manbij Protection Unit\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Manbij Protection Unit\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Manbij Protection Unit\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Manbij Protection Unit\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Manbij Protection Unit\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_1
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_1
+					add_idea = rojava_disorganized_militias_2
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_2
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_2
+					add_idea = rojava_disorganized_militias_3
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_3
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_3
+					add_idea = rojava_disorganized_militias_4
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_4
+				}
+				remove_ideas = rojava_disorganized_militias_4
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_protect_people
+		icon = mobilize_ypg
+		cost = 3
+		x = -1
+		y = 2
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_SDF }
+		prerequisite = { focus = ROJ_kurdish_supremacy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_protect_people"
+			custom_effect_tooltip = rojava_militia_tt
+			hidden_effect = {
+				capital_scope = {
+					create_unit = {
+						division = "name = \"Martyr Alişêr\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Martyr Jayan\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Martyr Xebat Dêrik\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Martyr Afrin\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Martyr Rojhilet\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+					create_unit = {
+						division = "name = \"Martyr Bahoz Afrin\" division_template = \"National Militia\" start_experience_factor = 1"
+						owner = ROJ
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_1
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_1
+					add_idea = rojava_disorganized_militias_2
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_2
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_2
+					add_idea = rojava_disorganized_militias_3
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_3
+				}
+				swap_ideas = {
+					remove_idea = rojava_disorganized_militias_3
+					add_idea = rojava_disorganized_militias_4
+				}
+			}
+			if = {
+				limit = {
+					has_idea = rojava_disorganized_militias_4
+				}
+				remove_ideas = rojava_disorganized_militias_4
+			}
+			if = {
+				limit = {
+					has_idea = no_military
+				}
+				swap_ideas = {
+					add_idea = draft_army
+					remove_idea = no_military
+				}
+			}
+			if = {
+				limit = {
+					has_idea = volunteer_army
+				}
+				swap_ideas = {
+					add_idea = draft_army
+					remove_idea = volunteer_army
+				}
+			}
+			if = {
+				limit = {
+					has_idea = partial_draft_army
+				}
+				swap_ideas = {
+					remove_idea = partial_draft_army
+					add_idea = draft_army
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_kurdish_supremacy
+		icon = kurdish_supreme_comitee
+		cost = 4
+		x = 2
+		y = 1
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_arise }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_kurdish_supremacy"
+			add_stability = 0.05
+			add_war_support = 0.1
+			set_temp_variable = { percent_change = 5 }
+			change_domestic_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_KNC_agreement
+		icon = party_agreement
+		cost = 2
+		x = 1
+		y = 2
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_SDF }
+		prerequisite = { focus = ROJ_kurdish_supremacy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_KNC_agreement"
+			set_party_index_to_ruling_party = yes
+			set_temp_variable = {
+				party_popularity_increase = 0.05
+			}
+			set_temp_variable = {
+				temp_outlook_increase = 0.05
+			}
+			add_relative_party_popularity = yes
+			remove_ideas = rojava_political_chaos
+			set_temp_variable = { add_col_one = 0 }
+			add_coalition_members_effect = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_minorities_agreement
+		icon = accept_minorities
+		cost = 2
+		x = 3
+		y = 2
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_SDF }
+		prerequisite = { focus = ROJ_kurdish_supremacy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_minorities_agreement"
+			swap_ideas = {
+				add_idea = rojava_unintegrated_minorities_2
+				remove_idea = rojava_unintegrated_minorities
+			}
+			set_temp_variable = {
+				party_popularity_increase = 0.05
+			}
+			set_temp_variable = {
+				temp_outlook_increase = 0.05
+			}
+			add_relative_party_popularity = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_asayish
+		icon = asayish
+		x = -4
+		y = 3
+		relative_position_id = ROJ_arise
+		cost = 4
+		prerequisite = { focus = ROJ_protect_women }
+		prerequisite = { focus = ROJ_protect_people }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_asayish"
+			if = {
+				limit = {
+					NOT = {
+						has_idea = ROJ_asayish_idea
+					}
+				}
+				add_ideas = ROJ_asayish_idea1
+			}
+			if = {
+				limit = {
+					has_idea = ROJ_asayish_idea
+				}
+				swap_ideas = {
+					remove_idea = ROJ_asayish_idea
+					add_idea = ROJ_asayish_idea1
+				}
+			}
+			set_temp_variable = { percent_change = 0.3 }
+			change_domestic_influence_percentage = yes
+			add_timed_idea = {
+				idea = GENERIC_police_reform_up_idea
+				days = 300
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_apo
+		icon = spirit_of_apo
+		cost = 2
+		x = -2
+		y = 3
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_protect_women }
+		prerequisite = { focus = ROJ_protect_people }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_apo"
+			add_ideas = rojava_apo_spirit
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_kurdish_support
+		icon = focus_IRQ_kurdish_form_the_peshmerga
+		cost = 5
+		x = 0
+		y = 3
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_protect_women }
+		prerequisite = { focus = ROJ_protect_people }
+
+		available = {
+			country_exists = KUR
+			NOT = {
+				has_war_with = KUR
+			}
+			KUR = {
+				has_opinion = {
+					target = ROJ
+					value > 0
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_kurdish_support"
+			army_experience = 25
+			add_timed_idea = {
+				idea = GENERIC_army_reform_up_idea
+				days = 300
+			}
+			add_equipment_to_stockpile = {
+				type = medium_tank_amphibious_chassis_0
+				variant_name = "BTR-a Rizgariya Gelên Bindest ên Rojava"
+				amount = 200
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_weapons1
+				amount = 3000
+				producer = SOV
+			}
+			if = {
+				limit = { has_dlc = "No Step Back" }
+					ARM = {
+						add_equipment_to_stockpile = {
+						type = medium_tank_chassis_1
+						variant_name = "T-80"
+						amount = 120
+						producer = SOV
+					}
+				}
+			}
+			else = {
+				ARM = {
+					add_equipment_to_stockpile = {
+						type = MBT_3
+						amount = 120
+						producer = SOV
+					}
+				}
+			}
+			set_temp_variable = { percent_change = 10 }
+			set_temp_variable = { tag_index = KUR }
+			set_temp_variable = { influence_target = ROJ }
+			change_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_syria_assyria_council
+		icon = syriac
+		cost = 2
+		x = -5
+		y = 4
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_asayish }
+		prerequisite = { focus = ROJ_apo }
+
+		available = {
+			has_completed_focus = ROJ_minorities_agreement
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_syria_assyria_council"
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Sutoro Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+				create_unit = {
+					division = "name = \"Dawronoye Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+			}	
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_international_brigades
+		icon = pkk_bases
+		cost = 4
+		x = -3
+		y = 4
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_asayish }
+		prerequisite = { focus = ROJ_apo }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_international_brigades"
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Reconstrucción Comunista Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+				create_unit = {
+					division = "name = \"Bob Crow Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+				create_unit = {
+					division = "name = \"The Queer Insurrection and Liberation Army\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+				create_unit = {
+					division = "name = \"Tekoşîna Anarşîst Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+				create_unit = {
+					division = "name = \"Women's Freedom Forces Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+				create_unit = {
+					division = "name = \"United Freedom Forces Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+			}
+			set_temp_variable = { temp_opinion = 10 }
+			change_communist_cadres_opinion = yes
+			set_temp_variable = {
+				treasury_change = -5
+			}
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_turkish_opposition
+		icon = turk_opposition_communist
+		cost = 2
+		x = -1
+		y = 4
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_asayish }
+		prerequisite = { focus = ROJ_apo }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_turkish_opposition"
+			add_political_power = 50
+			add_manpower = 2000
+			TUR = {
+				add_stability = -0.05
+				add_popularity = {
+					ideology = communism
+					popularity = 0.1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_nubar_ozaryan_brigade
+		icon = focus_nubar_brigade
+		cost = 4
+		x = -5
+		y = 5
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_syria_assyria_council }
+		prerequisite = { focus = ROJ_international_brigades }
+		prerequisite = { focus = ROJ_turkish_opposition }
+
+		available = {
+			has_completed_focus = ROJ_minorities_agreement
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_nubar_ozaryan_brigade"
+			country_event = arme.172
+			add_opinion_modifier = {
+				modifier = diplomatic_support
+				target = ARM
+			}
+			reverse_add_opinion_modifier = {
+				modifier = diplomatic_support
+				target = ARM
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_self_defence_forces
+		icon = ypg_spec
+		cost = 4
+		x = -3
+		y = 5
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_syria_assyria_council }
+		prerequisite = { focus = ROJ_international_brigades }
+		prerequisite = { focus = ROJ_turkish_opposition }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_self_defence_forces"
+			increase_military_spending = yes
+			division_template = {
+				name = "Rojava Special Forces"
+				regiments = {
+					Special_Forces = { x = 0 y = 0 }
+					Special_Forces = { x = 0 y = 1 }
+					Special_Forces = { x = 0 y = 2 }
+					Special_Forces = { x = 0 y = 3 }
+				}
+				priority = 2
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"Anti-Terror Unit\" division_template = \"Rojava Special Forces\" start_experience_factor = 1.0"
+					owner = ROJ
+				}
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"Hêzên Komandos\" division_template = \"Rojava Special Forces\" start_experience_factor = 1.0"
+					owner = ROJ
+				}
+			}
+			set_temp_variable = {
+				treasury_change = -5
+			}
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_turkish_volunteers
+		icon = ces_seljik
+		cost = 2
+		x = -1
+		y = 5
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_syria_assyria_council }
+		prerequisite = { focus = ROJ_international_brigades }
+		prerequisite = { focus = ROJ_turkish_opposition }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_turkish_volunteers"
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"TKP-ML Martyrs Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"Turkmen Volunteer Brigade\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_mazloum_abdi
+		icon = mazlum_abdi
+		cost = 3
+		x = -3
+		y = 6
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_nubar_ozaryan_brigade }
+		prerequisite = { focus = ROJ_self_defence_forces }
+		prerequisite = { focus = ROJ_turkish_volunteers }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_mazloum_abdi"
+			create_country_leader = {
+				name = "Mazloum Abdi"
+				picture = "Mazloum_Abdi.dds"
+				ideology = neutral_Social
+				traits = {
+					neutrality_neutral_Social
+					military_career
+					legendary_guerrilla_leader
+					leader_of_the_revolution
+					democratic_champion
+					opposes_muslim_brotherhood
+					pro_american
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_self_rule
+		icon = ROJ_self_rule
+		cost = 3
+		x = 2
+		y = 3
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_KNC_agreement }
+		prerequisite = { focus = ROJ_minorities_agreement }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_self_rule"
+			set_temp_variable = {
+				party_popularity_increase = 0.05
+			}
+			set_temp_variable = {
+				temp_outlook_increase = 0.05
+			}
+			add_relative_party_popularity = yes
+			set_temp_variable = { percent_change = 5 }
+			change_domestic_influence_percentage = yes
+			set_temp_variable = { temp_opinion = 25 }
+			change_communist_cadres_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_arabs_question
+		icon = ROJ_arab_question
+		cost = 4
+		x = 4
+		y = 3
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_KNC_agreement }
+		prerequisite = { focus = ROJ_minorities_agreement }
+
+		available = {
+			has_completed_focus = ROJ_SDF
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_arabs_question"
+			add_stability = -0.05
+			remove_ideas = rojava_unintegrated_minorities_2
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"Arab Liberation Army\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"Rojava Arabic Army\" division_template = \"National Militia\" start_experience_factor = 1"
+					owner = ROJ
+				}
+			}
+			add_state_core = 995
+			add_state_core = 192
+			add_state_core = 191
+			set_temp_variable = { treasury_change = -9 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_US_support
+		icon = USA_american_coat_of_arm
+		cost = 3
+		x = 6
+		y = 3
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_KNC_agreement }
+		prerequisite = { focus = ROJ_minorities_agreement }
+
+		available = {
+			country_exists = USA
+			NOT = {
+				has_war_with = USA
+			}
+			USA = {
+				has_opinion = {
+					target = ROJ
+					value > 9
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [This.GetName]: focus ARM_expand_russian_base_time executed"
+			USA = {
+				country_event = md4.4
+			}
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				add_political_power = -100
+				army_experience = 25
+				add_command_power = 15
+				add_tech_bonus = {
+					name = ROJ_expand_russian_base_time
+					uses = 1
+					bonus = 0.25
+					category = Cat_SPECIAL_FORCES
+				}
+				add_doctrine_cost_reduction = {
+					name = ROJ_expand_russian_base_time
+					category = CAT_land_doctrine
+					uses = 1
+					cost_reduction = 0.25
+				}
+			}
+			newline = yes
+			set_temp_variable = {
+				percent_change = 2
+			}
+			set_temp_variable = {
+				tag_index = ROJ
+			}
+			set_temp_variable = {
+				influence_target = USA
+			}
+			change_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_rus_support
+		icon = pmr_sell_weapon
+		cost = 3
+		x = 8
+		y = 3
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_KNC_agreement }
+		prerequisite = { focus = ROJ_minorities_agreement }
+
+		available = {
+			country_exists = SOV
+			NOT = {
+				has_war_with = SOV
+			}
+			SOV = {
+				has_opinion = {
+					target = ROJ
+					value > 9
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [This.GetName]: focus ARM_expand_russian_base_time executed"
+			SOV = {
+				country_event = md4.4
+			}
+			custom_effect_tooltip = ARM_effect_if_they_accept_TT
+			effect_tooltip = {
+				add_political_power = -100
+				army_experience = 25
+				add_command_power = 15
+				add_tech_bonus = {
+					name = ROJ_expand_russian_base_time
+					uses = 1
+					bonus = 0.25
+					category = Cat_SPECIAL_FORCES
+				}
+				add_doctrine_cost_reduction = {
+					name = ROJ_expand_russian_base_time
+					category = CAT_land_doctrine
+					uses = 1
+					cost_reduction = 0.25
+				}
+			}
+			newline = yes
+			set_temp_variable = {
+				percent_change = 2
+			}
+			set_temp_variable = {
+				tag_index = ROJ
+			}
+			set_temp_variable = {
+				influence_target = SOV
+			}
+			change_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_break_them
+		icon = ROJ_brealing_within
+		cost = 3
+		x = 10
+		y = 3
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_KNC_agreement }
+		prerequisite = { focus = ROJ_minorities_agreement }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_break_them"
+			add_timed_idea = {
+				idea = rojava_breaking_old_order
+				days = 180
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_saa_negotiations
+		icon = ROJ_saa
+		cost = 1
+		x = 9
+		y = 4
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_break_them }
+		mutually_exclusive = { focus = ROJ_fsa_negotiations }
+
+		available = {
+			country_exists = SYR
+			NOT = {
+				has_war_with = SYR
+			}
+			SYR = {
+				has_opinion = {
+					target = ROJ
+					value > 9
+				}
+			}
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_saa_negotiations"
+			SYR = { country_event = rojava.2 }
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_fsa_negotiations
+		icon = ROJ_fsa
+		cost = 1
+		x = 11
+		y = 4
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_break_them }
+		mutually_exclusive = { focus = ROJ_saa_negotiations }
+
+		available = {
+			country_exists = FSA
+			has_war_with = FSA
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_fsa_negotiations"
+			FSA = { country_event = rojava.5 }
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_territorial_agreement
+		icon = ROJ_territory_agreement
+		cost = 2
+		x = 8
+		y = 5
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_saa_negotiations focus = ROJ_fsa_negotiations }
+
+		available = {
+			country_exists = SYR
+			NOT = {
+				has_war_with = SYR
+			}
+			SYR = {
+				has_opinion = {
+					target = ROJ
+					value > 9
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_territorial_agreement"
+			SYR = { country_event = rojava.8 }
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_southern_operations_room
+		icon = ROJ_room_opp
+		cost = 3
+		x = 10
+		y = 5
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_saa_negotiations focus = ROJ_fsa_negotiations }
+
+		available = {
+			country_exists = DRU
+			NOT = {
+				has_war_with = DRU
+			}
+			DRU = {
+				has_opinion = {
+					target = ROJ
+					value > 9
+				}
+			}
+		}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_southern_operations_room"
+			add_ideas = rojava_aladruzes_friendship
+			DRU = {
+				add_ideas = rojava_aladruzes_friendship_2
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_turkey_ceasefire
+		icon = ROJ_ceasefire_tur
+		cost = 2
+		x = 12
+		y = 5
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_saa_negotiations focus = ROJ_fsa_negotiations }
+
+		available = {
+			country_exists = TUR
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_turkey_ceasefire"
+			TUR = { country_event = rojava.5 }
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_alawites_connections
+		icon = syrian_baath_officer
+		cost = 4
+		x = 9
+		y = 6
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_southern_operations_room }
+
+		available = {
+			OR = {
+				AND = {
+					country_exists = SYR
+					189 = {
+						is_controlled_by = SYR
+					}
+					has_war_with = ROJ
+				}
+				AND = {
+					country_exists = NUS
+					189 = {
+						is_controlled_by = NUS
+					}
+				}
+				AND = {
+					country_exists = FSA
+					189 = {
+						is_controlled_by = FSA
+					}
+					has_war_with = ROJ
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_alawites_connections"
+			if = {
+				limit = {
+					country_exists = ALA
+					ALA = {
+						NOT = {
+							has_war_with = ROJ
+						}
+					}
+				}
+				ALA = {
+					add_ideas = rojava_aladruzes_friendship_1
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						country_exists = ALA
+					}
+				}
+				random_list = {
+					60 = {
+						custom_effect_tooltip = alawites_failed_tt
+						hidden_effect = {
+							country_event = rojava.15
+						}
+					}
+					40 = {
+						custom_effect_tooltip = alawites_succeed_tt
+						hidden_effect = {
+							ROJ_alawites_rebellion = yes
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_coordinations_with_israel
+		icon = ROJ_isr_cooperate
+		cost = 4
+		x = 11
+		y = 6
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_southern_operations_room }
+
+		available = {
+			country_exists = ISR
+			NOT = {
+				has_war_with = ISR
+			}
+			ISR = {
+				has_opinion = {
+					target = ROJ
+					value > 9
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_coordinations_with_israel"
+			ISR = { country_event = rojava.11 }
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_prepare_constitution
+		icon = ROJ_constitution
+		cost = 3
+		x = 1
+		y = 4
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_self_rule }
+
+		available = {
+			has_completed_focus = ROJ_mazloum_abdi
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_prepare_constitution"
+			add_political_power = -100
+			set_temp_variable = { temp_opinion = 10 }
+			change_communist_cadres_opinion = yes
+			set_temp_variable = {
+				party_popularity_increase = 0.05
+			}
+			set_temp_variable = {
+				temp_outlook_increase = 0.05
+			}
+			add_relative_party_popularity = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_libertarian_socialism
+		icon = ROJ_libsoc
+		cost = 5
+		x = 3
+		y = 4
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_self_rule }
+		prerequisite = { focus = ROJ_arabs_question }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_libertarian_socialism"
+			add_ideas = rojava_libertarian
+			set_temp_variable = { temp_opinion = 10 }
+			change_communist_cadres_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_revol_army_negotiations
+		icon = ROJ_army_of_revolutionaries
+		cost = 1
+		x = 5
+		y = 4
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_US_support }
+		prerequisite = { focus = ROJ_arabs_question }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_revol_army_negotiations"
+			add_opinion_modifier = {
+				target = USA
+				modifier = military_deals
+			}
+			add_popularity = {
+				ideology = democratic
+				popularity = 0.1
+			}
+			army_experience = 15
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_iran_negotiations
+		icon = ROJ_iran_deal
+		cost = 3
+		x = 7
+		y = 4
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_US_support }
+		prerequisite = { focus = ROJ_rus_support }
+
+		available = {
+			country_exists = PER
+			NOT = {
+				has_war_with = PER
+			}
+			PER = {
+				has_opinion = {
+					target = ROJ
+					value > 14
+				}
+			}
+			NOT = {
+				has_completed_focus = ROJ_western_kurdistan_republic
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_iran_negotiations"
+			add_opinion_modifier = {
+				target = PER
+				modifier = military_deals
+			}
+			add_timed_idea = {
+				idea = iranian_aid
+				days = 300
+			}
+			diplomatic_relation = {
+				country = PER
+				relation = non_aggression_pact
+				active = no
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = PER }
+			set_temp_variable = { influence_target = ROJ }
+			change_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_democratic_autonomous_administration
+		icon = ROJ_autonomy_syria
+		cost = 6
+		x = 1
+		y = 5
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_prepare_constitution }
+		prerequisite = { focus = ROJ_libertarian_socialism }
+		mutually_exclusive = { focus = ROJ_western_kurdistan_republic }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_democratic_autonomous_administration"
+			remove_ideas = rojava_undecided_status
+			remove_ideas = Non_State_Actor
+			set_temp_variable = { temp_opinion = 5 }
+			change_communist_cadres_opinion = yes
+			add_political_power = 100
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_western_kurdistan_republic
+		icon = ROJ_western_kurdistan
+		cost = 6
+		x = 3
+		y = 5
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_prepare_constitution }
+		prerequisite = { focus = ROJ_libertarian_socialism }
+		mutually_exclusive = { focus = ROJ_democratic_autonomous_administration }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_western_kurdistan_republic"
+			if = {
+				limit = {
+					has_completed_focus = ROJ_iran_negotiations
+				}
+				remove_ideas = iranian_aid
+				diplomatic_relation = {
+					country = PER
+					relation = non_aggression_pact
+					active = yes
+				}
+				add_opinion_modifier = {
+					modifier = xenophobic_agenda
+					target = PER
+				}
+				reverse_add_opinion_modifier = {
+					modifier = xenophobic_agenda
+					target = PER
+				}
+				set_temp_variable = { percent_change = -7 }
+				set_temp_variable = { tag_index = PER }
+				set_temp_variable = { influence_target = ROJ }
+				change_influence_percentage = yes
+			}
+			remove_ideas = rojava_undecided_status
+			add_war_support = 0.15
+			set_temp_variable = { temp_opinion = 10 }
+			change_communist_cadres_opinion = yes
+			add_threat = 5
+			set_cosmetic_tag = KUR_AUTH
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.05
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_war_measures
+		icon = kurdish_commies
+		cost = 5
+		x = 1
+		y = 6
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_democratic_autonomous_administration }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_war_measures"
+			add_ideas = rojava_defense_measures
+			one_random_arms_factory = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_daesh_destroy
+		icon = attack_isis
+		cost = 2
+		x = 1
+		y = 7
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_mazloum_abdi }
+		prerequisite = { focus = ROJ_war_measures }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_daesh_destroy"
+			add_timed_idea = {
+				idea = kill_deash
+				days = 300
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_turkey_border_defenses
+		icon = turkey_defense
+		cost = 5
+		x = -1
+		y = 7
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_mazloum_abdi }
+		prerequisite = { focus = ROJ_war_measures }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_turkey_border_defenses"
+			193 = {
+				add_building_construction = {
+					type = bunker
+					level = 2
+					province = 6362
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = bunker
+					level = 2
+					province = 1549
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = bunker
+					level = 2
+					province = 1578
+					instant_build = yes
+				}
+			}
+			set_temp_variable = {
+				treasury_change = -3.875
+			}
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_sna_infiltrate
+		icon = attack_syrian_rebels
+		cost = 2
+		x = -3
+		y = 7
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_mazloum_abdi }
+		prerequisite = { focus = ROJ_war_measures }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_sna_infiltrate"
+			add_timed_idea = {
+				idea = kill_sna
+				days = 300
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_federalisation_negotiation
+		icon = syr_oppos_whatdo
+		cost = 2
+		x = -2
+		y = 8
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_sna_infiltrate }
+		prerequisite = { focus = ROJ_turkey_border_defenses }
+		prerequisite = { focus = ROJ_daesh_destroy }
+		mutually_exclusive = { focus = ROJ_true_syrian_government }
+
+		available = {
+			OR = {
+				country_exists = SYR
+				186 = {
+						is_controlled_by = SYR
+				}	
+				country_exists = FSA
+				186 = {
+						is_controlled_by = FSA
+				}	
+				country_exists = NUS
+				186 = {
+						is_controlled_by = NUS
+				}	
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_federalisation_negotiation"
+			if = {
+				limit = {
+					186 = {
+						is_controlled_by = SYR
+					}	
+				}
+				SYR = { country_event = SyriaFocus.0 }
+			}
+			if = {
+				limit = {
+					186 = {
+						is_controlled_by = FSA
+					}	
+				}
+				FSA = { country_event = SyriaFocus.0 }
+			}
+			if = {
+				limit = {
+					186 = {
+						is_controlled_by = NUS
+					}	
+				}
+				NUS = { country_event = SyriaFocus.0 }
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_true_syrian_government
+		icon = true_syrian_government
+		cost = 5
+		x = 0
+		y = 8
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_sna_infiltrate }
+		prerequisite = { focus = ROJ_turkey_border_defenses }
+		prerequisite = { focus = ROJ_daesh_destroy }
+		mutually_exclusive = { focus = ROJ_federalisation_negotiation }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_true_syrian_government"
+			add_state_core = 994
+			add_state_core = 575
+			add_state_core = 190
+			add_state_core = 158
+			add_state_core = 189
+			add_state_core = 566
+			add_state_core = 188
+			add_state_core = 186
+			add_state_core = 185
+			add_state_core = 184
+			add_state_core = 587
+			add_state_core = 191
+			declare_war_on = {
+				target = SYR
+				type = take_core_state
+			}
+			declare_war_on = {
+				target = FSA
+				type = take_core_state
+			}
+			declare_war_on = {
+				target = NUS
+				type = take_core_state
+			}
+			ALA = { country_event = { id = md4.14 days = 2 } }
+			DRU = { country_event = { id = md4.14 days = 2 } }
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_konets_genocida
+		icon = syr_end_of_war
+		cost = 3
+		x = -1
+		y = 9
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_federalisation_negotiation }
+		prerequisite = { focus = ROJ_true_syrian_government }
+
+		available = {
+			ROJ = {
+				has_war = no
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_konets_genocida"
+			add_political_power = 150
+			add_stability = 0.15
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_demilitarize_economy
+		icon = ISR_peace_isr
+		cost = 5
+		x = -2
+		y = 10
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_konets_genocida }
+		prerequisite = { focus = ROJ_federalisation_negotiation }
+		prerequisite = { focus = ROJ_true_syrian_government }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_demilitarize_economy"
+			add_stability = 0.05
+			two_office_construction = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_democratic_federation_of_syria
+		icon = true_syrian_federat
+		cost = 5
+		x = 0
+		y = 10
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_konets_genocida }
+		prerequisite = { focus = ROJ_federalisation_negotiation }
+		prerequisite = { focus = ROJ_true_syrian_government }
+
+		available = {
+			country_exists = LEB
+			country_exists = JOR
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_democratic_federation_of_syria"
+			LEB = { country_event = { id = md4.14 days = 2 } }
+			JOR = { country_event = { id = md4.14 days = 2 } }
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_rojava_or_death
+		icon = kurdish_militia
+		cost = 3
+		x = 3
+		y = 6
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_western_kurdistan_republic }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_rojava_or_death"
+			add_manpower = 5456
+			add_war_support = 0.1
+			add_ideas = rojava_or_death
+			add_equipment_to_stockpile = {
+				type = infantry_weapons1
+				amount = 500
+				producer = SOV
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_call_for_international_support
+		icon = international_support_rojava
+		cost = 3
+		x = 3
+		y = 7
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_rojava_or_death }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_call_for_international_support"
+			add_political_power = 50
+			army_experience = 15
+			add_threat = 10
+			set_temp_variable = { percent_change = -10 }
+			change_domestic_influence_percentage = yes
+			every_country = {
+				limit = { has_government = democratic }
+				add_opinion_modifier = {
+					modifier = diplomatic_support
+					target = ROOT
+				}
+				reverse_add_opinion_modifier = {
+					modifier = diplomatic_support
+					target = ROOT
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_union_with_iraqi_kurdistan
+		icon = focus_IRQ_promote_kurdish_culture
+		cost = 4
+		x = 3
+		y = 8
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_call_for_international_support }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_union_with_iraqi_kurdistan"
+			KUR = { country_event = { id = md4.14 days = 2 } }
+			annex_country = {
+				target = PUK
+				transfer_troops = yes
+			}
+			annex_country = {
+				target = IEK
+				transfer_troops = yes
+			}
+			add_state_core = 630
+			add_state_core = 164
+			add_state_core = 633
+			add_state_core = 641
+			add_state_core = 166
+			add_state_core = 165
+			add_state_core = 1078
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_towards_northern_kurdistan
+		icon = northern_kurdistan
+		cost = 5
+		x = 2
+		y = 9
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_union_with_iraqi_kurdistan }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_towards_northern_kurdistan"
+			add_state_core = 162
+			add_state_core = 1205
+			add_state_core = 935
+			if = {
+				limit = {
+					country_exists = PKK
+				}
+				annex_country = {
+					target = PKK
+					transfer_troops = yes
+				}
+			}
+			else = {
+				create_wargoal = {
+					target = TUR
+					type = take_core_state
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_PJAK_rebellion_support
+		icon = ppjak_rebellion
+		cost = 5
+		x = 4
+		y = 9
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_union_with_iraqi_kurdistan }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_PJAK_rebellion_support"
+			add_state_core = 1139
+			add_state_core = 408
+			add_state_core = 979
+			add_state_core = 1039
+			if = {
+				limit = {
+					country_exists = IKR
+				}
+				annex_country = {
+					target = IKR
+					transfer_troops = yes
+				}
+			}
+			else = {
+				create_wargoal = {
+					target = PER
+					type = take_core_state
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_united_kurdistan
+		icon = united_kurdistan
+		cost = 5
+		x = 3
+		y = 10
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_towards_northern_kurdistan }
+		prerequisite = { focus = ROJ_PJAK_rebellion_support }
+
+		available = {
+			630 = { is_controlled_by = ROJ }
+			164 = { is_controlled_by = ROJ }
+			633 = { is_controlled_by = ROJ }
+			641 = { is_controlled_by = ROJ }
+			166 = { is_controlled_by = ROJ }
+			165 = { is_controlled_by = ROJ }
+			1078 = { is_controlled_by = ROJ }
+			162 = { is_controlled_by = ROJ }
+			1205 = { is_controlled_by = ROJ }
+			935 = { is_controlled_by = ROJ }
+			1139 = { is_controlled_by = ROJ }
+			408 = { is_controlled_by = ROJ }
+			979 = { is_controlled_by = ROJ }
+			1039 = { is_controlled_by = ROJ }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_united_kurdistan"
+			add_stability = 0.3
+			add_political_power = 150
+			remove_ideas = Non_State_Actor
+			set_cosmetic_tag = KUR_AUTH_S_neutrality
+			set_temp_variable = { temp_productivity_change = 50 }
+			flat_productivity_change_effect = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_cooperative_economy
+		icon = pol_commies_proletarians
+		cost = 5
+		x = 6
+		y = 5
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_prepare_constitution }
+		prerequisite = { focus = ROJ_libertarian_socialism }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_cooperative_economy"
+			swap_ideas = {
+				remove_idea = rojava_libertarian
+				add_idea = rojava_libertarian2
+			}
+			set_temp_variable = { temp_productivity_change = 50 }
+			flat_productivity_change_effect = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_libertarian_tax_heaven
+		icon = ROJ_tax_heaven_soc
+		cost = 2
+		x = 5
+		y = 6
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_cooperative_economy }
+		mutually_exclusive = { focus = ROJ_healthcare_support_measures }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_libertarian_tax_heaven"
+			add_timed_idea = {
+				idea = rojava_tax_haven
+				days = 300
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_healthcare_support_measures
+		icon = RAJ_healthcare
+		cost = 2
+		x = 7
+		y = 6
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_cooperative_economy }
+		mutually_exclusive = { focus = ROJ_libertarian_tax_heaven }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_healthcare_support_measures"
+			add_timed_idea = {
+				idea = GENERIC_healthcare_reform_up_idea
+				days = 300
+			}
+			block_social_increase = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_agricultural_cooperatives
+		icon = SYR_hasah_cotton
+		cost = 5
+		x = 5
+		y = 7
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_libertarian_tax_heaven focus = ROJ_healthcare_support_measures }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_agricultural_cooperatives"
+			two_random_agriculture_district = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_industrial_cooperatives
+		icon = ROJ_cooperative_economy
+		cost = 10
+		x = 7
+		y = 7
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_libertarian_tax_heaven focus = ROJ_healthcare_support_measures }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_industrial_cooperatives"
+			two_random_industrial_complex = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_worker_councils
+		icon = ROJ_workers_council
+		cost = 3
+		x = 5
+		y = 8
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_agricultural_cooperatives }
+		prerequisite = { focus = ROJ_industrial_cooperatives }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_worker_councils"
+			set_temp_variable = { temp_productivity_change = 20 }
+			flat_productivity_change_effect = yes
+			add_stability = 0.05
+			set_temp_variable = { temp_opinion = 10 }
+			change_communist_cadres_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_oil_must_flow
+		icon = syr_oil_flow
+		cost = 5
+		x = 7
+		y = 8
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_agricultural_cooperatives }
+		prerequisite = { focus = ROJ_industrial_cooperatives }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_oil_must_flow"
+			random_owned_controlled_state = {
+				add_resource = {
+					type = oil
+					amount = 19
+				}
+				add_building_construction = {
+					type = rubber_refinery
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = fuel_silo
+					level = 1
+					instant_build = yes
+				}
+			}
+			set_temp_variable = { treasury_change = -11.75 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+	focus = {
+		id = ROJ_self_sufficient_military_production
+		icon = Drones
+		cost = 5
+		x = 6
+		y = 9
+		relative_position_id = ROJ_arise
+		prerequisite = { focus = ROJ_worker_councils }
+		prerequisite = { focus = ROJ_oil_must_flow }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ROJ_self_sufficient_military_production"
+			one_random_arms_factory = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+}

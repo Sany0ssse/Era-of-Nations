@@ -1,0 +1,293 @@
+add_namespace = destroy_building
+add_namespace = damage_building
+
+state_event = {
+	id = destroy_building.1
+	title = destroy_building.1.t
+	desc = destroy_building.1.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+		add_to_variable = { number_of_battery_parks_state_var = -1 }
+	            }
+	option = {
+		name = destroy_building.1.a
+	}
+}
+
+state_event = {
+	id = destroy_building.2
+	title = destroy_building.2.t
+	desc = destroy_building.2.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+		add_to_variable = { enrichment_facilities = -1 }
+		add_dynamic_modifier = {
+			modifier = nuclear_fallout_0
+			days = 365
+		}
+	            }
+	option = {
+		name = destroy_building.2.a
+	}
+}
+
+state_event = {
+	id = destroy_building.3
+	title = destroy_building.3.t
+	desc = destroy_building.3.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  set_variable = { hydroelectric_energy_production_var = 0 }
+	  set_variable = { hydroelectric_energy_storage_var = 0 }
+	  remove_dynamic_modifier = { modifier = hydroelectric_infrastructure_in_state }
+	}
+	option = {
+		name = destroy_building.3.a
+	}
+}
+
+state_event = {
+	id = destroy_building.4
+	title = destroy_building.4.t
+	desc = destroy_building.4.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  set_variable = { geothermal_energy_production_var = 0 }
+	  remove_dynamic_modifier = { modifier = geothermal_infrastructure_in_state }
+	}
+	option = {
+		name = destroy_building.4.a
+	}
+}
+
+state_event = {
+	id = destroy_building.5
+	title = destroy_building.5.t
+	desc = destroy_building.5.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  remove_building = {
+	   type = industrial_complex
+	   level = 1
+	                    }
+	}
+	option = {
+		name = destroy_building.5.a
+	}
+}
+
+state_event = {
+	id = destroy_building.6
+	title = destroy_building.6.t
+	desc = destroy_building.6.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  remove_building = {
+	   type = arms_factory
+	   level = 1
+	                    }
+	}
+	option = {
+		name = destroy_building.6.a
+	}
+}
+
+state_event = {
+	id = destroy_building.7
+	title = destroy_building.7.t
+	desc = destroy_building.7.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  remove_building = {
+	   type = dockyard
+	   level = 1
+	                    }
+	}
+	option = {
+		name = destroy_building.7.a
+	}
+}
+
+state_event = {
+	id = destroy_building.8
+	title = destroy_building.8.t
+	desc = destroy_building.8.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  remove_building = {
+	   type = offices
+	   level = 1
+	                    }
+	}
+	option = {
+		name = destroy_building.8.a
+	}
+}
+
+state_event = {
+	id = destroy_building.9
+	title = destroy_building.9.t
+	desc = destroy_building.9.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  remove_building = {
+	   type = rubber_refinery
+	   level = 1
+	                    }
+	}
+	option = {
+		name = destroy_building.9.a
+	}
+}
+
+state_event = {
+	id = destroy_building.10
+	title = destroy_building.10.t
+	desc = destroy_building.10.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  remove_building = {
+	   type = agriculture_district
+	   level = 1
+	                    }
+	}
+	option = {
+		name = destroy_building.10.a
+	}
+}
+
+state_event = {
+	id = destroy_building.11
+	title = destroy_building.11.t
+	desc = destroy_building.11.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  remove_building = {
+	   type = nuclear_reactor
+	   level = 1
+	                    }
+	  add_dynamic_modifier = {
+		modifier = nuclear_fallout_1
+		days = 365
+	  }
+	}
+	option = {
+		name = destroy_building.11.a
+	}
+}
+
+state_event = {
+	id = destroy_building.12
+	title = destroy_building.12.t
+	desc = destroy_building.12.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  remove_building = {
+	   type = synthetic_refinery
+	   level = 1
+	                    }
+	}
+	option = {
+		name = destroy_building.12.a
+	}
+}
+
+state_event = {
+	id = destroy_building.13
+	title = destroy_building.13.t
+	desc = destroy_building.13.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	immediate = {
+	  remove_building = {
+	   type = fossil_powerplant
+	   level = 1
+	                    }
+	}
+	option = {
+		name = destroy_building.13.a
+	}
+}
+
+state_event = {
+	id = damage_building.1
+	title = damage_building.1.t
+	desc = damage_building.1.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	hidden = yes
+	immediate = {
+		add_to_variable = { number_of_damaged_battery_parks = 1 }
+		set_temp_variable = { controler_parks = THIS.controller }
+		add_to_variable = { var:controler_parks.number_of_damaged_battery_parks = THIS.number_of_damaged_battery_parks }
+	}
+	option = {
+		name = damage_building.1.a
+	}
+}
+
+state_event = {
+	id = damage_building.2
+	title = damage_building.2.t
+	desc = damage_building.2.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	hidden = yes
+	immediate = {
+		add_to_variable = { number_of_damaged_enrichment_facilities = 1 }
+		set_temp_variable = { controler_enrichment = THIS.controller }
+		add_to_variable = { var:controler_enrichment.number_of_damaged_enrichment_facilities = THIS.number_of_damaged_enrichment_facilities }
+	}
+	option = {
+		name = damage_building.2.a
+	}
+}
+
+state_event = {
+	id = damage_building.3
+	title = damage_building.3.t
+	desc = damage_building.3.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	hidden = yes
+	immediate = {
+		set_temp_variable = { controler_hydroelectric = THIS.controller }
+		var:controler_hydroelectric = { add_to_array = { states_to_damage_hydroelectric = PREV } }
+		add_to_variable = { var:controler_hydroelectric.number_of_damaged_hydroelectric = 1 }
+		multiply_variable = { hydroelectric_energy_production_var = 0.5 }
+		multiply_variable = { hydroelectric_energy_storage_var = 0.5 }
+	}
+	option = {
+		name = damage_building.3.a
+	}
+}
+
+state_event = {
+	id = damage_building.4
+	title = damage_building.4.t
+	desc = damage_building.4.d
+	picture = GFX_burning_oil_refinery
+	is_triggered_only = yes
+	hidden = yes
+	immediate = {
+		set_temp_variable = { controler_geothermal = THIS.controller }
+		var:controler_geothermal = { add_to_array = { states_to_damage_geothermal = PREV } }
+		add_to_variable = { var:controler_geothermal.number_of_damaged_geothermal = 1 }
+		multiply_variable = { geothermal_energy_production_var = 0.5 }
+	}
+	option = {
+		name = damage_building.4.a
+	}
+}

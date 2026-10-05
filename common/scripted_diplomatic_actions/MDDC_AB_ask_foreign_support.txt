@@ -1,0 +1,67 @@
+##### Created by Haski_Laik #####
+scripted_diplomatic_actions = {
+	AB_ask_foreign_support = {
+	allowed = { 
+		always = yes 
+	}
+	visible = {
+		OR = {
+			has_idea = large_power
+			has_idea = great_power
+			has_idea = superpower
+		}
+		ROOT = {
+			OR = {
+				has_idea = non_power
+				has_idea = minor_power
+				has_idea = regional_power
+			}
+			has_defensive_war = yes
+		}
+	}
+	selectable = {
+		has_opinion = {
+			target = ROOT
+			value > 49
+		}
+		custom_trigger_tooltip = {
+			tooltip = AB_ASK_FOREIGN_SUPPORT_TOOLTIP
+			THIS = {
+				NOT = { has_country_flag = aid_request_cd_@ROOT }
+			}
+		}
+	}
+
+	cost = 50
+	requires_acceptance = no
+	show_acceptance_on_action_button = no
+    icon = 10
+
+	send_description = AB_ask_foreign_support_d
+	
+	on_sent_effect = {
+		log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect to [From.GetName] AB_ask_foreign_support"
+	}
+	
+	complete_effect = {
+		log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect AB_ask_foreign_support"
+		FROM = {
+			country_event = { id = AB_mobilization.4 days = 1 }
+			set_country_flag = { flag = aid_request_cd_@ROOT days = 360 value = 1 }
+		}
+	}
+	
+	reject_effect = {
+		# Empty
+	}
+	
+	ai_desire = {
+ 		base = 10
+		modifier = {
+			add = 50
+			has_war_with_major = yes
+		}
+	}
+    
+	}
+}   

@@ -1,0 +1,369 @@
+add_namespace = sanctions
+
+country_event = {
+	id = sanctions.1
+	title = sanctions.1.t
+	desc = sanctions.1.d
+
+	picture = GFX_raid_international_sanctions
+
+	is_triggered_only = yes
+
+	option = {
+		name = sanctions.1.a
+		log = "[GetDateText]: [This.GetName]: sanctions.1.a executed"
+	}
+}
+
+country_event = {
+	id = sanctions.2
+	title = sanctions.2.t
+	desc = sanctions.2.d
+
+	picture = GFX_generic_factory
+
+	is_triggered_only = yes
+
+	option = {
+		name = sanctions.2.a
+		log = "[GetDateText]: [This.GetName]: sanctions.2.a executed"
+		random_owned_controlled_state = {
+			limit = { industrial_complex > 0 }
+			remove_building = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = sanctions.3
+	title = sanctions.3.t
+	desc = sanctions.3.d
+
+	picture = GFX_united_states_dollar
+    
+	is_triggered_only = yes
+
+	option = {
+		name = sanctions.3.a
+		log = "[GetDateText]: [This.GetName]: sanctions.3.a executed"
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+	    set_temp_variable = { modify_capitalization = -0.05 }
+	    modify_capitalization_support = yes
+	}
+}
+
+country_event = {
+	id = sanctions.4
+	title = sanctions.4.t
+	desc = sanctions.4.d
+
+	picture = GFX_snatch
+    
+	is_triggered_only = yes
+
+	option = {
+		name = sanctions.4.a
+		log = "[GetDateText]: [This.GetName]: sanctions.4.a executed"
+	}
+}
+
+country_event = {
+	id = sanctions.5
+	title = sanctions.5.t
+	desc = sanctions.5.d
+
+	picture = GFX_gas_tanker
+    
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			set_temp_variable = { treasury_change = 1 }
+			modify_treasury_effect = yes
+			add_named_threat = {
+				name = shadow_fleet_snatch_treat
+				threat = 1
+			}
+			if = {
+				limit = { tag = SOV }
+				random_list = {
+					99 = {
+						country_event = { id = sanctions.7 }
+					}
+					1 = {
+						country_event = { id = sanctions.9 }
+					}
+				}
+			}
+		}
+		send_equipment = {
+			equipment = convoy
+			amount = 1
+			target = FROM
+		}
+		set_temp_variable = { treasury_change = -1 }
+		modify_treasury_effect = yes
+	}
+
+	option = {
+		name = sanctions.5.a
+		log = "[GetDateText]: [This.GetName]: sanctions.5.a executed"
+		effect_tooltip = {
+			FROM = {
+				set_temp_variable = { treasury_change = 1 }
+				modify_treasury_effect = yes
+				add_named_threat = {
+					name = shadow_fleet_snatch_treat
+					threat = 1
+				}
+			}
+			send_equipment = {
+				equipment = convoy
+				amount = 1
+				target = FROM
+			}
+			set_temp_variable = { treasury_change = -1 }
+			modify_treasury_effect = yes
+		}
+		set_country_flag = shadow_fleet_pirate_happened
+	}
+
+	option = {
+		name = sanctions.5.b
+		log = "[GetDateText]: [This.GetName]: sanctions.5.b executed"
+		effect_tooltip = {
+			FROM = {
+				set_temp_variable = { treasury_change = 1 }
+				modify_treasury_effect = yes
+				add_named_threat = {
+					name = shadow_fleet_snatch_treat
+					threat = 1
+				}
+			}
+			send_equipment = {
+				equipment = convoy
+				amount = 1
+				target = FROM
+			}
+			set_temp_variable = { treasury_change = -1 }
+			modify_treasury_effect = yes
+		}
+		create_wargoal = {
+    		type = puppet_wargoal_focus
+    		target = FROM
+			expire = 120
+		}
+		set_country_flag = shadow_fleet_pirate_happened
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = sanctions.6
+	title = sanctions.6.t
+	desc = sanctions.6.d
+
+	picture = GFX_shadow_fleet_pmc
+    
+	is_triggered_only = yes
+
+	immediate = {
+		add_manpower = -15
+		FROM = {
+			add_named_threat = {
+				name = shadow_fleet_conflict_treat
+				threat = 5
+			}
+			country_event = { id = sanctions.8 }
+		}
+	}
+
+	option = {
+		name = sanctions.6.a
+		log = "[GetDateText]: [This.GetName]: sanctions.6.a executed"
+		effect_tooltip = {
+			add_manpower = -15
+			FROM = {
+				add_named_threat = {
+					name = shadow_fleet_conflict_treat
+					threat = 5
+				}
+			}
+		}
+	}
+
+	option = {
+		name = sanctions.6.a
+		log = "[GetDateText]: [This.GetName]: sanctions.6.a executed"
+		effect_tooltip = {
+			add_manpower = -15
+			FROM = {
+				add_named_threat = {
+					name = shadow_fleet_conflict_treat
+					threat = 5
+				}
+			}
+		}
+		create_wargoal = {
+    		type = puppet_wargoal_focus
+    		target = FROM
+			expire = 120
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+country_event = {
+	id = sanctions.7
+	title = sanctions.7.t
+	desc = sanctions.7.d
+
+	picture = GFX_gas_tanker
+    
+	is_triggered_only = yes
+
+	option = {
+		name = sanctions.7.a
+		log = "[GetDateText]: [This.GetName]: sanctions.7.a executed"
+		effect_tooltip = {
+			FROM = {
+				set_temp_variable = { treasury_change = -1 }
+				modify_treasury_effect = yes
+				send_equipment = {
+					equipment = convoy
+					amount = 1
+					target = PREV
+				}
+				create_wargoal = {
+    				type = puppet_wargoal_focus
+    				target = PREV
+					expire = 120
+				}
+			}
+			add_named_threat = {
+				name = shadow_fleet_snatch_treat
+				threat = 1
+			}
+			set_temp_variable = { treasury_change = 1 }
+			modify_treasury_effect = yes
+		}
+	}
+}
+
+country_event = {
+	id = sanctions.8
+	title = sanctions.8.t
+	desc = sanctions.8.d
+
+	picture = GFX_shadow_fleet_pmc
+    
+	is_triggered_only = yes
+
+	option = {
+		name = sanctions.8.a
+		log = "[GetDateText]: [This.GetName]: sanctions.8.a executed"
+		effect_tooltip = {
+			FROM = {
+				add_manpower = -15
+				create_wargoal = {
+    				type = puppet_wargoal_focus
+    				target = PREV
+					expire = 120
+				}
+			}
+			add_named_threat = {
+				name = shadow_fleet_conflict_treat
+				threat = 5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = sanctions.9
+	title = sanctions.9.t
+	desc = sanctions.9.d
+
+	picture = GFX_russian_new_pirate
+    
+	is_triggered_only = yes
+
+	option = {
+		name = sanctions.9.a
+		log = "[GetDateText]: [This.GetName]: sanctions.9.a executed"
+		effect_tooltip = {
+			FROM = {
+				set_temp_variable = { treasury_change = -1 }
+				modify_treasury_effect = yes
+				send_equipment = {
+					equipment = convoy
+					amount = 1
+					target = PREV
+				}
+				create_wargoal = {
+    				type = puppet_wargoal_focus
+    				target = PREV
+					expire = 120
+				}
+			}
+			add_named_threat = {
+				name = shadow_fleet_snatch_treat
+				threat = 1
+			}
+			set_temp_variable = { treasury_change = 1 }
+			modify_treasury_effect = yes
+		}
+	}
+}
+
+country_event = {
+	id = sanctions.10
+	title = sanctions.10.t
+	desc = sanctions.10.d
+
+	picture = GFX_importozemeshenie
+
+	is_triggered_only = yes
+
+	option = {
+		name = sanctions.10.a
+		log = "[GetDateText]: [This.GetName]: sanctions.10.a executed"
+		add_stability = 0.15
+		add_political_power = 750
+		add_ideas = importozameshenie
+		add_to_variable = { quarters_since_sanctions = 15 }
+		clamp_variable = { var = quarters_since_sanctions max = 50 }
+		calculate_sanctions_modifier = yes
+		custom_effect_tooltip = sanctions_resistance_tt
+	}
+}
+
+country_event = {
+	id = sanctions.11
+	title = sanctions.11.t
+	desc = sanctions.11.d
+
+	picture = GFX_importozemeshenie_SOV
+
+	is_triggered_only = yes
+
+	option = {
+		name = sanctions.11.a
+		log = "[GetDateText]: [This.GetName]: sanctions.11.a executed"
+		add_stability = 0.15
+		add_political_power = 750
+		add_ideas = importozameshenie
+		add_to_variable = { quarters_since_sanctions = 15 }
+		clamp_variable = { var = quarters_since_sanctions max = 50 }
+		calculate_sanctions_modifier = yes
+		custom_effect_tooltip = sanctions_resistance_tt
+	}
+}

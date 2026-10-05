@@ -1,0 +1,2107 @@
+# Author(s): LordBogdanoff
+add_namespace = terrorism
+add_namespace = counter_terrorism_raids
+add_namespace = terracts
+#Separatism ISIS
+country_event = {
+	id = terrorism.1
+	title = terrorism.1.t
+	desc = terrorism.1.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			ISI = {
+				transfer_state = 191
+				transfer_state = 193
+				transfer_state = 995
+				load_oob = "ISI_2017_nsb"
+			}
+			SYR = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+			declare_war_on = {
+				target = ISI
+				type = take_core_state
+			}
+			if = {
+				limit = {
+					IRQ = {
+						NOT = {
+							has_country_flag = GENERIC_terrorism_rebeliion_flag
+						}
+					}
+					NOT = {
+						166 = { owner = { tag = ISI } }
+					}
+					NOT = {
+						167 = { owner = { tag = ISI } }
+					}
+					NOT = {
+						168 = { owner = { tag = ISI } }
+					}
+					NOT = {
+						641 = { owner = { tag = ISI } }
+					}
+				}
+				IRQ = {
+					set_temp_variable = { modify_terrorism = 25 }
+					add_to_variable = { terrorism = modify_terrorism }
+					set_temp_variable = { party_index = 11 }
+					set_temp_variable = { party_popularity_increase = 0.05 }
+					set_temp_variable = { temp_outlook_increase = 0.05 }
+					add_relative_party_popularity = yes
+					GENERIC_update_terrorism_rebellion_IRQ = yes
+				}
+			}
+		}
+	}
+}
+
+#Separatism ASALA
+country_event = {
+	id = terrorism.2
+	title = terrorism.2.t
+	desc = terrorism.2.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			ARW = {
+				transfer_state = 935
+				transfer_state = 163
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+				division_template = {
+					name = "National Militia"
+					priority = 0
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						L_Inf_Bat = { x = 0 y = 3 }
+						Arty_Bat = { x = 1 y = 0 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = ARW
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = ARW
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = ARW
+					}
+				}
+			}
+			declare_war_on = {
+				target = ARW
+				type = take_core_state
+			}
+		}
+	}
+}
+
+#Separatism Red Brigades
+country_event = {
+	id = terrorism.3
+	title = terrorism.3.t
+	desc = terrorism.3.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = communism
+				size = 0.1
+				states = {
+					81 78 1060
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+			every_country = {
+				limit = {
+					original_tag = ITA
+					has_government = communism
+				}
+				set_cosmetic_tag = ITA_AUTH_S_communism
+				clr_country_flag = dynamic_flag
+			}
+			ITA = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+		}
+	}
+}
+
+#Separatism ISIS Egypt
+country_event = {
+	id = terrorism.4
+	title = terrorism.4.t
+	desc = terrorism.4.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = fascism
+				size = 0.1
+				states = {
+					216
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+			EGY = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+			GENERIC_buff_terrorism_all = yes
+		}
+	}
+}
+
+#Separatism ISIS Niger
+country_event = {
+	id = terrorism.5
+	title = terrorism.5.t
+	desc = terrorism.5.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = fascism
+				size = 0.1
+				states = {
+					338 339 340
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+		 	NIG = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+			GENERIC_buff_terrorism_all = yes
+		}
+	}
+}
+
+#Separatism ISIS Algeria
+country_event = {
+	id = terrorism.6
+	title = terrorism.6.t
+	desc = terrorism.6.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = fascism
+				size = 0.1
+				states = {
+					381
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+		 	ALG = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+			GENERIC_buff_terrorism_all = yes
+		}
+	}
+}
+
+#Separatism ISIS Tunisia
+country_event = {
+	id = terrorism.7
+	title = terrorism.7.t
+	desc = terrorism.7.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = fascism
+				size = 0.1
+				states = {
+					390
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+		 	TUN = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+			GENERIC_buff_terrorism_all = yes
+		}
+	}
+}
+
+
+#Separatism ISIS Tajikistan
+country_event = {
+	id = terrorism.8
+	title = terrorism.8.t
+	desc = terrorism.8.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = fascism
+				size = 0.1
+				states = {
+					723
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+		 	TAJ = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+			GENERIC_buff_terrorism_all = yes
+		}
+	}
+}
+
+#Separatism Caucas Emirate - Ingushetia
+country_event = {
+	id = terrorism.9
+	title = terrorism.9.t
+	desc = terrorism.9.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			GENERIC_buff_terrorism_all = yes
+			ING = {
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = party_pop_array^11 }
+				add_relative_party_popularity = yes
+				clear_array = ruling_party
+				clear_array = gov_coalition_array
+				add_to_array = { ruling_party = 11 }
+				update_party_name = yes
+				set_coalition_drift = yes
+				set_ruling_leader = yes
+				set_leader = yes
+				set_politics = {
+					ruling_party = fascism
+					elections_allowed = no
+				}
+				transfer_state = 1126
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+				division_template = {
+					name = "National Militia"
+					priority = 0
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						L_Inf_Bat = { x = 0 y = 3 }
+						Arty_Bat = { x = 1 y = 0 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = ING
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = ING
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = ING
+					}
+				}
+			}
+			declare_war_on = {
+				target = ING
+				type = take_core_state
+			}
+		}
+	}
+}
+
+#Separatism Caucas Emirate - Kabardino-Balkaria
+country_event = {
+	id = terrorism.10
+	title = terrorism.10.t
+	desc = terrorism.10.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			GENERIC_buff_terrorism_all = yes
+			KBK = {
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = party_pop_array^11 }
+				add_relative_party_popularity = yes
+				clear_array = ruling_party
+				clear_array = gov_coalition_array
+				add_to_array = { ruling_party = 11 }
+				update_party_name = yes
+				set_coalition_drift = yes
+				set_ruling_leader = yes
+				set_leader = yes
+				set_politics = {
+					ruling_party = fascism
+					elections_allowed = no
+				}
+				transfer_state = 674
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+				division_template = {
+					name = "National Militia"
+					priority = 0
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						L_Inf_Bat = { x = 0 y = 3 }
+						Arty_Bat = { x = 1 y = 0 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = KBK
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = KBK
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = KBK
+					}
+				}
+			}
+			declare_war_on = {
+				target = KBK
+				type = take_core_state
+			}
+		}
+	}
+}
+#Separatism Caucas Emirate - Karachaevo-Cherkessia
+country_event = {
+	id = terrorism.11
+	title = terrorism.11.t
+	desc = terrorism.11.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			GENERIC_buff_terrorism_all = yes
+			KCC = {
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = party_pop_array^11 }
+				add_relative_party_popularity = yes
+				clear_array = ruling_party
+				clear_array = gov_coalition_array
+				add_to_array = { ruling_party = 11 }
+				update_party_name = yes
+				set_coalition_drift = yes
+				set_ruling_leader = yes
+				set_leader = yes
+				set_politics = {
+					ruling_party = fascism
+					elections_allowed = no
+				}
+				transfer_state = 1125
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+				division_template = {
+					name = "National Militia"
+					priority = 0
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						L_Inf_Bat = { x = 0 y = 3 }
+						Arty_Bat = { x = 1 y = 0 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = KCC
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = KCC
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = KCC
+					}
+				}
+			}
+			declare_war_on = {
+				target = KCC
+				type = take_core_state
+			}
+		}
+	}
+}
+
+#Separatism Caucas Emirate - Dagestan
+country_event = {
+	id = terrorism.12
+	title = terrorism.12.t
+	desc = terrorism.12.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			GENERIC_buff_terrorism_all = yes
+			DAG = {
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = party_pop_array^11 }
+				add_relative_party_popularity = yes
+				clear_array = ruling_party
+				clear_array = gov_coalition_array
+				add_to_array = { ruling_party = 11 }
+				update_party_name = yes
+				set_coalition_drift = yes
+				set_ruling_leader = yes
+				set_leader = yes
+				set_politics = {
+					ruling_party = fascism
+					elections_allowed = no
+				}
+				transfer_state = 671
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+				division_template = {
+					name = "National Militia"
+					priority = 0
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						L_Inf_Bat = { x = 0 y = 3 }
+						Arty_Bat = { x = 1 y = 0 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = DAG
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = DAG
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = DAG
+					}
+				}
+			}
+			declare_war_on = {
+				target = DAG
+				type = take_core_state
+			}
+		}
+	}
+}
+
+#Separatism Caucas Emirate - Chechnya
+country_event = {
+	id = terrorism.13
+	title = terrorism.13.t
+	desc = terrorism.13.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			GENERIC_buff_terrorism_all = yes
+			CHE = {
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = party_pop_array^11 }
+				add_relative_party_popularity = yes
+				clear_array = ruling_party
+				clear_array = gov_coalition_array
+				add_to_array = { ruling_party = 11 }
+				update_party_name = yes
+				set_coalition_drift = yes
+				set_ruling_leader = yes
+				set_leader = yes
+				set_politics = {
+					ruling_party = fascism
+					elections_allowed = no
+				}
+				transfer_state = 672
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+				division_template = {
+					name = "National Militia"
+					priority = 0
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						L_Inf_Bat = { x = 0 y = 3 }
+						Arty_Bat = { x = 1 y = 0 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = CHE
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = CHE
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"Militia Battalion\" division_template = \"National Militia\" start_experience_factor = 0.1"
+						owner = CHE
+					}
+				}
+			}
+			declare_war_on = {
+				target = CHE
+				type = take_core_state
+			}
+		}
+	}
+}
+
+
+#Separatism Red Amy Faction
+country_event = {
+	id = terrorism.14
+	title = terrorism.14.t
+	desc = terrorism.14.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = communism
+				size = 0.1
+				states = {
+					44
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+			every_country = {
+				limit = {
+					original_tag = GER
+					has_government = communism
+				}
+				set_cosmetic_tag = GER_AUTH_S_communism
+				clr_country_flag = dynamic_flag
+			}
+			GER = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+		}
+	}
+}
+
+#Separatism Red Amy Faction
+country_event = {
+	id = terrorism.15
+	title = terrorism.15.t
+	desc = terrorism.15.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = communism
+				size = 0.1
+				states = {
+					30
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+			every_country = {
+				limit = {
+					original_tag = NOR
+					has_government = communism
+				}
+				set_cosmetic_tag = NOR_REB_S
+				clr_country_flag = dynamic_flag
+			}
+			NOR = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+		}
+	}
+}
+
+
+#Separatism The Revolutionary Council of Vltava
+country_event = {
+	id = terrorism.16
+	title = terrorism.16.t
+	desc = terrorism.16.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = communism
+				size = 0.1
+				states = {
+					1018
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+			every_country = {
+				limit = {
+					original_tag = CZE
+					has_government = communism
+				}
+				set_cosmetic_tag = CZE_REB_S_neutrality
+				clr_country_flag = dynamic_flag
+			}
+			CZE = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+		}
+	}
+}
+
+#Separatism Wild Commune
+country_event = {
+	id = terrorism.17
+	title = terrorism.17.t
+	desc = terrorism.17.d
+	timeout_days = 2
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terrorism.1.a
+		log = "[GetDateText]: [This.GetName]: terrorism.1.a executed"
+		hidden_effect = {
+			start_civil_war = {
+				ideology = communism
+				size = 0.1
+				states = {
+					122
+				}
+				keep_political_leader = yes
+				keep_political_party_members = yes
+			}
+			every_country = {
+				limit = {
+					original_tag = HUN
+					has_government = communism
+				}
+				set_cosmetic_tag = HUN_AUTH_S_communism
+				clr_country_flag = dynamic_flag
+			}
+			HUN = {
+				set_country_flag = GENERIC_terrorism_rebeliion_flag
+			}
+		}
+	}
+}
+
+#CT Raids
+country_event = {
+	id = counter_terrorism_raids.1
+	title = counter_terrorism_raids.1.t
+	desc = counter_terrorism_raids.1.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	option = {
+		name = counter_terrorism_raids.1.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.1.a executed"
+		add_manpower = -5
+		set_temp_variable = { temp_opinion = -25 }
+		change_the_military_opinion = yes
+		set_temp_variable = { temp_opinion = -25 }
+		change_intelligence_community_opinion = yes
+		add_to_variable = { terrorism_mana = 10 }
+		clamp_variable = {
+			var = terrorism_mana
+			min = 1
+			max = 100
+		}
+	}
+	option = {
+		name = counter_terrorism_raids.1.b
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.1.b executed"
+		set_temp_variable = { treasury_change = -10 }
+		modify_treasury_effect = yes
+		add_political_power = -100
+		set_temp_variable = { temp_opinion = 5 }
+		change_the_military_opinion = yes
+		set_temp_variable = { temp_opinion = 5 }
+		change_intelligence_community_opinion = yes
+	}
+	option = {
+		name = counter_terrorism_raids.1.c
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.1.c executed"
+		add_manpower = -5
+		random_list = {
+			25 = {
+				country_event = {
+					id = counter_terrorism_raids.2
+					random_days = 7
+				}
+			}
+			50 = {
+				modifier = {
+					add = reid_chance
+					set_temp_variable = { reid_chance = modifier@ct_effectiveness_modifier }
+					multiply_temp_variable = { reid_chance = 100 }
+				}
+				country_event = {
+					id = counter_terrorism_raids.3
+					random_days = 7
+				}
+			}
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+country_event = {
+	id = counter_terrorism_raids.2
+	title = counter_terrorism_raids.2.t
+	desc = counter_terrorism_raids.2.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	option = {
+		name = counter_terrorism_raids.2.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.2.a executed"
+		add_manpower = -5
+		add_to_variable = { terrorism_mana = 10 }
+		clamp_variable = {
+			var = terrorism_mana
+			min = 1
+			max = 100
+		}
+	}
+}
+country_event = {
+	id = counter_terrorism_raids.3
+	title = counter_terrorism_raids.3.t
+	desc = counter_terrorism_raids.3.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	immediate = { army_experience = 5 }
+	option = {
+		name = counter_terrorism_raids.3.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.3.a executed"
+		add_manpower = 5
+		set_temp_variable = { temp_opinion = 25 }
+		change_the_military_opinion = yes
+		set_temp_variable = { temp_opinion = 25 }
+		change_intelligence_community_opinion = yes
+	}
+}
+country_event = {
+	id = counter_terrorism_raids.4
+	title = counter_terrorism_raids.4.t
+	desc = counter_terrorism_raids.4.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	option = {
+		name = counter_terrorism_raids.4.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.4.a executed"
+		add_manpower = -5
+	}
+}
+country_event = {
+	id = counter_terrorism_raids.5
+	title = counter_terrorism_raids.5.t
+	desc = counter_terrorism_raids.5.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	option = {
+		name = counter_terrorism_raids.5.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.5.a executed"
+	}
+}
+country_event = {
+	id = counter_terrorism_raids.6
+	title = counter_terrorism_raids.6.t
+	desc = counter_terrorism_raids.6.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	option = {
+		name = counter_terrorism_raids.6.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.6.a executed"
+		add_timed_idea = { idea = agent_incepted_in_terrorist_cell days = 180 }
+	}
+}
+country_event = {
+	id = counter_terrorism_raids.7
+	title = counter_terrorism_raids.7.t
+	desc = counter_terrorism_raids.7.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	option = {
+		name = counter_terrorism_raids.7.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.7.a executed"
+		add_timed_idea = { idea = terrorist_captive days = 180 }
+	}
+}
+country_event = {
+	id = counter_terrorism_raids.8
+	title = counter_terrorism_raids.8.t
+	desc = counter_terrorism_raids.8.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	option = {
+		name = counter_terrorism_raids.8.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.8.a executed"
+		add_timed_idea = { idea = terrorist_plans_revealed days = 180 }
+	}
+}
+country_event = {
+	id = counter_terrorism_raids.9
+	title = counter_terrorism_raids.9.t
+	desc = counter_terrorism_raids.9.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	option = {
+		name = counter_terrorism_raids.9.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.9.a executed"
+		set_temp_variable = { treasury_change = 1 }
+		modify_treasury_effect = yes
+	}
+}
+country_event = {
+	id = counter_terrorism_raids.10
+	title = counter_terrorism_raids.10.t
+	desc = counter_terrorism_raids.10.d
+	picture = GFX_event_ct_raid
+	is_triggered_only = yes
+	option = {
+		name = counter_terrorism_raids.10.a
+		log = "[GetDateText]: [This.GetName]: counter_terrorism_raids.10.a executed"
+		add_equipment_to_stockpile = {
+			type = infantry_weapons
+			amount = 1500
+			producer = SOV
+		}
+		add_equipment_to_stockpile = {
+			type = Anti_tank_0
+			amount = 250
+			producer = SOV
+		}
+	}
+}
+
+#Terracts
+country_event = {
+	id = terracts.1
+	title = terracts.1.t
+	desc = terracts.1.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.1.a
+		log = "[GetDateText]: [This.GetName]: terracts.1.a executed"
+		add_manpower = -15
+		random_owned_controlled_state  = {
+			limit = { check_variable = { non_damaged_building_level@infrastructure > 0 } }
+			damage_building = {
+  				type = infrastructure
+  				state = THIS
+  				damage = 1
+			}
+		}
+		hidden_effect = {
+			set_temp_variable = { disclosure_chance = 0.05 }
+			add_to_temp_variable = { disclosure_chance = modifier@ct_effectiveness_modifier }
+			multiply_temp_variable = { disclosure_chance = 100 }
+			clamp_temp_variable = {
+				var = disclosure_chance
+				max = 10
+				min = 1
+			}
+			random = {
+				chance = disclosure_chance
+				random_list = {
+					50 = {
+						country_event = {
+							id = terracts.17
+							random_days = 7
+						}
+					}
+					50 = {
+						country_event = {
+							id = terracts.18
+							random_days = 7
+						}
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = terracts.2
+	title = terracts.2.t
+	desc = terracts.2.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.2.a
+		log = "[GetDateText]: [This.GetName]: terracts.2.a executed"
+		add_manpower = -15
+		random_owned_controlled_state  = {
+			limit = { check_variable = { non_damaged_building_level@offices > 0 } }
+			damage_building = {
+  				type = offices
+  				state = THIS
+  				damage = 1
+			}
+		}
+		hidden_effect = {
+			set_temp_variable = { disclosure_chance = 0.05 }
+			add_to_temp_variable = { disclosure_chance = modifier@ct_effectiveness_modifier }
+			multiply_temp_variable = { disclosure_chance = 100 }
+			clamp_temp_variable = {
+				var = disclosure_chance
+				max = 10
+				min = 1
+			}
+			random = {
+				chance = disclosure_chance
+				random_list = {
+					50 = {
+						country_event = {
+							id = terracts.17
+							random_days = 7
+						}
+					}
+					50 = {
+						country_event = {
+							id = terracts.18
+							random_days = 7
+						}
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = terracts.3
+	title = terracts.3.t
+	desc = terracts.3.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.3.a
+		log = "[GetDateText]: [This.GetName]: terracts.3.a executed"
+		add_manpower = -25
+	}
+}
+country_event = {
+	id = terracts.4
+	title = terracts.4.t
+	desc = terracts.4.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.4.a
+		log = "[GetDateText]: [This.GetName]: terracts.4.a executed"
+		add_manpower = -15
+		add_political_power = -150
+	}
+}
+country_event = {
+	id = terracts.5
+	title = terracts.5.t
+	desc = terracts.5.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.5.a
+		log = "[GetDateText]: [This.GetName]: terracts.5.a executed"
+		add_manpower = -15
+		add_political_power = -250
+	}
+	option = {
+		name = terracts.5.b
+		log = "[GetDateText]: [This.GetName]: terracts.5.b executed"
+		set_temp_variable = { treasury_change = -10 }
+		modify_treasury_effect = yes
+		add_political_power = -100
+	}
+	option = {
+		name = terracts.5.c
+		log = "[GetDateText]: [This.GetName]: terracts.5.c executed"
+		random_list = {
+			25 = {
+				country_event = {
+					id = terracts.6
+					random_days = 7
+				}
+			}
+			50 = {
+				modifier = {
+					add = reid_chance
+					set_temp_variable = { reid_chance = modifier@ct_effectiveness_modifier }
+					multiply_temp_variable = { reid_chance = 100 }
+				}
+				country_event = {
+					id = terracts.7
+					random_days = 7
+				}
+			}
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+country_event = {
+	id = terracts.6
+	title = terracts.6.t
+	desc = terracts.6.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.6.a
+		log = "[GetDateText]: [This.GetName]: terracts.6.a executed"
+		add_manpower = -35
+		add_political_power = -150
+	}
+}
+country_event = {
+	id = terracts.7
+	title = terracts.7.t
+	desc = terracts.7.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	immediate = { army_experience = 5 }
+	option = {
+		name = terracts.7.a
+		log = "[GetDateText]: [This.GetName]: terracts.7.a executed"
+		add_political_power = 150
+		set_temp_variable = { temp_opinion = 25 }
+		change_the_military_opinion = yes
+		set_temp_variable = { temp_opinion = 25 }
+		change_intelligence_community_opinion = yes
+	}
+}
+
+country_event = {
+	id = terracts.8
+	title = terracts.8.t
+	desc = terracts.8.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.8.a
+		log = "[GetDateText]: [This.GetName]: terracts.8.a executed"
+		hidden_effect = {
+			country_event = {
+				id = terracts.1
+			}
+		}
+	}
+	option = {
+		name = terracts.8.b
+		log = "[GetDateText]: [This.GetName]: terracts.8.b executed"
+		hidden_effect = {
+			country_event = {
+				id = terracts.1
+			}
+		}
+	}
+	option = {
+		name = terracts.8.c
+		log = "[GetDateText]: [This.GetName]: terracts.8.c executed"
+		hidden_effect = { army_experience = 5 }
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+country_event = {
+	id = terracts.9
+	title = terracts.9.t
+	desc = terracts.9.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.9.a
+		log = "[GetDateText]: [This.GetName]: terracts.9.a executed"
+		add_manpower = -15
+		add_political_power = -250
+		var:other_hostages_country = {
+			country_event = { id = terracts.10 }
+		}
+		var:other_hostages_country1 = {
+			country_event = { id = terracts.10 }
+		}
+		clear_variable = other_hostages_country
+		clear_variable = other_hostages_country1
+	}
+	option = {
+		name = terracts.9.b
+		log = "[GetDateText]: [This.GetName]: terracts.9.b executed"
+		set_temp_variable = { treasury_change = -10 }
+		modify_treasury_effect = yes
+		add_political_power = -100
+		var:other_hostages_country = {
+			country_event = { id = terracts.11 }
+		}
+		var:other_hostages_country1 = {
+			country_event = { id = terracts.11 }
+		}
+		clear_variable = other_hostages_country
+		clear_variable = other_hostages_country1
+	}
+	option = {
+		name = terracts.9.c
+		log = "[GetDateText]: [This.GetName]: terracts.9.c executed"
+		var:other_hostages_country = {
+			country_event = { id = terracts.12 }
+		}
+		if = {
+			limit = { has_variable = other_hostages_country1 }
+			var:other_hostages_country1 = {
+				country_event = { id = terracts.12 }
+			}
+		}
+		country_event = {
+			id = terracts.26
+			days = 14
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+country_event = {
+	id = terracts.10
+	title = terracts.10.t
+	desc = terracts.10.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.10.a
+		log = "[GetDateText]: [This.GetName]: terracts.10.a executed"
+		add_manpower = -15
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+country_event = {
+	id = terracts.11
+	title = terracts.11.t
+	desc = terracts.11.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.11.a
+		log = "[GetDateText]: [This.GetName]: terracts.11.a executed"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+	}
+}
+country_event = {
+	id = terracts.12
+	title = terracts.12.t
+	desc = terracts.12.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.12.a
+		log = "[GetDateText]: [This.GetName]: terracts.12.a executed"
+		if = {
+			limit = { FROM = { NOT = { has_variable = other_hostages_country_modifier } } }
+			FROM = { set_variable = { other_hostages_country_modifier = modifier@ct_effectiveness_modifier } }
+		}
+		else = {
+			FROM = { set_variable = { other_hostages_country_modifier1 = modifier@ct_effectiveness_modifier } }
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = terracts.12.b
+		log = "[GetDateText]: [This.GetName]: terracts.12.b executed"
+	}
+}
+country_event = {
+	id = terracts.13
+	title = terracts.13.t
+	desc = terracts.13.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.13.a
+		log = "[GetDateText]: [This.GetName]: terracts.13.a executed"
+		add_manpower = -15
+		random_owned_controlled_state  = {
+			limit = { check_variable = { non_damaged_building_level@infrastructure > 0 } }
+			damage_building = {
+  				type = infrastructure
+  				state = THIS
+  				damage = 1
+			}
+		}
+	}
+}
+country_event = {
+	id = terracts.14
+	title = terracts.14.t
+	desc = terracts.14.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.14.a
+		log = "[GetDateText]: [This.GetName]: terracts.14.a executed"
+		add_manpower = -15
+		random_owned_controlled_state  = {
+			limit = { check_variable = { non_damaged_building_level@offices > 0 } }
+			damage_building = {
+  				type = offices
+  				state = THIS
+  				damage = 1
+			}
+		}
+	}
+}
+country_event = {
+	id = terracts.15
+	title = terracts.15.t
+	desc = terracts.15.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.15.a
+		log = "[GetDateText]: [This.GetName]: terracts.15.a executed"
+		add_manpower = -15
+	}
+}
+country_event = {
+	id = terracts.16
+	title = terracts.16.t
+	desc = terracts.16.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.16.a
+		log = "[GetDateText]: [This.GetName]: terracts.16.a executed"
+		add_manpower = -15
+	}
+}
+country_event = {
+	id = terracts.17
+	title = terracts.17.t
+	desc = terracts.17.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	immediate = {
+		random_other_country = {
+			limit = {
+				NOT = { has_country_flag = anti_terror_agreement@PREV }
+			}
+			PREV = { set_variable = { target_terrorist_contain_country = PREV } }
+		}
+	}
+	option = {
+		name = terracts.17.a
+		log = "[GetDateText]: [This.GetName]: terracts.17.a executed"
+	}
+	option = {
+		name = terracts.17.b
+		log = "[GetDateText]: [This.GetName]: terracts.17.b executed"
+		var:target_terrorist_contain_country = {
+			country_event = {
+				id = terracts.19
+				random_days = 7
+			}
+		}
+		clear_variable = target_terrorist_contain_country
+		add_political_power = -25
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+country_event = {
+	id = terracts.18
+	title = terracts.18.t
+	desc = terracts.18.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	immediate = {
+		random_other_country = {
+			limit = {
+				NOT = { has_country_flag = anti_terror_agreement@PREV }
+			}
+			PREV = { set_variable = { target_terrorist_contain_country = PREV } }
+		}
+	}
+	option = {
+		name = terracts.18.a
+		log = "[GetDateText]: [This.GetName]: terracts.18.a executed"
+	}
+	option = {
+		name = terracts.18.b
+		log = "[GetDateText]: [This.GetName]: terracts.18.b executed"
+		var:target_terrorist_contain_country = {
+			country_event = {
+				id = terracts.20
+				random_days = 7
+			}
+		}
+		clear_variable = target_terrorist_contain_country
+		add_political_power = -25
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+country_event = {
+	id = terracts.19
+	title = terracts.19.t
+	desc = terracts.19.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.19.a
+		log = "[GetDateText]: [This.GetName]: terracts.19.a executed"
+		FROM = {
+			add_opinion_modifier = {
+				target = PREV
+				modifier = recent_actions_positive
+			}
+			country_event = {
+				id = terracts.21
+				random_days = 7
+			}
+		}
+		if = {
+			limit = { has_idea = international_bankers }
+			set_temp_variable = { temp_opinion = -5 }
+			change_international_bankers_opinion = yes
+		}
+		else_if = {
+			limit = { has_idea = wall_street }
+			set_temp_variable = { temp_opinion = -5 }
+			change_wall_street_opinion = yes
+		}
+		set_temp_variable = { treasury_change = -2.5 }
+		modify_treasury_effect = yes
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = terracts.19.b
+		log = "[GetDateText]: [This.GetName]: terracts.19.b executed"
+		FROM = {
+			add_opinion_modifier = {
+				target = PREV
+				modifier = recent_actions_negative
+			}
+			country_event = {
+				id = terracts.22
+				random_days = 7
+			}
+		}
+		if = {
+			limit = { has_idea = international_bankers }
+			set_temp_variable = { temp_opinion = 5 }
+			change_international_bankers_opinion = yes
+		}
+		else_if = {
+			limit = { has_idea = wall_street }
+			set_temp_variable = { temp_opinion = 5 }
+			change_wall_street_opinion = yes
+		}
+		set_temp_variable = { percent_change = 5 }
+		change_domestic_influence_percentage = yes
+		set_temp_variable = { treasury_change = 2.5 }
+		modify_treasury_effect = yes
+	}
+}
+country_event = {
+	id = terracts.20
+	title = terracts.20.t
+	desc = terracts.20.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.20.a
+		log = "[GetDateText]: [This.GetName]: terracts.20.a executed"
+		FROM = {
+			add_opinion_modifier = {
+				target = PREV
+				modifier = recent_actions_positive
+			}
+			country_event = {
+				id = terracts.23
+				random_days = 7
+			}
+		}
+		add_political_power = -25
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						AND = {
+							FROM = { tag = ITA }
+							check_variable = { ITA.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = GER }
+							check_variable = { GER.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = CZE }
+							check_variable = { CZE.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = HUN }
+							check_variable = { HUN.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = AUS }
+							check_variable = { AUS.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = ARM }
+							tag = TUR
+							check_variable = { ARW.terrorism > 50 }
+						}
+					}
+				}
+				OR = {
+					jihadist_government = yes
+					has_government = fascism
+					has_idea = sunni
+					has_idea = shia
+					has_idea = shia_iranian_school
+					has_idea = sufi_islam
+					has_idea = ibadi
+					has_idea = NIG_islamic_majority_1_idea
+					has_idea = NIG_islamic_majority_2_idea
+					has_idea = NIG_islamic_majority_3_idea
+					has_idea = NIG_islamic_majority_4_idea
+					has_idea = NIG_islamic_majority_5_idea
+					has_idea = NIG_islamic_majority_6_idea
+					has_idea = NIG_islamic_majority_7_idea
+					has_idea = NIG_islamic_majority_8_idea
+					has_idea = NIG_islamic_majority_9_idea
+					has_idea = NIG_islamic_majority_10_idea
+				}
+			}
+			set_temp_variable = { protest_strength_change = 25 }
+			modify_protest_effect = yes
+			if = {
+				limit = { has_idea = the_ulema }
+				set_temp_variable = { temp_opinion = -25 }
+				change_the_ulema_opinion = yes
+			}
+			else_if = {
+				limit = { has_idea = wahabi_ulema }
+				set_temp_variable = { temp_opinion = -25 }
+				change_the_wahabi_ulema_opinion = yes
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						FROM = { tag = ITA }
+						check_variable = { ITA.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = GER }
+						check_variable = { GER.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = CZE }
+						check_variable = { CZE.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = HUN }
+						check_variable = { HUN.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = AUS }
+						check_variable = { AUS.terrorism > 50 }
+					}
+					AND = {
+						FROM = { controls_state = 935 }
+						check_variable = { ARW.terrorism > 50 }
+					}
+				}
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+					AND = {
+						FROM = { controls_state = 935 }
+						check_variable = { ARW.terrorism > 50 }
+						ARM = { is_top3_influencer = yes }
+					}
+				}
+			}
+			set_temp_variable = { protest_strength_change = 25 }
+			modify_protest_effect = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = -100
+				NOT = {
+					OR = {
+						AND = {
+							FROM = { tag = ITA }
+							check_variable = { ITA.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = GER }
+							check_variable = { GER.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = CZE }
+							check_variable = { CZE.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = HUN }
+							check_variable = { HUN.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = AUS }
+							check_variable = { AUS.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = ARM }
+							tag = TUR
+							check_variable = { ARW.terrorism > 50 }
+						}
+					}
+				}
+				OR = {
+					jihadist_government = yes
+					has_government = fascism
+					has_idea = sunni
+					has_idea = shia
+					has_idea = shia_iranian_school
+					has_idea = sufi_islam
+					has_idea = ibadi
+					has_idea = NIG_islamic_majority_1_idea
+					has_idea = NIG_islamic_majority_2_idea
+					has_idea = NIG_islamic_majority_3_idea
+					has_idea = NIG_islamic_majority_4_idea
+					has_idea = NIG_islamic_majority_5_idea
+					has_idea = NIG_islamic_majority_6_idea
+					has_idea = NIG_islamic_majority_7_idea
+					has_idea = NIG_islamic_majority_8_idea
+					has_idea = NIG_islamic_majority_9_idea
+					has_idea = NIG_islamic_majority_10_idea
+				}
+			}
+			modifier = {
+				add = -100
+				OR = {
+					AND = {
+						FROM = { tag = ITA }
+						check_variable = { ITA.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = GER }
+						check_variable = { GER.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = CZE }
+						check_variable = { CZE.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = HUN }
+						check_variable = { HUN.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = AUS }
+						check_variable = { AUS.terrorism > 50 }
+					}
+					AND = {
+						FROM = { controls_state = 935 }
+						check_variable = { ARW.terrorism > 50 }
+					}
+				}
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+					AND = {
+						FROM = { controls_state = 935 }
+						check_variable = { ARW.terrorism > 50 }
+						ARM = { is_top3_influencer = yes }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = terracts.20.b
+		log = "[GetDateText]: [This.GetName]: terracts.20.b executed"
+		FROM = {
+			add_opinion_modifier = {
+				target = PREV
+				modifier = recent_actions_negative
+			}
+			country_event = {
+				id = terracts.24
+				random_days = 7
+			}
+		}
+		set_temp_variable = { percent_change = 5 }
+		change_domestic_influence_percentage = yes
+		add_political_power = 25
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						AND = {
+							FROM = { tag = ITA }
+							check_variable = { ITA.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = GER }
+							check_variable = { GER.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = CZE }
+							check_variable = { CZE.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = HUN }
+							check_variable = { HUN.terrorism > 50 }
+						}
+						AND = {
+							FROM = { tag = AUS }
+							check_variable = { AUS.terrorism > 50 }
+						}
+					}
+				}
+				OR = {
+					jihadist_government = yes
+					has_government = fascism
+				}
+			}
+			set_temp_variable = { party_index = 11 }
+			set_temp_variable = { party_popularity_increase = 0.05 }
+			set_temp_variable = { temp_outlook_increase = 0.05 }
+			add_relative_party_popularity = yes
+			if = {
+				limit = { has_idea = the_ulema }
+				set_temp_variable = { temp_opinion = 10 }
+				change_the_ulema_opinion = yes
+			}
+			else_if = {
+				limit = { has_idea = wahabi_ulema }
+				set_temp_variable = { temp_opinion = 10 }
+				change_the_wahabi_ulema_opinion = yes
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						FROM = { tag = ITA }
+						check_variable = { ITA.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = GER }
+						check_variable = { GER.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = CZE }
+						check_variable = { CZE.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = HUN }
+						check_variable = { HUN.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = AUS }
+						check_variable = { AUS.terrorism > 50 }
+					}
+				}
+				neutrality_neutral_communism_are_in_power = yes
+			}
+			set_temp_variable = { party_index = 19 }
+			set_temp_variable = { party_popularity_increase = 0.05 }
+			set_temp_variable = { temp_outlook_increase = 0.05 }
+			add_relative_party_popularity = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						FROM = { tag = ITA }
+						check_variable = { ITA.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = GER }
+						check_variable = { GER.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = CZE }
+						check_variable = { CZE.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = HUN }
+						check_variable = { HUN.terrorism > 50 }
+					}
+					AND = {
+						FROM = { tag = AUS }
+						check_variable = { AUS.terrorism > 50 }
+					}
+				}
+				emerging_communist_state_are_in_power = yes
+			}
+			set_temp_variable = { party_index = 4 }
+			set_temp_variable = { party_popularity_increase = 0.05 }
+			set_temp_variable = { temp_outlook_increase = 0.05 }
+			add_relative_party_popularity = yes
+		}
+		else_if = {
+			limit = {
+				AND = {
+					FROM = { controls_state = 935 }
+					check_variable = { ARW.terrorism > 50 }
+					ARM = { is_top3_influencer = yes }
+				}
+			}
+			ARM = { add_opinion_modifier = { modifier = recent_actions_positive } }
+		}
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+country_event = {
+	id = terracts.21
+	title = terracts.21.t
+	desc = terracts.21.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.21.a
+		log = "[GetDateText]: [This.GetName]: terracts.21.a executed"
+		set_temp_variable = { treasury_change = 5 }
+		modify_treasury_effect = yes
+	}
+}
+country_event = {
+	id = terracts.22
+	title = terracts.22.t
+	desc = terracts.22.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.22.a
+		log = "[GetDateText]: [This.GetName]: terracts.22.a executed"
+	}
+}
+country_event = {
+	id = terracts.23
+	title = terracts.23.t
+	desc = terracts.23.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.23.a
+		log = "[GetDateText]: [This.GetName]: terracts.23.a executed"
+	}
+}
+country_event = {
+	id = terracts.24
+	title = terracts.24.t
+	desc = terracts.24.d
+	picture = GFX_event_terrorism_start
+	is_triggered_only = yes
+	option = {
+		name = terracts.24.a
+		log = "[GetDateText]: [This.GetName]: terracts.24.a executed"
+		random_list = {
+			25 = {
+				news_event = {
+					id = terracts.25
+					random_days = 7
+				}
+				FROM = {
+					add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+				}
+				add_political_power = -150
+			}
+			50 = {
+				modifier = {
+					add = reid_chance
+					set_temp_variable = { reid_chance = modifier@ct_effectiveness_modifier }
+					add_to_temp_variable = { reid_chance = civilian_intel@FROM }
+					multiply_temp_variable = { reid_chance = 100 }
+				}
+				country_event = {
+					id = terracts.26
+					random_days = 7
+				}
+			}
+		}
+		set_temp_variable = { temp_opinion = -5 }
+		change_the_military_opinion = yes
+		set_temp_variable = { temp_opinion = -5 }
+		change_intelligence_community_opinion = yes
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = terracts.24.b
+		log = "[GetDateText]: [This.GetName]: terracts.24.a executed"
+	}
+}
+news_event = {
+	id = terracts.25
+	title = terracts.25.t
+	desc = terracts.25.d
+	picture = GFX_event_ct_raid
+
+	major = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = terracts.25.a
+		log = "[GetDateText]: [This.GetName]: terracts.25.a executed"
+	}
+}
+country_event = {
+	id = terracts.26
+	title = terracts.26.t
+	desc = terracts.26.d
+	picture = GFX_event_ct_raid
+
+	is_triggered_only = yes
+
+	immediate = { army_experience = 5 }
+
+	option = {
+		name = terracts.26.a
+		log = "[GetDateText]: [This.GetName]: terracts.26.a executed"
+		add_political_power = 150
+		set_temp_variable = { temp_opinion = 25 }
+		change_the_military_opinion = yes
+		set_temp_variable = { temp_opinion = 25 }
+		change_intelligence_community_opinion = yes
+	}
+}
+country_event = {
+	id = terracts.27
+	title = terracts.27.t
+	desc = terracts.27.d
+	picture = GFX_event_ct_raid
+
+	hidden = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = terracts.27.a
+		log = "[GetDateText]: [This.GetName]: terracts.27.a executed"
+		random_list = {
+			25 = {
+				country_event = {
+					id = terracts.6
+					random_days = 7
+				}
+				if = {
+					limit = { has_variable = other_hostages_country_modifier }
+					var:other_hostages_country = {
+						country_event = {
+							id = terracts.6
+							random_days = 7
+						}
+					}
+				}
+				if = {
+					limit = { has_variable = other_hostages_country_modifier1 }
+					var:other_hostages_country1 = {
+						country_event = {
+							id = terracts.6
+							random_days = 7
+						}
+					}
+				}
+				clear_variable = other_hostages_country_modifier
+				clear_variable = other_hostages_country_modifier1
+			}
+			50 = {
+				modifier = {
+					add = reid_chance
+					set_temp_variable = { reid_chance = modifier@ct_effectiveness_modifier }
+					add_to_temp_variable = { reid_chance = other_hostages_country_modifier }
+					add_to_temp_variable = { reid_chance = other_hostages_country_modifier1 }
+					multiply_temp_variable = { reid_chance = 100 }
+				}
+				country_event = {
+					id = terracts.7
+					random_days = 7
+				}
+				if = {
+					limit = { has_variable = other_hostages_country_modifier }
+					var:other_hostages_country = {
+						country_event = {
+							id = terracts.7
+							random_days = 7
+						}
+					}
+				}
+				if = {
+					limit = { has_variable = other_hostages_country_modifier1 }
+					var:other_hostages_country1 = {
+						country_event = {
+							id = terracts.7
+							random_days = 7
+						}
+					}
+				}
+				clear_variable = other_hostages_country_modifier
+				clear_variable = other_hostages_country_modifier1
+			}
+		}
+		clear_variable = other_hostages_country
+		clear_variable = other_hostages_country1
+	}
+}
+news_event = {
+	id = terracts.28
+	title = terracts.28.t
+	desc = terracts.28.d
+	picture = GFX_event_world_nuclear_terror_strike
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = terracts.28.a
+		log = "[GetDateText]: [This.GetName]: terracts.28.a executed"
+	}
+}
+news_event = {
+	id = terracts.29
+	title = terracts.29.t
+	desc = terracts.29.d
+	picture = GFX_event_world_nuclear_terror_strike_interrupted
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = terracts.29.a
+		log = "[GetDateText]: [This.GetName]: terracts.29.a executed"
+	}
+}

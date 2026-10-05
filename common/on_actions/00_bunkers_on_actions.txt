@@ -1,0 +1,28 @@
+on_actions = {
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					threat > 0.5
+					NOT = { has_active_mission = bankruptcy_incoming_collapse }
+					check_variable = { gdp_total > 1000 }
+					any_state = {
+						is_owned_and_controlled_by = PREV
+						check_variable = { productivity_state_var > 1000 }
+						civil_bunker < 1
+					}
+					has_idea = developed_economy
+					NOT = {
+						has_dynamic_modifier = {
+							modifier = very_high_interest_country_modifiers
+						}
+					}
+				}
+				random = {
+					chance = 5
+					country_event = { id = civil_bunker.1 random_days = 15 }
+				}
+			}
+		}
+	}
+}

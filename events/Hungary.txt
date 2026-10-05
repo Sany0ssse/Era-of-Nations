@@ -1,0 +1,6103 @@
+add_namespace = hungary_great
+add_namespace = hungary_economy
+add_namespace = hungary_army
+add_namespace = hungary_foreign
+add_namespace = hungary_orban
+add_namespace = hungary_monarch
+add_namespace = hungary_jobbik
+add_namespace = hungary_hsp
+add_namespace = hungary_commi
+
+#Slovakia Ultimatum
+country_event = {
+	id = hungary_great.1
+	title = hungary_great.1.t
+	desc = hungary_great.1.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.1.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.1.a executed"
+		HUN = {
+			country_event = { id = hungary_great.2 days = 1 }
+			annex_country = {
+				target = SLO
+				transfer_troops = yes
+			}
+		}
+		ai_chance = { 
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_great.1.b
+		log = "[GetDateText]: [This.GetName]: hungary_great.1.b executed"
+		HUN = {
+			country_event = { id = hungary_great.3 days = 1 }
+		}
+		ai_chance = { 
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = HUN
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = HUN
+					value < -100
+				}
+			}
+		}
+	}
+}
+#Slovakia Ultimatum Accept
+country_event = {
+	id = hungary_great.2
+	title = hungary_great.2.t
+	desc = hungary_great.2.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.2.a executed"
+		add_named_threat = {
+			name = HUN_great_shaval_slo
+			threat = 10
+		}
+		hidden_effect = {
+			add_to_variable = { NATO_war_againts_powerfull_hungary = 1 }
+		}
+	}
+}
+#Slovakia Ultimatum Refused
+country_event = {
+	id = hungary_great.3
+	title = hungary_great.3.t
+	desc = hungary_great.3.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.3.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.3.a executed"
+		create_wargoal = {
+			target = FROM
+			type = take_state_focus
+			generator = { 119 120 }
+		}
+	}
+}
+#Ukraine Ultimatum
+country_event = {
+	id = hungary_great.4
+	title = hungary_great.4.t
+	desc = hungary_great.4.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.4.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.4.a executed"
+		701 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+		HUN = {
+			country_event = { id = hungary_great.5 days = 1 }
+		}
+		ai_chance = { 
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_great.4.b
+		log = "[GetDateText]: [This.GetName]: hungary_great.4.b executed"
+		HUN = {
+			country_event = { id = hungary_great.6 days = 1 }
+		}
+		ai_chance = { 
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = HUN
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = HUN
+					value < -100
+				}
+			}
+		}
+	}
+}
+#Ukraine Ultimatum Accept
+country_event = {
+	id = hungary_great.5
+	title = hungary_great.5.t
+	desc = hungary_great.5.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.5.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.5.a executed"
+		add_named_threat = {
+			name = HUN_great_shaval_ukr
+			threat = 10
+		}
+		hidden_effect = {
+			add_to_variable = { NATO_war_againts_powerfull_hungary = 1 }
+		}
+	}
+}
+#Ukraine Ultimatum Refused
+country_event = {
+	id = hungary_great.6
+	title = hungary_great.6.t
+	desc = hungary_great.6.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.6.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.6.a executed"
+		create_wargoal = {
+			target = FROM
+			type = take_state_focus
+			generator = { 701 }
+		}
+	}
+}
+#Romania Ultimatum
+country_event = {
+	id = hungary_great.7
+	title = hungary_great.7.t
+	desc = hungary_great.7.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.7.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.7.a executed"
+		909 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+		151 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+		910 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+		HUN = {
+			country_event = { id = hungary_great.8 days = 1 }
+		}
+		ai_chance = { 
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_great.7.b
+		log = "[GetDateText]: [This.GetName]: hungary_great.7.b executed"
+		HUN = {
+			country_event = { id = hungary_great.9 days = 1 }
+		}
+		ai_chance = { 
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = HUN
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = HUN
+					value < -100
+				}
+			}
+		}
+	}
+}
+#Romania Ultimatum Accept
+country_event = {
+	id = hungary_great.8
+	title = hungary_great.8.t
+	desc = hungary_great.8.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.8.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.8.a executed"
+		add_named_threat = {
+			name = HUN_great_shaval_rom
+			threat = 10
+		}
+		hidden_effect = {
+			add_to_variable = { NATO_war_againts_powerfull_hungary = 1 }
+		}
+	}
+}
+#Romania Ultimatum Refused
+country_event = {
+	id = hungary_great.9
+	title = hungary_great.9.t
+	desc = hungary_great.9.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.9.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.9.a executed"
+		create_wargoal = {
+			target = FROM
+			type = take_state_focus
+			generator = { 909 910 151 }
+		}
+	}
+}
+#Serbia Ultimatum
+country_event = {
+	id = hungary_great.10
+	title = hungary_great.10.t
+	desc = hungary_great.10.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.10.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.10.a executed"
+		998 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+		130 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+		HUN = {
+			country_event = { id = hungary_great.11 days = 1 }
+		}
+		ai_chance = { 
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_great.10.b
+		log = "[GetDateText]: [This.GetName]: hungary_great.10.b executed"
+		HUN = {
+			country_event = { id = hungary_great.12 days = 1 }
+		}
+		ai_chance = { 
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = HUN
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = HUN
+					value < -100
+				}
+			}
+		}
+	}
+}
+#Serbia Ultimatum Accept
+country_event = {
+	id = hungary_great.11
+	title = hungary_great.11.t
+	desc = hungary_great.11.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.11.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.11.a executed"
+		add_named_threat = {
+			name = HUN_great_shaval_ser
+			threat = 10
+		}
+	}
+}
+#Serbia Ultimatum Refused
+country_event = {
+	id = hungary_great.12
+	title = hungary_great.12.t
+	desc = hungary_great.12.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.9.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.12.a executed"
+		create_wargoal = {
+			target = FROM
+			type = take_state_focus
+			generator = { 998 130 }
+		}
+	}
+}
+#Croatia Ultimatum
+country_event = {
+	id = hungary_great.13
+	title = hungary_great.13.t
+	desc = hungary_great.13.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.13.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.13.a executed"
+		HUN = {
+			country_event = { id = hungary_great.14 days = 1 }
+			annex_country = {
+				target = CRO
+				transfer_troops = yes
+			}
+		}
+		ai_chance = { 
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = HUN
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value > 100
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_great.13.b
+		log = "[GetDateText]: [This.GetName]: hungary_great.13.b executed"
+		HUN = {
+			country_event = { id = hungary_great.15 days = 1 }
+		}
+		ai_chance = { 
+			modifier = { # very high influence ensures acceptance
+				factor = 0
+				sender_influence_higher_30 = yes
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value < -15
+				}
+			}
+			modifier = {
+				add = 30
+				has_opinion = {
+					target = HUN
+					value < -50
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = HUN
+					value < -100
+				}
+			}
+		}
+	}
+}
+#Croatia Ultimatum Accept
+country_event = {
+	id = hungary_great.14
+	title = hungary_great.14.t
+	desc = hungary_great.14.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.14.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.14.a executed"
+		add_named_threat = {
+			name = HUN_great_shaval_cro
+			threat = 10
+		}
+	}
+}
+#Croatia Ultimatum Refused
+country_event = {
+	id = hungary_great.15
+	title = hungary_great.15.t
+	desc = hungary_great.15.d
+	picture = GFX_HUN_Great_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.15.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.15.a executed"
+		create_wargoal = {
+			target = FROM
+			type = take_state_focus
+			generator = { 127 126 }
+		}
+	}
+}
+#Great Hungary Proclaim
+news_event = {
+	id = hungary_great.16
+	title = hungary_great.16.t
+	desc = hungary_great.16.d
+	picture = GFX_HUN_Great_hungary_news_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_great.16.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.16.a executed"
+	}
+}
+#Hungary cancels the Paris Treaty
+news_event = {
+	id = hungary_great.17
+	title = hungary_great.17.t
+	desc = hungary_great.17.d
+	picture = GFX_hungary_paris_treaty_news
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = hungary_great.17.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.17.a executed"
+	}
+}
+#Hungary Invest
+country_event = {
+	id = hungary_economy.1
+	title = hungary_economy.1.t
+	desc = hungary_economy.1.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.1.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.16.a executed"
+		set_temp_variable = { treasury_change = -5.00 }
+		modify_treasury_effect = yes
+		set_temp_variable = { int_investment_change = 5.00 }
+		modify_international_investment_effect = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		HUN = {
+			country_event = hungary_economy.2
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = HUN
+					value > 10
+				}
+			}
+			modifier = {
+				add = -40
+				has_opinion = {
+					target = HUN
+					value < 10
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_economy.1.b
+		log = "[GetDateText]: [This.GetName]: hungary_economy.1.b executed"
+		HUN = {
+			country_event = hungary_economy.3
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = -40
+				has_opinion = {
+					target = HUN
+					value > 10
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = HUN
+					value < 10
+				}
+			}
+		}
+	}
+}
+#Hungary Invest Accept
+country_event = {
+	id = hungary_economy.2
+	title = hungary_economy.2.t
+	desc = hungary_economy.2.d
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.2.a executed"
+		set_temp_variable = { treasury_change = 5.00 }
+		modify_treasury_effect = yes
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = FROM }
+			set_temp_variable = { influence_target = HUN }
+			change_influence_percentage = yes
+		}
+	}
+}
+#Hungary Invest Refuse
+country_event = {
+	id = hungary_economy.3
+	title = hungary_economy.3.t
+	desc = hungary_economy.3.d
+	picture = GFX_treaty_rejected
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.3.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.3.a executed"
+	}
+}
+#Subsidies from the IMF
+country_event = {
+	id = hungary_economy.4
+	title = hungary_economy.4.t
+	desc = hungary_economy.4.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.4.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.4.a executed"
+		set_temp_variable = { treasury_change = 25.00 }
+		modify_treasury_effect = yes
+	}
+	option = {
+		name = hungary_economy.4.b
+		log = "[GetDateText]: [This.GetName]: hungary_economy.4.b executed"
+		trigger = {
+			check_variable = { debt_rate > 24.99 }
+		}
+		set_temp_variable = { debt_change = -25 }
+		modify_debt_effect = yes
+	}
+	option = {
+		name = hungary_economy.4.c
+		log = "[GetDateText]: [This.GetName]: hungary_economy.4.c executed"
+		add_timed_idea = {
+			idea = HUN_subsidies_from_IMF
+			days = 360
+		}
+	}
+}
+#Hungary Invest
+country_event = {
+	id = hungary_economy.5
+	title = hungary_economy.5.t
+	desc = hungary_economy.5.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.5.a
+		log = "[GetDateText]: [This.GetName]: hungary_great.5.a executed"
+		set_temp_variable = { treasury_change = -3.50 }
+		modify_treasury_effect = yes
+		set_temp_variable = { int_investment_change = 3.50 }
+		modify_international_investment_effect = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		HUN = {
+			country_event = hungary_economy.6
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = HUN
+					value > 10
+				}
+			}
+			modifier = {
+				add = -40
+				has_opinion = {
+					target = HUN
+					value < 10
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_economy.5.b
+		log = "[GetDateText]: [This.GetName]: hungary_economy.5.b executed"
+		HUN = {
+			country_event = hungary_economy.7
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = -40
+				has_opinion = {
+					target = HUN
+					value > 10
+				}
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = HUN
+					value < 10
+				}
+			}
+		}
+	}
+}
+#Hungary Invest Accept
+country_event = {
+	id = hungary_economy.6
+	title = hungary_economy.6.t
+	desc = hungary_economy.6.d
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.6.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.6.a executed"
+		random_owned_controlled_state = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = internet_station
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+#Hungary Invest Refuse
+country_event = {
+	id = hungary_economy.7
+	title = hungary_economy.7.t
+	desc = hungary_economy.7.d
+	picture = GFX_treaty_rejected
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.7.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.7.a executed"
+	}
+}
+#Hungarian Agriculture
+country_event = {
+	id = hungary_economy.8
+	title = hungary_economy.8.t
+	desc = hungary_economy.8.d
+	picture = GFX_POL_agricultural_investmens_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.8.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.8.a executed"
+		add_ideas = HUN_purchase_of_hungarian_agricultural_products_idea
+		HUN = {
+			country_event = hungary_economy.9
+			add_to_variable = { HUN.HUN_agricultural_products_buyers = 1 }
+			set_temp_variable = { modify_capitalization =  0.025 }
+			modify_capitalization_support = yes
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = HUN value > 0 } }
+				add = 10
+			}
+		}
+	}
+	option = {
+		name = hungary_economy.8.b
+		log = "[GetDateText]: [This.GetName]: hungary_economy.8.a executed"
+		HUN = {
+			country_event = hungary_economy.10
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Hungarian Agriculture Accept
+country_event = {
+	id = hungary_economy.9
+	title = hungary_economy.9.t
+	desc = hungary_economy.9.d
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.9.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.9.a executed"
+	}
+}
+#Hungarian Agriculture Refuse
+country_event = {
+	id = hungary_economy.10
+	title = hungary_economy.10.t
+	desc = hungary_economy.10.d
+	picture = GFX_treaty_rejected
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.10.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.10.a executed"
+	}
+}
+#Hungarian Metallurgy Invest
+country_event = {
+	id = hungary_economy.11
+	title = hungary_economy.11.t
+	desc = hungary_economy.11.d
+	picture = GFX_steel_mill
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.11.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.11.a executed"
+		set_temp_variable = { int_investment_change = 8.25 }
+		modify_international_investment_effect = yes
+		set_temp_variable = { treasury_change = -8.25 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		HUN = {
+			add_opinion_modifier = {
+				target = PREV
+				modifier = recently_invest
+			}
+			country_event = hungary_economy.12
+			random_owned_controlled_state = {
+				add_resource = {
+					type = steel
+					amount = 1
+				}
+			}
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = HUN value > 0 } }
+				add = 10
+			}
+		}
+	}
+	option = {
+		name = hungary_economy.11.b
+		log = "[GetDateText]: [This.GetName]: hungary_economy.11.b executed"
+		HUN = {
+			country_event = hungary_economy.13
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Hungarian Metallurgy Accept
+country_event = {
+	id = hungary_economy.12
+	title = hungary_economy.12.t
+	desc = hungary_economy.12.d
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.12.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.12.a executed"
+		effect_tooltip = {
+			add_opinion_modifier = {
+				target = FROM
+				modifier = recently_invest
+			}
+			random_owned_controlled_state = {
+				add_resource = {
+					type = steel
+					amount = 1
+				}
+			}
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+	}
+}
+#Hungarian Metallurgy Refuse
+country_event = {
+	id = hungary_economy.13
+	title = hungary_economy.13.t
+	desc = hungary_economy.13.d
+	picture = GFX_treaty_rejected
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.13.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.13.a executed"
+	}
+}
+#Hungarian German Steel Export
+country_event = {
+	id = hungary_economy.14
+	title = hungary_economy.14.t
+	desc = hungary_economy.14.d
+	picture = GFX_steel_mill
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.14.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.14.a executed"
+		set_temp_variable = { treasury_change = 3.75 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = GER }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		39 = {
+			add_resource = {
+				type = steel
+				amount = -4
+			}
+		}
+		HUN = {
+			set_country_flag = German_Steel_Export
+			set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			add_opinion_modifier = {
+				target = GER
+				modifier = trade_mission
+			}
+			country_event = hungary_economy.15
+			random_owned_controlled_state = {
+				add_resource = {
+					type = steel
+					amount = 4
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				GER = { has_opinion = { target = HUN value > 0 } }
+				add = 10
+			}
+		}
+	}
+	option = {
+		name = hungary_economy.14.b
+		log = "[GetDateText]: [This.GetName]: hungary_economy.14.b executed"
+		HUN = {
+			country_event = hungary_economy.16
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Hungarian German Steel Export Accept
+country_event = {
+	id = hungary_economy.15
+	title = hungary_economy.15.t
+	desc = hungary_economy.15.d
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.15.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.15.a executed"
+		effect_tooltip = {
+		   set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			add_opinion_modifier = {
+				target = FROM
+				modifier = trade_mission
+			}
+			country_event = hungary_economy.15
+			random_owned_controlled_state = {
+				add_resource = {
+					type = steel
+					amount = 4
+				}
+			}
+		}
+	}
+}
+#Hungarian German Steel Refuse
+country_event = {
+	id = hungary_economy.16
+	title = hungary_economy.16.t
+	desc = hungary_economy.16.d
+	picture = GFX_treaty_rejected
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.16.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.16.a executed"
+	}
+}
+#Hungarian Russian Oil Export
+country_event = {
+	id = hungary_economy.17
+	title = hungary_economy.17.t
+	desc = hungary_economy.17.d
+	picture = GFX_oil_refinery
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.17.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.17.a executed"
+		set_temp_variable = { treasury_change = 3.75 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		679 = {
+			add_resource = {
+				type = oil
+				amount = -4
+			}
+		}
+		HUN = {
+			set_country_flag = Russian_Oil_Export
+			set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			add_opinion_modifier = {
+				target = SOV
+				modifier = trade_mission
+			}
+			country_event = hungary_economy.18
+			random_owned_controlled_state = {
+				add_resource = {
+					type = oil
+					amount = 4
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				SOV = { has_opinion = { target = HUN value > 0 } }
+				add = 10
+			}
+		}
+	}
+	option = {
+		name = hungary_economy.17.b
+		log = "[GetDateText]: [This.GetName]: hungary_economy.17.b executed"
+		HUN = {
+			country_event = hungary_economy.19
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Hungarian Russian Oil Export Accept
+country_event = {
+	id = hungary_economy.18
+	title = hungary_economy.18.t
+	desc = hungary_economy.18.d
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.18.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.18.a executed"
+		effect_tooltip = {
+		   set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			add_opinion_modifier = {
+				target = FROM
+				modifier = trade_mission
+			}
+			country_event = hungary_economy.15
+			random_owned_controlled_state = {
+				add_resource = {
+					type = oil
+					amount = 4
+				}
+			}
+		}
+	}
+}
+#Hungarian Russian Oil Export Refuse
+country_event = {
+	id = hungary_economy.19
+	title = hungary_economy.19.t
+	desc = hungary_economy.19.d
+	picture = GFX_treaty_rejected
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.19.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.19.a executed"
+	}
+}
+#Hungarian Chinese light metall Export
+country_event = {
+	id = hungary_economy.20
+	title = hungary_economy.20.t
+	desc = hungary_economy.20.d
+	picture = GFX_steel_mill
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.20.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.20.a executed"
+		set_temp_variable = { treasury_change = 3.75 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = CHI }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		556 = {
+			add_resource = {
+				type = aluminium
+				amount = -4
+			}
+		}
+		HUN = {
+			set_country_flag = Chinese_light_metall_Export
+			set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			add_opinion_modifier = {
+				target = CHI
+				modifier = trade_mission
+			}
+			country_event = hungary_economy.21
+			random_owned_controlled_state = {
+				add_resource = {
+					type = aluminium
+					amount = 4
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				SOV = { has_opinion = { target = HUN value > 0 } }
+				add = 10
+			}
+		}
+	}
+	option = {
+		name = hungary_economy.20.b
+		log = "[GetDateText]: [This.GetName]: hungary_economy.20.b executed"
+		HUN = {
+			country_event = hungary_economy.22
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Hungarian Chinese light metall Export Accept
+country_event = {
+	id = hungary_economy.21
+	title = hungary_economy.21.t
+	desc = hungary_economy.21.d
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.21.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.21.a executed"
+		effect_tooltip = {
+		   set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			add_opinion_modifier = {
+				target = FROM
+				modifier = trade_mission
+			}
+			country_event = hungary_economy.15
+			random_owned_controlled_state = {
+				add_resource = {
+					type = aluminium
+					amount = 4
+				}
+			}
+		}
+	}
+}
+#Hungarian Chinese light metall Export Refuse
+country_event = {
+	id = hungary_economy.22
+	title = hungary_economy.22.t
+	desc = hungary_economy.22.d
+	picture = GFX_treaty_rejected
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.22.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.22.a executed"
+	}
+}
+#Hungarian Invest in energy
+country_event = {
+	id = hungary_economy.23
+	title = hungary_economy.23.t
+	desc = hungary_economy.23.d
+	picture = GFX_steel_mill
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.23.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.23.a executed"
+		set_temp_variable = { int_investment_change = 8.50 }
+		modify_international_investment_effect = yes
+		set_temp_variable = { treasury_change = -8.50 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		HUN = {
+			add_opinion_modifier = {
+				target = PREV
+				modifier = recently_invest
+			}
+			country_event = hungary_economy.24
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = synthetic_refinery
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				SOV = { has_opinion = { target = HUN value > 0 } }
+				add = 10
+			}
+		}
+	}
+	option = {
+		name = hungary_economy.23.b
+		log = "[GetDateText]: [This.GetName]: hungary_economy.23.b executed"
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Hungarian Chinese light metall Export Accept
+country_event = {
+	id = hungary_economy.24
+	title = hungary_economy.24.t
+	desc = hungary_economy.24.d
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_economy.24.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.24.a executed"
+		effect_tooltip = {
+			add_opinion_modifier = {
+				target = PREV
+				modifier = recently_invest
+			}
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = synthetic_refinery
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+	}
+}
+#Hungarian Abrams Purchase
+country_event = {
+	id = hungary_army.1
+	title = hungary_army.1.t
+	desc = hungary_army.1.d
+	picture = GFX_hun_abrams_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.1.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.1.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		USA = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			country_event = hungary_army.2
+		}
+		USA = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "M1A2 Abrams"
+				amount = -120
+				producer = USA
+			}
+		}
+		HUN = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "M1A2 Abrams"
+				amount = 120
+				producer = USA
+			}
+		}
+	}
+	option = {
+		name = hungary_army.1.b
+		log = "[GetDateText]: [This.GetName]: hungary_army.1.b executed"
+		HUN = { country_event = hungary_army.3 }
+	}
+}
+#Hungarian Abrams Purchase Accept
+country_event = {
+	id = hungary_army.2
+	title = hungary_army.2.t
+	desc = hungary_army.2.d
+	picture = GFX_hun_abrams_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.2.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "M1A2 Abrams"
+				amount = 120
+				producer = USA
+			}
+		}
+	}
+}
+#Hungarian Abrams Purchase Refuse
+country_event = {
+	id = hungary_army.3
+	title = hungary_army.3.t
+	desc = hungary_army.3.d
+	picture = GFX_hun_abrams_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.3.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.3.a executed"
+	}
+}
+#Hungarian T-72 Purchase
+country_event = {
+	id = hungary_army.4
+	title = hungary_army.4.t
+	desc = hungary_army.4.d
+	picture = GFX_hun_t72_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.4.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.4.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		SOV = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			country_event = hungary_army.5
+		}
+		SOV = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "T-72 Ural"
+				amount = -120
+				producer = SOV
+			}
+		}
+		HUN = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "T-72 Ural"
+				amount = 120
+				producer = SOV
+			}
+		}
+	}
+	option = {
+		name = hungary_army.4.b
+		log = "[GetDateText]: [This.GetName]: hungary_army.4.b executed"
+		HUN = { country_event = hungary_army.6 }
+	}
+}
+#Hungarian T-72 Purchase Accept
+country_event = {
+	id = hungary_army.5
+	title = hungary_army.5.t
+	desc = hungary_army.5.d
+	picture = GFX_hun_t72_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.5.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.5.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "T-72 Ural"
+				amount = 120
+				producer = SOV
+			}
+		}
+	}
+}
+#Hungarian T-72 Purchase Refuse
+country_event = {
+	id = hungary_army.6
+	title = hungary_army.6.t
+	desc = hungary_army.6.d
+	picture = GFX_hun_t72_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.6.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.30.a executed"
+	}
+}
+#Resolve the MiG-29 issue
+country_event = {
+	id = hungary_army.7
+	title = hungary_army.7.t
+	desc = hungary_army.7.d
+	picture = GFX_POL_mig_29_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.7.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.7.a executed"
+		air_experience = 35
+		add_tech_bonus = {
+			name = CAT_fighter
+			bonus = 1
+			uses = 3
+			category = CAT_fighter
+		}
+	}
+	 option = {
+		name = hungary_army.7.b
+		log = "[GetDateText]: [This.GetName]: hungary_army.7.b executed"
+		create_equipment_variant = {
+			name = "MiG-29 Fulcrum"
+			type = small_plane_airframe_2
+			parent_version = 0
+			modules = {
+				fixed_main_weapon_slot = weap_a2a_hardpoint_1
+				fixed_gun_slot = weap_multi_gun_3
+				fixed_auxiliary_weapon_slot_1 = weap_mp_light_hardpoint_1
+				engine_type_slot = engine_light_double_2
+				avionics_type_slot = avionics_manned_2
+				wingform_type_slot = wing_swept
+				special_slot_type_1 = spec_countermeasures_1
+			}
+			obsolete = yes
+			icon = "gfx/interface/technologies/SOV/AIR/MR2.dds"
+			model = "SOV_small_plane_airframe_2_entity"
+		}
+	}
+	 option = {
+		name = hungary_army.7.c
+		log = "[GetDateText]: [This.GetName]: hungary_army.7.c executed"
+		set_country_flag = mig_29_found_buyer
+	}
+}
+#Hungarian Sweden Planes Purchase
+country_event = {
+	id = hungary_army.8
+	title = hungary_army.8.t
+	desc = hungary_army.8.d
+	picture = GFX_hun_sweden_plane_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.8.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.8.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SWE }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		SWE = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			country_event = hungary_army.9
+		}
+		SWE = {
+			add_equipment_to_stockpile = {
+				type = small_plane_strike_airframe_1
+				variant_name = "Sk-60"
+				amount = -20
+				producer = SWE
+			}
+		}
+		HUN = {
+			add_equipment_to_stockpile = {
+				type = small_plane_strike_airframe_1
+				variant_name = "Sk-60"
+				amount = 20
+				producer = SWE
+			}
+		}
+	}
+	option = {
+		name = hungary_army.8.b
+		log = "[GetDateText]: [This.GetName]: hungary_army.8 executed"
+		HUN = { country_event = hungary_army.10 }
+	}
+}
+#Hungarian Sweden Planes Purchase Accept
+country_event = {
+	id = hungary_army.9
+	title = hungary_army.9.t
+	desc = hungary_army.9.d
+	picture = GFX_hun_sweden_plane_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.9.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.9.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = small_plane_strike_airframe_1
+				variant_name = "Sk-60"
+				amount = 20
+				producer = SWE
+			}
+		}
+	}
+}
+#Hungarian Sweden Planes Purchase Refuse
+country_event = {
+	id = hungary_army.10
+	title = hungary_army.10.t
+	desc = hungary_army.10.d
+	picture = GFX_hun_sweden_plane_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.10.a
+		log = "[GetDateText]: [This.GetName]: hungary_economy.34.a executed"
+	}
+}
+#Hungarian sell MiG-29
+country_event = {
+	id = hungary_army.11
+	title = hungary_army.11.t
+	desc = hungary_army.11.d
+	picture = GFX_POL_mig_29_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.11.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.11.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		HUN = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+			country_event = hungary_army.12
+		}
+		ROOT = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+		}
+		ROOT = {
+			add_equipment_to_stockpile = {
+				type = small_plane_airframe_2
+				variant_name = "MiG-29 Fulcrum"
+				amount = 20
+				producer = HUN
+			}
+		}
+		HUN = {
+			add_equipment_to_stockpile = {
+				type = small_plane_airframe_2
+				variant_name = "MiG-29 Fulcrum"
+				amount = -20
+				producer = HUN
+			}
+			clr_country_flag = mig_29_found_buyer
+		}
+	}
+	option = {
+		name = hungary_army.11.b
+		log = "[GetDateText]: [This.GetName]: hungary_army.8 executed"
+		HUN = { country_event = hungary_army.13 }
+	}
+}
+#Hungarian Sweden Planes Purchase Accept
+country_event = {
+	id = hungary_army.12
+	title = hungary_army.12.t
+	desc = hungary_army.12.d
+	picture = GFX_POL_mig_29_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.12.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.12.a executed"
+		clr_country_flag = mig_29_buy_block
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = small_plane_airframe_2
+				variant_name = "MiG-29 Fulcrum"
+				amount = -20
+				producer = HUN
+			}
+		}
+	}
+}
+#Hungarian Sweden Planes Purchase Refuse
+country_event = {
+	id = hungary_army.13
+	title = hungary_army.13.t
+	desc = hungary_army.13.d
+	picture = GFX_POL_mig_29_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_army.13.a
+		log = "[GetDateText]: [This.GetName]: hungary_army.13.a executed"
+		clr_country_flag = mig_29_buy_block
+	}
+}
+#The EU membership question
+country_event = {
+	id = hungary_foreign.1
+	title = hungary_foreign.1.t
+	desc = hungary_foreign.1.d
+	picture = GFX_hungary_and_eu
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.1.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.1.a executed"
+		custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+		effect_tooltip = {
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_rapprochement }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_rapprochement }
+		}
+		for_each_scope_loop = {
+			array = global.EU_member
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_rapprochement }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_rapprochement }
+		}
+		set_temp_variable = { modify_eurosceptic = -0.05 }
+		EU_eurosceptic_change = yes
+	}
+	option = {
+		name = hungary_foreign.1.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.1.b executed"
+		set_temp_variable = { modify_eurosceptic = 0.05 }
+		EU_eurosceptic_change = yes
+	}
+}
+#European Investments
+country_event = {
+	id = hungary_foreign.2
+	title = hungary_foreign.2.t
+	desc = hungary_foreign.2.d
+	picture = GFX_hungary_and_eu
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.2.a executed"
+		set_temp_variable = { treasury_change = -5.00 }
+		modify_treasury_effect = yes
+		set_temp_variable = { int_investment_change = 5.00 }
+		modify_international_investment_effect = yes
+		add_opinion_modifier = {
+			target = HUN
+			modifier = recently_invest
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = 5.00 }
+			modify_treasury_effect = yes
+			country_event = hungary_foreign.3
+		}
+	}
+	option = {
+		name = hungary_foreign.2.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.2.b executed"
+	}
+}
+#European Investments
+country_event = {
+	id = hungary_foreign.3
+	title = hungary_foreign.3.t
+	desc = hungary_foreign.3.d
+	picture = GFX_hungary_and_eu
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.3.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.3.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = 5.00 }
+			modify_treasury_effect = yes
+		}
+	}
+}
+#Chinese Investments
+country_event = {
+	id = hungary_foreign.4
+	title = hungary_foreign.4.t
+	desc = hungary_foreign.4.d
+	picture = GFX_hungary_and_china
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.4.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.3.a executed"
+		CHI = {
+			set_temp_variable = { treasury_change = -15.00 }
+			modify_treasury_effect = yes
+			set_temp_variable = { int_investment_change = 15.00 }
+			modify_international_investment_effect = yes
+			add_opinion_modifier = {
+				target = HUN
+				modifier = recently_invest
+			}
+			add_opinion_modifier = {
+				target = HUN
+				modifier = hungary_diplomatic_partnership
+			}
+			reverse_add_opinion_modifier = {
+				target = HUN
+				modifier = hungary_diplomatic_partnership
+			}
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = 15.00 }
+			modify_treasury_effect = yes
+			country_event = hungary_foreign.5
+			add_ideas = HUN_chinese_companies
+		}
+	}
+	option = {
+		name = hungary_foreign.4.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.4.b executed"
+	}
+}
+#Chinese Investments Accept
+country_event = {
+	id = hungary_foreign.5
+	title = hungary_foreign.5.t
+	desc = hungary_foreign.5.d
+	picture = GFX_hungary_and_china
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.5.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.5.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = 15.00 }
+			modify_treasury_effect = yes
+			add_timed_idea = { idea = HUN_chinese_companies days = 230 }
+			add_opinion_modifier = {
+				target = CHI
+				modifier = hungary_diplomatic_partnership
+			}
+			reverse_add_opinion_modifier = {
+				target = CHI
+				modifier = hungary_diplomatic_partnership
+			}
+		}
+	}
+}
+#Chinese Investments Refuse
+country_event = {
+	id = hungary_foreign.6
+	title = hungary_foreign.6.t
+	desc = hungary_foreign.6.d
+	picture = GFX_POL_hungary_and_china
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.6.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.6.a executed"
+	}
+}
+#Purchase Iranian Equipment
+country_event = {
+	id = hungary_foreign.7
+	title = hungary_foreign.7.t
+	desc = hungary_foreign.7.d
+	picture = GFX_hungary_and_iran
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.7.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.7.a executed"
+		PER = {
+			set_temp_variable = { treasury_change = 10.00 }
+			modify_treasury_effect = yes
+			add_opinion_modifier = {
+				target = HUN
+				modifier = hungary_diplomatic_partnership
+			}
+			reverse_add_opinion_modifier = {
+				target = HUN
+				modifier = hungary_diplomatic_partnership
+			}
+			add_equipment_to_stockpile = {
+				amount = -250
+				type = Inf_equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = -10
+				type = ballistic_missile_equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = -25
+				type = util_vehicle_equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = -15
+				type = AA_Equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = -10
+				type = L_AT_Equipment
+				producer = PER
+			}
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = -10.00 }
+			modify_treasury_effect = yes
+			country_event = hungary_foreign.8
+			add_equipment_to_stockpile = {
+				amount = 250
+				type = Inf_equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = 10
+				type = ballistic_missile_equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = 25
+				type = util_vehicle_equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = 15
+				type = AA_Equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = 10
+				type = L_AT_Equipment
+				producer = PER
+			}
+		}
+	}
+	option = {
+		name = hungary_foreign.7.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.7.b executed"
+		HUN = {
+			country_event = hungary_foreign.9
+		}
+	}
+}
+#Purchase Iranian Equipment Accept
+country_event = {
+	id = hungary_foreign.8
+	title = hungary_foreign.8.t
+	desc = hungary_foreign.8.d
+	picture = GFX_hungary_and_iran
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.8.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.8.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -10.00 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				amount = 250
+				type = Inf_equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = 10
+				type = ballistic_missile_equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = 25
+				type = util_vehicle_equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = 15
+				type = AA_Equipment
+				producer = PER
+			}
+			add_equipment_to_stockpile = {
+				amount = 10
+				type = L_AT_Equipment
+				producer = PER
+			}
+		}
+	}
+}
+#Purchase Iranian Equipment Refuse
+country_event = {
+	id = hungary_foreign.9
+	title = hungary_foreign.9.t
+	desc = hungary_foreign.9.d
+	picture = GFX_hungary_and_iran
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.9.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.9.a executed"
+	}
+}
+#The NATO membership question
+country_event = {
+	id = hungary_foreign.10
+	title = hungary_foreign.10.t
+	desc = hungary_foreign.10.d
+	picture = GFX_hungary_and_nato
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.10.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.1.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		custom_effect_tooltip = TT_ALL_NATO_MEMBER_NATIONS_GAIN
+		effect_tooltip = {
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+		}
+		for_each_scope_loop = {
+			array = global.nato_members
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_partnership }
+		}
+	}
+	option = {
+		name = hungary_foreign.10.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.1.b executed"
+		set_temp_variable = { percent_change = -2 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		custom_effect_tooltip = TT_ALL_NATO_MEMBER_NATIONS_GAIN
+		effect_tooltip = {
+			add_opinion_modifier = { target = SLO modifier = hungary_natoscepticism }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_natoscepticism }
+		}
+		for_each_scope_loop = {
+			array = global.nato_members
+			add_opinion_modifier = { target = SLO modifier = hungary_natoscepticism }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_natoscepticism }
+		}
+	}
+}
+#Purchase Iranian Equipment
+country_event = {
+	id = hungary_foreign.11
+	title = hungary_foreign.11.t
+	desc = hungary_foreign.11.d
+	picture = GFX_hungary_and_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.11.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.11.a executed"
+		add_command_power = 20
+		army_experience = 15
+		navy_experience = 15
+		air_experience = 15
+		add_timed_idea = {
+			idea = HUN_hungary_russia_ex
+			days = 240
+		}
+		HUN = {
+			add_command_power = 20
+			army_experience = 15
+			navy_experience = 15
+			air_experience = 15
+			add_timed_idea = {
+				idea = HUN_hungary_russia_ex
+				days = 240
+			} 
+			country_event = hungary_foreign.12
+		}
+	}
+	option = {
+		name = hungary_foreign.11.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.11.b executed"
+		HUN = {
+			country_event = hungary_foreign.13
+		}
+	}
+}
+#Purchase Iranian Equipment Accept
+country_event = {
+	id = hungary_foreign.12
+	title = hungary_foreign.12.t
+	desc = hungary_foreign.12.d
+	picture = GFX_hungary_and_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.12.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.12.a executed"
+		effect_tooltip = {
+			add_command_power = 20
+			army_experience = 15
+			navy_experience = 15
+			air_experience = 15
+			add_timed_idea = {
+				idea = HUN_hungary_russia_ex
+				days = 240
+			} 
+		}
+	}
+}
+#Purchase Iranian Equipment Refuse
+country_event = {
+	id = hungary_foreign.13
+	title = hungary_foreign.13.t
+	desc = hungary_foreign.13.d
+	picture = GFX_hungary_and_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.13.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.13.a executed"
+	}
+}
+#Purchase German Tanks
+country_event = {
+	id = hungary_foreign.14
+	title = hungary_foreign.14.t
+	desc = hungary_foreign.14.d
+	picture = GFX_hun_german_tanks_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.14.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.14.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = GER }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		GER = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			country_event = hungary_foreign.15
+		}
+		GER = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "Leopard 2A4"
+				amount = -120
+				producer = GER
+			}
+		}
+		HUN = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "Leopard 2A4"
+				amount = 120
+				producer = GER
+			}
+		}
+	}
+	option = {
+		name = hungary_foreign.14.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.14.b executed"
+		HUN = {
+			country_event = hungary_foreign.16
+		}
+	}
+}
+#Purchase German Tanks Accept
+country_event = {
+	id = hungary_foreign.15
+	title = hungary_foreign.15.t
+	desc = hungary_foreign.15.d
+	picture = GFX_hun_german_tanks_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.15.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.15.a executed"
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				variant_name = "Leopard 2A4"
+				amount = 120
+				producer = GER
+			}
+		}
+	}
+}
+#Purchase German Tanks Refuse
+country_event = {
+	id = hungary_foreign.16
+	title = hungary_foreign.16.t
+	desc = hungary_foreign.16.d
+	picture = GFX_hun_german_tanks_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.16.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.16.a executed"
+	}
+}
+#Military aid to Ukraine
+country_event = {
+	id = hungary_foreign.17
+	title = hungary_foreign.17.t
+	desc = hungary_foreign.17.d
+	picture = GFX_hungary_and_ukraine
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.17.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.17.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = UKR }
+		change_influence_percentage = yes
+		add_equipment_to_stockpile = {
+			amount = 1200
+			type = Inf_equipment
+			producer = HUN
+		}
+		HUN = {
+			add_equipment_to_stockpile = {
+				amount = -1200
+				type = Inf_equipment
+				producer = HUN
+			}
+			country_event = hungary_foreign.18
+		}
+	}
+	option = {
+		name = hungary_foreign.14.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.14.b executed"
+		HUN = {
+			country_event = hungary_foreign.19
+		}
+	}
+}
+#Military aid to Ukraine Accept
+country_event = {
+	id = hungary_foreign.18
+	title = hungary_foreign.18.t
+	desc = hungary_foreign.18.d
+	picture = GFX_hungary_and_ukraine
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.18.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.18.a executed"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = UKR }
+			change_influence_percentage = yes
+			add_equipment_to_stockpile = {
+				amount = -250
+				type = Inf_equipment
+				producer = HUN
+			}
+		}
+	}
+}
+#Military aid to Ukraine Refuse
+country_event = {
+	id = hungary_foreign.19
+	title = hungary_foreign.19.t
+	desc = hungary_foreign.19.d
+	picture = GFX_hungary_and_ukraine
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.19.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.19.a executed"
+	}
+}
+#Anti-Russian Coalition
+country_event = {
+	id = hungary_foreign.20
+	title = hungary_foreign.20.t
+	desc = hungary_foreign.20.d
+	picture = GFX_hungary_anti_russian
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.20.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.20.a executed"
+		give_guarantee = HUN
+		add_opinion_modifier = {
+			target = SOV
+			modifier = hungary_member_anti_russian_coalition
+		}
+		reverse_add_opinion_modifier = {
+			target = SOV
+			modifier = hungary_member_anti_russian_coalition
+		}
+		HUN = {
+			give_guarantee = PREV
+			country_event = hungary_foreign.21
+		}
+		diplomatic_relation = {
+			country = HUN
+			relation = non_aggression_pact
+			active = yes
+		}
+		diplomatic_relation = {
+			country = HUN
+			relation = military_access
+			active = yes
+		}
+		add_ideas = anti_russian_coalition_member
+	}
+	option = {
+		name = hungary_foreign.20.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.20.b executed"
+	}
+}
+#Anti-Russian Coalition Accept
+country_event = {
+	id = hungary_foreign.21
+	title = hungary_foreign.21.t
+	desc = hungary_foreign.21.d
+	picture = GFX_hungary_anti_russian
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.21.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.21.a executed"
+		effect_tooltip = {
+			give_guarantee = FROM
+			FROM = {
+				give_guarantee = HUN
+			}
+			diplomatic_relation = {
+				country = FROM
+				relation = non_aggression_pact
+				active = yes
+			}
+			diplomatic_relation = {
+				country = FROM
+				relation = military_access
+				active = yes
+			}
+			FROM = {
+				add_ideas = anti_russian_coalition_member
+			}
+		}
+	}
+}
+#Defense pact with the CSTO
+country_event = {
+	id = hungary_foreign.22
+	title = hungary_foreign.22.t
+	desc = hungary_foreign.22.d
+	picture = GFX_csto_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.22.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.22.a executed"
+		give_guarantee = HUN
+		HUN = {
+			give_guarantee = PREV
+			country_event = hungary_foreign.23
+		}
+		diplomatic_relation = {
+			country = HUN
+			relation = non_aggression_pact
+			active = yes
+		}
+		diplomatic_relation = {
+			country = HUN
+			relation = military_access
+			active = yes
+		}
+	}
+	option = {
+		name = hungary_foreign.22.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.22.b executed"
+	}
+}
+#Defense pact with the CSTO Accept
+country_event = {
+	id = hungary_foreign.23
+	title = hungary_foreign.23.t
+	desc = hungary_foreign.23.d
+	picture = GFX_csto_event
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.23.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.23.a executed"
+		effect_tooltip = {
+			give_guarantee = FROM
+			FROM = {
+				give_guarantee = HUN
+			}
+			diplomatic_relation = {
+				country = FROM
+				relation = non_aggression_pact
+				active = yes
+			}
+			diplomatic_relation = {
+				country = FROM
+				relation = military_access
+				active = yes
+			}
+		}
+	}
+}
+#Cooperation with Azer
+country_event = {
+	id = hungary_foreign.24
+	title = hungary_foreign.24.t
+	desc = hungary_foreign.24.d
+	picture = GFX_hun_aliev_orban_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.24.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.24.a executed"
+		HUN = {
+			country_event = hungary_foreign.25
+		}
+		set_temp_variable = { receiver_nation = HUN.id }
+		set_temp_variable = { sender_nation = AZE.id }
+		set_improved_trade_agreement = yes
+
+		add_opinion_modifier = {
+			target = HUN
+			modifier = hungary_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = hungary_diplomatic_partnership
+		}
+	}
+	option = {
+		name = hungary_foreign.24.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.24.b executed"
+		HUN = {
+			country_event = hungary_foreign.26
+		}
+	}
+}
+#Cooperation with Azer Accept
+country_event = {
+	id = hungary_foreign.25
+	title = hungary_foreign.25.t
+	desc = hungary_foreign.25.d
+	picture = GFX_hun_aliev_orban_event
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.25.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.25.a executed"
+		effect_tooltip = {
+			set_temp_variable = { receiver_nation = HUN.id }
+			set_temp_variable = { sender_nation = AZE.id }
+			set_improved_trade_agreement = yes
+			add_opinion_modifier = {
+				target = AZE
+				modifier = hungary_diplomatic_partnership
+			}
+			reverse_add_opinion_modifier = {
+				target = AZE
+				modifier = hungary_diplomatic_partnership
+			}
+		}
+	}
+}
+#Cooperation with Azer Refuse
+country_event = {
+	id = hungary_foreign.26
+	title = hungary_foreign.26.t
+	desc = hungary_foreign.26.d
+	picture = GFX_hun_aliev_orban_event
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.26.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.25.a executed"
+	}
+}
+#Joint exercises with the United States
+country_event = {
+	id = hungary_foreign.27
+	title = hungary_foreign.27.t
+	desc = hungary_foreign.27.d
+	picture = GFX_hungary_and_nato
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.27.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.27.a executed"
+		army_experience = 15
+		add_timed_idea = {
+			idea = HUN_recent_exercises
+			days = 180
+		}
+		HUN = {
+			army_experience = 15
+			add_timed_idea = {
+				idea = HUN_recent_exercises
+				days = 180
+			}
+			country_event = hungary_foreign.28
+		}
+	}
+	option = {
+		name =hungary_foreign.27.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.27.b executed"
+		HUN = { country_event = hungary_foreign.29 }
+	}
+}
+#Joint exercises with the United States Accept
+country_event = {
+	id = hungary_foreign.28
+	title = hungary_foreign.28.t
+	desc = hungary_foreign.28.d
+	picture = GFX_hungary_and_nato
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.28.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.28.a executed"
+	}
+}
+#Joint exercises with the United States Reject
+country_event = {
+	id = hungary_foreign.29
+	title = hungary_foreign.29.t
+	desc = hungary_foreign.29.d
+	picture = GFX_hungary_and_nato
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.29.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.29.a executed"
+	}
+}
+#Reduce the budget deficit
+country_event = {
+	id = hungary_orban.1
+	title = hungary_orban.1.t
+	desc = hungary_orban.1.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_orban.1.a
+		log = "[GetDateText]: [This.GetName]: hungary_orban.1.a executed"
+		decrease_military_spending = yes
+	}
+	option = {
+		name = hungary_orban.1.b
+		log = "[GetDateText]: [This.GetName]: hungary_orban.1.a executed"
+		decrease_policing_budget = yes
+	}
+	option = {
+		name = hungary_orban.1.c
+		log = "[GetDateText]: [This.GetName]: hungary_orban.1.a executed"
+		decrease_centralization = yes
+	}
+}
+#Meeting between Orban and the Head of Russia
+country_event = {
+	id = hungary_orban.2
+	title = hungary_orban.2.t
+	desc = hungary_orban.2.d
+	picture = GFX_hungary_and_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_orban.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_orban.1.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = SOV }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = SOV.id }
+		set_temp_variable = { sender_nation = HUN.id }
+		set_improved_trade_agreement = yes
+		HUN = {
+			country_event = hungary_orban.3
+		}
+	}
+	option = {
+		name = hungary_orban.2.b
+		log = "[GetDateText]: [This.GetName]: hungary_orban.2.a executed"
+	}
+}
+#Meeting between Orban and the Head of Russia Accept
+country_event = {
+	id = hungary_orban.3
+	title = hungary_orban.3.t
+	desc = hungary_orban.3.d
+	picture = GFX_hungary_and_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_orban.3.a
+		log = "[GetDateText]: [This.GetName]: hungary_orban.3.a executed"
+	}
+}
+#Meeting between Orban and the Head of China
+country_event = {
+	id = hungary_orban.4
+	title = hungary_orban.4.t
+	desc = hungary_orban.4.d
+	picture = GFX_hungary_and_china
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_orban.4.a
+		log = "[GetDateText]: [This.GetName]: hungary_orban.4.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = CHI }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = CHI }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = CHI.id }
+		set_temp_variable = { sender_nation = HUN.id }
+		set_improved_trade_agreement = yes
+		HUN = {
+			country_event = hungary_orban.5
+		}
+	}
+	option = {
+		name = hungary_orban.4.b
+		log = "[GetDateText]: [This.GetName]: hungary_orban.4.a executed"
+	}
+}
+#Meeting between Orban and the Head of China Accept
+country_event = {
+	id = hungary_orban.5
+	title = hungary_orban.5.t
+	desc = hungary_orban.5.d
+	picture = GFX_hungary_and_china
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_orban.5.a
+		log = "[GetDateText]: [This.GetName]: hungary_orban.5.a executed"
+	}
+}
+#Protests against the new constitution
+country_event = {
+	id = hungary_orban.6
+	title = hungary_orban.6.t
+	desc = hungary_orban.6.d
+	picture = GFX_hungary_protests_event
+	is_triggered_only = yes
+
+	immediate = {
+		news_event = hungary_orban.7
+	}
+
+	option = {
+		name = hungary_orban.6.a
+		log = "[GetDateText]: [This.GetName]: hungary_orban.6.a executed"
+		increase_policing_budget_2 = yes
+		add_timed_idea = {
+			idea = HUN_protests
+			days = 90
+		}
+	}
+	option = {
+		name = hungary_orban.6.b
+		log = "[GetDateText]: [This.GetName]: hungary_orban.6.a executed"
+		add_timed_idea = {
+			idea = HUN_protests
+			days = 180
+		}
+	}
+}
+#Protests against the new constitution News
+news_event = {
+	id = hungary_orban.7
+	title = hungary_orban.7.t
+	desc = hungary_orban.7.d
+	picture = GFX_hungary_protests_news
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = hungary_orban.7.a
+		log = "[GetDateText]: [This.GetName]: hungary_orban.7.a executed"
+	}
+}
+#Hungarian-Serbian Content
+country_event = {
+	id = hungary_orban.8
+	title = hungary_orban.8.t
+	desc = hungary_orban.8.d
+	picture = GFX_hungary_and_serbia_border
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_orban.8.a
+		log = "[GetDateText]: [This.GetName]: hungary_orban.8.a executed"
+	}
+}
+#National Referendum on the Monarchy
+country_event = {
+	id = hungary_monarch.1
+	title = hungary_monarch.1.t
+	desc =hungary_monarch.1.d
+	picture = GFX_hungary_monarh_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.1.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.1.a executed"
+		set_country_flag = HUN_absolute_monarchy
+		custom_effect_tooltip = HUN_absolute_monarchy_tt
+		custom_effect_tooltip = HUN_monarchy_tt
+	}
+	option = {
+		name = hungary_monarch.1.b
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.1.b executed"
+		set_country_flag = HUN_const_monarchy
+		custom_effect_tooltip = HUN_const_monarchy_tt
+		custom_effect_tooltip = HUN_monarchy_tt
+	}
+}
+#Ambition to return the Habsburg Empire
+country_event = {
+	id = hungary_monarch.2
+	title = hungary_monarch.2.t
+	desc =hungary_monarch.2.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.2.a executed"
+		news_event = hungary_monarch.3
+		998 = {
+			add_claim_by = HUN
+		}
+		130 = {
+			add_claim_by = HUN
+		}
+		910 = {
+			add_claim_by = HUN
+		}
+		151 = {
+			add_claim_by = HUN
+		}
+		909 = {
+			add_claim_by = HUN
+		}
+		701 = {
+			add_claim_by = HUN
+		}
+		120 = {
+			add_claim_by = HUN
+		}
+		119 = {
+			add_claim_by = HUN
+		}
+		1018 = {
+			add_claim_by = HUN
+		}
+		118 = {
+			add_claim_by = HUN
+		}
+		117 = {
+			add_claim_by = HUN
+		}
+		1017 = {
+			add_claim_by = HUN
+		}
+		76 = {
+			add_claim_by = HUN
+		}
+		75 = {
+			add_claim_by = HUN
+		}
+		286 = {
+			add_claim_by = HUN
+		}
+		125 = {
+			add_claim_by = HUN
+		}
+		124 = {
+			add_claim_by = HUN
+		}
+		285 = {
+			add_claim_by = HUN
+		}
+	}
+}
+#Ambition to return the Habsburg Empire News
+news_event = {
+	id = hungary_monarch.3
+	title = hungary_monarch.3.t
+	desc =hungary_monarch.3.d
+	picture = GFX_gabsburg_ambition_news
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = hungary_monarch.3.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.2.a executed"
+	}
+}
+#Hungary demands Transylvania
+country_event = {
+	id = hungary_monarch.4
+	title = hungary_monarch.4.t
+	desc =hungary_monarch.4.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.4.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.1.a executed"
+		if = {
+			limit = {
+				909 = { is_owned_and_controlled_by = ROOT }
+			}
+			909 = {
+				set_state_owner_to = HUN
+				set_state_controller_to = HUN
+			}
+		}
+		if = {
+			limit = {
+				910 = { is_owned_and_controlled_by = ROOT }
+			}
+			910 = {
+				set_state_owner_to = HUN
+				set_state_controller_to = HUN
+			}
+		}
+		if = {
+			limit = {
+				151 = { is_owned_and_controlled_by = ROOT }
+			}
+			151 = {
+				set_state_owner_to = HUN
+				set_state_controller_to = HUN
+			}
+		}
+		HUN = {
+			country_event = hungary_monarch.5
+		}
+	}
+	option = {
+		name = hungary_monarch.4.b
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.1.b executed"
+		HUN = {
+			country_event = hungary_monarch.6
+		}
+	}
+}
+#Hungary demands Transylvania Accept
+country_event = {
+	id = hungary_monarch.5
+	title = hungary_monarch.5.t
+	desc =hungary_monarch.5.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.5.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.5.a executed"
+
+	}
+}
+#Hungary demands Transylvania Refuse
+country_event = {
+	id = hungary_monarch.6
+	title = hungary_monarch.6.t
+	desc =hungary_monarch.6.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.6.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.6.a executed"
+		create_wargoal = {
+			type = take_state_focus
+			target = FROM
+			generator = { 909 910 151 }
+		}
+	}
+}
+#Transcarpathia for the union
+country_event = {
+	id = hungary_monarch.7
+	title = hungary_monarch.7.t
+	desc =hungary_monarch.7.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.7.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.7.a executed"
+		HUN = {
+			give_guarantee = PREV
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = PREV }
+			change_influence_percentage = yes
+			set_temp_variable = { receiver_nation = PREV.id }
+			set_temp_variable = { sender_nation = HUN.id }
+			set_improved_trade_agreement = yes
+			country_event = hungary_monarch.8
+		}
+		701 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+	}
+	option = {
+		name = hungary_monarch.7.b
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.7.a executed"
+		HUN = {
+			country_event = hungary_monarch.9
+		}
+	}
+}
+#Transcarpathia for the union Accept
+country_event = {
+	id = hungary_monarch.8
+	title = hungary_monarch.8.t
+	desc =hungary_monarch.8.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.8.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.8.a executed"
+
+	}
+}
+#Transcarpathia for the union Refuse
+country_event = {
+	id = hungary_monarch.9
+	title = hungary_monarch.9.t
+	desc = hungary_monarch.9.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.9.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.9.a executed"
+		create_wargoal = {
+			type = take_state_focus
+			target = FROM
+			generator = { 701 }
+		}
+	}
+}
+#Hungary demands our annexation
+country_event = {
+	id = hungary_monarch.10
+	title = hungary_monarch.10.t
+	desc =hungary_monarch.10.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.10.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.10.a executed"
+		HUN = {
+			annex_country = {
+				target = PREV
+				transfer_troops = yes
+			}
+			country_event = hungary_monarch.11
+		}
+	}
+	option = {
+		name = hungary_monarch.10.b
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.8.a executed"
+		HUN = {
+			country_event = hungary_monarch.12
+		}
+	}
+}
+#Hungary demands our annexation Accept
+country_event = {
+	id = hungary_monarch.11
+	title = hungary_monarch.11.t
+	desc =hungary_monarch.11.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.11.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.11.a executed"
+
+	}
+}
+#Hungary demands our annexation Refuse
+country_event = {
+	id = hungary_monarch.12
+	title = hungary_monarch.12.t
+	desc =hungary_monarch.12.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.12.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.12.a executed"
+		create_wargoal = {
+			type = annex_everything
+			target = FROM
+		}
+	}
+}
+#Banat for guarantees
+country_event = {
+	id = hungary_monarch.13
+	title = hungary_monarch.13.t
+	desc =hungary_monarch.13.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.13.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.13.a executed"
+		HUN = {
+			give_guarantee = SER
+		}
+		diplomatic_relation = {
+			country = HUN
+			relation = non_aggression_pact
+			active = yes
+		}
+		130 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+		998 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+	}
+	option = {
+		name = hungary_monarch.13.b
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.13.a executed"
+		HUN = {
+			country_event = hungary_monarch.9
+		}
+	}
+}
+#Banat for guarantees Accept
+country_event = {
+	id = hungary_monarch.14
+	title = hungary_monarch.14.t
+	desc =hungary_monarch.14.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.14.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.14.a executed"
+
+	}
+}
+#Banat for guarantees Refuse
+country_event = {
+	id = hungary_monarch.15
+	title = hungary_monarch.15.t
+	desc =hungary_monarch.15.d
+	picture = GFX_gabsburg_ambition_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.15.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.15.a executed"
+		create_wargoal = {
+			type = take_state_focus
+			target = SER
+			generator = { 130 998 }
+		}
+	}
+}
+#Austro-Hungary Proclaim
+news_event = {
+	id = hungary_monarch.16
+	title = hungary_monarch.16.t
+	desc =hungary_monarch.16.d
+	picture = GFX_austri_hugary_news
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = hungary_monarch.16.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.16.a executed"
+	}
+}
+#Party Declaration Signed
+country_event = {
+	id = hungary_jobbik.1
+	title = hungary_jobbik.1.t
+	desc = hungary_jobbik.1.d
+	picture = GFX_court
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.1.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.1.a executed"
+	}
+}
+#Investments
+country_event = {
+	id = hungary_jobbik.2
+	title = hungary_jobbik.2.t
+	desc = hungary_jobbik.2.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.2.a executed"
+		set_temp_variable = { treasury_change = -7.75 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		HUN = {
+			add_opinion_modifier = {
+				target = PREV
+				modifier = recently_invest
+			}
+			set_temp_variable = { treasury_change = 7.75 }
+			modify_treasury_effect = yes
+			country_event = hungary_jobbik.3
+		}
+	}
+	option = {
+		name = hungary_jobbik.2.b
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.2.b executed"
+	}
+}
+#Investments Accept
+country_event = {
+	id = hungary_jobbik.3
+	title = hungary_jobbik.3.t
+	desc = hungary_jobbik.3.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.2.a executed"
+		effect_tooltip = {
+			add_opinion_modifier = {
+				target = FROM
+				modifier = recently_invest
+			}
+			set_temp_variable = { treasury_change = 7.75 }
+			modify_treasury_effect = yes
+		}
+	}
+}
+#The Israeli question
+country_event = {
+	id = hungary_jobbik.4
+	title = hungary_jobbik.4.t
+	desc = hungary_jobbik.4.d
+	picture = GFX_anti_israel_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.4.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.4.a executed"
+		add_stability = 0.03
+		set_temp_variable = { party_index = 21 }
+		set_temp_variable = { party_popularity_increase = 0.05 }
+		set_temp_variable = { temp_outlook_increase = 0.05 }
+		add_relative_party_popularity = yes
+		set_country_flag = HUN_all_deport
+		121 = {
+			add_manpower = -30000
+		}
+		ISR = {
+			204 = {
+				add_manpower = 30000
+			}
+		}
+	}
+	option = {
+		name = hungary_jobbik.4.b
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.4.a executed"
+		add_stability = -0.09
+		set_temp_variable = { party_index = 21 }
+		set_temp_variable = { party_popularity_increase = -0.03 }
+		set_temp_variable = { temp_outlook_increase = -0.03 }
+		add_relative_party_popularity = yes
+		121 = {
+			add_manpower = -10000
+		}
+		ISR = {
+			204 = {
+				add_manpower = 10000
+			}
+		}
+	}
+}
+#Deportation of Jew
+country_event = {
+	id = hungary_jobbik.5
+	title = hungary_jobbik.5.t
+	desc = hungary_jobbik.5.d
+	picture = GFX_anti_israel_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.5.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.5.a executed"
+		if = {
+			limit = { HUN = { has_country_flag = HUN_all_deport } }
+			effect_tooltip = {
+				204 = {
+					add_manpower = 30000
+				}
+			}
+		}
+		else = {
+			effect_tooltip = {
+				204 = {
+					add_manpower = 10000
+				}
+			}
+		}
+		hidden_effect = {
+			HUN = { clr_country_flag = HUN_all_deport }
+		}
+	}
+}
+#Socialists
+#The New Socialist Government
+country_event = {
+	id = hungary_hsp.0
+	title = hungary_hsp.0.t
+	desc = hungary_hsp.0.d
+	picture = GFX_gov_started
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.0.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.0.a executed"
+		set_temp_variable = { party_index = 14 }
+		set_temp_variable = { party_popularity_increase = -0.05 }
+		add_relative_party_popularity = yes
+	}
+}
+#Coalition Blocs Orban
+country_event = {
+	id = hungary_hsp.1
+	title = hungary_hsp.1.t
+	desc = hungary_hsp.1.d
+	picture = GFX_hun_parliament
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.1.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.1.a executed"
+		set_temp_variable = { party_index = 14 }
+		set_temp_variable = { party_popularity_increase = -0.05 }
+		add_relative_party_popularity = yes
+	}
+}
+#Referendum on Joining the EU
+country_event = {
+	id = hungary_hsp.2
+	title = hungary_hsp.2.t
+	desc = hungary_hsp.2.d
+	picture = GFX_eu_referendum_join
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.2.a executed"
+		add_ideas = EU_member
+		#force_update_map_mode = { mapmode = EU_map_mode }
+		custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+		effect_tooltip = {
+			news_event = {
+				id = EU_news.27 ### one country joins
+			}
+		}
+		for_each_scope_loop = {
+			array = global.EU_member
+			news_event = {
+				id = EU_news.27 ### one country joins
+			}
+		}
+		hidden_effect = {
+			EU_clear_voting = yes
+		}
+	}
+}
+#Ferenc Gyurcsány Becomes the PM
+country_event = {
+	id = hungary_hsp.3
+	title = hungary_hsp.3.t
+	desc = hungary_hsp.3.d
+	picture = GFX_ferenc_pm
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.3.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.2.a executed"
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = 0.05 }
+		add_relative_party_popularity = yes
+		create_country_leader = {
+			name = "Ferenc Gyurcsány"
+			picture = "Ferenc_Gyurcsany.dds"
+			ideology = socialism
+			traits = {
+				western_socialism
+				businessman
+				ruthless
+				stubborn
+				rash
+			}	
+		}
+	}
+}
+#Traditional faction Affirms its Grip
+country_event = {
+	id = hungary_hsp.4
+	title = hungary_hsp.4.t
+	desc = hungary_hsp.4.d
+	picture = GFX_traditional_pm
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.4.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.4.a executed"
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = 0.05 }
+		add_relative_party_popularity = yes
+		add_stability = 0.06
+		set_country_flag = HUN_trad_won
+		create_country_leader = {
+			name = "Gyula Hegyi"
+			picture = "Hegyi_Gyula.dds"
+			ideology = socialism
+			traits = {
+				western_socialism
+				journalist
+			}	
+		}
+	}
+}
+#Austerity Measures are Introduced
+country_event = {
+	id = hungary_hsp.5
+	title = hungary_hsp.5.t
+	desc = hungary_hsp.5.d
+	picture = GFX_ferenc_austerity
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.5.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.5.a executed"
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = -0.06 }
+		set_temp_variable = { temp_outlook_increase = -0.05 }
+		add_relative_party_popularity = yes
+		add_stability = -0.06
+		hidden_effect = {
+			country_event = { id = hungary_hsp.6 days = 35 }
+		}
+	}
+}
+#The Őszöd Speech
+country_event = {
+	id = hungary_hsp.6
+	title = hungary_hsp.6.t
+	desc = hungary_hsp.6.d
+	picture = GFX_oszod_speech
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.6.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.6.a executed"
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = -0.1 }
+		set_temp_variable = { temp_outlook_increase = -0.15 }
+		add_relative_party_popularity = yes
+		add_stability = -0.06
+		hidden_effect = {
+			country_event = { id = hungary_hsp.61 days = 7 }
+		}
+	}
+}
+#Nationwide Protests
+country_event = {
+	id = hungary_hsp.61
+	title = hungary_hsp.61.t
+	desc = hungary_hsp.61.d
+	picture = GFX_ferenc_protests
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.61.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.61.a executed"
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = -0.1 }
+		set_temp_variable = { temp_outlook_increase = -0.15 }
+		add_relative_party_popularity = yes
+		add_stability = -0.04
+		add_political_power = -100
+		custom_effect_tooltip = HUN_popularity_gov_tt
+		hidden_effect = {
+			country_event = { id = hungary_hsp.32 days = 15 }
+		}
+	}
+}
+#Unauthorised powers
+country_event = {
+	id = hungary_hsp.7
+	title = hungary_hsp.7.t
+	desc = hungary_hsp.7.d
+	picture = GFX_more_powers
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.7.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.7.a executed"
+		add_political_power = 130
+	}
+}
+#Hungarian economic agreement
+country_event = {
+	id = hungary_hsp.8
+	title = hungary_hsp.8.t
+	desc = hungary_hsp.8.d
+	picture = GFX_hungary_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.8.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.8.a executed"
+		SOV = { add_opinion_modifier = { target = HUN modifier = has_expressed_loyalty } }
+		add_opinion_modifier = { target = SOV modifier = has_expressed_loyalty }
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = HUN.id }
+		set_temp_variable = { sender_nation = SOV }
+		set_improved_trade_agreement = yes
+		set_temp_variable = { int_investment_change = 1 }
+		modify_international_investment_effect = yes
+		HUN = {
+			country_event = { id = hungary_hsp.9 days = 3 }
+		}
+		ai_chance = {
+			base = 1.5
+			modifier = {
+				add = 3
+				has_opinion = {
+					target = HUN
+					value > 10
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_hsp.8.b
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.8.b executed"
+		HUN = {
+			country_event = { id = hungary_hsp.10 days = 3 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Russian economic agreement signed
+country_event = {
+	id = hungary_hsp.9
+	title = hungary_hsp.9.t
+	desc = hungary_hsp.9.d
+	picture = GFX_hungary_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.9.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.9.a executed"
+		add_political_power = 130
+	}
+}
+#Russian rejected
+country_event = {
+	id = hungary_hsp.10
+	title = hungary_hsp.10.t
+	desc = hungary_hsp.10.d
+	picture = GFX_hungary_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.10.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.10.a executed"
+	}
+}
+#Hungarian economic agreement
+country_event = {
+	id = hungary_hsp.11
+	title = hungary_hsp.11.t
+	desc = hungary_hsp.11.d
+	picture = GFX_hungary_germany
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.11.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.11.a executed"
+		SOV = { add_opinion_modifier = { target = HUN modifier = has_expressed_loyalty } }
+		add_opinion_modifier = { target = GER modifier = has_expressed_loyalty }
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = GER }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = HUN.id }
+		set_temp_variable = { sender_nation = GER }
+		set_improved_trade_agreement = yes
+		set_temp_variable = { int_investment_change = 1 }
+		modify_international_investment_effect = yes
+		HUN = {
+			country_event = { id = hungary_hsp.12 days = 3 }
+		}
+		ai_chance = {
+			base = 1.5
+			modifier = {
+				add = 3
+				has_opinion = {
+					target = HUN
+					value > 10
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_hsp.11.b
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.11.b executed"
+		HUN = {
+			country_event = { id = hungary_hsp.13 days = 3 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#German economic agreement signed
+country_event = {
+	id = hungary_hsp.12
+	title = hungary_hsp.12.t
+	desc = hungary_hsp.12.d
+	picture = GFX_hungary_germany
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.12.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.12.a executed"
+		add_political_power = 130
+	}
+}
+#Germany Rejected
+country_event = {
+	id = hungary_hsp.13
+	title = hungary_hsp.13.t
+	desc = hungary_hsp.13.d
+	picture = GFX_hungary_germany
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.13.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.13.a executed"
+	}
+}
+#Constitutional Amendments
+country_event = {
+	id = hungary_hsp.14
+	title = hungary_hsp.14.t
+	desc = hungary_hsp.14.d
+	picture = GFX_constitution_hun
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.14.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.14.a executed"
+		add_political_power = 130
+	}
+}
+#Ferenc is Under Preasure
+country_event = {
+	id = hungary_hsp.15
+	title = hungary_hsp.15.t
+	desc = hungary_hsp.15.d
+	picture = GFX_ferenc_preasure
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.15.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.15.a executed"
+		retire_country_leader = yes
+		add_stability = -0.03
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = -0.04 }
+		set_temp_variable = { temp_outlook_increase = -0.03 }
+		add_relative_party_popularity = yes
+	}
+	option = {
+		name = hungary_hsp.15.b
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.15.a executed"
+		add_political_power = 130
+		country_event = { id = hungary_hsp.16 days = 10 }
+		add_stability = -0.06
+	}
+}
+#Vote of No Confidence
+country_event = {
+	id = hungary_hsp.16
+	title = hungary_hsp.16.t
+	desc = hungary_hsp.16.d
+	picture = GFX_vote_no_confidence
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.16.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.16.a executed"
+		retire_country_leader = yes
+		add_stability = -0.04
+	}
+	option = {
+		trigger = {
+			20_percent_government_popularity = yes
+		}
+		name = hungary_hsp.16.b
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.16.a executed"
+		add_political_power = 130
+		add_stability = -0.04
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = -0.05 }
+		set_temp_variable = { temp_outlook_increase = -0.06 }
+		add_relative_party_popularity = yes
+	}
+}
+#Left Faction is Expelled
+country_event = {
+	id = hungary_hsp.18
+	title = hungary_hsp.18.t
+	desc = hungary_hsp.18.d
+	picture = GFX_no_left
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.18.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.18.a executed"
+		add_political_power = 149
+		add_stability = 0.05
+	}
+}
+#United Europe Speech
+country_event = {
+	id = hungary_hsp.19
+	title = hungary_hsp.19.t
+	desc = hungary_hsp.19.d
+	picture = GFX_united_europe_speech
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.19.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.19.a executed"
+		custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
+		effect_tooltip = {
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_rapprochement }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_rapprochement }
+		}
+		for_each_scope_loop = {
+			array = global.EU_member
+			add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_rapprochement }
+			reverse_add_opinion_modifier = { target = SLO modifier = hungary_diplomatic_rapprochement }
+		}
+		set_temp_variable = { modify_eurosceptic = -0.05 }
+		EU_potential_eurosceptic_change = yes
+	}
+}
+#Budapest City
+country_event = {
+	id = hungary_hsp.20
+	title = hungary_hsp.20.t
+	desc = hungary_hsp.20.d
+	picture = GFX_budapest_city
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.20.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.20.a executed"
+		121 = {
+			add_dynamic_modifier = {
+				modifier = HUN_budapest_city
+			}
+		}
+	}
+}
+#Hungarian Third Way
+country_event = {
+	id = hungary_hsp.21
+	title = hungary_hsp.21.t
+	desc = hungary_hsp.21.d
+	picture = GFX_hungarian_third_way
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.21.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.21.a executed"
+		add_political_power = 149
+		add_stability = 0.05
+		swap_ideas = {
+			remove_idea = HUN_liberal_socdem5_gov_idea
+			add_idea = HUN_hungarian_third_way
+		}
+	}
+}
+#Visegrad Eurozone
+country_event = {
+	id = hungary_hsp.22
+	title = hungary_hsp.22.t
+	desc = hungary_hsp.22.d
+	picture = GFX_eurozone_reforms
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.22.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.22.a executed"
+		add_ideas = the_euro
+		add_dynamic_modifier = { modifier = euro_inflation_modifier }
+		set_temp_variable = { modify_eurosceptic = -0.03 }
+		EU_eurosceptic_change = yes
+		set_temp_variable = { modify_eurosceptic = -0.05 }
+		set_temp_variable = { modify_eurosceptic_target = ROOT }
+		eurosceptic_change = yes
+		HUN = { country_event = hungary_hsp.23 }
+	}
+	option = {
+		name = hungary_hsp.22.b
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.22.b executed"
+		set_temp_variable = { modify_eurosceptic = 0.05 }
+		EU_eurosceptic_change = yes
+		set_temp_variable = { modify_eurosceptic = 0.07 }
+		set_temp_variable = { modify_eurosceptic_target = ROOT }
+		eurosceptic_change = yes
+		HUN = { country_event = hungary_hsp.24 }
+	}
+}
+#Visegrad Eurozone Accept
+country_event = {
+	id = hungary_hsp.23
+	title = hungary_hsp.23.t
+	desc = hungary_hsp.23.d
+	picture = GFX_eurozone_reforms
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.23.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.23.a executed"
+	}
+}
+#Visegrad Eurozone Refuse
+country_event = {
+	id = hungary_hsp.24
+	title = hungary_hsp.24.t
+	desc = hungary_hsp.24.d
+	picture = GFX_eurozone_reforms
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.24.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.23.a executed"
+	}
+}
+#New Labour Code Reform Approved
+country_event = {
+	id = hungary_hsp.25
+	title = hungary_hsp.25.t
+	desc = hungary_hsp.25.d
+	picture = GFX_labor_code
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.25.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.25.a executed"
+		swap_ideas = {
+			remove_idea = HUN_socdem_gov_idea
+			add_idea = HUN_socdem1_gov_idea
+		}
+	}
+}
+#Government Must Care About You
+country_event = {
+	id = hungary_hsp.26
+	title = hungary_hsp.26.t
+	desc = hungary_hsp.26.d
+	picture = GFX_goverment_care
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.26.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.26.a executed"
+		swap_ideas = {
+			remove_idea = HUN_socdem1_gov_idea
+			add_idea = HUN_socdem2_gov_idea
+		}
+	}
+}
+#Goverment Introduces the Devolution Plan
+country_event = {
+	id = hungary_hsp.27
+	title = hungary_hsp.27.t
+	desc = hungary_hsp.27.d
+	picture = GFX_devolution_Plan
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.27.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.27.a executed"
+		add_political_power = 150
+	}
+}
+#Anti-Oppression Law
+country_event = {
+	id = hungary_hsp.28
+	title = hungary_hsp.28.t
+	desc = hungary_hsp.28.d
+	picture = GFX_anti_oppression_law
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.28.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.28.a executed"
+		set_temp_variable = { party_index = 22 }
+		set_temp_variable = { party_popularity_increase = -0.10 }
+		add_relative_party_popularity = yes
+		add_popularity = {
+			ideology = nationalist
+			popularity = -0.05
+		}
+		set_temp_variable = { party_index = 22 }
+		ban_party_scripted_call = yes
+	}
+}
+#People's Party for People's Hungary
+country_event = {
+	id = hungary_hsp.29
+	title = hungary_hsp.29.t
+	desc = hungary_hsp.29.d
+	picture = GFX_mszp_socialist_party
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.29.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.29.a executed"
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = 0.05 }
+		add_relative_party_popularity = yes
+	}
+}
+#Only You Can Care for Yourself
+country_event = {
+	id = hungary_hsp.30
+	title = hungary_hsp.30.t
+	desc = hungary_hsp.30.d
+	picture = GFX_care_for_yoursel
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.30.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.30.a executed"
+		swap_ideas = {
+			remove_idea = HUN_ferenc1_gov_idea
+			add_idea = HUN_liberal_socdem_gov_idea
+		}
+	}
+}
+
+#'Social' Referendum
+country_event = {
+	id = hungary_hsp.32
+	title = hungary_hsp.32.t
+	desc = hungary_hsp.32.d
+	picture = GFX_social_referendum
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.32.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.32.a executed"
+		hidden_effect = {
+			country_event = { id = hungary_hsp.15 days = 14 }
+		}
+		set_temp_variable = { party_index = 3 }
+		set_temp_variable = { party_popularity_increase = -0.03 }
+		add_relative_party_popularity = yes
+	}
+	option = {
+		name = hungary_hsp.32.b
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.32.b executed"
+		trigger = {
+			20_percent_government_popularity = yes
+		}
+		add_political_power = 130
+		add_stability = 0.03
+	}
+}
+
+#Democratic Coalition
+country_event = {
+	id = hungary_hsp.33
+	title = hungary_hsp.33.t
+	desc = hungary_hsp.33.d
+	picture = GFX_dk_party
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_hsp.33.a
+		log = "[GetDateText]: [This.GetName]: hungary_hsp.33.a executed"
+		set_country_flag = HUN_dk_party
+		update_party_name = yes
+		custom_effect_tooltip = HUN_dk_party_tt
+	}
+}
+#American Investments
+country_event = {
+	id = hungary_foreign.30
+	title = hungary_foreign.30.t
+	desc = hungary_foreign.30.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.30.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.30.a executed"
+		set_temp_variable = { treasury_change = -10.00 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = HUN
+			modifier = recently_invest
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = 10.00 }
+			modify_treasury_effect = yes
+			add_timed_idea = {
+				idea = HUN_us_investments
+				days = 180
+			}
+			country_event = hungary_foreign.31
+		}
+	}
+	option = {
+		name = hungary_foreign.30.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.30.b executed"
+		HUN = {
+			country_event = hungary_foreign.32
+		}
+	}
+}
+#American Investments accept
+country_event = {
+	id = hungary_foreign.31
+	title = hungary_foreign.31.t
+	desc = hungary_foreign.31.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.31.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.31.a executed"
+	}
+}
+#American Investments Reject
+country_event = {
+	id = hungary_foreign.32
+	title = hungary_foreign.32.t
+	desc = hungary_foreign.32.d
+	picture = GFX_united_states_dollar
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.32.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.32.a executed"
+	}
+}
+#Establish American units in Hungary
+country_event = {
+	id = hungary_foreign.33
+	title = hungary_foreign.33.t
+	desc = hungary_foreign.33.d
+	picture = GFX_us_hungary_flags_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.33.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.30.a executed"
+		add_manpower = -12000
+		add_equipment_to_stockpile = {
+			amount = -2600
+			type = Inf_equipment
+		}
+		add_equipment_to_stockpile = {
+			amount = -140
+			type = L_AT_Equipment
+		}
+		add_equipment_to_stockpile = {
+			amount = -40
+			type = AA_Equipment
+		}
+		add_equipment_to_stockpile = {
+			amount = -720
+			type = medium_tank_amphibious_chassis
+		}
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		HUN = {
+			division_template = {
+                name = "Hungarian Brigade of the United States"
+                regiments = {
+                    Arm_Inf_Bat = { x = 0 y = 0 }
+                    Arm_Inf_Bat = { x = 0 y = 1 }
+                    Arm_Inf_Bat = { x = 0 y = 2 }
+                    Arm_Inf_Bat = { x = 1 y = 0 }
+                    Arm_Inf_Bat = { x = 1 y = 1 }
+                    Arm_Inf_Bat = { x = 1 y = 2 }
+                    armor_Bat = { x = 2 y = 0 }
+                    armor_Bat = { x = 2 y = 1 }
+                    armor_Bat = { x = 2 y = 2 }
+                    armor_Bat = { x = 2 y = 3 }
+                    armor_Bat = { x = 0 y = 3 }
+                    armor_Bat = { x = 1 y = 3 }
+                    SP_Arty_Bat = { x = 0 y = 4 }
+                    SP_Arty_Bat = { x = 1 y = 4 }
+                }
+                support = {
+                    armor_Recce_Comp = { x = 0 y = 0 }
+                    H_Engi_Comp = { x = 0 y = 1 }
+                    combat_service_support_company = { x = 0 y = 2 }
+                    SP_AA_Battery = { x = 0 y = 3 }
+                }
+                priority = 2
+                is_locked = yes
+            }
+            random_owned_controlled_state = {
+                create_unit = {
+                    division = "name = \"1st Hungarian Brigade of the United States\" division_template = \"Hungarian Brigade of the United States\" start_experience_factor = 0.7"
+                    owner = HUN
+                }
+            }
+			random_owned_controlled_state = {
+                create_unit = {
+                    division = "name = \"2nd Hungarian Brigade of the United States\" division_template = \"Hungarian Brigade of the United States\" start_experience_factor = 0.7"
+                    owner = HUN
+                }
+            }
+			country_event = hungary_foreign.34
+		}
+	}
+	option = {
+		name = hungary_foreign.33.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.33.b executed"
+		HUN = {
+			country_event = hungary_foreign.35
+		}
+	}
+}
+#American Investments accept
+country_event = {
+	id = hungary_foreign.34
+	title = hungary_foreign.34.t
+	desc = hungary_foreign.34.d
+	picture = GFX_us_hungary_flags_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.34.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.34.a executed"
+	}
+}
+#American Investments Reject
+country_event = {
+	id = hungary_foreign.35
+	title = hungary_foreign.35.t
+	desc = hungary_foreign.35.d
+	picture = GFX_us_hungary_flags_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.35.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.35.a executed"
+	}
+}
+#Buy American Tanks
+country_event = {
+	id = hungary_foreign.36
+	title = hungary_foreign.36.t
+	desc = hungary_foreign.36.d
+	picture = GFX_hun_abrams_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.36.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.36.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		USA = {
+			set_temp_variable = { treasury_change = 2.5 }
+			modify_treasury_effect = yes
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = -2.5 }
+			modify_treasury_effect = yes
+			country_event = hungary_foreign.37
+		}
+		USA = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				amount = -50
+				producer = USA
+			}
+		}
+		HUN = {
+			add_equipment_to_stockpile = {
+				type = medium_tank_chassis_1
+				amount = 50
+				producer = USA
+			}
+		}
+	}
+	option = {
+		name = hungary_foreign.36.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.36.b executed"
+		HUN = {
+			country_event = hungary_foreign.38
+		}
+	}
+}
+#Buy American Tanks accept
+country_event = {
+	id = hungary_foreign.37
+	title = hungary_foreign.37.t
+	desc = hungary_foreign.37.d
+	picture = GFX_us_hungary_flags_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.37.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.37.a executed"
+	}
+}
+#Buy American Tanks Reject
+country_event = {
+	id = hungary_foreign.38
+	title = hungary_foreign.38.t
+	desc = hungary_foreign.38.d
+	picture = GFX_us_hungary_flags_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.38.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.38.a executed"
+	}
+}
+#Thaw in relations with Serbia
+country_event = {
+	id = hungary_foreign.39
+	title = hungary_foreign.39.t
+	desc = hungary_foreign.39.d
+	picture = GFX_serbia_and_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.39.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.38.a executed"
+		give_guarantee = HUN
+		HUN = {
+			give_guarantee = SER
+			diplomatic_relation = {
+				country = SER
+				relation = military_access
+				active = yes
+			}
+			country_event = hungary_foreign.40
+		}
+		diplomatic_relation = {
+			country = HUN
+			relation = military_access
+			active = yes
+		}
+		diplomatic_relation = {
+			country = HUN
+			relation = non_aggression_pact
+			active = yes
+		}
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = SER }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = SER }
+		change_influence_percentage = yes
+	}
+	option = {
+		name = hungary_foreign.39.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.38.b executed"
+		HUN = { country_event = hungary_foreign.41 }
+	}
+}
+#Thaw in relations with Serbia accept
+country_event = {
+	id = hungary_foreign.40
+	title = hungary_foreign.40.t
+	desc = hungary_foreign.40.d
+	picture = GFX_serbia_and_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.40.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.40.a executed"
+	}
+}
+#Thaw in relations with Serbia Reject
+country_event = {
+	id = hungary_foreign.41
+	title = hungary_foreign.41.t
+	desc = hungary_foreign.41.d
+	picture = GFX_serbia_and_hungary_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.41.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.41.a executed"
+	}
+}
+#Cooperation with Indonesia
+country_event = {
+	id = hungary_foreign.42
+	title = hungary_foreign.42.t
+	desc = hungary_foreign.42.d
+	picture = GFX_hungary_and_indonesia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.42.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.42.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = IND }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = IND }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = HUN
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = slovakia_diplomatic_partnership
+		}
+		set_temp_variable = { receiver_nation = IND.id }
+		set_temp_variable = { sender_nation = HUN.id }
+		set_improved_trade_agreement = yes
+		give_military_access = HUN
+		HUN = {
+			give_military_access = IND
+			country_event = hungary_foreign.43
+		}
+	}
+	option = {
+		name = hungary_foreign.42.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.38.b executed"
+		HUN = { country_event =  hungary_foreign.44 }
+	}
+}
+#Cooperation with Indonesia accept
+country_event = {
+	id = hungary_foreign.43
+	title = hungary_foreign.43.t
+	desc = hungary_foreign.43.d
+	picture = GFX_hungary_and_indonesia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.43.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.40.a executed"
+	}
+}
+#Cooperation with Indonesia Reject
+country_event = {
+	id = hungary_foreign.44
+	title = hungary_foreign.44.t
+	desc = hungary_foreign.44.d
+	picture = GFX_hungary_and_indonesia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.44.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.44.a executed"
+	}
+}
+#Joint research with Kazakhstan
+country_event = {
+	id = hungary_foreign.45
+	title = hungary_foreign.45.t
+	desc = hungary_foreign.45.d
+	picture = GFX_hungary_and_kazakhstan_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.45.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.45.a executed"
+		add_timed_idea = {
+			idea = HUN_KAZ_joint_research
+			days = 240
+		}
+		add_opinion_modifier = {
+			modifier = hungary_joint_research
+			target = HUN
+		}
+		reverse_add_opinion_modifier = {
+			modifier = hungary_joint_research
+			target = HUN
+		}
+		HUN = {
+			add_timed_idea = {
+				idea = HUN_KAZ_joint_research
+				days = 240
+			}
+			country_event = hungary_foreign.46
+		}
+	}
+	option = {
+		name = hungary_foreign.45.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.45.b executed"
+		HUN = { country_event =  hungary_foreign.47 }
+	}
+}
+#Joint research with Kazakhstan accept
+country_event = {
+	id = hungary_foreign.46
+	title = hungary_foreign.46.t
+	desc = hungary_foreign.46.d
+	picture = GFX_hungary_and_kazakhstan_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.46.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.46.a executed"
+	}
+}
+#Joint research with Kazakhstan Reject
+country_event = {
+	id = hungary_foreign.47
+	title = hungary_foreign.47.t
+	desc = hungary_foreign.47.d
+	picture = GFX_hungary_and_kazakhstan_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.47.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.47.a executed"
+	}
+}
+#Invite Korean workers
+country_event = {
+	id = hungary_foreign.48
+	title = hungary_foreign.48.t
+	desc = hungary_foreign.48.d
+	picture = GFX_nko_workers_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.48.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.48.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = NKO }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			modifier = economic_mission
+			target = HUN
+		}
+		reverse_add_opinion_modifier = {
+			modifier = economic_mission
+			target = HUN
+		}
+		HUN = {
+			add_ideas = HUN_korean_workers_idea
+			country_event = hungary_foreign.49
+		}
+	}
+	option = {
+		name = hungary_foreign.48.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.48.b executed"
+		HUN = { country_event =  hungary_foreign.50 }
+	}
+}
+#Invite Korean workers accept
+country_event = {
+	id = hungary_foreign.49
+	title = hungary_foreign.49.t
+	desc = hungary_foreign.49.d
+	picture = GFX_nko_workers_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.49.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.49.a executed"
+	}
+}
+#Invite Korean workers Reject
+country_event = {
+	id = hungary_foreign.50
+	title = hungary_foreign.50.t
+	desc = hungary_foreign.50.d
+	picture = GFX_nko_workers_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.50.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.50.a executed"
+	}
+}
+#Treaty of Friendship from Hungary
+country_event = {
+	id = hungary_foreign.51
+	title = hungary_foreign.51.t
+	desc = hungary_foreign.51.d
+	picture = GFX_hun_tur_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.51.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.51.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = TUR }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = TUR }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = HUN
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = slovakia_diplomatic_partnership
+		}
+		set_temp_variable = { receiver_nation = TUR.id }
+		set_temp_variable = { sender_nation = HUN.id }
+		set_improved_trade_agreement = yes
+		give_military_access = HUN
+		give_guarantee = HUN
+		HUN = {
+			give_guarantee = TUR
+			give_military_access = TUR
+			country_event = hungary_foreign.52
+		}
+	}
+	option = {
+		name = hungary_foreign.51.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.51.b executed"
+		HUN = { country_event =  hungary_foreign.53 }
+	}
+}
+#Turkey agrees to sign a friendship treaty
+country_event = {
+	id = hungary_foreign.52
+	title = hungary_foreign.52.t
+	desc = hungary_foreign.52.d
+	picture = GFX_hun_tur_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.52.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.52.a executed"
+	}
+}
+#Turkey refused to sign a friendship treaty
+country_event = {
+	id = hungary_foreign.53
+	title = hungary_foreign.53.t
+	desc = hungary_foreign.53.d
+	picture = GFX_hun_tur_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.53.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.53.a executed"
+	}
+}
+#Oil agreement with Hungary
+country_event = {
+	id = hungary_foreign.54
+	title = hungary_foreign.54.t
+	desc = hungary_foreign.54.d
+	picture = GFX_kuwait_oil_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.54.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.54.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = KUW }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		HUN = {
+			add_ideas = HUN_kuwait_oil
+			country_event =  hungary_foreign.55
+		}
+	}
+	option = {
+		name = hungary_foreign.54.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.54.b executed"
+		HUN = { country_event =  hungary_foreign.56 }
+	}
+}
+#Kuwait agrees to oil deal
+country_event = {
+	id = hungary_foreign.55
+	title = hungary_foreign.55.t
+	desc = hungary_foreign.55.d
+	picture = GFX_kuwait_oil_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.55.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.55.a executed"
+	}
+}
+#Kuwait refused to oil deal
+country_event = {
+	id = hungary_foreign.56
+	title = hungary_foreign.56.t
+	desc = hungary_foreign.56.d
+	picture = GFX_kuwait_oil_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.56.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.56.a executed"
+	}
+}
+#Agreement on Korean companies with Hungary
+country_event = {
+	id = hungary_foreign.57
+	title = hungary_foreign.57.t
+	desc = hungary_foreign.57.d
+	picture = GFX_hungary_and_korea_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.57.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.57.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = KOR }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = KOR.id }
+		set_temp_variable = { sender_nation = HUN.id }
+		set_improved_trade_agreement = yes
+		HUN = {
+			add_ideas = HUN_korean_companies
+			country_event =  hungary_foreign.58
+		}
+	}
+	option = {
+		name = hungary_foreign.57.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.57.b executed"
+		HUN = { country_event =  hungary_foreign.59 }
+	}
+}
+#Korea agrees to sign the treaty
+country_event = {
+	id = hungary_foreign.58
+	title = hungary_foreign.58.t
+	desc = hungary_foreign.58.d
+	picture = GFX_hungary_and_korea_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.58.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.58.a executed"
+	}
+}
+#Korea refused to sign the treaty
+country_event = {
+	id = hungary_foreign.59
+	title = hungary_foreign.59.t
+	desc = hungary_foreign.59.d
+	picture = GFX_hungary_and_korea_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.59.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.59.a executed"
+	}
+}
+#Trade agreement with Hungary
+country_event = {
+	id = hungary_foreign.60
+	title = hungary_foreign.60.t
+	desc = hungary_foreign.60.d
+	picture = GFX_hungary_taiwan_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.60.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.57.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = TAI }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = TAI }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = KOR.id }
+		set_temp_variable = { sender_nation = HUN.id }
+		set_improved_trade_agreement = yes
+		add_opinion_modifier = {
+			target = HUN
+			modifier = slovakia_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = slovakia_diplomatic_partnership
+		}
+		HUN = { country_event =  hungary_foreign.61 }
+	}
+	option = {
+		name = hungary_foreign.60.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.57.b executed"
+		HUN = { country_event =  hungary_foreign.62 }
+	}
+}
+#Taiwan agrees to trade deal
+country_event = {
+	id = hungary_foreign.61
+	title = hungary_foreign.61.t
+	desc = hungary_foreign.61.d
+	picture = GFX_hungary_taiwan_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.61.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.61.a executed"
+	}
+}
+#Taiwan refuse to trade deal
+country_event = {
+	id = hungary_foreign.62
+	title = hungary_foreign.62.t
+	desc = hungary_foreign.62.d
+	picture = GFX_hungary_taiwan_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.62.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.62.a executed"
+	}
+}
+#Hungary seeks investment
+country_event = {
+	id = hungary_foreign.63
+	title = hungary_foreign.63.t
+	desc = hungary_foreign.63.d
+	picture = GFX_hungary_india_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.63.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.57.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = RAJ }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = recently_invest
+		}
+		set_temp_variable = { treasury_change = -10.00 }
+		modify_treasury_effect = yes
+		HUN = {
+			country_event =  hungary_foreign.64
+			set_temp_variable = { treasury_change = 10.00 }
+			modify_treasury_effect = yes
+		}
+	}
+	option = {
+		name = hungary_foreign.63.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.57.b executed"
+		HUN = { country_event =  hungary_foreign.65 }
+	}
+}
+#India agrees to provide investments
+country_event = {
+	id = hungary_foreign.64
+	title = hungary_foreign.64.t
+	desc = hungary_foreign.64.d
+	picture = GFX_hungary_india_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.64.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.64.a executed"
+	}
+}
+#India refused to provide investments
+country_event = {
+	id = hungary_foreign.65
+	title = hungary_foreign.65.t
+	desc = hungary_foreign.65.d
+	picture = GFX_hungary_india_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.65.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.65.a executed"
+	}
+}
+#Hungary seeks investment
+country_event = {
+	id = hungary_foreign.66
+	title = hungary_foreign.66.t
+	desc = hungary_foreign.66.d
+	picture = GFX_euro
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.66.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.66.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = FRA }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = recently_invest
+		}
+		set_temp_variable = { treasury_change = -10.00 }
+		modify_treasury_effect = yes
+		HUN = {
+			country_event =  hungary_foreign.67
+			set_temp_variable = { treasury_change = 10.00 }
+			modify_treasury_effect = yes
+		}
+	}
+	option = {
+		name = hungary_foreign.66.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.66.b executed"
+		HUN = { country_event =  hungary_foreign.68 }
+	}
+}
+#France agrees to provide investments
+country_event = {
+	id = hungary_foreign.67
+	title = hungary_foreign.67.t
+	desc = hungary_foreign.67.d
+	picture = GFX_french_flag_generic
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.67.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.67.a executed"
+	}
+}
+#France refused to provide investments
+country_event = {
+	id = hungary_foreign.68
+	title = hungary_foreign.68.t
+	desc = hungary_foreign.68.d
+	picture = GFX_french_flag_generic
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.68.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.68.a executed"
+	}
+}
+#Offer from Hungary
+country_event = {
+	id = hungary_foreign.69
+	title = hungary_foreign.69.t
+	desc = hungary_foreign.69.d
+	picture = GFX_hungary_georgia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.69.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.66.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = GEO }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = GEO }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = HUN
+			modifier = hungary_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = hungary_diplomatic_partnership
+		}
+		set_temp_variable = { receiver_nation = GEO.id }
+		set_temp_variable = { sender_nation = HUN.id }
+		set_improved_trade_agreement = yes
+		HUN = {
+			country_event =  hungary_foreign.70
+		}
+	}
+	option = {
+		name = hungary_foreign.69.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.69.b executed"
+		HUN = { country_event =  hungary_foreign.71 }
+	}
+}
+#Georgia agrees to the proposal
+country_event = {
+	id = hungary_foreign.70
+	title = hungary_foreign.70.t
+	desc = hungary_foreign.70.d
+	picture = GFX_hungary_georgia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.70.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.70.a executed"
+	}
+}
+#Georgia refused to the proposal
+country_event = {
+	id = hungary_foreign.71
+	title = hungary_foreign.71.t
+	desc = hungary_foreign.71.d
+	picture = GFX_hungary_georgia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.71.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.71.a executed"
+	}
+}
+#Hungary is sending us peacekeepers
+country_event = {
+	id = hungary_foreign.72
+	title = hungary_foreign.72.t
+	desc = hungary_foreign.72.d
+	picture = GFX_transnistria_moldova_relations
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.72.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.72.a executed"
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = MLV }
+		change_influence_percentage = yes
+		division_template = {
+			name = "Hungarian Peacekeepers"
+			is_locked = yes
+			regiments = {
+				L_Inf_Bat = { x = 0 y = 0 }
+				L_Inf_Bat = { x = 0 y = 1 }
+				L_Inf_Bat = { x = 0 y = 2 }
+				L_Inf_Bat = { x = 1 y = 0 }
+				L_Inf_Bat = { x = 1 y = 1 }
+				L_Inf_Bat = { x = 1 y = 2 }
+				Arty_Bat = { x = 2 y = 0 }
+				Arty_Bat = { x = 2 y = 1 }
+			}
+			support = {
+				L_Recce_Comp = { x = 0 y = 0}
+				L_Engi_Comp = { x = 0 y = 1 }
+		    }
+			priority = 2
+		}
+		random_owned_controlled_state = {
+			create_unit = {
+				division = "name = \"1st Hungarian Battalion\" division_template = \"Hungarian Peacekeepers\" start_experience_factor = 0.4"
+				owner = MLV
+			}
+		}
+		random_owned_controlled_state = {
+			create_unit = {
+				division = "name = \"2nd Hungarian Battalion\" division_template = \"Hungarian Peacekeepers\" start_experience_factor = 0.4"
+				owner = MLV
+			}
+		}
+		HUN = {
+			country_event =  hungary_foreign.73
+		}
+	}
+	option = {
+		name = hungary_foreign.72.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.72.b executed"
+		HUN = { country_event =  hungary_foreign.74 }
+	}
+}
+#Moldova welcomed peacekeepers
+country_event = {
+	id = hungary_foreign.73
+	title = hungary_foreign.73.t
+	desc = hungary_foreign.73.d
+	picture = GFX_transnistria_moldova_relations
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.73.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.73.a executed"
+	}
+}
+#Moldova has abandoned its peacekeepers.
+country_event = {
+	id = hungary_foreign.74
+	title = hungary_foreign.74.t
+	desc = hungary_foreign.74.d
+	picture = GFX_transnistria_moldova_relations
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.74.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.74.a executed"
+	}
+}
+#Hungary offers economic cooperation to the CIS
+country_event = {
+	id = hungary_foreign.75
+	title = hungary_foreign.75.t
+	desc = hungary_foreign.75.d
+	picture = GFX_hungary_flag_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.75.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.75.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = ROOT }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = HUN
+			modifier = hungary_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = hungary_diplomatic_partnership
+		}
+		set_temp_variable = { receiver_nation = ROOT.id }
+		set_temp_variable = { sender_nation = HUN.id }
+		set_improved_trade_agreement = yes
+		HUN = { country_event =  hungary_foreign.76 }
+	}
+	option = {
+		name = hungary_foreign.75.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.75.b executed"
+		HUN = { country_event =  hungary_foreign.77 }
+	}
+}
+#FROM agrees to economic cooperation
+country_event = {
+	id = hungary_foreign.76
+	title = hungary_foreign.76.t
+	desc = hungary_foreign.76.d
+	picture = GFX_cis_flag_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.76.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.76.a executed"
+	}
+}
+#FROM refuses to economic cooperation
+country_event = {
+	id = hungary_foreign.77
+	title = hungary_foreign.77.t
+	desc = hungary_foreign.77.d
+	picture = GFX_cis_flag_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.77.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.77.a executed"
+	}
+}
+#Hungary offers trade cooperation
+country_event = {
+	id = hungary_foreign.78
+	title = hungary_foreign.78.t
+	desc = hungary_foreign.78.d
+	picture = GFX_hungary_flag_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.78.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.78.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = BLR }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = BLR }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = HUN
+			modifier = hungary_diplomatic_partnership
+		}
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = hungary_diplomatic_partnership
+		}
+		set_temp_variable = { receiver_nation = BLR.id }
+		set_temp_variable = { sender_nation = HUN.id }
+		set_improved_trade_agreement = yes
+		HUN = { country_event =  hungary_foreign.79 }
+	}
+	option = {
+		name = hungary_foreign.78.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.78.b executed"
+		HUN = { country_event =  hungary_foreign.80 }
+	}
+}
+#Belarus agrees to trade cooperation
+country_event = {
+	id = hungary_foreign.79
+	title = hungary_foreign.79.t
+	desc = hungary_foreign.79.d
+	picture = GFX_hungary_and_belarus_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.79.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.79.a executed"
+	}
+}
+#Belarus refuses to trade cooperation
+country_event = {
+	id = hungary_foreign.80
+	title = hungary_foreign.80.t
+	desc = hungary_foreign.80.d
+	picture = GFX_hungary_and_belarus_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.80.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.80.a executed"
+	}
+}
+#Hungary offers us weapons
+country_event = {
+	id = hungary_foreign.81
+	title = hungary_foreign.81.t
+	desc = hungary_foreign.81.d
+	picture = GFX_hungary_flag_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.81.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.81.a executed"
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = PMR }
+		change_influence_percentage = yes
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = hungary_sent_us_weapons
+		}
+		add_equipment_to_stockpile = {
+			amount = 250
+			type = Inf_equipment
+			producer = HUN
+		}
+		add_equipment_to_stockpile = {
+			amount = 10
+			type = L_AT_Equipment
+			producer = HUN
+		}
+		add_equipment_to_stockpile = {
+			amount = 10
+			type = AA_Equipment
+			producer = HUN
+		}
+		add_equipment_to_stockpile = {
+			amount = 10
+			type = util_vehicle_equipment
+			producer = HUN
+		}
+		HUN = {
+			add_equipment_to_stockpile = {
+				amount = -250
+				type = Inf_equipment
+				producer = HUN
+			}
+			add_equipment_to_stockpile = {
+				amount = -10
+				type = L_AT_Equipment
+				producer = HUN
+			}
+			add_equipment_to_stockpile = {
+				amount = -10
+				type = AA_Equipment
+				producer = HUN
+			}
+			add_equipment_to_stockpile = {
+				amount = -10
+				type = util_vehicle_equipment
+				producer = HUN
+			}
+			country_event =  hungary_foreign.82 
+		}
+	}
+	option = {
+		name = hungary_foreign.81.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.81.b executed"
+		HUN = { country_event =  hungary_foreign.83 }
+	}
+}
+#Transnistria accepts arms
+country_event = {
+	id = hungary_foreign.82
+	title = hungary_foreign.82.t
+	desc = hungary_foreign.82.d
+	picture = GFX_transnistria_map
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.82.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.82.a executed"
+	}
+}
+#Transnistria renounces arms
+country_event = {
+	id = hungary_foreign.83
+	title = hungary_foreign.83.t
+	desc = hungary_foreign.83.d
+	picture = GFX_transnistria_map
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_foreign.83.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.83.a executed"
+	}
+}
+#Hungary proposes to hold military exercises
+country_event = {
+	id = hungary_foreign.84
+	title = hungary_foreign.84.t
+	desc = hungary_foreign.84.d
+	picture = GFX_hungary_and_russia
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.84.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.84.a executed"
+		army_experience = 15
+		add_timed_idea = {
+			idea = HUN_recent_exercises_russia
+			days = 180
+		}
+		HUN = {
+			army_experience = 15
+			add_timed_idea = {
+				idea = HUN_recent_exercises_russia
+				days = 180
+			}
+			country_event = hungary_foreign.85
+		}
+	}
+	option = {
+		name =hungary_foreign.84.b
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.84.b executed"
+		HUN = { country_event = hungary_foreign.86 }
+	}
+}
+#Russia agrees to conduct military exercises
+country_event = {
+	id = hungary_foreign.85
+	title = hungary_foreign.85.t
+	desc = hungary_foreign.85.d
+	picture = GFX_hungary_and_russia
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.85.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.85.a executed"
+	}
+}
+#Russia refuses to conduct military exercises
+country_event = {
+	id = hungary_foreign.86
+	title = hungary_foreign.86.t
+	desc = hungary_foreign.86.d
+	picture = GFX_hungary_and_russia
+	is_triggered_only = yes
+
+	option = {
+		name =hungary_foreign.86.a
+		log = "[GetDateText]: [This.GetName]: hungary_foreign.86.a executed"
+	}
+}
+#Chinese guarantees
+country_event = {
+	id = hungary_commi.1
+	title = hungary_commi.1.t
+	desc = hungary_commi.1.d
+	picture = GFX_hungary_and_china
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.1.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.1.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = CHI }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		give_guarantee = HUN
+		HUN = { country_event = hungary_commi.2 }
+	}
+	option = {
+		name = hungary_commi.1.b
+		log = "[GetDateText]: [This.GetName]: hungary_commi.1.b executed"
+		HUN = { country_event = hungary_commi.3 }
+	}
+}
+#Chinese guarantees accept
+country_event = {
+	id = hungary_commi.2
+	title = hungary_commi.2.t
+	desc = hungary_commi.2.d
+	picture = GFX_hungary_and_china
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.2.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.2.a executed"
+	}
+}
+#Chinese guarantees refuse
+country_event = {
+	id = hungary_commi.3
+	title = hungary_commi.3.t
+	desc = hungary_commi.3.d
+	picture = GFX_hungary_and_china
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.3.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.3.a executed"
+	}
+}
+#Mutual Defense Treaty with Russia
+country_event = {
+	id = hungary_commi.4
+	title = hungary_commi.4.t
+	desc = hungary_commi.4.d
+	picture = GFX_hungary_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.4.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.4.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = SOV }
+		change_influence_percentage = yes
+		give_guarantee = HUN
+		give_military_access = HUN
+		add_opinion_modifier = {
+			target = HUN
+			modifier = military_cooperation
+		}
+		reverse_add_opinion_modifier = {
+			target = HUN
+			modifier = military_cooperation
+		}
+		HUN = {
+			country_event = hungary_commi.5
+			give_guarantee = SOV
+			give_military_access = SOV
+		}
+	}
+	option = {
+		name = hungary_commi.4.b
+		log = "[GetDateText]: [This.GetName]: hungary_commi.4.b executed"
+		HUN = { country_event = hungary_commi.6 }
+	}
+}
+#Mutual Defense Treaty with Russia accept
+country_event = {
+	id = hungary_commi.5
+	title = hungary_commi.5.t
+	desc = hungary_commi.5.d
+	picture = GFX_hungary_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.5.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.5.a executed"
+	}
+}
+#Mutual Defense Treaty with Russia refuse
+country_event = {
+	id = hungary_commi.6
+	title = hungary_commi.6.t
+	desc = hungary_commi.6.d
+	picture = GFX_hungary_russia
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.6.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.6.a executed"
+	}
+}
+#Invitation to the alliance
+country_event = {
+	id = hungary_commi.7
+	title = hungary_commi.7.t
+	desc = hungary_commi.7.d
+	picture = GFX_HUN_commi_union_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.7.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.7.a executed"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = HUN }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		add_ideas = HUN_cesu_member
+		HUN = {
+			add_to_faction = PREV
+			country_event = hungary_commi.8
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 100
+				has_government = communism
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value > 50
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_commi.7.b
+		log = "[GetDateText]: [This.GetName]: hungary_commi.7.b executed"
+		HUN = { country_event = hungary_commi.9 }
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 50
+				has_government = democratic
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value < 0
+				}
+			}
+		}
+	}
+}
+#Invitation to the alliance accept
+country_event = {
+	id = hungary_commi.8
+	title = hungary_commi.8.t
+	desc = hungary_commi.8.d
+	picture = GFX_HUN_commi_union_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.8.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.8.a executed"
+	}
+}
+#Invitation to the alliance refuse
+country_event = {
+	id = hungary_commi.9
+	title = hungary_commi.9.t
+	desc = hungary_commi.9.d
+	picture = GFX_HUN_commi_union_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.9.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.9.a executed"
+	}
+}
+#The question of the resurrection of the AVH
+country_event = {
+	id = hungary_commi.10
+	title = hungary_commi.10.t
+	desc = hungary_commi.10.d
+	picture = GFX_hungary_tek_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.10.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.10.a executed"
+		set_country_flag = avh_resurrection_flag
+		custom_effect_tooltip = available_new_departament
+        show_ideas_tooltip = HUN_avh_idea
+	}
+	option = {
+		name = hungary_commi.10.b
+		log = "[GetDateText]: [This.GetName]: hungary_commi.10.b executed"
+		set_country_flag = avh_not_resurrection_flag
+		swap_ideas = {
+			remove_idea = HUN_anti_terror_idea
+			add_idea = HUN_anti_terror_idea1
+		}
+	}
+}
+#Purchase Russian weapons
+country_event = {
+	id = hungary_commi.11
+	title = hungary_commi.11.t
+	desc = hungary_commi.11.d
+	picture = GFX_HUN_russian_eq_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.11.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.11.a executed"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = HUN }
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = 10.00 }
+		modify_treasury_effect = yes
+		add_equipment_to_stockpile = {
+			type = Inf_equipment
+			amount = -1500
+			producer = SOV
+		}
+		add_equipment_to_stockpile = {
+			type = command_control_equipment
+			amount = -100
+			producer = SOV
+		}
+		add_equipment_to_stockpile = {
+			type = artillery_equipment
+			amount = -30
+			producer = SOV
+		}
+		HUN = {
+			set_temp_variable = { treasury_change = -10.00 }
+			modify_treasury_effect = yes
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = 1500
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = command_control_equipment
+				amount = 100
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 30
+				producer = SOV
+			}
+			country_event = hungary_commi.12
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value > 50
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_commi.11.b
+		log = "[GetDateText]: [This.GetName]: hungary_commi.11.b executed"
+		HUN = { country_event = hungary_commi.13 }
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value < 0
+				}
+			}
+		}
+	}
+}
+#Purchase Russian weapons accept
+country_event = {
+	id = hungary_commi.12
+	title = hungary_commi.12.t
+	desc = hungary_commi.12.d
+	picture = GFX_HUN_russian_eq_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.12.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.12.a executed"
+	}
+}
+#Purchase Russian weapons refuse
+country_event = {
+	id = hungary_commi.13
+	title = hungary_commi.13.t
+	desc = hungary_commi.13.d
+	picture = GFX_HUN_russian_eq_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_commi.13.a
+		log = "[GetDateText]: [This.GetName]: hungary_commi.13.a executed"
+	}
+}
+#New Monarch
+country_event = {
+	id = hungary_monarch.17
+	title = hungary_monarch.17.t
+	desc = hungary_monarch.17.d
+	picture = GFX_HUN_habsburgs_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.17.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.17.a executed"
+		create_country_leader = {
+			name = "Otto von Habsburg"
+			picture = "otto_von_gabsburg.dds"
+			ideology = Monarchist
+			traits = {
+				nationalist_Monarchist
+				Pro_Western
+				pan_european
+				head_of_the_dynasty
+				King
+			}
+		}
+		hidden_effect = {
+			set_country_flag = otto_von_gabsburg_flag
+		}
+	}
+	option = {
+		name = hungary_monarch.17.b
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.17.b executed"
+		create_country_leader = {
+			name = "Karl Habsburg-Lothringen"
+			picture = "HUN_karl_von_gabsburg.dds"
+			ideology = Monarchist
+			traits = {
+				nationalist_Monarchist
+				pan_european
+				Pro_Western
+				heir_to_the_dynasty
+				career_politician
+				geopolitical_thinker
+				King
+			}
+		}
+		hidden_effect = {
+			set_country_flag = karl_von_gabsburg_flag
+		}
+	}
+	option = {
+		name = hungary_monarch.17.c
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.17.c executed"
+		create_country_leader = {
+			name = "Georg von Habsburg"
+			picture = "georg_von_gabsburg.dds"
+			ideology = Monarchist
+			traits = {
+				nationalist_Monarchist
+				journalist
+				hungarian_citizen
+				career_politician
+				diplomat
+			}
+		}
+		hidden_effect = {
+			set_country_flag = georg_von_gabsburg_flag
+		}
+	}
+}
+#The question of LGBT rights
+country_event = {
+	id = hungary_monarch.18
+	title = hungary_monarch.18.t
+	desc = hungary_monarch.18.d
+	picture = GFX_lgbt_parade
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.18.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.18.a executed"
+		set_ban_lgbt = yes
+	}
+	option = {
+		name = hungary_monarch.18.b
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.18.b executed"
+		set_civil_partnerships = yes
+		add_popularity = { ideology = democratic popularity = 0.05 }
+		set_temp_variable = { party_index = 0 }
+        set_temp_variable = { party_popularity_increase = 0.03 }
+        set_temp_variable = { temp_outlook_increase = 0.03 }
+        add_relative_party_popularity = yes
+		add_stability = 0.03
+	}
+}
+#The return of Galicia
+country_event = {
+	id = hungary_monarch.19
+	title = hungary_monarch.19.t
+	desc = hungary_monarch.19.d
+	picture = GFX_HUN_galicia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.19.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.19.a executed"
+		if = {
+			limit = {
+				700 = {
+					is_owned_and_controlled_by = ROOT
+				}
+			}
+			700 = {
+				set_state_owner_to = HUN
+				set_state_controller_to = HUN
+			}
+		}
+		if = {
+			limit = {
+				335 = {
+					is_owned_and_controlled_by = ROOT
+				}
+			}
+			335 = {
+				set_state_owner_to = HUN
+				set_state_controller_to = HUN
+			}
+		}
+		if = {
+			limit = {
+				1098 = {
+					is_owned_and_controlled_by = ROOT
+				}
+			}
+			1098 = {
+				set_state_owner_to = HUN
+				set_state_controller_to = HUN
+			}
+		}
+		HUN = { country_event = hungary_monarch.20 }
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = HUN
+					value > 10
+				}
+			}
+			modifier = {
+				add = 10
+				is_in_faction = no
+			}
+			modifier = {
+				add = 10
+				fighting_army_strength_ratio = {
+					tag = HUN
+					ratio < 0.5
+				}
+			}
+		}
+	}
+	option = {
+		name = hungary_monarch.19.b
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.19.b executed"
+		HUN = { country_event = hungary_monarch.21 }
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 10
+				is_in_faction = yes
+			}
+			modifier = {
+				add = 10
+				fighting_army_strength_ratio = {
+					tag = HUN
+					ratio > 0.5
+				}
+			}
+		}
+	}
+}
+#The return of Galicia accept
+country_event = {
+	id = hungary_monarch.20
+	title = hungary_monarch.20.t
+	desc = hungary_monarch.20.d
+	picture = GFX_HUN_galicia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.20.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.20.a executed"
+	}
+}
+#The return of Galicia refuse
+country_event = {
+	id = hungary_monarch.21
+	title = hungary_monarch.21.t
+	desc = hungary_monarch.21.d
+	picture = GFX_HUN_galicia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_monarch.21.a
+		log = "[GetDateText]: [This.GetName]: hungary_monarch.21.a executed"
+	}
+}
+#Federalization of Romania
+country_event = {
+	id = hungary_jobbik.6
+	title = hungary_jobbik.6.t
+	desc = hungary_jobbik.6.d
+	picture = GFX_transilvania_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.6.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.6.a executed"
+		151 = {
+			set_state_owner_to = TRA
+			add_core_of = TRA
+		}
+		909 = {
+			set_state_owner_to = TRA
+			add_core_of = TRA
+		}
+		910 = {
+			set_state_owner_to = TRA
+			add_core_of = TRA
+		}
+		set_autonomy = {
+			target = TRA
+			autonomous_state = autonomy_puppet_federation
+		}
+		HUN = {
+			country_event = hungary_jobbik.7
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				is_subject_of = HUN
+				add = 100
+			}
+			modifier = {
+				fighting_army_strength_ratio = {
+					tag = HUN
+					ratio < 0.5
+				}
+				add = 10
+			}
+			modifier = {
+				NOT = { is_in_faction = yes }
+				add = 10
+			}
+		}
+	}
+	option = {
+		name = hungary_jobbik.6.b
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.6.b executed"
+		HUN = {
+			country_event = hungary_jobbik.8
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				is_subject_of = HUN
+				add = -100
+			}
+			modifier = {
+				fighting_army_strength_ratio = {
+					tag = HUN
+					ratio > 0.5
+				}
+				add = 10
+			}
+			modifier = {
+				is_in_faction = yes
+				add = 10
+			}
+		}
+	}
+}
+#Federalization of Romania accept
+country_event = {
+	id = hungary_jobbik.7
+	title = hungary_jobbik.7.t
+	desc = hungary_jobbik.7.d
+	picture = GFX_transilvania_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.7.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.7.a executed"
+		give_guarantee = TRA
+	}
+}
+#Federalization of Romania refuse
+country_event = {
+	id = hungary_jobbik.8
+	title = hungary_jobbik.8.t
+	desc = hungary_jobbik.8.d
+	picture = GFX_transilvania_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.8.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.7.a executed"
+		151 = {
+			add_claim_by = HUN
+		}
+		909 = {
+			add_claim_by = HUN
+		}
+		910 = {
+			add_claim_by = HUN
+		}
+		create_wargoal = {
+			type = take_state_focus
+			target = ROM
+			generator = { 151 909 910 }
+		}
+	}
+}
+#Support Hungarian separatism in Ukraine
+country_event = {
+	id = hungary_jobbik.9
+	title = hungary_jobbik.9.t
+	desc = hungary_jobbik.9.d
+	picture = GFX_SLO_Transcarpathia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.9.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.9.a executed"
+		701 = {
+			set_state_owner_to = HUN
+			set_state_controller_to = HUN
+		}
+		HUN = {
+			country_event = hungary_jobbik.10
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				is_subject_of = HUN
+				add = 100
+			}
+			modifier = {
+				fighting_army_strength_ratio = {
+					tag = HUN
+					ratio < 0.5
+				}
+				add = 10
+			}
+			modifier = {
+				NOT = { is_in_faction = yes }
+				add = 10
+			}
+		}
+	}
+	option = {
+		name = hungary_jobbik.9.b
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.9.b executed"
+		HUN = {
+			country_event = hungary_jobbik.11
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				is_subject_of = HUN
+				add = -100
+			}
+			modifier = {
+				fighting_army_strength_ratio = {
+					tag = HUN
+					ratio > 0.5
+				}
+				add = 10
+			}
+			modifier = {
+				is_in_faction = yes
+				add = 10
+			}
+		}
+	}
+}
+#Support Hungarian separatism in Ukraine accept
+country_event = {
+	id = hungary_jobbik.10
+	title = hungary_jobbik.10.t
+	desc = hungary_jobbik.10.d
+	picture = GFX_SLO_Transcarpathia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.10.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.10.a executed"
+	}
+}
+#Support Hungarian separatism in Ukraine refuse
+country_event = {
+	id = hungary_jobbik.11
+	title = hungary_jobbik.11.t
+	desc = hungary_jobbik.11.d
+	picture = GFX_SLO_Transcarpathia_event
+	is_triggered_only = yes
+
+	option = {
+		name = hungary_jobbik.11.a
+		log = "[GetDateText]: [This.GetName]: hungary_jobbik.11.a executed"
+		create_wargoal = {
+			type = take_state_focus
+			target = FROM
+			generator = { 701 }
+		}
+	}
+}
+
+

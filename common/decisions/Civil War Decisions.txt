@@ -1,0 +1,209 @@
+Civil_war_decisions = {
+
+	restore_order = {
+		custom_cost_trigger = { command_power > 50 }
+		custom_cost_text = command_power_more_than_50
+
+		visible = {
+			any_controlled_state = {
+				is_fully_controlled_by = PREV
+				OR = {
+					has_dynamic_modifier = { modifier = partisans_activity }
+					has_dynamic_modifier = { modifier = partisans_activity_1 }
+				}
+			}
+		}
+
+		available = {
+			has_manpower > 1000
+			has_equipment = { Inf_equipment > 999 }
+			has_equipment = { cnc_equipment > 249 }
+		}
+
+		days_remove = 15
+		days_re_enable = 30
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove restore_order"
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = -1000
+			}
+			add_equipment_to_stockpile = {
+				type = cnc_equipment
+				amount = -250
+			}
+			add_manpower = -1000
+			add_to_variable = { civil_war_garrisons = 1 }
+			every_controlled_state = {
+				limit = { is_fully_controlled_by = PREV }
+				set_state_flag = restored_order
+				if = {
+					limit = { has_dynamic_modifier = { modifier = partisans_activity } }
+					remove_dynamic_modifier = { modifier = partisans_activity }
+				}
+				else_if = {
+					limit = { has_dynamic_modifier = { modifier = partisans_activity_1 } }
+					remove_dynamic_modifier = { modifier = partisans_activity_1 }
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+	confiscate_civilian_vehicles = {
+		cost = 50
+
+		days_remove = 15
+		days_re_enable = 30
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove confiscate_civilian_vehicles"
+			add_equipment_to_stockpile = {
+				type = util_vehicle_0
+				amount = 100
+			}
+			set_temp_variable = { treasury_change = -0.1 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 10
+			modifier = {
+				factor = 2
+				has_equipment = {
+					util_vehicle_equipment < 100
+				}
+			}
+		}
+	}
+
+	smuggle_small_arms = {
+		cost = 50
+
+		days_remove = 15
+		days_re_enable = 30
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove smuggle_small_arms"
+			add_equipment_to_stockpile = {
+				type = infantry_weapons
+				amount = 700
+				producer = SOV
+			}
+			set_temp_variable = { treasury_change = -0.1 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 10
+			modifier = {
+				factor = 2
+				has_equipment = {
+					Inf_equipment < 1000
+				}
+			}
+		}
+	}
+
+	smuggle_heavy_weapons = {
+		cost = 50
+
+		days_remove = 15
+		days_re_enable = 30
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove smuggle_heavy_weapons"
+			add_equipment_to_stockpile = {
+				type = Anti_Air_0
+				amount = 75
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = Anti_tank_0
+				amount = 75
+				producer = SOV
+			}
+			set_temp_variable = { treasury_change = -0.2 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 10
+			modifier = {
+				factor = 1.5			#Small arms and truck are prioritised
+				OR = {
+					has_equipment = {
+						AA_Equipment < 100
+					}
+					has_equipment = {
+						L_AT_Equipment < 100
+					}
+				}
+			}
+		}
+	}
+
+	buy_fuel_from_black_market = {
+		cost = 50
+
+		days_remove = 15
+		days_re_enable = 30
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove buy_fuel_from_black_market"
+			add_fuel = 1000
+			set_temp_variable = { treasury_change = -0.5 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 10
+			modifier = {
+				factor = 1.5
+				has_fuel < 50
+			}
+		}
+	}
+
+	buy_ammo_from_black_market = {
+		cost = 50
+
+		days_remove = 15
+		days_re_enable = 30
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove buy_ammo_from_black_market"
+			set_temp_variable = { adding_ammo = 1000 }
+			add_ammo = yes
+			set_temp_variable = { treasury_change = -0.5 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 10
+			modifier = {
+				factor = 1.5
+				check_variable = { ammo_production_rating < 0 }
+				check_variable = { ammo_stock_months < 2 }
+			}
+		}
+	}
+
+	force_conscript_children = {
+		available = {
+			NOT = { has_country_flag = Conscripting_Child_Soldiers }
+		}
+		cost = 200
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision force_conscript_children"
+			add_ideas = child_soldiers
+			set_country_flag = Conscripting_Child_Soldiers
+			set_variable = { var = child_soldiers value = 300 }
+			set_variable = { var = child_soldiers_recruitment value = 10 }
+		}
+	}
+}

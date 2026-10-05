@@ -1,0 +1,80 @@
+AI_radar_station = {
+	enable = {
+		OR = {
+			threat > 0.5
+			has_global_flag = age_has_begun_4
+		}
+		num_of_available_civilian_factories > 15
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = building_target id = radar_station value = 100 }
+}
+AI_Shorad = {
+	enable = {
+		OR = {
+			threat > 0.5
+			has_global_flag = age_has_begun_4
+		}
+		num_of_available_civilian_factories > 15
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = building_target id = anti_air_building value = 100 }
+}
+
+AI_Rocket_Site = {
+	enable = {
+		OR = {
+			threat > 0.5
+			has_global_flag = age_has_begun_4
+		}
+		num_of_available_civilian_factories > 15
+		OR = {
+			check_variable = { num_equipment@guided_missile_equipment > 5000 }
+			check_variable = { num_equipment@hypersonic_missile_equipment > 5000 }
+			check_variable = { num_equipment@ballistic_missile_equipment > 5000 }
+			check_variable = { num_equipment@sam_missile_equipment > 5000 }
+			AND = {
+				check_variable = { num_equipment@anti_ship_missile_equipment > 5000 }
+				any_owned_state = { is_coastal = yes }
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = building_target id = rocket_site value = 100 }
+}
+
+AI_Air_field = {
+	enable = {
+		OR = {
+			threat > 0.5
+			has_global_flag = age_has_begun_4
+		}
+		num_of_available_civilian_factories > 15
+		OR = {
+			check_variable = { num_equipment@small_plane_airframe > 1000 }
+			check_variable = { num_equipment@medium_plane_airframe > 1000 }
+			check_variable = { num_equipment@large_plane_airframe > 1000 }
+			check_variable = { num_equipment@mothership_equipment > 1000 }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = building_target id = air_base value = 100 }
+}
+
+AI_Civil_Bunker = {
+	enable = {
+		OR = {
+			threat > 0.75
+			has_global_flag = age_has_begun_4
+		}
+		num_of_available_civilian_factories > 15
+	}
+	abort_when_not_enabled = yes
+
+	# Good for Keeping Productivity Up
+	ai_strategy = { type = building_target id = civil_bunker value = 100 }
+}

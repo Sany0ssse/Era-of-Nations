@@ -1,0 +1,746 @@
+ideas = {
+	branch = {
+		law = yes
+		#COOPERATIONS
+		#IRAN AND  SLOVAKIA - IRAN PART
+		PER_SLO_cooperation_idea = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea PER_SLO_cooperation_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SLO }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SLO modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = SLO modifier = large_commercial_relations }
+				random_owned_controlled_state = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			available = {
+				original_tag = PER
+			}
+			allowed = {
+				original_tag = PER
+			}
+			visible = {
+				country_exists = SLO
+				SLO = {
+					has_idea = PER_SLO_cooperation1_idea
+				}
+			}
+			cancel = {
+				OR = {
+					NOT = {
+						country_exists = SLO
+						SLO = {
+							has_idea = PER_SLO_cooperation1_idea
+						}
+					}
+					is_embargoed_by = SLO
+					has_war_with = SLO
+				}
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = SLO }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SLO modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = SLO modifier = medium_decrease }
+			}
+			picture = cooperation_iran_slovakia
+
+			modifier = {
+				production_speed_infrastructure_factor = 0.10
+				custom_modifier_tooltip = GENERIC_slovakia_cooperation_tt
+			}
+			ai_will_do = {
+				factor = 0
+			}
+		}
+		#IRAN AND  SLOVAKIA - SLOVAKIA PART
+		PER_SLO_cooperation1_idea = {
+			name = PER_SLO_cooperation_idea
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea PER_SLO_cooperation1_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = PER }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = PER modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = PER modifier = large_commercial_relations }
+				random_owned_controlled_state = {
+					add_building_construction = {
+						type = fuel_silo
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			available = {
+				original_tag = SLO
+			}
+			allowed = {
+				original_tag = SLO
+			}
+			visible = {
+				country_exists = PER
+				PER = {
+					has_idea = PER_SLO_cooperation_idea
+				}
+			}
+			cancel = {
+				OR = {
+					NOT = {
+						country_exists = PER
+						PER = {
+							has_idea = PER_SLO_cooperation_idea
+						}
+					}
+					is_embargoed_by = PER
+					has_war_with = PER
+				}
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = PER }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = PER modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = PER modifier = medium_decrease }
+			}
+			picture = cooperation_iran_slovakia
+
+			modifier = {
+				fossil_pp_fuel_consumption_modifier = -0.05
+				custom_modifier_tooltip = GENERIC_iran_cooperation_tt
+			}
+			ai_will_do = {
+				factor = 0
+			}
+		}
+		#IRAN AND  SLOVAKIA - SLOVAKIA PART
+		PER_SLO_nuclear_cooperation_idea = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea PER_SLO_nuclear_cooperation_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = PER }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = PER modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = PER modifier = large_commercial_relations }
+			}
+			available = {
+				original_tag = SLO
+			}
+			allowed = {
+				original_tag = SLO
+			}
+			visible = {
+				has_country_flag = PER_nuclear_cooperation_slovakia
+				NOT = {
+					has_country_flag = PER_nuclear_slovakia_dead
+				}
+			}
+			cancel = {
+				OR = {
+					has_country_flag = PER_nuclear_slovakia_dead
+					NOT = {
+						country_exists = PER
+					}
+					is_embargoed_by = PER
+					has_war_with = PER
+				}
+			}
+			on_remove = {
+				set_country_flag = PER_nuclear_slovakia_dead
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = PER }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = PER modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = PER modifier = medium_decrease }
+			}
+			picture = cooperation_iran_slovakia
+
+			modifier = {
+				nuclear_fuel_consumption_modifier = -0.01
+				repair_speed_nuclear_reactor_factor = 0.02
+				production_speed_nuclear_reactor_factor = 0.02
+				custom_modifier_tooltip = GENERIC_iran_cooperation_tt
+			}
+			ai_will_do = {
+				factor = 0
+			}
+		}
+		#UKRAINE AND SLOVAKIA - UKRAINE PART
+		UKR_SLO_cooperation_idea = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea UKR_SLO_cooperation_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SLO }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SLO modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = SLO modifier = large_commercial_relations }
+				random_owned_controlled_state = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			available = {
+				original_tag = UKR
+			}
+			allowed = {
+				original_tag = UKR
+			}
+			visible = {
+				country_exists = SLO
+				SLO = {
+					has_idea = UKR_SLO_cooperation1_idea
+				}
+			}
+			cancel = {
+				OR = {
+					NOT = {
+						country_exists = SLO
+						SLO = {
+							has_idea = UKR_SLO_cooperation1_idea
+						}
+					}
+					is_embargoed_by = SLO
+					has_war_with = SLO
+				}
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = SLO }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SLO modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = SLO modifier = medium_decrease }
+			}
+			picture = cooperation_ukraine_slovakia
+
+			modifier = {
+				production_speed_infrastructure_factor = 0.10
+				custom_modifier_tooltip = GENERIC_slovakia_cooperation_tt
+			}
+			ai_will_do = {
+				factor = 0
+			}
+		}
+		#UKRAINE AND SLOVAKIA - SLOVAKIA PART
+		UKR_SLO_cooperation1_idea = {
+			name = UKR_SLO_cooperation_idea
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea UKR_SLO_cooperation1_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = UKR }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = UKR modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = UKR modifier = large_commercial_relations }
+				random_owned_controlled_state = {
+					add_building_construction = {
+						type = agriculture_district
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			available = {
+				original_tag = SLO
+			}
+			allowed = {
+				original_tag = SLO
+			}
+			visible = {
+				country_exists = SLO
+				UKR = {
+					has_idea = UKR_SLO_cooperation_idea
+				}
+			}
+			cancel = {
+				OR = {
+					NOT = {
+						country_exists = UKR
+						UKR = {
+							has_idea = UKR_SLO_cooperation_idea
+						}
+					}
+					is_embargoed_by = UKR
+					has_war_with = UKR
+				}
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = UKR }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = UKR modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = UKR modifier = medium_decrease }
+			}
+			picture = cooperation_ukraine_slovakia
+
+			modifier = {
+				agricolture_productivity_modifier = 0.10
+				custom_modifier_tooltip = GENERIC_ukraine_cooperation_tt
+			}
+			ai_will_do = {
+				factor = 0
+			}
+		}
+		#RUSSIA AND GERMANY - GERMANY PART
+		SOV_nord_stream_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea SOV_nord_stream_idea"
+				SOV = { country_event = sov_economic.30 }
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+			}
+			allowed = { always = yes }
+			picture = cooperation_germany_gazprom
+			available = {
+				original_tag = GER
+			}
+			allowed = {
+				original_tag = GER
+			}
+			visible = {
+				has_country_flag = SOV_gazprom_mechanic_nord_stream
+				NOT = {
+					has_country_flag = SOV_nord_stream_dead
+				}
+				NOT = {
+					has_country_flag = SOV_gazprom_idea_ded
+				}
+			}
+			cancel = {
+				OR = {
+					NOT = {
+						539 = {
+							is_owned_and_controlled_by = GER
+						}
+					}
+					has_war_with = SOV
+				}
+			}
+
+			on_remove = {
+				SOV = { country_event = sov_economic.29 }
+				set_country_flag = SOV_nord_stream_dead
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+			}
+
+			modifier = {
+				custom_modifier_tooltip = SOV_potocs_influency_TT
+				custom_modifier_tooltip = SOV_streams_pays_tt
+				country_resource_oil = 21
+			}
+		}
+		#RUSSIA AND GERMANY - GERMANY PART
+		SOV_nord_stream2_idea = {
+			on_add = {
+				SOV = { country_event = sov_economic.30 }
+				log = "[GetDateText]: [THIS.GetName]: add idea SOV_nord_stream2_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+			}
+			allowed = { always = yes }
+			picture = cooperation_germany_gazprom
+
+			available = {
+				original_tag = GER
+			}
+			allowed = {
+				original_tag = GER
+			}
+
+			visible = {
+				has_country_flag = SOV_gazprom_mechanic_nord_stream2
+				NOT = {
+					has_country_flag = SOV_nord_stream2_dead
+				}
+				NOT = {
+					has_country_flag = SOV_gazprom_idea_ded
+				}
+			}
+
+			cancel = {
+				OR = {
+					NOT = {
+						539 = {
+							is_owned_and_controlled_by = GER
+						}
+					}
+					has_war_with = SOV
+				}
+			}
+
+			on_remove = {
+				SOV = { country_event = sov_economic.29 }
+				set_country_flag = SOV_nord_stream2_dead
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+			}
+
+			modifier = {
+				custom_modifier_tooltip = SOV_potocs_influency_TT
+				custom_modifier_tooltip = SOV_streams_pays_tt
+				country_resource_oil = 21
+			}
+		}
+		#RUSSIA AND TURKEY - TURKEY PART
+		SOV_blue_stream_idea = {
+			on_add = {
+				SOV = { country_event = sov_economic.30 }
+				log = "[GetDateText]: [THIS.GetName]: add idea SOV_blue_stream_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+			}
+			allowed = { always = yes }
+			picture = cooperation_turkey_gazprom
+
+			available = {
+				original_tag = TUR
+			}
+			allowed = {
+				original_tag = TUR
+			}
+
+			visible = {
+				has_country_flag = SOV_gazprom_mechanic_blue_stream
+				NOT = {
+					has_country_flag = SOV_blue_stream_dead
+				}
+				NOT = {
+					has_country_flag = SOV_gazprom_idea_ded
+				}
+			}
+
+			cancel = {
+				OR = {
+					NOT = {
+						160 = {
+							is_owned_and_controlled_by = TUR
+						}
+					}
+					has_war_with = SOV
+				}
+			}
+
+			on_remove = {
+				SOV = { country_event = sov_economic.29 }
+				set_country_flag = SOV_blue_stream_dead
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+			}
+
+			modifier = {
+				custom_modifier_tooltip = SOV_potocs_influency_TT
+				custom_modifier_tooltip = SOV_streams_pays_tt
+				country_resource_oil = 21
+			}
+		}
+		#RUSSIA AND TURKEY - TURKEY PART
+		SOV_turkey_stream_idea = {
+			on_add = {
+				SOV = { country_event = sov_economic.30 }
+				log = "[GetDateText]: [THIS.GetName]: add idea SOV_turkey_stream_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+			}
+			allowed = { always = yes }
+			picture = cooperation_turkey_gazprom
+
+			available = {
+				original_tag = TUR
+			}
+			allowed = {
+				original_tag = TUR
+			}
+
+			visible = {
+				has_country_flag = SOV_gazprom_mechanic_turkey_stream
+				NOT = {
+					has_country_flag = SOV_turkey_stream_dead
+				}
+				NOT = {
+					has_country_flag = SOV_gazprom_idea_ded
+				}
+			}
+
+			cancel = {
+				OR = {
+					NOT = {
+						OR = {
+							160 = {
+								is_owned_and_controlled_by = TUR
+							}
+							934 = {
+								is_owned_and_controlled_by = TUR
+							}
+						}
+					}
+					has_war_with = SOV
+				}
+			}
+
+			on_remove = {
+				SOV = { country_event = sov_economic.29 }
+				set_country_flag = SOV_turkey_stream_dead
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+			}
+
+			modifier = {
+				custom_modifier_tooltip = SOV_potocs_influency_TT
+				custom_modifier_tooltip = SOV_streams_pays_tt
+				country_resource_oil = 21
+			}
+		}
+		#RUSSIA AND UKRAINE - UKRAINE PART
+		UKR_russian_gas_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea UKR_russian_gas_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+			}
+			picture = cooperation_ukraine_gazprom
+			available = {
+				original_tag = UKR
+			}
+			allowed = {
+				original_tag = UKR
+			}
+			visible = {
+				NOT = {
+					has_country_flag = SOV_ukraine_stream_dead
+				}
+				NOT = {
+					has_country_flag = SOV_gazprom_idea_ded
+				}
+			}
+			cancel = {
+				OR = {
+					NOT = { country_exists = SOV }
+					has_war_with = SOV
+				}
+			}
+			on_remove = {
+				set_country_flag = SOV_ukraine_stream_dead
+				set_temp_variable = { percent_change = -5 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+			}
+			modifier = {
+				custom_modifier_tooltip = SOV_potocs_influency_TT
+				custom_modifier_tooltip = SOV_streams_pays_hohol_tt
+				country_resource_oil = 12
+			}
+		}
+		#RUSSIA AND BELARUS - BELARUS PART
+		BLR_oil_russian_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea BLR_oil_russian_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+			}
+
+			picture = cooperation_belarus_gazprom
+
+			available = {
+				original_tag = BLR
+			}
+			allowed = {
+				original_tag = BLR
+			}
+
+			visible = {
+				NOT = {
+					has_country_flag = SOV_gazprom_idea_ded
+				}
+				NOT = {
+					has_country_flag = SOV_belarus_stream_dead
+				}
+			}
+
+			cancel = {
+				OR = {
+					NOT = { country_exists = SOV }
+					has_war_with = SOV
+				}
+			}
+			on_remove = {
+				set_country_flag = SOV_belarus_stream_dead
+				set_temp_variable = { percent_change = -5 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+			}
+
+			modifier = {
+				custom_modifier_tooltip = SOV_potocs_influency_TT
+				custom_modifier_tooltip = SOV_streams_pays_bulba_tt
+				country_resource_oil = 3
+			}
+		}
+		#RUSSIA AND SLOVAKIA - SLOVAKIA PART
+		SLO_oil_russian_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea SLO_oil_russian_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = SOV modifier = large_commercial_relations }
+			}
+
+			picture = cooperation_slovakia_gazprom
+
+			available = {
+				original_tag = SLO
+			}
+			allowed = {
+				original_tag = SLO
+			}
+
+			visible = {
+				has_country_flag = SOV_gazprom_mechanic_slovakia_stream
+				NOT = {
+					has_country_flag = SOV_gazprom_idea_ded
+				}
+				NOT = {
+					has_country_flag = SOV_slovakia_stream_dead
+				}
+			}
+
+			cancel = {
+				OR = {
+					NOT = { country_exists = SOV }
+					has_war_with = SOV
+				}
+			}
+			on_remove = {
+				set_country_flag = SOV_slovakia_stream_dead
+				set_temp_variable = { percent_change = -5 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = SOV modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = SOV modifier = medium_decrease }
+			}
+
+			modifier = {
+				custom_modifier_tooltip = SOV_potocs_influency_TT
+				custom_modifier_tooltip = SOV_streams_pays_bulba_tt
+				country_resource_oil = 3
+			}
+		}
+		#POLAND AND SLOVAKIA - SLOVAKIA PART
+		SLO_oil_polish_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea SLO_oil_polish_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = POL }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = POL modifier = large_commercial_relations }
+				reverse_add_opinion_modifier = { target = POL modifier = large_commercial_relations }
+			}
+
+			picture = cooperation_poland_slovakia
+
+			available = {
+				original_tag = SLO
+			}
+			allowed = {
+				original_tag = SLO
+			}
+
+			visible = {
+				has_country_flag = POL_LNG_mechanic_slovakia
+				NOT = {
+					has_country_flag = POL_slovakia_LNG_dead
+				}
+			}
+
+			cancel = {
+				OR = {
+					NOT = { country_exists = POL }
+					has_war_with = POL
+				}
+			}
+			on_remove = {
+				set_country_flag = POL_slovakia_LNG_dead
+				set_temp_variable = { percent_change = -5 }
+				set_temp_variable = { tag_index = POL }
+				set_temp_variable = { influence_target = ROOT }
+				change_influence_percentage = yes
+				add_opinion_modifier = { target = POL modifier = medium_decrease }
+				reverse_add_opinion_modifier = { target = POL modifier = medium_decrease }
+			}
+
+			modifier = {
+				custom_modifier_tooltip = GENERIC_poland_cooperation_tt
+				energy_use_multiplier = -0.01
+				battery_park_construction_cost = -0.03
+			}
+		}
+    }
+}

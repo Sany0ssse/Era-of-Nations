@@ -1,0 +1,394 @@
+##### Created by denzzerr #####
+scripted_diplomatic_actions = {
+	declare_anti_terror_agreement = {
+		allowed = {
+			always = yes
+		}
+		visible = {
+			NOT = {
+				THIS = { has_country_flag = anti_terror_agreement@ROOT }
+			}
+		}
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = PROPOSE_ANTITERROR_AGREEMENT_TOOLTIP
+				THIS = {
+					NOT = { has_country_flag = anti_terror_agreement@ROOT }
+				}
+			}
+			THIS = {
+				NOT = { has_war_with = ROOT }
+				has_opinion = { target = ROOT value > 9 }
+				if = {
+					limit = {
+						is_in_faction = yes
+						any_allied_country = {
+							exists = yes
+						}
+					}
+                    NOT = {
+					    any_allied_country = {
+						    has_war_with = ROOT
+					    }
+                    }
+				}
+			}
+		}
+		cost = 75
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		icon = 17
+		send_description = PROPOSE_ANTITERROR_AGREEMENT_DESC
+
+		on_sent_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect to [From.GetName] anti_terror_agreement_declare"
+			ROOT = {
+				set_variable = { pending_antiterror_country = PREV.id }
+				set_country_flag = { flag = anti_terror_agreement_cooldown@PREV value = 1 days = 120 }
+				set_country_flag = { flag = anti_terror_agreement_cooldown_global value = 1 days = 120 }
+			}
+			set_country_flag = { flag = anti_terror_agreement_cooldown@ROOT value = 1 days = 120 }
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect anti_terror_agreement_declare"
+			ROOT = {
+				clear_variable = pending_antiterror_country
+				set_country_flag = anti_terror_agreement@PREV
+				add_to_variable = { ct_effectiveness_add = 0.05 }
+				add_to_variable = { ct_command_debuff = -5 }
+				add_to_variable = { costil_command_buff = 5 }
+				if = {
+					limit = {
+						is_ai = yes
+						NOT = { has_dynamic_modifier = costilb_modifier }
+					}
+					add_dynamic_modifier = {
+						modifier = costilb_modifier
+					}
+				}
+				if = {
+					limit = { NOT = { has_dynamic_modifier = { modifier = ct_effectiveness } } }
+					add_dynamic_modifier = { modifier = ct_effectiveness }
+				}
+			}
+			THIS = {
+				add_opinion_modifier = { target = ROOT modifier = counter_terror_cooperation_opinion }
+				reverse_add_opinion_modifier = { target = ROOT modifier = counter_terror_cooperation_opinion }
+				set_country_flag = anti_terror_agreement@ROOT
+				add_to_variable = { ct_effectiveness_add = 0.05 }
+				add_to_variable = { ct_command_debuff = -5 }
+				add_to_variable = { costil_command_buff = 5 }
+				if = {
+					limit = {
+						is_ai = yes
+						NOT = { has_dynamic_modifier = costilb_modifier }
+					}
+					add_dynamic_modifier = {
+						modifier = costilb_modifier
+					}
+				}
+				if = {
+					limit = { NOT = { has_dynamic_modifier = { modifier = ct_effectiveness } } }
+					add_dynamic_modifier = { modifier = ct_effectiveness }
+				}
+			}
+		}
+
+		reject_effect = {
+			ROOT = {
+				clear_variable = pending_antiterror_country
+			}
+			THIS = {
+				add_opinion_modifier = { target = ROOT modifier = counter_terror_cooperation_reject }
+				reverse_add_opinion_modifier = { target = ROOT modifier = counter_terror_cooperation_reject }
+			}
+		}
+
+		ai_acceptance = {
+			base_ct_condition = {
+				base = 25
+			}
+			goverment_ct_condition = {
+				base = 0
+				modifier = {
+					add = -1000
+					jihadist_government = yes
+				}
+			}
+			ct_low_cp_condition = {
+				base = 0
+				modifier = {
+					add = -1000
+					command_power < 100
+				}
+			}
+			ct_has_war_condition = {
+				base = 0
+				modifier = {
+					add = -1000
+					has_war = yes
+				}
+			}
+			ct_faction_goal_condition = {
+				base = 0
+				modifier = {
+					add = 500
+					has_faction_goal = faction_goal_antiterror_cooperation
+					is_in_faction_with = ROOT
+				}
+			}
+		}
+
+		ai_desire = {
+ 			base = 0
+			modifier = {
+				factor = 0
+				ROOT = { NOT = { check_variable = { pending_antiterror_country = 0 } } }
+			}
+			modifier = {
+				factor = 0
+				ROOT = { jihadist_government = yes }
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+			modifier = {
+				factor = 0.5
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = { has_war = yes }
+			}
+			modifier = {
+				factor = 0.25
+				any_country = {
+					has_volunteers_amount_from = {
+						tag = ROOT
+						count > 0
+					}
+				}
+			}
+			modifier = {
+				factor = 0.25
+				any_other_country = {
+					has_volunteers_amount_from = {
+						tag = PREV
+						count > 0
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = anti_terror_agreement_cooldown@ROOT
+			}
+			modifier = {
+				factor = 0
+				ROOT = { has_country_flag = anti_terror_agreement_cooldown_global }
+			}
+			modifier = {
+				factor = 0
+				ROOT = { has_country_flag = anti_terror_agreement_cooldown_global }
+			}
+			modifier = {
+				add = 25
+				has_opinion = {
+    				target = ROOT
+    				value > 75
+				}
+				ROOT = {
+					has_opinion = {
+    					target = ROOT
+    					value > 75
+					}
+				}
+				check_variable = { terrorism_mana > 5 }
+				ROOT = { check_variable = { terrorism_mana > 5 } }
+			}
+			modifier = {
+				add = 50
+				gives_military_access_to = ROOT
+			}
+			modifier = {
+				add = 500
+				has_faction_goal = faction_goal_antiterror_cooperation
+				is_in_faction_with = ROOT
+			}
+		}
+	}
+
+	cancel_anti_terror_agreement = {
+		allowed = { always = yes }
+		visible = { THIS = { has_country_flag = anti_terror_agreement@ROOT } }
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = CANCEL_ANTITERROR_AGREEMENT_TOOLTIP
+				THIS = { has_country_flag = anti_terror_agreement@ROOT }
+			}
+		}
+		cost = 75
+		can_be_sent = { always = yes }
+		show_acceptance_on_action_button = no
+		requires_acceptance = no
+		icon = 17
+		send_description = CANCEL_ANTITERROR_AGREEMENT_DESC
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action cancel_anti_terror_agreement"
+			clr_country_flag = anti_terror_agreement@ROOT
+			ROOT = {
+				clr_country_flag = anti_terror_agreement@PREV
+				add_to_variable = { ct_effectiveness_add = -0.05 }
+				add_to_variable = { ct_command_debuff = 5 }
+				add_to_variable = { costil_command_buff = -5 }
+				set_country_flag = { flag = anti_terror_agreement_cooldown@PREV value = 1 days = 120 }
+				set_country_flag = { flag = anti_terror_agreement_cooldown_global value = 1 days = 120 }
+			}
+			THIS = {
+				set_country_flag = { flag = anti_terror_agreement_cooldown@ROOT value = 1 days = 120 }
+				remove_opinion_modifier = { target = ROOT modifier = counter_terror_cooperation_opinion }
+				ROOT = {
+					remove_opinion_modifier = { target = PREV modifier = counter_terror_cooperation_opinion }
+				}
+				clr_country_flag = anti_terror_agreement@ROOT
+				add_to_variable = { ct_effectiveness_add = -0.05 }
+				add_to_variable = { ct_command_debuff = 5 }
+				add_to_variable = { costil_command_buff = -5 }
+			}
+		}
+
+		ai_desire = {
+			base = 0
+			modifier = {
+				ROOT = { jihadist_government = yes }
+				add = 100
+			}
+			modifier = {
+				ROOT = { has_war = yes }
+				add = 50
+			}
+			modifier = {
+				add = 25
+				any_other_country = {
+					has_volunteers_amount_from = {
+						tag = PREV
+						count > 0
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				ROOT = { has_country_flag = anti_terror_agreement_cooldown@PREV }
+			}
+			modifier = {
+				factor = 0
+				ROOT = { has_country_flag = anti_terror_agreement_cooldown_global }
+			}
+			modifier = {
+				factor = 0
+				has_faction_goal = faction_goal_antiterror_cooperation
+				is_in_faction_with = ROOT
+			}
+		}
+	}
+
+	declare_jihad = {
+		allowed = { always = yes }
+		visible = {
+			ROOT = {
+				NOT = { has_country_flag = declared_jihad_against@PREV }
+				jihadist_government = yes
+			}
+		}
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = DECLARE_JIHAD_TOOLTIP
+				ROOT = {
+					NOT = { has_country_flag = declared_jihad_against@PREV }
+					jihadist_government = yes
+				}
+			}
+		}
+		cost = 75
+		can_be_sent = { always = yes }
+		show_acceptance_on_action_button = no
+		requires_acceptance = no
+		icon = 17
+		send_description = DECLARE_JIHAD_DESC
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action declare_jihad"
+			ROOT = {
+				set_country_flag = declared_jihad_against@PREV
+			}
+			THIS = {
+				add_opinion_modifier = { target = ROOT modifier = declared_jihad_opinion }
+			}
+		}
+
+		ai_desire = {
+			base = 0
+			modifier = {
+				has_war_with = ROOT
+				add = 100
+			}
+			modifier = {
+				ROOT = {
+					has_opinion = {
+    					target = PREV
+    					value < 0
+				 	}
+				}
+				add = 100
+			}
+		}
+	}
+
+	cancel_jihad = {
+		allowed = { always = yes }
+		visible = {
+			ROOT = { has_country_flag = declared_jihad_against@PREV }
+		}
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = CANCEL_JIHAD_TOOLTIP
+				ROOT = { has_country_flag = declared_jihad_against@PREV }
+			}
+		}
+		cost = 75
+		can_be_sent = { always = yes }
+		show_acceptance_on_action_button = no
+		requires_acceptance = no
+		icon = 17
+		send_description = DECLARE_JIHAD_DESC
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action cancel_jihad"
+			ROOT = {
+				clr_country_flag = declared_jihad_against@PREV
+			}
+			THIS = {
+				remove_opinion_modifier = { target = ROOT modifier = declared_jihad_opinion }
+			}
+		}
+
+		ai_desire = {
+			base = 0
+			modifier = {
+				no_jihadist_government = yes
+				add = 100
+			}
+			modifier = {
+				ROOT = {
+					has_opinion = {
+    					target = PREV
+    					value > 0
+					}
+				}
+				add = 100
+			}
+		}
+	}
+}

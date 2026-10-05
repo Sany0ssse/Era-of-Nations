@@ -1,0 +1,720 @@
+on_actions = {
+
+on_startup = {  ##count nuclear potential
+	effect = {
+		every_country = {
+		 limit = { has_capitulated = no }
+		 count_nuclear_potential = yes
+		}
+	}
+}
+
+on_startup = { ##adding war_with_nukestate_idea
+	effect = {
+		every_country = {
+			limit = {
+				any_country = {
+					has_war_with = PREV
+					has_capitulated = no
+					OR = {
+					   check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+					}
+					OR = {
+						any_controlled_state = {
+							OR = {
+								check_variable = { non_damaged_building_level@rocket_site > 0 }
+								AND = {
+									check_variable = { non_damaged_building_level@air_base > 0 }
+									check_variable = { num_equipment@strategic_bomber > 0 }
+								}
+							}
+						}
+						check_variable = { deployed_navy_manpower_k > 0 }
+					}
+					NOT = {
+						has_idea = non_nuclear_power
+						has_idea = nuclear_energy
+					}
+				}
+			}
+			add_ideas = War_with_nukestate_idea
+		}
+	}
+}
+
+on_monthly = { ##adding and removing war_with_nukestate_idea
+	effect = {
+		if = {
+			limit = {
+				any_country = {
+					has_war_with = PREV
+					has_capitulated = no
+					OR = {
+					   check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+					}
+					OR = {
+						any_controlled_state = {
+							OR = {
+								check_variable = { non_damaged_building_level@rocket_site > 0 }
+								AND = {
+									check_variable = { non_damaged_building_level@air_base > 0 }
+									check_variable = { num_equipment@strategic_bomber > 0 }
+								}
+							}
+						}
+						check_variable = { deployed_navy_manpower_k > 0 }
+					}
+					NOT = {
+						has_idea = non_nuclear_power
+						has_idea = nuclear_energy
+					}
+				}
+			}
+			add_ideas = War_with_nukestate_idea
+		}
+		else_if = {
+			limit = {
+				has_idea = War_with_nukestate_idea
+				NOT = {
+					any_country = {
+						has_war_with = PREV
+						has_capitulated = no
+						OR = {
+						   check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+						   check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						}
+						OR = {
+							any_controlled_state = {
+								OR = {
+									check_variable = { non_damaged_building_level@rocket_site > 0 }
+									AND = {
+										check_variable = { non_damaged_building_level@air_base > 0 }
+										check_variable = { num_equipment@strategic_bomber > 0 }
+									}
+								}
+							}
+							check_variable = { deployed_navy_manpower_k > 0 }
+						}
+						NOT = {
+							has_idea = non_nuclear_power
+							has_idea = nuclear_energy
+						}
+					}
+				}
+			}
+			remove_ideas = War_with_nukestate_idea
+		}
+	}
+}
+
+on_war_relation_added = { ##adding war_with_nukestate_idea
+	effect = {
+		if = {
+			limit = {
+				ROOT = {
+					OR = {
+					   check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+					}
+					OR = {
+						any_controlled_state = {
+							OR = {
+								check_variable = { non_damaged_building_level@rocket_site > 0 }
+								AND = {
+									check_variable = { non_damaged_building_level@air_base > 0 }
+									check_variable = { num_equipment@strategic_bomber > 0 }
+								}
+							}
+						}
+						check_variable = { deployed_navy_manpower_k > 0 }
+					}
+					NOT = {
+						   has_idea = non_nuclear_power
+						   has_idea = nuclear_energy
+					}
+				}
+			}
+			FROM = { add_ideas = War_with_nukestate_idea }
+		}
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+					   check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+					   check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+					}
+					OR = {
+						any_controlled_state = {
+							OR = {
+								check_variable = { non_damaged_building_level@rocket_site > 0 }
+								AND = {
+									check_variable = { non_damaged_building_level@air_base > 0 }
+									check_variable = { num_equipment@strategic_bomber > 0 }
+								}
+							}
+						}
+						check_variable = { deployed_navy_manpower_k > 0 }
+					}
+					NOT = {
+						   has_idea = non_nuclear_power
+						   has_idea = nuclear_energy
+					}
+				}
+			}
+			ROOT = { add_ideas = War_with_nukestate_idea }
+		}
+	}
+}
+
+on_peaceconference_ended = {  ##removing war_with_nukestate_idea
+	effect = {
+		if = {
+			limit = {
+				NOT = {
+					any_country = {
+						has_war_with = ROOT
+						OR = {
+						   check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+						   check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						}
+						OR = {
+							any_controlled_state = {
+								OR = {
+									check_variable = { non_damaged_building_level@rocket_site > 0 }
+									AND = {
+										check_variable = { non_damaged_building_level@air_base > 0 }
+										check_variable = { num_equipment@strategic_bomber > 0 }
+									}
+								}
+							}
+							check_variable = { deployed_navy_manpower_k > 0 }
+						}
+						NOT = {
+							has_idea = non_nuclear_power
+							has_idea = nuclear_energy
+						}
+					}
+				}
+			}
+			ROOT = { remove_ideas = War_with_nukestate_idea }
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_country = {
+						has_war_with = FROM
+						OR = {
+						   check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+						   check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						}
+						OR = {
+							any_controlled_state = {
+								OR = {
+									check_variable = { non_damaged_building_level@rocket_site > 0 }
+									AND = {
+										check_variable = { non_damaged_building_level@air_base > 0 }
+										check_variable = { num_equipment@strategic_bomber > 0 }
+									}
+								}
+							}
+							check_variable = { deployed_navy_manpower_k > 0 }
+						}
+						NOT = {
+							has_idea = non_nuclear_power
+							has_idea = nuclear_energy
+						}
+					}
+				}
+			}
+			FROM = { remove_ideas = War_with_nukestate_idea }
+		}
+	}
+}
+
+ on_war_relation_added = {  ##first offence and defence state nuclear strikes
+  effect = {
+	    if = {
+			limit = {
+				threat > 0.99
+				has_global_flag = age_has_begun_4
+				FROM = {
+					is_ai = yes
+					has_capitulated = no
+					OR = {
+					    check_variable = { num_equipment@nuclear_missile_equipment > 9 }
+						check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 9 }
+					}
+					OR = {
+						any_controlled_state = {
+							OR = {
+								check_variable = { non_damaged_building_level@rocket_site > 0 }
+								AND = {
+									check_variable = { non_damaged_building_level@air_base > 0 }
+									check_variable = { num_equipment@strategic_bomber > 0 }
+								}
+							}
+						}
+						check_variable = { deployed_navy_manpower_k > 0 }
+					}
+					has_idea = full_first_use
+					if = {
+						limit = { has_country_leader_with_trait = iron_dimon }
+						has_opinion = {
+							target = ROOT
+							value < -249
+						}
+						}
+					else = {
+						has_opinion = {
+							target = ROOT
+							value < -299
+					    }
+					}
+				}
+				ROOT = {
+					OR = {
+						check_variable = { num_equipment@nuclear_missile_equipment > 9 }
+						check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 9 }
+					}
+					OR = {
+						any_controlled_state = {
+							OR = {
+								check_variable = { non_damaged_building_level@rocket_site > 0 }
+								AND = {
+									check_variable = { non_damaged_building_level@air_base > 0 }
+									check_variable = { num_equipment@strategic_bomber > 0 }
+								}
+							}
+						}
+						check_variable = { deployed_navy_manpower_k > 0 }
+					}
+					NOT = {
+						has_idea = non_nuclear_power
+						has_idea = nuclear_energy
+					}
+				}
+				set_temp_variable = { nuclear_potential_difference_percent = FROM.nuclear_potential }
+				if = {
+					limit = { check_variable = { ROOT.nuclear_potential = 0 } }
+					set_temp_variable = { nuclear_potential_difference_percent = 2 }
+				}
+				else = { divide_temp_variable = { nuclear_potential_difference_percent = ROOT.nuclear_potential }}
+				if = {
+					limit = { FROM = { has_country_leader_with_trait = iron_dimon } }
+					check_variable = { nuclear_potential_difference_percent > 1 }
+				}
+				else = {
+					check_variable = { nuclear_potential_difference_percent > 2 }
+				}
+			}
+			ROOT = {
+				set_variable = { global.temp_arctic_nuclear_level = FROM.arctic_nuclear_level }
+				set_temp_variable = { global.nuke_striker = FROM }
+				launch_nuclear_ai_country_strike = yes
+			}
+			FROM = {
+				  add_named_threat = {
+					threat = 100
+					name = strat_nuclear_strike_wt_tt
+				                     }
+				  send_equipment = {
+						equipment = nuclear_ballistic_missile_equipment
+						amount = 10
+						target = EUU
+					}
+				  send_equipment = {
+						equipment = nuclear_missile_equipment
+						amount = 10
+						target = EUU
+					}
+		          set_country_flag = hrucker
+			}
+			set_global_flag = defender_used_first_strike
+		}
+		if = {
+			limit = {
+				ROOT = {
+					is_ai = yes
+					has_capitulated = no
+				    OR = {
+					 check_variable = { num_equipment@nuclear_missile_equipment > 9 }
+					 check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 9 }
+				    }
+					OR = {
+						any_controlled_state = {
+							OR = {
+								check_variable = { non_damaged_building_level@rocket_site > 0 }
+								AND = {
+									check_variable = { non_damaged_building_level@air_base > 0 }
+									check_variable = { num_equipment@strategic_bomber > 0 }
+								}
+							}
+						}
+						check_variable = { deployed_navy_manpower_k > 0 }
+					}
+					has_idea = full_first_use
+					if = {
+						limit = { has_country_leader_with_trait = iron_dimon }
+						has_opinion = {
+									   target = FROM
+									   value < -249
+									  }
+					  }
+				    else = {
+						has_opinion = {
+										target = FROM
+										value < -299
+									  }
+					}
+					}
+					set_temp_variable = { nuclear_potential_difference_percent = ROOT.nuclear_potential }
+					if = {
+						limit = { check_variable = { FROM.nuclear_potential = 0 } }
+						set_temp_variable = { nuclear_potential_difference_percent = 2 }
+					}
+					else = { divide_temp_variable = { nuclear_potential_difference_percent = FROM.nuclear_potential }}
+					if = {
+						limit = { ROOT = { has_country_leader_with_trait = iron_dimon } }
+						check_variable = { nuclear_potential_difference_percent > 1 }
+					}
+					else = {
+						check_variable = { nuclear_potential_difference_percent > 2 }
+					}
+				}
+				FROM = {
+					set_variable = { global.temp_arctic_nuclear_level = ROOT.arctic_nuclear_level }
+					set_temp_variable = { global.nuke_striker = ROOT }
+					launch_nuclear_ai_country_strike = yes
+				}
+				ROOT = {
+				  add_named_threat = {
+					threat = 100
+					name = strat_nuclear_strike_wt_tt
+				                     }
+				  send_equipment = {
+						equipment = nuclear_ballistic_missile_equipment
+						amount = 10
+						target = EUU
+					}
+				  send_equipment = {
+						equipment = nuclear_missile_equipment
+						amount = 10
+						target = EUU
+					}
+					set_country_flag = hrucker
+				}
+				set_global_flag = attaker_used_first_strike
+		}
+		if = {
+			limit = {
+					has_global_flag = defender_used_first_strike
+					NOT = { has_global_flag = attaker_used_first_strike }
+					ROOT = {
+						OR = {
+						has_country_flag = perimetr_system
+						is_ai = yes
+						}
+						has_capitulated = no
+					}
+				 }
+				 FROM = {
+					set_variable = { global.temp_arctic_nuclear_level = ROOT.arctic_nuclear_level }
+					set_temp_variable = { global.nuke_striker = ROOT }
+					launch_nuclear_ai_country_strike = yes
+				}
+				 ROOT = {
+					   add_named_threat = {
+						 threat = 100
+						 name = strat_nuclear_strike_wt_tt
+										  }
+					   send_equipment = {
+							 equipment = nuclear_ballistic_missile_equipment
+							 amount = 10
+							 target = EUU
+						 }
+					   send_equipment = {
+							 equipment = nuclear_missile_equipment
+							 amount = 10
+							 target = EUU
+						 }
+						 set_country_flag = hrucker
+						 }
+		}
+		else_if = {
+				limit = {
+					has_global_flag = attaker_used_first_strike
+					NOT = { has_global_flag = defender_used_first_strike }
+					FROM = {
+						OR = {
+						has_country_flag = perimetr_system
+						is_ai = yes
+						}
+						has_capitulated = no
+					}
+				 }
+				 ROOT = {
+					set_variable = { global.temp_arctic_nuclear_level = FROM.arctic_nuclear_level }
+					set_temp_variable = { global.nuke_striker = FROM }
+					launch_nuclear_ai_country_strike = yes
+				}
+				 FROM = {
+					   add_named_threat = {
+						 threat = 100
+						 name = strat_nuclear_strike_wt_tt
+										  }
+					   send_equipment = {
+							 equipment = nuclear_ballistic_missile_equipment
+							 amount = 10
+							 target = EUU
+						 }
+					   send_equipment = {
+							 equipment = nuclear_missile_equipment
+							 amount = 10
+							 target = EUU
+						 }
+						 set_country_flag = hrucker
+						 }
+		}
+		clr_global_flag = attaker_used_first_strike
+		clr_global_flag = defender_used_first_strike
+	}
+}
+
+on_monthly = { #last_stand_strike
+ effect = {
+   if = {
+	limit = {
+			has_war = yes
+			is_ai = yes
+			has_capitulated = no
+			NOT = {
+				has_civil_war = yes
+				AND = {
+					has_country_flag = Custom_Civil_War
+					has_war = yes
+				}
+			}
+			OR = {
+			   check_variable = { num_equipment@nuclear_missile_equipment > 9 }
+			   check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 9 }
+			}
+			OR = {
+				any_controlled_state = {
+					OR = {
+						check_variable = { non_damaged_building_level@rocket_site > 0 }
+						AND = {
+							check_variable = { non_damaged_building_level@air_base > 0 }
+							check_variable = { num_equipment@strategic_bomber > 0 }
+						}
+					}
+				}
+				check_variable = { deployed_navy_manpower_k > 0 }
+			}
+			surrender_progress > 0.49
+			NOT = {
+				   has_idea = non_nuclear_power
+				   has_idea = nuclear_energy
+				  }
+		    }
+	set_variable = { global.banner = THIS }
+	set_country_flag = sugomusus
+	set_country_flag = hrucker
+	every_other_country = {
+		limit = {
+			has_war_with = var:global.banner
+			has_capitulated = no
+		    check_variable = { nukes_strikes_count = 0 }
+			any_controlled_state = {
+				NOT = {
+					has_dynamic_modifier = {
+						modifier = nuclear_fallout
+					}
+				}
+				NOT = {
+					has_dynamic_modifier = {
+						modifier = nuclear_fallout1
+					}
+				}
+				NOT = {
+					has_dynamic_modifier = {
+						modifier = nuclear_fallout2
+					}
+				}
+				NOT = {
+					has_dynamic_modifier = {
+						modifier = nuclear_fallout3
+					}
+				}
+			}
+		}
+		set_variable = { global.temp_arctic_nuclear_level = PREV.arctic_nuclear_level }
+		set_temp_variable = { global.nuke_striker = PREV }
+		launch_nuclear_ai_country_strike = yes
+		add_to_variable = { nukes_strikes_count = 1 }
+	}
+	clear_variable = global.banner
+                    }
+	      }
+	         }
+
+on_monthly = {  ##first_tactical_strikes
+  effect = {
+	if = {
+	 limit = {
+		threat > 0.49
+		has_global_flag = age_has_begun_4
+	 }
+     if = {
+	                  limit = {
+		                     has_war = yes
+							 is_ai = yes
+							 NOT = {
+								 has_civil_war = yes
+								 AND = {
+									 has_country_flag = Custom_Civil_War
+									 has_war = yes
+								 }
+							 }
+							 check_variable = { alliance_strength_ratio < 1 }
+							 has_capitulated = no
+							 OR = {
+									has_idea = tac_first_use_strat_retaliation
+									has_idea = full_first_use
+										 }
+							 any_country = {
+								has_war_with = ROOT
+										   }
+			                  }
+					  set_variable = { global.nuke_striker = ROOT }
+					  set_country_flag = hrucker
+					  launch_tactical_nuclear_ai_first_strike = yes
+				     }
+		  }
+	       }
+              }
+
+on_monthly = {  ##defence_tactical_strikes
+effect = {
+	if = {
+	limit = {
+		threat > 0.49
+		has_global_flag = age_has_begun_4
+	}
+	if = {
+		             limit = {
+			                  has_war = yes
+			                  is_ai = yes
+							  NOT = {
+								  has_civil_war = yes
+								  AND = {
+									  has_country_flag = Custom_Civil_War
+									  has_war = yes
+								  }
+							  }
+							  check_variable = { alliance_strength_ratio < 0.51 }
+							  has_capitulated = no
+							  NOT = {
+									  has_idea = non_nuclear_power
+									  has_idea = nuclear_energy
+									}
+			                  any_country = {
+			                                 has_war_with = ROOT
+			                                }
+		                     }
+		             set_variable = { global.nuke_striker = ROOT }
+		             set_country_flag = hrucker
+		             launch_tactical_nuclear_ai_strike = yes
+			        }
+		}
+		 }
+		     }
+
+on_annex = { ##PAKISTAN FAKE NUKES KOSTILb
+	effect = {
+     if = {
+		limit = {
+			set_temp_variable = { pak_check = FROM }
+			check_variable = { pak_check = PAK }
+		}
+		ROOT = { set_country_flag = remove_fake_nukes }
+	 }
+	}
+}
+
+on_daily = {
+	effect = {
+		if = {
+			limit = {
+				has_global_flag = amogus
+				has_country_flag = sugoma
+				has_capitulated = no
+				}
+				launch_nuclear_ai_country_strike = yes
+				clr_country_flag = sugoma
+			}
+		if = {
+			limit = {
+				has_global_flag = amogus
+				has_country_flag = sussy_baka
+				has_capitulated = no
+				}
+			set_country_flag = hrucker
+			add_named_threat = {
+				threat = 100
+				name = strat_nuclear_strike_wt_tt
+				}
+			send_equipment = {
+				equipment = nuclear_ballistic_missile_equipment
+				amount = 10
+				target = EUU
+				}
+			send_equipment = {
+				equipment = nuclear_missile_equipment
+				amount = 10
+				target = EUU
+				}
+			clr_country_flag = sussy_baka
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						has_global_flag = amogus
+						any_country = {
+							OR = {
+								has_country_flag = sugoma
+								has_country_flag = sussy_baka
+							}
+						}
+					}
+				}
+			}
+			clr_global_flag = amogus
+			every_country = {
+				clr_country_flag = sugoma
+				clr_country_flag = sussy_baka
+			}
+			clear_variable = global.temp_arctic_nuclear_level
+			clear_variable = global.nuke_striker
+		}
+		if = {
+		    limit = { has_country_flag = remove_fake_nukes }
+			send_equipment = {
+				equipment = nuclear_ballistic_missile_equipment
+				amount = 164
+				target = EUU
+		    }
+			clr_country_flag = remove_fake_nukes
+		    }
+		}
+	}
+
+on_peace = {
+		effect = {
+		 clr_country_flag = has_been_hrucked
+		 clr_country_flag = hrucker
+		}
+	}
+}

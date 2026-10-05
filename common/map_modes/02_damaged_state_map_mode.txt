@@ -1,0 +1,61 @@
+scripted_map_modes = {
+    damaged_state_map_mode = {
+        top = {
+            type = none
+        }
+
+        bottom = {
+            type = state
+            color = {
+                # Check dynamic modifiers on the state (FROM) — follow original intent: use has_dynamic_modifier for each Damaged_state_X_level.
+                # Check from highest severity to lowest so the strongest modifier wins.
+                if = { limit = { FROM = { has_dynamic_modifier = { modifier = Damaged_state_5_level } } }
+                    # Level 5 -> Red
+                    set_temp_variable = { r_clc = 1.0 }
+                    set_temp_variable = { g_clc = 0.196 }
+                    set_temp_variable = { b_clc = 0.196 }
+                }
+                else_if = { limit = { FROM = { has_dynamic_modifier = { modifier = Damaged_state_4_level } } }
+                    # Level 4 -> Yellow->Red transition
+                    set_temp_variable = { r_clc = 1.0 }
+                    set_temp_variable = { g_clc = 0.5 }
+                    set_temp_variable = { b_clc = 0.1 }
+                }
+                else_if = { limit = { FROM = { has_dynamic_modifier = { modifier = Damaged_state_3_level } } }
+                    # Level 3 -> Yellow
+                    set_temp_variable = { r_clc = 1.0 }
+                    set_temp_variable = { g_clc = 0.84 }
+                    set_temp_variable = { b_clc = 0.0 }
+                }
+                else_if = { limit = { FROM = { has_dynamic_modifier = { modifier = Damaged_state_2_level } } }
+                    # Level 2 -> Green->Yellow transition
+                    set_temp_variable = { r_clc = 0.6 }
+                    set_temp_variable = { g_clc = 0.9 }
+                    set_temp_variable = { b_clc = 0.1 }
+                }
+                else_if = { limit = { FROM = { has_dynamic_modifier = { modifier = Damaged_state_1_level } } }
+                    # Level 1 -> Green
+                    set_temp_variable = { r_clc = 0.137 }
+                    set_temp_variable = { g_clc = 0.808 }
+                    set_temp_variable = { b_clc = 0.176 }
+                }
+                else = {
+                    # Default / no damage -> neutral gray (or transparent as desired)
+                    set_temp_variable = { r_clc = 0.5 }
+                    set_temp_variable = { g_clc = 0.5 }
+                    set_temp_variable = { b_clc = 0.5 }
+                }
+
+                set_temp_variable = { red = r_clc }
+                set_temp_variable = { green = g_clc }
+                set_temp_variable = { blue = b_clc }
+                set_temp_variable = { alpha = 1.00 }
+            }
+        }
+
+        far_text = state
+        near_text = state
+
+        update_daily = no
+    }
+}

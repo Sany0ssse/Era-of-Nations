@@ -1,0 +1,544 @@
+add_namespace = azeev
+add_namespace = aze_news
+
+### new stff
+# Escalation
+country_event = {
+	id = azeev.1
+	title = azeev.1.t
+	desc = azeev.1.d
+	picture = GFX_azer_iran_war
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.1.a
+		log = "[GetDateText]: [This.GetName]: azeev.1.a executed"
+		# TODO: Do something here with this for the former Karabkh mechanic
+
+		add_war_support = -0.1
+		add_stability = -0.1
+
+		ai_chance = {
+			base = 10
+		}
+	}
+	option = {
+		name = azeev.1.b
+		log = "[GetDateText]: [This.GetName]: azeev.1.b executed"
+		add_stability = 0.05
+		add_political_power = 50
+
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+# help from turkey
+country_event = {
+	id = azeev.2
+	title = azeev.2.t
+	desc = azeev.2.d
+	picture = GFX_diplomatic_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.2.a
+		log = "[GetDateText]: [This.GetName]: azeev.2.a executed"
+		add_political_power = -50
+		AZE = {
+			add_opinion_modifier = { target = ROOT modifier = AZE_per_focus }
+			reverse_add_opinion_modifier = { target = ROOT modifier = AZE_per_focus }
+			country_event = azeev.17
+		}
+
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = azeev.2.b
+		log = "[GetDateText]: [This.GetName]: azeev.2.b executed"
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+
+		AZE = {
+			country_event = azeev.16
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = 2000
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 100
+			}
+			add_equipment_to_stockpile = {
+				type = cnc_equipment
+				amount = 200
+			}
+			add_equipment_to_stockpile = {
+				type = util_vehicle_equipment
+				amount = 400
+			}
+		}
+
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = azeev.2.c
+		log = "[GetDateText]: [This.GetName]: azeev.2.c executed"
+		set_temp_variable = { treasury_change = -10 }
+		modify_treasury_effect = yes
+
+		AZE = {
+			country_event = azeev.16
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = 4000
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 200
+			}
+			add_equipment_to_stockpile = {
+				type = cnc_equipment
+				amount = 400
+			}
+			add_equipment_to_stockpile = {
+				type = util_vehicle_equipment
+				amount = 800
+			}
+		}
+
+		ai_chance = { base = 10 }
+	}
+}
+
+# state visit
+country_event = {
+	id = azeev.3
+	title = azeev.3.t
+	desc = azeev.3.d
+	picture = GFX_diplomatic_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.3.a
+		log = "[GetDateText]: [This.GetName]: azeev.3.a executed"
+		TUR = {
+			set_temp_variable = { percent_change = 7 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = THIS.id }
+			change_influence_percentage = yes
+		}
+
+		trigger = { country_exists = TUR }
+
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = azeev.3.b
+		log = "[GetDateText]: [This.GetName]: azeev.3.b executed"
+		SOV = {
+			set_temp_variable = { percent_change = 7 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = THIS.id }
+			change_influence_percentage = yes
+		}
+
+		trigger = { country_exists = SOV }
+
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = azeev.3.c
+		log = "[GetDateText]: [This.GetName]: azeev.3.c executed"
+		PER = {
+			set_temp_variable = { percent_change = 7 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = THIS.id }
+			change_influence_percentage = yes
+		}
+
+		trigger = {
+			country_exists = PER
+			NOT = { has_war_with = AZE }
+		}
+
+		ai_chance = { base = 10 }
+	}
+}
+
+# 2006 summit
+country_event = {
+	id = azeev.4
+	title = azeev.4.t
+	desc = azeev.4.d
+	picture = GFX_diplomatic_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.4.a
+		log = "[GetDateText]: [This.GetName]: azeev.4.a executed"
+
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		set_temp_variable = { int_investment_change = 5 }
+		modify_international_investment_effect = yes
+
+		AZE = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+		}
+
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = azeev.4.b
+		log = "[GetDateText]: [This.GetName]: azeev.4.b executed"
+	}
+}
+
+# First call
+country_event = {
+	id = azeev.5
+	title = azeev.5.t
+	desc = azeev.5.d
+	picture = GFX_diplomatic_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.5.a
+		log = "[GetDateText]: [This.GetName]: azeev.5.a executed"
+		TUR = { add_opinion_modifier = { target = ROOT modifier = AZE_first_call } }
+
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = azeev.5.b
+		log = "[GetDateText]: [This.GetName]: azeev.5.b executed"
+		SOV = { add_opinion_modifier = { target = ROOT modifier = AZE_first_call } }
+
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = azeev.5.c
+		log = "[GetDateText]: [This.GetName]: azeev.5.c executed"
+		PER = { add_opinion_modifier = { target = ROOT modifier = AZE_first_call } }
+
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = azeev.5.e
+		log = "[GetDateText]: [This.GetName]: azeev.5.e executed"
+		CHI = { add_opinion_modifier = { target = ROOT modifier = AZE_first_call } }
+
+		ai_chance = { base = 20 }
+	}
+}
+
+# AZE asks SOV for support
+country_event = {
+	id = azeev.6
+	title = azeev.6.t
+	desc = azeev.6.d
+	picture = GFX_diplomatic_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.6.a
+		log = "[GetDateText]: [This.GetName]: azeev.6.a executed"
+		SOV = {
+			set_temp_variable = { treasury_change = -5 }
+			modify_treasury_effect = yes
+		}
+		AZE = { country_event = azeev.7 }
+
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = azeev.6.b
+		log = "[GetDateText]: [This.GetName]: azeev.6.b executed"
+		AZE = { country_event = azeev.8 }
+
+		ai_chance = { base = 20 }
+	}
+}
+
+# Russia says yes
+country_event = {
+	id = azeev.7
+	title = azeev.7.t
+	desc = azeev.7.d
+	picture = GFX_diplomatic_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.7.a
+		log = "[GetDateText]: [This.GetName]: azeev.7.a executed"
+		AZE = {
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = 4000
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 200
+			}
+			add_equipment_to_stockpile = {
+				type = cnc_equipment
+				amount = 400
+			}
+			add_equipment_to_stockpile = {
+				type = util_vehicle_equipment
+				amount = 800
+			}
+		}
+
+		ai_chance = { base = 20 }
+	}
+}
+
+# Russia says no
+country_event = {
+	id = azeev.8
+	title = azeev.8.t
+	desc = azeev.8.d
+	picture = GFX_diplomatic_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.8.a
+		log = "[GetDateText]: [This.GetName]: azeev.8.a executed"
+		add_political_power = -50
+
+		ai_chance = { base = 20 }
+	}
+}
+
+# Aliev senior dies
+country_event = {
+	id = azeev.9
+	title = azeev.9.t
+	desc = azeev.9.d
+	picture = GFX_aliev_ded
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.9.a
+		log = "[GetDateText]: [This.GetName]: azeev.9.a executed"
+		set_ruling_leader = yes
+		set_leader = yes
+
+		set_country_flag = AZE_aliev_died
+
+		ai_chance = { base = 20 }
+	}
+}
+
+# Possible hunta
+country_event = {
+	id = azeev.10
+	title = azeev.10.t
+	desc = azeev.10.d
+	picture = GFX_azer_protest2
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.10.a
+		log = "[GetDateText]: [This.GetName]: azeev.10.a executed"
+		set_country_flag = Aze_hunta_possible
+
+		country_event = { id = azeev.10 days = 400 random_days = 100 }
+		ai_chance = { base = 20 }
+	}
+}
+
+# Hunta takes over
+country_event = {
+	id = azeev.11
+	title = azeev.11.t
+	desc = azeev.11.d
+	picture = GFX_azer_protest1
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	trigger = {
+		tag = AZE
+		NOT = { has_country_flag = AZE_hunta_not_possible }
+		western_conservatism_are_in_power = yes
+	}
+
+	option = {
+		name = azeev.11.a
+		log = "[GetDateText]: [This.GetName]: azeev.11.a executed"
+		set_country_flag = Aze_hunta_possible
+		hidden_effect = {
+			clear_array = ruling_party
+			clear_array = gov_coalition_array
+			add_to_array = { ruling_party = 22 }
+			update_government_coalition_strength = yes
+			update_party_name = yes
+			set_coalition_drift = yes
+			set_ruling_leader = yes
+			set_leader = yes
+		}
+
+		set_politics = {
+			ruling_party = nationalist
+			elections_allowed = yes
+		}
+
+		set_temp_variable = { party_index = 5 }
+		set_temp_variable = { party_popularity_increase = 0.1 }
+		set_temp_variable = { temp_outlook_increase = 0.1 }
+		add_relative_party_popularity = yes
+
+		every_neighbor_country = { news_event = aze_news.1 }
+
+		ai_chance = { base = 20 }
+	}
+}
+
+# Hunta takes over
+news_event = {
+	id = aze_news.1
+	title = aze_news.1.t
+	desc = aze_news.1.d
+	picture = GFX_azer_protest1
+
+	is_triggered_only = yes
+	#major = yes
+
+	option = {
+		name = aze_news.1.a
+		trigger = {
+			NOT = {
+				has_nationalist_government = yes
+			}
+		}
+		log = "[GetDateText]: [This.GetName]: aze_news.1.a executed"
+	}
+	option = {
+		name = aze_news.1.b
+		trigger = { has_nationalist_government = yes }
+		log = "[GetDateText]: [This.GetName]: aze_news.1.b executed"
+	}
+}
+
+#Aliev era desc
+country_event = {
+	id = azeev.15
+	title = azeev.15.t
+	desc = azeev.15.d
+	picture = GFX_big_brother_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.15.a
+		trigger = { tag = AZE }
+		log = "[GetDateText]: [This.GetName]: azeev.15.a executed"
+	}
+}
+
+#Azer army desc
+country_event = {
+	id = azeev.13
+	title = azeev.13.t
+	desc = azeev.13.d
+	picture = GFX_win_azerbaijani
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.13.a
+		trigger = { tag = AZE }
+		log = "[GetDateText]: [This.GetName]: azeev.13.a executed"
+	}
+}
+
+#Azer economy desc
+country_event = {
+	id = azeev.14
+	title = azeev.14.t
+	desc = azeev.14.d
+	picture = GFX_economic_forum_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.14.a
+		trigger = { tag = AZE }
+		log = "[GetDateText]: [This.GetName]: azeev.14.a executed"
+	}
+}
+
+# azeev 2 - they refuse
+country_event = {
+	id = azeev.17
+	title = azeev.17.t
+	desc = azeev.17.d
+	picture = GFX_economic_forum_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.15.a
+		log = "[GetDateText]: [This.GetName]: azeev.15.a executed"
+	}
+}
+
+# azeev 2 - they accept
+country_event = {
+	id = azeev.16
+	title = azeev.16.t
+	desc = azeev.16.d
+	picture = GFX_economic_forum_aze
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.16.a
+		log = "[GetDateText]: [This.GetName]: azeev.16.a executed"
+	}
+}
+
+country_event = {
+	id = azeev.18
+	title = azeev.18.t
+	desc = azeev.18.d
+	picture = GFX_political_deal
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = azeev.18.a
+		log = "[GetDateText]: [This.GetName]: azeev.18.a executed"
+	}
+}

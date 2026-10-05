@@ -1,0 +1,65 @@
+scripted_diplomatic_actions = {
+	airecall_embargo = {
+		allowed = { always = yes }
+
+		visible = {
+			ROOT = { is_ai = yes }
+			THIS = { is_embargoed_by = ROOT }
+            NOT = {
+                AND = {
+                    THIS = { tag = ISR }
+                    ROOT = {
+                        OR = {
+                            has_idea = full_isr_boycotte
+                            has_idea = econ_isr_boycotte
+                        }
+                    }
+                }
+            }
+            NOT = {
+                AND = {
+                    ROOT = { tag = USA }
+                    THIS = { tag = CUB }
+                    is_in_array = { ROOT.sanctions_targets = CUB }
+                }
+            }
+		}
+
+		selectable = { always = yes }
+
+		cost = 5
+
+		requires_acceptance = no
+		show_acceptance_on_action_button = yes
+
+		icon = 17
+
+		receive_description = AIRECALL_EMBARGO_RECIEVER_LOC
+		accept_title = AIRECALL_EMBARGO_ACCEPTED_TITLE
+		accept_description = AIRECALL_EMBARGO_ACCEPTED_DESC
+
+		complete_effect = {
+			ROOT = {
+                diplomatic_relation = {
+                    country = PREV
+                    relation = embargo
+                    active = no
+                }
+			}
+		}
+
+		ai_desire = {
+			base = -1
+			modifier = {
+				add = 50
+				ROOT = {
+					has_opinion = { target = THIS value > 75 }
+				}
+			}
+		}
+
+		ai_acceptance = {
+			cbase = 100
+		}
+	}
+}

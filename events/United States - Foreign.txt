@@ -1,0 +1,3260 @@
+add_namespace = usa_foreign
+add_namespace = usa_quad
+#USA-NATO Help
+country_event = {
+	id = usa_foreign.1
+	title = usa_foreign.1.t
+	desc = usa_foreign.1.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+	#Agree
+	option = {
+		name = usa_foreign.1.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.1.a"
+		USA = {
+			country_event = { id = usa_foreign.2 days = 1 }
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					NOT = {
+						tag = USA
+					}
+					has_idea = NATO_member
+				}
+				country_event = { id = usa_foreign.3 days = 1 }
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				OR = {
+					has_government = democratic
+					has_government = neutrality
+				}
+				add = 90
+			}
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.1.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.1.b"
+		USA = {
+			country_event = { id = usa_foreign.7 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				NOT = {
+					OR = {
+						has_government = democratic
+						has_government = neutrality
+					}
+				}
+				add = 90
+			}
+		}
+	}
+}
+#USA-NATO Help - Agree
+country_event = {
+	id = usa_foreign.2
+	title = usa_foreign.2.t
+	desc = usa_foreign.2.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.2.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.2.a"
+		FROM = {
+			country_event = { id = usa_foreign.4 days = 1 }
+		}
+	}
+}
+#USA-NATO Help - Others Help
+country_event = {
+	id = usa_foreign.3
+	title = usa_foreign.3.t
+	desc = usa_foreign.3.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+	#Agree
+	option = {
+		name = usa_foreign.3.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.3.a"
+		add_equipment_to_stockpile = {
+			type = infantry_weapons1
+			amount = -1000
+			producer = THIS
+		}
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = THIS.id }
+			set_temp_variable = { influence_target = FROM.id }
+			change_influence_percentage = yes
+			add_equipment_to_stockpile = {
+				type = infantry_weapons1
+				amount = 1000
+				producer = FROM
+			}
+		}
+		FROM = {
+			country_event = { id = usa_foreign.6 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.3.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.3.b"
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#USA-NATO Help - USA Help
+country_event = {
+	id = usa_foreign.4
+	title = usa_foreign.4.t
+	desc = usa_foreign.4.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.4.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.4.a"
+		add_equipment_to_stockpile = {
+			type = infantry_weapons1
+			amount = -3000
+			producer = USA
+		}
+		add_equipment_to_stockpile = {
+			type = util_vehicle_equipment
+			amount = -360
+			producer = USA
+		}
+		add_equipment_to_stockpile = {
+			type = AA_Equipment
+			amount = -160
+			producer = USA
+		}
+		add_equipment_to_stockpile = {
+			type = L_AT_Equipment
+			amount = -240
+			producer = USA
+		}
+		add_equipment_to_stockpile = {
+			type = command_control_equipment1
+			amount = -300
+			producer = USA
+		}
+		
+	}
+}
+#USA-NATO Help - USA Help
+country_event = {
+	id = usa_foreign.5
+	title = usa_foreign.5.t
+	desc = usa_foreign.5.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.5.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.5.a"
+		USA = {
+			country_event = { id = usa_foreign.4 days = 1 }
+		}
+		set_temp_variable = { percent_change = 6 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = THIS.id }
+		change_influence_percentage = yes
+		add_equipment_to_stockpile = {
+			type = infantry_weapons1
+			amount = 3000
+			producer = USA
+		}
+		add_equipment_to_stockpile = {
+			type = util_vehicle_equipment
+			amount = 360
+			producer = USA
+		}
+		add_equipment_to_stockpile = {
+			type = AA_Equipment
+			amount = 160
+			producer = USA
+		}
+		add_equipment_to_stockpile = {
+			type = L_AT_Equipment
+			amount = 240
+			producer = USA
+		}
+		add_equipment_to_stockpile = {
+			type = command_control_equipment1
+			amount = 300
+			producer = USA
+		}
+	}
+}
+#USA-NATO Help - Others Help
+country_event = {
+	id = usa_foreign.6
+	title = usa_foreign.6.t
+	desc = usa_foreign.6.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.6.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.6.a"
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = FROM.id }
+		set_temp_variable = { influence_target = ROOT.id }
+		change_influence_percentage = yes
+		add_equipment_to_stockpile = {
+			type = infantry_weapons1
+			amount = 1000
+			producer = FROM
+		}
+	}
+}
+#USA-NATO Help - Disagree
+country_event = {
+	id = usa_foreign.7
+	title = usa_foreign.7.t
+	desc = usa_foreign.7.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.7.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.7.a"
+	}
+}
+
+#USA - recognize PMR
+country_event = {
+	id = usa_foreign.8
+	title = usa_foreign.8.t
+	desc = usa_foreign.8.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.8.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.8.a"
+		set_temp_variable = { percent_change = 6 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = PMR.id }
+		change_influence_percentage = yes
+		remove_ideas = Non_State_Actor
+	}
+}
+#USA - Attack on Moldova
+country_event = {
+	id = usa_foreign.9
+	title = usa_foreign.9.t
+	desc = usa_foreign.9.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	#Agree
+	option = {
+		name = usa_foreign.9.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.9.a"
+		declare_war_on = {
+			target = MLV
+			type = annex_everything
+		}
+		give_military_access = USA
+		USA = {
+			declare_war_on = {
+				target = MLV
+				type = annex_everything
+			}
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 2
+				sender_influence_higher_5 = yes
+			}
+			modifier = {
+				factor = 3
+				sender_influence_higher_15 = yes
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = USA
+					value > 15
+				}
+			}
+			modifier = {
+				add = 5
+				has_opinion = {
+					target = USA
+					value > 50
+				}
+			}
+			modifier = {
+				add = 10
+				has_opinion = {
+					target = USA
+					value > 100
+				}
+			}
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.9.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.9.b"
+		USA = {
+			country_event = { id = usa_foreign.10 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#USA - Attack on Moldova Disagree
+country_event = {
+	id = usa_foreign.10
+	title = usa_foreign.10.t
+	desc = usa_foreign.10.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	option = {
+		name = usa_foreign.10.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.10.a"
+
+	}
+}
+#USA - Peackeepers
+country_event = {
+	id = usa_foreign.11
+	title = usa_foreign.11.t
+	desc = usa_foreign.11.d
+	is_triggered_only = yes
+	picture = GFX_USA_afg_conflict
+
+	#Agree
+	option = {
+		name = usa_foreign.11.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.11.a"
+		add_ideas = USA_pmr_base_idea
+		set_temp_variable = { percent_change = 6 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = PMR.id }
+		change_influence_percentage = yes
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.11.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.11.b"
+		USA = {
+			country_event = { id = usa_foreign.12 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#USA - Peackeepers Disagree
+country_event = {
+	id = usa_foreign.12
+	title = usa_foreign.12.t
+	desc = usa_foreign.12.d
+	is_triggered_only = yes
+	picture = GFX_USA_afg_conflict
+
+	option = {
+		name = usa_foreign.12.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.12.a"
+
+	}
+}
+#USA - Belarus Not Revoult
+country_event = {
+	id = usa_foreign.13
+	title = usa_foreign.13.t
+	desc = usa_foreign.13.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_belarus
+
+	option = {
+		name = usa_foreign.13.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.12.a"
+		effect_tooltip = {
+			BLR = {
+				add_popularity = {
+					ideology = democratic
+					popularity = 0.25
+				}
+				recalculate_party = yes
+			}
+			set_temp_variable = { percent_change = 3 }
+			set_temp_variable = { tag_index = USA.id }
+			set_temp_variable = { influence_target = BLR.id }
+			change_influence_percentage = yes
+		}
+	}
+}
+#USA - Russia Join NATO
+country_event = {
+	id = usa_foreign.14
+	title = usa_foreign.14.t
+	desc = usa_foreign.14.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_russia
+
+	#Agree
+	option = {
+		name = usa_foreign.14.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.14.a"
+		leave_faction = yes
+		if = {
+			limit = { has_idea = CSTO_member }
+			CSTO_leave = yes
+		}
+		NATO_join_via_event = yes
+		SOV_warcult_script_bad = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.14.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.14.b"
+		USA = {
+			country_event = { id = usa_foreign.15 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#USA - Russia Join NATO Disagree
+country_event = {
+	id = usa_foreign.15
+	title = usa_foreign.15.t
+	desc = usa_foreign.15.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_russia
+
+	option = {
+		name = usa_foreign.15.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.15.a"
+
+	}
+}
+#USA - Countries Join NATO
+country_event = {
+	id = usa_foreign.16
+	title = usa_foreign.16.t
+	desc = usa_foreign.16.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	#Agree
+	option = {
+		name = usa_foreign.16.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.16.a"
+		leave_faction = yes
+		if = {
+			limit = { has_idea = CSTO_member }
+			CSTO_leave = yes
+		}
+		NATO_join_via_event = yes
+		USA = {
+			country_event = { id = usa_foreign.122 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.16.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.16.b"
+		USA = {
+			country_event = { id = usa_foreign.17 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#USA - Country Join NATO Disagree
+country_event = {
+	id = usa_foreign.17
+	title = usa_foreign.17.t
+	desc = usa_foreign.17.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.17.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.17.a"
+
+	}
+}
+#USA - North Corps
+country_event = {
+	id = usa_foreign.18
+	title = usa_foreign.18.t
+	desc = usa_foreign.18.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_north
+
+	option = {
+		name = usa_foreign.18.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.18.a"
+		add_ideas = NATO_corps_north_idea
+		hidden_effect = {
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = USA.id }
+			set_temp_variable = { influence_target = ROOT.id }
+			change_influence_percentage = yes
+		}
+	}
+}
+#USA - South Corps
+country_event = {
+	id = usa_foreign.19
+	title = usa_foreign.19.t
+	desc = usa_foreign.19.d
+	is_triggered_only = yes
+	picture = GFXUSA_event_nato_south
+
+	option = {
+		name = usa_foreign.19.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.19.a"
+		add_ideas = NATO_corps_south_idea
+		hidden_effect = {
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = USA.id }
+			set_temp_variable = { influence_target = ROOT.id }
+			change_influence_percentage = yes
+		}
+	}
+}
+#USA - Mobizile Peacelkeepers
+country_event = {
+	id = usa_foreign.20
+	title = usa_foreign.20.t
+	desc = usa_foreign.20.d
+	is_triggered_only = yes
+	picture = GFX_USA_afg_conflict
+
+	option = {
+		name = usa_foreign.19.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.19.a"
+		remove_ideas = USA_pmr_base_idea
+		division_template = {
+			name = "The Peacekeeping Brigade"
+			regiments = {
+				L_Inf_Bat = { x = 0 y = 0 }
+				L_Inf_Bat = { x = 0 y = 1 }
+				L_Inf_Bat = { x = 0 y = 2 }
+				L_Inf_Bat = { x = 0 y = 3 }
+				Arty_Bat = { x = 0 y = 4 }
+				L_Inf_Bat = { x = 1 y = 0 }
+				L_Inf_Bat = { x = 1 y = 1 }
+				L_Inf_Bat = { x = 1 y = 2 }
+				L_Inf_Bat = { x = 1 y = 3 }
+				Arty_Bat = { x = 1 y = 4 }
+			}
+			support = {
+				L_Recce_Comp = { x = 0 y = 0 }
+				L_Engi_Comp = { x = 0 y = 1 }
+			}
+			priority = 2
+		}
+		149 = {
+			create_unit = {
+				division = "name = \"The Peacekeeping Brigade\" division_template = \"The Peacekeeping Brigade\"start_manpower_factor = 0.7"
+				prioritize_location = 13202
+				owner = USA
+				count = 1
+			}
+		}
+	}
+}
+
+#USA - Countries Join Major non-NATO
+country_event = {
+	id = usa_foreign.21
+	title = usa_foreign.21.t
+	desc = usa_foreign.21.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	#Agree
+	option = {
+		name = usa_foreign.21.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.21.a"
+		add_ideas = Major_Non_NATO_Ally
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.21.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.21.b"
+		USA = {
+			country_event = { id = usa_foreign.22 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#USA - Country Join Major non-NATO Disagree
+country_event = {
+	id = usa_foreign.22
+	title = usa_foreign.22.t
+	desc = usa_foreign.22.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.22.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.22.a"
+
+	}
+}
+country_event = {
+    id = usa_foreign.23
+    title = usa_foreign.23.t
+    desc = usa_foreign.23.d
+    picture = GFX_NATO_intervention
+
+    is_triggered_only = yes
+
+    option = {
+        name = usa_foreign.23.a
+        log = "[GetDateText]: [This.GetName]: usa_foreign.23.a executed"
+        every_country = {
+            limit = { has_war_with = FROM }
+            ROOT = {
+                declare_war_on = {
+                    target = PREV
+                    type = puppet_wargoal_focus
+                }
+            }
+        }
+        ai_chance = {
+            factor = 1
+            modifier = {
+                tag = USA
+                factor = 100
+            }
+        }
+    }
+    option = {
+        name = usa_foreign.23.b
+        log = "[GetDateText]: [This.GetName]: usa_foreign.23.b executed"
+        ai_chance = {
+            factor = 2
+        }
+    }
+}
+country_event = {
+	id = usa_foreign.24
+	title = usa_foreign.24.t
+	desc = usa_foreign.24.d
+	is_triggered_only = yes
+	picture = GFX_event_pmcs
+
+	#Agree
+	option = {
+		name = usa_foreign.24.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.24.a"
+		add_ideas = USA_military_cooperation_idea
+		if = {
+			limit = {
+				USA = {
+					NOT = {
+						has_military_access_to = ROOT
+					}
+				}
+			}
+			USA = {
+				diplomatic_relation = {
+					country = ROOT
+					relation = military_access
+					active = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				USA = {
+					NOT = {
+						has_guaranteed = ROOT
+					}
+				}
+			}
+			USA = {
+				diplomatic_relation = {
+					country = ROOT
+					relation = guarantee
+					active = yes
+				}
+			}
+		}
+		USA = {
+			country_event = { id = usa_foreign.28 days = 1 }
+		}
+		ai_chance = {
+			base = 70
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.24.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.24.b"
+		USA = {
+			country_event = { id = usa_foreign.25 days = 1 }
+		}
+		ai_chance = {
+			base = 30
+		}
+	}
+}
+country_event = {
+	id = usa_foreign.25
+	title = usa_foreign.25.t
+	desc = usa_foreign.25.d
+	is_triggered_only = yes
+	picture = GFX_treaty_rejected
+
+	option = {
+		name = usa_foreign.25.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.25.a"
+
+	}
+}
+country_event = {
+	id = usa_foreign.26
+	title = usa_foreign.26.t
+	desc = usa_foreign.26.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	#Agree
+	option = {
+		name = usa_foreign.26.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.26.a"
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		add_equipment_to_stockpile = {
+			type = guided_missile_equipment_4
+			amount = 10
+		}
+		random_owned_state = {
+			limit = {
+				is_core_of = ROOT
+			}
+            add_building_construction = {
+				type = rocket_site
+				level = 1
+				instant_build = yes
+			}
+            add_building_construction = {
+				type = anti_air_building
+				level = 1
+				instant_build = yes
+			}
+            add_building_construction = {
+				type = nuclear_facility
+				level = 1
+				instant_build = yes
+			}
+		}
+		USA = {
+			country_event = { id = usa_foreign.29 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.26.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.26.b"
+		USA = {
+			country_event = { id = usa_foreign.25 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+country_event = {
+	id = usa_foreign.27
+	title = usa_foreign.27.t
+	desc = usa_foreign.27.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	#Agree
+	option = {
+		name = usa_foreign.27.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.27.a"
+		declare_war_on = {
+			target = NKO
+			type = annex_everything
+		}
+		USA = {
+			declare_war_on = {
+				target = NKO
+				type = annex_everything
+			}
+			country_event = { id = usa_foreign.30 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.27.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.27.b"
+		USA = {
+			country_event = { id = usa_foreign.31 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+country_event = {
+	id = usa_foreign.28
+	title = usa_foreign.28.t
+	desc = usa_foreign.28.d
+	is_triggered_only = yes
+	picture = GFX_special_forces
+
+	option = {
+		name = usa_foreign.28.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.28.a"
+	}
+}
+country_event = {
+	id = usa_foreign.29
+	title = usa_foreign.29.t
+	desc = usa_foreign.29.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.29.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.29.a"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 4 }
+			set_temp_variable = { tag_index = USA }
+			set_temp_variable = { influence_target = KOR }
+			change_influence_percentage = yes
+			KOR = {
+				add_equipment_to_stockpile = {
+					type = guided_missile_equipment_4
+					amount = 4
+				}
+				604 = {
+					add_building_construction = {
+						type = rocket_site
+						level = 1
+					}
+				}
+				604 = {
+					add_building_construction = {
+						type = anti_air_building
+						level = 1
+					}
+				}
+				605 = {
+					add_building_construction = {
+						type = nuclear_facility
+						province = 4056
+						level = 1
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = usa_foreign.30
+	title = usa_foreign.30.t
+	desc = usa_foreign.30.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	option = {
+		name = usa_foreign.30.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.30.a"
+		create_wargoal = {
+			type = annex_everything
+			target = NKO
+		}
+	}
+}
+country_event = {
+	id = usa_foreign.31
+	title = usa_foreign.31.t
+	desc = usa_foreign.31.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.31.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.31.a"
+	}
+}
+country_event = {
+	id = usa_foreign.32
+	title = usa_foreign.32.t
+	desc = usa_foreign.32.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_quad
+
+	#Agree
+	option = {
+		name = usa_foreign.32.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.32.a"
+		add_ideas = USA_quad_member_idea
+		if = {
+			limit = {
+				USA = {
+					NOT = {
+						has_idea = USA_quad_member_idea
+					}
+				}
+			}
+			USA = {
+				add_ideas = USA_quad_member_idea
+			}
+		}
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = THIS.id }
+		change_influence_percentage = yes
+		USA = {
+			country_event = { id = usa_foreign.33 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				is_subject_of = CHI
+				add = -100
+			}
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.32.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.32.b"
+		USA = {
+			country_event = { id = usa_foreign.34 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				is_subject_of = CHI
+				add = 100
+			}
+		}
+	}
+}
+#Agree
+country_event = {
+	id = usa_foreign.33
+	title = usa_foreign.33.t
+	desc = usa_foreign.33.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_quad
+
+	option = {
+		name = usa_foreign.33.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.33.a"
+	}
+}
+#Disagree
+country_event = {
+	id = usa_foreign.34
+	title = usa_foreign.34.t
+	desc = usa_foreign.34.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_quad
+
+	option = {
+		name = usa_foreign.34.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.34.a"
+	}
+}
+country_event = {
+	id = usa_foreign.35
+	title = usa_foreign.35.t
+	desc = usa_foreign.35.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	#Agree
+	option = {
+		name = usa_foreign.35.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.35.a"
+		KOR = {
+			remove_ideas = KOR_northern_propaganda_broadcasts
+			remove_opinion_modifier = {
+				target = NKO
+				modifier = propaganda_broadcasts
+			}
+			add_war_support = -0.02
+		}
+		NKO = {
+			remove_ideas = KOR_northern_propaganda_broadcasts
+			remove_opinion_modifier = {
+				target = KOR
+				modifier = propaganda_broadcasts
+			}
+			add_war_support = -0.02
+		}
+		USA = {
+			country_event = { id = usa_foreign.36 days = 1 }
+		}
+		NKO = {
+			country_event = { id = usa_foreign.44 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.35.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.35.b"
+		USA = {
+			country_event = { id = usa_foreign.43 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+country_event = {
+	id = usa_foreign.36
+	title = usa_foreign.36.t
+	desc = usa_foreign.36.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.36.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.36.a"
+	}
+}
+country_event = {
+	id = usa_foreign.37
+	title = usa_foreign.37.t
+	desc = usa_foreign.37.d
+	is_triggered_only = yes
+	picture = GFX_treaty
+
+	#Agree
+	option = {
+		name = usa_foreign.37.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.37.a"
+		add_ideas = USA_usaid
+		USA = {
+			country_event = { id = usa_foreign.45 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.37.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.37.b"
+		USA = {
+			country_event = { id = usa_foreign.38 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+country_event = {
+	id = usa_foreign.38
+	title = usa_foreign.38.t
+	desc = usa_foreign.38.d
+	is_triggered_only = yes
+	picture = GFX_treaty_rejected
+
+	option = {
+		name = usa_foreign.38.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.38.a"
+	}
+}
+country_event = {
+	id = usa_foreign.39
+	title = usa_foreign.39.t
+	desc = usa_foreign.39.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	#Agree
+	option = {
+		name = usa_foreign.39.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.39.a"
+		KOR = {
+			country_event = { id = korea.33 days = 30 }
+		}
+		ai_chance = {
+			base = 60
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.39.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.39.b"
+		USA = {
+			country_event = { id = usa_foreign.40 days = 1 }
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+}
+country_event = {
+	id = usa_foreign.40
+	title = usa_foreign.40.t
+	desc = usa_foreign.40.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.40.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.40.a"
+	}
+}
+country_event = {
+	id = usa_foreign.41
+	title = usa_foreign.41.t
+	desc = usa_foreign.41.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	#Agree
+	option = {
+		name = usa_foreign.41.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.41.a"
+		add_ideas = USA_usaid
+		add_ideas = Major_Non_NATO_Ally
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = ROOT.id }
+		change_influence_percentage = yes
+		USA = {
+			country_event = { id = usa_foreign.46 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.41.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.41.b"
+		USA = {
+			country_event = { id = usa_foreign.42 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+country_event = {
+	id = usa_foreign.42
+	title = usa_foreign.42.t
+	desc = usa_foreign.42.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.42.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.42.a"
+		set_temp_variable = { percent_change = -1 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = FROM.id }
+		change_influence_percentage = yes
+	}
+}
+country_event = {
+	id = usa_foreign.43
+	title = usa_foreign.43.t
+	desc = usa_foreign.43.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.43.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.43.a"
+		set_temp_variable = { percent_change = -1 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = FROM.id }
+		change_influence_percentage = yes
+	}
+}
+country_event = {
+	id = usa_foreign.44
+	title = usa_foreign.44.t
+	desc = usa_foreign.44.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.44.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.44.a"
+		set_temp_variable = { percent_change = -1 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = FROM.id }
+		change_influence_percentage = yes
+	}
+}
+country_event = {
+	id = usa_foreign.45
+	title = usa_foreign.45.t
+	desc = usa_foreign.45.d
+	is_triggered_only = yes
+	picture = GFX_united_states_dollar
+
+	option = {
+		name = usa_foreign.45.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.45.a"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = FROM.id }
+		change_influence_percentage = yes
+	}
+}
+country_event = {
+	id = usa_foreign.46
+	title = usa_foreign.46.t
+	desc = usa_foreign.46.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.46.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.46.a"
+		set_temp_variable = { percent_change = -1 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = FROM.id }
+		change_influence_percentage = yes
+	}
+}
+country_event = {
+	id = usa_foreign.47
+	title = usa_foreign.47.t
+	desc = usa_foreign.47.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.47.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.47.a"
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = NKO.id }
+		change_influence_percentage = yes
+	}
+}
+#Nuclear for Egypt - Question
+country_event = {
+	id = usa_foreign.48
+	title = usa_foreign.48.t
+	desc = usa_foreign.48.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.48.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.48.a"
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = EGY.id }
+		change_influence_percentage = yes
+		random_owned_controlled_state = {
+			add_building_construction = {
+				type = nuclear_reactor
+				level = 1
+				instant_build = yes
+			}
+			add_extra_state_shared_building_slots = 1
+		}
+		USA = {
+			country_event = { id = usa_foreign.49 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.48.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.48.b"
+		USA = {
+			country_event = { id = usa_foreign.50 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Nuclear for Egypt - Yes
+country_event = {
+	id = usa_foreign.49
+	title = usa_foreign.49.t
+	desc = usa_foreign.49.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.49.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.49.a"
+		set_temp_variable = { treasury_change = -10 }
+		modify_treasury_effect = yes
+	}
+}
+#Nuclear for Egypt - No
+country_event = {
+	id = usa_foreign.50
+	title = usa_foreign.50.t
+	desc = usa_foreign.50.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.50.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.50.a"
+	}
+}
+#Gaza for Egypt - Question for Gaza
+country_event = {
+	id = usa_foreign.51
+	title = usa_foreign.51.t
+	desc = usa_foreign.51.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.51.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.51.a"
+		HAM = {
+			country_event = { id = usa_foreign.52 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.51.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.51.b"
+		USA = {
+			country_event = { id = usa_foreign.56 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Gaza for Egypt - Question for Gaza
+country_event = {
+	id = usa_foreign.52
+	title = usa_foreign.52.t
+	desc = usa_foreign.52.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.52.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.52.a"
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = HAM.id }
+		change_influence_percentage = yes
+		EGY = {
+			set_autonomy = {
+				target = HAM
+				autonomy_state = autonomy_associated_state
+			}
+		}
+		USA = {
+			country_event = { id = usa_foreign.53 days = 1 }
+		}
+		EGY = {
+			country_event = { id = usa_foreign.54 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = usa_foreign.52.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.52.b"
+		USA = {
+			country_event = { id = usa_foreign.55 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Gaza for Egypt - Question for Gaza Yes (USA)
+country_event = {
+	id = usa_foreign.53
+	title = usa_foreign.53.t
+	desc = usa_foreign.53.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.53.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.53.a"
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = EGY.id }
+		change_influence_percentage = yes
+	}
+}
+#Gaza for Egypt - Question for Gaza Yes (Egypt)
+country_event = {
+	id = usa_foreign.54
+	title = usa_foreign.54.t
+	desc = usa_foreign.54.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.54.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.54.a"
+
+	}
+}
+#Gaza for Egypt - Question for Gaza No
+country_event = {
+	id = usa_foreign.55
+	title = usa_foreign.55.t
+	desc = usa_foreign.55.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.55.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.55.a"
+		EGY = {
+			country_event = { id = usa_foreign.57 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = usa_foreign.55.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.55.b"
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Gaza for Egypt - Question for Egypt No
+country_event = {
+	id = usa_foreign.56
+	title = usa_foreign.56.t
+	desc = usa_foreign.56.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.56.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.56.a"
+
+	}
+}
+#Gaza for Egypt - Question for Egypt War
+country_event = {
+	id = usa_foreign.57
+	title = usa_foreign.57.t
+	desc = usa_foreign.57.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.57.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.57.a"
+		declare_war_on = {
+			target = HAM
+			type = annex_everything
+		}
+		USA = {
+			declare_war_on = {
+				target = HAM
+				type = annex_everything
+			}
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.57.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.57.b"
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Mozambique Attack
+country_event = {
+	id = usa_foreign.58
+	title = usa_foreign.58.t
+	desc = usa_foreign.58.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.58.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.58.a"
+		declare_war_on = {
+			target = MOZ
+			type = annex_everything
+		}
+		USA = {
+			declare_war_on = {
+				target = MOZ
+				type = annex_everything
+			}
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.58.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.58.b"
+		USA = {
+			country_event = { id = usa_foreign.59 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Mozambique Attack - No
+country_event = {
+	id = usa_foreign.59
+	title = usa_foreign.59.t
+	desc = usa_foreign.59.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.59.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.59.a"
+
+	}
+}
+#Somali Attack
+country_event = {
+	id = usa_foreign.60
+	title = usa_foreign.60.t
+	desc = usa_foreign.60.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.60.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.60.a"
+		declare_war_on = {
+			target = SOM
+			type = annex_everything
+		}
+		USA = {
+			declare_war_on = {
+				target = SOM
+				type = annex_everything
+			}
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.60.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.60.b"
+		USA = {
+			country_event = { id = usa_foreign.61 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Somali Attack - No
+country_event = {
+	id = usa_foreign.61
+	title = usa_foreign.61.t
+	desc = usa_foreign.61.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.61.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.61.a"
+
+	}
+}
+#Erithrea Attack
+country_event = {
+	id = usa_foreign.62
+	title = usa_foreign.62.t
+	desc = usa_foreign.62.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.62.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.62.a"
+		declare_war_on = {
+			target = SOM
+			type = annex_everything
+		}
+		USA = {
+			declare_war_on = {
+				target = SOM
+				type = annex_everything
+			}
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.62.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.62.b"
+		USA = {
+			country_event = { id = usa_foreign.63 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Erithrea Attack - No
+country_event = {
+	id = usa_foreign.63
+	title = usa_foreign.63.t
+	desc = usa_foreign.63.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.63.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.63.a"
+
+	}
+}
+#Ethiopia Attack
+country_event = {
+	id = usa_foreign.64
+	title = usa_foreign.64.t
+	desc = usa_foreign.64.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.64.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.64.a"
+		declare_war_on = {
+			target = ETH
+			type = annex_everything
+		}
+		USA = {
+			declare_war_on = {
+				target = ETH
+				type = annex_everything
+			}
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.64.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.64.b"
+		USA = {
+			country_event = { id = usa_foreign.65 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Ethiopia Attack - No
+country_event = {
+	id = usa_foreign.65
+	title = usa_foreign.65.t
+	desc = usa_foreign.65.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.65.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.65.a"
+
+	}
+}
+#Coca Cola Start
+country_event = {
+	id = usa_foreign.66
+	title = usa_foreign.66.t
+	desc = usa_foreign.66.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.66.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.66.a"
+		set_country_flag = Coca_cola_invade
+		add_ideas = USA_cocalcola_branch_idea
+		USA = {
+			country_event = { id = usa_foreign.68 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.66.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.66.b"
+		USA = {
+			country_event = { id = usa_foreign.67 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Coca Cola Start - No
+country_event = {
+	id = usa_foreign.67
+	title = usa_foreign.67.t
+	desc = usa_foreign.67.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.67.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.67.a"
+
+	}
+}
+#Coca Cola Start - Yes
+country_event = {
+	id = usa_foreign.68
+	title = usa_foreign.68.t
+	desc = usa_foreign.68.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.68.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.68.a"
+
+	}
+}
+
+#Resource Deal India Start
+country_event = {
+	id = usa_foreign.69
+	title = usa_foreign.69.t
+	desc = usa_foreign.69.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.69.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.69.a"
+		add_ideas = RAJ_american_deal_idea
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = THIS.id }
+		change_influence_percentage = yes
+		add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		USA = {
+			add_ideas = USA_india_deal_idea
+			country_event = { id = usa_foreign.70 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.69.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.69.b"
+		set_temp_variable = { percent_change = -2 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = ROOT.id }
+		change_influence_percentage = yes
+		add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		USA = {
+			country_event = { id = usa_foreign.71 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Resource Deal India - Yes
+country_event = {
+	id = usa_foreign.70
+	title = usa_foreign.70.t
+	desc = usa_foreign.70.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.70.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.70.a"
+		effect_tooltip = {
+			add_ideas = USA_india_deal_idea
+			set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = USA.id }
+			set_temp_variable = { influence_target = RAJ.id }
+			change_influence_percentage = yes
+			RAJ = {
+				add_ideas = RAJ_american_deal_idea
+			}
+		}
+	}
+}
+
+#Resource Deal India - No
+country_event = {
+	id = usa_foreign.71
+	title = usa_foreign.71.t
+	desc = usa_foreign.71.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.71.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.71.a"
+		effect_tooltip = {
+			set_temp_variable = { percent_change = -2 }
+			set_temp_variable = { tag_index = USA.id }
+			set_temp_variable = { influence_target = RAJ.id }
+			change_influence_percentage = yes
+		}
+	}
+}
+
+
+#Congo Peace Deal 
+country_event = {
+	id = usa_foreign.72
+	title = usa_foreign.72.t
+	desc = usa_foreign.72.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.72.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.72.a"
+		THIS = { white_peace = CNG }
+		add_political_power = 150
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		CNG = {
+			country_event = { id = usa_foreign.73 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.72.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.72.b"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Congo Peace Deal - USA done
+country_event = {
+	id = usa_foreign.73
+	title = usa_foreign.73.t
+	desc = usa_foreign.73.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.73.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.73.a"
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = CNG }
+		change_influence_percentage = yes
+		add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+	}
+}
+#Anti Islamist African Help
+country_event = {
+	id = usa_foreign.74
+	title = usa_foreign.74.t
+	desc = usa_foreign.74.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.74.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.74.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		add_popularity = {
+			ideology = fascism
+			popularity = -0.15
+		}
+		add_political_power = 100
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = THIS }
+		change_influence_percentage = yes
+		USA = {
+			country_event = { id = usa_foreign.75 days = 1 }
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+	option = {
+		name = usa_foreign.74.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.74.b"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		USA = {
+			country_event = { id = usa_foreign.76 days = 1 }
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+#Anti Islamist African Help - Agree
+country_event = {
+	id = usa_foreign.75
+	title = usa_foreign.75.t
+	desc = usa_foreign.75.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.75.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.75.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+	}
+}
+#Anti Islamist African Help - Disagree
+country_event = {
+	id = usa_foreign.76
+	title = usa_foreign.76.t
+	desc = usa_foreign.76.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.76.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.76.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+#Lybia Bastion
+country_event = {
+	id = usa_foreign.77
+	title = usa_foreign.77.t
+	desc = usa_foreign.77.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.77.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.77.a"
+		add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		set_temp_variable = { percent_change = 6 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = THIS }
+		change_influence_percentage = yes
+		give_military_access = USA
+		USA = {
+			country_event = { id = usa_foreign.78 days = 1 }
+		}
+		ai_chance = {
+			base = 88
+		}
+	}
+	option = {
+		name = usa_foreign.77.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.77.b"
+		add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		USA = {
+			country_event = { id = usa_foreign.79 days = 1 }
+		}
+		ai_chance = {
+			base = 12
+		}
+	}
+}
+#Lybia Bastion - Agree
+country_event = {
+	id = usa_foreign.78
+	title = usa_foreign.78.t
+	desc = usa_foreign.78.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.78.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.78.a"
+		give_guarantee = LBA
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+	}
+}
+#Lybia Bastion - Disagree
+country_event = {
+	id = usa_foreign.79
+	title = usa_foreign.79.t
+	desc = usa_foreign.79.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.79.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.79.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+#Lybia Subsidies
+country_event = {
+	id = usa_foreign.80
+	title = usa_foreign.80.t
+	desc = usa_foreign.80.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.80.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.80.a"
+		set_temp_variable = { treasury_change = 35 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 3 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = THIS }
+		change_influence_percentage = yes
+	}
+}
+#Nigerian Oil Deal
+country_event = {
+	id = usa_foreign.81
+	title = usa_foreign.81.t
+	desc = usa_foreign.81.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_nigeria_coop
+
+	option = {
+		name = usa_foreign.81.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.81.a"
+		add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = THIS }
+		change_influence_percentage = yes
+		add_ideas = NIG_american_deal_idea
+		USA = {
+			add_ideas = USA_nigerian_deal_idea
+			country_event = { id = usa_foreign.82 days = 1 }
+		}
+	}
+	option = {
+		name = usa_foreign.81.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.81.b"
+		add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		USA = {
+			country_event = { id = usa_foreign.83 days = 1 }
+		}
+	}
+}
+#Nigerian Oil Deal - Agree
+country_event = {
+	id = usa_foreign.82
+	title = usa_foreign.82.t
+	desc = usa_foreign.82.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_nigeria_coop
+
+	option = {
+		name = usa_foreign.82.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.82.a"
+		effect_tooltip = {
+			add_ideas = USA_nigerian_deal_idea
+		}
+	}
+}
+#Nigerian Oil Deal - Disagree
+country_event = {
+	id = usa_foreign.83
+	title = usa_foreign.83.t
+	desc = usa_foreign.83.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_nigeria_coop
+
+	option = {
+		name = usa_foreign.83.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.83.a"
+		add_opinion_modifier = { target = NIG modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = NIG modifier = recent_actions_negative }
+	}
+}
+
+#Congo Chromium Deal
+country_event = {
+	id = usa_foreign.84
+	title = usa_foreign.84.t
+	desc = usa_foreign.84.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_kongo_coop
+
+	option = {
+		name = usa_foreign.84.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.84.a"
+		add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = THIS }
+		change_influence_percentage = yes
+		add_ideas = CNG_american_deal_idea
+		USA = {
+			add_ideas = USA_congo_deal_idea
+			country_event = { id = usa_foreign.85 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.84.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.84.b"
+		add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		USA = {
+			country_event = { id = usa_foreign.86 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Congo Chromium Deal - Agree
+country_event = {
+	id = usa_foreign.85
+	title = usa_foreign.85.t
+	desc = usa_foreign.85.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_kongo_coop
+
+	option = {
+		name = usa_foreign.85.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.85.a"
+		effect_tooltip = {
+			add_ideas = USA_congo_deal_idea
+		}
+	}
+}
+#Congo Chromium Deal - Disagree
+country_event = {
+	id = usa_foreign.86
+	title = usa_foreign.86.t
+	desc = usa_foreign.86.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_kongo_coop
+
+	option = {
+		name = usa_foreign.86.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.86.a"
+		add_opinion_modifier = { target = CNG modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = CNG modifier = recent_actions_negative }
+	}
+}
+
+#Angola Chromium Deal
+country_event = {
+	id = usa_foreign.87
+	title = usa_foreign.87.t
+	desc = usa_foreign.87.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_angola_coop
+
+	option = {
+		name = usa_foreign.87.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.87.a"
+		add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		set_temp_variable = { percent_change = 2 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = THIS }
+		change_influence_percentage = yes
+		add_ideas = AGL_american_deal_idea
+		USA = {
+			add_ideas = USA_angola_deal_idea
+			country_event = { id = usa_foreign.88 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.87.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.87.b"
+		add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		USA = {
+			country_event = { id = usa_foreign.89 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Angola Chromium Deal - Agree
+country_event = {
+	id = usa_foreign.88
+	title = usa_foreign.88.t
+	desc = usa_foreign.88.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_angola_coop
+
+	option = {
+		name = usa_foreign.88.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.88.a"
+		effect_tooltip = {
+			add_ideas = USA_angola_deal_idea
+		}
+	}
+}
+#Angola Chromium Deal - Disagree
+country_event = {
+	id = usa_foreign.89
+	title = usa_foreign.89.t
+	desc = usa_foreign.89.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_angola_coop
+
+	option = {
+		name = usa_foreign.89.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.89.a"
+		add_opinion_modifier = { target = AGL modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = AGL modifier = recent_actions_negative }
+	}
+}
+
+#Economic Support
+country_event = {
+	id = usa_foreign.90
+	title = usa_foreign.90.t
+	desc = usa_foreign.90.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.90.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.90.a"
+		add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		set_temp_variable = { percent_change = 4 }
+		set_temp_variable = { tag_index = USA }
+		set_temp_variable = { influence_target = THIS }
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = 25.00 }
+		modify_treasury_effect = yes
+		USA = {
+			country_event = { id = usa_foreign.91 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.90.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.90.b"
+		add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		USA = {
+			country_event = { id = usa_foreign.92 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Economic Support - Agree
+country_event = {
+	id = usa_foreign.91
+	title = usa_foreign.91.t
+	desc = usa_foreign.91.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.91.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.91.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 4 }
+			set_temp_variable = { tag_index = USA }
+			set_temp_variable = { influence_target = FROM }
+			change_influence_percentage = yes
+		}
+	}
+}
+#Economic Support - Disagree
+country_event = {
+	id = usa_foreign.92
+	title = usa_foreign.92.t
+	desc = usa_foreign.92.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.92.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.92.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+
+#Choose who will help invade afgan
+country_event = {
+	id = usa_foreign.93
+	title = usa_foreign.93.t
+	desc = usa_foreign.93.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	option = {
+		name = usa_foreign.93.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.93.a"
+		trigger = {
+			country_exists = SOV
+		}
+		SOV = {
+			country_event = { id = usa_foreign.94 days = 1 }
+		}
+	}
+	option = {
+		name = usa_foreign.93.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.93.b"
+		trigger = {
+			country_exists = CHI
+		}
+		CHI = {
+			country_event = { id = usa_foreign.94 days = 1 }
+		}
+	}
+	option = {
+		name = usa_foreign.93.c
+		log = "[GetDateText]: [This.GetName]: usa_foreign.93.c"
+		trigger = {
+			country_exists = PAK
+		}
+		PAK = {
+			country_event = { id = usa_foreign.94 days = 1 }
+		}
+	}
+}
+
+#Choose who will help invade afgan - What
+country_event = {
+	id = usa_foreign.94
+	title = usa_foreign.94.t
+	desc = usa_foreign.94.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	option = {
+		name = usa_foreign.94.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.94.a"
+		add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		USA = {
+			country_event = { id = usa_foreign.95 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = usa_foreign.94.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.94.b"
+		add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		USA = {
+			country_event = { id = usa_foreign.96 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Choose who will help invade afgan - Agree
+country_event = {
+	id = usa_foreign.95
+	title = usa_foreign.95.t
+	desc = usa_foreign.95.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	option = {
+		name = usa_foreign.95.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.95.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		declare_war_on = {
+			target = AFG
+			type = annex_everything
+		}
+		FROM = {
+			declare_war_on = {
+				target = AFG
+				type = annex_everything
+			}
+		}
+
+	}
+}
+#Choose who will help invade afgan - Disagree
+country_event = {
+	id = usa_foreign.96
+	title = usa_foreign.96.t
+	desc = usa_foreign.96.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.96.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.96.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+#Attack on Taiwan - Question
+country_event = {
+	id = usa_foreign.97
+	title = usa_foreign.97.t
+	desc = usa_foreign.97.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	#Agree
+	option = {
+		name = usa_foreign.97.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.97.a"
+		declare_war_on = {
+			target = TAI
+			type = annex_everything
+		}
+		give_military_access = USA
+		USA = {
+			declare_war_on = {
+				target = TAI
+				type = annex_everything
+			}
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.97.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.97.b"
+		USA = {
+			country_event = { id = usa_foreign.98 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Attack on Taiwan - Disagree
+country_event = {
+	id = usa_foreign.98
+	title = usa_foreign.98.t
+	desc = usa_foreign.98.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	option = {
+		name = usa_foreign.98.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.98.a"
+
+	}
+}
+
+#Cooperation with Taiwan - Question
+country_event = {
+	id = usa_foreign.99
+	title = usa_foreign.99.t
+	desc = usa_foreign.99.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_taiwan_coop
+
+	#Agree
+	option = {
+		name = usa_foreign.99.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.99.a"
+		add_ideas = USA_tai_cooperation_idea
+		USA = {
+			add_ideas = USA_tai_cooperation_idea
+			country_event = { id = usa_foreign.100 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.99.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.97.b"
+		USA = {
+			country_event = { id = usa_foreign.101 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Cooperation with Taiwan - Agree
+country_event = {
+	id = usa_foreign.100
+	title = usa_foreign.100.t
+	desc = usa_foreign.100.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_taiwan_coop
+
+	option = {
+		name = usa_foreign.100.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.100.a"
+		effect_tooltip = {
+			add_ideas = USA_tai_cooperation_idea
+		}
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+	}
+}
+#Cooperation with Taiwan - Disagree
+country_event = {
+	id = usa_foreign.101
+	title = usa_foreign.101.t
+	desc = usa_foreign.101.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_taiwan_coop
+
+	option = {
+		name = usa_foreign.101.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.101.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+
+#Recognize Taiwan
+country_event = {
+	id = usa_foreign.102
+	title = usa_foreign.102.t
+	desc = usa_foreign.102.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_taiwan_coop
+
+	option = {
+		name = usa_foreign.102.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.102.a"
+		remove_ideas = Non_State_Actor
+		set_temp_variable = { percent_change = 6 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = TAI.id }
+		change_influence_percentage = yes
+		add_opinion_modifier = { target = TAI modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = TAI modifier = recent_actions_positive }
+		add_opinion_modifier = { target = CHI modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = CHI modifier = recent_actions_negative }
+	}
+}
+#No Recognize Taiwan
+country_event = {
+	id = usa_foreign.103
+	title = usa_foreign.103.t
+	desc = usa_foreign.103.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_china_coop
+
+	option = {
+		name = usa_foreign.103.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.102.a"
+		set_temp_variable = { percent_change = -3 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = TAI.id }
+		change_influence_percentage = yes
+		add_opinion_modifier = { target = CHI modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = CHI modifier = recent_actions_positive }
+		add_opinion_modifier = { target = TAI modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = TAI modifier = recent_actions_negative }
+	}
+}
+
+#TSMC take - Question
+country_event = {
+	id = usa_foreign.104
+	title = usa_foreign.104.t
+	desc = usa_foreign.104.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_taiwan_coop
+
+	option = {
+		name = usa_foreign.104.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.104.a"
+		clr_country_flag = Take_TSMC
+		effect_tooltip = {
+			remove_ideas = TAI_TSMC_company
+		}
+		set_temp_variable = { treasury_change = 60 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 8 }
+		set_temp_variable = { tag_index = USA.id }
+		set_temp_variable = { influence_target = TAI.id }
+		change_influence_percentage = yes
+		add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_positive }
+		USA = {
+			country_event = { id = usa_foreign.105 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = usa_foreign.104.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.104.a"
+		add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = USA modifier = recent_actions_negative }
+		USA = {
+			country_event = { id = usa_foreign.106 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#TSMC take - Agree
+country_event = {
+	id = usa_foreign.105
+	title = usa_foreign.105.t
+	desc = usa_foreign.105.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_taiwan_coop
+
+	option = {
+		name = usa_foreign.105.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.105.a"
+		set_temp_variable = { treasury_change = -60 }
+		modify_treasury_effect = yes
+		set_country_flag = Take_TSMC
+		effect_tooltip = {
+			add_ideas = TAI_TSMC_company
+		}
+		add_opinion_modifier = { target = TAI modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = TAI modifier = recent_actions_positive }
+	}
+}
+#TSMC take - Disagree
+country_event = {
+	id = usa_foreign.106
+	title = usa_foreign.106.t
+	desc = usa_foreign.106.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_taiwan_coop
+
+	option = {
+		name = usa_foreign.106.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.106.a"
+		add_opinion_modifier = { target = TAI modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = TAI modifier = recent_actions_negative}
+	}
+}
+
+#Cooperation with China - Question
+country_event = {
+	id = usa_foreign.107
+	title = usa_foreign.107.t
+	desc = usa_foreign.107.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_china_coop
+
+	#Agree
+	option = {
+		name = usa_foreign.107.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.107.a"
+		add_ideas = USA_china_cooperation_idea
+		USA = {
+			add_ideas = USA_china_cooperation_idea
+			country_event = { id = usa_foreign.108 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.107.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.107.b"
+		USA = {
+			country_event = { id = usa_foreign.109 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Cooperation with China - Agree
+country_event = {
+	id = usa_foreign.108
+	title = usa_foreign.108.t
+	desc = usa_foreign.108.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_china_coop
+
+	option = {
+		name = usa_foreign.108.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.108.a"
+		effect_tooltip = {
+			add_ideas = USA_china_cooperation_idea
+		}
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+	}
+}
+#Cooperation with China - Disagree
+country_event = {
+	id = usa_foreign.109
+	title = usa_foreign.109.t
+	desc = usa_foreign.109.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_china_coop
+
+	option = {
+		name = usa_foreign.109.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.109.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+#Attack on Bangladesh - Question
+country_event = {
+	id = usa_foreign.110
+	title = usa_foreign.110.t
+	desc = usa_foreign.110.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	#Agree
+	option = {
+		name = usa_foreign.110.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.110.a"
+		declare_war_on = {
+			target = BAN
+			type = annex_everything
+		}
+		give_military_access = USA
+		USA = {
+			declare_war_on = {
+				target = BAN
+				type = annex_everything
+			}
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.110.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.110.b"
+		USA = {
+			country_event = { id = usa_foreign.111 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Attack on Bangladesh - Disagree
+country_event = {
+	id = usa_foreign.111
+	title = usa_foreign.111.t
+	desc = usa_foreign.111.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	option = {
+		name = usa_foreign.111.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.111.a"
+
+	}
+}
+
+#Cooperation with India - Question
+country_event = {
+	id = usa_foreign.112
+	title = usa_foreign.112.t
+	desc = usa_foreign.112.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_india_coop
+
+	#Agree
+	option = {
+		name = usa_foreign.112.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.112.a"
+		add_ideas = USA_india_cooperation_idea
+		USA = {
+			add_ideas = USA_india_cooperation_idea
+			country_event = { id = usa_foreign.113 days = 1 }
+		}
+		ai_chance = {
+			base = 99
+		}
+
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.112.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.112.b"
+		USA = {
+			country_event = { id = usa_foreign.114 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Cooperation with India - Agree
+country_event = {
+	id = usa_foreign.113
+	title = usa_foreign.113.t
+	desc = usa_foreign.113.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_india_coop
+
+	option = {
+		name = usa_foreign.113.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.113.a"
+		effect_tooltip = {
+			add_ideas = USA_india_cooperation_idea
+			RAJ = {
+				add_ideas = USA_india_cooperation_idea
+			}
+		}
+		add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_positive }
+	}
+}
+#Cooperation with India - Disagree
+country_event = {
+	id = usa_foreign.114
+	title = usa_foreign.114.t
+	desc = usa_foreign.114.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_india_coop
+
+	option = {
+		name = usa_foreign.114.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.114.a"
+		add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+		reverse_add_opinion_modifier = { target = FROM modifier = recent_actions_negative }
+	}
+}
+
+
+#Kashmir Pizdets - Question
+country_event = {
+	id = usa_foreign.115
+	title = usa_foreign.115.t
+	desc = usa_foreign.115.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_china_coop
+
+	#India
+	option = {
+		name = usa_foreign.115.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.115.a"
+		trigger = {
+			RAJ = {
+				has_idea = USA_quad_member_idea
+			}
+			PAK = {
+				NOT = {
+					has_idea = USA_quad_member_idea
+				}
+			}
+		}
+		RAJ = {
+			country_event = { id = usa_foreign.116 days = 1 }
+		}
+
+	}
+	#Pakistan
+	option = {
+		name = usa_foreign.115.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.115.b"
+		trigger = {
+			PAK = {
+				has_idea = USA_quad_member_idea
+			}
+			RAJ = {
+				NOT = {
+					has_idea = USA_quad_member_idea
+				}
+			}
+		}
+		PAK = {
+			country_event = { id = usa_foreign.117 days = 1 }
+		}
+	}
+}
+
+#Kashmir Pizdets - India
+country_event = {
+	id = usa_foreign.116
+	title = usa_foreign.116.t
+	desc = usa_foreign.116.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_china_coop
+
+	option = {
+		name = usa_foreign.116.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.116.a"
+		declare_war_on = {
+			target = PAK
+			type = puppet_wargoal_focus
+		}
+		USA = {
+			declare_war_on = {
+				target = PAK
+				type = puppet_wargoal_focus
+			}
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.116.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.116.b"
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+#Kashmir Pizdets - Pakistan
+country_event = {
+	id = usa_foreign.117
+	title = usa_foreign.117.t
+	desc = usa_foreign.117.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_china_coop
+
+	option = {
+		name = usa_foreign.117.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.117.a"
+		declare_war_on = {
+			target = RAJ
+			type = puppet_wargoal_focus
+		}
+		USA = {
+			declare_war_on = {
+				target = RAJ
+				type = puppet_wargoal_focus
+			}
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.117.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.117.b"
+
+	}
+}
+
+#Kashmir Pizdets - Pakistan and India
+country_event = {
+	id = usa_foreign.118
+	title = usa_foreign.118.t
+	desc = usa_foreign.118.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_china_coop
+
+	option = {
+		name = usa_foreign.118.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.118.a"
+		declare_war_on = {
+			target = CHI
+			type = puppet_wargoal_focus
+		}
+		USA = {
+			declare_war_on = {
+				target = CHI
+				type = puppet_wargoal_focus
+			}
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+	option = {
+		name = usa_foreign.118.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.118.b"
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Kashmir Pizdets - Otkaz
+country_event = {
+	id = usa_foreign.119
+	title = usa_foreign.119.t
+	desc = usa_foreign.119.d
+	is_triggered_only = yes
+	picture = GFX_usa_event_china_coop
+
+	option = {
+		name = usa_foreign.119.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.119.a"
+
+	}
+}
+
+#Angola Pizdets
+country_event = {
+	id = usa_foreign.120
+	title = usa_foreign.120.t
+	desc = usa_foreign.120.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.120.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.120.a"
+		declare_war_on = {
+			target = AGL
+			type = puppet_wargoal_focus
+		}
+		ai_chance = {
+			base = 99
+		}
+	}
+	option = {
+		name = usa_foreign.120.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.120.b"
+		USA = {
+			country_event = { id = usa_foreign.121 days = 1 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+#Angola Pizdets - Disagree
+country_event = {
+	id = usa_foreign.121
+	title = usa_foreign.121.t
+	desc = usa_foreign.121.d
+	is_triggered_only = yes
+	picture = GFX_us_flag
+
+	option = {
+		name = usa_foreign.121.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.121.a"
+
+	}
+}
+
+#USA - Country Join NATO Agree
+country_event = {
+	id = usa_foreign.122
+	title = usa_foreign.122.t
+	desc = usa_foreign.122.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_nato_join
+
+	option = {
+		name = usa_foreign.122.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.122.a"
+
+	}
+}
+
+#Attack barashek
+country_event = {
+	id = usa_foreign.123
+	title = usa_foreign.123.t
+	desc = usa_foreign.123.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	#Agree
+	option = {
+		name = usa_foreign.123.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.123.a"
+		declare_war_on = {
+			target = BOS
+			type = annex_everything
+		}
+		USA = {
+			declare_war_on = {
+				target = BOS
+				type = annex_everything
+			}
+			country_event = { id = usa_foreign.124 days = 1 }
+		}
+		ai_chance = {
+			base = 70
+		}
+	}
+	#Disagree
+	option = {
+		name = usa_foreign.123.b
+		log = "[GetDateText]: [This.GetName]: usa_foreign.123.b"
+		USA = {
+			country_event = { id = usa_foreign.125 days = 1 }
+		}
+		ai_chance = {
+			base = 30
+		}
+	}
+}
+
+#Agree
+country_event = {
+	id = usa_foreign.124
+	title = usa_foreign.124.t
+	desc = usa_foreign.124.d
+	is_triggered_only = yes
+	picture = GFX_USA_event_request_attack
+
+	option = {
+		name = usa_foreign.124.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.124.a"
+
+	}
+}
+
+#Disagree
+country_event = {
+	id = usa_foreign.125
+	title = usa_foreign.125.t
+	desc = usa_foreign.125.d
+	is_triggered_only = yes
+	picture = GFX_treaty_rejected
+
+	option = {
+		name = usa_foreign.125.a
+		log = "[GetDateText]: [This.GetName]: usa_foreign.125.a"
+
+	}
+}
+
+country_event = {	
+	id = usa_quad.1
+	title = usa_quad.1.t
+	desc = usa_quad.1.d
+	picture = GFX_USA_event_quad
+
+	is_triggered_only = yes
+
+	option = {
+		name = usa_quad.1.a
+		log = "[GetDateText]: [This.GetName]: usa_quad.1.a executed"
+		declare_war_on = {
+			target = CHI
+			type = puppet_wargoal_focus
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				tag = USA
+				factor = 100
+			}
+		}
+	}
+	option = {
+		name = usa_quad.1.b
+		log = "[GetDateText]: [This.GetName]: usa_quad.1.b executed"
+		ai_chance = {
+			factor = 1
+		}
+	}
+}

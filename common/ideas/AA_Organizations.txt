@@ -1,0 +1,626 @@
+ideas = {
+	country = {
+		#European Union
+		EU_member = {
+			allowed = {
+				OR = {
+					original_tag = POR
+					original_tag = SPR
+					original_tag = IRE
+					original_tag = ENG
+					original_tag = FRA
+					original_tag = BEL
+					original_tag = ICE
+					original_tag = HOL
+					original_tag = GER
+					original_tag = SWI
+					original_tag = AUS
+					original_tag = DEN
+					original_tag = ITA
+					original_tag = NOR
+					original_tag = MLT
+					original_tag = POL
+					original_tag = SWE
+					original_tag = SLV
+					original_tag = SLO
+					original_tag = HUN
+					original_tag = CRO
+					original_tag = BOS
+					original_tag = SER
+					original_tag = ALB
+					original_tag = GRE
+					original_tag = BUL
+					original_tag = TUR
+					original_tag = FIN
+					original_tag = EST
+					original_tag = LAT
+					original_tag = LIT
+					original_tag = BLR
+					original_tag = UKR
+					original_tag = ROM
+					original_tag = CYP
+				}
+			}
+			picture = european_union_member
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea EU_member"
+				add_to_array = { global.EU_member = THIS }
+			}
+			on_remove = {
+				log = "[GetDateText]: [Root.GetName]: remove idea EU_member"
+				remove_from_array = { global.EU_member = THIS }
+
+				# Clear EU Configuration as a Safety Measure
+				set_country_flag = EUU_do_not_remove_eu_idea
+				leaving_EU = yes
+				clr_country_flag = EUU_do_not_remove_eu_idea
+			}
+
+			modifier = {
+				democratic_drift = 0.04
+				neutrality_drift = 0.02
+				political_power_factor = -0.2
+				war_support_factor = -0.05
+				trade_opinion_factor = 0.15
+				stability_factor = 0.05
+				consumer_goods_factor = -0.05
+			}
+		}
+		un_member = {
+			modifier = {
+				political_power_gain = 0.25
+			}
+		}
+		the_euro = {
+			picture = the_euro
+			allowed_civil_war = { always = yes }
+			cancel = {
+				#please add here exception for some countries like Andorra, San Marino, Vatican, Monaco if you need this.
+				NOT = { has_idea = EU_member }
+				# Disabled if not in the EU
+				has_global_flag = GAME_RULE_eu_disabled
+			}
+
+			on_remove = {
+				remove_dynamic_modifier = { modifier = euro_inflation_modifier }
+				clear_variable = euro_personal_inflation_multiplier
+			}
+
+			modifier = {
+				custom_modifier_tooltip = the_euro_idea_TT
+				economic_cycles_cost_factor = 0.5
+				trade_opinion_factor = 0.2
+				consumer_goods_factor = -0.01
+				interest_rate_multiplier_modifier = -2
+				econ_cycle_upg_cost_multiplier_modifier = 0.50
+			}
+		}
+		#The permanent members of the United Nations Security Council
+		p5_member = {
+			allowed = {
+				OR = {
+					tag = USA
+					tag = ENG
+					tag = SOV
+					tag = CHI
+					tag = FRA
+				}
+			}
+			modifier = {
+				political_power_gain = 0.5
+			}
+		}
+		#Group of Seven
+		g7_member = {
+			allowed = {
+				OR = {
+					original_tag = USA
+					original_tag = CAN
+					original_tag = ENG
+					original_tag = FRA
+					original_tag = ITA
+					original_tag = GER
+					original_tag = JAP
+				}
+			}
+
+			modifier = {
+				political_power_gain = 0.1
+				#stability_factor = -0.05
+			}
+		}
+		#ASEAN
+		ASEAN_Member = {
+			picture = ideas_organizations_asean
+			modifier = {
+				political_power_gain = 0.15
+				consumer_goods_factor = -0.08
+				interest_rate_multiplier_modifier = -0.75
+				stability_factor = 0.05
+				war_support_factor = -0.05
+				trade_opinion_factor = 0.10
+				hidden_modifier = {
+					ai_get_ally_desire_factor = -1000
+				}
+			}
+		}
+		#League os African State
+		LoAS_member = {
+			picture = ideas_organizations_arab_league
+			visible = {
+				NOT = {
+					has_idea = LoAS_member_upd
+				}
+			}
+			allowed_civil_war = { no_jihadist_government = yes }
+			cancel = { jihadist_government = yes }
+		}
+		LoAS_member_upd = {
+			picture = ideas_organizations_arab_league
+			visible = {
+				NOT = {
+					has_idea = LoAS_member
+				}
+			}
+			allowed_civil_war = { no_jihadist_government = yes }
+			cancel = { jihadist_government = yes }
+			modifier = {
+				stability_factor = 0.05
+			}
+		}
+		#League os African State
+		#Organization of African states
+		OAU_member = { 
+			picture = ideas_organizations_african_union
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea OAU_member"
+				add_to_array = { global.OAU_member = THIS }
+			}
+			on_remove = {
+				log = "[GetDateText]: [Root.GetName]: remove idea OAU_member"
+				if = { limit = { is_in_array = { global.OAU_member = THIS } } remove_from_array = { global.OAU_member = THIS } }
+			}
+			allowed = {
+				is_african_nation = yes
+			}
+			allowed_civil_war = {
+				no_jihadist_government = yes
+			}
+			cancel = {
+				jihadist_government = yes
+			}
+
+			modifier = {
+				stability_factor = 0.05
+			}
+		}
+		AU_member = { # AFRICAN UNION
+			picture = ideas_organizations_african_union
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea AU_member"
+				add_to_array = { global.AU_member = THIS }
+				add_dynamic_modifier = { modifier = african_union_reforms_modifier }
+			}
+			on_remove = {
+				log = "[GetDateText]: [Root.GetName]: remove idea AU_member"
+				if = { limit = { is_in_array = { global.AU_member = THIS } } remove_from_array = { global.AU_member = THIS } }
+				remove_dynamic_modifier = { modifier = african_union_reforms_modifier }
+				african_union_remove_summit_buffs = yes
+			}
+			allowed_civil_war = {
+				no_jihadist_government = yes
+			}
+			cancel = {
+				OR = {
+					jihadist_government = yes
+					nationalist_military_junta_are_in_power = yes
+				}
+			}
+
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = 0.05
+				foreign_influence_defense_modifier = 0.05
+			}
+		}
+		#ECOWAS
+		ecowas_member_state = { 
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea ecowas_member_state"
+				add_to_array = { global.ECOWAS_member = THIS }
+			}
+			on_remove = {
+				log = "[GetDateText]: [Root.GetName]: remove idea ecowas_member_state"
+				remove_from_array = { global.ECOWAS_member = THIS }
+			}
+			picture = ideas_organizations_ecowas
+			allowed = {
+				is_african_nation = yes
+			}
+			modifier = {
+				political_power_gain = 0.15
+			}
+		}
+		#Commonwealth
+		commonwealth_of_nations_member = {
+			picture = ideas_organizations_commonweatlh
+			modifier = {
+				political_power_gain = 0.15
+				justify_war_goal_time = 0.15
+			}
+			cancel = {
+				OR = {
+					has_war_with = ENG
+					NOT = {
+						ENG = {
+							has_idea = commonwealth_of_nations_member
+						}
+					}
+				}
+			}
+		}
+		#GUAM Organization - Ukraine
+		idea_GUAM_member_state = {
+			picture = ideas_organizations_guam
+			allowed = {
+				original_tag = UKR
+			}
+			cancel = {
+				NOT = {
+					GEO = {
+						has_idea = idea_GUAM_member_geo_state
+					}
+					MLV = {
+						has_idea = idea_GUAM_member_mlv_state
+					}
+					AZE = {
+						has_idea = idea_GUAM_member_aze_state
+					}
+				}
+			}
+			targeted_modifier = {
+				tag = AZE
+				trade_opinion_factor = 0.3
+			}
+			targeted_modifier = {
+				tag = GEO
+				trade_opinion_factor = 0.3
+			}
+			targeted_modifier = {
+				tag = MLV
+				trade_opinion_factor = 0.3
+			}
+			modifier = {
+				political_power_factor = 0.03
+				trade_opinion_factor = 0.03
+				stability_factor = 0.02
+			}
+		}
+		#GUAM Organization - Georgia
+		idea_GUAM_member_geo_state = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea idea_GUAM_member_geo_state"
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = UKR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			name = idea_GUAM_member_state
+			picture = ideas_organizations_guam
+			allowed = {
+				original_tag = GEO
+			}
+			cancel = {
+				NOT = {
+					UKR = {
+						has_idea = idea_GUAM_member_state
+					}
+				}
+			}
+			targeted_modifier = {
+				tag = UKR
+				trade_opinion_factor = 0.3
+			}
+			targeted_modifier = {
+				tag = AZE
+				trade_opinion_factor = 0.3
+			}
+			targeted_modifier = {
+				tag = MLV
+				trade_opinion_factor = 0.3
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -1 }
+				set_temp_variable = { tag_index = UKR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			modifier = {
+				political_power_factor = 0.03
+				trade_opinion_factor = 0.03
+				stability_factor = 0.02
+				custom_modifier_tooltip = UKR_guam_tt
+			}
+		}
+		#GUAM Organization - Moldova
+		idea_GUAM_member_mlv_state = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea idea_GUAM_member_mlv_state"
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = UKR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			name = idea_GUAM_member_state
+			picture = ideas_organizations_guam
+			allowed = {
+				original_tag = MLV
+			}
+			cancel = {
+				NOT = {
+					UKR = {
+						has_idea = idea_GUAM_member_state
+					}
+				}
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -1 }
+				set_temp_variable = { tag_index = UKR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			targeted_modifier = {
+				tag = UKR
+				trade_opinion_factor = 0.3
+			}
+			targeted_modifier = {
+				tag = GEO
+				trade_opinion_factor = 0.3
+			}
+			targeted_modifier = {
+				tag = AZE
+				trade_opinion_factor = 0.3
+			}
+			modifier = {
+				political_power_factor = 0.03
+				trade_opinion_factor = 0.03
+				stability_factor = 0.02
+				custom_modifier_tooltip = UKR_guam_tt
+			}
+		}
+		#GUAM Organization - Azer
+		idea_GUAM_member_aze_state = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea idea_GUAM_member_aze_state"
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = UKR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			name = idea_GUAM_member_state
+			picture = ideas_organizations_guam
+			allowed = {
+				original_tag = AZE
+			}
+			cancel = {
+				NOT = {
+					UKR = {
+						has_idea = idea_GUAM_member_state
+					}
+				}
+			}
+			targeted_modifier = {
+				tag = UKR
+				trade_opinion_factor = 0.3
+			}
+			targeted_modifier = {
+				tag = GEO
+				trade_opinion_factor = 0.3
+			}
+			targeted_modifier = {
+				tag = MLV
+				trade_opinion_factor = 0.3
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -1 }
+				set_temp_variable = { tag_index = UKR }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			modifier = {
+				political_power_factor = 0.03
+				trade_opinion_factor = 0.03
+				stability_factor = 0.02
+				custom_modifier_tooltip = UKR_guam_tt
+			}
+		}
+		#Commonwealth of Independent States - Russia
+		CIS_member_state_sov_idea = {
+			picture = ideas_organizations_cis
+			name = CIS_member_state_idea
+			modifier = {
+				political_power_factor = 0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.02
+				trade_opinion_factor = 0.10
+				fascism_drift = -0.01
+				stability_factor = 0.01
+				supply_combat_penalties_on_core_factor = -0.03
+				army_core_attack_factor = 0.01
+				army_core_defence_factor = 0.02
+				custom_modifier_tooltip = CIS_liberal_tt
+			}
+			allowed = {
+				original_tag = SOV
+			}
+			cancel = {
+				OR = {
+					has_government = nationalist
+					has_government = fascism
+				}
+			}
+			on_remove = {
+				remove_ideas = SOV_center_of_power_idea
+				remove_ideas = SOV_center_of_power1_idea
+				remove_ideas = SOV_cis_reformed_idea
+				remove_ideas = SOV_cis_bank_idea
+				remove_ideas = SOV_cis_science_space_idea
+				remove_ideas = SOV_cis_army_idea
+			}
+		}
+		#Commonwealth of Independent States
+		CIS_member_state_idea = {
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea CIS_member_state_idea"
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			picture = ideas_organizations_cis
+			modifier = {
+				political_power_factor = 0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.02
+				trade_opinion_factor = 0.10
+				fascism_drift = -0.01
+				stability_factor = 0.01
+				supply_combat_penalties_on_core_factor = -0.03
+				army_core_attack_factor = 0.01
+				army_core_defence_factor = 0.02
+				custom_modifier_tooltip = SOV_cis_tt
+				custom_modifier_tooltip = CIS_liberal_tt
+			}
+			targeted_modifier = {
+				tag = SOV
+				trade_opinion_factor = 0.3
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -1 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+				remove_ideas = SOV_cis_reformed_idea
+				remove_ideas = SOV_cis_bank_idea
+				remove_ideas = SOV_cis_science_space_idea
+				remove_ideas = SOV_cis_army_idea
+			}
+			cancel = {
+				OR = {
+					has_government = nationalist
+					has_government = fascism
+					has_war_with = SOV
+					NOT = {
+						SOV = {
+							has_idea = CIS_member_state_sov_idea
+						}
+					}
+				}
+			}
+		}
+		#EAEU - Russia
+		eaeu_member_sov_idea = {
+			picture = ideas_organizations_eaeu
+			modifier = {
+				political_power_factor = 0.15
+				econ_cycle_upg_cost_multiplier_modifier = -0.04
+				trade_opinion_factor = 0.30
+				production_speed_buildings_factor = 0.1
+			}
+			allowed = {
+				original_tag = SOV
+			}
+			cancel = {
+				NOT = {
+					has_country_flag = EAEU_create
+				}
+			}
+		}
+		#EAEU
+		eaeu_member_idea = {
+			name = eaeu_member_sov_idea
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea eaeu_member_idea"
+				set_temp_variable = { percent_change = 3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			picture = ideas_organizations_eaeu
+			modifier = {
+				political_power_factor = 0.15
+				econ_cycle_upg_cost_multiplier_modifier = -0.04
+				trade_opinion_factor = 0.30
+				production_speed_buildings_factor = 0.1
+				custom_modifier_tooltip = SOV_cis_tt
+			}
+			allowed = {
+				OR = {
+					original_tag = GEO
+					original_tag = UKR
+					original_tag = MLV
+					original_tag = AZE
+					original_tag = TAJ
+					original_tag = TRK
+					original_tag = UZB
+					original_tag = ARM
+					original_tag = KAZ
+					original_tag = BLR
+					original_tag = KYR
+				}
+			}
+			targeted_modifier = {
+				tag = SOV
+				trade_opinion_factor = 0.6
+			}
+			visible = {
+				NOT = {
+					original_tag = SOV
+				}
+				has_country_flag = EAEU_create
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -3 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			cancel = {
+				OR = {
+					has_war_with = SOV
+					NOT = {
+						SOV = {
+							has_idea = eaeu_member_sov_idea
+						}
+					}
+				}
+			}
+		}
+	}
+	hidden_ideas = {
+		CIS_confederation_member_idea = {
+
+			picture = CIS_member_idea
+			cancel = {
+				OR = {
+					NOT = {
+						has_idea = CIS_member_state_idea
+					}
+					SOV = {
+						NOT = {
+							has_government = democratic
+						}
+					}
+				}
+			}
+			on_remove = {
+				SOV = {
+					country_event = { id = sov_liberals.21 days = 1 }
+					release_puppet = ROOT
+					set_autonomy = {
+						target = ROOT
+						autonomy_state = autonomy_free
+					}
+				}
+			}
+		}
+	}
+}

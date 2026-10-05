@@ -1,0 +1,352 @@
+GEO_cis_eu_influence_decision = {
+	GEO_expand_cis_influence = {
+		icon = GFX_russian_flag_cis_texticon
+		available = {
+			NOT = { has_country_flag = GEO_flag_eu_incr_stuff }
+		}
+		cost = 100
+
+		days_remove = 25
+		fire_only_once = no
+
+		complete_effect = {
+			custom_effect_tooltip = GEO_cis_trade_influence_incr_TT
+			custom_effect_tooltip = GEO_EU_trade_influence_decr_TT
+			hidden_effect = {
+				add_to_variable = { GEO_cis_trade_influence = 5 }
+				add_to_variable = { GEO_eu_trade_influence = -5 }
+				clamp_variable = { var = GEO_cis_trade_influence max = 100 }
+				clamp_variable = { var = GEO_eu_trade_influence min = 0 }
+				set_country_flag = GEO_flag_cis_incr_stuff
+			}
+		}
+		remove_effect = { clr_country_flag = GEO_flag_cis_incr_stuff }
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 5
+				date < 2006.1.1
+				has_global_flag = GEO_PRO_RUS_PATH
+			}
+			modifier = {
+				add = 5
+				date > 2010.1.1
+				OR = {
+					has_global_flag = GEO_NATIONALIST_2013_PATH
+					has_global_flag = GEO_UNITED_GEORGIA_PATH
+				}
+			}
+		}
+	}
+
+	GEO_expand_eu_influence = {
+		icon = GFX_european_union_texticon
+		available = {
+			NOT = { has_country_flag = GEO_flag_cis_incr_stuff }
+		}
+		cost = 100
+
+		days_remove = 25
+		fire_only_once = no
+
+		complete_effect = {
+			custom_effect_tooltip = GEO_EU_trade_influence_incr_TT
+			custom_effect_tooltip = GEO_cis_trade_influence_decr_TT
+			hidden_effect = {
+				add_to_variable = { GEO_eu_trade_influence = 5 }
+				add_to_variable = { GEO_cis_trade_influence = -5 }
+				clamp_variable = { var = GEO_eu_trade_influence max = 100 }
+				clamp_variable = { var = GEO_cis_trade_influence min = 0 }
+				set_country_flag = GEO_flag_eu_incr_stuff
+			}
+		}
+		remove_effect = { clr_country_flag = GEO_flag_eu_incr_stuff }
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 1
+				check_variable = { from.GEO_eu_trade_influence < 80 }
+				has_global_flag = GEO_PRO_WEST_SHEVA_PATH
+			}
+			modifier = {
+				add = 5
+				date < 2004.1.1
+				has_global_flag = GEO_HELP_CHE
+			}
+			modifier = {
+				add = 5
+				date < 2006.1.1
+				has_global_flag = GEO_PRO_WEST_SHEVA_PATH
+			}
+			modifier = {
+				add = 5
+				date > 2010.1.1
+				has_global_flag = GEO_UNITED_NATIONAL_MOVEMENT_PATH
+			}
+		}
+	}
+}
+
+GEO_tiblisis_gambit = {
+	GEO_the_conflict = {
+		activation = {
+			always = no
+		}
+		available = {
+			OR = {
+				GEO = {
+					controls_province = 11696
+					controls_province = 3734
+					controls_province = 9753
+				}
+			}
+			if = {
+				limit = {
+					GEO = {
+						has_war_with = SOO
+					}
+				}
+				705 = {
+					is_controlled_by = GEO
+				}
+			}
+			if = {
+				limit = {
+					GEO = {
+						has_war_with = ABK
+					}
+				}
+				706 = {
+					is_controlled_by = GEO
+				}
+			}
+		}
+		days_mission_timeout = 90
+		is_good = no
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GEO_the_conflict"
+			custom_effect_tooltip = USA_russian_defeat_TT
+			hidden_effect = {
+				if = {
+					limit = {
+						671 = {
+							is_owned_and_controlled_by = SOV
+						}
+						NOT = {
+							country_exists = DAG
+						}
+					}
+					SOV = {
+						release = DAG
+					}
+				}
+				else_if = {
+					limit = {
+						DAG = {
+							is_subject_of = SOV
+						}
+					}
+					SOV = {
+						set_autonomy = {
+							target = DAG
+							autonomous_state = autonomy_free
+							end_wars = no
+						}
+					}
+				}
+
+				if = {
+					limit = {
+						672 = {
+							is_owned_and_controlled_by = SOV
+						}
+						NOT = {
+							country_exists = CHE
+						}
+					}
+					SOV = {
+						release = CHE
+					}
+				}
+				else_if = {
+					limit = {
+						CHE = {
+							is_subject_of = SOV
+						}
+					}
+					SOV = {
+						set_autonomy = {
+							target = CHE
+							autonomous_state = autonomy_free
+							end_wars = no
+						}
+					}
+				}
+
+				if = {
+					limit = {
+						1126 = {
+							is_owned_and_controlled_by = SOV
+						}
+						NOT = {
+							country_exists = ING
+						}
+					}
+					SOV = {
+						release = ING
+					}
+				}
+				else_if = {
+					limit = {
+						ING = {
+							is_subject_of = SOV
+						}
+					}
+					SOV = {
+						set_autonomy = {
+							target = ING
+							autonomous_state = autonomy_free
+							end_wars = no
+						}
+					}
+				}
+
+				if = {
+					limit = {
+						1126 = {
+							is_owned_and_controlled_by = SOV
+						}
+					}
+					1126 = {
+						transfer_state_to = SOO
+					}
+				}
+
+				if = {
+					limit = {
+						674 = {
+							is_owned_and_controlled_by = SOV
+						}
+						NOT = {
+							country_exists = KBK
+						}
+					}
+					SOV = {
+						release = KBK
+					}
+				}
+				else_if = {
+					limit = {
+						KBK = {
+							is_subject_of = SOV
+						}
+					}
+					SOV = {
+						set_autonomy = {
+							target = KBK
+							autonomous_state = autonomy_free
+							end_wars = no
+						}
+					}
+				}
+
+				if = {
+					limit = {
+						1125 = {
+							is_owned_and_controlled_by = SOV
+						}
+						NOT = {
+							country_exists = KCC
+						}
+					}
+					SOV = {
+						release = KCC
+					}
+				}
+				else_if = {
+					limit = {
+						KCC = {
+							is_subject_of = SOV
+						}
+					}
+					SOV = {
+						set_autonomy = {
+							target = KCC
+							autonomous_state = autonomy_free
+							end_wars = no
+						}
+					}
+				}
+			}
+		}
+		timeout_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GEO_the_conflict"
+			custom_effect_tooltip = USA_stalemate_TT
+			hidden_effect = {
+				SOV = {
+					white_peace = GEO
+				}
+				# Georgian Victory
+				if = {
+					limit = {
+						GEO = {
+							has_war_with = SOO
+						}
+						705 = {
+							is_controlled_by = GEO
+						}
+					}
+					705 = {
+						transfer_state_to = GEO
+					}
+				}
+				if = {
+					limit = {
+						GEO = {
+							has_war_with = ABK
+						}
+						706 = {
+							is_controlled_by = GEO
+						}
+					}
+					706 = {
+						transfer_state_to = GEO
+					}
+				}
+				# Russian Victory
+				if = {
+					limit = {
+						GEO = {
+							has_war_with = SOO
+						}
+						NOT = {
+							705 = {
+								is_controlled_by = GEO
+							}
+						}
+					}
+					705 = {
+						transfer_state_to = SOO
+					}
+				}
+				if = {
+					limit = {
+						GEO = {
+							has_war_with = ABK
+						}
+						NOT = {
+							706 = {
+								is_controlled_by = GEO
+							}
+						}
+					}
+					706 = {
+						transfer_state_to = ABK
+					}
+				}
+			}
+		}
+	}
+}

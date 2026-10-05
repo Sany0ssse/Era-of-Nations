@@ -1,0 +1,208 @@
+##### Created by denzzerr #####
+scripted_diplomatic_actions = {
+	propose_migrants_agreement = {
+		allowed = {
+			always = yes
+		}
+		visible = {
+			ROOT = { NOT = { has_dynamic_modifier = { modifier = migrants_agreement_cut } } }
+		}
+		selectable = {
+			THIS = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+			THIS = {
+				NOT = { has_war_with = ROOT }
+				has_opinion = { target = ROOT value > 9 }
+				if = {
+					limit = {
+						is_in_faction = yes
+						any_allied_country = {
+							exists = yes
+						}
+					}
+                    NOT = {
+					    any_allied_country = {
+						    has_war_with = ROOT
+					    }
+                    }
+				}
+			}
+            if = {
+                limit = { THIS = { is_subject = yes } }
+                THIS = { is_subject_of = ROOT }
+            }
+			custom_trigger_tooltip = {
+				tooltip = PROPOSE_MIGRANTS_AGREEMENT_TOOLTIP
+            	THIS = {
+                	NOT = { has_dynamic_modifier = { modifier = migrants_agreement_add } }
+                	NOT = { has_country_flag = migration_agreement_migrants_cut@ROOT }
+            	}
+			}
+		}
+		cost = 150
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		icon = 17
+		send_description = PROPOSE_MIGRANTS_AGREEMENT_DESC
+
+		on_sent_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect to [From.GetName] migration_agreement_declare"
+			ROOT = {
+				set_variable = { pending_migration_agreement_country = PREV.id }
+				set_country_flag = { flag = migration_agreement_cooldown@PREV value = 1 days = 120 }
+			}
+			set_country_flag = { flag = migration_agreement_cooldown@ROOT value = 1 days = 120 }
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect migration_agreement_declare"
+			ROOT = {
+				clear_variable = pending_migration_agreement_country
+				set_country_flag = migration_agreement_migrants_add@PREV
+				add_to_variable = { migrants_add = 0.05 }
+                if = {
+                    limit = { NOT = { has_dynamic_modifier = { modifier = migrants_agreement_add } } }
+                    add_dynamic_modifier = { modifier = migrants_agreement_add }
+                }
+			}
+			THIS = {
+				add_opinion_modifier = { target = ROOT modifier = migration_agreement_opinion }
+				reverse_add_opinion_modifier = { target = ROOT modifier = migration_agreement_opinion }
+				set_country_flag = migration_agreement_migrants_cut@ROOT
+				add_to_variable = { migrants_cut = -0.05 }
+                if = {
+                    limit = { NOT = { has_dynamic_modifier = { modifier = migrants_agreement_cut } } }
+                    add_dynamic_modifier = { modifier = migrants_agreement_cut }
+                }
+			}
+		}
+
+		reject_effect = {
+			ROOT = {
+				clear_variable = pending_migration_agreement_country
+			}
+			THIS = {
+				add_opinion_modifier = { target = ROOT modifier = migration_agreement_reject }
+				reverse_add_opinion_modifier = { target = ROOT modifier = migration_agreement_reject }
+                if = {
+                    limit = { is_subject = yes }
+                    add_autonomy_ratio = { value = -1 }
+                }
+			}
+		}
+
+		ai_acceptance = {
+			base_migrants_condition = {
+				base = 25
+			}
+			opinion_migrants_condition = {
+				base = 0
+				modifier = {
+					set_temp_variable = { opinion_calculator = opinion@ROOT }
+					add = opinion_calculator
+				}
+			}
+			is_subject_migrants_condition = {
+				base = 0
+				modifier = {
+					add = 1000
+                    is_subject_of = ROOT
+				}
+			}
+		}
+
+		ai_desire = {
+ 			base = 0
+			modifier = {
+				factor = 0
+				ROOT = { NOT = { check_variable = { pending_migration_agreement_country = 0 } } }
+			}
+            modifier = {
+                add = 250
+                ROOT = {
+                    has_dynamic_modifier = { modifier = low_unemployment_modifier }
+                }
+            }
+			modifier = {
+				factor = 0
+				has_country_flag = migration_agreement_cooldown@ROOT
+			}
+		}
+	}
+
+    cancel_migrants_agreement = {
+		allowed = { always = yes }
+		visible = {
+            OR = {
+                THIS = { has_country_flag = migration_agreement_migrants_cut@ROOT }
+                THIS = { has_country_flag = migration_agreement_migrants_add@ROOT }
+            }
+        }
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = CANCEL_MIGRANTS_AGREEMENT_TOOLTIP
+                OR = {
+                    THIS = { has_country_flag = migration_agreement_migrants_cut@ROOT }
+                    THIS = { has_country_flag = migration_agreement_migrants_add@ROOT }
+                }
+			}
+		}
+		cost = 25
+		can_be_sent = { always = yes }
+		show_acceptance_on_action_button = no
+		requires_acceptance = no
+		icon = 17
+		send_description = CANCEL_MIGRANTS_AGREEMENT_DESC
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action cancel_migrants_agreement"
+            if = {
+                limit = { has_country_flag = migration_agreement_migrants_cut@ROOT }
+                clr_country_flag = migration_agreement_migrants_cut@ROOT
+                add_to_variable = { migrants_cut = 0.05 }
+                ROOT = {
+                    clr_country_flag = migration_agreement_migrants_add@PREV
+                    add_to_variable = { migrants_add = -0.05 }
+                }
+            }
+            else = {
+                clr_country_flag = migration_agreement_migrants_add@ROOT
+                add_to_variable = { migrants_add = -0.05 }
+                ROOT = {
+                    clr_country_flag = migration_agreement_migrants_cut@PREV
+                    add_to_variable = { migrants_cut = 0.05 }
+                }
+            }
+			THIS = {
+				remove_opinion_modifier = { target = ROOT modifier = migration_agreement_opinion }
+				ROOT = {
+					remove_opinion_modifier = { target = PREV modifier = migration_agreement_opinion }
+				}
+			}
+		}
+
+		ai_desire = {
+			base = 0
+			modifier = {
+				has_war_with = ROOT
+				add = 1000
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = migration_agreement_cooldown@ROOT
+			}
+			modifier = {
+                add = 250
+                OR = {
+                    AND = {
+                        THIS = { has_country_flag = migration_agreement_migrants_cut@ROOT }
+                        NOT = { has_dynamic_modifier = { modifier = high_unemployment_modifier } }
+                    }
+                    AND = {
+                        THIS = { has_country_flag = migration_agreement_migrants_add@ROOT }
+                        NOT = { has_dynamic_modifier = { modifier = low_unemployment_modifier } }
+                    }
+                }
+			}
+		}
+	}
+}

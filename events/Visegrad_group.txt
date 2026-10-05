@@ -1,0 +1,535 @@
+add_namespace = visegrad_group
+
+#Foreign funding
+country_event = {
+	id = visegrad_group.1
+    title = visegrad_group.1.t
+    desc = visegrad_group.1.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.1.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.1.a executed"
+		set_temp_variable = { visegrad_fund_treasury_change = 5 }
+        visegrad_fund_treasury_update = yes
+        set_temp_variable = { treasury_change = -5.00 }
+        modify_treasury_effect = yes
+        set_temp_variable = { int_investment_change = 5 }
+        modify_international_investment_effect = yes
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            add_opinion_modifier = {
+                target = ROOT
+                modifier = visegrad_invest
+            }
+            country_event = visegrad_group.2
+        }
+        ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = FROM value > 0 } }
+				add = 10
+			}
+			modifier = {
+				check_variable = { treasury > 4.5 }
+				add = 10
+			}
+		}
+	}
+	option = {
+        name = visegrad_group.1.b
+		log = "[GetDateText]: [This.GetName]: visegrad_group.1.a executed"
+		set_temp_variable = { visegrad_fund_treasury_change = 15 }
+        visegrad_fund_treasury_update = yes
+        set_temp_variable = { treasury_change = -15.00 }
+        modify_treasury_effect = yes
+        set_temp_variable = { int_investment_change = 15 }
+        modify_international_investment_effect = yes
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            add_opinion_modifier = {
+                target = ROOT
+                modifier = visegrad_invest
+            }
+            country_event = visegrad_group.2
+        }
+        ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = FROM value > 0 } }
+				add = 10
+			}
+			modifier = {
+				check_variable = { treasury > 14.5 }
+				add = 10
+			}
+		}
+	}
+    option = {
+        name = visegrad_group.1.c
+		log = "[GetDateText]: [This.GetName]: visegrad_group.1.a executed"
+		set_temp_variable = { visegrad_fund_treasury_change = 35 }
+        visegrad_fund_treasury_update = yes
+        set_temp_variable = { treasury_change = -35.00 }
+        modify_treasury_effect = yes
+        set_temp_variable = { int_investment_change = 35 }
+        modify_international_investment_effect = yes
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            add_opinion_modifier = {
+                target = ROOT
+                modifier = visegrad_invest
+            }
+            country_event = visegrad_group.2
+        }
+        ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = FROM value > 0 } }
+				add = 10
+			}
+			modifier = {
+				check_variable = { treasury > 34.5 }
+				add = 10
+			}
+		}
+	}
+    option = {
+        name = visegrad_group.1.g
+		log = "[GetDateText]: [This.GetName]: visegrad_group.1.b executed"
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            country_event = visegrad_group.3
+        }
+        ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = FROM value < 0 } }
+				add = 10
+			}
+			modifier = {
+				check_variable = { treasury < 5 }
+				add = 10
+			}
+		}
+	}
+}
+#Foreign funding Accept
+country_event = {
+	id = visegrad_group.2
+    title = visegrad_group.2.t
+    desc = visegrad_group.2.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.2.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.2.a executed"
+	}
+}
+#Foreign funding Refuse
+country_event = {
+	id = visegrad_group.3
+    title = visegrad_group.3.t
+    desc = visegrad_group.3.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.3.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.3.a executed"
+	}
+}
+#Visegrad Leave
+country_event = {
+	id = visegrad_group.4
+    title = visegrad_group.4.t
+    desc = visegrad_group.4.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.4.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.4.a executed"
+	}
+}
+#Ford Invest
+country_event = {
+	id = visegrad_group.5
+    title = visegrad_group.5.t
+    desc = visegrad_group.5.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.5.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.5.a executed"
+        set_temp_variable = { visegrad_fund_treasury_change = 40 }
+        visegrad_fund_treasury_update = yes
+        set_temp_variable = { treasury_change = -40.00 }
+        modify_treasury_effect = yes
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            country_event = visegrad_group.6
+        }
+        set_country_flag = VG_ford_flag
+        ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = FROM value > 0 } }
+				add = 10
+			}
+			modifier = {
+				check_variable = { treasury > 39.99 }
+				add = 10
+			}
+		}
+	}
+    option = {
+        name = visegrad_group.5.b
+		log = "[GetDateText]: [This.GetName]: visegrad_group.5.b executed"
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            country_event = visegrad_group.7
+        }
+        ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = FROM value < 0 } }
+				add = 10
+			}
+			modifier = {
+				check_variable = { treasury < 40 }
+				add = 5
+			}
+		}
+
+	}
+}
+#Ford Accept
+country_event = {
+	id = visegrad_group.6
+    title = visegrad_group.6.t
+    desc = visegrad_group.6.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.6.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.6.a executed"
+	}
+}
+#Ford Refused
+country_event = {
+	id = visegrad_group.7
+    title = visegrad_group.7.t
+    desc = visegrad_group.7.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.7.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.7.a executed"
+	}
+}
+#Hyundai Invest
+country_event = {
+	id = visegrad_group.8
+    title = visegrad_group.8.t
+    desc = visegrad_group.8.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.5.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.8.a executed"
+        set_temp_variable = { visegrad_fund_treasury_change = 40 }
+        visegrad_fund_treasury_update = yes
+        set_temp_variable = { treasury_change = -40.00 }
+        modify_treasury_effect = yes
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            country_event = visegrad_group.9
+        }
+        set_country_flag = VG_hyundai_flag
+        ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = FROM value > 0 } }
+				add = 10
+			}
+			modifier = {
+				check_variable = { treasury > 39.99 }
+				add = 10
+			}
+		}
+	}
+    option = {
+        name = visegrad_group.5.b
+		log = "[GetDateText]: [This.GetName]: visegrad_group.8.b executed"
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            country_event = visegrad_group.10
+        }
+        ai_chance = {
+			base = 1
+			modifier = {
+				THIS = { has_opinion = { target = FROM value < 0 } }
+				add = 10
+			}
+			modifier = {
+				check_variable = { treasury < 40 }
+				add = 5
+			}
+		}
+	}
+}
+#Hyundai Accept
+country_event = {
+	id = visegrad_group.9
+    title = visegrad_group.9.t
+    desc = visegrad_group.9.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.6.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.9.a executed"
+	}
+}
+#Hyundai Refused
+country_event = {
+	id = visegrad_group.10
+    title = visegrad_group.10.t
+    desc = visegrad_group.10.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.7.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.10.a executed"
+	}
+}
+#Joint exercises
+country_event = {
+	id = visegrad_group.11
+    title = visegrad_group.11.t
+    desc = visegrad_group.11.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.11.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.11.a executed"
+        add_command_power = 20
+        army_experience = 15
+        navy_experience = 15
+        air_experience = 15
+        set_country_flag = { flag = exercises_temp value = 1 days = 180 }
+	}
+    option = {
+        name = visegrad_group.11.b
+		log = "[GetDateText]: [This.GetName]: visegrad_group.11.a executed"
+        set_country_flag = { flag = exercises_temp value = 1 days = 180 }
+	}
+}
+#V4 + exercises
+country_event = {
+	id = visegrad_group.12
+    title = visegrad_group.12.t
+    desc = visegrad_group.12.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.11.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.12.a executed"
+        add_command_power = 20
+        army_experience = 15
+        navy_experience = 15
+        air_experience = 15
+        if = {
+            limit = { POL = { has_idea = Visegrad_group } }
+            set_temp_variable = { percent_change = 2 }
+            set_temp_variable = { tag_index = ROOT }
+            set_temp_variable = { influence_target = POL }
+            change_influence_percentage = yes
+        }
+        if = {
+            limit = { CZE = { has_idea = Visegrad_group } }
+            set_temp_variable = { percent_change = 2 }
+            set_temp_variable = { tag_index = ROOT }
+            set_temp_variable = { influence_target = CZE }
+            change_influence_percentage = yes
+        }
+        if = {
+            limit = { HUN = { has_idea = Visegrad_group } }
+            set_temp_variable = { percent_change = 2 }
+            set_temp_variable = { tag_index = ROOT }
+            set_temp_variable = { influence_target = HUN }
+            change_influence_percentage = yes
+        }
+        if = {
+            limit = { SLO = { has_idea = Visegrad_group } }
+            set_temp_variable = { percent_change = 2 }
+            set_temp_variable = { tag_index = ROOT }
+            set_temp_variable = { influence_target = SLO }
+            change_influence_percentage = yes
+        }
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            country_event = visegrad_group.13
+        }
+	}
+    option = {
+        name = visegrad_group.11.b
+		log = "[GetDateText]: [This.GetName]: visegrad_group.12.a executed"
+        every_country = {
+            limit = { has_idea = Visegrad_group }
+            country_event = visegrad_group.14
+        }
+	}
+}
+#V4+ Accept
+country_event = {
+	id = visegrad_group.13
+    title = visegrad_group.13.t
+    desc = visegrad_group.13.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.13.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.13.a executed"
+        add_command_power = 20
+        army_experience = 15
+        navy_experience = 15
+        air_experience = 15
+        set_country_flag = { flag = exercises_temp value = 1 days = 180 }
+        
+	}
+}
+#V4+ Refused
+country_event = {
+	id = visegrad_group.14
+    title = visegrad_group.14.t
+    desc = visegrad_group.14.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.14.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.13.a executed"
+        set_country_flag = { flag = exercises_temp value = 1 days = 180 }
+	}
+}
+#V4 invest
+country_event = {
+	id = visegrad_group.15
+    title = visegrad_group.15.t
+    desc = visegrad_group.15.d
+    picture = GFX_VG_visegrad_event
+
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.15.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.15.a executed"
+	}
+}
+#Visegrad Unite
+news_event = {
+	id = visegrad_group.16
+    title = visegrad_group.16.t
+    desc = visegrad_group.16.d
+    picture = GFX_POL_visegrad_udin_unite_news
+	is_triggered_only = yes
+    major = yes
+
+    option = {
+        name = visegrad_group.16.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.16.a executed"
+	}
+}
+#Visegrad Education
+country_event = {
+	id = visegrad_group.17
+    title = visegrad_group.17.t
+    desc = visegrad_group.17.d
+    picture = GFX_Visegrad_education_event
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.17.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.17.a executed"
+        country_event = visegrad_group.18
+	}
+    option = {
+        name = visegrad_group.17.b
+		log = "[GetDateText]: [This.GetName]: visegrad_group.17.a executed"
+        ai_chance = {
+            factor = 100
+        }
+	}
+}
+#Visegrad Education Main
+country_event = {
+	id = visegrad_group.18
+    title = visegrad_group.18.t
+    desc = visegrad_group.18.d
+    picture = GFX_Visegrad_education1_event
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.18.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.18.a executed"
+        country_event = visegrad_group.19
+	}
+}
+#Visegrad Education Decision
+country_event = {
+	id = visegrad_group.19
+    title = visegrad_group.19.t
+    desc = visegrad_group.19.d
+    picture = GFX_Visegrad_education2_event
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.19.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.19.a executed"
+        country_event = visegrad_group.20
+	}
+}
+#Visegrad Education Union
+country_event = {
+	id = visegrad_group.20
+    title = visegrad_group.20.t
+    desc = visegrad_group.20.d
+    picture = GFX_Visegrad_education3_event
+	is_triggered_only = yes
+
+    option = {
+        name = visegrad_group.20.a
+		log = "[GetDateText]: [This.GetName]: visegrad_group.20.a executed"
+	}
+    option = {
+        name = visegrad_group.20.b
+		log = "[GetDateText]: [This.GetName]: visegrad_group.20.b executed"
+        country_event = visegrad_group.17
+	}
+}

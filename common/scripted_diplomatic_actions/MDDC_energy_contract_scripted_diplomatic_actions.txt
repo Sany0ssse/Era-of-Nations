@@ -1,0 +1,261 @@
+scripted_diplomatic_actions = {
+	energy_contract_agreement = {
+		allowed = { always = yes }
+		visible = {
+			is_neighbor_of = ROOT
+			NOT = {
+				THIS = { has_country_flag = energy_agreement@ROOT }
+			}
+		}
+		selectable = {
+			is_neighbor_of = ROOT
+			custom_trigger_tooltip = {
+				tooltip = PROPOSE_ENERGY_AGREEMENT_TOOLTIP
+				THIS = {
+					NOT = { has_country_flag = energy_contract@ROOT }
+				}
+			}
+			THIS = {
+				NOT = { has_war_with = ROOT }
+				has_opinion = { target = ROOT value > 10 }
+				if = {
+					limit = {
+						is_in_faction = yes
+						any_allied_country = {
+							exists = yes
+						}
+					}
+					any_allied_country = {
+						NOT = { has_war_with = ROOT }
+					}
+				}
+			}
+		}
+		cost = 75
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		icon = 17
+		send_description = PROPOSE_ENERGY_AGREEMENT_DESC
+
+		on_sent_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect propose_improved_energy_agreement"
+			ROOT = { set_variable = { pending_energy_offer_country = PREV.id } }
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect propose_improved_energy_agreement"
+			set_country_flag = energy_agreement@ROOT
+			ROOT = {
+				clear_variable = pending_energy_offer_country
+				set_country_flag = energy_agreement@PREV
+			}
+			THIS = {
+				add_opinion_modifier = { target = ROOT modifier = energy_agreement_accept }
+				reverse_add_opinion_modifier = { target = ROOT modifier = energy_agreement_accept }
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = ROOT.id }
+				set_temp_variable = { influence_target = THIS.id }
+				change_influence_percentage = yes
+				ROOT = {
+					set_temp_variable = { percent_change = 1 }
+					set_temp_variable = { tag_index = PREV.id }
+					set_temp_variable = { influence_target = THIS.id }
+					change_influence_percentage = yes
+				}
+			}
+		}
+		reject_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect propose_improved_trade_agreement"
+			ROOT = {
+				clear_variable = pending_energy_offer_country
+			}
+			THIS = {
+				add_opinion_modifier = { target = ROOT modifier = energy_agreement_reject }
+				reverse_add_opinion_modifier = { target = ROOT modifier = energy_agreement_reject }
+			}
+		}
+
+		accept_title = PROPOSE_ENERGY_AGREEMENT_ACCEPT_TT
+		accept_description = PROPOSE_ENERGY_AGREEMENT_ACCEPT_DESC
+		reject_title = PROPOSE_ENERGY_AGREEMENT_REJECT_TT
+		reject_description = PROPOSE_ENERGY_AGREEMENT_REJECT_DESC
+
+		ai_acceptance = {
+			base_energy_condition = {
+				base = -25
+			}
+			condition_three = {
+				base = 0
+				modifier = {
+					set_temp_variable = { opinion_calculator = opinion@ROOT }
+					multiply_temp_variable = { opinion_calculator = 0.05 }
+					check_variable = { opinion_calculator > -60 }
+					add = opinion_calculator
+				}
+			}
+			condition_six = {
+				base = 0
+				modifier = {
+					add = 25
+					ROOT = { is_in_faction_with = PREV }
+				}
+			}
+			condition_energy_five = {
+				base = 0
+				modifier = {
+					in_same_economic_faction = yes
+					add = 15
+				}
+			}
+			condition_energy_six = {
+				base = 0
+				modifier = {
+					add = 10
+					is_neighbor_of = ROOT
+				}
+			}
+			condition_seven = {
+				base = 0
+				modifier = {
+					add = 10
+					is_subject_of = ROOT
+				}
+			}
+			condition_eight = {
+				base = 0
+				modifier = {
+					add = 5
+					is_influencer = yes
+				}
+			}
+		}
+		ai_desire = {
+			factor = 10
+			modifier = {
+				is_neighbor_of = ROOT
+				factor = 2
+			}
+			modifier = {
+				in_same_economic_faction = yes
+				factor = 4
+			}
+			modifier = {
+				is_in_faction_with = ROOT
+				factor = 5
+			}
+			modifier = {
+				is_subject_of = ROOT
+				factor = 999
+			}
+			modifier = {
+				set_temp_variable = { opinion_calculator = opinion@ROOT }
+				multiply_temp_variable = { opinion_calculator = 0.05 }
+				check_variable = { opinion_calculator > -60 }
+				factor = opinion_calculator
+			}
+			modifier = {
+				factor = 0
+				ROOT = { NOT = { check_variable = { pending_energy_offer_country = 0 } } }
+			}
+		}
+	}
+
+	cancel_energy_agreement = {
+		allowed = { always = yes }
+		visible = { THIS = { has_country_flag = energy_agreement@ROOT } }
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = CANCEL_ENERGY_AGREEMENT_TOOLTIP
+				THIS = { has_country_flag = energy_agreement@ROOT }
+			}
+		}
+		cost = 75
+		can_be_sent = { always = yes }
+		show_acceptance_on_action_button = no
+		requires_acceptance = no
+		icon = 17
+		send_description = CANCEL_ENERGY_AGREEMENT_DESC
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: diplomatic action cancel_energy_agreement"
+			clr_country_flag = energy_agreement@ROOT
+			ROOT = {
+				clear_variable = pending_energy_offer_country
+				clr_country_flag = energy_agreement@PREV
+			}
+			THIS = {
+				remove_opinion_modifier = { target = ROOT modifier = energy_agreement_accept }
+				for_each_loop = {
+					array = energy_contractors
+					value = v
+					index = i
+					break = break
+					if = {
+						limit = { check_variable = { v = ROOT } }
+						set_variable = { index_to_remove = i }
+						add_to_variable = { break = 1 }
+					}
+				}
+				if = {
+					limit = { has_variable = index_to_remove }
+					remove_from_array = {
+						array = energy_contractors
+						index = index_to_remove
+					}
+					remove_from_array = {
+						array = energy_contracts_ammount
+						index = index_to_remove
+					}
+					remove_from_array = {
+						array = energy_contracts_price
+						index = index_to_remove
+					}
+					clear_variable = index_to_remove
+				}
+				ROOT = {
+					remove_opinion_modifier = { target = PREV modifier = energy_agreement_accept }
+					for_each_loop = {
+						array = energy_contractors
+						value = v
+						index = i
+						break = break
+						if = {
+							limit = { check_variable = { v = PREV } }
+							set_variable = { index_to_remove = i }
+							add_to_variable = { break = 1 }
+						}
+					}
+					if = {
+						limit = { has_variable = index_to_remove }
+						remove_from_array = {
+							array = energy_contractors
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_ammount
+							index = index_to_remove
+						}
+						remove_from_array = {
+							array = energy_contracts_price
+							index = index_to_remove
+						}
+						clear_variable = index_to_remove
+					}
+				}
+			}
+		}
+
+		ai_desire = {
+			base = 5
+			modifier = {
+				has_war_with = ROOT
+				factor = 100
+			}
+			modifier = {
+				set_temp_variable = { opinion_calculator = opinion@ROOT }
+				multiply_temp_variable = { opinion_calculator = 0.05 }
+				check_variable = { opinion_calculator < -10 }
+				factor = opinion_calculator
+			}
+		}
+	}
+}

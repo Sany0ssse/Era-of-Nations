@@ -1,0 +1,219 @@
+on_actions = {
+	on_monthly_CHI = {
+		effect = {
+			#Chinese Aggression
+			if = {
+				limit = { check_variable = { chinese_aggression > 0 } }
+				add_to_variable = { chinese_aggression = -1 }
+			}
+
+			if = {
+				limit = {
+					OR = {
+						has_communist_government_or_in_coalition = yes
+						has_communist_government = yes
+					}
+					HKG = { is_subject_of = CHI }
+					has_country_flag = CHI_sar_five_decade_period
+					date > 2047.7.1
+				}
+				annex_country = { target = HKG transfer_troops = yes }
+				595 = { add_core_of = CHI }
+				595 = { remove_dynamic_modifier = { modifier = CHI_hong_kong } }
+				595 = { add_dynamic_modifier = { modifier = CHI_special_economic_zone } }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_communist_government_or_in_coalition = yes
+						has_communist_government = yes
+					}
+					MAC = { is_subject_of = CHI }
+					has_country_flag = CHI_sar_five_decade_period
+					date > 2049.12.20
+				}
+				annex_country = { target = MAC transfer_troops = yes }
+				1106 = { add_core_of = CHI }
+				1106 = { remove_dynamic_modifier = { modifier = CHI_macau } }
+				1106 = { add_dynamic_modifier = { modifier = CHI_special_economic_zone } }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_communist_government_or_in_coalition = yes
+						has_communist_government = yes
+					}
+					AND = {
+						OR = {
+							MON = { is_subject_of = CHI }
+							MON = { exists = no }
+						}
+						OR = {
+							TAI = { is_subject_of = CHI }
+							TAI = { exists = no }
+						}
+					}
+				}
+				country_event = { id = china.58 days = 1 }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_communist_government_or_in_coalition = yes
+						has_communist_government = yes
+					}
+					MON = { exists = no }
+					TAI = { exists = no }
+					is_greater_china_state_owned = yes
+					is_outer_manchuria_state_owned = yes
+					is_buryatia_state_owned = yes
+					is_uriankhai_state_owned = yes
+					is_outer_xinjiang_state_owned = yes
+				}
+				country_event = { id = china.64 days = 1 }
+			}
+			random = {
+				chance = 20
+				add_to_variable = { CHI.kasmir_china_readiness = -5 }
+			}
+			random = {
+				chance = 20
+				add_to_variable = { GLOBAL.arunachal_tension = -5 }
+			}
+			random = {
+				chance = 20
+				add_to_variable = { CHI.arunachal_readiness = -5 }
+			}
+
+			# moved out for smooth value calculation
+			if = { limit = { has_variable = CHI.kasmir_china_readiness } clamp_variable = { var = CHI.kasmir_china_readiness min = 0 max = 100 } }
+			if = { limit = { has_variable = GLOBAL.arunachal_tension } clamp_variable = { var = GLOBAL.arunachal_tension min = 0 max = 100 } }
+			if = { limit = { has_variable = CHI.arunachal_readiness } clamp_variable = { var = CHI.arunachal_readiness min = 0 max = 100 } }
+
+			#uighur event chain
+			if = {
+				limit = {
+					OR = {
+						check_variable = { global.month = 4 }
+						check_variable = { global.month = 8 }
+						check_variable = { global.month = 12 }
+					}
+				}
+				random_list = {
+					100 = {
+						modifier = {
+							factor = 0
+							NOT = { CHI = { has_country_flag = borderland_calm_down } }
+						}
+						add_political_power = 1
+					}
+					20 = {
+						modifier = {
+							factor = 0
+							NOT = {
+								CHI = {
+									controls_state = 592
+									check_variable = {
+										var = uighur_opinion
+										value = 100
+										compare = less_than
+									}
+									check_variable = {
+										var = uighur_threat
+										value = 50
+										compare = greater_than
+									}
+								}
+							}
+						}
+						country_event = china.9
+					}
+					20 = {
+						modifier = {
+							factor = 0
+							NOT = {
+								CHI = {
+									controls_state = 592
+									check_variable = {
+										var = uighur_opinion
+										value = 100
+										compare = less_than
+									}
+									check_variable = {
+										var = uighur_threat
+										value = 70
+										compare = greater_than
+									}
+								}
+							}
+						}
+						country_event = china.10
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = {
+								controls_state = 592
+								check_variable = {
+									var = uighur_opinion
+									value = 100
+									compare = less_than
+								}
+							}
+						}
+						country_event = china.11
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = {
+								CHI = {
+									controls_state = 592
+									check_variable = { uighur_opinion < 100 }
+								}
+							}
+						}
+						country_event = china.8
+					}
+					5 = {
+						modifier = {
+							factor = 0
+							NOT = {
+								CHI = {
+									controls_state = 592
+									check_variable = { uighur_opinion > 89 }
+								}
+							}
+						}
+						modifier = {
+							factor = 1.50
+							check_variable = { uighur_threat > 94 }
+						}
+						modifier = {
+							factor = 1.75
+							CHI = { has_war = yes }
+						}
+						modifier = {
+							factor = 1.25
+							CHI = { has_stability < 0.4 }
+						}
+						country_event = china.13
+					}
+				}
+
+			}
+
+			#SCO GUI Update
+			if = {
+				limit = {
+					OR = {
+						check_variable = { global.month = 4 }
+						check_variable = { global.month = 8 }
+						check_variable = { global.month = 12 }
+					}
+				}
+				SCO_dirty_update = yes
+			}
+		}
+	}
+}

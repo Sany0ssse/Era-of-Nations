@@ -1,0 +1,469 @@
+is_diplomatic_action_valid_peace_proposal = {
+    always = no
+}
+
+peace_deal_available = {
+
+	if ={
+		limit = {
+			has_game_rule = {
+				rule = peace_deal_waittime
+				option = DEFAULT
+			}
+			is_debug = no
+		}
+		if = {
+			limit = {
+				is_major_conflict_t = yes
+			}	
+			war_length_with = {
+				tag = ROOT
+				months > 11
+			}
+		}	
+		else_if = {
+			limit = {
+				is_half_major_conflict_t = yes
+			}	
+			war_length_with = {
+				tag = ROOT
+				months > 5
+			}
+		}
+		else = {
+			war_length_with = {
+				tag = ROOT
+				months > 2
+			}
+		}
+	}
+	
+	if = {
+		limit = {
+			OR = {
+				#Generic civil war
+				civilwar_target = ROOT
+				ROOT = { civilwar_target = PREV }
+				AND = {
+					has_country_flag = Custom_Civil_War
+					ROOT = { has_country_flag = Custom_Civil_War }
+				}
+				#Syrian civil war
+				AND = {
+					OR = {
+						original_tag = SYR
+						original_tag = FSA
+						original_tag = NUS
+						original_tag = ROJ
+						original_tag = ALA
+						original_tag = DRU
+						original_tag = ISI
+						original_tag = KUR
+						original_tag = PUK
+						original_tag = IRQ
+					}
+					OR = {
+						ROOT = { original_tag = SYR }
+						ROOT = { original_tag = FSA }
+						ROOT = { original_tag = NUS }
+						ROOT = { original_tag = ROJ }
+						ROOT = { original_tag = ALA }
+						ROOT = { original_tag = DRU }
+						ROOT = { original_tag = ISI }
+						ROOT = { original_tag = KUR }
+						ROOT = { original_tag = PUK }
+						ROOT = { original_tag = IRQ }
+					}
+				}
+				#Libyan Civil War
+				AND = {
+					OR = {
+						original_tag = HOR
+						original_tag = GNA
+						original_tag = GNC
+						original_tag = TUA
+					}
+					OR = {
+						ROOT = { original_tag = HOR }
+						ROOT = { original_tag = GNA }
+						ROOT = { original_tag = GNC }
+						ROOT = { original_tag = TUA }
+					}
+				}
+				#Yemeni Civil War
+				AND = {
+					OR = {
+						original_tag = AQY
+						original_tag = YEM
+						original_tag = HOU
+					}
+					OR = {
+						ROOT = { original_tag = AQY }
+						ROOT = { original_tag = YEM }
+						ROOT = { original_tag = HOU }
+					}
+				}
+				#Afghanistan Civil War
+				AND = {
+					OR = {
+						original_tag = AFG
+						original_tag = TAL
+					}
+					OR = {
+						ROOT = { original_tag = AFG }
+						ROOT = { original_tag = TAL }
+					}
+				}
+				#Somalian Civil War
+				AND = {
+					OR = {
+						original_tag = SOM
+						original_tag = SHB
+						original_tag = SML
+						original_tag = PUN
+						original_tag = SNA
+						original_tag = SWS
+						original_tag = JUB
+					}
+					OR = {
+						ROOT = { original_tag = SOM }
+						ROOT = { original_tag = SHB }
+						ROOT = { original_tag = SML }
+						ROOT = { original_tag = PUN }
+						ROOT = { original_tag = SNA }
+						ROOT = { original_tag = SWS }
+						ROOT = { original_tag = JUB }
+					}
+				}
+				#Sudan Civil War
+				AND = {
+					OR = {
+						original_tag = SUD
+						original_tag = DAR
+						original_tag = SSU
+					}
+					OR = {
+						ROOT = { original_tag = SUD }
+						ROOT = { original_tag = DAR }
+						ROOT = { original_tag = SSU }
+					}
+				}
+				#Central African Civil War
+				AND = {
+					OR = {
+						original_tag = CAR
+						original_tag = BAL
+						original_tag = SEL
+						original_tag = LOG
+					}
+					OR = {
+						ROOT = { original_tag = CAR }
+						ROOT = { original_tag = BAL }
+						ROOT = { original_tag = SEL }
+						ROOT = { original_tag = LOG }
+					}
+				}
+				#Liberian Civil War
+				AND = {
+					OR = {
+						original_tag = LIB
+						original_tag = LUR
+						original_tag = SIE
+						original_tag = AFR
+						original_tag = GUI
+					}
+					OR = {
+						ROOT = { original_tag = LIB }
+						ROOT = { original_tag = LUR }
+						ROOT = { original_tag = SIE }
+						ROOT = { original_tag = AFR }
+						ROOT = { original_tag = GUI }
+					}
+				}
+				#Angolan civil war
+				AND = {
+					OR = {
+						original_tag = AGL
+						original_tag = UNI
+					}
+					OR = {
+						ROOT = { original_tag = AGL }
+						ROOT = { original_tag = UNI }
+					}
+				}
+				#Congo war
+				AND = {
+					OR = {
+						original_tag = DRC
+						original_tag = RCD
+						original_tag = MLC
+					}
+					OR = {
+						ROOT = { original_tag = DRC }
+						ROOT = { original_tag = RCD }
+						ROOT = { original_tag = MLC }
+					}
+				}
+				#Aceh war
+				AND = {
+					OR = {
+						original_tag = ACE
+						original_tag = IND
+					}
+					OR = {
+						ROOT = { original_tag = ACE }
+						ROOT = { original_tag = IND }
+					}
+				}
+				#Nepal war
+				AND = {
+					OR = {
+						original_tag = NPM
+					    original_tag = NEP
+					}
+					OR = {
+						ROOT = { original_tag = NPM }
+						ROOT = { original_tag = NEP }
+					}
+				}
+				#Sri-Lanka war
+				AND = {
+					OR = {
+						original_tag = TML
+					    original_tag = SRI
+					}
+					OR = {
+						ROOT = { original_tag = TML }
+						ROOT = { original_tag = SRI }
+					}
+				}
+				#PMR and Moldova war
+				AND = {
+					OR = {
+						original_tag = PMR
+					    original_tag = MLV
+					}
+					OR = {
+						ROOT = { original_tag = PMR }
+						ROOT = { original_tag = MLV }
+					}
+				}
+				#Senegal war
+				AND = {
+					OR = {
+						original_tag = SEN
+					    original_tag = CSM
+					}
+					OR = {
+						ROOT = { original_tag = SEN }
+						ROOT = { original_tag = CSM }
+					}
+				}
+			}
+		}
+		
+		custom_trigger_tooltip = {
+			tooltip = civil_war_reason_tt
+			always = no
+		}
+	}
+	
+	if = {
+		limit = {
+			is_subject = yes
+		}
+		
+		custom_trigger_tooltip = {
+			tooltip = subject_reason_tt
+			always = no
+		}
+	}
+	
+	else_if = {
+		limit = {
+			ROOT = {
+				is_subject = yes
+			}
+		}
+		
+		custom_trigger_tooltip = {
+			tooltip = subject_reason_2tt
+			always = no
+		}
+	}	
+}
+
+is_major_conflict_t = {
+	ROOT = {
+		is_major = yes
+	}
+	THIS = {
+		is_major = yes
+	}
+}
+
+is_half_major_conflict_t = {
+	OR = {
+		ROOT = {
+			is_major = yes
+		}
+		THIS = {
+			is_major = yes
+		}
+	}
+}
+
+is_minor_conflict_t = {
+	ROOT = {
+		is_major = no
+	}
+	THIS = {
+		is_major = no
+	}
+}	
+
+is_reachable = {
+	OR = {
+		is_neighbor_of = ROOT
+		any_allied_country = {
+			is_neighbor_of = ROOT
+		}
+	}
+	
+	ROOT = {
+		OR = {
+			is_neighbor_of = PREV
+			any_allied_country = {
+				is_neighbor_of = PREV
+			}
+		}	
+	}
+}
+
+is_reachable_continent = {
+
+	OR = {
+		any_owned_state = {
+			is_on_same_continent_as = ROOT
+		}
+		any_controlled_state = {
+			is_on_same_continent_as = ROOT
+		}
+		any_allied_country = {
+			OR = {
+				any_owned_state = {
+					is_on_same_continent_as = ROOT
+				}
+				any_controlled_state = {
+					is_on_same_continent_as = ROOT
+				}
+			}
+		}	
+	}
+	ROOT = {
+		OR = {
+			any_owned_state = {
+				is_on_same_continent_as = THIS
+			}
+			any_controlled_state = {
+				is_on_same_continent_as = THIS
+			}
+			any_allied_country = {
+				OR = {
+					any_owned_state = {
+						is_on_same_continent_as = THIS
+					}
+					any_controlled_state = {
+						is_on_same_continent_as = THIS
+					}
+				}
+			}	
+		}
+	}
+}
+
+is_directly_reachable = {
+	OR = {
+		is_neighbor_of = ROOT
+		ROOT = {
+			any_allied_country = {
+				is_neighbor_of = PREV.PREV
+			}
+		}
+		AND = {
+			ROOT = {
+				any_owned_state = {
+					is_coastal = yes
+				}
+			}
+			any_owned_state = {
+				is_coastal = yes
+			}
+		}
+	}
+}
+
+NonCoreControlledAlliesTHIS = {
+	OR = {
+		any_allied_country = {
+			any_controlled_state = {
+				NOT = {
+					is_core_of = ROOT
+				}
+				is_owned_by = ROOT	
+			}
+		}	
+		any_controlled_state = {
+			NOT = {
+				is_core_of = ROOT
+			}
+			is_owned_by = ROOT
+		}	
+	}
+}
+
+NonCoreControlledAlliesROOT = {
+	OR = {
+		ROOT = {
+			any_allied_country = {
+				any_controlled_state = {
+					NOT = {
+						is_core_of = PREV.PREV
+					}
+					is_owned_by = PREV.PREV
+				}
+			}
+		}
+		ROOT = {
+			any_controlled_state = {
+				NOT = {
+					is_core_of = PREV.PREV
+				}
+				is_owned_by = PREV.PREV
+			}
+		}	
+	}
+}
+
+ControlledAlliesROOT = {
+	any_allied_country = {
+		any_owned_state = {
+			is_controlled_by_ROOT_or_ally = yes
+		}
+	}	
+}
+
+ControlledAlliesTHIS = {
+	ROOT = {
+		any_allied_country = {
+			any_owned_state = {
+				OR = {
+					is_controlled_by = PREV.PREV
+					controller = {
+						is_ally_with = PREV.PREV
+					}
+				}
+			}
+		}
+	}	
+}

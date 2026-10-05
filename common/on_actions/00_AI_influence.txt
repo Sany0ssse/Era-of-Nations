@@ -1,0 +1,72 @@
+on_actions = {
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					is_ai = yes
+					OR = {
+						check_variable = { global.month = 6 }
+						check_variable = { global.month = 12 }
+					}
+				}
+				clear_array = auto_influence_array
+				set_variable = { auto_influence_users = 0 }
+				resize_array = { array = auto_influence_array value = 0 size = 10 } # ONLY 4 MORE SLOTS ARE AVAILABLE
+				update_auto_influence_array = yes
+				update_dirty_influence_var = yes
+			}
+			if = {
+				limit = {
+					is_ai = yes
+					OR = {
+						check_variable = { global.month = 6 }
+						check_variable = { global.month = 12 }
+					}
+				}
+				clear_array = random_influence_array
+				set_temp_variable = { counter = 0 }
+				for_each_loop = {
+					array = global.countries
+					value = v
+					break = break
+					if = {
+						limit = {
+							var:v = {
+								NOT = { tag = PREV }
+								is_influencer = yes
+								influence_higher_5 = yes
+							}
+						}
+						random = {
+							chance = 1
+							add_to_array = { PREV.random_influence_array = THIS.id }
+						}
+						add_to_temp_variable = { counter = 1 }
+						if = {
+							limit = {
+								check_variable = { counter = 5 }
+							}
+							add_to_temp_variable = { break = 1 }
+						}
+					}
+				}
+			}
+		}
+	}
+	on_send_attache = {
+		effect = {
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = FROM.id }
+			change_influence_percentage = yes
+		}
+	}
+	on_military_access = {
+		effect = {
+			set_temp_variable = { percent_change = 3 }
+			set_temp_variable = { tag_index = ROOT.id }
+			set_temp_variable = { influence_target = FROM.id }
+			change_influence_percentage = yes
+		}
+	}
+}

@@ -1,0 +1,19 @@
+find_highest_opinion_in_array = {
+	for_each_loop = {
+		array = target_array
+		value = v
+		index = i
+		if = {
+			limit = { check_variable = { i = 0 } }
+			set_temp_variable = { prev_opinion = opinion@var:v }
+			set_variable = { target_TAG = v }
+		}
+		else = {
+			if = {
+				limit = { check_variable = { opinion@var:v > prev_opinion } }
+				set_temp_variable = { prev_opinion = opinion@var:v }
+				set_variable = { target_TAG = v }
+			}
+		}
+	}
+}

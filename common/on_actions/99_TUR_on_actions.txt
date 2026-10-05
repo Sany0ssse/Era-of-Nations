@@ -1,0 +1,265 @@
+on_actions = {
+	on_weekly_TUR = {
+		effect = {
+			set_variable = { kurdish_resistance_cap = TUR_PKK_strength }
+			multiply_variable = { kurdish_resistance_cap = 0.005 }
+			set_variable = { kurdish_resistance_garrison_requirement = TUR_PKK_strength }
+			multiply_variable = { kurdish_resistance_garrison_requirement = 0.03 }
+			set_variable = { kurdish_resistance_garrison_damage = TUR_PKK_strength }
+			multiply_variable = { kurdish_resistance_garrison_damage = 0.019 }
+			add_to_variable = { kurdish_resistance_garrison_damage = -0.999 }
+
+			if = { limit = { has_idea = the_military }
+				# Calculate current tier
+				set_temp_variable = { TUR_mil_tier = 1 }
+				if = { limit = { check_variable = { TUR_military_standing_value < -1 } }
+					set_temp_variable = { TUR_mil_tier = 2 }
+				}
+				if = { limit = { check_variable = { TUR_military_standing_value < -49 } }
+					set_temp_variable = { TUR_mil_tier = 3 }
+				}
+				if = { limit = { check_variable = { TUR_military_standing_value < -99 } }
+					set_temp_variable = { TUR_mil_tier = 4 }
+				}
+				if = { limit = { check_variable = { TUR_military_standing_value < -149 } }
+					set_temp_variable = { TUR_mil_tier = 5 }
+				}
+				if = { limit = { check_variable = { TUR_military_standing_value < -199 } }
+					set_temp_variable = { TUR_mil_tier = 6 }
+				}
+
+				# Only swap ideas if the tier changed
+				if = {
+					limit = { NOT = { check_variable = { TUR_current_mil_tier = TUR_mil_tier } } }
+					set_variable = { TUR_current_mil_tier = TUR_mil_tier }
+
+					remove_ideas = {
+						TUR_military_happy
+						TUR_military_anger1
+						TUR_military_anger2
+						TUR_military_anger3
+						TUR_military_anger4
+						TUR_military_anger5
+					}
+
+					if = {
+						limit = { check_variable = { TUR_current_mil_tier = 6 } }
+						add_ideas = TUR_military_anger5
+						remove_ideas = the_military
+					}
+					else_if = {
+						limit = { check_variable = { TUR_current_mil_tier = 5 } }
+						add_ideas = TUR_military_anger4
+					}
+					else_if = {
+						limit = { check_variable = { TUR_current_mil_tier = 4 } }
+						add_ideas = TUR_military_anger3
+					}
+					else_if = {
+						limit = { check_variable = { TUR_current_mil_tier = 3 } }
+						add_ideas = TUR_military_anger2
+					}
+					else_if = {
+						limit = { check_variable = { TUR_current_mil_tier = 2 } }
+						add_ideas = TUR_military_anger1
+					}
+					else = {
+						add_ideas = TUR_military_happy
+					}
+				}
+			}
+			TUR_update_military_standing = yes
+			TUR_mafia_events_random = yes
+			#### MAFIA STUFF
+			if = {
+				limit = { check_variable = { TUR_mafia_influence > 59 } has_idea = TUR_mafia_weak }
+				add_to_variable = { TUR_mafia_influence = 0.5 }
+				clamp_variable = { var = TUR_mafia_influence min = 0 max = 100 }
+			}
+			if = {
+				limit = { check_variable = { TUR_mafia_influence < 30 } has_idea = TUR_mafia_weak }
+				set_country_flag = TUR_eliminate_mafia
+			}
+			if = {
+				limit = { check_variable = { TUR_mafia_influence > 30 } has_idea = TUR_mafia_weak has_country_flag = TUR_eliminate_mafia }
+				clr_country_flag = TUR_eliminate_mafia
+			}
+			# Automatic Assaults
+			if = { # If you cut spending, you can't continue attacks!
+				limit = {
+					OR = {
+						has_country_flag = TUR_auto_attacks_van
+						has_country_flag = TUR_auto_attacks_euphrates
+						has_country_flag = TUR_auto_attacks_diyarbakir
+					}
+					OR = {
+						has_idea = defence_01
+						has_idea = defence_02
+						has_idea = defence_03
+						has_idea = defence_04
+					}
+				}
+				clr_country_flag = TUR_auto_attacks_van
+				clr_country_flag = TUR_auto_attacks_euphrates
+				clr_country_flag = TUR_auto_attacks_diyarbakir
+			}
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = TUR_auto_attacks_van
+						has_country_flag = TUR_auto_attacks_euphrates
+						has_country_flag = TUR_auto_attacks_diyarbakir
+					}
+				}
+				TUR_pkk_events = yes
+				TUR_PKK_attack = yes
+			}
+		}
+	}
+
+	on_monthly_TUR = {
+		#Forced events
+		effect = {
+			TUR_parties_random = yes
+			if = { #Mafia will be able to assassinate (Activates mission)
+				limit = { check_variable = { TUR_mafia_influence > 84 } has_country_flag = TUR_turkishMafia }
+				TUR = {
+					country_event = {
+						id = Turkish_mafia.9
+					}
+				}
+				set_country_flag = TUR_mafia_war_start
+			}
+			if = { #Mafia will not be able to assassinate (Deactivates mission)
+				limit = { check_variable = { TUR_mafia_influence < 59 } has_country_flag = TUR_turkishMafia }
+				clr_country_flag = TUR_mafia_war_start
+			}
+			#MHP calls for new elections
+			if = {
+				limit = {
+					NOT = { has_country_flag = TUR_Turkey4_fired }
+					is_in_array = { ruling_party = 3 }
+					is_in_array = { gov_coalition_array = 20 }
+					OR = {
+						NOT = {
+							has_country_leader = {
+								character = TUR_bulent_ecevit
+								ruling_only = yes
+							}
+						}
+						check_variable = { party_pop_array^3 < 0.10 }
+					}
+				}
+				country_event = { id = Turkey.4 days = 5 random_days = 25 }
+			}
+
+			# PKK STUFF
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = TUR_PKK_gone
+					}
+					check_variable = {
+						TUR_PKK_yearly_strength < 12
+					}
+				}
+				add_to_variable = { var = TUR_PKK_yearly_strength value = 1 }
+				clamp_variable = { var = TUR_PKK_yearly_strength min = 0 max = 12 }
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						has_country_flag = TUR_PKK_gone
+					}
+					check_variable = {
+						TUR_PKK_yearly_strength > 11
+					}
+				}
+				random_list = {
+					50 = {
+						add_to_variable = { TUR_PKK_strength = 5 }
+					}
+					50 = {
+						add_to_variable = { TUR_PKK_strength = 10 }
+					}
+				}
+				add_to_variable = { var = TUR_PKK_yearly_strength value = -12 }
+				clamp_variable = { var = TUR_PKK_yearly_strength min = 0 max = 12 }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = TUR_auto_attacks_van
+						has_country_flag = TUR_auto_attacks_euphrates
+						has_country_flag = TUR_auto_attacks_diyarbakir
+					}
+				}
+				clr_country_flag = TUR_auto_attacks_van
+				clr_country_flag = TUR_auto_attacks_euphrates
+				clr_country_flag = TUR_auto_attacks_diyarbakir
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = TUR_PKK_gone
+					}
+					check_variable = {
+						TUR_PKK_strength > 99
+					}
+				}
+				country_event = TUR_pkk.604
+			}
+		}
+	}
+
+	on_government_change = {
+		effect = {
+			if = {
+				limit = {
+					original_tag = TUR
+				}
+				if = { # Will lose Neo-Ottoman State cosmetic tag if not Ottomans
+					limit = {
+						has_cosmetic_tag = TUR_NEW_TURKIC_STATE
+						NOT = {
+							nationalist_monarchists_are_in_power = yes
+						}
+					}
+					country_event = {
+						id = Turkish_parties.9
+					}
+				}
+				if = { # Will lose Anatolian Syndicate cosmetic tag if not Mafia
+					limit = {
+						has_cosmetic_tag = TUR_ANATOLIAN_SYNDICATE
+						NOT = {
+							neutrality_neutral_oligarch_are_in_power = yes
+						}
+					}
+					country_event = {
+						id = Turkish_parties.9
+					}
+				}
+				if = { # Will drop Vanguard of Turkey cosmetic tag if not communist
+					limit = {
+						has_cosmetic_tag = TUR_VANGUARD
+						NOT = {
+							emerging_communist_state_are_in_power = yes
+							emerging_anarchist_communism_are_in_power = yes
+							emerging_autocracy_are_in_power = yes
+						}
+					}
+					country_event = {
+						id = Turkish_parties.9
+					}
+				}
+				if = {
+					limit = {
+						has_idea = TUR_minority_government
+					}
+					remove_ideas = TUR_minority_government
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,1000 @@
+﻿focus_tree = {
+	id = wagner_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 20
+			original_tag = WAG
+		}
+	}
+
+	continuous_focus_position = { x = 3200 y = 1200 }
+	focus = {
+		id = WAG_strength_1
+		icon = WAG_start1
+
+		x = 0
+		y = 0
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_strength_1"
+			if = {
+				limit = {
+					has_idea = WAG_start_spirit_1
+				}
+				remove_ideas = WAG_start_spirit_1
+			}
+			add_stability = 0.10
+			country_event = { id = wagneria.001 days = 1 }
+			division_template = {
+				name = "Wagner Brigade"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					L_Inf_Bat = { x = 0 y = 2 }
+					L_Inf_Bat = { x = 0 y = 3 }
+					Arty_Bat = { x = 0 y = 4 }
+					L_Inf_Bat = { x = 1 y = 0 }
+					L_Inf_Bat = { x = 1 y = 1 }
+					L_Inf_Bat = { x = 1 y = 2 }
+					L_Inf_Bat = { x = 1 y = 3 }
+					Arty_Bat = { x = 1 y = 4 }
+				}
+				support = {
+					L_Recce_Comp = { x = 0 y = 0 }
+					L_Engi_Comp = { x = 0 y = 1 }
+				}
+				priority = 2
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Wagner Brigade\" division_template = \"Wagner Brigade\" start_experience_factor = 1.0"
+					owner = WAG
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Wagner Brigade\" division_template = \"Wagner Brigade\" start_experience_factor = 1.0"
+					owner = WAG
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_strength_2
+		icon = WAG_start2
+
+		x = -1
+		y = 1
+
+		cost = 3
+
+		prerequisite = { focus = WAG_strength_1 }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_strength_2"
+			if = {
+				limit = {
+					has_idea = WAG_start_spirit_2
+				}
+				remove_ideas = WAG_start_spirit_2
+			}
+			add_war_support = 0.10
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_strength_3
+		icon = wag_start3
+
+		x = 1
+		y = 1
+
+		cost = 3
+
+		prerequisite = { focus = WAG_strength_1 }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_strength_3"
+			if = {
+				limit = {
+					has_idea = WAG_start_spirit_3
+				}
+				remove_ideas = WAG_start_spirit_3
+			}
+			add_political_power = 50
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_strength_4
+		icon = wag_start4
+
+		x = 0
+		y = 2
+
+		cost = 3
+
+		prerequisite = { focus = WAG_strength_2 }
+		prerequisite = { focus = WAG_strength_3 }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_strength_4"
+			if = {
+				limit = {
+					has_idea = WAG_start_spirit_4
+				}
+				remove_ideas = WAG_start_spirit_4
+			}
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.10
+			}
+			country_event = { id = wagneria.002 days = 1 }
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_recruit_nationalists
+		icon = WAG_nationalist_recruit
+
+		x = -4
+		y = 3
+
+		cost = 3
+
+		prerequisite = { focus = WAG_strength_4 }
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_recruit_nationalists"
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.10
+			}
+			if = {
+				limit = {
+					has_idea = WAG_army_spirit
+				}
+				remove_ideas = WAG_army_spirit
+			}
+			add_ideas = WAG_army_spirit_nationalists
+			country_event = { id = wagneria.010 days = 1 }
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Wagner Brigade\" division_template = \"Wagner Brigade\" start_experience_factor = 1.0"
+					owner = WAG
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_recruit_serbia
+		icon = WAG_serbs_recruit
+
+		x = -5
+		y = 4
+
+		cost = 3
+
+		prerequisite = { focus = WAG_recruit_nationalists }
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_recruit_serbia"
+			country_event = { id = wagneria.011 days = 1 }
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Wagner Brigade\" division_template = \"Wagner Brigade\" start_experience_factor = 1.0"
+					owner = WAG
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_recruit_belarus
+		icon = WAG_belarus_recruit
+
+		x = -3
+		y = 4
+
+		cost = 3
+
+		prerequisite = { focus = WAG_recruit_nationalists }
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_recruit_belarus"
+			add_stability = -0.05
+			country_event = { id = wagneria.012 days = 1 }
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Wagner Brigade\" division_template = \"Wagner Brigade\" start_experience_factor = 1.0"
+					owner = WAG
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_recruit_syria
+		icon = WAG_syria_recruit
+
+		x = -5
+		y = 5
+
+		cost = 3
+
+		prerequisite = { focus = WAG_recruit_serbia }
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_recruit_syria"
+			country_event = { id = wagneria.013 days = 1 }
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Wagner Brigade\" division_template = \"Wagner Brigade\" start_experience_factor = 1.0"
+					owner = WAG
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_recruit_afghanistan
+		icon = WAG_afgan_recruit
+
+		x = -3
+		y = 5
+
+		cost = 3
+
+		prerequisite = { focus = WAG_recruit_belarus }
+
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_recruit_afghanistan"
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Wagner Brigade\" division_template = \"Wagner Brigade\" start_experience_factor = 1.0"
+					owner = WAG
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_recruit_veterans
+		icon = WAG_smo_recruit
+
+		x = -4
+		y = 6
+
+		cost = 3
+
+		prerequisite = {
+			focus = WAG_recruit_syria
+			focus = WAG_recruit_afghanistan
+		}
+		search_filters = { FOCUS_FILTER_MILITARY }
+	
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_recruit_veterans"
+			if = {
+				limit = {
+					has_idea = WAG_army_spirit_nationalists
+				}
+				remove_ideas = WAG_army_spirit_nationalists
+			}
+			add_ideas = WAG_army_spirit_veterans
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_recruit_latin_america
+		icon = WAG_latin_recruit
+
+		x = -5
+		y = 7
+
+		cost = 3
+
+		prerequisite = { focus = WAG_recruit_veterans }
+		search_filters = { FOCUS_FILTER_MILITARY }
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_recruit_latin_america"
+			country_event = { id = wagneria.014 days = 1 }
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Wagner Brigade\" division_template = \"Wagner Brigade\" start_experience_factor = 1.0"
+					owner = WAG
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_recruit_asia
+		icon = WAG_asia_recruit
+
+		x = -3
+		y = 7
+
+		cost = 3
+
+		prerequisite = { focus = WAG_recruit_veterans }
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_recruit_asia"
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Wagner Brigade\" division_template = \"Wagner Brigade\" start_experience_factor = 1.0"
+					owner = WAG
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_recruit_international
+		icon = WAG_fortune
+
+		x = -4
+		y = 8
+
+		cost = 3
+
+		prerequisite = {
+			focus = WAG_recruit_latin_america
+		}
+		prerequisite = {
+			focus = WAG_recruit_asia
+		}
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_recruit_international"
+			if = {
+				limit = {
+					has_idea = WAG_army_spirit_veterans
+				}
+				remove_ideas = WAG_army_spirit_veterans
+			}
+			add_ideas = WAG_army_spirit_international
+			country_event = { id = wagneria.015 days = 1 }
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_mercenary_army_spirit
+		icon = WAG_proffesionals
+
+		x = -2
+		y = 9
+
+		cost = 3
+
+		prerequisite = { focus = WAG_recruit_international }
+
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_mercenary_army_spirit"
+			if = {
+				limit = {
+					has_idea = WAG_army_spirit_international
+				}
+				remove_ideas = WAG_army_spirit_international
+			}
+			add_ideas = WAG_mercenary_army
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_legacy_tactics
+		icon = WAG_orchestra
+
+		x = 0
+		y = 3
+
+		cost = 3
+
+		prerequisite = { focus = WAG_strength_4 }
+		search_filters = { FOCUS_FILTER_MILITARY }
+	
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_legacy_tactics"
+			country_event = { id = wagneria.020 days = 1 }
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_urban_assault
+		icon = WAG_shturm
+
+		x = -1
+		y = 4
+
+		cost = 3
+
+		prerequisite = { focus = WAG_legacy_tactics }
+		search_filters = { FOCUS_FILTER_MILITARY }
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_urban_assault"
+			add_ideas = WAG_tactics_spirit_urban
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_artillery_duel
+		icon = WAG_gods_war
+
+		x = 1
+		y = 4
+
+		cost = 3
+
+		prerequisite = { focus = WAG_legacy_tactics }
+		search_filters = { FOCUS_FILTER_MILITARY }
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_artillery_duel"
+			add_ideas = WAG_tactics_spirit_arty
+			country_event = { id = wagneria.021 days = 1 }
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_siege_masters
+		icon = WAG_symphony
+
+		x = 0
+		y = 7
+
+		cost = 3
+
+		prerequisite = {
+			focus = WAG_urban_assault
+		}
+		prerequisite = {
+			focus = WAG_artillery_duel
+		}
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_siege_masters"
+			if = {
+				limit = {
+					has_idea = WAG_tactics_spirit_urban
+				}
+				remove_ideas = WAG_tactics_spirit_urban
+			}
+			if = {
+				limit = {
+					has_idea = WAG_tactics_spirit_arty
+				}
+				remove_ideas = WAG_tactics_spirit_arty
+			}
+			add_ideas = WAG_siege_spirit
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+	focus = {
+		id = WAG_alternative_tactics
+		icon = WAG_new_tactics
+
+		x = 3
+		y = 3
+
+		cost = 3
+
+		prerequisite = { focus = WAG_strength_4 }
+		search_filters = { FOCUS_FILTER_MILITARY }
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_alternative_tactics"
+			country_event = { id = wagneria.030 days = 1 }
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_hybrid_warfare
+		icon = WAG_drones
+
+		x = 2
+		y = 5
+
+		cost = 3
+
+		prerequisite = { focus = WAG_alternative_tactics }
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_hybrid_warfare"
+			add_ideas = WAG_alt_tactics_spirit_hybrid
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_information_ops
+		icon = WAG_ipso
+
+		x = 4
+		y = 5
+
+		cost = 3
+
+		prerequisite = { focus = WAG_alternative_tactics }
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_information_ops"
+			add_ideas = WAG_alt_tactics_spirit_info
+			country_event = { id = wagneria.031 days = 1 }
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_shadow_government
+		icon = WAG_shadow
+
+		x = 3
+		y = 7
+
+		cost = 3
+
+		prerequisite = {
+			focus = WAG_hybrid_warfare
+		}
+		prerequisite = {
+			focus = WAG_information_ops
+		}
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_shadow_government"
+			if = {
+				limit = {
+					has_idea = WAG_alt_tactics_spirit_hybrid
+				}
+				remove_ideas = WAG_alt_tactics_spirit_hybrid
+			}
+			if = {
+				limit = {
+					has_idea = WAG_alt_tactics_spirit_info
+				}
+				remove_ideas = WAG_alt_tactics_spirit_info
+			}
+			add_ideas = WAG_shadow_spirit
+			country_event = { id = wagneria.032 days = 1 }
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+	focus = {
+		id = WAG_establish_companies
+		icon = WAG_companies
+
+		x = 4
+		y = 8
+
+		cost = 3
+
+		prerequisite = { focus = WAG_shadow_government }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_establish_companies"
+			set_temp_variable = { temp_productivity_change = 50 }
+			random_owned_controlled_state = {
+				state_flat_productivity_change_effect = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_heavy_industry_companies
+		icon = WAG_heavy_industry
+
+		x = 3
+		y = 9
+
+		cost = 3
+
+		prerequisite = { focus = WAG_establish_companies }
+
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_heavy_industry_companies"
+			add_political_power = 50
+			custom_effect_tooltip = WAG_heavy_companies_unlock_tt
+			show_ideas_tooltip = {
+				idea = WAG_heavy_concern_wagner
+				idea = WAG_heavy_african_resources
+				idea = WAG_heavy_rusatom_africa
+				idea = WAG_heavy_safir_logistics
+				idea = WAG_heavy_wagner_tech
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_light_industry_companies
+		icon = WAG_light_industry
+
+		x = 5
+		y = 9
+
+		cost = 3
+
+		prerequisite = { focus = WAG_establish_companies }
+
+		search_filters = { FOCUS_FILTER_MILITARY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_light_industry_companies"
+			add_political_power = 50
+			custom_effect_tooltip = WAG_light_companies_unlock_tt
+			show_ideas_tooltip = {
+				idea = WAG_light_pmc_solutions
+				idea = WAG_light_diamond_trade
+				idea = WAG_light_african_construction
+				idea = WAG_light_agro_africa
+				idea = WAG_light_telecom_africa
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+	focus = {
+		id = WAG_influence_africa
+		icon = WAG_africa
+
+		x = 0
+		y = 10
+
+		cost = 3
+
+		prerequisite = {
+			focus = WAG_siege_masters
+		}
+		prerequisite = {
+			focus = WAG_mercenary_army_spirit
+		}
+		prerequisite = {
+			focus = WAG_shadow_government
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_influence_africa"
+			add_political_power = -100
+			every_country = {
+				limit = { 
+					is_in_africa = yes 
+				}
+				set_temp_variable = { percent_change = 3.0 }
+				set_temp_variable = { tag_index = WAG }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_war_cameroon
+		icon = WAG_war_cameroon
+
+		x = -4
+		y = 11
+
+		cost = 3
+
+		prerequisite = { focus = WAG_influence_africa }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		
+		available = {
+			country_exists = CAM
+			NOT = { 
+				has_war_with = CAM 
+				CAM = { is_subject_of = WAG }
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_war_cameroon"
+			declare_war_on = {
+				target = CAM
+				type = puppet_wargoal_focus
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_war_chad
+		icon = WAG_war_chad
+
+		x = -2
+		y = 11
+
+		cost = 3
+
+		prerequisite = { focus = WAG_influence_africa }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		
+		available = {
+			country_exists = CHA
+			NOT = { 
+				has_war_with = CHA 
+				CHA = { is_subject_of = WAG }
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_war_chad"
+			declare_war_on = {
+				target = CHA
+				type = puppet_wargoal_focus
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_war_congo
+		icon = WAG_war_congo
+
+		x = 0
+		y = 11
+
+		cost = 3
+
+		prerequisite = { focus = WAG_influence_africa }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		
+		available = {
+			country_exists = CNG
+			NOT = { 
+				has_war_with = CNG
+				CNG = { is_subject_of = WAG }
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_war_congo"
+			declare_war_on = {
+				target = CNG
+				type = puppet_wargoal_focus
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_war_drc
+		icon = WAG_war_drc
+
+		x = 2
+		y = 11
+
+		cost = 3
+
+		prerequisite = { focus = WAG_influence_africa }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			country_exists = DRC
+			NOT = { 
+				has_war_with = DRC
+				DRC = { is_subject_of = WAG }
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_war_drc"
+			declare_war_on = {
+				target = DRC
+				type = puppet_wargoal_focus
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_war_sudan
+		icon = WAG_war_sudan
+
+		x = 4
+		y = 11
+
+		cost = 3
+
+		prerequisite = { focus = WAG_influence_africa }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			country_exists = SUD
+			NOT = { 
+				has_war_with = SUD
+				SUD = { is_subject_of = WAG }
+			}
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_war_sudan"
+			declare_war_on = {
+				target = SUD
+				type = puppet_wargoal_focus
+			}
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = WAG_african_hegemon
+		icon = WAG_hehemon
+
+		x = 0
+		y = 12
+
+		cost = 3
+
+		prerequisite = {
+			focus = WAG_war_cameroon
+			focus = WAG_war_chad
+			focus = WAG_war_congo
+			focus = WAG_war_drc
+			focus = WAG_war_sudan
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus WAG_african_hegemon"
+			add_ideas = WAG_african_hegemon_spirit
+			add_political_power = 200
+			country_event = { id = wagneria.045 days = 1 }
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+}
+
+
+
+

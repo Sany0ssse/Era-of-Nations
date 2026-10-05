@@ -1,0 +1,221 @@
+#example_dynamic_modifier = {
+#		icon = "GFX_idea_unknown" # optional, will show up in guis if icon is specified
+#		enable = { always = yes } #optional, the modifier won't apply if not enabled
+#		remove_trigger = { always = no } #optional, will remove the modifier if true
+#
+#		# list of modifiers
+#		fuel_cost = 321
+#		max_fuel = var_max_fuel # will be taken from a variable
+#	}
+
+inflation_hit_modifier = {
+	enable = { always = yes }
+	return_on_investment_modifier = inflation_hit_multiplier
+	country_productivity_growth_modifier = inflation_hit_multiplier
+	migration_rate_value_factor = inflation_hit_multiplier
+	econ_cycle_upg_cost_multiplier_modifier = inflation_hit_multiplier
+}
+
+very_high_interest_country_modifiers = {
+	icon = "GFX_idea_great_depression2"
+	enable = { always = yes }
+
+	production_speed_buildings_factor = production_speed_buildings_factor_very_high_interest_modifier
+	industrial_capacity_factory = industrial_capacity_factory_very_high_interest_modifier
+	industrial_capacity_dockyard = industrial_capacity_dockyard_very_high_interest_modifier
+	stability_factor = stability_factor_very_high_interest_modifier
+	democratic_drift = western_drift_very_high_interest_modifier
+	communism_drift = emerging_drift_very_high_interest_modifier
+	neutrality_drift = nonaligned_drift_very_high_interest_modifier
+	fascism_drift = salafist_drift_very_high_interest_modifier
+	nationalist_drift = nationalist_drift_very_high_interest_modifier
+	custom_modifier_tooltip = very_high_interest_country_modifiers_tt
+}
+
+population_tax_stability_hit = {
+	enable = { always = yes }
+	stability_factor = stability_factor_from_population_tax
+	expected_education_modifier = expectations_from_pop_tax
+	expected_healthcare_modifier = expectations_from_pop_tax
+	expected_welfare_modifier = expectations_from_pop_tax
+	#social_cost_multiplier_modifier = law_spending_from_population_tax
+	#health_cost_multiplier_modifier = law_spending_from_population_tax
+	#econ_cycle_upg_cost_multiplier_modifier = law_spending_from_population_tax
+	inflation_multiplier_modifier = inflation_factor_from_population_tax
+}
+
+corporate_tax_consumer_goods_hit = {
+	enable = { always = yes }
+
+	consumer_goods_expected_value = consumer_goods_from_corporate_tax
+	receiving_investment_cost_modifier = receiving_investment_cost_form_corporate_tax
+	productivity_growth_modifier = productivity_growth_modifier_from_corporate_tax
+	small_businesses_workers_modifier = small_businesses_workers_from_corporate_tax
+}
+
+resources_manpower_fulfillment_modifier = {
+	enable = { always = yes }
+	local_resources_factor = resource_sector_worker_fulfillment_var
+}
+
+high_unemployment_modifier = {
+	enable = { always = yes }
+	stability_factor = high_unemployment_modifier_var
+	social_cost_multiplier_modifier = high_unemployment_modifier_var_2
+	population_tax_income_multiplier_modifier = high_unemployment_modifier_var
+	corporate_tax_income_multiplier_modifier = high_unemployment_modifier_var_3
+}
+
+low_unemployment_modifier = {
+	enable = { always = yes }
+	stability_factor = low_unemployment_modifier_var
+	social_cost_multiplier_modifier = low_unemployment_modifier_var_3
+	population_tax_income_multiplier_modifier = low_unemployment_modifier_var_2
+	corporate_tax_income_multiplier_modifier = low_unemployment_modifier_var
+}
+
+productivity_and_employment_modifier = {
+	enable = { always = yes }
+	industrial_capacity_factory = military_factories_output_var
+	industrial_capacity_dockyard = dockyards_output_var
+	production_speed_buildings_factor = construction_speed_output_var
+	production_speed_agriculture_district_factor = agriculture_district_output_var
+	monthly_population  = productivity_population_buff
+}
+
+gdp_per_capita_country_modifiers = {
+	enable = { always = yes }
+	production_speed_buildings_factor = production_speed_buildings_factor_gdp_modifier
+	research_speed_factor = research_speed_factor_gdp_modifier
+	stability_factor = stability_factor_gdp_modifier
+	education_cost_multiplier_modifier = research_slot_modifier
+	total_workforce_modifier = total_workforce_gdp_c_modifier_var
+	production_speed_fossil_powerplant_factor = fossil_pp_construction_gdp_c_modifier_var
+	foreign_influence_defense_modifier = gdpc_influence_defence_modifier
+	receiving_investment_cost_modifier = gdpc_investment_cost_modifier
+}
+
+# State-Owned Investments
+state_owned_local_renewable_capacity_modifier = {
+	enable = { always = yes }
+
+	state_renewable_energy_generation_modifier = 0.25
+}
+
+state_owned_local_infrastructure_modifier = {
+	enable = { always = yes }
+
+	state_production_speed_infrastructure_factor = 0.25
+	state_production_speed_internet_station_factor = 0.25
+	state_production_speed_rail_way_factor = 0.25
+}
+
+state_owned_local_military_infrastructure_modifier = {
+	enable = { always = yes }
+
+	state_production_speed_air_base_factor = 0.25
+	state_production_speed_anti_air_building_factor = 0.25
+	state_production_speed_radar_station_factor = 0.25
+	state_production_speed_rocket_site_factor = 0.25
+}
+
+state_owned_local_energy_infrastructure_modifier = {
+	enable = { always = yes }
+
+	state_production_speed_synthetic_refinery_factor = 0.25
+	state_production_speed_fossil_powerplant_factor = 0.25
+	state_production_speed_fuel_silo_factor = 0.25
+	state_production_speed_nuclear_reactor_factor = 0.25
+}
+
+state_owned_build_forward_logistics_base_modifier = {
+	enable = { always = yes }
+
+	local_supply_impact_factor = -0.25
+}
+
+state_owned_improve_rebuilding_efforts_modifier = {
+	enable = { always = yes }
+
+	compliance_growth = 0.2
+	resistance_activity = -0.1
+}
+
+state_owned_hire_extra_primary_sector_workers_modifier = {
+	enable = { always = yes }
+
+	state_resources_factor = 0.15
+}
+
+factories_leasing_modifier = {
+	enable = { check_variable = { leased_civilian_factories < 0 } }
+
+	civilian_factory_use = leased_civilian_factories_modifier_value
+}
+
+# Central Bank Rate
+
+central_bank_rate_modifier = {
+	enable = { always = yes }
+	production_speed_buildings_factor = central_bank_multiplier_modifier
+	country_productivity_growth_modifier = central_bank_multiplier_modifier
+	inflation_percent_modifier = central_bank_multiplier_modifier
+	small_businesses_workers_modifier = small_businesses_workers_from_central_bank_rate
+	interest_rate_multiplier_modifier = debt_percent_rate
+}
+
+# CFA Franc Custodian Inflation
+
+cfa_franc_custodian_inflation_modifier = {
+	enable = { always = yes }
+	inflation_defence_multiplier_modifier = inflation_multiplier_FRA_cfa_franc_custodian
+}
+
+# Euro Inflation
+
+euro_inflation_modifier = {
+	enable = { always = yes }
+	inflation_percent_modifier = euro_personal_inflation_multiplier
+}
+
+# Visegrad Euro Inflation
+
+visegrad_euro_inflation_modifier = {
+	enable = { always = yes }
+	inflation_percent_modifier = visegrad_euro_personal_inflation_multiplier
+}
+
+# Khaleeji Inflation
+
+khaleeji_inflation_modifier = {
+	enable = { always = yes }
+	inflation_percent_modifier = khaleeji_personal_inflation_multiplier
+}
+
+# BRICS currency Inflation
+
+RAJ_BRICS_cur_inflation_modifier = {
+	enable = { always = yes }
+	inflation_percent_modifier = RAJ_BRICS_cur_personal_inflation_multiplier
+}
+
+# ECO Inflation
+
+eco_cur_inflation_modifier = {
+	enable = { always = yes }
+	inflation_defence_multiplier_modifier = eco_cur_personal_inflation_multiplier
+}
+
+# USR valute Inflation
+
+USR_valute_inflation_modifier = {
+	enable = { always = yes }
+	inflation_percent_modifier = USR_valute_personal_inflation_multiplier
+}
+
+# MERSOCUR valute Inflation
+
+Mercosur_valute_inflation_modifier = {
+	enable = { always = yes }
+	inflation_percent_modifier = mercosur_valute_personal_inflation_multiplier
+}

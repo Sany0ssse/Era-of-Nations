@@ -1,0 +1,4212 @@
+ideas = {
+	country = {
+		civ_guns_exports = {
+			picture = army_corruption
+			allowed = { original_tag = ISR }
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				custom_modifier_tooltip = civgun_income_tt
+			}
+		}
+		full_isr_boycotte = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea full_isr_boycotte"
+				add_opinion_modifier = {
+					target = ISR
+					modifier = full_blockades_isr
+				}
+				if = {
+					limit = { has_dlc = "By Blood Alone" }
+					send_embargo = ISR
+				}
+			}
+			on_remove = {
+				remove_opinion_modifier = {
+					target = ISR
+					modifier = full_blockades_isr
+				}
+				if = {
+					limit = { has_dlc = "By Blood Alone" }
+					break_embargo = ISR
+				}
+			}
+			cancel = {
+				OR = {
+					ISR = {
+						has_country_flag = isratine_formed
+					}
+					is_subject_of = ISR
+				}
+			}
+			picture = isr_embargo
+			allowed = {
+				NOT = { original_tag = ISR }
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				war_support_factor = 0.05
+			}
+			targeted_modifier = {
+				tag = ISR
+				trade_opinion_factor = -1
+				foreign_influence_modifier = -0.5
+				improve_relations_maintain_cost_factor = 1
+				custom_modifier_tooltip = ISR_boyc_idea_1_tt
+				custom_modifier_tooltip = ISR_boyc_idea_invest_tt
+			}
+		}
+		pol_isr_boycotte = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea pol_isr_boycotte"
+				add_opinion_modifier = {
+					target = ISR
+					modifier = part_blockades_isr
+				}
+			}
+			on_remove = {
+				remove_opinion_modifier = {
+					target = ISR
+					modifier = part_blockades_isr
+				}
+			}
+			cancel = {
+				OR = {
+					ISR = {
+						has_country_flag = isratine_formed
+					}
+					is_subject_of = ISR
+				}
+			}
+			picture = isr_embargo
+			allowed = {
+				NOT = { original_tag = ISR }
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				war_support_factor = 0.025
+			}
+			targeted_modifier = {
+				tag = ISR
+				foreign_influence_modifier = -0.5
+				improve_relations_maintain_cost_factor = 1
+				custom_modifier_tooltip = ISR_boyc_idea_2_tt
+			}
+		}
+		econ_isr_boycotte = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea econ_isr_boycotte"
+				add_opinion_modifier = {
+					target = ISR
+					modifier = part_blockades_isr
+				}
+				if = {
+					limit = { has_dlc = "By Blood Alone" }
+					send_embargo = ISR
+				}
+			}
+			on_remove = {
+				remove_opinion_modifier = {
+					target = ISR
+					modifier = part_blockades_isr
+				}
+				if = {
+					limit = { has_dlc = "By Blood Alone" }
+					break_embargo = ISR
+				}
+			}
+			cancel = {
+				OR = {
+					ISR = {
+						has_country_flag = isratine_formed
+					}
+					is_subject_of = ISR
+				}
+			}
+			picture = isr_embargo
+			allowed = {
+				NOT = { original_tag = ISR }
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				war_support_factor = 0.025
+			}
+			targeted_modifier = {
+				tag = ISR
+				trade_opinion_factor = -1
+				custom_modifier_tooltip = ISR_boyc_idea_invest_tt
+			}
+		}
+		########
+		ISR_pipeline_1 = {
+			picture = foreign_capital
+			allowed = { original_tag = ISR }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				base_fuel_gain_factor = 0.15
+				projects_cost_modifier = -0.10
+			}
+			targeted_modifier = {
+				tag = TUR
+				trade_opinion_factor = 0.1
+			}
+		}
+		ISR_pipeline_12 = {
+			picture = foreign_capital
+			allowed = { original_tag = TUR }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				base_fuel_gain_factor = 0.15
+				projects_cost_modifier = -0.10
+			}
+			targeted_modifier = {
+				tag = ISR
+				trade_opinion_factor = 0.1
+			}
+		}
+		ISR_pipeline_2 = {
+			picture = foreign_capital
+			allowed = { original_tag = ISR }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				base_fuel_gain_factor = 0.15
+				projects_cost_modifier = -0.10
+			}
+			targeted_modifier = {
+				tag = GRE
+				trade_opinion_factor = 0.1
+			}
+		}
+		ISR_pipeline_22 = {
+			picture = foreign_capital
+			allowed = { original_tag = GRE }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				base_fuel_gain_factor = 0.15
+				projects_cost_modifier = -0.10
+			}
+			targeted_modifier = {
+				tag = ISR
+				trade_opinion_factor = 0.1
+			}
+		}
+		ISR_pipeline_23 = {
+			picture = foreign_capital
+			allowed = { original_tag = EGY }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				base_fuel_gain_factor = 0.15
+				projects_cost_modifier = -0.10
+			}
+			targeted_modifier = {
+				tag = ISR
+				trade_opinion_factor = 0.1
+			}
+		}
+		########
+		ISR_compromised_gas_deal = {
+			allowed_civil_war = { always = yes }
+			picture = GENERIC_protectionism
+			modifier = {
+				social_cost_multiplier_modifier = -0.1
+				health_cost_multiplier_modifier = -0.1
+				renewable_energy_gain_multiplier = 0.05
+			}
+		}
+		########
+		ISR_arab_protests = {
+			allowed_civil_war = { always = yes }
+			picture = hol_liberation
+			modifier = {
+				stability_factor = -0.1
+				western_outlook_campaign_cost_modifier = 0.1
+				civilian_industry_tax_modifier = -0.1
+				agriculture_tax_modifier = -0.1
+				defensive_war_stability_factor = -0.05
+			}
+		}
+		#########
+		ISR_israeli_diamond_stuff = {
+			allowed_civil_war = { always = yes }
+			picture = isr_diamonds
+			modifier = {
+				resource_export_multiplier_modifier = 0.05
+				custom_modifier_tooltip = isr_diamond_trade_tt
+			}
+		}
+		ISR_israeli_diamond_stuff2 = {
+			allowed_civil_war = { always = yes }
+			picture = isr_diamonds
+			modifier = {
+				resource_export_multiplier_modifier = 0.1
+				trade_opinion_factor = 0.1
+				custom_modifier_tooltip = isr_diamond_trade_tt
+			}
+		}
+		angola_israel_diamonds = {
+			allowed = {
+				country_exists = ISR
+				301 = {
+					is_controlled_by = ROOT
+				}
+			}
+			allowed_civil_war = { always = yes }
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea angola_israel_diamonds"
+				if = {
+					limit = {
+						original_tag = AGL
+					}
+					AGL = {
+						give_resource_rights = {
+							receiver = ISR
+							state = 301
+							resources = { chromium }
+						}
+					}
+				}
+				if = {
+					limit = {
+						original_tag = UNI
+					}
+					UNI = {
+						give_resource_rights = {
+							receiver = ISR
+							state = 301
+							resources = { chromium }
+						}
+					}
+				}
+			}
+			on_remove = {
+				ISR = { remove_resource_rights = 301 }
+			}
+			picture = isr_diamonds
+			modifier = {
+				tax_gain_multiplier_modifier = 0.12
+				foreign_influence_defense_modifier = -0.05
+				custom_modifier_tooltip = we_diamonds1_tt
+			}
+		}
+		namibia_israel_diamonds = {
+			allowed = {
+				country_exists = ISR
+				283 = {
+					is_controlled_by = ROOT
+				}
+			}
+			allowed_civil_war = { always = yes }
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea namibia_israel_diamonds"
+				NAM = {
+					give_resource_rights = {
+						receiver = ISR
+						state = 283
+						resources = { chromium }
+					}
+				}
+			}
+			on_remove = {
+				ISR = { remove_resource_rights = 283 }
+			}
+			picture = isr_diamonds
+			modifier = {
+				tax_gain_multiplier_modifier = 0.12
+				foreign_influence_defense_modifier = -0.05
+				custom_modifier_tooltip = we_diamonds2_tt
+			}
+		}
+		russia_israel_diamonds = {
+			allowed = {
+				country_exists = ISR
+				647 = {
+					is_controlled_by = ROOT
+				}
+			}
+			allowed_civil_war = { always = yes }
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea namibia_israel_diamonds"
+				SOV = {
+					give_resource_rights = {
+						receiver = ISR
+						state = 647
+						resources = { chromium }
+					}
+				}
+			}
+			on_remove = {
+				ISR = { remove_resource_rights = 647 }
+			}
+			picture = isr_diamonds
+			modifier = {
+				tax_gain_multiplier_modifier = 0.02
+				foreign_influence_defense_modifier = -0.05
+				custom_modifier_tooltip = we_diamonds3_tt
+			}
+		}
+		botswana_israel_diamonds = {
+			allowed = {
+				country_exists = ISR
+				288 = {
+					is_controlled_by = ROOT
+				}
+			}
+			allowed_civil_war = { always = yes }
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea namibia_israel_diamonds"
+				BOT = {
+					give_resource_rights = {
+						receiver = ISR
+						state = 288
+						resources = { chromium }
+					}
+				}
+			}
+			on_remove = {
+				ISR = { remove_resource_rights = 288 }
+			}
+			picture = isr_diamonds
+			modifier = {
+				tax_gain_multiplier_modifier = 0.12
+				foreign_influence_defense_modifier = -0.05
+				custom_modifier_tooltip = we_diamonds4_tt
+			}
+		}
+		canada_israel_diamonds = {
+			allowed = {
+				country_exists = ISR
+				763 = {
+					is_controlled_by = ROOT
+				}
+			}
+			allowed_civil_war = { always = yes }
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea namibia_israel_diamonds"
+				CAN = {
+					give_resource_rights = {
+						receiver = ISR
+						state = 763
+						resources = { chromium }
+					}
+				}
+			}
+			on_remove = {
+				ISR = { remove_resource_rights = 763 }
+			}
+			picture = isr_diamonds
+			modifier = {
+				tax_gain_multiplier_modifier = 0.05
+				foreign_influence_defense_modifier = -0.05
+				custom_modifier_tooltip = we_diamonds5_tt
+			}
+		}
+		congo_israel_diamonds = {
+			allowed = {
+				country_exists = ISR
+				304 = {
+					is_controlled_by = ROOT
+				}
+			}
+			allowed_civil_war = { always = yes }
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: add idea namibia_israel_diamonds"
+				ROOT = {
+					give_resource_rights = {
+						receiver = ISR
+						state = 304
+						resources = { chromium }
+					}
+				}
+			}
+			on_remove = {
+				ISR = { remove_resource_rights = 304 }
+			}
+			picture = isr_diamonds
+			modifier = {
+				tax_gain_multiplier_modifier = 0.12
+				foreign_influence_defense_modifier = -0.05
+				custom_modifier_tooltip = we_diamonds6_tt
+			}
+		}
+		##########
+		ISR_silicon_wadi_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_internet_cencorship_economic
+			modifier = {
+				research_speed_factor = 0.05
+				offices_productivity = 0.05
+			}
+		}
+		ISR_silicon_wadi2_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = blr_internet_cencorship_economic
+			modifier = {
+				research_speed_factor = 0.1
+				offices_productivity = 0.1
+			}
+		}
+		ISR_cutzpah_thing = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = political_support
+			modifier = {
+				research_speed_factor = 0.1
+			}
+		}
+		ISR_quad_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = ces_border_reform
+			modifier = {
+				internal_factions_cost_factor = 0.1
+				consumer_goods_factor = -0.05
+				renewable_energy_gain_multiplier = 0.1
+				social_cost_multiplier_modifier = -0.05
+				health_cost_multiplier_modifier = -0.05
+			}
+		}
+		ISR_yotzma_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = NOR_printing_money
+			modifier = {
+				office_park_income_tax_modifier = -0.1
+				foreign_influence_defense_modifier = -0.05
+				offices_worker_requirement_modifier = 0.07
+				trade_laws_cost_factor = -0.05
+				return_on_investment_modifier = 0.05
+				receiving_investment_cost_modifier = -0.1
+				receiving_investment_duration_modifier = 0.05
+			}
+		}
+		ISR_increased_taxation = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = poor_economy
+			modifier = {
+				tax_gain_multiplier_modifier = 0.15
+				productivity_growth_modifier = -0.05
+				high_unemployment_threshold_modifier = -0.05
+				receiving_investment_duration_modifier = -0.05
+				receiving_investment_cost_modifier = 0.1
+				econ_cycle_upg_cost_multiplier_modifier = 0.05
+			}
+		}
+		ISR_industry_focus_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = industrial_focus
+			modifier = {
+				consumer_goods_factor = -0.05
+				production_speed_buildings_factor = 0.10
+			}
+		}
+		ISR_education_focus_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = political_support
+			modifier = {
+				research_speed_factor = 0.05
+				education_cost_multiplier_modifier = -0.05
+			}
+		}
+		ISR_social_focus_idea = {
+			allowed_civil_war = { always = yes }
+			picture = research_bonus
+
+			modifier = {
+				health_cost_multiplier_modifier = -0.05
+				social_cost_multiplier_modifier = -0.03
+			}
+		}
+		israel_new_intifada = {
+			picture = research_bonus
+			modifier = {
+				stability_factor = -0.10
+				political_power_factor = -0.10
+				production_speed_buildings_factor = -0.25
+				neutrality_drift = 0.05
+			}
+		}
+		ISR_idea_eacu_cooperation = {
+
+			picture = sov_eaes_idea
+			modifier = {
+				war_support_factor = -0.02
+				stability_factor = 0.02
+				local_resources_factor = 0.10
+			}
+		}
+		ISR_idea_fir_ukr_work = {
+
+			picture = deal_with_the_devil
+			modifier = {
+				tax_gain_multiplier_modifier = 0.1
+				mil_facs_worker_requirement_modifier = 0.05
+				civ_facs_worker_requirement_modifier = 0.05
+				resource_sector_workers_modifier = 0.05
+			}
+		}
+		ISR_idea_two_ukr_work = {
+
+			picture = Ukrainian_minority
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				mil_facs_worker_requirement_modifier = -0.05
+				civ_facs_worker_requirement_modifier = -0.05
+				resource_sector_workers_modifier = -0.05
+			}
+		}
+		israeli_intelligenc_idea = {
+
+			allowed = { original_tag = ISR }
+			allowed_civil_war = { always = yes }
+			picture = spr_international_brigades
+			modifier = {
+				intelligence_agency_defense = 0.5
+				intel_network_gain_factor = 0.15
+				foreign_influence_modifier = 0.02
+				custom_modifier_tooltip = mossad_spend_tt
+			}
+		}
+		israeli_intelligenc2_idea = {
+
+			allowed = { original_tag = ISR }
+			allowed_civil_war = { always = yes }
+			picture = spr_international_brigades
+			modifier = {
+				intelligence_agency_defense = 0.5
+				intel_network_gain_factor = 0.15
+				root_out_resistance_effectiveness_factor = 0.25
+				influence_coup_modifier = 0.02
+				foreign_influence_modifier = 0.05
+				custom_modifier_tooltip = mossad_spend2_tt
+			}
+		}
+		israeli_intelligenc3_idea = {
+
+			allowed = { original_tag = ISR }
+			allowed_civil_war = { always = yes }
+			picture = spr_international_brigades
+			modifier = {
+				intelligence_agency_defense = 0.5
+				intel_network_gain_factor = 0.15
+				root_out_resistance_effectiveness_factor = 0.25
+				influence_coup_modifier = 0.05
+				foreign_influence_modifier = 0.07
+				foreign_influence_auto_influence_cap_modifier = 1
+				custom_modifier_tooltip = mossad_spend3_tt
+			}
+		}
+		ISR_mossad_military_advisors = {
+			picture = army_cons
+			modifier = {
+				max_command_power = 15
+				max_planning = 0.12
+				special_forces_cap = 0.01
+			}
+		}
+		ISR_government_company_hacked = {
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			picture = SWE_neither_death_nor_dishonor
+			targeted_modifier = {
+				tag = PER
+				defense_bonus_against = 0.10
+				attack_bonus_against = 0.15
+			}
+		}
+		ISR_olympic_games_op = {
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			picture = SWE_neither_death_nor_dishonor
+			targeted_modifier = {
+				tag = PER
+				defense_bonus_against = 0.05
+				recon_factor = 0.15
+			}
+		}
+		ISR_archive_stolen = {
+			allowed = {
+				original_tag = PER
+			}
+			allowed_civil_war = { always = yes }
+			picture = spr_crush_the_revolution
+			modifier = {
+				research_speed_factor = -0.05
+				rocket_attack_factor = -0.1
+			}
+		}
+		ISR_archive_destroyed = {
+			allowed = {
+				original_tag = PER
+			}
+			allowed_civil_war = { always = yes }
+			picture = spr_crush_the_revolution
+			modifier = {
+				research_speed_factor = -0.05
+			}
+		}
+		ISR_drone_better_operations = {
+			picture = mig
+			modifier = {
+				air_manpower_requirement_factor = -0.05
+				air_bombing_targetting = 0.05
+				air_accidents_factor = -0.5
+				spysat_production_speed_modifier = 0.05
+			}
+			equipment_bonus = {
+				medium_plane_suicide_airframe = {
+					build_cost_ic = -0.30
+					instant = yes
+				}
+			}
+		}
+		#######Police
+		ISR_police_1 = {
+			picture = incompetent_officiers
+			modifier = {
+				foreign_influence_defense_modifier = 0.02
+				stability_factor = 0.03
+				expected_police_modifier = 1
+				crime_fighting_cost_factor = 0.02
+			}
+		}
+		ISR_police_2 = {
+			picture = national_defenders
+			modifier = {
+				conscription_factor = -0.03
+				foreign_influence_defense_modifier = 0.04
+				stability_factor = 0.03
+				expected_police_modifier = 1
+				crime_fighting_cost_factor = 0.04
+			}
+		}
+		ISR_police_3 = {
+			picture = army_cons
+			modifier = {
+				conscription_factor = -0.03
+				foreign_influence_defense_modifier = 0.04
+				stability_factor = 0.04
+				expected_police_modifier = 1
+				crime_fighting_cost_factor = 0.04
+				resistance_target = -0.15
+			}
+		}
+		#######Nat guard
+		ISR_nat_guard_1 = {
+			picture = SWE_ga_pa_tactics
+			modifier = {
+				conscription_factor = 0.03
+				war_support_factor = 0.02
+				defensive_war_stability_factor = 0.05
+				expected_mil_modifier = 1
+				Military_Spending_cost_factor = 0.02
+			}
+		}
+		ISR_nat_guard_2 = {
+			picture = SWE_ga_pa_tactics
+			modifier = {
+				conscription_factor = 0.05
+				dig_in_speed_factor = 0.05
+				war_support_factor = 0.02
+				defensive_war_stability_factor = 0.05
+				expected_mil_modifier = 1
+				Military_Spending_cost_factor = 0.04
+				land_bunker_effectiveness_factor = 0.03
+			}
+		}
+		ISR_nat_guard_3 = {
+			picture = SWE_ga_pa_tactics
+			modifier = {
+				conscription_factor = 0.05
+				dig_in_speed_factor = 0.05
+				war_support_factor = 0.04
+				defensive_war_stability_factor = 0.05
+				expected_mil_modifier = 1
+				Military_Spending_cost_factor = 0.04
+				land_bunker_effectiveness_factor = 0.05
+			}
+		}
+		#######
+		ISR_grain_bought = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = SWE_hungershield
+			modifier = {
+				agriculture_workers_modifier = -0.1
+				agriculture_tax_modifier = 0.05
+				monthly_population = 0.05
+				trade_opinion_factor = 0.5
+			}
+		}
+		#######
+		ISR_iran_def_idea = {
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = defense
+			modifier = {
+				drift_defence_factor = 0.05
+				ai_focus_defense_factor = 0.05
+			}
+			targeted_modifier = { tag = PER attack_bonus_against = 0.05 }
+		}
+		ISR_iran_wat_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = CUB_revived_agro
+			modifier = {
+				agriculture_workers_modifier = -0.05
+				agriculture_tax_modifier = 0.05
+				agricolture_productivity_modifier = 0.1
+			}
+		}
+		ISR_isr_iran_oil = {
+
+			picture = protoil
+			modifier = {
+				production_oil_factor = 0.05
+				oil_export_multiplier_modifier = 0.1
+				trade_laws_cost_factor = -0.05
+			}
+			targeted_modifier = {
+				tag = PER
+				country_resource_oil = 10
+				extra_trade_to_target_factor = 0.1
+			}
+			targeted_modifier = {
+				tag = ISR
+				country_resource_oil = 4
+				extra_trade_to_target_factor = 0.1
+			}
+		}
+		ISR_isr_iran_int = {
+
+			picture = secret_police
+			modifier = {
+				influence_coup_modifier = 0.1
+				foreign_influence_home_continent_modifier = 0.05
+				own_operative_capture_chance_factor = -0.05
+			}
+		}
+	ISR_isr_iran_int_2 = {
+
+		picture = secret_police
+		modifier = {
+			initiative_factor = 0.05
+			max_planning_factor = 0.05
+			recon_factor = 0.05
+			recon_factor_while_entrenched = 0.1
+		}
+	}
+	ISR_gulf_mossad_protecc = {
+
+		picture = unit_log
+		cancel = { has_war_with = ISR }
+		modifier = {
+			custom_modifier_tooltip = canc_if_isrwar_tt
+		}
+		targeted_modifier = {
+			tag = PER
+			foreign_influence_defense_modifier = 0.1
+		}
+		targeted_modifier = {
+			tag = ISR
+			foreign_influence_defense_modifier = -0.05
+		}
+	}
+	israel_observer_african_union = {
+		picture = AU_member
+		modifier = {
+			political_power_factor = 0.05
+			opinion_gain_monthly = 5
+		}
+	}
+	idea_israel_negev_forum = {
+		picture = GFX_idea_israel_negev_forum
+		modifier = {
+			cic_construction_boost_factor = 0.05
+			production_speed_buildings_factor = 0.05
+			projects_cost_modifier = -0.05
+			receiving_investment_cost_modifier = -0.05
+		}
+	}
+	ISR_visa_free_moroc = {
+		picture = visa_free
+		modifier = {
+			trade_opinion_factor = 0.05
+			resource_export_multiplier_modifier = 0.05
+			democratic_drift = 0.02
+			drift_defence_factor = -0.02
+			improve_relations_maintain_cost_factor = -0.05
+		}
+	}
+	ISR_eth_jews_migr = {
+		picture = population_rapid_growth
+		modifier = {
+			monthly_population = -0.05
+			social_cost_multiplier_modifier = -0.02
+		}
+	}
+	ISR_eth_jews_migr_isr = {
+		picture = population_stagnation
+		modifier = {
+			monthly_population = 0.05
+			social_cost_multiplier_modifier = 0.02
+		}
+	}
+	ISR_sinai_investig = {
+
+		picture = SWE_all_cards_on_deck
+		modifier = {
+			trade_laws_cost_factor = -0.1
+			tax_gain_multiplier_modifier = 0.05
+			Foreign_Intervention_Law_cost_factor = -0.05
+			crime_fighting_cost_factor = -0.05
+		}
+	}
+	ISR_egy_surveillance_drones = {
+
+		picture = air_support
+		allowed = {
+			original_tag = EGY
+		}
+		cancel = {
+			NOT = {
+				OR = {
+					has_war_with = ISI
+					has_civil_war = yes
+				}
+			}
+		}
+		allowed_civil_war = {
+			always = yes
+		}
+		modifier = {
+			max_planning_factor = 0.15
+			intel_network_gain_factor = 0.3
+		}
+	}
+	#######
+		ISR_gideon_plan_idea = {
+
+			name = ISR_gideon_plan_idea
+			picture = mountain_defence_blue
+			modifier = {
+				conscription_factor = 0.02
+				mobilization_speed = 0.3
+				experience_gain_army = 0.25
+				weekly_manpower = 500
+			}
+		}
+		ISR_gideon_plan_idea_cyprus_1 = {
+
+			name = ISR_gideon_plan_idea
+			picture = mountain_defence_blue
+			modifier = {
+				conscription_factor = 0.02
+				mobilization_speed = 0.3
+				experience_gain_army = 0.25
+				weekly_manpower = 500
+				offence = 0.25
+			}
+		}
+		ISR_gideon_plan_idea_cyprus_2 = {
+
+			name = ISR_gideon_plan_idea
+			picture = mountain_defence_blue
+			modifier = {
+				conscription_factor = 0.02
+				mobilization_speed = 0.3
+				experience_gain_army = 0.25
+				weekly_manpower = 500
+				offence = 0.25
+				breakthrough_factor = 0.3
+			}
+		}
+		ISR_gideon_plan_idea_usa_1 = {
+
+			name = ISR_gideon_plan_idea
+			picture = mountain_defence_blue
+			modifier = {
+				conscription_factor = 0.02
+				mobilization_speed = 0.3
+				experience_gain_army = 0.25
+				weekly_manpower = 500
+				army_speed_factor = 0.25
+			}
+		}
+		ISR_gideon_plan_idea_usa_2 = {
+
+			name = ISR_gideon_plan_idea
+			picture = mountain_defence_blue
+			modifier = {
+				conscription_factor = 0.02
+				mobilization_speed = 0.3
+				experience_gain_army = 0.25
+				weekly_manpower = 500
+				army_speed_factor = 0.25
+				max_planning_factor = 0.5
+			}
+		}
+		ISR_tenufa_project_idea = {
+
+			name = ISR_tenufa_project_idea
+			picture = mountain_defence_blue
+			modifier = {
+				army_personnel_cost_multiplier_modifier = -0.15
+				equipment_cost_multiplier_modifier = -0.15
+				command_power_gain = 0.25
+			}
+		}
+		ISR_tenufa_project_idea_cyprus_1 = {
+
+			name = ISR_tenufa_project_idea
+			picture = mountain_defence_blue
+			modifier = {
+				army_personnel_cost_multiplier_modifier = -0.15
+				equipment_cost_multiplier_modifier = -0.15
+				command_power_gain = 0.25
+				offence = 0.25
+			}
+		}
+		ISR_tenufa_project_idea_cyprus_2 = {
+
+			name = ISR_tenufa_project_idea
+			picture = mountain_defence_blue
+			modifier = {
+				army_personnel_cost_multiplier_modifier = -0.15
+				equipment_cost_multiplier_modifier = -0.15
+				command_power_gain = 0.25
+				offence = 0.25
+			}
+		}
+		ISR_tenufa_project_idea_usa_1 = {
+
+			name = ISR_tenufa_project_idea
+			picture = mountain_defence_blue
+			modifier = {
+				army_personnel_cost_multiplier_modifier = -0.15
+				equipment_cost_multiplier_modifier = -0.15
+				command_power_gain = 0.25
+				army_speed_factor = 0.25
+			}
+		}
+		ISR_tenufa_project_idea_usa_2 = {
+
+			name = ISR_tenufa_project_idea
+			picture = mountain_defence_blue
+			modifier = {
+				army_personnel_cost_multiplier_modifier = -0.15
+				equipment_cost_multiplier_modifier = -0.15
+				command_power_gain = 0.25
+				army_speed_factor = 0.25
+				max_planning_factor = 0.5
+			}
+		}
+		ISR_paphos_drills_1 = {
+
+			picture = mountain_defence_blue
+			allowed = {
+				NOT = { has_war_with = CYP }
+			}
+			targeted_modifier = {
+				tag = HEZ
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			modifier = {
+				army_morale_factor = 0.05
+				army_speed_factor = 0.03
+				army_org_factor = 0.02
+				army_breakthrough_against_major_factor = 0.05
+			}
+		}
+		ISR_paphos_drills_2 = {
+
+			picture = mountain_defence_blue
+			name = ISR_paphos_drills_1
+			allowed = {
+				NOT = { has_war_with = CYP }
+			}
+			targeted_modifier = {
+				tag = LEB
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = HEZ
+				attack_bonus_against = 0.1
+				defense_bonus_against = 0.1
+			}
+			targeted_modifier = {
+				tag = SYR
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			modifier = {
+				army_morale_factor = 0.10
+				army_speed_factor = 0.05
+				army_org_factor = 0.04
+				army_breakthrough_against_major_factor = 0.05
+			}
+		}
+		ISR_paphos_drills_3 = {
+
+			picture = mountain_defence_blue
+			name = ISR_paphos_drills_1
+			allowed = {
+				NOT = { has_war_with = CYP }
+			}
+			targeted_modifier = {
+				tag = LEB
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = HEZ
+				attack_bonus_against = 0.1
+				defense_bonus_against = 0.1
+			}
+			targeted_modifier = {
+				tag = SYR
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			modifier = {
+				army_morale_factor = 0.15
+				conscription_factor = 0.06
+				army_speed_factor = 0.05
+				army_org_factor = 0.05
+				army_breakthrough_against_major_factor = 0.05
+			}
+		}
+		ISR_paphos_drills_4 = {
+
+			picture = mountain_defence_blue
+			name = ISR_paphos_drills_1
+			allowed = {
+				NOT = { has_war_with = CYP }
+			}
+			targeted_modifier = {
+				tag = LEB
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = HEZ
+				attack_bonus_against = 0.1
+				defense_bonus_against = 0.1
+			}
+			targeted_modifier = {
+				tag = SYR
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			modifier = {
+				army_morale_factor = 0.15
+				conscription_factor = 0.06
+				army_speed_factor = 0.05
+				army_org_factor = 0.05
+				army_attack_factor = 0.05
+				army_breakthrough_against_major_factor = 0.1
+			}
+		}
+		ISR_sayaret_matkal_drills_1 = {
+
+			picture = USA_gun_funding
+			allowed = {
+				NOT = { has_war_with = USA }
+			}
+			targeted_modifier = {
+				tag = HAM
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			modifier = {
+				experience_gain_army_factor = 0.05
+				training_time_army_factor = 0.05
+				choose_preferred_tactics_cost = 3
+				acclimatization_hot_climate_gain_factor = 0.1
+				army_breakthrough_against_minor_factor = 0.05
+			}
+		}
+		ISR_sayaret_matkal_drills_2 = {
+
+			picture = USA_gun_funding
+			name = ISR_sayaret_matkal_drills_1
+			allowed = {
+				NOT = { has_war_with = USA }
+			}
+			targeted_modifier = {
+				tag = EGY
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = PAL
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = HAM
+				attack_bonus_against = 0.1
+				defense_bonus_against = 0.1
+			}
+			modifier = {
+				experience_gain_army_factor = 0.05
+				training_time_army_factor = 0.05
+				choose_preferred_tactics_cost = 3
+				acclimatization_hot_climate_gain_factor = 0.1
+				army_breakthrough_against_minor_factor = 0.05
+			}
+		}
+		ISR_sayaret_matkal_drills_3 = {
+
+			picture = USA_gun_funding
+			name = ISR_sayaret_matkal_drills_1
+			allowed = {
+				NOT = { has_war_with = USA }
+			}
+			targeted_modifier = {
+				tag = EGY
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = PAL
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = HAM
+				attack_bonus_against = 0.1
+				defense_bonus_against = 0.1
+			}
+			modifier = {
+				experience_gain_army_factor = 0.07
+				training_time_army_factor = 0.07
+				choose_preferred_tactics_cost = 3
+				acclimatization_hot_climate_gain_factor = 0.15
+				army_breakthrough_against_minor_factor = 0.1
+			}
+		}
+		ISR_sayaret_matkal_drills_4 = {
+
+			picture = USA_gun_funding
+			name = ISR_sayaret_matkal_drills_1
+			allowed = {
+				NOT = { has_war_with = USA }
+			}
+			targeted_modifier = {
+				tag = EGY
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = PAL
+				attack_bonus_against = 0.1
+				defense_bonus_against = 0.1
+			}
+			targeted_modifier = {
+				tag = HAM
+				attack_bonus_against = 0.1
+				defense_bonus_against = 0.1
+			}
+			modifier = {
+				experience_gain_army_factor = 0.1
+				training_time_army_factor = 0.1
+				choose_preferred_tactics_cost = 3
+				acclimatization_hot_climate_gain_factor = 0.15
+				army_breakthrough_against_minor_factor = 0.1
+			}
+		}
+		ISR_modernization_of_armored_forces_1_idea = {
+
+			name = ISR_modernization_of_armored_forces_idea
+			picture = armor
+			equipment_bonus = {
+				medium_tank_destroyer_chassis = {
+					build_cost_ic = -0.02 instant = yes
+				}
+				medium_tank_chassis = {
+					build_cost_ic = -0.02 instant = yes
+				}
+			}
+		}
+
+		ISR_modernization_of_armored_forces_2_idea = {
+
+			name = ISR_modernization_of_armored_forces_idea
+			picture = armor
+			equipment_bonus = {
+				medium_tank_chassis = {
+					build_cost_ic = -0.04 instant = yes
+				}
+				medium_tank_amphibious_chassis = {
+					build_cost_ic = -0.06 instant = yes
+				}
+				medium_tank_destroyer_chassis = {
+					build_cost_ic = -0.02 instant = yes
+				}
+				medium_tank_chassis = {
+					build_cost_ic = -0.05 instant = yes
+				}
+			}
+		}
+
+		ISR_modernization_of_armored_forces_3_idea = {
+
+			name = ISR_modernization_of_armored_forces_idea
+			picture = armor
+			equipment_bonus = {
+				medium_tank_chassis = {
+					build_cost_ic = -0.04 instant = yes
+				}
+				medium_tank_amphibious_chassis = {
+					build_cost_ic = -0.08 instant = yes
+				}
+				medium_tank_destroyer_chassis = {
+					build_cost_ic = -0.02 instant = yes
+				}
+				medium_tank_chassis = {
+					build_cost_ic = -0.05 instant = yes
+				}
+			}
+		}
+		ISR_vie_isr_coop = {
+
+			picture = blr_agro_industry_idea
+			allowed = {
+				NOT = { has_war_with = VIE }
+			}
+			modifier = {
+				agricolture_productivity_modifier = 0.01
+				agriculture_tax_modifier = 0.07
+				production_speed_buildings_factor = 0.05
+				agriculture_workers_modifier = -0.03
+			}
+		}
+		ISR_us_visa_free = {
+
+			picture = desegregation2
+			allowed = {
+				NOT = { has_war_with = USA }
+			}
+			modifier = {
+				office_park_income_tax_modifier = 0.10
+				foreign_influence_defense_modifier = -0.05
+			}
+		}
+		ISR_chi_isr_forum = {
+
+			picture = NOR_printing_money
+			modifier = {
+				research_speed_factor = 0.05
+				trade_opinion_factor = 0.05
+				opinion_gain_monthly_factor = 0.05
+			}
+		}
+		ISR_us_dev_zon = {
+
+			picture = NOR_printing_money
+			modifier = {
+				consumer_goods_factor = -0.15
+				trade_opinion_factor = 0.05
+			}
+		}
+		citizenship_denial = {
+
+			picture = blank
+			modifier = {
+				democratic_drift = -0.02
+				stability_factor = -0.1
+				war_support_factor = -0.05
+			}
+		}
+		ISR_one_country_two_systems = {
+
+			picture = blank
+			modifier = {
+				democratic_drift = 0.05
+				stability_factor = -0.1
+				war_support_factor = 0.05
+				consumer_goods_factor = 0.1
+			}
+		}
+		alice_miller_v_ministry_of_defence = {
+
+
+			picture = international_treaty2
+			modifier = {
+				military_status_women_cost_factor = 5
+				war_support_factor = -0.05
+			}
+		}
+		harari_compromise = {
+
+
+			picture = syria_jewish_rights_guaranteed2
+			modifier = {
+				political_power_factor = -0.25
+				corruption_cost_factor = 0.1
+			}
+		}
+		arab_mafia_1 = {
+
+
+			picture = politicised_army2
+			modifier = {
+				tax_gain_multiplier_modifier = -0.1
+				stability_factor = -0.05
+				police_cost_multiplier_modifier = 0.1
+			}
+		}
+		arab_mafia_2 = {
+
+
+			picture = politicised_army2
+			modifier = {
+				tax_gain_multiplier_modifier = -0.08
+				stability_factor = -0.04
+				police_cost_multiplier_modifier = 0.08
+			}
+		}
+		arab_mafia_3 = {
+
+
+			picture = politicised_army2
+			modifier = {
+				tax_gain_multiplier_modifier = -0.06
+				stability_factor = -0.03
+				police_cost_multiplier_modifier = 0.06
+			}
+		}
+		arab_mafia_4 = {
+
+
+			picture = politicised_army2
+			modifier = {
+				tax_gain_multiplier_modifier = -0.04
+				stability_factor = -0.02
+				police_cost_multiplier_modifier = 0.04
+			}
+		}
+		arab_mafia_5 = {
+
+
+			picture = politicised_army2
+			modifier = {
+				tax_gain_multiplier_modifier = -0.02
+				stability_factor = -0.01
+				police_cost_multiplier_modifier = 0.02
+			}
+		}
+		unintegrated_ultraorthodox_community_1 = {
+
+
+			picture = orthodox_community
+			modifier = {
+				monthly_population = 0.35
+				social_cost_multiplier_modifier = 0.07
+				health_cost_multiplier_modifier = 0.07
+				education_cost_multiplier_modifier = 0.07
+			}
+		}
+		unintegrated_ultraorthodox_community_2 = {
+
+
+			picture = orthodox_community
+			modifier = {
+				monthly_population = 0.35
+				social_cost_multiplier_modifier = 0.065
+				health_cost_multiplier_modifier = 0.065
+				education_cost_multiplier_modifier = 0.065
+			}
+		}
+		unintegrated_ultraorthodox_community_3 = {
+
+
+			picture = orthodox_community
+			modifier = {
+				monthly_population = 0.35
+				social_cost_multiplier_modifier = 0.06
+				health_cost_multiplier_modifier = 0.06
+				education_cost_multiplier_modifier = 0.06
+			}
+		}
+		unintegrated_ultraorthodox_community_4 = {
+
+
+			picture = orthodox_community
+			modifier = {
+				monthly_population = 0.35
+				social_cost_multiplier_modifier = 0.05
+				health_cost_multiplier_modifier = 0.05
+				education_cost_multiplier_modifier = 0.05
+			}
+		}
+		unintegrated_ultraorthodox_community_5 = {
+
+
+			picture = orthodox_community
+			modifier = {
+				monthly_population = 0.35
+				social_cost_multiplier_modifier = 0.02
+				health_cost_multiplier_modifier = 0.02
+				education_cost_multiplier_modifier = 0.02
+			}
+		}
+		unintegrated_ultraorthodox_community_6 = {
+
+
+			picture = orthodox_community
+			modifier = {
+				monthly_population = 0.35
+				social_cost_multiplier_modifier = 0.01
+				health_cost_multiplier_modifier = 0.01
+				education_cost_multiplier_modifier = 0.01
+			}
+		}
+		unintegrated_ultraorthodox_community_7 = {
+
+
+			picture = orthodox_community
+			modifier = {
+				monthly_population = 0.35
+				consumer_goods_factor = -0.01
+				social_cost_multiplier_modifier = -0.055
+				health_cost_multiplier_modifier = -0.055
+				education_cost_multiplier_modifier = -0.055
+			}
+		}
+		unintegrated_ultraorthodox_community_8 = {
+
+
+			picture = orthodox_community
+			modifier = {
+				monthly_population = 0.35
+				consumer_goods_factor = -0.01
+				social_cost_multiplier_modifier = -0.02
+				health_cost_multiplier_modifier = -0.02
+				education_cost_multiplier_modifier = -0.02
+			}
+		}
+		legacy_of_yitzhak_rabin = {
+
+
+			picture = yitzak_rabin
+			modifier = {
+				democratic_drift = 0.1
+				nationalist_drift = -0.1
+			}
+		}
+		oslo_accords_1 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				war_support_factor = 0.05
+			}
+			targeted_modifier = {
+				tag = PAL
+				trade_opinion_factor = 0.05
+				recon_factor = 0.02
+			}
+		}
+		oslo_accords_2 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				war_support_factor = 0.05
+				political_power_gain = -0.1
+			}
+			targeted_modifier = {
+				tag = PAL
+				trade_opinion_factor = 0.05
+				recon_factor = 0.02
+			}
+		}
+		oslo_accords_3 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				war_support_factor = 0.05
+				political_power_gain = 0.1
+			}
+			targeted_modifier = {
+				tag = PAL
+				trade_opinion_factor = 0.05
+				recon_factor = 0.02
+			}
+		}
+		oslo_accords_4 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				war_support_factor = 0.05
+				political_power_gain = 0.1
+				production_factory_efficiency_gain_factor = 0.1
+			}
+			targeted_modifier = {
+				tag = PAL
+				trade_opinion_factor = 0.05
+				recon_factor = 0.02
+			}
+		}
+		oslo_accords_5 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				war_support_factor = 0.05
+				political_power_gain = 0.1
+				production_factory_efficiency_gain_factor = 0.1
+			}
+			targeted_modifier = {
+				tag = PAL
+				trade_opinion_factor = 0.05
+				recon_factor = 0.02
+			}
+		}
+		anapolis_memorandum_1 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+			}
+		}
+		anapolis_memorandum_2 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+				political_power_gain = -0.1
+			}
+		}
+		anapolis_memorandum_3 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+				political_power_gain = 0.1
+			}
+		}
+		anapolis_memorandum_4 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+				political_power_gain = 0.1
+				production_factory_efficiency_gain_factor = 0.1
+			}
+		}
+		anapolis_memorandum_5 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+				political_power_gain = 0.1
+				production_factory_efficiency_gain_factor = 0.1
+				war_support_factor = 0.05
+			}
+		}
+		anapolis_memorandum_6 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+				production_speed_buildings_factor = 0.1
+			}
+		}
+		anapolis_memorandum_7 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+				political_power_gain = -0.1
+				production_speed_buildings_factor = 0.1
+			}
+		}
+		anapolis_memorandum_8 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+				political_power_gain = 0.1
+				production_speed_buildings_factor = 0.1
+			}
+		}
+		anapolis_memorandum_9 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+				political_power_gain = 0.1
+				production_factory_efficiency_gain_factor = 0.1
+				production_speed_buildings_factor = 0.1
+			}
+		}
+		anapolis_memorandum_10 = {
+
+
+			picture = isr_oslo1
+			modifier = {
+				stability_factor = 0.1
+				political_power_gain = 0.1
+				production_factory_efficiency_gain_factor = 0.1
+				war_support_factor = 0.05
+				production_speed_buildings_factor = 0.1
+			}
+		}
+		daneils_final_prophecy_1 = {
+
+
+			picture = walking_roupe
+			modifier = {
+				political_power_factor = -0.2
+			}
+		}
+		daneils_final_prophecy_2 = {
+
+
+			picture = walking_roupe
+			modifier = {
+				political_power_factor = -0.15
+			}
+		}
+		daneils_final_prophecy_3 = {
+
+
+			picture = walking_roupe
+			modifier = {
+				political_power_factor = -0.1
+			}
+		}
+		daneils_final_prophecy_4 = {
+
+
+			picture = walking_roupe
+			modifier = {
+				political_power_factor = -0.05
+			}
+		}
+		peoples_army_1 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = 0.25
+				personnel_cost_multiplier_modifier = -0.1
+				command_power_gain = 0.065
+				conscription_factor = 0.05
+				war_support_factor = -0.10
+				political_power_gain = -0.10
+				army_morale_factor = -0.1
+			}
+		}
+		peoples_army_2 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = 0.2
+				personnel_cost_multiplier_modifier = -0.08
+				command_power_gain = 0.055
+				conscription_factor = 0.06
+				war_support_factor = -0.08
+				political_power_gain = -0.08
+				army_morale_factor = -0.08
+			}
+		}
+		peoples_army_3 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = 0.2
+				personnel_cost_multiplier_modifier = -0.06
+				command_power_gain = 0.045
+				conscription_factor = 0.065
+				war_support_factor = -0.06
+				political_power_gain = -0.06
+				army_morale_factor = -0.06
+			}
+		}
+		peoples_army_4 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = 0.1
+				personnel_cost_multiplier_modifier = -0.04
+				command_power_gain = 0.035
+				conscription_factor = 0.065
+				war_support_factor = -0.04
+				political_power_gain = -0.04
+				army_morale_factor = -0.04
+			}
+		}
+		peoples_army_5 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = 0.05
+				personnel_cost_multiplier_modifier = -0.02
+				command_power_gain = 0.025
+				conscription_factor = 0.07
+				war_support_factor = -0.02
+				political_power_gain = -0.02
+				army_morale_factor = -0.02
+			}
+		}
+		peoples_army_6 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = 0.05
+				personnel_cost_multiplier_modifier = -0.02
+				command_power_gain = 0.025
+				conscription_factor = 0.075
+				war_support_factor = 0.02
+				political_power_gain = 0.02
+				army_morale_factor = 0.02
+			}
+		}
+		peoples_army_7 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = -0.1
+				personnel_cost_multiplier_modifier = 0.02
+				command_power_gain = -0.05
+				conscription_factor = 0.08
+				war_support_factor = 0.04
+				political_power_gain = 0.04
+				army_morale_factor = 0.02
+			}
+		}
+		peoples_army_8 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = -0.15
+				personnel_cost_multiplier_modifier = 0.04
+				command_power_gain = -0.10
+				conscription_factor = 0.085
+				war_support_factor = 0.08
+				political_power_gain = 0.08
+				army_morale_factor = 0.04
+			}
+		}
+		peoples_army_9 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = -0.15
+				personnel_cost_multiplier_modifier = 0.06
+				command_power_gain = -0.15
+				conscription_factor = 0.09
+				war_support_factor = 0.12
+				political_power_gain = 0.12
+				army_morale_factor = 0.06
+			}
+		}
+		peoples_army_10 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = -0.15
+				personnel_cost_multiplier_modifier = 0.08
+				command_power_gain = -0.20
+				conscription_factor = 0.095
+				war_support_factor = 0.16
+				political_power_gain = 0.16
+				army_morale_factor = 0.08
+			}
+		}
+		peoples_army_11 = {
+
+
+			picture = the_peoples_army
+			modifier = {
+				army_org_factor = -0.2
+				personnel_cost_multiplier_modifier = 0.1
+				command_power_gain = -0.25
+				conscription_factor = 0.1
+				war_support_factor = 0.2
+				political_power_gain = 0.2
+				army_morale_factor = 0.1
+			}
+		}
+		eddaic_ghost_1 = {
+
+
+			picture = the_eddaic_ghost
+			modifier = {
+				stability_factor = -0.10
+				political_power_factor = -0.10
+				research_speed_factor = -0.10
+				corruption_cost_factor = 1.0
+				propaganda_campaign_cost_modifier = 1.0
+			}
+		}
+		eddaic_ghost_2 = {
+
+
+			picture = the_eddaic_ghost
+			modifier = {
+				stability_factor = -0.075
+				political_power_factor = -0.075
+				research_speed_factor = -0.075
+				corruption_cost_factor = 0.75
+				propaganda_campaign_cost_modifier = 0.75
+			}
+		}
+		eddaic_ghost_3 = {
+
+
+			picture = the_eddaic_ghost
+			modifier = {
+				stability_factor = -0.05
+				political_power_factor = -0.05
+				research_speed_factor = -0.05
+				corruption_cost_factor = 0.50
+				propaganda_campaign_cost_modifier = 0.50
+			}
+		}
+		eddaic_ghost_4 = {
+
+
+			picture = the_eddaic_ghost
+			modifier = {
+				stability_factor = -0.035
+				political_power_factor = -0.035
+				research_speed_factor = -0.035
+				corruption_cost_factor = 0.35
+				propaganda_campaign_cost_modifier = 0.35
+			}
+		}
+		eddaic_ghost_5 = {
+
+
+			picture = the_eddaic_ghost
+			modifier = {
+				stability_factor = -0.020
+				political_power_factor = -0.020
+				research_speed_factor = -0.020
+				corruption_cost_factor = 0.20
+				propaganda_campaign_cost_modifier = 0.20
+			}
+		}
+		eddaic_ghost_6 = {
+
+
+			picture = the_eddaic_ghost
+			modifier = {
+				stability_factor = -0.010
+				political_power_factor = -0.010
+				research_speed_factor = -0.010
+				corruption_cost_factor = 0.10
+				propaganda_campaign_cost_modifier = 0.10
+			}
+		}
+		security_belt = {
+			picture = occupation_of_lebanon
+			modifier = {
+				war_support_weekly = -0.0025
+				land_night_attack = -0.005
+				army_attack_factor = -0.005
+				experience_gain_army = 0.05
+			}
+		}
+		security_belt2 = {
+			picture = occupation_of_lebanon
+			modifier = {
+				war_support_factor = -0.10
+				experience_gain_army = 0.05
+			}
+			targeted_modifier = {
+				tag = HEZ
+				attack_bonus_against = 0.03
+				defense_bonus_against = 0.03
+			}
+		}
+		west_bank_barrier_no_settlements = {
+
+			picture = ces_border_reform
+			targeted_modifier = {
+				tag = PAL
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.15
+			}
+		}
+		west_bank_barrier_with_settlements = {
+
+			picture = ces_border_reform
+			targeted_modifier = {
+				tag = PAL
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.10
+			}
+		}
+		samarian_wine = {
+			picture = research_bonus
+			modifier = {
+				consumer_goods_factor = -0.05
+			}
+		}
+		operation_shover_galim_1 = {
+			picture = disorganized_army
+			modifier = {
+				army_core_defence_factor = 0.1
+				training_time_army_factor = -0.15
+			}
+		}
+		operation_shover_galim_2 = {
+			picture = disorganized_army
+			modifier = {
+				army_core_defence_factor = 0.1
+				training_time_army_factor = -0.15
+				command_power_gain = 0.25
+				army_org_factor = 0.05
+			}
+		}
+		daniel_lions_cage_1 = {
+			picture = disorganized_army
+			modifier = {
+				army_core_defence_factor = 0.1
+				training_time_army_factor = -0.15
+				army_defence_factor = 0.05
+				army_attack_factor = 0.05
+			}
+		}
+		daniel_lions_cage_2 = {
+			picture = disorganized_army
+
+			modifier = {
+				army_core_defence_factor = 0.1
+				training_time_army_factor = -0.15
+				army_defence_factor = 0.05
+				army_attack_factor = 0.05
+				justify_war_goal_time = -0.15
+			}
+		}
+		anti_abbas_propaganda = {
+			modifier = {
+				stability_factor = -0.05
+				neutrality_drift = -0.01
+			}
+		}
+		anti_palestine_propaganda = {
+			modifier = {
+				war_support_weekly = 0.10
+			}
+		}
+		law_of_return = {
+			picture = low_popular_support3
+
+			modifier = {
+				MONTHLY_POPULATION = 0.5
+				drift_defence_factor = -0.1
+			}
+		}
+		right_of_return = {
+			picture = low_popular_support3
+
+			modifier = {
+				MONTHLY_POPULATION = 1
+				weekly_manpower = 10
+				stability_factor = -0.1
+			}
+		}
+		ISR_sion_production = { # The Si'on Productions
+			picture = isr_more_drones
+			equipment_bonus = {
+				medium_plane_suicide_airframe = {
+					build_cost_ic = -0.3
+					instant = yes
+				}
+			}
+		}
+		ISR_karabakh_victory = {
+
+			picture = arm_win_azer
+			allowed = {
+				always = yes
+			}
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.15
+				political_power_gain = 0.15
+			}
+		}
+		ISR_indian_imports = {
+			on_add = {
+				log = "[GetDateText]: [Root.GetName]: ISR_indian_imports idea added"
+				RAJ = {
+					add_opinion_modifier = {
+						target = ISR
+						modifier = small_increase
+					}
+					set_temp_variable = { percent_change = 2 }
+					set_temp_variable = { tag_index = RAJ }
+					set_temp_variable = { influence_target = ISR }
+					change_influence_percentage = yes
+				}
+			}
+			picture = SWE_saltsjobaden_agreement
+			allowed = {
+				NOT = { has_war_with = RAJ }
+			}
+			modifier = {
+				production_speed_buildings_factor = 0.1
+			}
+		}
+
+		###########
+		ISR_kill_agents_idea = {
+
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			picture = cold_war
+			modifier = {
+				intelligence_agency_defense = -0.1
+				recon_factor = -0.15
+				political_power_factor = -0.1
+			}
+		}
+		ISR_kill_scientist_idea = {
+
+			allowed = {
+				original_tag = PER
+			}
+			allowed_civil_war = { always = yes }
+			picture = cold_war
+			modifier = {
+				research_speed_factor = -0.15
+				rocket_attack_factor = -0.1
+			}
+		}
+		ISR_souleimani_killed_idea = {
+
+			allowed = {
+				original_tag = PER
+			}
+			allowed_civil_war = { always = yes }
+			picture = qasem_soleimani
+			modifier = {
+				defensive_war_stability_factor = -0.1
+				war_support_factor = -0.05
+			}
+			targeted_modifier = {
+				tag = ISR
+				attack_bonus_against = -0.05
+			}
+		}
+
+		ISR_jordan_waqf_slek = {
+
+			picture = ISR_allqsa
+			modifier = {
+				tax_gain_multiplier_modifier = 0.05
+				opinion_gain_monthly_same_ideology_factor = 0.05
+			}
+			targeted_modifier = {
+				tag = ISR
+				foreign_influence_modifier = 0.05
+			}
+		}
+		ISR_saud_waqf_slek = {
+
+			picture = islamic_world
+			modifier = {
+				tax_gain_multiplier_modifier = 0.05
+				opinion_gain_monthly_same_ideology_factor = 0.05
+			}
+			targeted_modifier = {
+				tag = ISR
+				foreign_influence_modifier = 0.05
+			}
+		}
+
+		ISR_jor_isr_treaty = {
+			cancel = {
+				OR = {
+					NOT = { country_exists = JOR }
+					NOT = { country_exists = ISR }
+					JOR = { has_war_with = ISR }
+				}
+			}
+			picture = islamic_world
+			modifier = {
+				receiving_investment_cost_modifier = -0.05
+			}
+			targeted_modifier = {
+				tag = ISR
+				investment_duration_modifier = 0.05
+				dockyard_income_tax_modifier = 0.05
+				return_on_investment_modifier = 0.02
+			}
+			targeted_modifier = {
+				tag = JOR
+				investment_duration_modifier = 0.05
+				dockyard_income_tax_modifier = 0.05
+				return_on_investment_modifier = 0.02
+			}
+		}
+
+		ISR_jor_water_share = {
+			cancel = {
+				OR = {
+					NOT = { country_exists = JOR }
+					NOT = { country_exists = ISR }
+					JOR = { has_war_with = ISR }
+				}
+			}
+			picture = water_conservation
+			modifier = {
+				agriculture_tax_modifier = 0.1
+				agricolture_productivity_modifier = 0.1
+			}
+		}
+		ISR_jor_attack_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = defense
+			modifier = {
+				drift_defence_factor = 0.05
+				ai_focus_aggressive_factor = 0.05
+			}
+			targeted_modifier = { tag = JOR attack_bonus_against = 0.15 }
+		}
+		ISR_jor_unloyal_mil_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = zombies
+			modifier = {
+				drift_defence_factor = -0.05
+				stability_factor = -0.10
+			}
+			targeted_modifier = { tag = ISR attack_bonus_against = -0.05 }
+		}
+		ISR_economic_startup = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = ETH_customs_barrier_ITA
+			modifier = {
+				tax_gain_multiplier_modifier = 0.1
+				army_personnel_cost_multiplier_modifier = -0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.05
+				tax_rate_change_multiplier_modifier = -0.1
+				interest_rate_multiplier_modifier = -2
+				receiving_investment_duration_modifier = 0.05
+			}
+		}
+		ISR_begin_projects = {
+
+			picture = construction
+			allowed = {
+				tag = ISR
+			}
+			modifier = {
+				productivity_growth_modifier = 0.08
+				consumer_goods_factor = -0.03
+				production_speed_buildings_factor = 0.05
+				truck_attrition_factor = -0.1
+			}
+		}
+		ISR_begin_projects2 = {
+
+			picture = construction
+			allowed = {
+				tag = ISR
+			}
+			modifier = {
+				productivity_growth_modifier = 0.08
+				tax_gain_multiplier_modifier = 0.05
+				agriculture_district_income_tax_modifier = 0.05
+				agricolture_productivity_modifier = 0.05
+
+			}
+		}
+		ISR_pmc_first_idea = {
+
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = zombies
+			modifier = {
+				send_volunteer_size = 5
+				send_volunteer_factor = 0.3
+				send_volunteer_divisions_required = -0.3
+				conscription_factor = 0.02
+			}
+		}
+		ISR_pmc_sec_idea = {
+
+			name = ISR_pmc_first_idea
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = zombies
+			modifier = {
+				send_volunteer_size = 5
+				send_volunteer_factor = 0.3
+				send_volunteer_divisions_required = -0.3
+				political_power_factor = 0.03
+				drift_defence_factor = 0.05
+				stability_factor = 0.05
+				training_time_factor = 0.03
+			}
+		}
+		ISR_pmc_three_idea = {
+
+			name = ISR_pmc_first_idea
+			allowed = {
+			}
+			allowed_civil_war = { always = yes }
+			picture = zombies
+			modifier = {
+				send_volunteer_size = 5
+				send_volunteer_factor = 0.3
+				send_volunteer_divisions_required = -0.3
+				political_power_factor = -0.02
+				drift_defence_factor = -0.05
+				stability_factor = -0.02
+				training_time_factor = -0.1
+				army_attack_factor = 0.05
+				conscription_factor = 0.04
+			}
+		}
+		titkadmu_idea = {
+			picture = national_unity
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				conscription_factor = 0.01
+				research_speed_factor = 0.03
+			}
+		}
+		madan_idea = {
+			picture = SWE_coastal_support
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				experience_gain_navy_factor = 0.05
+				navy_intel_factor = 0.1
+				navy_leader_start_coordination_level = 1
+				assign_navy_leader_cp_cost = -5
+				navy_anti_air_attack_factor = 0.05
+			}
+		}
+		#########AIR
+		##reserve
+		ISR_air_reservists_idea = {
+			name = ISR_air_reservists_idea
+			picture = planess_idea
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				airforce_personnel_cost_multiplier_modifier = -0.05
+				air_mission_xp_gain_factor = -0.05
+			}
+		}
+		ISR_air_reservists_idea2 = {
+			name = ISR_air_reservists_idea
+			picture = planess_idea
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				airforce_personnel_cost_multiplier_modifier = -0.15
+				air_mission_xp_gain_factor = -0.05
+				social_cost_multiplier_modifier = 0.05
+				defensive_war_stability_factor = 0.05
+			}
+		}
+		ISR_air_reservists_idea3 = {
+			name = ISR_air_reservists_idea
+			picture = planess_idea
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				airforce_personnel_cost_multiplier_modifier = -0.15
+				air_mission_xp_gain_factor = -0.05
+				social_cost_multiplier_modifier = 0.05
+				defensive_war_stability_factor = 0.05
+				air_accidents_factor = 0.05
+				air_untrained_pilots_penalty_factor = -0.05
+				air_training_xp_gain_factor = -0.05
+			}
+		}
+		ISR_air_reservists_idea4 = {
+			name = ISR_air_reservists_idea
+			picture = planess_idea
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				airforce_personnel_cost_multiplier_modifier = -0.15
+				air_mission_xp_gain_factor = -0.05
+				social_cost_multiplier_modifier = 0.05
+				defensive_war_stability_factor = 0.05
+				air_accidents_factor = 0.05
+				air_untrained_pilots_penalty_factor = -0.05
+				air_training_xp_gain_factor = -0.05
+				air_home_defence_factor = 0.03
+				air_power_projection_factor = 0.03
+			}
+		}
+		##profs
+		ISR_air_profs_idea = {
+			name = ISR_air_profs_idea
+			picture = planess_idea
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				airforce_personnel_cost_multiplier_modifier = 0.05
+				air_mission_xp_gain_factor = 0.05
+			}
+		}
+		ISR_air_profs_idea2 = {
+			name = ISR_air_profs_idea
+			picture = planess_idea
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				airforce_personnel_cost_multiplier_modifier = 0.1
+				air_mission_xp_gain_factor = 0.05
+				air_mission_efficiency = 0.03
+				air_night_penalty = -0.03
+			}
+		}
+		ISR_air_profs_idea3 = {
+			name = ISR_air_profs_idea
+			picture = planess_idea
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				airforce_personnel_cost_multiplier_modifier = 0.12
+				air_mission_xp_gain_factor = 0.05
+				air_mission_efficiency = 0.03
+				air_night_penalty = -0.03
+				air_accidents_factor = -0.05
+			}
+		}
+		ISR_air_profs_idea4 = {
+			name = ISR_air_profs_idea
+			picture = planess_idea
+			allowed = {
+				original_tag = ISR
+			}
+			allowed_civil_war = { always = yes }
+			modifier = {
+				airforce_personnel_cost_multiplier_modifier = 0.15
+				air_mission_xp_gain_factor = 0.05
+				air_mission_efficiency = 0.07
+				air_night_penalty = -0.07
+				air_accidents_factor = -0.05
+				air_superiority_bonus_in_combat = 0.05
+				air_doctrine_cost_factor = 0.1
+			}
+		}
+		ISR_intelligence_lahak = { # The Intelligence Lahak
+			picture = strategic_services
+			modifier = {
+				production_speed_radar_station_factor = 0.1
+				air_range_factor = 0.05
+				recon_factor = 0.05
+				air_volunteer_cap = 1
+			}
+		}
+		ISR_idid_rest = {
+			picture = Inherent_Resolve
+
+			modifier = {
+				research_speed_factor = 0.05
+				justify_war_goal_time = -0.1
+				recon_factor_while_entrenched = 0.1
+				military_industrial_organization_research_bonus = 0.05
+			}
+		}
+		kirya_glilot_tensions = {
+			picture = glilot_kiryah_rivalry
+			modifier = {
+				foreign_influence_modifier = -0.1
+				foreign_influence_defense_modifier = -0.1
+				encryption_factor = -0.25
+				decryption_factor = -0.25
+			}
+		}
+		kirya_ontop = {
+			picture = idi_log
+			modifier = {
+				foreign_influence_modifier = 0.1
+				decryption_factor = 0.1
+				foreign_influence_defense_modifier = -0.05
+				encryption_factor = -0.05
+			}
+		}
+		gilot_ontop = {
+			picture = unit_log
+			modifier = {
+				foreign_influence_defense_modifier = 0.1
+				encryption_factor = 0.1
+				foreign_influence_modifier = -0.05
+				decryption_factor = -0.05
+			}
+		}
+		kirya_gilot_middle = {
+			picture = glilot_kiryah
+			modifier = {
+				political_power_factor = -0.05
+				foreign_influence_modifier = 0.05
+				decryption_factor = 0.05
+				foreign_influence_defense_modifier = 0.05
+				encryption_factor = 0.05
+			}
+		}
+		## For Ben-Gvir path
+		ISR_ben_gvir_kahanism_1 = {
+			picture = kahanism_spirit
+			allowed = { has_government = nationalist }
+			cancel = {
+				isr_forming_government = no
+				isr_fascist_policy_valid = no
+			}
+			modifier = {
+				Military_Spending_cost_factor = -0.1
+				political_power_factor = 0.01
+				police_cost_multiplier_modifier = 0.05
+				agriculture_workers_modifier = 0.1
+				migration_rate_value_factor = -0.2
+				improve_relations_maintain_cost_factor = 0.1
+				monthly_population = 0.02
+				party_popularity_stability_factor = 0.1
+				# to be added here stuff that could degrade the relationship with western democracies ?
+			}
+		}
+		ISR_ben_gvir_kahanism_2 = {
+			picture = kahanism_spirit
+			allowed = { has_government = nationalist }
+			cancel = {
+				isr_forming_government = no
+				isr_fascist_policy_valid = no
+			}
+			modifier = {
+				Military_Spending_cost_factor = -0.2
+				Conscription_Law_cost_factor = -0.2
+				expected_mil_modifier = 1
+				political_power_factor = 0.02
+				police_cost_multiplier_modifier = 0.1
+				nationalist_outlook_campaign_cost_modifier = 0.05
+				agriculture_workers_modifier = 0.2
+				migration_rate_value_factor = -0.3
+				improve_relations_maintain_cost_factor = 0.2
+				monthly_population = 0.05
+				party_popularity_stability_factor = 0.15
+				foreign_influence_defense_modifier = 0.05
+				# to be added here stuff that could degrade the relationship with western democracies ?
+			}
+		}
+		ISR_ben_gvir_kahanism_3 = {
+			picture = kahanism_spirit
+			allowed = { has_government = nationalist }
+			cancel = {
+				isr_forming_government = no
+				isr_fascist_policy_valid = no
+			}
+			modifier = {
+				Military_Spending_cost_factor = -0.3
+				Conscription_Law_cost_factor = -0.3
+				expected_mil_modifier = 1
+				expected_adm_modifier = 1
+				political_power_factor = 0.05
+				police_cost_multiplier_modifier = 0.15
+				nationalist_outlook_campaign_cost_modifier = 0.1
+				agriculture_workers_modifier = 0.3
+				migration_rate_value_factor = -0.8
+				improve_relations_maintain_cost_factor = 0.3
+				monthly_population = 0.08
+				party_popularity_stability_factor = 0.2
+				foreign_influence_defense_modifier = 0.1
+				# to be added here stuff that could degrade the relationship with western democracies ?
+			}
+		}
+		ISR_ben_gvir_kahanism_4 = {
+			picture = kahanism_spirit
+			allowed = { has_government = nationalist }
+			cancel = {
+				isr_forming_government = no
+				isr_fascist_policy_valid = no
+			}
+			modifier = {
+				Military_Spending_cost_factor = -0.5
+				Conscription_Law_cost_factor = -0.5
+				expected_mil_modifier = 1
+				expected_adm_modifier = 1
+				expected_police_modifier = 1
+				political_power_factor = 0.08
+				police_cost_multiplier_modifier = 0.2
+				nationalist_outlook_campaign_cost_modifier = 0.2
+				agriculture_workers_modifier = 0.4
+				migration_rate_value_factor = -1.0
+				improve_relations_maintain_cost_factor = 0.4
+				monthly_population = 0.1
+				party_popularity_stability_factor = 0.25
+				foreign_influence_defense_modifier = 0.2
+				# to be added here stuff that could degrade the relationship with western democracies ?
+			}
+		}
+
+		ISR_ben_gvir_easy_trigger_1 = {
+			picture = international_brigades
+			allowed = { has_government = nationalist }
+			cancel = {
+				isr_forming_government = no
+				isr_fascist_policy_valid = no
+			}
+			modifier = {
+				army_attack_against_minor_factor = 0.05
+				air_strategic_bomber_bombing_factor = 0.2
+				experience_gain_army_factor = -0.1
+				special_forces_training_time_factor = 0.1
+				army_org_factor = -0.05
+			}
+		}
+		ISR_ben_gvir_easy_trigger_2 = {
+			picture = international_brigades
+			allowed = { has_government = nationalist }
+			cancel = {
+				isr_forming_government = no
+				isr_fascist_policy_valid = no
+			}
+			modifier = {
+				army_attack_against_minor_factor = 0.1
+				air_strategic_bomber_bombing_factor = 0.4
+				experience_gain_army_factor = -0.2
+				special_forces_training_time_factor = 0.2
+				army_org_factor = -0.1
+			}
+		}
+		## For Religious Zionist path
+		ISR_settlements_subsidized_1 = {
+			picture = BRA_dasp
+			cancel = {
+				isr_forming_government = no
+				isr_tkuma_policy_valid = no
+			}
+			modifier = {
+				agricolture_productivity_modifier = 0.15
+				agriculture_tax_modifier = 0.05
+				agriculture_workers_modifier = 0.1
+				party_popularity_stability_factor = 0.1
+			}
+		}
+		ISR_settlements_subsidized_2 = {
+			picture = BRA_dasp
+			cancel = {
+				isr_forming_government = no
+				isr_tkuma_policy_valid = no
+			}
+			modifier = {
+				agricolture_productivity_modifier = 0.3
+				agriculture_tax_modifier = 0.1
+				agriculture_workers_modifier = 0.3
+				party_popularity_stability_factor = 0.2
+			}
+		}
+
+		ISR_promote_early_marriage = {
+			picture = family_supports
+			cancel = {
+				isr_forming_government = no
+				isr_tkuma_policy_valid = no
+			}
+			modifier = {
+				monthly_population = 0.10
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		ISR_palestine_civilian_adm = {
+			picture = unit_log
+			allowed = { tag = PAL }
+			cancel = { has_war_with = ISR }
+			modifier = {
+				custom_modifier_tooltip = canc_if_isrwar_tt
+			}
+			targeted_modifier = {
+				tag = ISR
+				foreign_influence_defense_modifier = -0.05
+				defense_bonus_against = 0.05
+			}
+		}
+		## For UTJ (Torah and Shabbat Judaism) path
+		ISR_freedom_of_teaching_1 = {
+			picture = mercosur_education
+			cancel = {
+				isr_forming_government = no
+				isr_hatora_policy_valid = no
+			}
+			modifier = {
+				research_speed_factor = -0.03
+				neutrality_drift = 0.01
+			}
+		}
+		ISR_freedom_of_teaching_2 = {
+			picture = mercosur_education
+			cancel = {
+				isr_forming_government = no
+				isr_hatora_policy_valid = no
+			}
+			modifier = {
+				neutrality_drift = 0.01
+				democratic_drift = -0.01
+				research_speed_factor = -0.05
+				production_speed_internet_station_factor = -0.1
+				research_sharing_per_country_bonus_factor = -0.1
+			}
+		}
+		ISR_only_pikuach_nefesh = {
+			picture = arm_une_idea
+			cancel = {
+				isr_forming_government = no
+				isr_hatora_policy_valid = no
+			}
+			modifier = {
+				production_speed_buildings_factor = -0.05
+			}
+		}
+		## Meretz path
+		ISR_gender_equality = {
+			picture = isra_gender_equality
+			cancel = {
+				isr_forming_government = no
+				isr_progressive_policy_valid = no
+			}
+			modifier = {
+				monthly_population = -0.02
+				stability_factor = 0.05
+			}
+		}
+
+		ISR_renewable_energy_focused = {
+			picture = sustainable_development
+			cancel = {
+				isr_forming_government = no
+				isr_progressive_policy_valid = no
+			}
+			modifier = {
+				production_speed_synthetic_refinery_factor = 0.10
+				renewable_energy_gain_multiplier = 0.05
+				battery_park_construction_cost = -0.10
+			}
+		}
+		#Likud
+		ISR_lower_pension = {
+			picture = blr_pensions_reform_govern
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				social_cost_multiplier_modifier = -0.10
+				stability_factor = -0.04
+			}
+		}
+		ISR_no_insurance = {
+			picture = NOR_printing_money
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				health_cost_multiplier_modifier = -0.10
+				stability_factor = -0.05
+				bureaucracy_cost_multiplier_modifier = -0.05
+			}
+		}
+		ISR_reformed_mutual_funds = {
+			picture = gold
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				investment_duration_modifier = 0.1
+				receiving_investment_cost_modifier = 0.05
+				corporate_tax_income_multiplier_modifier = 0.05
+				stability_factor = -0.03
+				foreign_influence_defense_modifier = 0.07
+			}
+		}
+		ISR_lower_child_ben = {
+			picture = ARG_political_corruption_modifier
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				social_cost_multiplier_modifier = -0.05
+				stability_factor = -0.08
+				monthly_population = -0.07
+			}
+		}
+		ISR_yesman_likud = {
+			picture = ISR_yesmen_likud
+			cancel = {
+				isr_forming_government = no
+				isr_netanyahu_policy_valid = no
+			}
+			modifier = {
+				political_power_gain = 0.08
+				increase_graft_cost = 0.1
+				stability_factor = 0.05
+			}
+		}
+		ISR_attack_media = {
+			picture = BRA_media_on_the_opposition
+			cancel = {
+				isr_forming_government = no
+				isr_netanyahu_policy_valid = no
+			}
+			modifier = {
+				political_power_gain = 0.03
+				democratic_drift = -0.04
+				stability_factor = -0.05
+			}
+		}
+		ISR_controlled_media = {
+			picture = ISR_media_control
+			cancel = {
+				isr_forming_government = no
+				isr_netanyahu_policy_valid = no
+			}
+			modifier = {
+				political_power_gain = 0.05
+				democratic_drift = 0.04
+				stability_factor = 0.05
+				increase_graft_cost = 0.07
+			}
+		}
+		ISR_immunity_par = {
+			picture = BRA_dasp
+			cancel = {
+				isr_forming_government = no
+				isr_netanyahu_policy_valid = no
+			}
+			modifier = {
+				political_power_gain = 0.07
+				democratic_drift = -0.02
+				increase_graft_cost = 0.1
+			}
+		}
+		constitution_likud_isr = {
+			picture = constitutional_changes
+			modifier = {
+				political_power_gain = 0.03
+				democratic_drift = 0.05
+				war_support_factor = 0.1
+			}
+		}
+		basic_law_making_isr = {
+			picture = tur_odpa
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = -0.1
+				stability_factor = 0.05
+				war_support_factor = 0.1
+			}
+		}
+		ISR_tama = {
+			picture = economy_housing
+			modifier = {
+				production_speed_buildings_factor = 0.04
+				population_tax_income_multiplier_modifier = 0.03
+			}
+		}
+		ISR_shtrum_committee = {
+			picture = public_service_investment_idea
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				offices_productivity = 0.05
+				office_park_income_tax_modifier = 0.06
+				production_speed_offices_factor = 0.03
+			}
+		}
+
+		# the road won't disappear when Likud leaves power
+		ISR_road_6_expansion = {
+			picture = economic_road_idea
+			modifier = {
+				production_speed_infrastructure_factor = 0.07
+			}
+		}
+		ISR_road_6_expansion_2 = {
+			picture = economic_road_idea
+			modifier = {
+				production_speed_infrastructure_factor = 0.10
+				production_speed_supply_node_factor = 0.1
+			}
+		}
+
+		ISR_proud_likudniks = {
+			picture = one_child_policy
+			cancel = {
+				isr_forming_government = no
+				western_conservatism_are_in_power_or_coalition = no # only makes sense for Likud
+			}
+			modifier = {
+				political_power_factor = 0.05
+				democratic_drift = 0.04
+				monthly_population = -0.05
+				war_support_factor = -0.03
+			}
+		}
+		# given by Jewish Might, Likud, Shas and Muslim Brotherhood
+		ISR_family_values = {
+			picture = family_supports
+			cancel = {
+				isr_forming_government = no
+				has_conservative_government_or_in_coalition = no
+			}
+			modifier = {
+				democratic_drift = -0.04
+				monthly_population = 0.05
+				war_support_factor = 0.03
+			}
+		}
+		ISR_legalize_cannabis = {
+			picture = marijuana
+			modifier = {
+				drift_defence_factor = 0.05
+				production_factory_efficiency_gain_factor = -0.05
+				police_cost_multiplier_modifier = -0.06
+				party_popularity_stability_factor = 0.05
+			}
+		}
+		ISR_effevtive_priv_1 = {
+			picture = economic_increase
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.08
+				production_speed_fossil_powerplant_factor = 0.07
+				production_speed_synthetic_refinery_factor = 0.1
+				stability_factor = -0.04
+			}
+		}
+		ISR_effevtive_mail_priv_1 = {
+			picture = improved_per_capita_productivity_idea
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.14
+				production_speed_fossil_powerplant_factor = 0.10
+				production_speed_synthetic_refinery_factor = 0.10
+				production_speed_infrastructure_factor = 0.12
+				stability_factor = -0.06
+			}
+		}
+		ISR_bank_leumi_priv = {
+			picture = positive_gold
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = -0.05
+				offices_productivity = 0.10
+				stability_factor = -0.02
+			}
+		}
+		ISR_kachlon_priv = {
+			picture = market_dynamics
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = -0.10
+				offices_productivity = 0.12
+				production_speed_internet_station_factor = 0.1
+				stability_factor = -0.04
+			}
+		}
+		ISR_elal_priv = {
+			picture = industrial_focus
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = -0.10
+				offices_productivity = 0.10
+				production_speed_air_base_factor = -0.06
+				stability_factor = -0.04
+			}
+		}
+		ISR_elal_kachlon_priv = {
+			picture = market_dynamics
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = -0.14
+				offices_productivity = 0.14
+				production_speed_air_base_factor = -0.06
+				production_speed_internet_station_factor = 0.06
+				stability_factor = -0.04
+			}
+		}
+		ISR_open_skies = {
+			picture = air_research
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.10
+				production_speed_air_base_factor = 0.12
+			}
+		}
+		ISR_cyprus_civil_marraige = {
+			picture = ARG_social_welfare_fund_ns
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.07
+				democratic_drift = 0.03
+			}
+		}
+		ISR_learn_maths = {
+			picture = jihad_of_education
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				education_cost_multiplier_modifier = 0.06
+				research_speed_factor = 0.09
+			}
+		}
+		ISR_dont_apologize = {
+			picture = tiger_economy
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				nationalist_drift = 0.04
+				war_support_factor = 0.05
+				democratic_drift = 0.02
+				nationalist_outlook_campaign_cost_modifier = -0.06
+			}
+		}
+		ISR_conservatism_judges = {
+			picture = conservatism
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				political_power_factor = 0.02
+				stability_factor = 0.03
+				communism_drift = -0.04
+				drift_defence_factor = 0.05
+			}
+		}
+		ISR_kaminitz = {
+			picture = generic_oppression
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				political_power_factor = 0.04
+				conscription_factor = -0.06
+				bureaucracy_cost_multiplier_modifier = -0.07
+			}
+		}
+		ISR_no_kibbutz = {
+			picture = spr_masters_of_our_own_fate
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				communism_drift = -0.03
+				production_factory_efficiency_gain_factor = 0.07
+			}
+		}
+
+		# likud
+		ISR_gay_parades = {
+			picture = lgbt
+			cancel = {
+				isr_forming_government = no
+				isr_likud_policy_valid = no
+			}
+			modifier = {
+				custom_modifier_tooltip = pride_spend_tt
+				democratic_drift = 0.02
+				stability_factor = -0.04
+			}
+		}
+
+		# seems unused
+		ISR_get_five = {
+			picture = edu_04
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				tax_gain_multiplier_modifier = 0.08
+				democratic_drift = -0.03
+				monthly_population = 0.04
+			}
+		}
+
+		ISR_limit_labor = {
+			picture = labour_unions_idea
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				communism_drift = -0.01
+				production_speed_buildings_factor = 0.03
+				production_factory_max_efficiency_factor = 0.04
+			}
+		}
+
+		ISR_new_singapore = {
+			picture = entrepot_trade
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				office_park_income_tax_modifier = 0.05
+				offices_productivity = 0.07
+				communism_drift = -0.03
+				production_speed_offices_factor = 0.06
+				production_factory_max_efficiency_factor = 0.07
+				police_cost_multiplier_modifier = 0.11
+			}
+		}
+
+		ISR_raegan_legacy = {
+			picture = ISR_legacy_raegan
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.06
+				offices_productivity = 0.05
+				police_cost_multiplier_modifier = 0.04
+			}
+		}
+
+		ISR_bull_moose = {
+			picture = progressive_caucuse
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.05
+				democratic_drift = 0.02
+			}
+		}
+
+		ISR_bull_moose_bure = {
+			picture = progressive_caucuse
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.05
+				democratic_drift = 0.02
+				bureaucracy_cost_multiplier_modifier = -0.03
+				political_power_factor = -0.04
+			}
+		}
+
+		ISR_women_serving = {
+			picture = no_women_in_military_idea
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				neutrality_drift = 0.01
+				personnel_cost_multiplier_modifier = 0.04
+				stability_factor = 0.03
+				production_speed_buildings_factor = 0.04
+			}
+		}
+
+		ISR_public_isr_works = {
+			picture = GENERIC_public_works
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				neutrality_drift = 0.01
+				personnel_cost_multiplier_modifier = 0.04
+				stability_factor = 0.03
+				production_speed_infrastructure_factor = 0.02
+				production_speed_industrial_complex_factor = 0.02
+			}
+		}
+		ISR_thatcher_legacy = {
+			picture = ISR_raegan_legacy
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				neutrality_drift = 0.02
+				democratic_drift = 0.02
+				personnel_cost_multiplier_modifier = 0.1
+				stability_factor = 0.03
+				production_speed_infrastructure_factor = 0.03
+				production_speed_industrial_complex_factor = 0.03
+				population_tax_income_multiplier_modifier = 0.07
+				bureaucracy_cost_multiplier_modifier = -0.06
+				political_power_factor = -0.07
+			}
+		}
+
+		ISR_nation_state = {
+			picture = ISR_nation_state_law
+			cancel = {
+				isr_forming_government = no
+				isr_home_policy_valid = no
+			}
+			modifier = {
+				nationalist_drift = 0.03
+				war_support_factor = 0.04
+				army_core_defence_factor = 0.05
+			}
+		}
+
+		ISR_business_subsidize = {
+			picture = KUR_money
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = 0.06
+				offices_productivity = 0.07
+				production_factory_efficiency_gain_factor = 0.06
+				office_park_income_tax_modifier = 0.08
+			}
+		}
+
+		ISR_price_protection_act = {
+			picture = GENERIC_protectionism
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+				isr_knesset_supermajority = yes
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = 0.04
+				production_factory_max_efficiency_factor = -0.03
+				population_tax_income_multiplier_modifier = 0.05
+				high_unemployment_threshold_modifier = -0.04
+			}
+		}
+
+		ISR_competition_directory_i = {
+			picture = blr_good_agroindustry
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+				isr_knesset_supermajority = yes
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = 0.08
+				production_factory_max_efficiency_factor = -0.01
+				population_tax_income_multiplier_modifier = 0.07
+				high_unemployment_threshold_modifier = -0.08
+				corporate_tax_income_multiplier_modifier = 0.06
+			}
+		}
+
+		ISR_agricultural_protection = {
+			picture = blr_agro_industry
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = 0.03
+				agriculture_tax_modifier = 0.06
+				foreign_influence_defense_modifier = 0.04
+			}
+		}
+
+		ISR_farmer_union = {
+			picture = BOT_kalahari_expansion
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = 0.06
+				agriculture_tax_modifier = 0.08
+				foreign_influence_defense_modifier = 0.08
+				agricolture_productivity_modifier = 0.07
+				agriculture_workers_modifier = 0.03
+			}
+		}
+
+		ISR_farmer_union_1 = {
+			picture = BOT_kalahari_expansion
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+			}
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = 0.04
+				agriculture_tax_modifier = 0.04
+				foreign_influence_defense_modifier = 0.06
+				agricolture_productivity_modifier = 0.04
+				agriculture_workers_modifier = 0.02
+			}
+		}
+
+		# timed socdem idea
+		ISR_edication_relief = {
+			picture = jihad_of_education
+			modifier = {
+				expected_education_modifier = -1
+				education_cost_multiplier_modifier = 0.07
+				research_speed_factor = 0.05
+			}
+		}
+
+		ISR_haifa_model_fek = {
+			picture = ser_plebs_idea
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+			}
+			modifier = {
+				projects_cost_modifier = -0.4
+				tax_gain_multiplier_modifier = 0.1
+				econ_cycle_upg_cost_multiplier_modifier = 0.5
+			}
+		}
+
+		ISR_smaller_classes_th = {
+			picture = mercosur_education
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+				isr_liberal_policy_valid = no
+			}
+			modifier = {
+				education_cost_multiplier_modifier = 0.1
+				expected_education_modifier = 2
+				expected_welfare_modifier = -1
+				research_speed_factor = 0.15
+				econ_cycle_upg_cost_multiplier_modifier = -0.05
+				bureaucracy_cost_multiplier_modifier = -0.05
+			}
+		}
+
+		ISR_raised_minimum_wage = {
+			picture = fra_market_dynamism
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+			}
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.07
+				high_unemployment_threshold_modifier = 0.1
+				total_workforce_modifier = -0.05
+				personnel_cost_multiplier_modifier = 0.06
+			}
+		}
+
+		ISR_regulated_finances = {
+			picture = financial_crisis
+			cancel = {
+				isr_forming_government = no
+				isr_socdem_policy_valid = no
+			}
+			modifier = {
+				tax_rate_change_multiplier_modifier = -0.15
+				projects_cost_modifier = -0.05
+				corporate_tax_income_multiplier_modifier = 0.05
+			}
+		}
+
+		###
+		ISR_collapsed_tunnels = {
+
+			picture = SWE_severe_lack_of_ammunition
+			allowed = { tag = HEZ }
+			targeted_modifier = {
+				tag = ISR
+				attack_bonus_against = -0.1
+			}
+		}
+		ISR_radwan_infiltrate = {
+
+			picture = incompetent_officiers
+			allowed = { tag = HEZ }
+			modifier = {
+				army_org_factor = -0.05
+			}
+		}
+		##
+		ISR_leb_air = {
+
+			picture = incompetent_officiers
+			allowed = { tag = ISR }
+			targeted_modifier = {
+				tag = HEZ
+				air_attack_factor = 0.06
+			}
+			targeted_modifier = {
+				tag = LEB
+				air_attack_factor = 0.06
+			}
+		}
+		#Palestine Stuff
+		ISR_calm_security = {
+
+			picture = palestine_liberation_groups
+			allowed = {
+				tag = ISR
+				NOT = {
+					OR = {
+						has_country_flag = isratine_formed
+						NOT = { country_exists = PAL }
+					}
+				}
+			}
+			cancel = {
+				has_country_flag = isratine_formed
+				NOT = { country_exists = PAL }
+			}
+			modifier = {
+				stability_factor = 0.05
+				war_support_factor = -0.05
+			}
+		}
+		ISR_stable_security = {
+
+			picture = palestine_liberation_groups
+			allowed = {
+				tag = ISR
+				NOT = {
+					OR = {
+						has_country_flag = isratine_formed
+						NOT = { country_exists = PAL }
+					}
+				}
+			}
+			cancel = {
+				has_country_flag = isratine_formed
+				NOT = { country_exists = PAL }
+			}
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = -0.02
+			}
+		}
+		ISR_routine_security = {
+
+			picture = palestine_liberation_groups
+			allowed = {
+				tag = ISR
+				NOT = {
+					OR = {
+						has_country_flag = isratine_formed
+						NOT = { country_exists = PAL }
+					}
+				}
+			}
+			cancel = {
+				has_country_flag = isratine_formed
+				NOT = { country_exists = PAL }
+			}
+			modifier = {
+				stability_factor = -0.01
+				war_support_factor = 0.02
+				emerging_outlook_campaign_cost_modifier = 0.02
+			}
+		}
+		ISR_frequent_incidents = {
+
+			picture = palestine_liberation_groups
+			allowed = {
+				tag = ISR
+				NOT = {
+					OR = {
+						has_country_flag = isratine_formed
+						NOT = { country_exists = PAL }
+					}
+				}
+			}
+			cancel = {
+				has_country_flag = isratine_formed
+				NOT = { country_exists = PAL }
+			}
+			modifier = {
+				stability_factor = -0.04
+				war_support_factor = 0.05
+				emerging_outlook_campaign_cost_modifier = 0.03
+				nationalist_outlook_campaign_cost_modifier = -0.02
+			}
+		}
+		ISR_very_frequent_incidents = {
+
+			picture = palestine_liberation_groups
+			allowed = {
+				tag = ISR
+				NOT = {
+					OR = {
+						has_country_flag = isratine_formed
+						NOT = { country_exists = PAL }
+					}
+				}
+			}
+			cancel = {
+				has_country_flag = isratine_formed
+				NOT = { country_exists = PAL }
+			}
+			modifier = {
+				political_power_factor = -0.05
+				stability_factor = -0.07
+				war_support_factor = 0.08
+				emerging_outlook_campaign_cost_modifier = 0.05
+				nationalist_outlook_campaign_cost_modifier = -0.07
+			}
+		}
+		ISR_intifada = {
+
+			picture = palestine_liberation_groups
+			allowed = {
+				tag = ISR
+				NOT = {
+					OR = {
+						has_country_flag = isratine_formed
+						NOT = { country_exists = PAL }
+					}
+				}
+			}
+			cancel = {
+				has_country_flag = isratine_formed
+				NOT = { country_exists = PAL }
+			}
+			modifier = {
+				unit_upkeep_attrition_factor = 0.05
+				production_speed_buildings_factor = -0.06
+				political_power_factor = -0.1
+				stability_factor = -0.12
+				war_support_factor = 0.15
+				emerging_outlook_campaign_cost_modifier = 0.1
+				nationalist_outlook_campaign_cost_modifier = -0.12
+			}
+		}
+		palestinian_resistance = {
+
+			picture = palestine_liberation_groups
+			allowed = {
+				tag = ISR
+				NOT = {
+					OR = {
+						has_country_flag = isratine_formed
+						NOT = { country_exists = PAL }
+					}
+				}
+			}
+			cancel = {
+				has_country_flag = isratine_formed
+				NOT = { country_exists = PAL }
+			}
+			modifier = {
+				unit_upkeep_attrition_factor = 0.06
+				production_speed_buildings_factor = -0.08
+				political_power_factor = -0.12
+				stability_factor = -0.15
+				war_support_factor = 0.19
+				emerging_outlook_campaign_cost_modifier = 0.12
+				nationalist_outlook_campaign_cost_modifier = -0.15
+			}
+		}
+		ISR_shabac_dominance = {
+
+			picture = defense
+			allowed = { tag = ISR }
+			modifier = {
+				foreign_influence_defense_modifier = 0.1
+				bureaucracy_cost_multiplier_modifier = 0.05
+			}
+		}
+		ISR_8200_dominance = {
+
+			picture = defense
+			allowed = { tag = ISR }
+			modifier = {
+				foreign_influence_modifier = 0.1
+				army_personnel_cost_multiplier_modifier = 0.05
+			}
+		}
+		ISR_tzamams = {
+
+			picture = defense
+			allowed = { tag = ISR }
+			modifier = {
+				foreign_influence_modifier = 0.05
+				foreign_influence_defense_modifier = 0.05
+				army_personnel_cost_multiplier_modifier = 0.025
+				bureaucracy_cost_multiplier_modifier = 0.0025
+			}
+		}
+		ISR_peaceful_approach = {
+
+			picture = defense
+			allowed = { tag = ISR }
+			modifier = {
+				stability_factor = 0.04
+				war_support_factor = -0.03
+				political_power_factor = 0.05
+				army_personnel_cost_multiplier_modifier = 0.04
+			}
+		}
+		ISR_neighbor_procedure = {
+
+			picture = defense
+			allowed = { tag = ISR }
+			modifier = {
+				stability_factor = -0.06
+				war_support_factor = 0.05
+				army_personnel_cost_multiplier_modifier = 0.04
+				army_defence_factor = 0.07
+			}
+		}
+		###
+		ISR_jenin_labs = {
+
+			picture = firearm_wall_sheep
+			allowed = { tag = PAL }
+			modifier = {
+				production_factory_start_efficiency_factor = 0.05
+				license_infantry_eq_production_speed_factor = 0.05
+				production_factory_efficiency_gain_factor = 0.05
+				production_lack_of_resource_penalty_factor = 0.1
+			}
+		}
+		ISR_failed_operation = {
+
+			picture = BOT_army_against_poaching
+			allowed = { tag = ISR }
+			modifier = {
+				political_power_factor = -0.05
+				army_personnel_cost_multiplier_modifier = 0.05
+				police_cost_multiplier_modifier = 0.05
+				expected_police_modifier = 2
+				crime_fighting_cost_factor = 0.1
+			}
+		}
+		ISR_support_of_settlements = {
+
+			picture = ITA_build_abuse
+			allowed = { tag = ISR }
+			modifier = {
+				tax_gain_multiplier_modifier = -0.08
+				agriculture_district_income_tax_modifier = 0.07
+				agriculture_tax_modifier = 0.07
+			}
+		}
+		ISR_support_of_settlements2 = {
+
+			picture = ITA_build_abuse
+			allowed = { tag = ISR }
+			modifier = {
+				tax_gain_multiplier_modifier = -0.06
+				agriculture_district_income_tax_modifier = 0.05
+				agriculture_tax_modifier = 0.05
+			}
+		}
+		focus_on_exclaves_0 = {
+			picture = ITA_build_abuse
+			modifier = {
+				tax_gain_multiplier_modifier = -0.08
+				agriculture_district_income_tax_modifier = 0.03
+				agriculture_tax_modifier = 0.03
+				production_speed_buildings_factor = 0.05
+			}
+		}
+		focus_on_exclaves_1 = {
+			picture = ITA_build_abuse
+			modifier = {
+				tax_gain_multiplier_modifier = -0.1
+				agriculture_district_income_tax_modifier = 0.04
+				agriculture_tax_modifier = 0.04
+				production_speed_buildings_factor = 0.07
+			}
+		}
+		#######
+		ISR_gazan_workers = {
+
+			picture = ICE_general_strike
+			allowed = { tag = ISR }
+			modifier = {
+				stability_factor = -0.05
+				production_factory_efficiency_gain_factor = 0.07
+				monthly_population = 0.1
+			}
+		}
+		ISR_gazan_workershama = {
+
+			picture = ICE_general_strike
+			allowed = { tag = HAM }
+			modifier = {
+				production_factory_efficiency_gain_factor = -0.05
+				monthly_population = -0.1
+			}
+		}
+		#######SHAS
+		ISR_legacy_of_yousefi = {
+			picture = ETH_imru_prince_regent
+			cancel = {
+				isr_forming_government = no
+				isr_shas_policy_valid = no
+			}
+			modifier = {
+				social_cost_multiplier_modifier = 0.05
+				health_cost_multiplier_modifier = 0.05
+				war_support_factor = 0.05
+				drift_defence_factor = 0.1
+				total_workforce_modifier = 0.05
+			}
+		}
+		ISR_food_for_poor = {
+			picture = generic_supply_depot
+			cancel = {
+				isr_forming_government = no
+				isr_shas_policy_valid = no
+			}
+			modifier = {
+				production_factory_efficiency_gain_factor = -0.02
+				out_of_supply_factor = -0.03
+				high_unemployment_threshold_modifier = 0.03
+			}
+		}
+		#RAAM
+		ISR_legalized_plygamy = {
+			picture = sunni
+			cancel = {
+				isr_forming_government = no
+				isr_raam_policy_valid = no
+			}
+			modifier = {
+				monthly_population = 0.1
+				stability_factor = -0.05
+				population_tax_income_multiplier_modifier = 0.04
+				expected_welfare_modifier = 1
+				social_cost_multiplier_modifier = 0.03
+			}
+		}
+		#liberman
+		ISR_russian_tv_channels = {
+			picture = sov_information_war_idea
+			cancel = {
+				isr_forming_government = no
+				isr_beitenu_policy_valid = no
+			}
+			modifier = {
+				offices_productivity = 0.03
+				expected_education_modifier = -1
+				migration_rate_value_factor = 0.05
+				foreign_influence_modifier = 0.04
+				popularity_boost_modifier = 0.05
+			}
+		}
+		ISR_aliyah_encouraged = {
+
+			picture = eruope_blue
+			cancel = {
+				isr_forming_government = no
+				isr_beitenu_policy_valid = no
+			}
+			modifier = {
+				migration_rate_value_factor = 0.1
+				productivity_growth_modifier = -0.05
+			}
+		}
+		#Yesh i Pey
+		ISR_yesh_pey_atid_idea = {
+			picture = collective_soceity
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			modifier = {
+				political_power_factor = 0.05
+				corruption_cost_factor = -0.05
+			}
+		}
+		ISR_yesh_pey_atid_idea1 = {
+			picture = collective_soceity
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			modifier = {
+				political_power_factor = 0.07
+				corruption_cost_factor = -0.1
+				crime_fighting_cost_factor = 0.05
+			}
+		}
+		ISR_yesh_pey_atid_idea2 = {
+			picture = collective_soceity
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			modifier = {
+				political_power_factor = 0.09
+				corruption_cost_factor = -0.1
+				crime_fighting_cost_factor = 0.05
+				health_cost_multiplier_modifier = 0.15
+				expected_healthcare_modifier = -2
+			}
+		}
+		ISR_yesh_pey_atid_idea3 = {
+			picture = collective_soceity
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			modifier = {
+				political_power_factor = 0.12
+				corruption_cost_factor = -0.15
+				crime_fighting_cost_factor = 0.10
+				health_cost_multiplier_modifier = 0.15
+				expected_healthcare_modifier = -2
+			}
+		}
+		ISR_yesh_pey_atid_ministry = {
+			allowed_civil_war = { always = yes }
+			picture = sov_information_war # TODO
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+				isr_liberal_policy_valid = no
+			}
+			modifier = {
+				stability_factor = 0.15
+				health_cost_multiplier_modifier = 0.07
+				social_cost_multiplier_modifier = 0.07
+				education_cost_multiplier_modifier = 0.07
+			}
+		}
+		ISR_yesh_pey_atid_debils = {
+			allowed_civil_war = { always = yes }
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			picture = sov_information_war # TODO
+			modifier = {
+				economic_cycles_cost_factor = -0.1
+				bureaucracy_cost_factor = -0.12
+			}
+		}
+		ISR_yesh_pey_atid_taxx = {
+			allowed_civil_war = { always = yes }
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			picture = sov_information_war # TODO
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.10
+				stability_factor = -0.03
+				bureaucracy_cost_factor = 0.10
+			}
+		}
+		ISR_yesh_pey_atid_yeshiva = {
+			allowed_civil_war = { always = yes }
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			picture = sov_information_war # TODO
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.13
+				stability_factor = -0.05
+				bureaucracy_cost_factor = 0.09
+				nationalist_drift = 0.03
+			}
+		}
+		ISR_yesh_pey_atid_settlements = {
+			allowed_civil_war = { always = yes }
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			picture = sov_information_war # TODO
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.12
+				stability_factor = -0.10
+				bureaucracy_cost_factor = 0.12
+			}
+		}
+		ISR_yesh_pey_atid_localhost = {
+			picture = family_supports
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+				isr_socdem_policy_valid = no
+			}
+			modifier = {
+				political_power_factor = 0.05
+				health_cost_multiplier_modifier = 0.03
+				expected_healthcare_modifier = -1
+			}
+		}
+		ISR_yesh_pey_atid_elder_scrolls = {
+			picture = ARG_social_welfare_fund_ns
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+				isr_socdem_policy_valid = no
+			}
+			modifier = {
+				health_cost_multiplier_modifier = 0.05
+				party_popularity_stability_factor = 0.03
+			}
+		}
+		ISR_yesh_pey_atid_bey_class = {
+			picture = sov_information_war # TODO
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			modifier = {
+				health_cost_multiplier_modifier = 0.05
+				party_popularity_stability_factor = 0.03
+			}
+		}
+		ISR_yesh_pey_atid_marxx = {
+			allowed_civil_war = { always = yes }
+			cancel = {
+				isr_forming_government = no
+				isr_yesh_atid_policy_valid = no
+			}
+			picture = NOR_printing_money
+			modifier = {
+				corporate_tax_income_multiplier_modifier = -0.07
+				consumer_goods_factor = 0.02
+			}
+		}
+		ISR_yesh_pey_atid_europa = {
+			picture = EU_Roundel
+			modifier = {
+				trade_opinion_factor = 0.10
+				consumer_goods_factor = -0.065
+				research_speed_factor = 0.05
+				education_cost_multiplier_modifier = -0.10
+			}
+		}
+		########newhope
+		ISR_ottoman_agencies = {
+			picture = kemalist_army_officers_powerful_effect
+			cancel = {
+				isr_forming_government = no
+				isr_new_hope_policy_valid = no
+			}
+			modifier = {
+				internal_factions_cost_factor = -0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.05
+				buildings_worker_requirement_modifier = 0.05
+				country_productivity_growth_modifier = 0.04
+				bureaucracy_cost_multiplier_modifier = 0.1
+			}
+		}
+		########Gantz
+		ISR_radical_centrism = {
+			picture = kemalist_army_officers_powerful_effect
+			cancel = {
+				isr_forming_government = no
+				isr_resilience_policy_valid = no
+			}
+			modifier = {
+				drift_defence_factor = 0.05
+				party_popularity_stability_factor = 0.1
+				defensive_war_stability_factor = 0.15
+				opinion_gain_monthly = 5
+				nationalist_acceptance = 50
+			}
+		}
+		ISR_israel_above_all = {
+			picture = kemalist_army_officers_powerful_effect
+			cancel = {
+				isr_forming_government = no
+				isr_resilience_policy_valid = no
+			}
+			modifier = {
+				projects_cost_modifier = -0.05
+				western_outlook_campaign_cost_modifier = -0.05
+				military_industry_tax_modifier = 0.05
+			}
+		}
+		#NEwhopeandGantz
+		ISR_emp_reg_govs = {
+			picture = kemalist_army_officers_powerful_effect
+			cancel = {
+				isr_forming_government = no
+				isr_resilience_policy_valid = no
+				isr_new_hope_policy_valid = no
+			}
+			modifier = {
+				political_power_factor = -0.05
+				civilian_industry_tax_modifier = -0.05
+				econ_cycle_upg_cost_multiplier_modifier = -0.1
+			}
+		}
+		ISR_woman_incombat = {
+			picture = SOV_fascist_womens_movement
+			cancel = {
+				isr_forming_government = no
+				isr_has_ultra_religious_government = yes
+				isr_knesset_supermajority = yes
+			}
+			modifier = {
+				conscription_factor = 0.5
+				democratic_drift = 0.04
+				monthly_population = -0.1
+			}
+		}
+		ISR_new_basic_law = {
+			picture = harari_compromise
+			modifier = {
+				party_popularity_stability_factor = 0.1
+			}
+		}
+		######ISRATINE
+		ISR_judean_identity = {
+			picture = judaism
+			cancel = {
+				isr_forming_government = no
+				isr_arab_policy_valid = no
+				isr_knesset_supermajority = yes
+			}
+			modifier = {
+				corporate_tax_income_multiplier_modifier = 0.1
+				research_speed_factor = 0.05
+			}
+		}
+		ISR_canaans_identity = {
+			picture = spirit_JAP_retweet_fascism2
+			cancel = {
+				isr_forming_government = no
+				isr_arab_policy_valid = no
+				isr_knesset_supermajority = yes
+			}
+			modifier = {
+				army_attack_speed_factor = 0.1
+				army_morale_factor = 0.05
+			}
+		}
+		ISR_galil_identity = {
+			picture = tur_tuz_golu_training_facility
+			cancel = {
+				isr_forming_government = no
+				isr_arab_policy_valid = no
+				isr_knesset_supermajority = yes
+			}
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.1
+				civilian_factories_productivity = 0.05
+			}
+		}
+		ISR_idea_isratine_federalism = {
+			picture = sov_republic_rf
+			cancel = {
+				isr_forming_government = no
+				isr_arab_policy_valid = no
+				isr_knesset_supermajority = yes
+			}
+			modifier = {
+				tax_rate_change_multiplier_modifier = -0.05
+				stability_factor = 0.06
+				corruption_cost_factor = 0.05
+			}
+		}
+		######KNESSET
+		ISR_liberamn_done = {
+			picture = ISR_beitenu_party
+			modifier = {
+				production_speed_industrial_complex_factor = 0.09
+				civilian_factories_productivity = 0.1
+			}
+		}
+		ISR_givir_done = {
+			picture = ISR_givir_party
+			modifier = {
+				military_factories_productivity = 0.1
+				production_speed_arms_factory_factor = 0.1
+			}
+		}
+		ISR_likud_done = {
+			picture = ISR_likud_party
+			modifier = {
+				office_park_income_tax_modifier = 0.1
+				offices_productivity = 0.09
+			}
+		}
+		ISR_shas_done = {
+			picture = ISR_shas_party
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.1
+				monthly_population = 0.08
+			}
+		}
+		ISR_jud_done = {
+			picture = ISR_torah_party
+			modifier = {
+				stability_factor = 0.1
+				monthly_population = 0.09
+			}
+		}
+		ISR_nz_done = {
+			picture = ISR_national_union_party
+			modifier = {
+				production_speed_infrastructure_factor = 0.1
+				repair_speed_infrastructure_factor = 0.1
+			}
+		}
+		ISR_jewish_done = {
+			picture = ISR_jewish_home_party
+			modifier = {
+				bureaucracy_cost_multiplier_modifier = -0.1
+				research_speed_factor = 0.1
+			}
+		}
+		ISR_labour_done = {
+			picture = ISR_avoda_party
+			modifier = {
+				social_cost_multiplier_modifier = -0.1
+				health_cost_multiplier_modifier = -0.1
+			}
+		}
+		ISR_meretz_done = {
+			picture = ISR_meretz_party
+			modifier = {
+				population_tax_income_multiplier_modifier = 0.1
+				production_speed_synthetic_refinery_factor = 0.1
+			}
+		}
+		ISR_arab_done = {
+			picture = ISR_raam_party
+			modifier = {
+				monthly_population = 0.1
+				conscription_factor = 0.1
+			}
+		}
+	}
+	hidden_ideas = {
+		ISR_econ_bonus_bl = {
+			picture = ETH_customs_barrier_ITA
+			allowed_civil_war = { always = yes }
+
+			modifier = {
+				consumer_goods_factor = -0.35
+				personnel_cost_multiplier_modifier = -0.90
+				tax_gain_multiplier_modifier = 0.45
+			}
+		}
+	}
+}

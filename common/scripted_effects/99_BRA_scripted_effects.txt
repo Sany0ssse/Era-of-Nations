@@ -1,0 +1,281 @@
+# Author(s): AngriestBird, CeruleanEyes, Niblo
+BRA_operation_car_wash_switch = {
+	if = { limit = { has_idea = BRA_idea_car_wash1 }
+		swap_ideas = {
+			remove_idea = BRA_idea_car_wash1 add_idea = BRA_idea_car_wash2
+		}
+	}
+	else_if = { limit = { has_idea = BRA_idea_car_wash2 }
+		swap_ideas = {
+			remove_idea = BRA_idea_car_wash2 add_idea = BRA_idea_car_wash3
+		}
+	}
+	else_if = { limit = { has_idea = BRA_idea_car_wash3 }
+		swap_ideas = {
+			remove_idea = BRA_idea_car_wash3 add_idea = BRA_idea_car_wash4
+		}
+	}
+}
+
+modify_treasury_effect_corruption = {
+	set_temp_variable = { treasury_change2 = treasury_change }
+	if = {
+		limit = { has_idea = paralyzing_corruption }
+		multiply_temp_variable = { treasury_change = 10 }
+	}
+	else_if = {
+		limit = { has_idea = crippling_corruption }
+		multiply_temp_variable = { treasury_change = 9 }
+	}
+	else_if = {
+		limit = { has_idea = rampant_corruption }
+		multiply_temp_variable = { treasury_change = 8 }
+	}
+	else_if = {
+		limit = { has_idea = unrestrained_corruption }
+		multiply_temp_variable = { treasury_change = 6.9 }
+	}
+	else_if = {
+		limit = { has_idea = systematic_corruption }
+		multiply_temp_variable = { treasury_change = 6.25 }
+	}
+	else_if = {
+		limit = { has_idea = unrestrained_corruption }
+		multiply_temp_variable = { treasury_change = 5.4 }
+	}
+	else_if = {
+		limit = { has_idea = widespread_corruption }
+		multiply_temp_variable = { treasury_change = 4.6 }
+	}
+	else_if = {
+		limit = { has_idea = medium_corruption }
+		multiply_temp_variable = { treasury_change = 3.9 }
+	}
+	else_if = {
+		limit = { has_idea = modest_corruption }
+		multiply_temp_variable = { treasury_change = 3 }
+	}
+	else_if = {
+		limit = { has_idea = slight_corruption }
+		multiply_temp_variable = { treasury_change = 2 }
+	}
+	custom_effect_tooltip = modify_treasury_effect_tt
+	add_to_variable = { treasury = treasury_change }
+	clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+}
+
+BRA_update_brazil_energy_idea = {
+	if = {
+		limit = {
+			NOT = {
+				has_idea = BRA_idea_brazil_energy1
+				has_idea = BRA_idea_brazil_energy2
+				has_idea = BRA_idea_brazil_energy3
+			}
+		}
+		add_ideas = BRA_idea_brazil_energy1
+	}
+	else_if = {
+		limit = { has_idea = BRA_idea_brazil_energy1 }
+		swap_ideas = {
+			remove_idea = BRA_idea_brazil_energy1
+			add_idea = BRA_idea_brazil_energy2
+		}
+	}
+	else_if = {
+		limit = { has_idea = BRA_idea_brazil_energy2 }
+		swap_ideas = {
+			remove_idea = BRA_idea_brazil_energy2
+			add_idea = BRA_idea_brazil_energy3
+		}
+	}
+}
+
+# --- Worker's Party Alignment --- #
+BRA_worker_party_alignment_effect = {
+	custom_effect_tooltip = BRA_worker_party_alignment_effect_tt
+	add_to_variable = { BRA_brazilian_party_alignment = temp_change }
+	clamp_variable = {
+		var = BRA_brazilian_party_alignment
+		min = 0
+		max = 100
+	}
+}
+
+
+# --- Amazon System --- #
+# Function: BRA_conserv_acreage_effect
+# purpose: Change the total amount of conserved acreage
+BRA_conserv_acreage_effect = {
+	custom_effect_tooltip = BRA_conserv_acreage_effect_tt
+	add_to_variable = { BRA_acres_conserved = temp_change }
+	clamp_variable = {
+		var = BRA_acres_conserved
+		min = 0
+	}
+
+	BRA_calculate_amazon_system = yes
+}
+
+# function: BRA_wild_acreage_effect
+# purpose: Change the total amount of wild acreage
+BRA_wild_acreage_effect = {
+	custom_effect_tooltip = BRA_wild_acreage_effect_tt
+	add_to_variable = { BRA_acres_wild = temp_change }
+	clamp_variable = {
+		var = BRA_acres_wild
+		min = 0
+	}
+
+	BRA_calculate_amazon_system = yes
+}
+
+# function: BRA_target_acreage_effect
+# purpose: Adjust the targeted total number of acreage
+BRA_target_acreage_effect = {
+	custom_effect_tooltip = BRA_target_acreage_effect_tt
+	add_to_variable = { BRA_acres_target = temp_change }
+	clamp_variable = {
+		var = BRA_acres_target
+		min = 250
+	}
+
+	BRA_calculate_amazon_system = yes
+}
+
+# function: BRA_acre_rate_gain_effect
+# purpose: Change the total amount of wild acreage gained each year
+BRA_acre_rate_gain_effect = {
+	custom_effect_tooltip = BRA_acre_rate_gain_effect_tt
+	add_to_variable = { BRA_acre_rate_gain = temp_change }
+	clamp_variable = {
+		var = BRA_acre_rate_gain
+		min = 0
+	}
+
+	BRA_calculate_amazon_system = yes
+}
+
+# function: BRA_acre_rate_loss_effect
+# purpose: Change the total amount of wild acreage lost each year
+BRA_acre_rate_loss_effect = {
+	custom_effect_tooltip = BRA_acre_rate_loss_effect_tt
+	add_to_variable = { BRA_acre_rate_loss = temp_change }
+	clamp_variable = {
+		var = BRA_acre_rate_loss
+		min = 0
+	}
+
+	BRA_calculate_amazon_system = yes
+}
+
+# function: BRA_acres_conserved_change_effect
+# purpose: Changes the amount of wild acreage that is converted to conserved acreage
+BRA_acres_conserved_change_effect = {
+	custom_effect_tooltip = BRA_acres_conserved_change_effect_tt
+	add_to_variable = { BRA_acres_conserved_change = temp_change }
+	clamp_variable = {
+		var = BRA_acres_conserved_change
+		min = 0
+	}
+
+	BRA_calculate_amazon_system = yes
+}
+
+# function: BRA_calculate_amazon_system
+# purpose: Calculates the penalties in the Amazon states and at the Brazilian country level.
+# BRA_acres_current - The total Acreage in Brazil
+# BRA_acres_conserved - The total amount of Acreage in Brazil that is conserved
+# BRA_acres_wild - Total amount of Acreage in Brazil that is wild (untamed)
+# BRA_wild_acreage_ratio - The ratio of wild acreage
+# BRA_conserved_acreage_ratio - The ratio of conserved acreage
+# BRA_current_target_ratio - The ratio of total acreage we want
+# BRA_current_target - The total number of acres we want to have for the amazon
+# BRA_acres_conserved_change - The rate at which wild acres are converted to conserved acres
+# BRA_acre_rate_loss - The number of wild acres lost each year
+# BRA_acre_rate_gain - The number of wild acres gained each year
+# BRA_net_acreage - The total number of wild acreage change each year
+BRA_calculate_amazon_system = {
+	set_variable = { BRA_acres_current = 0 }
+	add_to_variable = { var = BRA_acres_current value = BRA_acres_conserved }
+	add_to_variable = { var = BRA_acres_current value = BRA_acres_wild }
+
+	# Calculate Wild Percentage
+	set_variable = { var = BRA_wild_acreage_ratio value = BRA_acres_wild }
+	divide_variable = { var = BRA_wild_acreage_ratio value = BRA_acres_current }
+
+	# Calculate Conserved Percentage (Used for Display only)
+	set_variable = { var = BRA_conserved_acreage_ratio value = BRA_acres_conserved }
+	divide_variable = { var = BRA_conserved_acreage_ratio value = BRA_acres_current }
+
+	# Calculate Target Ratio
+	set_variable = { var = BRA_current_target_ratio value = BRA_acres_current }
+	divide_variable = { var = BRA_current_target_ratio value = BRA_acres_target }
+
+	# Calculate Penalties
+	set_temp_variable = { var = temp_penalties value = BRA_acres_current }
+	divide_temp_variable = { var = temp_penalties value = BRA_acres_target }
+
+	# Wild Acreage Causes the Most Penalties
+	set_temp_variable = { temp_ratio_penalties = BRA_wild_acreage_ratio }
+	multiply_temp_variable = { temp_ratio_penalties = -1 }
+	set_variable = { BRA.BRA_amazon_penalties = temp_ratio_penalties }
+	set_variable = { BRA.BRA_building_slots_factor = temp_ratio_penalties }
+
+	clamp_variable = { var = BRA.BRA_building_slots_factor min = -1 max = 0 }
+	clamp_variable = { var = BRA.BRA_amazon_penalties min = -0.50 max = 0 }
+
+	# Calculate Country Penalties
+	if = { limit = { check_variable = { BRA_current_target_ratio < 1.0 } }
+		set_temp_variable = { tmp_stability = BRA_current_target_ratio }
+		multiply_temp_variable = { tmp_stability = 100 }
+		multiply_temp_variable = { tmp_stability = -0.001 }
+
+		set_temp_variable = { tmp_neutral_drift = 0.10 }
+		multiply_temp_variable = { tmp_neutral_drift = BRA_current_target_ratio }
+		multiply_temp_variable = { tmp_neutral_drift = 0.5 }
+	}
+	else = {
+		set_temp_variable = { tmp_stability = 0 }
+		set_temp_variable = { tmp_neutral_drift = 0 }
+	}
+
+	# Clamp Variables
+	clamp_variable = { var = BRA_acres_conserved min = 0 }
+	clamp_variable = { var = BRA_acres_wild min = 0 }
+	clamp_variable = { var = BRA_wild_acreage_ratio min = 0 }
+	clamp_variable = { var = BRA_conserved_acreage_ratio min = 0 }
+	clamp_variable = { var = BRA_current_target_ratio min = 0 }
+
+	# Update State Dynamic Modifiers
+	for_each_scope_loop = {
+		array = BRA.amazon_states
+		if = {
+			limit = { has_state_flag = improve_local_conservation_efforts }
+			set_temp_variable = { temp_ratio_penalties2 = temp_ratio_penalties }
+
+			multiply_temp_variable = { temp_ratio_penalties2 = 0.75 }
+
+			set_variable = { BRA_amazon_penalties = temp_ratio_penalties2 }
+			set_variable = { BRA_building_slots_factor = temp_ratio_penalties2 }
+		}
+		else = {
+			set_variable = { BRA_amazon_penalties = temp_ratio_penalties }
+			set_variable = { BRA_building_slots_factor = temp_ratio_penalties }
+		}
+	}
+}
+
+# function: BRA_yearly_amazon_acreage_change
+# purpose: Changes the total number of acreage depending on the scale of the conservative
+BRA_monthly_amazon_acreage_change = {
+	set_variable = { BRA_net_acreage = BRA_acre_rate_gain }
+	subtract_from_variable = { BRA_net_acreage = BRA_acre_rate_loss }
+
+	add_to_variable = { BRA_acres_wild = BRA_net_acreage }
+
+	subtract_from_variable = { BRA_acres_wild = BRA_acres_conserved_change }
+	add_to_variable = { BRA_acres_conserved = BRA_acres_conserved_change }
+
+	BRA_calculate_amazon_system = yes
+}

@@ -1,0 +1,1711 @@
+add_namespace = arctic
+
+country_event = {
+	id = arctic.1
+	title = arctic.1.t
+	desc = arctic.1.d
+	picture = GFX_arctic_research
+	is_triggered_only = yes
+	option = {
+		name = arctic.1.a
+		log = "[GetDateText]: [This.GetName]: arctic.1.a executed"
+		set_country_flag = arctic_mutual_research_treaty@FROM
+		add_opinion_modifier = {
+			target = FROM
+			modifier = arctic_research_agreement
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = arctic_research_agreement
+		}
+		count_threaty_research = yes
+		recalculate_arctic_research = yes
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = arctic_research } } }
+			add_dynamic_modifier = { modifier = arctic_research }
+		}
+		FROM = {
+			set_country_flag = arctic_mutual_research_treaty@PREV
+			count_threaty_research = yes
+			recalculate_arctic_research = yes
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = arctic_research } } }
+				add_dynamic_modifier = { modifier = arctic_research }
+			}
+			country_event = arctic.4
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = FROM
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = arctic.1.b
+		log = "[GetDateText]: [This.GetName]: arctic.1.b executed"
+		FROM = { country_event = arctic.5 }
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+country_event = {
+	id = arctic.2
+	title = arctic.2.t
+	desc = arctic.2.d
+	picture = GFX_arctic_research
+	is_triggered_only = yes
+	option = {
+		name = arctic.2.a
+		log = "[GetDateText]: [This.GetName]: arctic.2.a executed"
+		set_country_flag = arctic_mutual_resource_treaty@FROM
+		add_opinion_modifier = {
+			target = FROM
+			modifier = arctic_resource_agreement
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = arctic_resource_agreement
+		}
+        count_threaty_resources = yes
+        recalculate_arctic_resources = yes
+		if = {
+			limit = {
+				NOT = { has_dynamic_modifier = arctic_resources }
+			}
+            add_dynamic_modifier = { modifier = arctic_resources }
+		}
+		FROM = {
+			set_country_flag = arctic_mutual_resource_treaty@PREV
+			country_event = arctic.4
+        	count_threaty_resources = yes
+        	recalculate_arctic_resources = yes
+			if = {
+				limit = {
+					NOT = { has_dynamic_modifier = arctic_resources }
+				}
+				add_dynamic_modifier = { modifier = arctic_resources }
+			}
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = FROM
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = arctic.2.b
+		log = "[GetDateText]: [This.GetName]: arctic.2.b executed"
+		FROM = { country_event = arctic.5 }
+		ai_chance = {
+			base = 10
+		}
+	}
+}
+
+country_event = {
+	id = arctic.3
+	title = arctic.3.t
+	desc = arctic.3.d
+	picture = GFX_arctic_council
+	is_triggered_only = yes
+	option = {
+		name = arctic.3.a
+		log = "[GetDateText]: [This.GetName]: arctic.3.a executed"
+		add_to_variable = { global.arctic_resorces_amogusus = 1 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 20
+				OR = {
+					oil < 10
+					tungsten < 10
+					chromium < 10
+				}
+			}
+			modifier = {
+				add = 10
+				has_global_flag = age_has_begun_3
+			}
+			modifier = {
+				add = 15
+				threat > 0.25
+			}
+		}
+	}
+	option = {
+		name = arctic.3.b
+		log = "[GetDateText]: [This.GetName]: arctic.3.b executed"
+		add_to_variable = { global.arctic_resorces_amogusus = -1 }
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+country_event = {
+	id = arctic.4
+	title = arctic.4.t
+	desc = arctic.4.d
+	picture = GFX_arctic_research
+	is_triggered_only = yes
+	option = {
+		name = arctic.4.a
+		log = "[GetDateText]: [This.GetName]: arctic.4.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.5
+	title = arctic.5.t
+	desc = arctic.5.d
+
+	picture = GFX_arctic_research
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.5.a
+		log = "[GetDateText]: [This.GetName]: arctic.5.a executed"
+	}
+}
+
+news_event = {
+	id = arctic.6
+	title = arctic.6.t
+	desc = arctic.6.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.6.a
+		log = "[GetDateText]: [This.GetName]: arctic.6.a executed"
+	}
+}
+
+news_event = {
+	id = arctic.7
+	title = arctic.7.t
+	desc = arctic.7.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.7.a
+		log = "[GetDateText]: [This.GetName]: arctic.7.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.8
+	title = arctic.8.t
+	desc = arctic.8.d
+	picture = GFX_arctic_council
+	is_triggered_only = yes
+	option = {
+		name = arctic.8.a
+		log = "[GetDateText]: [This.GetName]: arctic.8.a executed"
+		add_to_variable = { global.arctic_kick_sugomusus = 1 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 20
+				var:global.arctic_member_to_kick = {
+					PREV = {
+						has_opinion = {
+							target = PREV
+							value < 0
+						}
+					}
+				}
+			}
+			modifier = {
+				add = 20
+				var:global.arctic_member_to_kick = {
+					PREV = {
+						has_opinion = {
+							target = PREV
+							value < -50
+						}
+					}
+				}
+				OR = {
+					threat > 0.5
+					has_global_flag = age_has_begun_4
+				}
+			}
+		}
+	}
+	option = {
+		name = arctic.8.b
+		log = "[GetDateText]: [This.GetName]: arctic.8.b executed"
+		add_to_variable = { global.arctic_kick_sugomusus = -1 }
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+news_event = {
+	id = arctic.9
+	title = arctic.9.t
+	desc = arctic.9.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.9.a
+		log = "[GetDateText]: [This.GetName]: arctic.9.a executed"
+		clear_variable = arctic_member_to_kick
+	}
+}
+
+news_event = {
+	id = arctic.10
+	title = arctic.10.t
+	desc = arctic.10.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.10.a
+		log = "[GetDateText]: [This.GetName]: arctic.10.a executed"
+		clear_variable = arctic_member_to_kick
+	}
+}
+
+country_event = {
+	id = arctic.11
+	title = arctic.11.t
+	desc = arctic.11.d
+	picture = GFX_arctic_research
+	is_triggered_only = yes
+	option = {
+		name = arctic.11.a
+		log = "[GetDateText]: [This.GetName]: arctic.11.a executed"
+		clear_variable = arctic_region_to_build_lab
+	}
+}
+
+country_event = {
+	id = arctic.12
+	title = arctic.12.t
+	desc = arctic.12.d
+	picture = GFX_arctic_force
+	is_triggered_only = yes
+	option = {
+		name = arctic.12.a
+		log = "[GetDateText]: [This.GetName]: arctic.12.a executed"
+		add_to_variable = { global.artic_attack_clear = 1 }
+		if = {
+			limit = { check_variable = { global.artic_attack_clear = 2 } }
+			clear_variable = arctic_region_to_attack
+			clear_variable = arctic_attacker_state
+			clear_variable = global.artic_attack_clear
+		}
+	}
+}
+
+country_event = {
+	id = arctic.13
+	title = arctic.13.t
+	desc = arctic.13.d
+	picture = GFX_arctic_force
+	is_triggered_only = yes
+	option = {
+		name = arctic.13.a
+		log = "[GetDateText]: [This.GetName]: arctic.13.a executed"
+		add_to_variable = { global.artic_attack_clear = 1 }
+		if = {
+			limit = { check_variable = { global.artic_attack_clear = 2 } }
+			clear_variable = arctic_region_to_attack
+			clear_variable = arctic_attacker_state
+			clear_variable = global.artic_attack_clear
+		}
+	}
+}
+
+country_event = {
+	id = arctic.14
+	title = arctic.14.t
+	desc = arctic.14.d
+	picture = GFX_arctic_research
+	is_triggered_only = yes
+	option = {
+		name = arctic.14.a
+		log = "[GetDateText]: [This.GetName]: arctic.14.a executed"
+		set_temp_variable = { treasury_change = 150 }
+		modify_treasury_effect = yes
+		add_opinion_modifier = {
+			target = FROM
+			modifier = arctic_land_purchase
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = arctic_land_purchase
+		}
+		FROM = {
+			country_event = arctic.15
+			if = {
+				limit = {
+					check_variable = { global.arctic_labs^arctic_region_buy_land = 1 }
+				}
+				count_owned_research = yes
+				recalculate_arctic_research = yes
+            	every_other_country = {
+                	limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                	count_threaty_research = yes
+                	recalculate_arctic_research = yes
+            	}
+				if = {
+					limit = { NOT = { has_dynamic_modifier = { modifier = arctic_research } } }
+					add_dynamic_modifier = { modifier = arctic_research }
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = started_arctic_resources_extraction
+						has_global_flag = arctic_resources_allowed
+					}
+				}
+        		count_owned_resources = yes
+        		recalculate_arctic_resources = yes
+				if = {
+					limit = { NOT = { has_dynamic_modifier = { modifier = arctic_resources } } }
+					add_dynamic_modifier = { modifier = arctic_resources }
+				}
+				every_other_country = {
+                    limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                    count_threaty_resources = yes
+                    recalculate_arctic_resources = yes
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						check_variable = { global.arctic_military^arctic_region_buy_land = 1 }
+						check_variable = { global.arctic_air^arctic_region_buy_land = 1 }
+						check_variable = { global.arctic_navy^arctic_region_buy_land = 1 }
+						check_variable = { global.arctic_nuclear^arctic_region_buy_land = 1 }
+					}
+				}
+				count_arctic_military_bases = yes
+				if = {
+					limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+					add_dynamic_modifier = { modifier = arctic_based }
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = started_arctic_resources_extraction
+					has_global_flag = arctic_resources_allowed
+				}
+			}
+        	count_owned_resources = yes
+        	recalculate_arctic_resources = yes
+			every_other_country = {
+                limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+            	count_threaty_resources = yes
+                recalculate_arctic_resources = yes
+			}
+		}
+		if = {
+			limit = {
+				FROM = { check_variable = { global.arctic_labs^arctic_region_buy_land = 1 } }
+			}
+			count_owned_research = yes
+			recalculate_arctic_research = yes
+            every_other_country = {
+                limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                count_threaty_research = yes
+                recalculate_arctic_research = yes
+            }
+		}
+		if = {
+			limit = {
+				OR = {
+					PREV = { check_variable = { global.arctic_military^arctic_region_buy_land = 1 } }
+					PREV = { check_variable = { global.arctic_air^arctic_region_buy_land = 1 } }
+					PREV = { check_variable = { global.arctic_navy^arctic_region_buy_land = 1 } }
+					PREV = { check_variable = { global.arctic_nuclear^arctic_region_buy_land = 1 } }
+				}
+			}
+			count_arctic_military_bases = yes
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+	option = {
+		name = arctic.14.b
+		log = "[GetDateText]: [This.GetName]: arctic.14.b executed"
+		FROM = { country_event = arctic.16 }
+		ai_chance = {
+			base = 80
+		}
+	}
+}
+
+country_event = {
+	id = arctic.15
+	title = arctic.15.t
+	desc = arctic.15.d
+	picture = GFX_arctic_research
+	is_triggered_only = yes
+	option = {
+		name = arctic.15.a
+		log = "[GetDateText]: [This.GetName]: arctic.15.a executed"
+		set_temp_variable = { treasury_change = -150 }
+		modify_treasury_effect = yes
+		buy_arctic_region = yes
+	}
+}
+
+country_event = {
+	id = arctic.16
+	title = arctic.16.t
+	desc = arctic.16.d
+
+	picture = GFX_arctic_research
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.16.a
+		log = "[GetDateText]: [This.GetName]: arctic.16.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.17
+	title = arctic.17.t
+	desc = arctic.17.d
+
+	picture = [arctic_dead_general_picture]
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.17.a
+		log = "[GetDateText]: [This.GetName]: arctic.17.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.18
+	title = arctic.18.t
+	desc = arctic.18.d
+
+	picture = GFX_ace_died
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.18.a
+		log = "[GetDateText]: [This.GetName]: arctic.18.a executed"
+		add_war_support = -0.02
+	}
+}
+
+country_event = {
+	id = arctic.19
+	title = arctic.19.t
+	desc = arctic.19.d
+
+	picture = GFX_ace_promoted
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.19.a
+		log = "[GetDateText]: [This.GetName]: arctic.19.a executed"
+		add_war_support = 0.02
+	}
+}
+
+country_event = {
+	id = arctic.20
+	title = arctic.20.t
+	desc = arctic.20.d
+
+	picture = GFX_arctic_council
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.20.a
+		log = "[GetDateText]: [This.GetName]: arctic.20.a executed"
+		clr_global_flag = arctic_land_squander
+		add_political_power = 500
+		add_opinion_modifier = {
+			target = FROM
+			modifier = negotiated_arctic_land
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = negotiated_arctic_land
+		}
+		if = {
+			limit = { FROM = { check_variable = { selected_region = 0 } } }
+			clr_country_flag = Sector_1_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 1 } } }
+			clr_country_flag = Sector_2_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 2 } } }
+			clr_country_flag = Sector_3_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 3 } } }
+			clr_country_flag = Sector_4_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 4 } } }
+			clr_country_flag = Sector_5_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 5 } } }
+			clr_country_flag = Sector_6_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 6 } } }
+			clr_country_flag = Sector_7_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 7 } } }
+			clr_country_flag = Sector_8_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 8 } } }
+			clr_country_flag = Sector_9_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 9 } } }
+			clr_country_flag = Sector_10_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 10 } } }
+			clr_country_flag = Sector_11_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 11 } } }
+			clr_country_flag = Sector_12_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 12 } } }
+			clr_country_flag = Sector_13_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 13 } } }
+			clr_country_flag = Sector_14_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 14 } } }
+			clr_country_flag = Sector_15_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 15 } } }
+			clr_country_flag = Sector_16_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 16 } } }
+			clr_country_flag = Sector_17_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 17 } } }
+			clr_country_flag = Sector_18_core
+		}
+		else_if = {
+			limit = { FROM = { check_variable = { selected_region = 18 } } }
+			clr_country_flag = Sector_19_core
+		}
+		FROM = { country_event = arctic.4 }
+		clear_variable = global.arctic_land_to_squander
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 25
+				has_opinion = {
+                    target = FROM
+                    value > 0
+                }
+			}
+			modifier = {
+				add = 50
+				has_opinion = {
+                    target = FROM
+                    value > 50
+                }
+			}
+		}
+	}
+
+	option = {
+		name = arctic.20.b
+		log = "[GetDateText]: [This.GetName]: arctic.20.b executed"
+		clr_global_flag = arctic_land_squander
+		FROM = { country_event = arctic.5 }
+		clear_variable = global.arctic_land_to_squander
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+country_event = {
+	id = arctic.21
+	title = arctic.21.t
+	desc = arctic.21.d
+	picture = GFX_arctic_council
+	is_triggered_only = yes
+	option = {
+		name = arctic.21.a
+		log = "[GetDateText]: [This.GetName]: arctic.21.a executed"
+		add_to_variable = { global.arctic_accept_amogus = 1 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = FROM
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = arctic.21.b
+		log = "[GetDateText]: [This.GetName]: arctic.21.b executed"
+		add_to_variable = { global.arctic_accept_amogus = -1 }
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+news_event = {
+	id = arctic.22
+	title = arctic.22.t
+	desc = arctic.22.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.22.a
+		log = "[GetDateText]: [This.GetName]: arctic.22.a executed"
+	}
+}
+
+news_event = {
+	id = arctic.23
+	title = arctic.23.t
+	desc = arctic.23.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.23.a
+		log = "[GetDateText]: [This.GetName]: arctic.23.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.24
+	title = arctic.24.t
+	desc = arctic.24.d
+	picture = GFX_arctic_council
+	is_triggered_only = yes
+	option = {
+		name = arctic.24.a
+		log = "[GetDateText]: [This.GetName]: arctic.24.a executed"
+		add_to_variable = { global.arctic_council_accept_amogus = 1 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 50
+				has_opinion = {
+					target = FROM
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = arctic.24.b
+		log = "[GetDateText]: [This.GetName]: arctic.24.b executed"
+		add_to_variable = { global.arctic_council_accept_amogus = -1 }
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+news_event = {
+	id = arctic.25
+	title = arctic.25.t
+	desc = arctic.25.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.25.a
+		log = "[GetDateText]: [This.GetName]: arctic.25.a executed"
+	}
+}
+
+news_event = {
+	id = arctic.26
+	title = arctic.26.t
+	desc = arctic.26.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.26.a
+		log = "[GetDateText]: [This.GetName]: arctic.26.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.27
+	title = arctic.27.t
+	desc = arctic.27.d
+
+	picture = GFX_arctic_base
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.27.a
+		log = "[GetDateText]: [This.GetName]: arctic.27.a executed"
+		clear_variable = arctic_region_to_build_military_base
+	}
+}
+
+country_event = {	#Arctic exercise
+	id = arctic.28
+	title = arctic.28.t
+	desc = arctic.28.d
+
+	picture = GFX_arctic_force
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.28.a
+		log = "[GetDateText]: [This.GetName]: arctic.28.a executed"
+		army_experience = 5
+		air_experience = 5
+		navy_experience = 5
+		set_country_flag = {
+			flag = recent_arctic_exercises
+			days = 360
+		}
+		add_timed_idea = {
+			idea = recent_arctic_exercises
+			days = 180
+		}
+		FROM = {
+			army_experience = 5
+			air_experience = 5
+			navy_experience = 5
+			country_event = arctic.29
+			set_country_flag = {
+				flag = recent_arctic_exercises
+				days = 360
+			}
+			add_timed_idea = {
+				idea = recent_arctic_exercises
+				days = 180
+			}
+		}
+	}
+	option = {
+		name = arctic.28.b
+		log = "[GetDateText]: [This.GetName]: arctic.28.b executed"
+		FROM = {
+			country_event = arctic.30
+		}
+	}
+}
+
+country_event = {
+	id = arctic.29
+	title = arctic.29.t
+	desc = arctic.29.d
+
+	picture = GFX_arctic_force
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.29.a
+		log = "[GetDateText]: [This.GetName]: arctic.29.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.30
+	title = arctic.30.t
+	desc = arctic.30.d
+
+	picture = GFX_arctic_force
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.30.a
+		log = "[GetDateText]: [This.GetName]: arctic.30.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.31
+	title = arctic.31.t
+	desc = arctic.31.d
+
+	picture = GFX_arctic_research
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.31.a
+		log = "[GetDateText]: [This.GetName]: arctic.31.a executed"
+		clear_variable = arctic_region_to_research
+	}
+}
+
+country_event = {
+	id = arctic.32
+	title = arctic.32.t
+	desc = arctic.32.d
+	picture = GFX_arctic_council
+	is_triggered_only = yes
+	option = {
+		name = arctic.32.a
+		log = "[GetDateText]: [This.GetName]: arctic.32.a executed"
+		add_to_variable = { global.arctic_trade_route_amogusus = 1 }
+		set_temp_variable = { treasury_change = -25 }
+		modify_treasury_effect = yes
+		ai_chance = {
+			base = 50
+		}
+	}
+	option = {
+		name = arctic.32.b
+		log = "[GetDateText]: [This.GetName]: arctic.32.b executed"
+		add_to_variable = { global.arctic_trade_route_amogusus = -1 }
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+news_event = {
+	id = arctic.33
+	title = arctic.33.t
+	desc = arctic.33.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.33.a
+		log = "[GetDateText]: [This.GetName]: arctic.33.a executed"
+	}
+}
+
+news_event = {
+	id = arctic.34
+	title = arctic.34.t
+	desc = arctic.34.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.34.a
+		log = "[GetDateText]: [This.GetName]: arctic.34.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.35
+	title = arctic.35.t
+	desc = arctic.35.d
+	picture = GFX_arctic_council
+	is_triggered_only = yes
+	option = {
+		name = arctic.35.a
+		log = "[GetDateText]: [This.GetName]: arctic.35.a executed"
+		add_to_variable = { global.arctic_kick_observer_sugomusus = 1 }
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 20
+				var:global.arctic_observer_to_kick = {
+					PREV = {
+						has_opinion = {
+							target = PREV
+							value < 0
+						}
+					}
+				}
+			}
+			modifier = {
+				add = 20
+				var:global.arctic_observer_to_kick = {
+					PREV = {
+						has_opinion = {
+							target = PREV
+							value < -50
+						}
+					}
+				}
+				OR = {
+					threat > 0.5
+					has_global_flag = age_has_begun_4
+				}
+			}
+		}
+	}
+	option = {
+		name = arctic.35.b
+		log = "[GetDateText]: [This.GetName]: arctic.35.b executed"
+		add_to_variable = { global.arctic_kick_observer_sugomusus = -1 }
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+news_event = {
+	id = arctic.36
+	title = arctic.36.t
+	desc = arctic.36.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.36.a
+		log = "[GetDateText]: [This.GetName]: arctic.9.a executed"
+		clear_variable = arctic_observer_to_kick
+	}
+}
+
+news_event = {
+	id = arctic.37
+	title = arctic.37.t
+	desc = arctic.37.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.37.a
+		log = "[GetDateText]: [This.GetName]: arctic.37.a executed"
+		clear_variable = arctic_observer_to_kick
+	}
+}
+
+news_event = {
+	id = arctic.38
+	title = arctic.38.t
+	desc = arctic.38.d
+
+	picture = GFX_arctic_resource_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.38.a
+		log = "[GetDateText]: [This.GetName]: arctic.38.a executed"
+	}
+}
+
+news_event = {
+	id = arctic.39
+	title = arctic.39.t
+	desc = arctic.39.d
+
+	picture = GFX_arctic_nuclear_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.39.a
+		log = "[GetDateText]: [This.GetName]: arctic.39.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.40
+	title = arctic.40.t
+	desc = arctic.40.d
+
+	picture = GFX_arctic_council
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.40.a
+		log = "[GetDateText]: [This.GetName]: arctic.40.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.41
+	title = arctic.41.t
+	desc = arctic.41.d
+
+	picture = GFX_arctic_council
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.41.a
+		log = "[GetDateText]: [This.GetName]: arctic.41.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.42
+	title = arctic.42.t
+	desc = arctic.42.d
+
+	picture = GFX_arctic_airport
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.42.a
+		log = "[GetDateText]: [This.GetName]: arctic.42.a executed"
+		clear_variable = arctic_region_to_build_air_base
+	}
+}
+
+country_event = {
+	id = arctic.43
+	title = arctic.43.t
+	desc = arctic.43.d
+
+	picture = GFX_arctic_fleet
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.43.a
+		log = "[GetDateText]: [This.GetName]: arctic.43.a executed"
+		clear_variable = arctic_region_to_build_navy_base
+	}
+}
+
+country_event = {
+	id = arctic.44
+	title = arctic.44.t
+	desc = arctic.44.d
+
+	picture = GFX_arctic_nuclear
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.44.a
+		log = "[GetDateText]: [This.GetName]: arctic.44.a executed"
+		clear_variable = arctic_region_to_build_nuclear_base
+	}
+}
+
+news_event = {
+	id = arctic.45
+	title = arctic.45.t
+	desc = arctic.45.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_country = {
+					has_idea = arctic_council_member
+					NOT = { has_country_flag = was_arctic_chairman }
+					NOT = {
+						any_other_country = {
+							has_idea = arctic_council_member
+							NOT = { has_country_flag = was_arctic_chairman }
+						}
+					}
+				}
+			}
+            every_country = {
+                limit = { is_ai = no }
+				random_country = {
+					if = {
+						limit = {
+							has_idea = arctic_council_member
+							NOT = { has_country_flag = was_arctic_chairman }
+						}
+						PREV = { set_variable = { arctic_chairman = PREV } }
+					}
+				}
+            }
+			news_event = arctic.46
+		}
+		else = {
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							has_idea = arctic_council_member
+							NOT = { has_country_flag = was_arctic_chairman }
+						}
+					}
+				}
+				every_country = {
+					limit = { has_idea = arctic_council_member }
+					clr_country_flag = was_arctic_chairman
+				}
+			}
+			for_each_loop = {
+				array = global.arctic_council_members
+				add_to_array = {
+					array = global.arctic_chairman_voting
+					value = 0
+				}
+			}
+			set_global_flag = arctic_council_chairman_voting_active
+			every_country = {
+				limit = { has_idea = arctic_council_member }
+				activate_mission = arctic_chairman_election
+			}
+		}
+	}
+
+	option = {
+		name = arctic.45.a
+		log = "[GetDateText]: [This.GetName]: arctic.45.a executed"
+	}
+}
+
+news_event = {
+	id = arctic.46
+	title = arctic.46.t
+	desc = arctic.46.d
+
+	picture = GFX_arctic_council_news
+
+	is_triggered_only = yes
+
+	major = yes
+
+	show_major = {
+		has_idea = arctic_council_member
+	}
+
+	option = {
+		name = arctic.46.a
+		log = "[GetDateText]: [This.GetName]: arctic.46.a executed"
+		clear_variable = arctic_chairman
+	}
+}
+
+country_event = {
+	id = arctic.47
+	title = arctic.47.t
+	desc = arctic.47.d
+
+	picture = GFX_arctic_sushi
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.47.a
+		log = "[GetDateText]: [This.GetName]: arctic.47.a executed"
+		set_temp_variable = { treasury_change = -0.01 }
+		modify_treasury_effect = yes
+	}
+
+	option = {
+		name = arctic.47.b
+		log = "[GetDateText]: [This.GetName]: arctic.47.b executed"
+	}
+}
+
+country_event = {
+	id = arctic.48
+	title = arctic.48.t
+	desc = arctic.48.d
+
+	picture = GFX_arctic_sushi
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.48.a
+		log = "[GetDateText]: [This.GetName]: arctic.48.a executed"
+		add_political_power = 15
+	}
+}
+
+country_event = {
+	id = arctic.49
+	title = arctic.49.t
+	desc = arctic.49.d
+
+	picture = GFX_arctic_hat
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.49.a
+		log = "[GetDateText]: [This.GetName]: arctic.49.a executed"
+		add_manpower = -1
+	}
+}
+
+country_event = {
+	id = arctic.50
+	title = arctic.50.t
+	desc = arctic.50.d
+
+	picture = GFX_arctic_agarta
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.50.a
+		log = "[GetDateText]: [This.GetName]: arctic.50.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.51
+	title = arctic.51.t
+	desc = arctic.51.d
+
+	picture = GFX_arctic_dark
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.51.a
+		log = "[GetDateText]: [This.GetName]: arctic.51.a executed"
+		set_country_flag = Dark_general
+	}
+
+	option = {
+		name = arctic.51.b
+		log = "[GetDateText]: [This.GetName]: arctic.51.b executed"
+		add_political_power = 15
+	}
+}
+
+country_event = {
+	id = arctic.52
+	title = arctic.52.t
+	desc = arctic.52.d
+
+	picture = GFX_arctic_haski_laik
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.52.a
+		log = "[GetDateText]: [This.GetName]: arctic.52.a executed"
+		set_country_flag = arctic_haski_laik
+	}
+
+	option = {
+		name = arctic.52.b
+		log = "[GetDateText]: [This.GetName]: arctic.52.b executed"
+		add_political_power = 15
+	}
+}
+
+country_event = {
+	id = arctic.53
+	title = arctic.53.t
+	desc = arctic.53.d
+
+	picture = GFX_arctic_burger
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.53.a
+		log = "[GetDateText]: [This.GetName]: arctic.53.a executed"
+		add_political_power = 15
+		add_popularity = {
+			ideology = nationalist
+			popularity = 0.01
+		}
+	}
+
+	option = {
+		name = arctic.53.b
+		log = "[GetDateText]: [This.GetName]: arctic.53.b executed"
+	}
+}
+
+country_event = {
+	id = arctic.54
+	title = arctic.54.t
+	desc = arctic.54.d
+
+	picture = GFX_arctic_fleet
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.54.a
+		log = "[GetDateText]: [This.GetName]: arctic.54.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.55
+	title = arctic.55.t
+	desc = arctic.55.d
+
+	picture = GFX_arctic_virus
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.55.a
+		log = "[GetDateText]: [This.GetName]: arctic.55.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.56
+	title = arctic.56.t
+	desc = arctic.56.d
+
+	picture = GFX_arctic_bactery
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.56.a
+		log = "[GetDateText]: [This.GetName]: arctic.56.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.57
+	title = arctic.57.t
+	desc = arctic.57.d
+
+	picture = GFX_arctic_animal_dead
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.57.a
+		log = "[GetDateText]: [This.GetName]: arctic.57.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.58
+	title = arctic.58.t
+	desc = arctic.58.d
+
+	picture = GFX_arctic_expedition_dead
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.58.a
+		log = "[GetDateText]: [This.GetName]: arctic.58.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.59
+	title = arctic.59.t
+	desc = arctic.59.d
+
+	picture = GFX_arctic_mineral
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.59.a
+		log = "[GetDateText]: [This.GetName]: arctic.59.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.60
+	title = arctic.60.t
+	desc = arctic.60.d
+
+	picture = GFX_arctic_konuhov
+
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = arctic.60.a
+		log = "[GetDateText]: [This.GetName]: arctic.60.a executed"
+		add_political_power = 15
+	}
+}
+
+country_event = {
+	id = arctic.61
+	title = arctic.61.t
+	desc = arctic.61.d
+
+	picture = GFX_arctic_wars
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.61.a
+		log = "[GetDateText]: [This.GetName]: arctic.61.a executed"
+	}
+
+	option = {
+		name = arctic.61.b
+		log = "[GetDateText]: [This.GetName]: arctic.61.b executed"
+		FROM = { country_event = arctic.62 }
+		ai_chance = {
+			base = 25
+		}
+	}
+}
+
+country_event = {
+	id = arctic.62
+	title = arctic.62.t
+	desc = arctic.62.d
+
+	picture = GFX_arctic_wars
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.62.a
+		log = "[GetDateText]: [This.GetName]: arctic.62.a executed"
+		FROM = { country_event = arctic.64 }
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 50
+				OR = {
+			 		has_idea = nuclear_power_off
+			 		has_idea = nuclear_power_def
+				}
+				OR = {
+					has_equipment = {
+						nuclear_missile_equipment > 0
+					}
+					has_equipment = {
+						nuclear_ballistic_missile_equipment > 0
+					}
+				}
+			}
+			modifier = {
+				add = 50
+				strength_ratio = {
+    				tag = FROM
+    				ratio > 1
+				}
+			}
+			modifier = {
+				factor = 0
+				threat < 0.25
+			}
+		}
+	}
+
+	option = {
+		name = arctic.62.b
+		log = "[GetDateText]: [This.GetName]: arctic.62.b executed"
+		remove_mission = arctic_expand_land
+		FROM = { country_event = arctic.63 }
+		ai_chance = {
+			base = 50
+		}
+	}
+}
+
+country_event = {
+	id = arctic.63
+	title = arctic.63.t
+	desc = arctic.63.d
+
+	picture = GFX_arctic_wars
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.63.a
+		log = "[GetDateText]: [This.GetName]: arctic.63.a executed"
+	}
+}
+
+country_event = {
+	id = arctic.64
+	title = arctic.64.t
+	desc = arctic.64.d
+
+	picture = GFX_arctic_wars
+
+	is_triggered_only = yes
+
+	option = {
+		name = arctic.64.a
+		log = "[GetDateText]: [This.GetName]: arctic.64.a executed"
+		set_country_flag = { flag = sanctions_prepared@FROM value = 1 days = 365 }
+		create_wargoal = {
+    		type = puppet_wargoal_focus
+    		target = FROM
+			expire = 365
+		}
+	}
+}

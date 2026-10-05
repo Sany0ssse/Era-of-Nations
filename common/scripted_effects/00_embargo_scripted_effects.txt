@@ -1,0 +1,49 @@
+calculate_embargo_modifiers = {
+    every_country = {
+        if = {
+            limit = {
+                any_other_country = {
+                    OR = {
+                        is_embargoing = PREV
+                        is_embargoed_by = PREV
+                    }
+                }
+            }
+            set_variable = { embargo_modifier_value = percentage_of_global_factories }
+            every_other_country = {
+                limit = {
+                    OR = {
+                        is_embargoing = PREV
+                        is_embargoed_by = PREV
+                    }
+                }
+                PREV = { subtract_from_variable = { embargo_modifier_value = PREV.percentage_of_global_factories } }
+            }
+            every_other_country = {
+                limit = {
+                    NOT = { is_embargoing = PREV }
+                    NOT = { is_embargoed_by = PREV }
+                }
+                PREV = { add_to_variable = { embargo_modifier_value = PREV.percentage_of_global_factories } }
+            }
+            add_to_variable = { embargo_modifier_value = -1 }
+            multiply_variable = { embargo_modifier_value = 0.25 }
+
+	        set_temp_variable = { embargo_modifier_value_multiplyer = modifier@sanctions_defence_modifier }
+	        multiply_temp_variable = { embargo_modifier_value_multiplyer = 100 }
+
+	        set_temp_variable = { embargo_modifier_value_modifier = quarters_since_sanctions }
+	        add_to_temp_variable = { embargo_modifier_value_modifier = embargo_modifier_value_multiplyer }
+	        multiply_temp_variable = { embargo_modifier_value_modifier = -0.01 }
+	        add_to_temp_variable = { embargo_modifier_value_modifier = 1 }
+	        multiply_variable = { embargo_modifier_value = embargo_modifier_value_modifier }
+            clamp_variable = { var = embargo_modifier_value min = -0.25 max = -0.01 }
+            set_variable = { embargo_modifier_value_minus = embargo_modifier_value }
+            multiply_variable = { embargo_modifier_value_minus = -1 }
+            if = {
+                limit = { NOT = { has_dynamic_modifier = { modifier = embargo_dynamic_modifier } } }
+                add_dynamic_modifier = { modifier = embargo_dynamic_modifier }
+            }
+        }
+    }
+}

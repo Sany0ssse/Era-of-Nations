@@ -1,0 +1,176 @@
+##### Created by Haski_Laik #####
+add_namespace = manage_subject_expenses
+
+country_event = {
+    id = manage_subject_expenses.2
+    immediate = {
+        log = "[GetDateText]: [Root.GetName]: event manage_subject_expenses.2 - spawning main event at overlord"
+        FROM = {
+            country_event = { id = manage_subject_expenses.1 }
+        }
+    }
+    title = "You're not supposed to be here"
+    desc = "Why are you here?"
+    hidden = yes
+    is_triggered_only = yes
+}
+
+country_event = {
+    id = manage_subject_expenses.1
+    title = MANAGE_SUBJECT_EXPENSES_T
+    desc = MANAGE_SUBJECT_EXPENSES_D
+
+    is_triggered_only = yes
+    picture = GFX_treaty
+
+    option = {
+        name = manage_subject_expenses.1.a
+        trigger = {
+            FROM = {
+                NOT = { has_idea = police_05 }
+            }
+        }
+        log = "[GetDateText]: [This.GetName]: manage_subject_expenses.1.a executed - Police focus"
+        FROM = {
+            increase_policing_budget = yes
+            custom_effect_tooltip = SUBJ_BLOCK_POLICE_DECREASE_TT
+            hidden_effect = {
+                block_police_decrease = yes
+            }
+            add_autonomy_ratio = {
+                value = 0.35
+            }
+        }
+    }
+
+    option = {
+        name = manage_subject_expenses.1.b
+        trigger = {
+            FROM = {
+                NOT = { has_idea = edu_05 }
+            }
+        }
+        log = "[GetDateText]: [This.GetName]: manage_subject_expenses.1.b executed - Education focus"
+        FROM = {
+            increase_education_budget = yes
+            custom_effect_tooltip = SUBJ_BLOCK_EDU_DECREASE_TT
+            hidden_effect = {
+                block_edu_decrease = yes
+            }
+            add_autonomy_ratio = {
+                value = 0.25
+            }
+        }
+    }
+
+    option = {
+        name = manage_subject_expenses.1.c
+        trigger = {
+            FROM = {
+                NOT = { has_idea = health_06 }
+            }
+        }
+        log = "[GetDateText]: [This.GetName]: manage_subject_expenses.1.c executed - Healthcare focus"
+        FROM = {
+            increase_healthcare_budget = yes
+            custom_effect_tooltip = SUBJ_BLOCK_HEALTH_DECREASE_TT
+            hidden_effect = {
+                block_health_decrease = yes
+            }
+            add_autonomy_ratio = {
+                value = 0.30
+            }
+        }
+    }
+
+    option = {
+        name = manage_subject_expenses.1.d
+        log = "[GetDateText]: [This.GetName]: manage_subject_expenses.1.d executed - Advanced options"
+        hidden_effect = {
+            FROM = {
+                country_event = { id = manage_subject_expenses.3 }
+            }
+        }
+    }
+}
+
+country_event = {
+    id = manage_subject_expenses.3
+    immediate = {
+        log = "[GetDateText]: [Root.GetName]: event manage_subject_expenses.3 - spawning main event at overlord"
+        FROM = {
+            country_event = { id = manage_subject_expenses.4 }
+        }
+    }
+    title = "You're not supposed to be here"
+    desc = "Why are you here?"
+    hidden = yes
+    is_triggered_only = yes
+}
+
+country_event = {
+    id = manage_subject_expenses.4
+    title = MANAGE_SUBJECT_EXPENSES_ADV_T
+    desc = MANAGE_SUBJECT_EXPENSES_ADV_D
+
+    is_triggered_only = yes
+    picture = GFX_treaty
+
+    option = {
+        name = manage_subject_expenses.4.a
+        trigger = {
+            FROM = {
+                NOT = { has_idea = bureau_05 }
+            }
+        }
+        log = "[GetDateText]: [This.GetName]: manage_subject_expenses.4.a executed - Administration"
+        FROM = {
+            increase_centralization = yes
+            custom_effect_tooltip = SUBJ_BLOCK_BUREAU_DECREASE_TT
+            hidden_effect = {
+                block_bureau_decrease = yes
+            }
+            add_autonomy_ratio = {
+                value = 0.10
+            }
+        }
+    }
+
+    option = {
+        name = manage_subject_expenses.4.b
+        trigger = {
+            FROM = {
+                NOT = { has_idea = social_06 }
+            }
+        }
+        log = "[GetDateText]: [This.GetName]: manage_subject_expenses.4.b executed - Social spending"
+        FROM = {
+            increase_social_spending = yes
+            custom_effect_tooltip = SUBJ_BLOCK_SOCIAL_DECREASE_TT
+            hidden_effect = {
+                block_social_decrease = yes
+            }
+            add_autonomy_ratio = {
+                value = 0.15
+            }
+        }
+    }
+
+    option = {
+        name = manage_subject_expenses.4.c
+        log = "[GetDateText]: [This.GetName]: manage_subject_expenses.4.c executed - Back to main"
+        hidden_effect = {
+            FROM = {
+                country_event = { id = manage_subject_expenses.2 }
+            }
+        }
+    }
+
+    option = {
+        name = manage_subject_expenses.4.d
+        log = "[GetDateText]: [This.GetName]: manage_subject_expenses.4.d executed - Close"
+        hidden_effect = {
+            add_political_power = 250
+        }
+    }
+}

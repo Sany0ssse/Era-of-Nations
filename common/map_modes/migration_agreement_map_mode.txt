@@ -1,0 +1,39 @@
+scripted_map_modes = {
+    migration_agreement_map_mode = {
+        top = {
+            type = none
+        }
+
+        bottom = {
+            type = country
+            color = {
+                if = {
+                    limit = {
+                        OR = {
+                            has_country_flag = migration_agreement_migrants_add@FROM
+                            has_country_flag = migration_agreement_migrants_cut@FROM
+                        }
+                    }
+                    set_temp_variable = { r_clc = 0.137 }
+                    set_temp_variable = { g_clc = 0.808 }
+                    set_temp_variable = { b_clc = 0.176 }
+                }
+                else = {
+                    set_temp_variable = { r_clc = 0.5 }
+                    set_temp_variable = { g_clc = 0.5 }
+                    set_temp_variable = { b_clc = 0.5 }
+                }
+
+                set_temp_variable = { red = r_clc }
+                set_temp_variable = { green = g_clc }
+                set_temp_variable = { blue = b_clc }
+                set_temp_variable = { alpha = 1.00 }
+            }
+        }
+
+        far_text = country
+        near_text = none
+
+        update_daily = no
+    }
+}

@@ -1,0 +1,777 @@
+add_namespace = energy_selling
+
+#BUY ENERGY OFFER
+country_event = {
+	id = energy_selling.1
+	title = energy_selling.1.t
+	desc = energy_selling.1.desc
+	picture = GFX_energy_sell_buy
+	is_triggered_only = yes
+
+    immediate = {
+		if = {
+			limit = { FROM = { is_ai = yes } }
+			clamp_variable = { var = FROM.temp_energy_price min = 0.01 }
+			if = {
+				limit = { check_variable = { FROM.energy_balance > 0 } }
+				set_temp_variable = {
+					energy_balance_minus = {
+						value = FROM.energy_balance
+						multiply = -1
+					}
+				}
+				clamp_variable = { var = FROM.temp_energy_ammount min = energy_balance_minus }
+				round_variable = FROM.temp_energy_ammount
+			}
+			clamp_variable = { var = FROM.temp_energy_ammount max = -1 }
+		}
+		set_variable = { contract_energy_ammount = FROM.temp_energy_ammount }
+		multiply_variable = { contract_energy_ammount = -1 }
+		set_variable = { ai_accept_chance = 0 }
+		if = {
+			limit = { has_idea = heavy_additional_consumption_spirit }
+			add_to_variable = { ai_accept_chance = -50 }
+		}
+		else_if = {
+			limit = {
+				has_idea = heavy_power_restrictions_spirit
+			}
+			set_temp_variable = { energy_temp = energy_consumption }
+			multiply_temp_variable = { energy_temp = 1.4 }
+			subtract_from_variable = { energy_temp = energy_sum }
+			if = {
+				limit = {
+					check_variable = { energy_temp < 0 }
+				}
+				multiply_temp_variable = { energy_temp = -1 }
+				set_temp_variable = { energy_temp_diviation = FROM.temp_energy_ammount }
+				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
+				if = {
+					limit = {
+						check_variable = { energy_temp_diviation > 0 }
+						check_variable = { energy_temp_diviation < 11 }
+					}
+					add_to_variable = { ai_accept_chance = 50 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_idea = some_power_restrictions_spirit
+			}
+			set_temp_variable = { energy_temp = energy_consumption }
+			multiply_temp_variable = { energy_temp = 1.3 }
+			subtract_from_variable = { energy_temp = energy_sum }
+			if = {
+				limit = {
+					check_variable = { energy_temp < 0 }
+				}
+				multiply_temp_variable = { energy_temp = -1 }
+				set_temp_variable = { energy_temp_diviation = FROM.temp_energy_ammount }
+				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
+				if = {
+					limit = {
+						check_variable = { energy_temp_diviation > 0 }
+						check_variable = { energy_temp_diviation < 11 }
+					}
+					add_to_variable = { ai_accept_chance = 50 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_idea = some_additional_consumption_spirit
+			}
+			set_temp_variable = { energy_temp = energy_consumption }
+			multiply_temp_variable = { energy_temp = 1.1 }
+			subtract_from_variable = { energy_temp = energy_sum }
+			if = {
+				limit = {
+					check_variable = { energy_temp < 0 }
+				}
+				multiply_temp_variable = { energy_temp = -1 }
+				set_temp_variable = { energy_temp_diviation = FROM.temp_energy_ammount }
+				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
+				if = {
+					limit = {
+						check_variable = { energy_temp_diviation > 0 }
+						check_variable = { energy_temp_diviation < 11 }
+					}
+					add_to_variable = { ai_accept_chance = 50 }
+				}
+			}
+		}
+		else = {
+			set_temp_variable = { energy_temp = energy_consumption }
+			multiply_temp_variable = { energy_temp = 1.2 }
+			subtract_from_variable = { energy_temp = energy_sum }
+			if = {
+				limit = {
+					check_variable = { energy_temp < 0 }
+				}
+				multiply_temp_variable = { energy_temp = -1 }
+				set_temp_variable = { energy_temp_diviation = FROM.temp_energy_ammount }
+				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
+				if = {
+					limit = {
+						check_variable = { energy_temp_diviation > 0 }
+						check_variable = { energy_temp_diviation < 11 }
+					}
+					add_to_variable = { ai_accept_chance = 50 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { energy_balance < 10 } }
+			add_to_variable = { ai_accept_chance = 50 }
+		}
+		if = {
+			limit = { check_variable = { display_income < display_expense } }
+			add_to_variable = { ai_accept_chance = -100 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					any_other_country = {
+						has_country_flag = energy_agreement@ROOT
+						check_variable = { energy_balance > 1 }
+					}
+				}
+			}
+			add_to_variable = { ai_accept_chance = 50 }
+		}
+		set_temp_variable = { price_adjust = FROM.temp_energy_price }
+		add_to_temp_variable = { price_adjust = -0.05 }
+		multiply_temp_variable = { price_adjust = -1000 }
+		add_to_variable = { ai_accept_chance = price_adjust }
+		add_to_variable = { ai_accept_chance = contract_energy_ammount }
+	}
+
+	option = {
+		name = energy_selling.1.a
+		log = "[GetDateText]: [This.GetName]: energy_selling.1.a executed"
+		custom_effect_tooltip = energy_selling_decision_tt
+		add_to_array = {
+			array = energy_contractors
+			value = FROM
+		}
+		multiply_variable = { FROM.temp_energy_ammount = -1 }
+		add_to_array = {
+			array = energy_contracts_ammount
+			value = FROM.temp_energy_ammount
+		}
+		add_to_array = {
+			array = energy_contracts_price
+			value = FROM.temp_energy_price
+		}
+		multiply_variable = { FROM.temp_energy_ammount = -1 }
+		clear_variable = contract_energy_ammount
+		FROM = {
+			add_to_array = {
+				array = energy_contractors
+				value = PREV
+			}
+			add_to_array = {
+				array = energy_contracts_ammount
+				value = temp_energy_ammount
+			}
+			add_to_array = {
+				array = energy_contracts_price
+				value = temp_energy_price
+			}
+			country_event = energy_selling.2
+			clear_variable = temp_energy_ammount
+			clear_variable = temp_energy_price
+			clear_variable = energy_selling_selected_TAG
+		}
+		clear_variable = ai_accept_chance
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				check_variable = {
+    				var = ai_accept_chance
+    				value = 0
+    				compare = less_than_or_equals
+				}
+			}
+		}
+	}
+	option = {
+		name = energy_selling.1.b
+		log = "[GetDateText]: [This.GetName]: energy_selling.1.a executed"
+		FROM = {
+			country_event = energy_selling.3
+			clear_variable = temp_energy_ammount
+			clear_variable = temp_energy_price
+			clear_variable = energy_selling_selected_TAG
+		}
+		clear_variable = ai_accept_chance
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				check_variable = { ai_accept_chance > 0 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = energy_selling.2
+	title = energy_selling.2.t
+	desc = energy_selling.2.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = energy_selling.2.a
+		clr_country_flag = question_about_contract
+		FROM = { clr_country_flag = question_about_contract }
+		log = "[GetDateText]: [This.GetName]: energy_selling.2.a executed"
+	}
+}
+
+country_event = {
+	id = energy_selling.3
+	title = energy_selling.3.t
+	desc = energy_selling.3.desc
+	picture = GFX_declined_offer_no
+	is_triggered_only = yes
+	option = {
+		name = energy_selling.3.a
+		clr_country_flag = question_about_contract
+		FROM = { clr_country_flag = question_about_contract }
+		log = "[GetDateText]: [This.GetName]: energy_selling.3.a executed"
+	}
+}
+
+country_event = {
+	id = energy_selling.4
+	title = energy_selling.4.t
+	desc = energy_selling.4.desc
+	picture = GFX_energy_sell_buy
+	is_triggered_only = yes
+
+    immediate = {
+		if = {
+			limit = { FROM = { is_ai = yes } }
+			clamp_variable = { var = FROM.temp_energy_price min = 0.01 }
+			if = {
+				limit = { check_variable = { FROM.energy_balance < 0 } }
+				set_temp_variable = {
+					energy_balance_minus = {
+						value = FROM.energy_balance
+						multiply = -1
+					}
+				}
+				clamp_variable = { var = FROM.temp_energy_ammount max = energy_balance_minus }
+				round_variable = FROM.temp_energy_ammount
+			}
+			else = { clamp_variable = { var = FROM.temp_energy_ammount max = 1 } }
+		}
+		set_variable = { contract_energy_ammount = FROM.temp_energy_ammount }
+		multiply_variable = { contract_energy_ammount = -1 }
+		set_variable = { ai_accept_chance = 0 }
+		if = {
+			limit = { check_variable = { energy_balance > 10 } }
+			add_to_variable = { ai_accept_chance = 50 }
+		}
+		if = {
+			limit = { NOT = { has_idea = heavy_additional_consumption_spirit } }
+			add_to_variable = { ai_accept_chance = -50 }
+		}
+		if = {
+			limit = { check_variable = { display_income < display_expense } }
+			add_to_variable = { ai_accept_chance = 100 }
+		}
+		if = {
+			limit = {
+				check_variable = { FROM.temp_energy_price = 0 }
+			}
+			add_to_variable = { ai_accept_chance = -1000 }
+		}
+		set_temp_variable = { price_adjust = FROM.temp_energy_price }
+		add_to_temp_variable = { price_adjust = -0.05 }
+		multiply_temp_variable = { price_adjust = 1000 }
+		add_to_variable = { ai_accept_chance = price_adjust }
+		add_to_variable = { ai_accept_chance = contract_energy_ammount }
+	}
+
+	option = {
+		name = energy_selling.4.a
+		log = "[GetDateText]: [This.GetName]: energy_selling.4.a executed"
+		custom_effect_tooltip = energy_buying_decision_tt
+		add_to_array = {
+			array = energy_contractors
+			value = FROM
+		}
+		multiply_variable = { FROM.temp_energy_ammount = -1 }
+		add_to_array = {
+			array = energy_contracts_ammount
+			value = FROM.temp_energy_ammount
+		}
+		add_to_array = {
+			array = energy_contracts_price
+			value = FROM.temp_energy_price
+		}
+		multiply_variable = { FROM.temp_energy_ammount = -1 }
+		clear_variable = contract_energy_ammount
+		FROM = {
+			add_to_array = {
+				array = energy_contractors
+				value = PREV
+			}
+			add_to_array = {
+				array = energy_contracts_ammount
+				value = temp_energy_ammount
+			}
+			add_to_array = {
+				array = energy_contracts_price
+				value = temp_energy_price
+			}
+			country_event = energy_selling.2
+			clear_variable = temp_energy_ammount
+			clear_variable = temp_energy_price
+			clear_variable = energy_selling_selected_TAG
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				check_variable = {
+    				var = ai_accept_chance
+    				value = 0
+    				compare = less_than_or_equals
+				}
+			}
+		}
+	}
+	option = {
+		name = energy_selling.4.b
+		log = "[GetDateText]: [This.GetName]: energy_selling.4.a executed"
+		FROM = {
+			clear_variable = temp_energy_ammount
+			clear_variable = temp_energy_price
+			clear_variable = energy_selling_selected_TAG
+			country_event = energy_selling.3
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				check_variable = { ai_accept_chance > 0 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = energy_selling.5
+	title = energy_selling.5.t
+	desc = energy_selling.5.desc
+	picture = GFX_energy_sell_buy
+	is_triggered_only = yes
+	option = {
+		name = energy_selling.5.a
+		log = "[GetDateText]: [This.GetName]: energy_selling.5.a executed"
+		clr_country_flag = question_about_contract
+		FROM = {
+			clr_country_flag = question_about_contract
+			clear_variable = temp_energy_ammount
+			clear_variable = temp_energy_price
+			clear_variable = energy_selling_selected_TAG
+		}
+	}
+}
+
+country_event = {
+	id = energy_selling.12
+	title = energy_selling.12.t
+	desc = energy_selling.12.desc
+	picture = GFX_energy_sell_buy
+	is_triggered_only = yes
+	option = {
+		name = energy_selling.12.a
+		log = "[GetDateText]: [This.GetName]: energy_selling.12.a executed"
+		custom_effect_tooltip = Ingurskaya_hydro_plant_investment_decision_tt
+		add_opinion_modifier = {
+			target = FROM
+			modifier = ingurskaya_plant_investitions
+		}
+		if = {
+			limit = {
+				706 = { is_controlled_by = PREV }
+			}
+			706 = {
+				set_state_flag = { flag = expand_local_hydroelectric_infrastructure value = 1 days = 120 }
+				if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 0 } check_variable = { expanded_hydroelectric_infrastructure_times = 1 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.2 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.5 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 5 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 1.75 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 2 } check_variable = { expanded_hydroelectric_infrastructure_times = 3 } check_variable = { expanded_hydroelectric_infrastructure_times = 4 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.25 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.6 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 6 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 2.5 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 5 } check_variable = { expanded_hydroelectric_infrastructure_times = 6 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.3 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.7 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 7 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 3 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 7 } check_variable = { expanded_hydroelectric_infrastructure_times = 8 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.35 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.8 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 8 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 3.25 }
+				}
+				custom_effect_tooltip = expand_local_hydroelectric_infrastructure_click_tt
+				add_to_variable = { expanded_hydroelectric_infrastructure_times = 1 }
+				if = {
+					limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 9 } }
+					set_state_flag = block_future_expand_local_hydroelectric_infrastructure
+				}
+				PREV = {
+					set_temp_variable = { treasury_change = display_income }
+					multiply_temp_variable = { treasury_change = 0.1 } # 10% of weekly income
+					multiply_temp_variable = { treasury_change = ii_cost } #we multiply our 10% on the temp var, so having ii_cost = 7.5 means 75% of weekly income
+					set_temp_variable = { ii_cost_modifier = 1 }
+					add_to_temp_variable = { ii_cost_modifier = modifier@internal_investments_money_cost_modifier }
+					multiply_temp_variable = { treasury_change = ii_cost_modifier }
+					clamp_temp_variable = { var = treasury_change min = 0.75 max = 20 }
+					multiply_temp_variable = { treasury_change = -1 }
+					modify_treasury_effect = yes
+					state_owned_concurrent_investment_limit_implement = yes
+				}
+			}
+		}
+		else = {
+			707 = {
+				set_state_flag = { flag = expand_local_hydroelectric_infrastructure value = 1 days = 120 }
+				if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 0 } check_variable = { expanded_hydroelectric_infrastructure_times = 1 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.2 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.5 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 5 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 1.75 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 2 } check_variable = { expanded_hydroelectric_infrastructure_times = 3 } check_variable = { expanded_hydroelectric_infrastructure_times = 4 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.25 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.6 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 6 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 2.5 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 5 } check_variable = { expanded_hydroelectric_infrastructure_times = 6 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.3 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.7 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 7 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 3 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 7 } check_variable = { expanded_hydroelectric_infrastructure_times = 8 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.35 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.8 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 8 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 3.25 }
+				}
+				custom_effect_tooltip = expand_local_hydroelectric_infrastructure_click_tt
+				add_to_variable = { expanded_hydroelectric_infrastructure_times = 1 }
+				if = {
+					limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 9 } }
+					set_state_flag = block_future_expand_local_hydroelectric_infrastructure
+				}
+				PREV = {
+					set_temp_variable = { treasury_change = display_income }
+					multiply_temp_variable = { treasury_change = 0.1 } # 10% of weekly income
+					multiply_temp_variable = { treasury_change = ii_cost } #we multiply our 10% on the temp var, so having ii_cost = 7.5 means 75% of weekly income
+					set_temp_variable = { ii_cost_modifier = 1 }
+					add_to_temp_variable = { ii_cost_modifier = modifier@internal_investments_money_cost_modifier }
+					multiply_temp_variable = { treasury_change = ii_cost_modifier }
+					clamp_temp_variable = { var = treasury_change min = 0.75 max = 20 }
+					multiply_temp_variable = { treasury_change = -1 }
+					modify_treasury_effect = yes
+					state_owned_concurrent_investment_limit_implement = yes
+				}
+			}
+		}
+		FROM = {
+			add_opinion_modifier = {
+				target = FROM
+				modifier = ingurskaya_plant_investitions
+			}
+			if = {
+				limit = {
+					706 = { is_controlled_by = PREV }
+				}
+				706 = {
+					set_state_flag = { flag = expand_local_hydroelectric_infrastructure value = 1 days = 120 }
+					if = {
+						limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 0 } check_variable = { expanded_hydroelectric_infrastructure_times = 1 } } }
+						set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+						multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.2 }
+						set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.5 }
+						set_temp_variable = { max_hydroelectric_energy_production_var_increase = 5 }
+						clamp_temp_variable = {
+							var = hydroelectric_energy_production_var_increase
+							min = min_hydroelectric_energy_production_var_increase
+							max = max_hydroelectric_energy_production_var_increase
+						}
+						add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+						set_temp_variable = { ii_cost = 1.75 }
+					}
+					else_if = {
+						limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 2 } check_variable = { expanded_hydroelectric_infrastructure_times = 3 } check_variable = { expanded_hydroelectric_infrastructure_times = 4 } } }
+						set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+						multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.25 }
+						set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.6 }
+						set_temp_variable = { max_hydroelectric_energy_production_var_increase = 6 }
+						clamp_temp_variable = {
+							var = hydroelectric_energy_production_var_increase
+							min = min_hydroelectric_energy_production_var_increase
+							max = max_hydroelectric_energy_production_var_increase
+						}
+						add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+						set_temp_variable = { ii_cost = 2.5 }
+					}
+					else_if = {
+						limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 5 } check_variable = { expanded_hydroelectric_infrastructure_times = 6 } } }
+						set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+						multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.3 }
+						set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.7 }
+						set_temp_variable = { max_hydroelectric_energy_production_var_increase = 7 }
+						clamp_temp_variable = {
+							var = hydroelectric_energy_production_var_increase
+							min = min_hydroelectric_energy_production_var_increase
+							max = max_hydroelectric_energy_production_var_increase
+						}
+						add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+						set_temp_variable = { ii_cost = 3 }
+					}
+					else_if = {
+						limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 7 } check_variable = { expanded_hydroelectric_infrastructure_times = 8 } } }
+						set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+						multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.35 }
+						set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.8 }
+						set_temp_variable = { max_hydroelectric_energy_production_var_increase = 8 }
+						clamp_temp_variable = {
+							var = hydroelectric_energy_production_var_increase
+							min = min_hydroelectric_energy_production_var_increase
+							max = max_hydroelectric_energy_production_var_increase
+						}
+						add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+						set_temp_variable = { ii_cost = 3.25 }
+					}
+					custom_effect_tooltip = expand_local_hydroelectric_infrastructure_click_tt
+					add_to_variable = { expanded_hydroelectric_infrastructure_times = 1 }
+					if = {
+						limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 9 } }
+						set_state_flag = block_future_expand_local_hydroelectric_infrastructure
+					}
+					PREV = {
+						set_temp_variable = { treasury_change = display_income }
+						multiply_temp_variable = { treasury_change = 0.1 } # 10% of weekly income
+						multiply_temp_variable = { treasury_change = ii_cost } #we multiply our 10% on the temp var, so having ii_cost = 7.5 means 75% of weekly income
+						set_temp_variable = { ii_cost_modifier = 1 }
+						add_to_temp_variable = { ii_cost_modifier = modifier@internal_investments_money_cost_modifier }
+						multiply_temp_variable = { treasury_change = ii_cost_modifier }
+						clamp_temp_variable = { var = treasury_change min = 0.75 max = 20 }
+						multiply_temp_variable = { treasury_change = -1 }
+						modify_treasury_effect = yes
+						state_owned_concurrent_investment_limit_implement = yes
+					}
+				}
+			}
+			else = {
+				707 = {
+					set_state_flag = { flag = expand_local_hydroelectric_infrastructure value = 1 days = 120 }
+					if = {
+						limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 0 } check_variable = { expanded_hydroelectric_infrastructure_times = 1 } } }
+						set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+						multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.2 }
+						set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.5 }
+						set_temp_variable = { max_hydroelectric_energy_production_var_increase = 5 }
+						clamp_temp_variable = {
+							var = hydroelectric_energy_production_var_increase
+							min = min_hydroelectric_energy_production_var_increase
+							max = max_hydroelectric_energy_production_var_increase
+						}
+						add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+						set_temp_variable = { ii_cost = 1.75 }
+					}
+					else_if = {
+						limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 2 } check_variable = { expanded_hydroelectric_infrastructure_times = 3 } check_variable = { expanded_hydroelectric_infrastructure_times = 4 } } }
+						set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+						multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.25 }
+						set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.6 }
+						set_temp_variable = { max_hydroelectric_energy_production_var_increase = 6 }
+						clamp_temp_variable = {
+							var = hydroelectric_energy_production_var_increase
+							min = min_hydroelectric_energy_production_var_increase
+							max = max_hydroelectric_energy_production_var_increase
+						}
+						add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+						set_temp_variable = { ii_cost = 2.5 }
+					}
+					else_if = {
+						limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 5 } check_variable = { expanded_hydroelectric_infrastructure_times = 6 } } }
+						set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+						multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.3 }
+						set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.7 }
+						set_temp_variable = { max_hydroelectric_energy_production_var_increase = 7 }
+						clamp_temp_variable = {
+							var = hydroelectric_energy_production_var_increase
+							min = min_hydroelectric_energy_production_var_increase
+							max = max_hydroelectric_energy_production_var_increase
+						}
+						add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+						set_temp_variable = { ii_cost = 3 }
+					}
+					else_if = {
+						limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 7 } check_variable = { expanded_hydroelectric_infrastructure_times = 8 } } }
+						set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+						multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.35 }
+						set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.8 }
+						set_temp_variable = { max_hydroelectric_energy_production_var_increase = 8 }
+						clamp_temp_variable = {
+							var = hydroelectric_energy_production_var_increase
+							min = min_hydroelectric_energy_production_var_increase
+							max = max_hydroelectric_energy_production_var_increase
+						}
+						add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+						set_temp_variable = { ii_cost = 3.25 }
+					}
+					custom_effect_tooltip = expand_local_hydroelectric_infrastructure_click_tt
+					add_to_variable = { expanded_hydroelectric_infrastructure_times = 1 }
+					if = {
+						limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 9 } }
+						set_state_flag = block_future_expand_local_hydroelectric_infrastructure
+					}
+					PREV = {
+						set_temp_variable = { treasury_change = display_income }
+						multiply_temp_variable = { treasury_change = 0.1 } # 10% of weekly income
+						multiply_temp_variable = { treasury_change = ii_cost } #we multiply our 10% on the temp var, so having ii_cost = 7.5 means 75% of weekly income
+						set_temp_variable = { ii_cost_modifier = 1 }
+						add_to_temp_variable = { ii_cost_modifier = modifier@internal_investments_money_cost_modifier }
+						multiply_temp_variable = { treasury_change = ii_cost_modifier }
+						clamp_temp_variable = { var = treasury_change min = 0.75 max = 20 }
+						multiply_temp_variable = { treasury_change = -1 }
+						modify_treasury_effect = yes
+						state_owned_concurrent_investment_limit_implement = yes
+					}
+				}
+			}
+			country_event = energy_selling.13
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				check_variable = { energy_balance < 0 }
+				add = 50
+			}
+			modifier = {
+				check_variable = { energy_balance > 5 }
+				add = -50
+			}
+			modifier = {
+				factor = 0
+				check_variable = { display_income < display_expense }
+			}
+		}
+	}
+	option = {
+		name = energy_selling.12.b
+		log = "[GetDateText]: [This.GetName]: energy_selling.12.b executed"
+		FROM = {
+			country_event = energy_selling.14
+		}
+	}
+}
+
+country_event = {
+	id = energy_selling.13
+	title = energy_selling.13.t
+	desc = energy_selling.13.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = energy_selling.13.a
+		log = "[GetDateText]: [This.GetName]: energy_selling.13.a executed"
+	}
+}
+
+country_event = {
+	id = energy_selling.14
+	title = energy_selling.14.t
+	desc = energy_selling.14.desc
+	picture = GFX_declined_offer_no
+	is_triggered_only = yes
+	option = {
+		name = energy_selling.14.a
+		log = "[GetDateText]: [This.GetName]: energy_selling.14.a executed"
+	}
+}

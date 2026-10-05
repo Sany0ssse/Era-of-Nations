@@ -1,0 +1,7705 @@
+﻿focus_tree = {
+	id = generic_focus
+	country = { factor = 2 }
+	continuous_focus_position = { x = 5 y = 2130 }
+	default = no
+	reset_on_civilwar = yes
+
+	# GCC Shared tree
+	shared_focus = GCC_the_gcc
+
+	# EU shared tree
+	shared_focus = USoE001
+	shared_focus = POTEF001
+
+	# Gagauzia mini tree
+	shared_focus = GGZ_mutlu_erim
+
+	#African shared tree
+ 	shared_focus = AFRICAN_UNION_shared_focus
+	shared_focus = visegrad_group_shared_focus
+	#People's Republics
+    shared_focus = DPR_start
+	shared_focus = LPR_start
+	shared_focus = LRP_Start_rebellion
+	shared_focus = HPR_Start_rebellion
+	shared_focus = OPR_Start_rebellion
+	shared_focus = OPR_Start_junta
+	shared_focus = VRP_Start_rebellion
+	shared_focus = CRM_samooborona
+	shared_focus = CRM_monarchy
+	shared_focus = CRM_natbols
+	shared_focus = MLR_start
+	#Artsakh
+	shared_focus = NKR_economy_start
+	shared_focus = NKR_safe_start
+	#Abkhazia and Monadire
+	shared_focus = ABK_In_New_Millenium
+	#shared_focus = MND_kvitsianis_gamble
+
+	# Focus Shortcut
+	shortcut = {
+		name = GENERIC_political_reform
+		target = GENERIC_political_reform
+		scroll_wheel_factor = 0.80
+	}
+	shortcut = {
+		name = GENERIC_army_start
+		target = GENERIC_army_start
+		scroll_wheel_factor = 0.80
+	}
+	shortcut = {
+		name = GENERIC_economic_start
+		target = GENERIC_economic_start
+		scroll_wheel_factor = 0.80
+	}
+
+
+	#Start
+	focus = {
+		id = GENERIC_economic_start
+		icon = GENERIC_econ_start
+
+		x = 8
+		y = 0
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_economic_start"
+			add_political_power = 100
+			add_ideas = GENERIC_economic_full_idea
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	#Army Reform
+	focus = {
+		id = GENERIC_army_start
+		icon = militarystart
+
+		x = 31
+		y = 0
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_EXPENDITURE }
+
+		available = {
+			NOT = {
+				has_idea = no_military
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_reform"
+			army_experience = 50
+			add_command_power = 20
+			add_timed_idea = {
+				idea = GENERIC_army_reform_up_idea
+				days = 300
+			}
+			if = {
+				limit = {
+					has_idea = GRL_no_army_idea
+				}
+				remove_ideas = GRL_no_army_idea
+			}
+			ABK_genocide_army_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_military_emergency
+		icon = generic_army_military_emergency
+
+		x = -3
+		y = 0
+		relative_position_id = GENERIC_army_start
+
+		cost = 2
+
+		available = {
+			OR = {
+				has_defensive_war = yes
+				surrender_progress > 0.05
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_military_emergency"
+			army_experience = 50
+			air_experience = 50
+			if = {
+				limit = { has_war_support < 0.75 }
+				add_war_support = 0.05
+			}
+		}
+
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = GENERIC_last_war_volunteers
+		icon = Generic_Army_Focus_Red02
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_military_emergency
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_military_emergency }
+
+		available = {
+			OR = {
+				has_defensive_war = yes
+				surrender_progress > 0.05
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_last_war_volunteers"
+			division_template = {
+				name = "Militia"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+				}
+				priority = 2
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"1st Militia Battalion\" division_template = \"Militia\" start_experience_factor = 0.1"
+					owner = ROOT
+				}
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"2nd Militia Battalion\" division_template = \"Militia\" start_experience_factor = 0.1"
+					owner = ROOT
+				}
+			}
+			add_war_support = 0.10
+		}
+
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = GENERIC_last_war_stand
+		icon = generic_army_lastbreath
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_military_emergency
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_military_emergency }
+
+		available = {
+			OR = {
+				has_defensive_war = yes
+				surrender_progress > 0.05
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_last_war_stand"
+			add_ideas = GENERIC_defence_nation
+			add_war_support = 0.10
+		}
+
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_ground_troops
+		icon = Generic_Soldier_Aiming
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_start }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_ground_troops"
+			add_ideas = GENERIC_army_idea
+			ABK_genocide_army_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_exercises
+		icon = traininggeneric
+
+		x = -2
+		y = 2
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_ground_troops }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_exercises"
+			army_experience = 50
+			add_war_support = 0.05
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_doctrine
+		icon = generic_doctrine
+
+		x = -2
+		y = 3
+		relative_position_id = GENERIC_army_start
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_army_exercises }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_doctrine"
+			add_doctrine_cost_reduction = {
+				name = GENERIC_land_doctrine_innovations
+				category = CAT_land_doctrine
+				uses = 2
+				cost_reduction = 0.5
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_peacekeepers
+		icon = peacekuyper
+
+		x = 0
+		y = 2
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_ground_troops }
+
+		available = {
+			has_army_manpower = {
+    			size > 50000
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_peacekeepers"
+			add_ideas = GENERIC_peace_idea
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_education
+		icon = choose_the_true_leader
+
+		x = 2
+		y = 2
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_ground_troops }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_education"
+			swap_ideas = {
+				remove_idea = GENERIC_army_idea
+				add_idea = GENERIC_army_idea1
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_engineer
+		icon = military_engineer
+
+		x = 2
+		y = 3
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_education }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_engineer"
+			swap_ideas = {
+				remove_idea = GENERIC_army_idea1
+				add_idea = GENERIC_army_idea2
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_uniform
+		icon = new_uniform
+
+		x = 0
+		y = 4
+		relative_position_id = GENERIC_army_start
+
+		cost = 7
+
+		prerequisite = { focus = GENERIC_army_doctrine }
+		prerequisite = { focus = GENERIC_army_engineer }
+
+		available = {
+			num_of_military_factories > 3
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_uniform"
+			add_ideas = GENERIC_our_vpk_idea
+			add_tech_bonus = {
+				name = GENERIC_uniform_improvements
+				uses = 2
+				bonus = 0.5
+				technology = body_armor_1980
+				technology = body_armor_2000
+				technology = body_armor_2010
+				technology = body_armor_2030
+				technology = camouflage
+				technology = camouflage2
+				technology = camouflage3
+				technology = camouflage4
+				technology = camouflage5
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_equip
+		icon = generic_equipment
+
+		x = -2
+		y = 5
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_uniform }
+
+		available = { 
+			num_of_military_factories > 3 
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_equip"
+			add_tech_bonus = {
+				name = GENERIC_infantry_equipment_development
+				uses = 2
+				bonus = 0.5
+				category = CAT_inf_wep
+			}
+			swap_ideas = {
+				remove_idea = GENERIC_our_vpk_idea
+				add_idea = GENERIC_our_vpk_idea1
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_fortress
+		icon = Focus_Machine_Gun_Crew
+
+		x = -2
+		y = 6
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_uniform }
+
+		available = { 
+			num_of_military_factories > 4
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_fortress"
+			capital_scope = {
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+					province = {
+						all_provinces = yes
+					}
+				}
+			}
+			set_temp_variable = { treasury_change = -0.5 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_artillery
+		icon = artillery
+
+		x = 0
+		y = 5
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_uniform }
+
+		available = { 
+			num_of_military_factories > 3 
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_artillery"
+			add_tech_bonus = {
+				name = GENERIC_artillery_experiments
+				uses = 2
+				bonus = 0.5
+				category = CAT_arty
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_armor
+		icon = leclerc_tank
+
+		x = 0
+		y = 6
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_artillery }
+
+		available = { 
+			num_of_military_factories > 4
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_armor"
+			add_tech_bonus = {
+				name = GENERIC_develop_armor_prototypes
+				uses = 2
+				bonus = 0.5
+				category = CAT_armor
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_anti_air
+		icon = anti_air_shit
+
+		x = 2
+		y = 5
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_uniform }
+
+		available = { 
+			num_of_military_factories > 3 
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_anti_air"
+			swap_ideas = {
+				remove_idea = GENERIC_army_idea2
+				add_idea = GENERIC_army_idea3
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_anti_air_build
+		icon = army_anti_missles
+
+		x = 2
+		y = 6
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_anti_air }
+
+		available = { 
+			num_of_military_factories > 4
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_anti_air_build"
+			capital_scope = {
+				add_building_construction = {
+					type = anti_air_building
+					level = 1
+					instant_build = yes
+				}
+			}
+			set_temp_variable = { treasury_change = -1.75 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_anti_armor
+		icon = anti_generic_air
+
+		x = -1
+		y = 7
+		relative_position_id = GENERIC_army_start
+
+		cost = 5
+
+		prerequisite = { focus = GENERIC_army_fortress }
+		prerequisite = { focus = GENERIC_army_armor }
+
+		available = { 
+			num_of_military_factories > 5
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_anti_armor"
+			swap_ideas = {
+				remove_idea = GENERIC_our_vpk_idea1
+				add_idea = GENERIC_our_vpk_idea2
+			}
+			add_tech_bonus = {
+				name = GENERIC_countermeasures_against_armored_units
+				uses = 2
+				bonus = 0.5
+				category = CAT_at
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_hub
+		icon = snabzhenets_krisa_tylovaya
+
+		x = 1
+		y = 7
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_anti_air_build }
+		prerequisite = { focus = GENERIC_army_armor }
+
+		available = {
+			num_of_military_factories > 5
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_hub"
+			random_owned_controlled_state = {
+				limit = {
+					can_construct_building = supply_node
+				}
+				construct_building_in_random_province = {
+					supply_node = 1
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					can_construct_building = supply_node
+				}
+				construct_building_in_random_province = {
+					supply_node = 1
+				}
+			}
+			set_temp_variable = { treasury_change = -2.5 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_sso
+		icon = generic_spekial_force
+
+		x = 0
+		y = 8
+		relative_position_id = GENERIC_army_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_anti_armor }
+		prerequisite = { focus = GENERIC_army_hub }
+
+		available = {
+			num_of_military_factories > 6
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_sso"
+			add_ideas = GENERIC_army_sso_idea
+			add_country_leader_trait = GENERIC_reformator_army_trait
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	# Focus Section
+	focus = {
+		id = GENERIC_political_reform
+		icon = focus_consolidat
+
+		x = -15
+		y = 0
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_political_reform"
+			add_political_power = 200
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	#Diplomatic Ties/Outlook Alignment - Temp Ideas to give player a boost#
+
+	focus = {
+		id = GENERIC_diplomatic_positions
+		icon = MEX_Defend_the_constitution
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_political_reform
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_political_reform }
+
+		search_filters = { FOCUS_FILTER_INFLUENCE }
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_diplomatic_positions"
+			set_temp_variable = { percent_change = 0.5 }
+			set_temp_variable = { tag_index = THIS.id }
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_opinion_modifier = { target = PREV modifier = supports_us_2 }
+				reverse_add_opinion_modifier = { target = PREV modifier = supports_us_2 }
+				set_temp_variable = { influence_target = THIS.id }
+				change_influence_percentage = yes
+			}
+			custom_effect_tooltip = influence_on_neighbors_tt
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = 0.03 }
+			modify_treasury_effect = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_our_place
+		icon = MEX_Mexican_government
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_political_reform
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_INFLUENCE }
+		prerequisite = { focus = GENERIC_political_reform }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_our_place"
+			set_temp_variable = { percent_change = 8 }
+			change_domestic_influence_percentage = yes
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	#Ease of Business Reforms
+	focus = {
+		id = GENERIC_ease_of_business_reformss
+		icon = generic_economic_business_ease
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		mutually_exclusive = { focus = GENERIC_business_regulations }
+		prerequisite = { focus = GENERIC_economic_start }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_ease_of_business_reforms"
+			add_political_power = 150
+			set_temp_variable = { temp_productivity_change = 50 }
+			random_owned_controlled_state = {
+				state_flat_productivity_change_effect = yes
+			}
+			add_timed_idea = {
+				idea = GENERIC_economy_easy_business
+				days = 390
+			}
+		}
+
+		ai_will_do = {
+			base = 4
+			modifier = {
+				check_variable = { interest_rate > 5 }
+				factor = 10
+			}
+		}
+	}
+
+	#####More business_regulations
+	focus = {
+		id = GENERIC_business_regulations
+		icon = generic_economic_business_regulation
+
+		x = 3
+		y = 1
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = GENERIC_economic_start }
+		mutually_exclusive = { focus = GENERIC_ease_of_business_reformss }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_ease_of_business_reforms"
+			add_political_power = 150
+			set_temp_variable = { temp_opinion = 10 }
+			change_labour_unions_opinion = yes
+			set_temp_variable = { temp_opinion = 10 }
+			change_communist_cadres_opinion = yes
+			add_timed_idea = {
+				idea = GENERIC_economy_sad_business
+				days = 390
+			}
+		}
+
+		ai_will_do = {
+			base = 4
+			modifier = {
+				check_variable = { interest_rate > 5 }
+				factor = 10
+			}
+		}
+	}
+
+	#Build Roads
+	focus = {
+		id = GENERIC_build_roadss
+		icon = economic_roads_new
+
+		x = -2
+		y = 1
+		relative_position_id = GENERIC_economic_start
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = GENERIC_economic_start }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_build_roads"
+			one_random_infrastructure = yes
+			add_ideas = GENERIC_economy_adin_idea
+		}
+
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0.5
+				check_variable = { interest_rate > 14.99 }
+			}
+		}
+	}
+
+
+	focus = {
+		id = GENERIC_network_infrastructure
+		icon = generic_economic_internet_infra
+
+		x = -3
+		y = 2
+		relative_position_id = GENERIC_economic_start
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = GENERIC_build_roadss }
+
+		available = {
+			has_tech = internet1
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_network_infrastructure"
+			two_random_network_infrastructure = yes
+			add_tech_bonus = {
+				name = GENERIC_network_infrastructure
+				uses = 1
+				bonus = 0.25
+				category = CAT_internet_tech
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+
+	focus = {
+		id = GENERIC_station_in_the_world
+		icon = New_Government_1
+
+		x = 0
+		y = 2
+		relative_position_id = GENERIC_political_reform
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = GENERIC_diplomatic_positions }
+		prerequisite = { focus = GENERIC_our_place }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_station_in_the_world"
+			add_timed_idea = {
+				idea = GENERIC_politic_place_world_idea
+				days = 170
+			}
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_build_railways
+		icon = generic_economic_railways
+
+		x = -2
+		y = 3
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_build_highways }
+		prerequisite = { focus = GENERIC_network_infrastructure }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_build_railways"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_adin_idea
+				add_idea = GENERIC_economy_adin_idea1
+			}
+			one_random_infrastructure = yes
+			add_country_leader_trait = railroad_enthusiast
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0.5
+				check_variable = { interest_rate > 14.99 }
+			}
+		}
+	}
+	focus = {
+		id = GENERIC_rural_logistical_solutions
+		icon = generic_economic_agro_infra
+
+		x = -2
+		y = 4
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_build_railways }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		mutually_exclusive = { focus = GENERIC_urban_public_transportation_investments }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_rural_logistical_solutions"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_adin_idea1
+				add_idea = GENERIC_economy_adin_idea2
+			}
+		}
+
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0.5
+				check_variable = { interest_rate > 14.99 }
+			}
+		}
+	}
+	focus = {
+		id = GENERIC_urban_public_transportation_investments
+		icon = generic_economic_urban_infra
+
+		x = -4
+		y = 4
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_build_railways }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		mutually_exclusive = { focus = GENERIC_rural_logistical_solutions }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_urban_public_transportation_investments"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_adin_idea1
+				add_idea = GENERIC_economy_adin_idea3
+			}
+		}
+
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0.5
+				check_variable = { interest_rate > 14.99 }
+			}
+		}
+	}
+	focus = {
+		id = GENERIC_build_highways
+		icon = GENERIC_highway_to_hell
+
+		x = -1
+		y = 2
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_build_roadss }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+
+		available = {
+			any_owned_state = {
+				infrastructure < 5
+			}
+		}
+
+		bypass_if_unavailable = yes
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_build_highways"
+			one_random_infrastructure = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0.5
+				check_variable = { interest_rate > 14.99 }
+			}
+		}
+	}
+	focus = {
+		id = GENERIC_expand_urban_areas
+		icon = generic_housing
+
+		x = 0
+		y = 4
+		relative_position_id = GENERIC_economic_start
+
+		cost = 5
+
+		prerequisite = { focus = GENERIC_build_railways }
+		prerequisite = { focus = GENERIC_attract_foreign_investors }
+		prerequisite = { focus = GENERIC_assure_the_national_fuel_reserve }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_expand_urban_areas"
+			set_temp_variable = { treasury_change = 0 }
+			random_owned_state = {
+				limit = { state_population > 1000000 }
+				add_extra_state_shared_building_slots = 2
+				add_to_temp_variable = { treasury_change = -2 }
+			}
+			if = {
+				limit = { all_owned_state = { state_population < 1000000 } }
+				capital_scope = {
+					add_extra_state_shared_building_slots = 2
+					add_to_temp_variable = { treasury_change = -2 }
+				}
+			}
+			modify_treasury_effect = yes
+			if = { limit = { is_agrarian_economy = yes }
+				set_temp_variable = { crop_type = 0 }
+				set_temp_variable = { price_change = -7 }
+				AGRI_price_change_effect = yes
+				set_temp_variable = { crop_type = 1 }
+				set_temp_variable = { price_change = -7 }
+				AGRI_price_change_effect = yes
+				set_temp_variable = { temp_opinion = -12 }
+				change_farmers_opinion = yes
+				AGRI_update_math_variables = yes
+			}
+			else = {
+				set_temp_variable = { temp_opinion = -10 }
+				change_farmers_opinion = yes
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_small_medium_business_owners_opinion = yes
+			change_industrial_conglomerates_opinion = yes
+			change_international_bankers_opinion = yes
+			change_oligarchs_opinion = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_developmentalism
+		icon = generic_office_construct
+
+		x = -3
+		y = 5
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNAL_FACTION }
+		prerequisite = { focus = GENERIC_expand_urban_areas }
+		prerequisite = {
+			focus = GENERIC_urban_public_transportation_investments
+			focus = GENERIC_rural_logistical_solutions
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_developmentalism"
+			add_ideas = GENERIC_economy_developmentalism_idea
+			set_temp_variable = { temp_opinion = 5 }
+			change_industrial_conglomerates_opinion = yes
+			change_small_medium_business_owners_opinion = yes
+			change_the_donju_opinion = yes
+			change_chaebols_opinion = yes
+			change_wall_street_opinion = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+	focus = {
+		id = GENERIC_increase_resource_production
+		icon = generic_economic_resource
+
+		x = -3
+		y = 6
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_developmentalism }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_increase_resource_production"
+			if = {
+				limit = {
+					OR = {
+						has_idea = non_power
+						has_idea = minor_power
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = oil amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = oil amount > 0 } }
+						add_resource = { type = oil amount = 4 }
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = steel amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = steel amount > 0 } }
+						add_resource = { type = steel amount = 4 }
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = aluminium amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = aluminium amount > 0 } }
+						add_resource = { type = aluminium amount = 4 }
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = tungsten amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = tungsten amount > 0 } }
+						add_resource = { type = tungsten amount = 4 }
+					}
+				}
+				if = {
+					limit = {
+						all_owned_state = { has_resources_amount = { resource = oil amount < 1 } }
+						all_owned_state = { has_resources_amount = { resource = steel amount < 1 } }
+						all_owned_state = { has_resources_amount = { resource = aluminium amount < 1 } }
+						all_owned_state = { has_resources_amount = { resource = tungsten amount < 1 } }
+					}
+					capital_scope = { add_resource = { type = steel amount = 6 } }
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_idea = regional_power
+						has_idea = large_power
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = oil amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = oil amount > 0 } }
+						add_resource = { type = oil amount = 6 }
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = steel amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = steel amount > 0 } }
+						add_resource = { type = steel amount = 6 }
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = aluminium amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = aluminium amount > 0 } }
+						add_resource = { type = aluminium amount = 6 }
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = tungsten amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = tungsten amount > 0 } }
+						add_resource = { type = tungsten amount = 6 }
+					}
+				}
+				if = {
+					limit = {
+						all_owned_state = { has_resources_amount = { resource = oil amount < 1 } }
+						all_owned_state = { has_resources_amount = { resource = steel amount < 1 } }
+						all_owned_state = { has_resources_amount = { resource = aluminium amount < 1 } }
+						all_owned_state = { has_resources_amount = { resource = tungsten amount < 1 } }
+					}
+					capital_scope = { add_resource = { type = steel amount = 10 } }
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_idea = great_power
+						has_idea = superpower
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = oil amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = oil amount > 0 } }
+						add_resource = { type = oil amount = 10 }
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = steel amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = steel amount > 0 } }
+						add_resource = { type = steel amount = 10 }
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = aluminium amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = aluminium amount > 0 } }
+						add_resource = { type = aluminium amount = 10 }
+					}
+				}
+				if = {
+					limit = {
+						any_owned_state = { has_resources_amount = { resource = tungsten amount > 0 } }
+					}
+					random_owned_state = {
+						limit = { has_resources_amount = { resource = tungsten amount > 0 } }
+						add_resource = { type = tungsten amount = 10 }
+					}
+				}
+				if = {
+					limit = {
+						all_owned_state = { has_resources_amount = { resource = oil amount < 1 } }
+						all_owned_state = { has_resources_amount = { resource = steel amount < 1 } }
+						all_owned_state = { has_resources_amount = { resource = aluminium amount < 1 } }
+						all_owned_state = { has_resources_amount = { resource = tungsten amount < 1 } }
+					}
+					capital_scope = { add_resource = { type = steel amount = 15 } }
+				}
+			}
+			# AGRICULTURAL SHIT
+			if = { limit = { is_agrarian_economy = yes }
+				set_temp_variable = { treasury_change = gdp_total }
+				multiply_temp_variable = { treasury_change = -0.005 }
+				modify_treasury_effect = yes
+				set_temp_variable = { AGRI_protections_change = 1 }
+				AGRI_protection_update = yes
+				set_temp_variable = { allocation_change = -0.05 }
+				set_temp_variable = { crop_type = 0 }
+				AGRI_allocation_change_effect = yes
+				set_temp_variable = { allocation_change = 0.05 }
+				set_temp_variable = { crop_type = 1 }
+				AGRI_allocation_change_effect = yes
+				set_temp_variable = { temp_opinion = 2 }
+				change_farmers_opinion = yes
+				AGRI_update_math_variables = yes
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_industrial_conglomerates_opinion = yes
+			change_small_medium_business_owners_opinion = yes
+			change_the_donju_opinion = yes
+			change_chaebols_opinion = yes
+			change_wall_street_opinion = yes
+			change_fossil_fuel_industry_opinion = yes
+			change_oligarchs_opinion = yes
+			change_defense_industry_opinion = yes
+			change_landowners_opinion = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = -0.001 }
+			modify_treasury_effect = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+	focus = {
+		id = GENERIC_economic_autonomy
+		icon = GENERIC_autarky
+
+		x = -1
+		y = 5
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_expand_urban_areas }
+		mutually_exclusive = { focus = GENERIC_trade_oriented_economy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_economic_autonomy"
+			add_ideas = GENERIC_economy_economic_autonomy_idea
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_autarky
+		icon = GENERIC_autarky_3
+
+		x = -1
+		y = 6
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_economic_autonomy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_autarky"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_economic_autonomy_idea
+				add_idea = GENERIC_economy_economic_autonomy_idea2
+			}
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_trade_oriented_economy
+		icon = GENERIC_trade1
+
+		x = 1
+		y = 5
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_expand_urban_areas }
+		mutually_exclusive = { focus = GENERIC_economic_autonomy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_trade_based_economy"
+			add_ideas = GENERIC_economy_global_market_idea
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_economic_global_integration
+		icon = GENERIC_trade2
+
+		x = 1
+		y = 6
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_trade_oriented_economy }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_trade_based_economy"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_global_market_idea
+				add_idea = GENERIC_economy_global_market_idea2
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_economic_measures
+		icon = GENERIC_economic_measures
+
+		x = 0
+		y = 7
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_increase_resource_production }
+		prerequisite = {
+			focus = GENERIC_autarky
+			focus = GENERIC_economic_global_integration
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_autarky"
+			if = {
+				limit = {
+					NOT = {
+						has_idea = economic_boom
+						has_idea = fast_growth
+						has_idea = stable_growth
+					}
+				}
+				increase_economic_growth = yes
+			}
+			if = {
+				limit = {
+					has_idea = GENERIC_economy_economic_autonomy_idea2
+				}
+				swap_ideas = {
+					remove_idea = GENERIC_economy_economic_autonomy_idea2
+					add_idea = GENERIC_economy_economic_autonomy_idea3
+				}
+			}
+			if = {
+				limit = {
+					has_idea = GENERIC_economy_global_market_idea2
+				}
+				swap_ideas = {
+					remove_idea = GENERIC_economy_global_market_idea2
+					add_idea = GENERIC_economy_global_market_idea3
+				}
+			}
+			set_temp_variable = { debt_change = debt }
+			multiply_temp_variable = { debt_change = -0.03 }
+			modify_debt_effect = yes
+			# AGRICULTURAL SHIT
+			if = { limit = { is_agrarian_economy = yes }
+				set_temp_variable = { crop_type = 0 }
+				set_temp_variable = { price_change = 5 }
+				AGRI_price_change_effect = yes
+				set_temp_variable = { crop_type = 1 }
+				set_temp_variable = { price_change = 5 }
+				AGRI_price_change_effect = yes
+				set_temp_variable = { temp_opinion = 1 }
+				change_farmers_opinion = yes
+				AGRI_update_math_variables = yes
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_productivity_measures
+		icon = focus_generic_industrialists
+
+		x = -3
+		y = 7
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_increase_resource_production }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_productivity_measures"
+			set_temp_variable = { temp_productivity_change = 25 }
+			flat_productivity_change_effect = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = -0.03 }
+			modify_treasury_effect = yes
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_improved_worker_productivity
+		icon = GENERIC_quality
+
+		x = 1
+		y = 8
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_economic_measures }
+		mutually_exclusive = { focus = GENERIC_the_manpower_solution }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_improved_worker_productivity"
+			add_ideas = GENERIC_economy_worker_productivity_idea
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_the_manpower_solution
+		icon = GENERIC_manpower_ec
+
+		x = -1
+		y = 8
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_economic_measures }
+		mutually_exclusive = { focus = GENERIC_improved_worker_productivity }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_the_manpower_solution"
+			add_ideas = GENERIC_economy_generic_the_manpower_solution_idea
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_emphasize_autarkic_measures
+		icon = GENERIC_autarky_2
+
+		x = -2
+		y = 9
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESOURCE }
+		prerequisite = {
+			focus = GENERIC_improved_worker_productivity
+			focus = GENERIC_the_manpower_solution
+		}
+		prerequisite = {
+			focus = GENERIC_autarky
+		}
+		mutually_exclusive = { focus = GENERIC_reaching_to_the_global_market }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_emphasize_autarkic_measures"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_economic_autonomy_idea3
+				add_idea = GENERIC_economy_economic_autonomy_idea4
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_reaching_to_the_global_market
+		icon = GENERIC_trade3
+
+		x = 2
+		y = 9
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESOURCE }
+		prerequisite = {
+			focus = GENERIC_improved_worker_productivity
+			focus = GENERIC_the_manpower_solution
+		}
+		prerequisite = {
+			focus = GENERIC_economic_global_integration
+		}
+		mutually_exclusive = { focus = GENERIC_emphasize_autarkic_measures }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_reaching_to_the_global_market"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_global_market_idea3
+				add_idea = GENERIC_economy_global_market_idea4
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_international_bankers_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_assure_the_national_fuel_reserve
+		icon = economic_npz
+
+		x = 0
+		y = 3
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = GENERIC_build_highways }
+		prerequisite = { focus = GENERIC_agricultural_district_subsidization }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_assure_the_national_fuel_reserve"
+			set_temp_variable = { treasury_change = -1.5 }
+			modify_treasury_effect = yes
+			capital_scope = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = fuel_silo
+					instant_build = yes
+					level = 1
+				}
+			}
+			add_fuel = 200000
+			add_ideas = GENERIC_economy_fuel_structure_building_efforts_idea
+			set_temp_variable = { temp_opinion = 10 }
+			change_fossil_fuel_industry_opinion = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0.5
+				check_variable = { interest_rate > 14.99 }
+			}
+		}
+	}
+
+	focus = {
+		id = GENERIC_attract_foreign_investors
+		icon = generic_economy_foreign_investors
+
+		x = 2
+		y = 3
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_debt_refactoring focus = GENERIC_agricultural_district_subsidization }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_attract_foreign_investors"
+			add_ideas = idea_focus_generic_public_service_investment
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_enter_wto
+		icon = generic_economy_wto
+
+		x = 2
+		y = 4
+		relative_position_id = GENERIC_economic_start
+
+		cost = 2
+
+		prerequisite = { focus = GENERIC_attract_foreign_investors }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+
+		bypass = {
+			has_idea = GENERIC_wto_idea
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_enter_wto"
+			add_ideas = GENERIC_wto_idea
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_debt_refactoring
+		icon = generic_economic_dept
+
+		x = 3
+		y = 2
+		relative_position_id = GENERIC_economic_start
+
+		cost = 5
+
+		prerequisite = { 
+			focus = GENERIC_ease_of_business_reformss
+			focus = GENERIC_business_regulations
+		}
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+
+		available = {
+			gdp_debt_ratio_higher_50 = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_attract_foreign_investors"
+			set_temp_variable = { debt_change = debt }
+			multiply_temp_variable = { debt_change = 0.05 }
+			clamp_temp_variable = { var = debt_change min = 0 max = 100 }
+			modify_debt_effect = yes
+			add_timed_idea = {
+				idea = idea_generic_temporary_debt_refactoring
+				days = 730
+			}
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 10
+				check_variable = { interest_rate > 5 }
+			}
+			modifier = {
+				factor = 5
+				gdp_debt_ratio_higher_50 = yes
+			}
+		}
+	}
+
+	focus = {
+		id = GENERIC_agricultural_district_subsidization
+		icon = pro-agroculture_policy
+
+		x = 1
+		y = 2
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		prerequisite = { 
+			focus = GENERIC_ease_of_business_reformss
+			focus = GENERIC_business_regulations
+		}
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_agricultural_district_subsidization"
+			one_random_agriculture_district = yes
+			add_ideas = agricultural_investments
+			set_temp_variable = { temp_opinion = 10 }
+			change_farmers_opinion = yes
+			set_temp_variable = { temp_opinion = 5 }
+			change_landowners_opinion = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				check_variable = { total_unemployed_percentage_display < 0.01 }
+			}
+		}
+	}
+
+
+	focus = {
+		id = GENERIC_mobilize_the_working_class
+		icon = generic_factory
+
+		x = 7
+		y = 2
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = GENERIC_light_industry_investments }
+
+		available = {
+			if = { limit = { is_ai = no }
+				custom_trigger_tooltip = {
+					tooltip = 50_total_gdp_tt
+					check_variable = { gdp_total > 50 }
+				}
+				has_war = no
+				has_offensive_war = no
+			}
+			else = {
+				check_variable = { interest_rate < 14.999 }
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_mobilize_the_working_class"
+			add_war_support = 0.05
+			set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			capital_scope = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				check_variable = { total_unemployed_percentage_display < 0.02 }
+			}
+		}
+	}
+
+	#Light Industry Investments
+	focus = {
+		id = GENERIC_light_industry_investments
+		icon = GENERIC_light_industry
+
+		x = 6
+		y = 1
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = GENERIC_economic_start }
+
+		available = {
+			if = { limit = { is_ai = no }
+				has_war = no
+			}
+			else = {
+				check_variable = { interest_rate < 14.999 }
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_light_industry_investments"
+			set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			capital_scope = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = fossil_powerplant
+					level = 1
+				}
+			}
+			add_ideas = GENERIC_economy_industry_idea
+			if = {
+				limit = { num_of_factories > 25 }
+				one_random_industrial_complex = yes
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0.5
+				check_variable = { interest_rate > 14.99 }
+			}
+			modifier = {
+				factor = 2
+				num_of_civilian_factories < 5
+			}
+			modifier = {
+				factor = 0
+				check_variable = { total_unemployed_percentage_display < 0.02 }
+			}
+		}
+	}
+	focus = {
+		id = GENERIC_heavy_industry_investments
+		icon = generic_economic_heavy_industry
+
+		x = 5
+		y = 2
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNAL_FACTION }
+		prerequisite = { focus = GENERIC_light_industry_investments }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 95_total_gdp_tt
+				check_variable = { gdp_total > 95 }
+			}
+			has_war = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_heavy_industry_investments"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_industry_idea
+				add_idea = GENERIC_economy_industry_idea1
+			}
+			one_random_arms_factory = yes
+			set_temp_variable = { temp_opinion = 5 }
+			change_defense_industry_opinion = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 1
+			#modifier = {
+			#	factor = 0
+			#	disabled_ai_unit_list = yes
+			#}
+			#modifier = {
+			#	factor = 0
+			#	check_variable = { total_unemployed_percentage_display < 0.02 }
+			#}
+		}
+	}
+
+	focus = {
+		id = GENERIC_refitting_the_military_industry
+		icon = generic_economic_military_industry
+
+		x = 4
+		y = 3
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNAL_FACTION }
+		prerequisite = { focus = GENERIC_heavy_industry_investments }
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 95_total_gdp_tt
+				check_variable = { gdp_total > 95 }
+			}
+			has_war = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_heavy_industry_investments"
+			set_temp_variable = { treasury_change = -3.75 }
+			modify_treasury_effect = yes
+			capital_scope = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+			if = {
+				limit = { num_of_factories > 20 num_of_factories < 45 }
+				one_random_arms_factory = yes
+			}
+			else_if = {
+				limit = { num_of_factories > 44 }
+				two_random_arms_factory = yes
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_defense_industry_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 1
+			#modifier = {
+			#	factor = 0
+			#	disabled_ai_unit_list = yes
+			#}
+			#modifier = {
+			#	factor = 0
+			#	check_variable = { total_unemployed_percentage_display < 0.02 }
+			#}
+		}
+	}
+
+	# ENERGY SECTOR
+	focus = {
+		id = GENERIC_energy_sector
+		icon = generic_economic_energy_sector
+
+		x = -6
+		y = 1
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = GENERIC_economic_start }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_energy_sector"
+			set_temp_variable = { treasury_change = -5.25 }
+			modify_treasury_effect = yes
+			add_ideas = GENERIC_economy_energy_idea
+			capital_scope = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = fossil_powerplant
+					level = 1
+				}
+				add_building_construction = {
+					type = synthetic_refinery
+					level = 1
+				}
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_fossil_powerplant
+		icon = oil_red
+
+		x = -5
+		y = 2
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = GENERIC_energy_sector }
+		mutually_exclusive = { focus = GENERIC_renewable_retooling }
+
+	
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_fossil_powerplant"
+			set_temp_variable = { treasury_change = -1.0 }
+			modify_treasury_effect = yes
+			capital_scope = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = fossil_powerplant
+					level = 1
+				}
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_fossil_fuel_industry_opinion = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_improved_energy_cycling
+		icon = oil_companies
+
+		x = -5
+		y = 3
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = GENERIC_fossil_powerplant }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_improved_energy_cycling"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_energy_idea
+				add_idea = GENERIC_economy_energy_idea2
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_fossil_fuel_industry_opinion = yes
+			change_oligarchs_opinion = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_renewable_retooling
+		icon = generic_solar
+
+		x = -7
+		y = 2
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = GENERIC_energy_sector }
+		mutually_exclusive = { focus = GENERIC_fossil_powerplant }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_renewable_retooling"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_energy_idea
+				add_idea = GENERIC_economy_energy_idea1
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_renewable_infrastructure
+		icon = BRA_renewable_energy_funds
+
+		x = -7
+		y = 3
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = GENERIC_renewable_retooling }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_renewable_retooling"
+			set_temp_variable = { treasury_change = -4.0 }
+			modify_treasury_effect = yes
+			capital_scope = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = synthetic_refinery
+					level = 1
+				}
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_nuclear_energy_expansions
+		icon = generic_economic_nuclear
+
+		x = -6
+		y = 4
+		relative_position_id = GENERIC_economic_start
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = GENERIC_renewable_infrastructure
+			focus = GENERIC_improved_energy_cycling
+		}
+
+		available = {
+			has_tech = reactor1
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_nuclear_energy_expansions"
+			if = { limit = { NOT = { has_tech = reactor1 } }
+				effect_tooltip = {
+					random_owned_controlled_state = {
+						add_building_construction = {
+							type = nuclear_reactor
+							level = 1
+							instant_build = yes
+						}
+					}
+					set_temp_variable = { treasury_change = -4.5 }
+					modify_treasury_effect = yes
+				}
+			}
+			else = {
+				one_random_nuclear_reactor = yes
+			}
+			if = {
+				limit = { has_idea = non_nuclear_power }
+				swap_ideas = {
+					remove_idea = non_nuclear_power
+					add_idea = nuclear_energy
+				}
+			}
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	# UNEMPLOYMENT PROGRAMS
+	focus = {
+		id = GENERIC_unemployment_program
+		icon = generic_economic_no_job
+
+		x = 5
+		y = 4
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = GENERIC_mobilize_the_working_class }
+		prerequisite = { focus = GENERIC_attract_foreign_investors }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_unemployment_program"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_industry_idea1
+				add_idea = GENERIC_economy_industry_idea2
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_labour_unions_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	# SATISFY THE MIDDLE CLASS
+	focus = {
+		id = GENERIC_satisfy_the_middle_class
+		icon = middle_class_focus
+
+		x = 7
+		y = 3
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = GENERIC_mobilize_the_working_class }
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 95_total_gdp_tt
+				check_variable = { gdp_total > 95 }
+			}
+			has_civil_war = no
+			has_offensive_war = no
+		}
+
+		cancel = {
+			OR = {
+				has_civil_war = yes
+				has_offensive_war = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_satisfy_the_middle_class"
+			add_stability = 0.05
+			one_office_construction = yes
+			set_temp_variable = { temp_opinion = 10 }
+			change_industrial_conglomerates_opinion = yes
+			change_small_medium_business_owners_opinion = yes
+			change_the_donju_opinion = yes
+			change_chaebols_opinion = yes
+			change_wall_street_opinion = yes
+			if = { limit = { is_agrarian_economy = yes }
+				set_temp_variable = { crop_type = 0 }
+				set_temp_variable = { price_change = 2 }
+				AGRI_price_change_effect = yes
+				set_temp_variable = { crop_type = 1 }
+				set_temp_variable = { price_change = 2 }
+				AGRI_price_change_effect = yes
+				AGRI_update_math_variables = yes
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+	focus = {
+		id = GENERIC_build_churches
+		icon = generic_economic_religion_good
+
+		x = 9
+		y = 4
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION }
+		prerequisite = { focus = GENERIC_satisfy_the_middle_class }
+		mutually_exclusive = { focus = GENERIC_nationalize_religious_lands }
+
+		available = {
+			OR = {
+				has_idea = the_priesthood
+				has_idea = the_ulema
+				has_idea = the_clergy
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_build_churches"
+			add_stability = 0.05
+			set_temp_variable = { temp_opinion = 10 }
+			change_the_priesthood_opinion = yes
+			change_the_ulema_opinion = yes
+			change_the_wahabi_ulema_opinion = yes
+			change_the_clergy_opinion = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = -0.05 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_nationalize_religious_lands
+		icon = generic_economic_religion_nationalize
+
+		x = 11
+		y = 4
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION }
+		prerequisite = { focus = GENERIC_satisfy_the_middle_class }
+		mutually_exclusive = { focus = GENERIC_build_churches }
+
+		available = {
+			OR = {
+				has_idea = the_priesthood
+				has_idea = the_ulema
+				has_idea = the_clergy
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_nationalize_religious_lands"
+			add_stability = -0.05
+			set_temp_variable = { temp_opinion = -10 }
+			change_the_priesthood_opinion = yes
+			change_the_ulema_opinion = yes
+			change_the_wahabi_ulema_opinion = yes
+			change_the_clergy_opinion = yes
+			set_temp_variable = { treasury_change = gdp_total }
+			multiply_temp_variable = { treasury_change = 0.05 }
+			modify_treasury_effect = yes
+
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_please_the_upper_class
+		icon = generic_economic_upper_class
+
+		x = 7
+		y = 4
+		relative_position_id = GENERIC_economic_start
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = GENERIC_satisfy_the_middle_class }
+
+		available = {
+			has_civil_war = no
+			has_offensive_war = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_please_the_upper_class"
+			add_stability = 0.05
+			one_office_construction = yes
+			set_temp_variable = { temp_opinion = 10 }
+			change_oligarchs_opinion = yes
+			change_landowners_opinion = yes
+			change_international_bankers_opinion = yes
+			change_wall_street_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+	focus = {
+		id = GENERIC_assure_intellectual_freedoms
+		icon = generic_economic_free_science
+
+		x = 6
+		y = 5
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_unemployment_program }
+		prerequisite = { focus = GENERIC_please_the_upper_class }
+		mutually_exclusive = { focus = GENERIC_pressure_scientific_sommunity }
+
+		available = {
+			NOT = { has_idea = police_05 }
+			has_civil_war = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_assure_intellectual_freedoms"
+			add_ideas = GENERIC_economy_science_idea
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_pressure_scientific_sommunity
+		icon = generic_economic_bad_science
+
+		x = 8
+		y = 5
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_please_the_upper_class }
+		prerequisite = { focus = GENERIC_unemployment_program }
+		mutually_exclusive = { focus = GENERIC_assure_intellectual_freedoms }
+
+		available = {
+			NOT = { has_idea = police_05 }
+			has_civil_war = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_pressure_scientific_sommunity"
+			add_ideas = GENERIC_economy_noscience_idea
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_invest_in_biofuels
+		icon = generic_economic_biofuel
+
+		x = 9
+		y = 3
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_RESOURCE }
+		prerequisite = { focus = GENERIC_mobilize_the_working_class }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_invest_in_biofuels"
+			set_temp_variable = { treasury_change = -2.125 }
+			modify_treasury_effect = yes
+			capital_scope = {
+				add_building_construction = {
+					type = synthetic_refinery
+					instant_build = yes
+					level = 1
+				}
+			}
+			# AGRICULTURAL SHIT
+			if = { limit = { is_agrarian_economy = yes }
+				set_temp_variable = { treasury_change = gdp_total }
+				multiply_temp_variable = { treasury_change = -0.005 }
+				modify_treasury_effect = yes
+				set_temp_variable = { AGRI_protections_change = 1 }
+				AGRI_protection_update = yes
+				set_temp_variable = { allocation_change = 0.075 }
+				set_temp_variable = { crop_type = 0 }
+				AGRI_allocation_change_effect = yes
+				set_temp_variable = { allocation_change = -0.075 }
+				set_temp_variable = { crop_type = 1 }
+				AGRI_allocation_change_effect = yes
+				set_temp_variable = { temp_opinion = 7 }
+				change_farmers_opinion = yes
+				AGRI_update_math_variables = yes
+			}
+			else = {
+				set_temp_variable = { temp_opinion = 5 }
+				change_farmers_opinion = yes
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+	focus = {
+		id = GENERIC_import_foreign_automobiles
+		icon = generic_economic_autobrands
+
+		x = 3
+		y = 2
+		relative_position_id = GENERIC_satisfy_the_middle_class
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_please_the_upper_class }
+		prerequisite = { focus = GENERIC_unemployment_program }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_import_foreign_automobiles"
+			add_political_power = 100
+			add_tech_bonus = {
+				name = CAT_afv
+				category = CAT_util
+				category = CAT_afv
+				category = CAT_ifv
+				bonus = 0.25
+				uses = 2
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_create_an_automotive_industry
+		icon = generic_economic_our_auto
+
+		x = 3
+		y = 3
+		relative_position_id = GENERIC_satisfy_the_middle_class
+
+		cost = 5
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 135_total_gdp_tt
+				check_variable = { gdp_total > 135 }
+			}
+			has_war = no
+		}
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNAL_FACTION }
+		prerequisite = { focus = GENERIC_import_foreign_automobiles }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_create_an_automotive_industry"
+			one_random_industrial_complex = yes
+			swap_ideas = {
+				remove_idea = GENERIC_economy_industry_idea2
+				add_idea = GENERIC_economy_industry_idea3
+			}
+			if = {
+				limit = { num_of_factories > 29 num_of_factories < 60 }
+				one_random_industrial_complex = yes
+			}
+			if = {
+				limit = { num_of_factories > 59 }
+				two_random_industrial_complex = yes
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_labour_unions_opinion = yes
+			change_industrial_conglomerates_opinion = yes
+			change_small_medium_business_owners_opinion = yes
+			change_the_donju_opinion = yes
+			change_chaebols_opinion = yes
+			change_wall_street_opinion = yes
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	###Build Primary Schools
+	focus = {
+		id = GENERIC_build_primary_schools
+		icon = generic_economic_schools
+
+		x = 4
+		y = 5
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_unemployment_program }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_build_primary_schools"
+			add_ideas = GENERIC_economy_educations_idea
+			if = {
+				limit = {
+					has_variable = literacy_rate
+				}
+				set_temp_variable = { LR_change = 0.025 }
+				update_literacy_rate = yes
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_assure_access_to_education
+		icon = generic_economic_education_free
+
+		x = 5
+		y = 6
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+		
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_build_primary_schools }
+		mutually_exclusive = { focus = GENERIC_illiteracy_births_fertility }
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 135_total_gdp_tt
+				check_variable = { gdp_total > 135 }
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_assure_access_to_education"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_educations_idea
+				add_idea = GENERIC_economy_noeducation_idea
+			}
+			if = {
+				limit = {
+					has_variable = literacy_rate
+				}
+				set_temp_variable = { LR_change = 0.05 }
+				update_literacy_rate = yes
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_illiteracy_births_fertility
+		icon = generic_economic_education_nofree
+
+		x = 3
+		y = 6
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+		
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_build_primary_schools }
+		mutually_exclusive = { focus = GENERIC_assure_access_to_education }
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_illiteracy_births_fertility"
+			swap_ideas = {
+				remove_idea = GENERIC_economy_educations_idea
+				add_idea = GENERIC_economy_education_idea
+			}
+			if = {
+				limit = {
+					has_variable = literacy_rate
+				}
+				set_temp_variable = { LR_change = -0.05 }
+				update_literacy_rate = yes
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_expand_the_universities
+		icon = generic_economic_expand_univer
+
+		x = 7
+		y = 6
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { 
+			focus = GENERIC_assure_intellectual_freedoms
+			focus = GENERIC_pressure_scientific_sommunity
+		}
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 160_total_gdp_tt
+				check_variable = { gdp_total > 160 }
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_expand_the_universities"
+			if = {
+				limit = {
+					has_idea = GENERIC_economy_science_idea
+				}
+				swap_ideas = {
+					remove_idea = GENERIC_economy_science_idea
+					add_idea = GENERIC_economy_science_idea1
+				}
+			}
+			if = {
+				limit = {
+					has_idea = GENERIC_economy_noscience_idea
+				}
+				swap_ideas = {
+					remove_idea = GENERIC_economy_noscience_idea
+					add_idea = GENERIC_economy_noscience_idea1
+				}
+			}
+			if = {
+				limit = {
+					has_variable = literacy_rate
+				}
+				set_temp_variable = { LR_change = 0.1 }
+				update_literacy_rate = yes
+			}
+			add_country_leader_trait = educator
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_industrial_research_task_forces
+		icon = generic_economic_science
+
+		x = 6
+		y = 7
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_expand_the_universities }
+		prerequisite = { 
+			focus = GENERIC_assure_access_to_education
+			focus = GENERIC_illiteracy_births_fertility
+		}
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 200_total_gdp_tt
+				check_variable = { gdp_total > 200 }
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_industrial_research_task_forces"
+			add_ideas = GENERIC_economy_research_task_force_idea
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_domestic_vehicle_research
+		icon = generic_economic_super_tank
+
+		x = 3
+		y = 8
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_industrial_research_task_forces }
+		mutually_exclusive = {
+			focus = GENERIC_domestic_naval_research
+			focus = GENERIC_domestic_aircraft_research
+			focus = GENERIC_secret_weapons_program
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 200_total_gdp_tt
+				check_variable = { gdp_total > 200 }
+			}
+			NOT = { has_facility_specialization = specialization_land }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_domestic_vehicle_research"
+			one_random_land_facility = yes
+			add_country_leader_trait = scientist
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_domestic_naval_research
+		icon = generic_economic_super_ship
+
+		x = 5
+		y = 8
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_industrial_research_task_forces }
+		mutually_exclusive = {
+			focus = GENERIC_domestic_vehicle_research
+			focus = GENERIC_domestic_aircraft_research
+			focus = GENERIC_secret_weapons_program
+		}
+		
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 200_total_gdp_tt
+				check_variable = { gdp_total > 200 }
+			}
+			any_owned_state = {
+				is_coastal = yes
+			}
+			NOT = { has_facility_specialization = specialization_naval }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_domestic_naval_research"
+			one_random_naval_facility = yes
+			add_country_leader_trait = scientist
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_domestic_aircraft_research
+		icon = generic_economic_super_air
+
+		x = 7
+		y = 8
+		relative_position_id = GENERIC_economic_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_industrial_research_task_forces }
+		mutually_exclusive = {
+			focus = GENERIC_domestic_vehicle_research
+			focus = GENERIC_domestic_naval_research
+			focus = GENERIC_secret_weapons_program
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 200_total_gdp_tt
+				check_variable = { gdp_total > 200 }
+			}
+			NOT = { has_facility_specialization = specialization_air }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_domestic_aircraft_research"
+			one_random_air_facility = yes
+			add_country_leader_trait = scientist
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_secret_weapons_program
+		icon = generic_economic_super_civil
+
+		x = 9
+		y = 8
+		relative_position_id = GENERIC_economic_start
+
+		cost = 10
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_industrial_research_task_forces }
+		mutually_exclusive = {
+			focus = GENERIC_domestic_vehicle_research
+			focus = GENERIC_domestic_naval_research
+			focus = GENERIC_domestic_aircraft_research
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = 200_total_gdp_tt
+				check_variable = { gdp_total > 200 }
+			}
+			NOT = { has_facility_specialization = specialization_nuclear }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_secret_weapons_program"
+			one_random_nuclear_facility = yes
+			add_country_leader_trait = scientist
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	#Naval Reform
+	focus = {
+		id = GENERIC_naval_reform
+		icon = generic_army_reformnavy
+
+		x = 23
+		y = 0
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION }
+
+		available = { 
+			any_owned_state = { 
+				is_coastal = yes 
+			} 
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_naval_reform"
+			navy_experience = 50
+			add_doctrine_cost_reduction = {
+				name = GENERIC_naval_reform
+				category = CAT_naval_doctrine
+				uses = 1
+				cost_reduction = 0.5
+			}
+			add_ideas = GENERIC_navy_idea
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_naval_bases
+		icon = generic_army_navalbase
+
+		x = -2
+		y = 1
+		relative_position_id = GENERIC_naval_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNAL_FACTION }
+		prerequisite = { focus = GENERIC_naval_reform }
+
+		available = { 
+			any_owned_state = { 
+				is_coastal = yes 
+			} 
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_naval_bases"
+			random_owned_controlled_state = {
+				limit = {
+					can_construct_building = naval_base
+				}
+				construct_building_in_random_province = {
+					naval_base = 2
+				}
+			}
+			set_temp_variable = { treasury_change = -0.5 }
+			modify_treasury_effect = yes
+			set_temp_variable = { temp_opinion = 5 }
+			change_maritime_industry_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 1
+			#modifier = {
+			#	factor = 0
+			#	disabled_ai_unit_list = yes
+			#}
+			#modifier = {
+			#	factor = 0
+			#	num_of_civilian_factories < 10
+			#}
+			#modifier = {
+			#	factor = 0
+			#	check_variable = { total_unemployed_percentage_display < 0.02 }
+			#}
+		}
+	}
+	focus = {
+		id = GENERIC_surface_ships
+		icon = generic_army_ships
+
+		x = 2
+		y = 1
+		relative_position_id = GENERIC_naval_reform
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_naval_reform }
+
+		available = { 
+			num_of_military_factories > 2 
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_surface_ships"
+			add_tech_bonus = {
+				name = CAT_surface_ship
+				uses = 2
+				bonus = 0.5
+				category = CAT_surface_ship
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_dockyards
+		icon = generic_army_dockyard
+
+		x = -2
+		y = 2
+		relative_position_id = GENERIC_naval_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNAL_FACTION }
+		available = { any_owned_state = { is_coastal = yes } }
+		prerequisite = { focus = GENERIC_naval_bases }
+		prerequisite = { focus = GENERIC_naval_doctrine_innovations }
+
+		available = {
+			num_of_factories > 0
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_dockyards"
+			if = {
+				limit = { num_of_factories < 10 }
+				one_random_dockyard = yes
+			}
+			else = {
+				two_random_dockyards = yes
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_maritime_industry_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 1
+			#modifier = {
+			#	factor = 0
+			#	disabled_ai_unit_list = yes
+			#}
+			#modifier = {
+			#	factor = 0
+			#	num_of_civilian_factories < 10
+			#}
+			#modifier = {
+			#	factor = 0
+			#	check_variable = { total_unemployed_percentage_display < 0.02 }
+			#}
+		}
+	}
+
+	focus = {
+		id = GENERIC_naval_doctrine_innovations
+		icon = generic_army_fleet_doctrine
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_naval_reform
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_naval_reform }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_naval_doctrine_innovations"
+			add_doctrine_cost_reduction = {
+				name = GENERIC_naval_doctrine_innovations
+				category = CAT_naval_doctrine
+				uses = 2
+				cost_reduction = 0.5
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_vessel_production
+		icon = generic_army_shipyard
+
+		x = 2
+		y = 2
+		relative_position_id = GENERIC_naval_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_surface_ships }
+		prerequisite = { focus = GENERIC_naval_doctrine_innovations }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_naval_doctrine_expertise"
+			swap_ideas = {
+				remove_idea = GENERIC_navy_idea
+				add_idea = GENERIC_navy_idea1
+			}
+			set_temp_variable = { temp_opinion = 5 }
+			change_maritime_industry_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_fleet_guard
+		icon = generic_army_defendshores
+
+		x = 0
+		y = 2
+		relative_position_id = GENERIC_naval_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_naval_doctrine_innovations }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_naval_doctrine_expertise"
+			add_tech_bonus = {
+				name = CAT_corvette
+				bonus = 0.25
+				uses = 1
+				category = CAT_corvette
+			}
+			add_tech_bonus = {
+				name = CAT_frigate
+				bonus = 0.25
+				uses = 1
+				category = CAT_frigate
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_fleet_morpehi
+		icon = generic_army_marinecorps
+
+		x = 0
+		y = 3
+		relative_position_id = GENERIC_naval_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_vessel_production }
+		prerequisite = { focus = GENERIC_dockyards }
+		prerequisite = { focus = GENERIC_fleet_guard }
+
+		available = { 
+			num_of_military_factories > 3 
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_fleet_morpehi"
+			swap_ideas = {
+				remove_idea = GENERIC_navy_idea1
+				add_idea = GENERIC_navy_idea2
+			}
+			add_country_leader_trait = GENERIC_reformator_fleet_trait
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+
+	#Air Force Reform
+	focus = {
+		id = GENERIC_air_force_reform
+		icon = generic_army_air_reform
+
+		x = 36
+		y = 0
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_air_force_reform"
+			air_experience = 50
+			add_ideas = GENERIC_airforce_idea
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_army_vdv
+		icon = generic_army_airborne_troops
+
+		x = -2
+		y = 4
+		relative_position_id = GENERIC_air_force_reform
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_army_transport_avia }
+
+		available = { 
+			num_of_military_factories > 4
+			has_completed_focus = GENERIC_army_anti_air
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_vdv"
+			swap_ideas = {
+				remove_idea = GENERIC_army_idea3
+				add_idea = GENERIC_army_idea4
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_fighter_planes
+		icon = generic_army_airplanes
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_air_force_reform
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_air_force_reform }
+		available = { num_of_military_factories > 3 }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_fighter_planes"
+			add_tech_bonus = {
+				name = GENERIC_fighter_planes
+				uses = 2
+				bonus = 0.5
+				category = CAT_air_eqp
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_air_doctrine_innovations
+		icon = generic_army_airdoctrine
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_air_force_reform
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+
+		prerequisite = {
+			focus = GENERIC_air_force_reform
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_air_doctrine_innovations"
+			add_doctrine_cost_reduction = {
+				name = GENERIC_air_doctrine_innovations
+				category = CAT_air_doctrine
+				uses = 1
+				cost_reduction = 0.5
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_countermeasures_against_aircraft
+		icon = generic_army_antiaircraft
+
+		x = 0
+		y = 2
+		relative_position_id = GENERIC_air_force_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_AIRCRAFT }
+		prerequisite = { focus = GENERIC_fighter_planes }
+		prerequisite = { focus = GENERIC_air_doctrine_innovations }
+
+		available = {
+			num_of_military_factories > 3
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_countermeasures_against_aircraft"
+			add_tech_bonus = {
+				name = GENERIC_countermeasures_against_aircraft
+				uses = 1
+				bonus = 0.75
+				category = CAT_aa
+			}
+			one_anti_air = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_drones
+		icon = generic_army_drones
+
+		x = 1
+		y = 3
+		relative_position_id = GENERIC_air_force_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_countermeasures_against_aircraft }
+
+		available = {
+			num_of_military_factories > 4
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_drones"
+			add_tech_bonus = {
+				name = GENERIC_drones
+				uses = 2
+				bonus = 0.5
+				category = CAT_l_drone
+				category = CAT_a_uav
+			}
+			add_ideas = GENERIC_drone_army_idea
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_army_airport
+		icon = generic_army_airbase
+
+		x = 2
+		y = 4
+		relative_position_id = GENERIC_air_force_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_drones }
+
+		available = {
+			num_of_military_factories > 4
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_airport"
+			capital_scope = {
+				add_building_construction = {
+					type = air_base
+					level = 1
+					instant_build = yes
+				}
+			}
+			set_temp_variable = { treasury_change = -1.25 }
+			modify_treasury_effect = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_army_pilots
+		icon = generic_army_pilots
+
+		x = 0
+		y = 4
+		relative_position_id = GENERIC_air_force_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_drones }
+		prerequisite = { focus = GENERIC_army_transport_avia }
+
+		available = {
+			num_of_military_factories > 4
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_army_airport"
+			swap_ideas = {
+				remove_idea = GENERIC_airforce_idea1
+				add_idea = GENERIC_airforce_idea2
+			}
+			add_country_leader_trait = GENERIC_reformator_air_trait
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_army_transport_avia
+		icon = generic_army_transport_avia
+
+		x = -1
+		y = 3
+		relative_position_id = GENERIC_air_force_reform
+
+		cost = 5
+
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_countermeasures_against_aircraft }
+
+		available = {
+			num_of_military_factories > 4
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_drones"
+			add_tech_bonus = {
+				name = GENERIC_drones
+				uses = 2
+				bonus = 0.5
+				category = CAT_l_drone
+				category = CAT_a_uav
+			}
+			swap_ideas = {
+				remove_idea = GENERIC_airforce_idea
+				add_idea = GENERIC_airforce_idea1
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	#Special Service
+	focus = {
+		id = GENERIC_special_service_start
+		icon = generic_special_service
+
+		x = 23
+		y = 4
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION }
+
+		allow_branch = { 
+			NOT = {
+				original_tag = ABK
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_special_service_start"
+			add_political_power = 50
+			if = {
+				limit = { has_intelligence_agency = no }
+				add_stability = 0.05
+				create_intelligence_agency = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_special_service_mvd
+		icon = generic_internal_affairs
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_special_service_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_special_service_start }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_special_service_mvd"
+			add_ideas = GENERIC_mvd_intel_idea
+			set_temp_variable = { treasury_change = -0.05 }
+			modify_treasury_effect = yes
+			add_political_power = -25
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_special_service_outer
+		icon = general_outer_intel
+
+		x = -2
+		y = 2
+		relative_position_id = GENERIC_special_service_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_special_service_mvd }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_special_service_outer"
+			add_ideas = GENERIC_outer_intel_idea
+			set_temp_variable = { treasury_change = -0.05 }
+			modify_treasury_effect = yes
+			add_political_power = -75
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_build_intelligence_stations
+		icon = espionage2
+
+		x = -2
+		y = 3
+		relative_position_id = GENERIC_special_service_start
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = GENERIC_special_service_outer }
+
+		available = {
+			any_owned_state = {
+				radar_station < 6
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_build_intelligence_stations"
+			set_temp_variable = { treasury_change = -0.875 }
+			modify_treasury_effect = yes
+			random_owned_state = {
+				limit = { free_building_slots = { building = radar_station size > 0 include_locked = no } }
+				add_building_construction = {
+					type = radar_station
+					level = 1
+					instant_build = yes
+				}
+			}
+			random_owned_state = {
+				limit = { free_building_slots = { building = radar_station size > 0 include_locked = no } }
+				add_building_construction = {
+					type = radar_station
+					level = 1
+					instant_build = yes
+				}
+			}
+			set_temp_variable = { temp_opinion = 10 }
+			change_intelligence_community_opinion = yes
+			change_the_military_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_special_service_inner
+		icon = generic_inner_intel
+
+		x = 0
+		y = 2
+		relative_position_id = GENERIC_special_service_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_special_service_mvd }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_special_service_inner"
+			add_ideas = GENERIC_inner_intel_idea
+			set_temp_variable = { treasury_change = -0.05 }
+			modify_treasury_effect = yes
+			add_political_power = -75
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	focus = {
+		id = GENERIC_special_service_military
+		icon = generic_military_intel
+
+		x = 2
+		y = 2
+		relative_position_id = GENERIC_special_service_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_special_service_mvd }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_special_service_military"
+			add_ideas = GENERIC_military_intel_idea
+			set_temp_variable = { treasury_change = -0.05 }
+			modify_treasury_effect = yes
+			add_political_power = -75
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+	# Secret Service Path
+	focus = {
+		id = GENERIC_expand_the_secret_service
+		icon = espionage
+
+		x = 2
+		y = 3
+		relative_position_id = GENERIC_special_service_start
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_INTERNAL_FACTION FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = GENERIC_special_service_military }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_expand_the_secret_service"
+			add_ideas = GENERIC_expand_intel_idea
+			set_temp_variable = { temp_opinion = 10 }
+			change_intelligence_community_opinion = yes
+			change_the_military_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_special_service_ops
+		icon = generic_special_unit
+
+		x = 0
+		y = 3
+		relative_position_id = GENERIC_special_service_start
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_special_service_military }
+		prerequisite = { focus = GENERIC_special_service_inner }
+		prerequisite = { focus = GENERIC_special_service_outer }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_special_service_ops"
+			add_ideas = GENERIC_spec_intel_idea
+			set_temp_variable = { treasury_change = -0.05 }
+			modify_treasury_effect = yes
+			add_political_power = -50
+			add_country_leader_trait = GENERIC_policeman_trait
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	#Democratic
+	focus = {
+		id = GENERIC_democracy
+		icon = GENERIC_democracy
+
+		x = -15
+		y = 3
+		relative_position_id = GENERIC_political_reform
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = GENERIC_station_in_the_world }
+
+		available = {
+			OR = {
+				western_conservatism_are_in_power = yes
+				western_liberals_are_in_power = yes
+				western_social_democrats_are_in_power = yes
+				emerging_reactionaries_are_in_power = yes
+				neutrality_neutral_green_are_in_power = yes
+				neutrality_neutral_conservatism_are_in_power = yes
+				neutrality_neutral_libertarians_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_democracy"
+			add_political_power = 100
+			add_popularity = {
+				ideology = democratic
+				popularity = 0.05
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 4
+		}
+	}
+
+	focus = {
+		id = GENERIC_personal_freedom
+		icon = GENERIC_personal_freedom
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_democracy
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_democracy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_liberals_are_in_power = yes
+				neutrality_neutral_libertarians_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_personal_freedom"
+			set_internet_freedom = yes
+			add_ideas = GENERIC_personal_freedom_idea
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_minimal_government
+		icon = Decentralization
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_personal_freedom
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_personal_freedom
+			focus = GENERIC_conservative_values
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_conservatism_are_in_power = yes
+				western_liberals_are_in_power = yes
+				emerging_reactionaries_are_in_power = yes
+				neutrality_neutral_conservatism_are_in_power = yes
+				neutrality_neutral_libertarians_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_minimal_government"
+			add_ideas = GENERIC_minimal_govern_idea
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_democratic_representation
+		icon = GENERIC_representation
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_personal_freedom
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_personal_freedom
+			focus = GENERIC_social_equity
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				neutrality_neutral_libertarians_are_in_power = yes
+				western_liberals_are_in_power = yes
+				western_social_democrats_are_in_power = yes
+				neutrality_neutral_green_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_democratic_representation"
+			set_free_assembly = yes
+			add_ideas = GENERIC_dem_representation
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_freedom_of_speech
+		icon = democratic_stability
+
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_minimal_government
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_democratic_representation }
+		prerequisite = { focus = GENERIC_minimal_government }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_liberals_are_in_power = yes
+				neutrality_neutral_libertarians_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_freedom_of_speech"
+			set_freedom_of_speech = yes
+			add_popularity = {
+				ideology = democratic
+				popularity = 0.05
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_conservative_values
+		icon = GENERIC_conservative_values
+
+		x = 2
+		y = 1
+		relative_position_id = GENERIC_democracy
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_democracy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_conservatism_are_in_power = yes
+				emerging_reactionaries_are_in_power = yes
+				neutrality_neutral_conservatism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_conservative_values"
+			add_ideas = GENERIC_cons_values
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+	focus = {
+		id = GENERIC_family_defence
+		icon = family
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_conservative_values
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_conservative_values }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_conservatism_are_in_power = yes
+				emerging_reactionaries_are_in_power = yes
+				neutrality_neutral_conservatism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_family_defence"
+			set_traditional_values = yes
+			add_ideas = GENERIC_family_def
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_economic_deregulation
+		icon = BRA_libertarian_economics
+
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_family_defence
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_minimal_government
+			focus = GENERIC_family_defence
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_conservatism_are_in_power = yes
+				western_liberals_are_in_power = yes
+				emerging_reactionaries_are_in_power = yes
+				neutrality_neutral_conservatism_are_in_power = yes
+				neutrality_neutral_libertarians_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_economic_deregulation"
+			set_temp_variable = { corp_change = -5 }
+			modify_corporate_tax_rate_effect = yes
+			add_political_power = 100
+			set_temp_variable = { temp_opinion = 5 }
+			change_small_medium_business_owners_opinion = yes
+			set_temp_variable = { temp_opinion = 5 }
+			change_oligarchs_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_social_equity
+		icon = GENERIC_social_security
+
+
+		x = -2
+		y = 1
+		relative_position_id = GENERIC_democracy
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_democracy }
+
+		available = {
+			OR = {
+				western_social_democrats_are_in_power = yes
+				neutrality_neutral_green_are_in_power = yes
+			}
+		}
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_social_equity"
+			add_ideas = GENERIC_social_equality_idea
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_green_politic
+		icon = GENERIC_green_politics
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_social_equity
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_social_equity }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_green_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_green_politic"
+			add_ideas = GENERIC_green_energy
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_welfare_state
+		icon = pensions_increase
+
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_green_politic
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_green_politic
+			focus = GENERIC_democratic_representation
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_social_democrats_are_in_power = yes
+				neutrality_neutral_green_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_welfare_state"
+			set_ghent_system = yes
+			add_ideas = GENERIC_welfare_idea
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_western_liberal_democracy
+		icon = GENERIC_liberal_democracy
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_welfare_state
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_welfare_state
+			focus = GENERIC_freedom_of_speech
+			focus = GENERIC_economic_deregulation
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_social_democrats_are_in_power = yes
+				neutrality_neutral_green_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_western_liberal_democracye"
+			add_popularity = {
+				ideology = democratic
+				popularity = 0.1
+			}
+			add_political_power = -50
+			add_country_leader_trait = democratic_champion
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = democratic
+					popularity = 0.10
+				}
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+	focus = {
+		id = GENERIC_independent_democracy
+		icon = GENERIC_independent_democracy
+
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_freedom_of_speech
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_welfare_state
+			focus = GENERIC_freedom_of_speech
+			focus = GENERIC_economic_deregulation
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_liberals_are_in_power = yes
+				neutrality_neutral_libertarians_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_independent_democracy"
+			set_temp_variable = { percent_change = 10 }
+			change_domestic_influence_percentage = yes
+			add_political_power = 100
+			add_country_leader_trait = democratic_champion
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = democratic
+					popularity = 0.10
+				}
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+	focus = {
+		id = GENERIC_reactionary_democracy
+		icon = GENERIC_reactionary_democracy
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_economic_deregulation
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_welfare_state
+			focus = GENERIC_freedom_of_speech
+			focus = GENERIC_economic_deregulation
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_conservatism_are_in_power = yes
+				emerging_reactionaries_are_in_power = yes
+				neutrality_neutral_conservatism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_reactionary_democracy"
+			add_stability = 0.05
+			add_political_power = 50
+			add_popularity = {
+				ideology = communism
+				popularity = 0.1
+			}
+			add_country_leader_trait = democratic_champion
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = democratic
+					popularity = 0.10
+				}
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	#NATIONALISM
+	focus = {
+		id = GENERIC_nationalism
+		icon = neo_jingo
+
+		x = 11
+		y = 3
+		relative_position_id = GENERIC_political_reform
+
+		cost = 2
+
+		prerequisite = { focus = GENERIC_station_in_the_world }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = { has_government = nationalist }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_nationalism"
+			add_political_power = 100
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.05
+			}
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 4
+		}
+	}
+
+	focus = {
+		id = GENERIC_glorious_past
+		icon = monarchism_absolutism
+
+		x = 3
+		y = 1
+		relative_position_id = GENERIC_nationalism
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_nationalism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			nationalist_monarchists_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_glorious_past"
+			set_temp_variable = { party_index = 23 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			add_relative_party_popularity = yes
+			add_ideas = GENERIC_save_king
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_uncertain_times
+		icon = generic_nationalists_dictatorship
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_nationalism
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_nationalism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			nationalist_military_junta_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_uncertain_times"
+			set_temp_variable = { party_index = 22 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			add_relative_party_popularity = yes
+			add_ideas = GENERIC_military_dictatorship
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_nation_spirit
+		icon = generic_nationalism
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_nationalism
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_nationalism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			nationalist_fascist_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_nation_spirit"
+			set_temp_variable = { party_index = 21 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			add_relative_party_popularity = yes
+			add_ideas = GENERIC_fascist_spirit_idea
+			if = {
+				limit = {
+					has_idea = multi_ethnic_state_idea
+				}
+				set_temp_variable = { protest_strength_change = 30 }
+				modify_protest_effect = yes
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_against_establishment
+		icon = generic_nationalists_against
+
+		x = -3
+		y = 1
+		relative_position_id = GENERIC_nationalism
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_nationalism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			nationalist_right_wing_populists_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_against_establishment"
+			set_temp_variable = { party_index = 20 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			add_relative_party_popularity = yes
+			add_political_power = 50
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_our_interests
+		icon = generic_nationalists_interests
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_uncertain_times
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_uncertain_times
+			focus = GENERIC_glorious_past
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				nationalist_military_junta_are_in_power = yes
+				nationalist_monarchists_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_our_interests"
+			country_event = redux_generic.1
+			set_temp_variable = { percent_change = 10 }
+			change_domestic_influence_percentage = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_militarization_society
+		icon = generic_nationalists_militarization
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_uncertain_times
+
+		cost = 4
+
+		prerequisite = { 
+			focus = GENERIC_uncertain_times
+			focus = GENERIC_nation_spirit
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = { 
+			OR = { 
+				nationalist_military_junta_are_in_power = yes 
+				nationalist_fascist_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_militarization_society"
+			set_temp_variable = { temp_opinion = 5 }
+			change_the_military_opinion = yes
+			custom_effect_tooltip = militarization_society_tt
+			add_ideas = GENERIC_military_state_idea
+		}
+
+		ai_will_do = {
+			base = 2
+			modifier = {
+				add = 100
+				has_war = yes
+			}
+		}
+	}
+
+	focus = {
+		id = GENERIC_traditional_values
+		icon = generic_nationalists_values
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_nation_spirit
+
+		cost = 4
+
+		prerequisite = { 
+			focus = GENERIC_against_establishment
+			focus = GENERIC_nation_spirit
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = { 
+			OR = { 
+				nationalist_right_wing_populists_are_in_power = yes 
+				nationalist_fascist_are_in_power = yes
+			}
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_traditional_values"
+			if = {
+				limit = {
+					has_idea = GENERIC_fascist_spirit_idea
+				}
+				swap_ideas = {
+					remove_idea = GENERIC_fascist_spirit_idea
+					add_idea = GENERIC_fascist_spirit_idea1
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_idea = GENERIC_fascist_spirit_idea
+					}
+				}
+				set_temp_variable = { party_index = 20 }
+				set_temp_variable = { party_popularity_increase = 0.10 }
+				add_relative_party_popularity = yes
+				add_political_power = 50
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_work_for_country
+		icon = generic_nationalists_benefits
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_our_interests
+
+		cost = 4
+
+		prerequisite = { 
+			focus = GENERIC_our_interests
+			focus = GENERIC_militarization_society
+		}
+		mutually_exclusive = { focus = GENERIC_protect_people }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = { 
+			OR = { 
+				nationalist_military_junta_are_in_power = yes 
+				nationalist_monarchists_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_work_for_country"
+			if = {
+				limit = {
+					has_idea = GENERIC_internal_politic
+				}
+				swap_ideas = {
+					remove_idea = GENERIC_internal_politic
+					add_idea = GENERIC_internal_politic1
+				}
+			}
+			if = {
+				limit = {
+					has_idea = GENERIC_external_politic
+				}
+				swap_ideas = {
+					remove_idea = GENERIC_external_politic
+					add_idea = GENERIC_external_politic1
+				}
+			}
+			if = {
+				limit = {
+					has_idea = GENERIC_military_state_idea
+				}
+				add_war_support = 0.05
+				set_temp_variable = { temp_opinion = 5 }
+				change_the_military_opinion = yes
+			}
+			set_temp_variable = { corp_change = -3 }
+			modify_corporate_tax_rate_effect = yes
+			set_temp_variable = { pop_change = 5 }
+			modify_population_tax_rate_effect = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+			modifier = {
+				add = -1
+				has_stability < 0.4
+			}
+		}
+	}
+
+	focus = {
+		id = GENERIC_protect_people
+		icon = generic_nationalists_protect_people
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_our_interests
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_our_interests
+			focus = GENERIC_militarization_society
+		}
+		mutually_exclusive = { focus = GENERIC_work_for_country }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				nationalist_military_junta_are_in_power = yes
+				nationalist_monarchists_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_protect_people"
+			add_stability = 0.05
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.05
+			}
+			set_party_index_to_ruling_party = yes
+			set_temp_variable = { party_popularity_increase = 0.05 }
+			add_relative_party_popularity = yes
+			set_temp_variable = { corp_change = 5 }
+			modify_corporate_tax_rate_effect = yes
+			set_temp_variable = { pop_change = -5 }
+			modify_population_tax_rate_effect = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_autoritarism
+		icon = SOV_presidential_republic
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_militarization_society
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_traditional_values
+			focus = GENERIC_militarization_society
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				nationalist_right_wing_populists_are_in_power = yes
+				nationalist_fascist_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_autoritarism"
+			set_censorship = yes
+			add_ideas = GENERIC_autoritarism_idea
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_people_representatives
+		icon = generic_nationalists_representatives
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_traditional_values
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_traditional_values
+			focus = GENERIC_militarization_society
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = { nationalist_right_wing_populists_are_in_power = yes }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_people_representatives"
+			decrease_corruption = yes
+			add_stability = 0.05
+			add_political_power = 100
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.05
+			}
+			set_temp_variable = { party_index = 20 }
+			set_temp_variable = { party_popularity_increase = 0.05 }
+			add_relative_party_popularity = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_unity
+		icon = generic_nationalists_unity
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_autoritarism
+
+		cost = 4
+
+		prerequisite = { 
+			focus = GENERIC_people_representatives
+			focus = GENERIC_autoritarism
+			focus = GENERIC_protect_people
+			focus = GENERIC_work_for_country
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = { 
+			nationalist_right_wing_populists_are_in_power = yes 
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_unity"
+			add_ideas = GENERIC_unity_idea
+			add_country_leader_trait = dictator
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.10
+				}
+			}
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_power
+		icon = generic_nationalists_power
+
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_autoritarism
+
+		cost = 4
+
+		prerequisite = { 
+			focus = GENERIC_people_representatives
+			focus = GENERIC_autoritarism
+			focus = GENERIC_protect_people
+			focus = GENERIC_work_for_country
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		 available = { 
+			OR = { 
+				nationalist_military_junta_are_in_power = yes 
+				nationalist_monarchists_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_power"
+			add_ideas = GENERIC_power_idea
+			add_country_leader_trait = dictator
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.10
+				}
+			}
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_fairness
+		icon = generic_nationalists_fairness
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_work_for_country
+
+		cost = 4
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { 
+			focus = GENERIC_people_representatives
+			focus = GENERIC_autoritarism
+			focus = GENERIC_protect_people
+			focus = GENERIC_work_for_country
+		}
+
+		available = {
+			nationalist_fascist_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_fairness"
+			add_ideas = GENERIC_fairness_idea
+			add_country_leader_trait = dictator
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.10
+				}
+			}
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	#COMMUNISM
+
+	focus = {
+		id = GENERIC_left_twist
+		icon = generic_one_party
+
+		x = 3
+		y = 3
+		relative_position_id = GENERIC_political_reform
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = GENERIC_station_in_the_world }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_left_twist"
+			if = {
+				limit = {
+					has_government = neutrality
+				}
+				add_popularity = {
+					ideology = neutrality
+					popularity = 0.1
+				}
+			}
+			else = {
+				add_popularity = {
+					ideology = Communism
+					popularity = 0.10
+				}
+			}
+			add_political_power = 100
+			set_party_index_to_ruling_party = yes
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			add_relative_party_popularity = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 4
+		}
+	}
+
+	focus = {
+		id = GENERIC_people_government
+		icon = generic_commi_govern
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_left_twist
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_left_twist }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_left_twist"
+			add_ideas = GENERIC_people_government_idea
+			add_political_power = -50
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_centralism
+		icon = generic_commie_democratic_centralism
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_people_government
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_people_government }
+		mutually_exclusive = { focus = GENERIC_socialism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_centralism"
+			increase_centralization_2 = yes
+			swap_ideas = {
+				remove_idea = GENERIC_people_government_idea
+				add_idea = GENERIC_people_government_democratic_idea
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_socialism
+		icon = generic_commie_democratic_socialism
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_people_government
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_people_government }
+		mutually_exclusive = { focus = GENERIC_centralism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_socialism"
+			swap_ideas = {
+				remove_idea = GENERIC_people_government_idea
+				add_idea = GENERIC_people_government_socialism_idea
+			}
+			add_popularity = {
+				ideology = democratic
+				popularity = 0.1
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_class_matter
+		icon = generic_commi_class
+
+		x = -3
+		y = 1
+		relative_position_id = GENERIC_people_government
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_people_government }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_class_matter"
+			country_event = redux_generic.2
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_redistribution_income
+		icon = generic_commi_income
+
+		x = 3
+		y = 1
+		relative_position_id = GENERIC_people_government
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_people_government }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_redistribution_income"
+			add_timed_idea =  {
+				idea = GENERIC_redistribution_income_idea
+				days= 180
+			}
+			add_political_power = -50
+			increase_healthcare_budget = yes
+			increase_social_spending = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_five_year_plan
+		icon = generic_commie_five_year
+
+		x = 2
+		y = 1
+		relative_position_id = GENERIC_class_matter
+
+		cost = 5
+
+		prerequisite = {
+			focus = GENERIC_socialism
+			focus = GENERIC_centralism
+		}
+		mutually_exclusive = { focus = GENERIC_limited_market }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_five_year_plan"
+			add_timed_idea = {
+				idea = GENERIC_five_year_plan_idea
+				days = 1820
+			}
+			custom_effect_tooltip = generic_five_year_plan_tt
+			set_country_flag = GENERIC_start_five_year_plan
+			activate_mission = five_year_plan_mission
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_limited_market
+		icon = generic_commie_limited_market
+
+		x = -2
+		y = 1
+		relative_position_id = GENERIC_redistribution_income
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_socialism
+			focus = GENERIC_centralism
+		}
+		mutually_exclusive = { focus = GENERIC_five_year_plan }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		bypass = {
+			has_idea = md_closed_economy
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_limited_market"
+			GENERIC_limited_market_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_militia
+		icon = generic_commi_militia
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_redistribution_income
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_redistribution_income }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = { 
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_militia"
+			effect_tooltip = {
+				add_ideas = GENERIC_peoples_militia_idea
+			}
+			division_template = {
+				name = "Militia"
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+				}
+				priority = 2
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"1st Militia Battalion\" division_template = \"Militia\" start_experience_factor = 0.1"
+					owner = ROOT
+				}
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"2nd Militia Battalion\" division_template = \"Militia\" start_experience_factor = 0.1"
+					owner = ROOT
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+			modifier = {
+				add = 1000
+				has_war = yes
+			}
+		}
+	}
+
+	focus = {
+		id = GENERIC_new_culture
+		icon = generic_commi_culture
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_class_matter
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_class_matter }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_new_culture"
+			country_event = redux_generic.3
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_liberty
+		icon = generic_commie_liberty
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_new_culture
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_militia }
+		prerequisite = { focus = GENERIC_new_culture }
+		prerequisite = {
+			focus = GENERIC_five_year_plan
+			focus = GENERIC_limited_market
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			has_completed_focus = GENERIC_socialism
+			has_completed_focus = GENERIC_limited_market
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_liberty"
+			add_ideas = GENERIC_liberty_idea
+			add_political_power = 150
+			add_popularity = {
+				ideology = democratic
+				popularity = 0.05
+			}
+			add_country_leader_trait = communist_revolutionary
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = communism
+					popularity = 0.10
+				}
+			}
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_equality
+		icon = generic_commie_equality
+
+		x = 3
+		y = 1
+		relative_position_id = GENERIC_new_culture
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_militia }
+		prerequisite = { focus = GENERIC_new_culture }
+		prerequisite = {
+			focus = GENERIC_five_year_plan
+			focus = GENERIC_limited_market
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				AND = {
+					has_completed_focus = GENERIC_centralism
+					has_completed_focus = GENERIC_limited_market
+				}
+				AND = {
+					has_completed_focus = GENERIC_socialism
+					has_completed_focus = GENERIC_five_year_plan
+				}
+			}
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_equality"
+			add_political_power = -100
+			add_ideas = GENERIC_equality_idea
+			add_country_leader_trait = communist_revolutionary
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = communism
+					popularity = 0.10
+				}
+			}
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	focus = {
+		id = GENERIC_fraternity
+		icon = generic_commie_fraternity
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_militia
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_militia }
+		prerequisite = { focus = GENERIC_new_culture }
+		prerequisite = {
+			focus = GENERIC_five_year_plan
+			focus = GENERIC_limited_market
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			has_completed_focus = GENERIC_centralism
+			has_completed_focus = GENERIC_five_year_plan
+			OR = {
+				emerging_communist_state_are_in_power = yes
+				emerging_anarchist_communism_are_in_power = yes
+				neutrality_Neutral_Communism_are_in_power = yes
+				neutrality_neutral_social_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_fraternity"
+			add_ideas = GENERIC_fraternity_idea
+			add_popularity = {
+				ideology = communism
+				popularity = 0.1
+			}
+			add_country_leader_trait = communist_revolutionary
+			every_neighbor_country = {
+				limit = { NOT = { has_war_with = ROOT } }
+				add_popularity = {
+					ideology = communism
+					popularity = 0.10
+				}
+			}
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	#AUTOCRATS
+	focus = {
+		id = GENERIC_autocracy
+		icon = GENERIC_autocracy
+
+		x = -6
+		y = 3
+		relative_position_id = GENERIC_political_reform
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = GENERIC_station_in_the_world }
+
+		available = {
+			OR = {
+				western_autocrats_are_in_power = yes
+				emerging_autocracy_are_in_power = yes
+				neutrality_neutral_autocracy_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_autocracy"
+			add_political_power = 100
+			set_party_index_to_ruling_party = yes
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			add_relative_party_popularity = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 4
+		}
+	}
+
+	focus = {
+		id = GENERIC_independence
+		icon = GENERIC_independence
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_autocracy
+
+		cost = 2
+
+		prerequisite = { focus = GENERIC_autocracy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_autocracy_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_independence"
+			add_popularity = {
+				ideology = neutrality
+				popularity = 0.1
+			}
+			set_temp_variable = { percent_change = 10 }
+			change_domestic_influence_percentage = yes
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_no_foreign_agents
+		icon = GENERIC_no_agents
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_independence
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_independence }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_autocracy_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_no_foreign_agents"
+			add_ideas = GENERIC_fighting_agents_idea
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_friendship_with_everyone
+		icon = GENERIC_everyone_love
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_no_foreign_agents
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_no_foreign_agents }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_autocracy_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_friendship_with_everyone"
+			swap_ideas = {
+				remove_idea = GENERIC_fighting_agents_idea
+				add_idea = GENERIC_fighting_agents_idea1
+			}
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_between_east_west
+		icon = BLR_east_west
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_friendship_with_everyone
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_friendship_with_everyone
+		}
+
+		available = {
+			neutrality_neutral_autocracy_are_in_power = yes
+		}
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_between_east_west"
+			set_temp_variable = { percent_change = 20 }
+			change_domestic_influence_percentage = yes
+			add_country_leader_trait = political_dancer
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_secret_police
+		icon = generic_secret_service
+
+		x = 0
+		y = 2
+		relative_position_id = GENERIC_friendship_with_everyone
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_friendship_with_everyone
+			focus = GENERIC_east
+			focus = GENERIC_west
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_autocrats_are_in_power = yes
+				neutrality_neutral_autocracy_are_in_power = yes
+				emerging_autocracy_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_secret_police"
+			set_notification_regime = yes
+			effect_tooltip = {
+				add_ideas = GENERIC_secret_service_idea
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_people_regime
+		icon = GENERIC_people_regime
+
+		x = 3
+		y = 1
+		relative_position_id = GENERIC_autocracy
+
+		cost = 2
+
+		prerequisite = { focus = GENERIC_autocracy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_autocracy_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_people_regime"
+			add_stability = 0.05
+			add_popularity = {
+				ideology = communism
+				popularity = 0.1
+			}
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_eastern_investments
+		icon = GENERIC_eastern_investments
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_people_regime
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_people_regime }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_autocracy_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_eastern_investments"
+			custom_effect_tooltip = eastern_invest_tt
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_national_patriotism
+		icon = SOV_presidential_republic
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_eastern_investments
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_eastern_investments }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_autocracy_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_national_patriotism"
+			add_ideas = GENERIC_nat_patriot
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_police_state
+		icon = GENERIC_police_state
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_people_regime
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_facade_democracy
+			focus = GENERIC_independence
+			focus = GENERIC_people_regime
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_autocrats_are_in_power = yes
+				neutrality_neutral_autocracy_are_in_power = yes
+				emerging_autocracy_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_police_state"
+			add_ideas = GENERIC_police_state_idea
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_east
+		icon = GENERIC_east_love
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_national_patriotism
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_national_patriotism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_autocracy_are_in_power = yes
+			NOT = {
+				has_idea = Non_State_Actor
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_east"
+			add_political_power = 100
+			add_popularity = {
+				ideology = communism
+				popularity = 0.1
+			}
+			set_temp_variable = { party_index = 7 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			add_relative_party_popularity = yes
+			add_country_leader_trait = communist_sympathizer
+			custom_effect_tooltip = {
+				localization_key = UNLOCK_DECISION_IN_CATEGORY
+				DECISION = GENERIC_csto_friendship_treaty
+				DECISION_CATEGORY = GENERIC_csto_ratification_category
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_facade_democracy
+		icon = GENERIC_fraud_democracy
+
+		x = -3
+		y = 1
+		relative_position_id = GENERIC_autocracy
+
+		cost = 2
+
+		prerequisite = { focus = GENERIC_autocracy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			western_autocrats_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_facade_democracy"
+			add_political_power = 100
+			add_popularity = {
+				ideology = democratic
+				popularity = 0.1
+			}
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_western_investments
+		icon = dollars_money
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_facade_democracy
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_facade_democracy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			western_autocrats_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_western_investments"
+			custom_effect_tooltip = western_invest_tt
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_control_of_opposition
+		icon = GENERIC_controlled_opposition
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_facade_democracy
+
+		cost = 4
+
+		prerequisite = {
+			focus = GENERIC_facade_democracy
+			focus = GENERIC_independence
+			focus = GENERIC_people_regime
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				western_autocrats_are_in_power = yes
+				neutrality_neutral_autocracy_are_in_power = yes
+				emerging_autocracy_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_control_of_opposition"
+			set_ban_on_extremism = yes
+			add_ideas = GENERIC_control_opposition
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_economic_freedom
+		icon = classic_liberal_economy
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_western_investments
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_western_investments }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			western_autocrats_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_economic_freedom"
+			add_ideas = GENERIC_eco_freedom
+			set_temp_variable = { percent_change = 10 }
+			change_domestic_influence_percentage = yes
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_west
+		icon = GENERIC_west_love
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_economic_freedom
+
+		cost = 4
+
+		prerequisite = { focus = GENERIC_economic_freedom }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		
+		available = {
+			western_autocrats_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_west"
+			add_political_power = 100
+			add_popularity = {
+				ideology = democratic
+				popularity = 0.1
+			}
+			set_temp_variable = { party_index = 0 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			add_relative_party_popularity = yes
+			add_country_leader_trait = democratic_reformer
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	#Muslims
+	focus = {
+		id = GENERIC_brothers_muslims
+		icon = muslim_brotherhood_egy
+		x = -4
+		y = 8
+
+		cost = 3
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				has_idea = sunni
+				has_idea = sufi_islam
+			}
+			neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_brothers_muslims"
+			add_political_power = 100
+			set_temp_variable = { party_index = 12 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_international_relations
+		icon = muslim_arab_world
+		
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_brothers_muslims
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_brothers_muslims }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_international_relations"
+			every_country = {
+				limit = {
+					neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+				}
+				add_opinion_modifier = { target = PREV modifier = ideological_alliance }
+				reverse_add_opinion_modifier = { target = PREV modifier = ideological_alliance }
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_state_islam
+		icon = generic_muslim_state_islam
+
+		
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_international_relations
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_international_relations }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_state_islam"
+			set_state_religion = yes
+			add_ideas = GENERIC_state_islam_idea
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_qatar_foundations
+		icon = generic_muslim_quatar
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_international_relations
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_international_relations }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+			country_exists = QAT
+		}
+
+		bypass = {
+			NOT = {
+				country_exists = QAT
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_qatar_foundations"
+			QAT = {
+				country_event = generic_muslims.1
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_islamic_democracy
+		icon = generic_muslim_islam_democracy
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_state_islam
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_state_islam }
+		prerequisite = { focus = GENERIC_qatar_foundations }
+		mutually_exclusive = { focus = GENERIC_moderate_emirate }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_islamic_democracy"
+			add_ideas = GENERIC_democracy_under_sharia
+			add_political_power = 50
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_moderate_emirate
+		icon = generic_muslim_moderate_emirate
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_qatar_foundations
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_state_islam }
+		prerequisite = { focus = GENERIC_qatar_foundations }
+		mutually_exclusive = { focus = GENERIC_islamic_democracy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_moderate_emirate"
+			add_ideas = GENERIC_moderate_emirate_idea
+			set_country_flag = free_ban_parties
+			set_partyall_banned = yes
+			GENERIC_antipuppet_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_support_hamas
+		icon = generic_muslim_hamas
+		
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_islamic_democracy
+
+		cost = 3
+
+		prerequisite = { 
+			focus = GENERIC_islamic_democracy
+			focus = GENERIC_moderate_emirate
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_support_hamas"
+			ISR = {
+				add_opinion_modifier = { target = PREV modifier = declaration_of_hostility }
+				reverse_add_opinion_modifier = { target = PREV modifier = declaration_of_hostility }
+			}
+			if = {
+				limit = { country_exists = HAM }
+				custom_effect_tooltip = {
+					localization_key = UNLOCK_DECISION_IN_CATEGORY
+					DECISION = GENERIC_political_support
+					DECISION_CATEGORY = GENERIC_hamas_support_category
+				}
+			}
+			else = {
+				custom_effect_tooltip = {
+					localization_key = UNLOCK_DECISION_IN_CATEGORY
+					DECISION = GENERIC_challenge_israel
+					DECISION_CATEGORY = GENERIC_hamas_support_category
+				}
+			}
+			add_country_leader_trait = anti_zionist
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_propaganda_bases
+		icon = generic_muslim_propaganda
+
+		x = 2
+		y = 1
+		relative_position_id = GENERIC_islamic_democracy
+
+		cost = 3
+
+		prerequisite = { 
+			focus = GENERIC_islamic_democracy
+			focus = GENERIC_moderate_emirate
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_propaganda_bases"
+			add_political_power = 150
+			set_temp_variable = { percent_change = 10 }
+			change_domestic_influence_percentage = yes
+			set_temp_variable = { party_index = 12 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_anti_jid
+		icon = generic_resistance_jid
+
+		x = 1
+		y = 2
+		relative_position_id = GENERIC_islamic_democracy
+
+		cost = 3
+
+		prerequisite = { 
+			focus = GENERIC_propaganda_bases
+			focus = GENERIC_support_hamas
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			neutrality_neutral_Muslim_Brotherhood_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_anti_jid"
+			effect_tooltip = {
+				add_ideas = GENERIC_resistance_movement_idea
+			}
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	#Shia
+	focus = {
+		id = GENERIC_iron_hand_shiism
+		icon = GENERIC_princip_sh
+
+		x = -12
+		y = 8
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_Hardline_Shiite_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_iron_hand_shiism"
+			add_political_power = 100
+			set_temp_variable = { party_index = 9 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_shiite_democracy
+		icon = GENERIC_reformist_sh
+
+		x = -10
+		y = 8
+
+		cost = 2
+
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_moderate_Shiite_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_shiite_democracy"
+			add_political_power = 100
+			set_temp_variable = { party_index = 8 }
+			set_temp_variable = { party_popularity_increase = 0.10 }
+			set_temp_variable = { temp_outlook_increase = 0.10 }
+			add_relative_party_popularity = yes
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_our_new_mullah
+		icon = GENERIC_new_mullah
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_iron_hand_shiism
+
+		cost = 3
+
+		prerequisite = {
+			focus = GENERIC_iron_hand_shiism
+			focus = GENERIC_shiite_democracy
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_moderate_Shiite_are_in_power = yes
+				emerging_Hardline_Shiite_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_our_new_mullah"
+			set_hierocracy = yes
+			add_ideas = GENERIC_state_mullah
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_guards_of_revolution
+		icon = GENERIC_revolution_guard
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_iron_hand_shiism
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_iron_hand_shiism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_Hardline_Shiite_are_in_power = yes
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_guards_of_revolution"
+			effect_tooltip = {
+				add_ideas = GENERIC_guards_of_revolution_idea
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_public_defence_system
+		icon = GENERIC_public_safety
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_shiite_democracy
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_shiite_democracy }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			emerging_moderate_Shiite_are_in_power = yes
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_brothers_muslims"
+			add_ideas = GENERIC_defence_system
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_civil_sharia
+		icon = GENERIC_civil_shariah
+
+		x = 0
+		y = 1
+		relative_position_id = GENERIC_our_new_mullah
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_our_new_mullah }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_moderate_Shiite_are_in_power = yes
+				emerging_Hardline_Shiite_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_civil_sharia"
+			swap_ideas = {
+				remove_idea = GENERIC_state_mullah
+				add_idea = GENERIC_state_mullah2
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_iranian_system
+		icon = GENERIC_iranian_system
+
+		x = -1
+		y = 1
+		relative_position_id = GENERIC_civil_sharia
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_civil_sharia }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_moderate_Shiite_are_in_power = yes
+				emerging_Hardline_Shiite_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_iranian_system"
+			add_political_power = 150
+			PER = {
+				add_opinion_modifier = { target = PREV modifier = supports_us_2 }
+				reverse_add_opinion_modifier = { target = PREV modifier = supports_us_2 }
+			}
+			add_ideas = GENERIC_iran_system_idea
+			if = {
+				limit = { 
+					country_exists = PER
+					NOT = { has_war_with = PER }
+					PER = {
+						has_government = communism
+					}
+				}
+				add_country_leader_trait = pro_iranian
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_islamic_socialism
+		icon = GENERIC_islamic_socialism
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_civil_sharia
+
+		cost = 3
+
+		prerequisite = { focus = GENERIC_civil_sharia }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_moderate_Shiite_are_in_power = yes
+				emerging_Hardline_Shiite_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_islamic_socialism"
+			swap_ideas = {
+				remove_idea = GENERIC_state_mullah2
+				add_idea = GENERIC_state_mullah3
+			}
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	focus = {
+		id = GENERIC_islamic_republic
+		icon = GENERIC_islamic_republic
+
+		x = 1
+		y = 1
+		relative_position_id = GENERIC_iranian_system
+
+		cost = 5
+
+		prerequisite = { focus = GENERIC_iranian_system }
+		prerequisite = { focus = GENERIC_islamic_socialism }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+
+		available = {
+			OR = {
+				emerging_moderate_Shiite_are_in_power = yes
+				emerging_Hardline_Shiite_are_in_power = yes
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GENERIC_islamic_republic"
+			add_ideas = GENERIC_islamic_republic_idea
+			set_partyall_banned = yes 
+			set_temp_variable = { party_index = 10 }
+			unban_party_scripted_call = yes
+			set_temp_variable = { party_index = 9 }
+			unban_party_scripted_call = yes
+			set_temp_variable = { percent_change = 10 }
+			change_domestic_influence_percentage = yes
+			add_country_leader_trait = GENERIC_supreme_leader_trait
+			GENERIC_antipuppet_script = yes
+			#No More Hehemons
+			GENERIC_antiinfluency_script = yes
+		}
+
+		ai_will_do = {
+			base = 2
+		}
+	}
+
+	#Salafiti
+		#Shia
+		focus = {
+			id = GENERIC_torjestvo_jihad
+			icon = jihad_pizdec
+			x = -18
+			y = 8
+
+			cost = 2
+
+			search_filters = { FOCUS_FILTER_POLITICAL }
+
+			available = {
+				has_government = fascism
+			}
+
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_torjestvo_jihad"
+				add_political_power = 100
+				set_party_index_to_ruling_party = yes
+				set_temp_variable = { party_popularity_increase = 0.10 }
+				set_temp_variable = { temp_outlook_increase = 0.10 }
+				add_relative_party_popularity = yes
+				add_ideas = sunni
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+
+			ai_will_do = {
+				base = 5
+			}
+		}
+		focus = {
+			id = GENERIC_call_intern_jihadis
+			icon = jihadist_kalash
+
+			x = -2
+			y = 1
+			relative_position_id = GENERIC_torjestvo_jihad
+
+			cost = 5
+
+			prerequisite = { focus = GENERIC_torjestvo_jihad }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+
+			available = {
+				has_government = fascism
+			}
+
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_call_intern_jihadis"
+				if = {
+					limit = {
+						NOT = { has_idea = foreign_jihadis }
+					}
+					if = {
+						limit = { has_idea = small_medium_business_owners }
+						swap_ideas = {
+							remove_idea = small_medium_business_owners
+							add_idea = foreign_jihadis
+						}
+					}
+					else_if = {
+						limit = { has_idea = industrial_conglomerates }
+						swap_ideas = {
+							remove_idea = industrial_conglomerates
+							add_idea = foreign_jihadis
+						}
+					}
+					else_if = {
+						limit = { has_idea = landowners }
+						swap_ideas = {
+							remove_idea = landowners
+							add_idea = foreign_jihadis
+						}
+					}
+					else_if = {
+						limit = { has_idea = farmers }
+						swap_ideas = {
+							remove_idea = farmers
+							add_idea = foreign_jihadis
+						}
+					}
+					else_if = {
+						limit = { has_idea = oligarchs }
+						swap_ideas = {
+							remove_idea = oligarchs
+							add_idea = foreign_jihadis
+						}
+					}
+					else_if = {
+						limit = { has_idea = international_bankers }
+						swap_ideas = {
+							remove_idea = international_bankers
+							add_idea = foreign_jihadis
+						}
+					}
+					else_if = {
+						limit = { has_idea = maritime_industry }
+						swap_ideas = {
+							remove_idea = maritime_industry
+							add_idea = foreign_jihadis
+						}
+					}
+					else_if = {
+						limit = { has_idea = the_military }
+						swap_ideas = {
+							remove_idea = the_military
+							add_idea = foreign_jihadis
+						}
+					}
+					else_if = {
+						limit = { has_idea = intelligence_community }
+						swap_ideas = {
+							remove_idea = intelligence_community
+							add_idea = foreign_jihadis
+						}
+					}
+					else_if = {
+						limit = { has_idea = labour_unions }
+						swap_ideas = {
+							remove_idea = labour_unions
+							add_idea = foreign_jihadis
+						}
+					}
+
+				}
+				add_political_power = 50
+				set_temp_variable = { temp_opinion = 15 }
+				change_foreign_jihadis_opinion = yes
+				division_template = {
+					name = "Rural Militia"
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+					}
+					support = {
+						L_Engi_Comp = { x = 0 y = 0 }
+					}
+					priority = 2
+					is_locked = yes
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"1st Rural Militia Battalion\" division_template = \"Rural Militia\" start_experience_factor = 0.1"
+						owner = ROOT
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"2st Rural Militia Battalion\" division_template = \"Rural Militia\" start_experience_factor = 0.1"
+						owner = ROOT
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"3st Rural Militia Battalion\" division_template = \"Rural Militia\" start_experience_factor = 0.1"
+						owner = ROOT
+					}
+				}
+				division_template = {
+					name = "Jihadist-Deserters"
+					regiments = {
+						Mot_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 0 y = 2 }
+						Mot_Inf_Bat = { x = 1 y = 0 }
+						L_Inf_Bat = { x = 1 y = 1 }
+						L_Inf_Bat = { x = 1 y = 2 }
+						Arty_Bat = { x = 2 y = 0 }
+						Arty_Bat = { x = 2 y = 1 }
+					}
+					support = {
+						L_Recce_Comp = { x = 0 y = 0}
+						L_Engi_Comp = { x = 0 y = 1 }
+					}
+					priority = 2
+					is_locked = yes
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"1st Jihadist-Deserters Battalion\" division_template = \"Jihadist-Deserters\" start_experience_factor = 0.2"
+						owner = ROOT
+					}
+				}
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"2st Jihadist-Deserters Battalion\" division_template = \"Jihadist-Deserters\" start_experience_factor = 0.2"
+						owner = ROOT
+					}
+				}
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_crush_mushriqs
+			icon = mushriqs_must_fear
+
+			x = 0
+			y = 1
+			relative_position_id = GENERIC_torjestvo_jihad
+
+			cost = 3
+
+			prerequisite = { focus = GENERIC_torjestvo_jihad }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+
+			available = {
+				has_government = fascism
+			}
+
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_crush_mushriqs"
+				country_event = generic_salafists.1
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+
+			ai_will_do = {
+				base = 2
+			}
+		}
+		focus = {
+			id = GENERIC_bring_muftis
+			icon = call_mufti
+
+			x = 2
+			y = 1
+			relative_position_id = GENERIC_torjestvo_jihad
+
+			cost = 3
+
+			prerequisite = { focus = GENERIC_torjestvo_jihad }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+
+			available = {
+				has_government = fascism
+			}
+
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_bring_muftis"
+				if = {
+					limit = {
+						NOT = { has_idea = the_ulema }
+					}
+					if = {
+						limit = { has_idea = small_medium_business_owners }
+						swap_ideas = {
+							remove_idea = small_medium_business_owners
+							add_idea = the_ulema
+						}
+					}
+					else_if = {
+						limit = { has_idea = industrial_conglomerates }
+						swap_ideas = {
+							remove_idea = industrial_conglomerates
+							add_idea = the_ulema
+						}
+					}
+					else_if = {
+						limit = { has_idea = landowners }
+						swap_ideas = {
+							remove_idea = landowners
+							add_idea = the_ulema
+						}
+					}
+					else_if = {
+						limit = { has_idea = farmers }
+						swap_ideas = {
+							remove_idea = farmers
+							add_idea = the_ulema
+						}
+					}
+					else_if = {
+						limit = { has_idea = oligarchs }
+						swap_ideas = {
+							remove_idea = oligarchs
+							add_idea = the_ulema
+						}
+					}
+					else_if = {
+						limit = { has_idea = international_bankers }
+						swap_ideas = {
+							remove_idea = international_bankers
+							add_idea = the_ulema
+						}
+					}
+					else_if = {
+						limit = { has_idea = maritime_industry }
+						swap_ideas = {
+							remove_idea = maritime_industry
+							add_idea = the_ulema
+						}
+					}
+					else_if = {
+						limit = { has_idea = the_military }
+						swap_ideas = {
+							remove_idea = the_military
+							add_idea = the_ulema
+						}
+					}
+					else_if = {
+						limit = { has_idea = intelligence_community }
+						swap_ideas = {
+							remove_idea = intelligence_community
+							add_idea = the_ulema
+						}
+					}
+					else_if = {
+						limit = { has_idea = labour_unions }
+						swap_ideas = {
+							remove_idea = labour_unions
+							add_idea = the_ulema
+						}
+					}
+				}
+				set_temp_variable = { temp_modify_social_con_government = 10 }
+				modify_social_conservatism_government = yes
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_declare_malikate
+			icon = declare_malikate
+
+			x = -1
+			y = 2
+			relative_position_id = GENERIC_torjestvo_jihad
+
+			cost = 4
+
+			prerequisite = { focus = GENERIC_call_intern_jihadis }
+			prerequisite = { focus = GENERIC_crush_mushriqs }
+			prerequisite = { focus = GENERIC_bring_muftis }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+
+			available = {
+				salafist_kingdom_are_in_power = yes
+			}
+
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_declare_malikate"
+				add_ideas = GENERIC_malikate_guard
+				GENERIC_antipuppet_script = yes
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+
+			ai_will_do = {
+				base = 2
+			}
+		}
+
+		focus = {
+			id = GENERIC_unify_caliphate
+			icon = declare_caliphate
+
+			x = 1
+			y = 2
+			relative_position_id = GENERIC_torjestvo_jihad
+
+			cost = 4
+
+			prerequisite = { focus = GENERIC_call_intern_jihadis }
+			prerequisite = { focus = GENERIC_crush_mushriqs }
+			prerequisite = { focus = GENERIC_bring_muftis }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+
+			available = {
+				salafist_caliphate_are_in_power = yes
+			}
+
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_unify_caliphate"
+				add_war_support = 0.15
+				add_popularity = {
+					ideology = fascism
+					popularity = 0.15
+				}
+				add_ideas = GENERIC_permanent_jihad
+				GENERIC_antipuppet_script = yes
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_taqfir_to_infidels
+			icon = taqfir_nevernim
+	
+			x = 2
+			y = 3
+			relative_position_id = GENERIC_torjestvo_jihad
+	
+			cost = 4
+	
+			prerequisite = { focus = GENERIC_unify_caliphate }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+	
+			available = {
+				salafist_caliphate_are_in_power = yes
+			}
+	
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_taqfir_to_infidels"
+				swap_ideas = {
+					remove_idea = GENERIC_permanent_jihad
+					add_idea = GENERIC_permanent_jihad2
+				}
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+	
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_effective_jizya
+			icon = effective_jizya
+	
+			x = 4
+			y = 3
+			relative_position_id = GENERIC_torjestvo_jihad
+	
+			cost = 4
+	
+			prerequisite = { focus = GENERIC_unify_caliphate }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+	
+			available = {
+				salafist_caliphate_are_in_power = yes
+			}
+	
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_effective_jizya"
+				add_ideas = GENERIC_effective_jizya_idea
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+	
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_medrese_propaganda
+			icon = medrese_propagaga
+	
+			x = -2
+			y = 3
+			relative_position_id = GENERIC_torjestvo_jihad
+	
+			cost = 4
+	
+			prerequisite = { focus = GENERIC_declare_malikate }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+	
+			available = {
+				salafist_kingdom_are_in_power = yes
+			}
+	
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_medrese_propaganda"
+				add_ideas = GENERIC_medrese_propaganda_idea
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+				
+			}
+	
+			ai_will_do = {
+				base = 2
+			}
+		}
+		focus = {
+			id = GENERIC_jihadis_volunteers
+			icon = jihad_fanaticism
+	
+			x = 0
+			y = 3
+			relative_position_id = GENERIC_torjestvo_jihad
+	
+			cost = 4
+	
+			prerequisite = {
+				focus = GENERIC_declare_malikate
+				focus = GENERIC_unify_caliphate
+			}
+			search_filters = { FOCUS_FILTER_POLITICAL }
+	
+			available = {
+				salafist_kingdom_are_in_power = yes
+			}
+	
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_jihadis_volunteers"
+				set_country_flag = can_sent_military_aid
+				effect_tooltip = {
+					add_ideas = GENERIC_jihadis_volunteers_idea
+				}
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+	
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_ensure_ties_with_saudis
+			icon = saudi_ties
+	
+			x = -4
+			y = 3
+			relative_position_id = GENERIC_torjestvo_jihad
+	
+			cost = 4
+	
+			prerequisite = { focus = GENERIC_declare_malikate }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+	
+			available = {
+				salafist_kingdom_are_in_power = yes
+				SAU = {
+					has_opinion = {
+						target = PREV
+						value > 99
+					}
+				}
+			}
+	
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_ensure_ties_with_saudis"
+				add_ideas = GENERIC_hejaz_exp
+				if = {
+					limit = {
+						original_tag = SAU
+						original_tag = BHR
+						original_tag = KUW
+						original_tag = OMA
+						original_tag = QAT
+						original_tag = UAE
+						original_tag = EGY
+						original_tag = IRQ
+						original_tag = JOR
+						original_tag = MOR
+						original_tag = YEM
+					}
+					random_country = {
+						limit = { has_country_flag = gcc_dominant_member }
+						add_to_faction = ROOT
+					}
+				}
+				SAU = {
+					country_event = generic_salafists.2
+				}
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+	
+			ai_will_do = {
+				base = 2
+			}
+		}
+		focus = {
+			id = GENERIC_religious_fanaticism
+			icon = jihad_fanaticism
+	
+			x = -1
+			y = 4
+			relative_position_id = GENERIC_torjestvo_jihad
+	
+			cost = 5
+	
+			prerequisite = { 
+				focus = GENERIC_ensure_ties_with_saudis
+				focus = GENERIC_medrese_propaganda
+				focus = GENERIC_taqfir_to_infidels
+				focus = GENERIC_effective_jizya
+				focus = GENERIC_jihadis_volunteers
+			}
+			search_filters = { FOCUS_FILTER_POLITICAL }
+	
+			available = {
+				has_government = fascism
+			}
+	
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_religious_fanaticism"
+				add_political_power = -100
+				set_temp_variable = { temp_opinion = 15 }
+				change_the_ulema_opinion = yes
+				set_temp_variable = { temp_opinion = 15 }
+				change_foreign_jihadis_opinion = yes
+				set_temp_variable = { temp_modify_social_con_government = 5 }
+				modify_social_conservatism_government = yes
+				set_temp_variable = { modify_terrorism = 7 }
+				add_to_variable = { terrorism_mana = 15 }
+				clamp_variable = {
+					var = terrorism_mana
+					min = 1
+					max = 100
+				}
+				modify_terrorism_support = yes
+				add_country_leader_trait = GENERIC_supreme_leader_trait
+				every_neighbor_country = {
+					limit = { 
+						NOT = { 
+							has_war_with = ROOT 
+						} 
+						NOT = { 
+							has_idea = GENERIC_salafist_influency_idea
+						}
+					}
+					add_popularity = {
+						ideology = fascism
+						popularity = 0.10
+					}
+				}
+				GENERIC_antipuppet_script = yes
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+	
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_government_sharia
+			icon = sharia_install
+	
+			x = 1
+			y = 4
+			relative_position_id = GENERIC_torjestvo_jihad
+	
+			cost = 5
+	
+			prerequisite = { 
+				focus = GENERIC_ensure_ties_with_saudis
+				focus = GENERIC_medrese_propaganda
+				focus = GENERIC_taqfir_to_infidels
+				focus = GENERIC_effective_jizya
+				focus = GENERIC_jihadis_volunteers
+			}
+			search_filters = { FOCUS_FILTER_POLITICAL }
+	
+			available = {
+				has_government = fascism
+			}
+	
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_government_sharia"
+				add_popularity = {
+					ideology = fascism
+					popularity = 0.12
+				}
+				set_temp_variable = { temp_modify_social_con_government = 10 }
+				modify_social_conservatism_government = yes
+				add_ideas = GENERIC_government_sharia_idea
+				every_neighbor_country = {
+					limit = { 
+						NOT = { 
+							has_war_with = ROOT 
+						} 
+						NOT = { 
+							has_idea = GENERIC_salafist_influency_idea
+						}
+					}
+					add_popularity = {
+						ideology = fascism
+						popularity = 0.10
+					}
+				}
+				GENERIC_antipuppet_script = yes
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+	
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_inghimasi
+			icon = generic_inghimasi
+	
+			x = 0
+			y = 5
+			relative_position_id = GENERIC_torjestvo_jihad
+	
+			cost = 4
+	
+			prerequisite = { 
+				focus = GENERIC_religious_fanaticism
+				focus = GENERIC_government_sharia
+			}
+			search_filters = { FOCUS_FILTER_POLITICAL }
+	
+			available = {
+				has_government = fascism
+			}
+	
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_inghimasi"
+				effect_tooltip = {
+					add_ideas = GENERIC_inghimasi_idea
+				}
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+	
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_jihad_against_apostates
+			icon = generic_inghimasi
+
+			x = -1
+			y = 6
+			relative_position_id = GENERIC_torjestvo_jihad
+
+			cost = 5
+
+			prerequisite = { focus = GENERIC_inghimasi }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+
+			available = {
+				NOT = {
+					has_idea = non_power
+					original_tag = TAL
+				}
+				is_subject = no
+				salafist_caliphate_are_in_power = yes
+			}
+
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_inghimasi"
+				add_war_support = 0.05
+				every_neighbor_country = {
+					limit = {
+						NOT = { has_war_with = ROOT }
+						NOT = { salafist_caliphate_are_in_power = yes }
+					}
+					ROOT = {
+						create_wargoal = {
+							type = annex_everything
+							target = PREV
+						}
+						set_country_flag = declared_jihad_against@PREV
+					}
+					add_opinion_modifier = { target = ROOT modifier = declared_jihad_opinion }
+				}
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_unite_the_ummah
+			icon = generic_inghimasi
+
+			x = 1
+			y = 6
+			relative_position_id = GENERIC_torjestvo_jihad
+
+			cost = 5
+
+			prerequisite = { focus = GENERIC_inghimasi }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+
+			available = {
+				NOT = {
+					has_idea = non_power
+					has_idea = minor_power
+					original_tag = TAL
+				}
+				is_subject = no
+				salafist_caliphate_are_in_power = yes
+				any_other_country = {
+					salafist_caliphate_are_in_power = yes
+					NOT = {
+						original_tag = TAL
+					}
+				}
+			}
+
+			bypass = {
+				any_other_country = {
+					has_country_leader_with_trait = GENERIC_amir_al_muminin_trait
+				}
+			}
+
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_inghimasi"
+				if = { limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+				if = { limit = { is_faction_leader = no }
+					dismantle_faction = yes
+					create_faction_from_template = faction_template_generic_islamic_states
+				}
+				every_other_country = {
+					limit = {
+						NOT = { is_in_faction_with = ROOT }
+						OR = {
+							AND = {
+								salafist_caliphate_are_in_power = yes
+								NOT = { original_tag = TAL }
+							}
+							AND = {
+								original_tag = LBA
+								has_government = fascism
+							}
+						}
+					}
+					country_event = { id = generic_salafists.3 days = 1 }
+				}
+				add_country_leader_trait = GENERIC_amir_al_muminin_trait
+				set_temp_variable = { percent_change = 10 }
+				change_domestic_influence_percentage = yes
+				news_event = generic_salafists.5
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+
+			ai_will_do = {
+				base = 3
+			}
+		}
+		focus = {
+			id = GENERIC_revenge_for_the_crusades
+			icon = generic_inghimasi
+
+			x = 0
+			y = 7
+			relative_position_id = GENERIC_torjestvo_jihad
+
+			cost = 5
+
+			prerequisite = { focus = GENERIC_jihad_against_apostates }
+			prerequisite = { focus = GENERIC_unite_the_ummah }
+			search_filters = { FOCUS_FILTER_POLITICAL }
+
+			available = {
+				NOT = {
+					has_idea = non_power
+					has_idea = minor_power
+					original_tag = TAL
+				}
+				is_subject = no
+				salafist_caliphate_are_in_power = yes
+			}
+
+			bypass = {
+				has_idea = GENERIC_jihad_retribution_idea
+			}
+
+			completion_reward = {
+				log = "[GetDateText]: [Root.GetName]: Focus GENERIC_inghimasi"
+				every_faction_member = {
+					add_ideas = GENERIC_jihad_retribution_idea
+					country_event = generic_salafists.4
+				}
+				#No More Hehemons
+				GENERIC_antiinfluency_script = yes
+			}
+
+			ai_will_do = {
+				base = 3
+			}
+		}
+}

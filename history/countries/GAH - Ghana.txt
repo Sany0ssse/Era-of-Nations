@@ -1,0 +1,241 @@
+
+capital = 346
+2000.1.1 = {
+	set_country_flag = dynamic_flag
+	set_country_flag = dynamic_rebel_flag
+	set_variable = { gdp_per_capita = 2.752 }
+	set_variable = { capitalization = 0.010 }
+	set_variable = { count_companies = 0 }
+	
+
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency
+	}
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency_trade
+	}
+	if = {
+		limit = { has_dlc = "No Step Back" }
+
+
+		set_technology = {
+			mbt_tech_ops = 1
+			mbt_tech = 1
+		}
+
+		set_oob = "GAH_2000_nsb"
+		else = {
+			set_oob = "GAH_2000_nonnsb"
+		}
+	}
+	if = {
+		limit = { has_dlc = "By Blood Alone" }
+		set_air_oob = "GAH_2000_bba"
+		else = {
+			set_air_oob = "GAH_2000_nonbba"
+		}
+	}
+
+	set_cosmetic_tag = GAH
+	add_ideas = {		#Freedom Laws
+		censorship_02
+		assembly_02
+		freedom_religion_02
+		lgbt_laws_04
+		freedom_trade_unions_02
+		internet_02
+
+		rampant_corruption
+		ecowas_member_state
+		OAU_member
+		pluralist
+		fast_growth
+		defence_01
+		edu_04
+		health_01
+		social_01
+		bureau_03
+		police_01
+		volunteer_army
+		volunteer_women
+		USA_usaid #https://explorer.usaid.gov/aid-dashboard.html
+		international_bankers
+		fossil_fuel_industry
+		small_medium_business_owners
+		semi_consumption_economy
+		commonwealth_of_nations_member
+		officer_basic_training
+		GENERIC_structures_idea3
+		GENERIC_structures_idea1
+		GENERIC_structures_idea2
+		GENERIC_no_rest_idea
+		GENERIC_wto_idea
+		frontier_market
+		population_pyramid_2
+		GENERIC_petrodollar_idea
+	}
+
+	#Influence system
+	init_influence = yes
+	set_variable = { domestic_influence_amount = 110 }
+	add_to_array = { influence_array = USA.id }
+	add_to_array = { influence_array_val = 45 }
+	add_to_array = { influence_array = BFA.id }
+	add_to_array = { influence_array_val = 10 }
+	add_to_array = { influence_array = CHI.id }
+	add_to_array = { influence_array_val = 65 }
+	add_to_array = { influence_array = ENG.id }
+	add_to_array = { influence_array_val = 25 }
+	add_to_array = { influence_array = SOV.id }
+	add_to_array = { influence_array_val = 15 }
+	add_to_array = { influence_array = NIG.id }
+	add_to_array = { influence_array_val = 2 }
+	add_to_array = { influence_array = FRA.id }
+	add_to_array = { influence_array_val = 5 }
+	startup_influence = yes
+
+	set_variable = { var = debt value = 33.88 }
+	set_variable = { var = treasury value = 0.0650 }
+	set_variable = { var = corporate_tax_rate value = 15 }
+	set_variable = { var = population_tax_rate value = 24 }
+	set_variable = { var = int_investments value = 0 }
+
+	set_popularities = {
+		democratic = 91.7
+		communism = 2.8
+		fascism = 0.0
+		neutrality = 5.5
+		nationalist = 0.0
+	}
+	set_politics = {
+		ruling_party = democratic
+		last_election = "1996.12.7"
+		election_frequency = 48
+		elections_allowed = yes
+	}
+
+	start_politics_input = yes
+
+	set_variable = { election_threshold = 0.01 }
+
+	### Party Popularities
+	set_variable = { party_pop_array^0 = 0 } #Western_Autocracy
+	set_variable = { party_pop_array^1 = 0.448 } #conservatism - NPP
+	set_variable = { party_pop_array^2 = 0 } #liberalism - PPP
+	set_variable = { party_pop_array^3 = 0.469 } #socialism - NDC
+	set_variable = { party_pop_array^4 = 0.028 } #Communist-State - CPP
+	set_variable = { party_pop_array^5 = 0 } #anarchist_communism - DPP
+	set_variable = { party_pop_array^6 = 0 } #Conservative
+	set_variable = { party_pop_array^7 = 0 } #Autocracy
+	set_variable = { party_pop_array^8 = 0 } #Mod_Vilayat_e_Faqih
+	set_variable = { party_pop_array^9 = 0 } #Vilayat_e_Faqih
+	set_variable = { party_pop_array^10 = 0 } #Kingdom
+	set_variable = { party_pop_array^11 = 0 } #Caliphate
+	set_variable = { party_pop_array^12 = 0 } #Neutral_Muslim_Brotherhood
+	set_variable = { party_pop_array^13 = 0 } #Neutral_Autocracy
+	set_variable = { party_pop_array^14 = 0 } #Neutral_conservatism - NDP
+	set_variable = { party_pop_array^15 = 0 } #oligarchism
+	set_variable = { party_pop_array^16 = 0.018 } #Neutral_Libertarian - NRF
+	set_variable = { party_pop_array^17 = 0 } #Neutral_green - GCPP
+	set_variable = { party_pop_array^18 = 0 } #neutral_Social - EGLE
+	set_variable = { party_pop_array^19 = 0.037 } #Neutral_Communism - PNC
+	set_variable = { party_pop_array^20 = 0 } #Nat_Populism
+	set_variable = { party_pop_array^21 = 0 } #Nat_Fascism
+	set_variable = { party_pop_array^22 = 0 } #Nat_Autocracy
+	set_variable = { party_pop_array^23 = 0 } #Monarchist
+
+	### Ruling Party
+	add_to_array = { ruling_party = 3 }
+
+	#1996 election results
+	set_variable = { party_pop_elect_array^1 = 0.338 } #conservatism - NPP
+	set_variable = { party_pop_elect_array^3 = 0.53 } #socialist - NDC
+	set_variable = { party_pop_elect_array^4 = 0.067 } #Communist-State - CPP
+	set_variable = { party_pop_elect_array^5 = 0.001 } #anarchist_communism - DPP
+	set_variable = { party_pop_elect_array^17 = 0 } #Neutral_green - GCPP
+	set_variable = { party_pop_elect_array^18 = 0.001 } #neutral_Social - EGLE
+	set_variable = { party_pop_elect_array^19 = 0.033 } #Neutral_Communism - PNC
+
+	startup_politics = yes
+
+	create_country_leader = {
+		name = "Jerry Rawlings"
+		picture = "jerry_rawlings.dds"
+		expire = "1997.01.07"
+		ideology = socialism
+		traits = {
+			western_socialism
+		}
+	}
+	set_variable = { term_limit = 2 }
+	set_variable = { current_term = 2 }
+
+	recruit_character = GAH_joseph_henry_smith
+	recruit_character = GAH_clayton_yaache
+	recruit_character = GAH_samuel_odotei
+	recruit_character = GAH_michael_samson_oje
+	recruit_character = GAH_e_o_owusu_ansah
+	recruit_character = GAH_arthur_riby_sampa_nuno
+	recruit_character = GAH_peter_blay
+
+	set_technology = {
+		integrated_transportation_system = 1
+		post_conventional_rail = 1
+		early_freight_locomotive = 1
+
+
+		infantry_mass_assault = 1
+		#For templates
+		infantry_weapons = 1
+		combat_eng_equipment = 1
+		command_control_equipment = 1
+		Anti_tank_0 = 1
+		Heavy_Anti_tank_0 = 1
+		util_vehicle_0 = 1
+
+
+
+		basic_computing = 1
+		integrated_circuit = 1
+		computing1 = 1
+		decryption1 = 1
+		encryption1 = 1
+		radar = 1
+		fuel_silos = 1
+
+		industrial_electrospun_polymeric_nanofibers = 1
+		stereolitography = 1
+		fuel_refining = 1
+		construction1 = 1
+	}
+	if = {
+		limit = { has_dlc = "No Step Back" }
+
+		set_technology = {
+
+			nsb_artillery_0 = 1
+			nsb_Anti_Air_0 = 1
+
+		}
+
+		else = {
+			set_technology = {
+				Early_APC = 1
+				APC_1 = 1
+				artillery_0 = 1
+				Anti_Air_0 = 1
+				Rec_tank_0 = 1
+			}
+		}
+	}
+	add_to_array = { agri_crop_allocation = 0.748 } # Basic = 0
+	add_to_array = { agri_crop_allocation = 0.252 } # Cash = 1
+
+	add_to_array = { agri_crop_price = 15 } # Basic = 0
+	add_to_array = { agri_crop_price = 25 } # Cash = 1
+
+	set_variable = { literacy_rate = 0.579 }
+	set_variable = { overall_productivity = 361 }
+}

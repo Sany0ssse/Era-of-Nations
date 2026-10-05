@@ -1,0 +1,50 @@
+##### Created by Haski_Laik #####
+scripted_diplomatic_actions = {
+    man_subj_exp_ac = {
+    allowed = { 
+        always = yes 
+    }
+    visible = {
+        is_subject = yes
+        is_subject_of = ROOT
+    }
+    selectable = {
+        is_subject_of = ROOT
+        NOT = { has_war_with = ROOT }
+        ROOT = {
+		has_political_power > 250
+		}
+    }
+
+    cost = 250
+    requires_acceptance = no
+    show_acceptance_on_action_button = no
+    icon = 17
+
+    send_description = diplomatic_action_man_subj_exp_ac_d
+
+    
+    on_sent_effect = {
+        log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect man_subj_exp_ac"
+    }
+    
+    complete_effect = {
+        log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect man_subj_exp_ac"
+        THIS = {
+            country_event = manage_subject_expenses.2
+        }
+    }
+    
+    reject_effect = {
+        # Empty
+    }
+    
+    ai_desire = {
+        base = 0
+        modifier = {
+            factor = 0
+            ROOT = { is_ai = yes }
+        }
+    }
+}
+}   

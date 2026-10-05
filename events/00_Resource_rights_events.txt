@@ -1,0 +1,140 @@
+add_namespace = resource_rights
+
+country_event = {
+	id = resource_rights.1
+	title = resource_rights.1.t
+	desc = resource_rights.1.d
+	picture = GFX_raw_diamonds
+	is_triggered_only = yes
+
+    option = {
+        name = resource_rights.1.a
+		log = "[GetDateText]: [This.GetName]: resource_rights.1.a executed"
+        clear_variable = remove_resource_rights_state
+    }
+}
+
+country_event = {
+	id = resource_rights.2
+	title = resource_rights.2.t
+	desc = resource_rights.2.d
+	picture = GFX_raw_diamonds
+	is_triggered_only = yes
+
+    option = {
+        name = resource_rights.2.a
+		log = "[GetDateText]: [This.GetName]: resource_rights.2.a executed"
+        var:resource_rights_state = {
+            CONTROLLER = {
+                give_resource_rights = { receiver = FROM state = PREV }
+            }
+            add_dynamic_modifier = { modifier = foreign_resource_rights_in_state }
+			count_resource_rights_given_resources = yes
+        }
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = FROM }
+		set_temp_variable = { influence_target = ROOT }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = FROM
+			modifier = resource_rights_agreement
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = resource_rights_agreement
+		}
+		add_opinion_modifier = {
+			target = FROM
+			modifier = resource_rights_agreement_trade
+		}
+		reverse_add_opinion_modifier = {
+			target = FROM
+			modifier = resource_rights_agreement_trade
+		}
+        FROM = { country_event = resource_rights.3 }
+        clear_variable = resource_rights_state
+        clr_country_flag = resource_rights_negotiations
+        FROM = { clr_country_flag = resource_rights_negotiations }
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 25
+				has_opinion = {
+					target = FROM
+					value > 99
+				}
+			}
+		}
+    }
+
+    option = {
+        name = resource_rights.2.b
+		trigger = { NOT = { is_subject_of = FROM } }
+		log = "[GetDateText]: [This.GetName]: resource_rights.2.b executed"
+        FROM = { country_event = resource_rights.4 }
+        clear_variable = resource_rights_state
+        clr_country_flag = resource_rights_negotiations
+        FROM = { clr_country_flag = resource_rights_negotiations }
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 50
+				OR = {
+					AND = {
+						OR = {
+							oil < 0
+							fuel_ratio < 0
+						}
+						var:resource_rights_state = { oil > 0 }
+					}
+					AND = {
+						aluminium < 0
+						var:resource_rights_state = { aluminium > 0 }
+					}
+					AND = {
+						tungsten < 0
+						var:resource_rights_state = { tungsten > 0 }
+					}
+					AND = {
+						rubber < 0
+						var:resource_rights_state = { rubber > 0 }
+					}
+					AND = {
+						steel < 0
+						var:resource_rights_state = { steel > 0 }
+					}
+					AND = {
+						chromium < 0
+						var:resource_rights_state = { chromium > 0 }
+					}
+				}
+			}
+		}
+    }
+}
+
+country_event = {
+	id = resource_rights.3
+	title = resource_rights.3.t
+	desc = resource_rights.3.d
+	picture = GFX_raw_diamonds
+	is_triggered_only = yes
+
+    option = {
+        name = resource_rights.3.a
+		log = "[GetDateText]: [This.GetName]: resource_rights.3.a executed"
+    }
+}
+
+country_event = {
+	id = resource_rights.4
+	title = resource_rights.4.t
+	desc = resource_rights.4.d
+	picture = GFX_raw_diamonds
+	is_triggered_only = yes
+
+    option = {
+        name = resource_rights.4.a
+		log = "[GetDateText]: [This.GetName]: resource_rights.4.a executed"
+    }
+}

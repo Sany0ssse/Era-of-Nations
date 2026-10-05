@@ -1,0 +1,39 @@
+calculate_damaged_buildings_count = {
+  hidden_effect = {
+
+ set_variable = { num_of_damaged_civs = 0 } #variables to count number of damaged buildings
+ set_variable = { num_of_damaged_mils = 0 }
+ set_variable = { num_of_damaged_dockyards = 0 }
+ set_variable = { num_of_damaged_offices = 0 }
+ set_variable = { num_of_damaged_rub_ref = 0 }
+ set_variable = { num_of_damaged_agriculture_district = 0 }
+ set_variable = { num_of_damaged_nuclear_reactor = 0 }
+ set_variable = { num_of_damaged_synthetic_refinery = 0 }
+ set_variable = { num_of_damaged_fossil_powerplant = 0 }
+
+ every_controlled_state = {                 #counting number of damaged buildings for states and summing states numbers for country
+   add_to_variable = { PREV.num_of_damaged_civs = damaged_building_level@industrial_complex }
+   add_to_variable = { PREV.num_of_damaged_mils = damaged_building_level@arms_factory }
+   add_to_variable = { PREV.num_of_damaged_dockyards = damaged_building_level@dockyard }
+   add_to_variable = { PREV.num_of_damaged_offices = damaged_building_level@offices }
+   add_to_variable = { PREV.num_of_damaged_rub_ref = damaged_building_level@rubber_refinery }
+   add_to_variable = { PREV.num_of_damaged_agriculture_district = damaged_building_level@agriculture_district }
+   add_to_variable = { PREV.num_of_damaged_nuclear_reactor = damaged_building_level@nuclear_reactor }
+   add_to_variable = { PREV.num_of_damaged_synthetic_refinery = damaged_building_level@synthetic_refinery }
+   add_to_variable = { PREV.num_of_synthetic_refinery = building_level@synthetic_refinery }
+   add_to_variable = { PREV.num_of_damaged_fossil_powerplant = damaged_building_level@fossil_powerplant }
+                          }
+  set_variable = { damaged_civil_fac_debuff = num_of_damaged_civs }
+  multiply_variable = { damaged_civil_fac_debuff = 0.6 }
+  set_variable = { damaged_military_fac_debuff = num_of_damaged_mils }
+  multiply_variable = { damaged_military_fac_debuff = 0.6 }
+  set_variable = { damaged_dockyard_debuff = num_of_damaged_dockyards }
+  multiply_variable = { damaged_dockyard_debuff = 0.6 }
+  set_variable = { damaged_offices_debuff = num_of_damaged_offices }
+  multiply_variable = { damaged_offices_debuff = 0.6 }
+  set_variable = { damaged_rub_ref_debuff = num_of_damaged_rub_ref }
+  multiply_variable = { damaged_rub_ref_debuff = 0.6 }
+  set_variable = { damaged_agriculture_district_debuff = num_of_damaged_agriculture_district }
+  multiply_variable = { damaged_agriculture_district_debuff = 0.6 }
+                        }
+                                   }

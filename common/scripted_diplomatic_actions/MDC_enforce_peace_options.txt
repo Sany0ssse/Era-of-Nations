@@ -1,0 +1,211 @@
+scripted_diplomatic_actions = {
+	enforce_war = {
+
+		allowed = {
+			always = yes
+		}
+
+		visible = {
+            has_war = yes
+            NOT = { has_war_with = ROOT }
+            NOT = {
+                ROOT = {
+                    any_allied_country = {
+                        has_war_with = PREV.PREV
+                    }
+                }
+            }
+            NOT = {
+                ROOT = {
+                    any_subject_country = {
+                        has_war_with = PREV.PREV
+                    }
+                }
+            }
+			ROOT = {
+				NOT = { has_country_flag = enforcewarcooldown }
+			}
+			NOT = { has_idea = enforced_war_idea }
+		}
+
+		selectable = {
+            OR = {
+                is_top_influencer = yes
+                influence_higher_50 = yes
+                AND = {
+                    ROOT = { tag = ENG }
+                    is_top3_influencer = yes
+                    influence_higher_25 = yes
+                }
+            }
+			custom_trigger_tooltip = {
+				tooltip = less_than_50_independence_TT
+				check_variable = { domestic_influence_amount < 49.99 }
+			}
+		}
+
+		cost = 150
+
+		requires_acceptance = no
+		show_acceptance_on_action_button = yes
+
+		icon = 5
+
+		receive_description = ENFORCE_WAR_RECIEVER_LOC
+		accept_title = ENFORCE_WAR_ACCEPTED_TITLE
+		accept_description = ENFORCE_WAR_ACCEPTED_DESC
+
+		complete_effect = {
+            add_war_support = 0.25
+			add_timed_idea = {
+				idea = enforced_war_idea
+				days = 365
+			}
+			ROOT = {
+				if = {
+					limit = { is_ai = yes }
+					if = { limit = { is_major = yes }
+						set_country_flag = { flag = enforcewarcooldown days = 28 value = 1 }
+					}
+					else = {
+						set_country_flag = { flag = enforcewarcooldown days = 160 value = 1 }
+					}
+				}
+			}
+		}
+
+		ai_desire = {
+			base = 0
+            modifier = {
+                add = 5
+                ROOT = { is_lend_leasing = PREV }
+            }
+			modifier = {
+				add = 10
+				has_attache_from = ROOT
+			}
+			modifier = {
+				add = 25
+				has_volunteers_amount_from = {
+					tag = ROOT
+					count > 0
+				}
+			}
+			modifier = {
+				add = 50
+                is_guaranteed_by = ROOT
+			}
+		}
+
+		ai_acceptance = {
+			condition = {
+				base = 100
+			}
+		}
+	}
+	enforce_peace = {
+
+		allowed = {
+			always = yes
+		}
+
+		visible = {
+            has_war = yes
+            NOT = {
+                has_war_with = ROOT
+                ROOT = {
+                    any_allied_country = {
+                        has_war_with = PREV.PREV
+                    }
+                }
+                ROOT = {
+                    any_subject_country = {
+                        has_war_with = PREV.PREV
+                    }
+                }
+            }
+			ROOT = {
+				NOT = { has_country_flag = enforcepeacecooldown }
+			}
+		}
+
+		selectable = {
+            OR = {
+                is_top_influencer = yes
+                influence_higher_50 = yes
+                AND = {
+                    ROOT = { has_country_leader_with_trait = peacekeeper }
+                    is_top3_influencer = yes
+                    influence_higher_25 = yes
+                }
+			    NOT = { has_idea = enforced_war_idea }
+            }
+			custom_trigger_tooltip = {
+				tooltip = less_than_50_independence_TT
+				check_variable = { domestic_influence_amount < 49.99 }
+			}
+            all_enemy_country = {
+                OR = {
+                    is_top_influencer = yes
+                    influence_higher_50 = yes
+                    AND = {
+                        ROOT = { has_country_leader_with_trait = peacekeeper }
+                        is_top3_influencer = yes
+                        influence_higher_25 = yes
+                    }
+                }
+			    custom_trigger_tooltip = {
+				    tooltip = less_than_50_independence_TT
+				    check_variable = { domestic_influence_amount < 49.99 }
+			    }
+			    NOT = { has_idea = enforced_war_idea }
+            }
+		}
+
+		cost = 250
+
+		requires_acceptance = no
+		show_acceptance_on_action_button = yes
+
+		icon = 27
+
+		receive_description = ENFORCE_PEACE_RECIEVER_LOC
+		accept_title = ENFORCE_PEACE_ACCEPTED_TITLE
+		accept_description = ENFORCE_PEACE_ACCEPTED_DESC
+
+		complete_effect = {
+            every_enemy_country = {
+                white_peace = PREV
+            }
+			ROOT = {
+				if = {
+					limit = { is_ai = yes }
+					if = { limit = { is_major = yes }
+						set_country_flag = { flag = enforcepeacecooldown days = 28 value = 1 }
+					}
+					else = {
+						set_country_flag = { flag = enforcepeacecooldown days = 160 value = 1 }
+					}
+				}
+			}
+		}
+
+		ai_desire = {
+			base = 0
+            modifier = {
+                add = 50
+                influence_higher_80 = yes
+            }
+			modifier = {
+				add = 25
+                is_guaranteed_by = ROOT
+			}
+		}
+
+		ai_acceptance = {
+			condition = {
+				base = 100
+			}
+		}
+	}
+}

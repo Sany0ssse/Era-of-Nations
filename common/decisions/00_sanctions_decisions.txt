@@ -1,0 +1,1306 @@
+sanctions_decision_category = {
+	preparing_sanctions = {
+
+		icon = GFX_idea_generic_sanctions_economic_mini_idea
+
+		days_mission_timeout = 120
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+			var:sanction_target = { ROOT = { set_country_flag = { flag = sanctions_prepared@PREV value = 1 days = 365 } } }
+			set_country_flag = sanctions_complete
+            custom_effect_tooltip = sanction_prepared_tt
+        }
+
+		remove_trigger = {
+			OR = {
+				var:sanction_target = { exists = no }
+				has_country_flag = sanctions_complete
+			}
+		}
+
+		remove_effect = {
+			clr_country_flag = sanctions_complete
+			clear_variable = sanction_target
+		}
+    }
+	nationalise_sanctioneer_industries = {
+		icon = generic_independence
+		cost = 100
+		days_remove = 60
+		days_re_enable = 60
+		fixed_random_seed = no
+
+		target_array = sanctioneers
+
+		target_trigger = {
+			is_in_array = { FROM.sanctions_targets = ROOT }
+			sender_influence_higher_20 = yes
+			FROM = { check_variable = { int_investments > 0 } }
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision combat_biggest_influencer_decision"
+			set_temp_variable = { percent_change = -5 }
+			set_temp_variable = { tag_index = FROM }
+			set_temp_variable = { influence_target = ROOT }
+			change_influence_percentage = yes
+			if = {
+				limit = { num_of_factories > 3 any_owned_state = { is_coastal = yes } }
+				random_list = {
+					40 = {
+						country_event = subparty_policies.0	#Gain money
+					}
+					10 = {
+						country_event = subparty_policies.1	#Gain 1 CIC
+					}
+					5 = {
+						country_event = subparty_policies.6	#Gain 1 office
+					}
+					5 = {
+						country_event = subparty_policies.2	#Gain 1 MIC
+					}
+					5 = {
+						country_event = subparty_policies.3	#Gain 1 NIC
+					}
+					15 = {
+						country_event = subparty_policies.4	#Lose stability
+				        modifier = {
+					        add = cash_flow_modifier
+					        set_temp_variable = { cash_flow_modifier = 0 }
+                            if = {
+                                limit = { has_idea = restricted_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -5 }
+                            }
+                            else_if = {
+                                limit = { has_idea = closed_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -10 }
+                            }
+							set_temp_variable = { intel_stuff = FROM.civilian_intel@ROOT }
+							add_to_temp_variable = { cash_flow_modifier = intel_stuff }
+				        }
+					}
+					20 = {
+						country_event = subparty_policies.5	#Lose 1 CIC
+				        modifier = {
+					        add = cash_flow_modifier
+					        set_temp_variable = { cash_flow_modifier = 0 }
+                            if = {
+                                limit = { has_idea = restricted_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -5 }
+                            }
+                            else_if = {
+                                limit = { has_idea = closed_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -10 }
+                            }
+							set_temp_variable = { intel_stuff = FROM.civilian_intel@ROOT }
+							add_to_temp_variable = { cash_flow_modifier = intel_stuff }
+				        }
+					}
+				}
+			}
+			if = {
+				limit = { num_of_factories > 3 NOT = { any_owned_state = { is_coastal = yes } } }
+				random_list = {
+					40 = {
+						country_event = subparty_policies.0	#Gain money
+					}
+					10 = {
+						country_event = subparty_policies.1	#Gain 1 CIC
+					}
+					10 = {
+						country_event = subparty_policies.6	#Gain 1 Office
+					}
+					5 = {
+						country_event = subparty_policies.2	#Gain 1 MIC
+					}
+					15 = {
+						country_event = subparty_policies.4	#Lose stability
+				        modifier = {
+					        add = cash_flow_modifier
+					        set_temp_variable = { cash_flow_modifier = 0 }
+                            if = {
+                                limit = { has_idea = restricted_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -5 }
+                            }
+                            else_if = {
+                                limit = { has_idea = closed_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -10 }
+                            }
+							set_temp_variable = { intel_stuff = FROM.civilian_intel@ROOT }
+							add_to_temp_variable = { cash_flow_modifier = intel_stuff }
+				        }
+					}
+					20 = {
+						country_event = subparty_policies.5	#Lose 1 CIC
+				        modifier = {
+					        add = cash_flow_modifier
+					        set_temp_variable = { cash_flow_modifier = 0 }
+                            if = {
+                                limit = { has_idea = restricted_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -5 }
+                            }
+                            else_if = {
+                                limit = { has_idea = closed_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -10 }
+                            }
+							set_temp_variable = { intel_stuff = FROM.civilian_intel@ROOT }
+							add_to_temp_variable = { cash_flow_modifier = intel_stuff }
+				        }
+					}
+				}
+			}
+			if = {
+				limit = { num_of_factories < 4 }
+				random_list = {
+					65 = {
+						country_event = subparty_policies.0	#Gain money
+					}
+					35 = {
+						country_event = subparty_policies.4	#Lose stability
+				        modifier = {
+					        add = cash_flow_modifier
+					        set_temp_variable = { cash_flow_modifier = 0 }
+                            if = {
+                                limit = { has_idea = restricted_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -5 }
+                            }
+                            else_if = {
+                                limit = { has_idea = closed_cash_flow }
+					            add_to_temp_variable = { cash_flow_modifier = -10 }
+                            }
+							set_temp_variable = { intel_stuff = FROM.civilian_intel@ROOT }
+							add_to_temp_variable = { cash_flow_modifier = intel_stuff }
+				        }
+					}
+				}
+			}
+            issued_sanctions_update = yes
+			FROM = {
+				add_opinion_modifier = {
+					target = ROOT
+					modifier = reduced_our_influence
+				}
+				reverse_add_opinion_modifier = {
+					target = ROOT
+					modifier = reduced_our_influence
+				}
+			}
+		}
+
+        cancel_trigger = {
+			OR = {
+            	NOT = { sender_influence_higher_20 = yes }
+				NOT = { FROM = { check_variable = { int_investments > 0 } } }
+				NOT = { is_in_array = { FROM.sanctions_targets = ROOT } }
+			}
+        }
+
+        cancel_effect = {  }
+
+		ai_will_do = {
+			base = 500
+		}
+
+	}
+	start_parallel_import = {
+		icon = GFX_idea_generic_sanctions_economic_mini_idea
+		visible = {
+			NOT = { has_idea = parallel_import }
+			OR = {
+				any_other_country = {
+					is_in_array = { sanctions_targets = PREV }
+					NOT = { has_idea = non_power }
+					NOT = { has_idea = minor_power }
+				}
+				has_idea = international_sanctions
+				has_idea = Massive_International_Sanctions
+				has_idea = NKO_international_sanctions_idea
+				has_idea = NKO_international_sanctions_idea1
+				has_idea = NKO_international_sanctions_idea2
+				has_idea = NKO_international_sanctions_idea3
+				has_idea = NKO_international_sanctions_idea4
+				has_idea = IRQ_international_sanctions
+				has_idea = IRQ_international_sanctions2
+				has_idea = IRQ_international_sanctions3
+				has_idea = IRQ_international_sanctions4
+				has_idea = PAL_quartet_very_high_sanctions
+				has_idea = PAL_quartet_high_sanctions
+				has_idea = PAL_quartet_moderate_sanctions
+				has_idea = SER_International_Isolation
+				has_idea = SER_International_Isolation_1
+				check_variable = { embargo_modifier_value < -0.15 }
+			}
+		}
+		cost = 150
+		days_remove = 120
+
+		remove_effect = {
+			add_ideas = parallel_import
+			hidden_effect = {
+				calculate_sanctions_modifier = yes
+				calculate_embargo_modifiers = yes
+			}
+		}
+
+        cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = not_under_sanctions_tt
+				NOT = {
+					OR = {
+						any_other_country = {
+							is_in_array = { sanctions_targets = PREV }
+							NOT = { has_idea = non_power }
+							NOT = { has_idea = minor_power }
+						}
+						has_idea = international_sanctions
+						has_idea = Massive_International_Sanctions
+						has_idea = NKO_international_sanctions_idea
+						has_idea = NKO_international_sanctions_idea1
+						has_idea = NKO_international_sanctions_idea2
+						has_idea = NKO_international_sanctions_idea3
+						has_idea = NKO_international_sanctions_idea4
+						has_idea = IRQ_international_sanctions
+						has_idea = IRQ_international_sanctions2
+						has_idea = IRQ_international_sanctions3
+						has_idea = IRQ_international_sanctions4
+						has_idea = SER_International_Isolation
+						has_idea = SER_International_Isolation_1
+						check_variable = { embargo_modifier_value < -0.15 }
+					}
+				}
+			}
+		}
+
+        cancel_effect = {  }
+
+		ai_will_do = {
+			base = 25
+		}
+	}
+	end_parallel_import = {
+		icon = GFX_idea_generic_sanctions_economic_mini_idea
+		visible = { has_idea = parallel_import }
+		cost = 150
+		days_remove = 120
+
+		remove_effect = {
+			remove_ideas = parallel_import
+			hidden_effect = {
+				calculate_sanctions_modifier = yes
+				calculate_embargo_modifiers = yes
+			}
+		}
+	}
+	national_pharma_company = {
+		icon = generic_independence
+		fixed_random_seed = no
+
+		visible = {
+			OR = {
+				any_other_country = {
+					is_in_array = { sanctions_targets = PREV }
+					NOT = { has_idea = non_power }
+					NOT = { has_idea = minor_power }
+				}
+				has_idea = international_sanctions
+				has_idea = Massive_International_Sanctions
+				has_idea = NKO_international_sanctions_idea
+				has_idea = NKO_international_sanctions_idea1
+				has_idea = NKO_international_sanctions_idea2
+				has_idea = NKO_international_sanctions_idea3
+				has_idea = NKO_international_sanctions_idea4
+				has_idea = IRQ_international_sanctions
+				has_idea = IRQ_international_sanctions2
+				has_idea = IRQ_international_sanctions3
+				has_idea = IRQ_international_sanctions4
+				has_idea = PAL_quartet_very_high_sanctions
+				has_idea = PAL_quartet_high_sanctions
+				has_idea = PAL_quartet_moderate_sanctions
+				has_idea = SER_International_Isolation
+				has_idea = SER_International_Isolation_1
+				check_variable = { embargo_modifier_value < -0.15 }
+			}
+			NOT = { has_country_flag = importozemeshenie_pharma }
+			is_dynamic_country = no
+		}
+
+		days_remove = 120
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 20 }
+		}
+
+		custom_cost_text = cost_20_0
+
+		complete_effect = {
+			set_temp_variable = { treasury_change = -20 }
+			modify_treasury_effect = yes
+			log = "[GetDateText]: [This.GetName]: decision national_pharma_company executed"
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision national_pharma_company"
+			random_list = {
+				55 = {
+					set_country_flag = importozemeshenie_pharma
+					add_to_variable = { quarters_since_sanctions = 5 }
+					clamp_variable = { var = quarters_since_sanctions max = 50 }
+					calculate_sanctions_modifier = yes
+					custom_effect_tooltip = sanctions_resistance_tt
+					effect_tooltip = { add_ideas = Domestic_Pharmaceuticalcompany_idea }
+					if = {
+						limit = {
+							has_country_flag = importozemeshenie_pharma
+							has_country_flag = importozemeshenie_eda
+							has_country_flag = importozemeshenie_avto
+							has_country_flag = importozemeshenie_elbrus
+							has_country_flag = importozemeshenie_poezda
+							has_country_flag = importozemeshenie_samoletu
+						}
+						if = {
+							limit = { NOT = { tag = SOV } }
+							country_event = sanctions.10
+						}
+						else = { country_event = sanctions.11 }
+					}
+					one_random_free_industrial_complex = yes
+				}
+				0 = {
+					modifier = {
+						add = corruption_factor
+						set_temp_variable = { corruption_factor = 0 }
+						if = {
+							limit = { has_idea = slight_corruption }
+							add_to_temp_variable = { corruption_factor = 5 }
+						}
+						if = {
+							limit = { has_idea = modest_corruption }
+							add_to_temp_variable = { corruption_factor = 10 }
+						}
+						if = {
+							limit = { has_idea = medium_corruption }
+							add_to_temp_variable = { corruption_factor = 15 }
+						}
+						if = {
+							limit = { has_idea = widespread_corruption }
+							add_to_temp_variable = { corruption_factor = 20 }
+						}
+						if = {
+							limit = { has_idea = systematic_corruption }
+							add_to_temp_variable = { corruption_factor = 25 }
+						}
+						if = {
+							limit = { has_idea = unrestrained_corruption }
+							add_to_temp_variable = { corruption_factor = 30 }
+						}
+						if = {
+							limit = { has_idea = rampant_corruption }
+							add_to_temp_variable = { corruption_factor = 35 }
+						}
+						if = {
+							limit = { has_idea = crippling_corruption }
+							add_to_temp_variable = { corruption_factor = 40 }
+						}
+						if = {
+							limit = { has_idea = paralyzing_corruption }
+							add_to_temp_variable = { corruption_factor = 45 }
+						}
+					}
+					country_event = sanctions.4 #Художественный фильм Спиздили
+				}
+			}
+		}
+
+        cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = not_under_sanctions_tt
+				NOT = {
+					OR = {
+						any_other_country = {
+							is_in_array = { sanctions_targets = PREV }
+							NOT = { has_idea = non_power }
+							NOT = { has_idea = minor_power }
+						}
+						has_idea = international_sanctions
+						has_idea = Massive_International_Sanctions
+						has_idea = NKO_international_sanctions_idea
+						has_idea = NKO_international_sanctions_idea1
+						has_idea = NKO_international_sanctions_idea2
+						has_idea = NKO_international_sanctions_idea3
+						has_idea = NKO_international_sanctions_idea4
+						has_idea = IRQ_international_sanctions
+						has_idea = IRQ_international_sanctions2
+						has_idea = IRQ_international_sanctions3
+						has_idea = IRQ_international_sanctions4
+						has_idea = SER_International_Isolation
+						has_idea = SER_International_Isolation_1
+						check_variable = { embargo_modifier_value < -0.15 }
+					}
+				}
+			}
+		}
+
+        cancel_effect = {  }
+
+		ai_will_do = {
+			base = 500
+		}
+	}
+	national_agrarian_company = {
+		icon = generic_independence
+		fixed_random_seed = no
+
+		visible = {
+			OR = {
+				any_other_country = {
+					is_in_array = { sanctions_targets = PREV }
+					NOT = { has_idea = non_power }
+					NOT = { has_idea = minor_power }
+				}
+				has_idea = international_sanctions
+				has_idea = Massive_International_Sanctions
+				has_idea = NKO_international_sanctions_idea
+				has_idea = NKO_international_sanctions_idea1
+				has_idea = NKO_international_sanctions_idea2
+				has_idea = NKO_international_sanctions_idea3
+				has_idea = NKO_international_sanctions_idea4
+				has_idea = IRQ_international_sanctions
+				has_idea = IRQ_international_sanctions2
+				has_idea = IRQ_international_sanctions3
+				has_idea = IRQ_international_sanctions4
+				has_idea = PAL_quartet_very_high_sanctions
+				has_idea = PAL_quartet_high_sanctions
+				has_idea = PAL_quartet_moderate_sanctions
+				has_idea = SER_International_Isolation
+				has_idea = SER_International_Isolation_1
+				check_variable = { embargo_modifier_value < -0.15 }
+			}
+			NOT = { has_country_flag = importozemeshenie_eda }
+			has_tech = gps_agricultural_applications
+			is_dynamic_country = no
+		}
+
+		days_remove = 120
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 20 }
+		}
+
+		custom_cost_text = cost_20_0
+
+		complete_effect = {
+			set_temp_variable = { treasury_change = -20 }
+			modify_treasury_effect = yes
+			log = "[GetDateText]: [This.GetName]: decision national_agrarian_company executed"
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision national_agrarian_company"
+			random_list = {
+				55 = {
+					set_country_flag = importozemeshenie_eda
+					add_to_variable = { quarters_since_sanctions = 5 }
+					clamp_variable = { var = quarters_since_sanctions max = 50 }
+					calculate_sanctions_modifier = yes
+					custom_effect_tooltip = sanctions_resistance_tt
+					effect_tooltip = { add_ideas = Domestic_Agrarian_idea }
+					if = {
+						limit = {
+							has_country_flag = importozemeshenie_pharma
+							has_country_flag = importozemeshenie_eda
+							has_country_flag = importozemeshenie_avto
+							has_country_flag = importozemeshenie_elbrus
+							has_country_flag = importozemeshenie_poezda
+							has_country_flag = importozemeshenie_samoletu
+						}
+						if = {
+							limit = { NOT = { tag = SOV } }
+							country_event = sanctions.10
+						}
+						else = { country_event = sanctions.11 }
+					}
+					one_random_free_agriculture_district = yes
+				}
+				0 = {
+					modifier = {
+						add = corruption_factor
+						set_temp_variable = { corruption_factor = 0 }
+						if = {
+							limit = { has_idea = slight_corruption }
+							add_to_temp_variable = { corruption_factor = 5 }
+						}
+						if = {
+							limit = { has_idea = modest_corruption }
+							add_to_temp_variable = { corruption_factor = 10 }
+						}
+						if = {
+							limit = { has_idea = medium_corruption }
+							add_to_temp_variable = { corruption_factor = 15 }
+						}
+						if = {
+							limit = { has_idea = widespread_corruption }
+							add_to_temp_variable = { corruption_factor = 20 }
+						}
+						if = {
+							limit = { has_idea = systematic_corruption }
+							add_to_temp_variable = { corruption_factor = 25 }
+						}
+						if = {
+							limit = { has_idea = unrestrained_corruption }
+							add_to_temp_variable = { corruption_factor = 30 }
+						}
+						if = {
+							limit = { has_idea = rampant_corruption }
+							add_to_temp_variable = { corruption_factor = 35 }
+						}
+						if = {
+							limit = { has_idea = crippling_corruption }
+							add_to_temp_variable = { corruption_factor = 40 }
+						}
+						if = {
+							limit = { has_idea = paralyzing_corruption }
+							add_to_temp_variable = { corruption_factor = 45 }
+						}
+					}
+					country_event = sanctions.4 #Художественный фильм Спиздили
+				}
+			}
+		}
+
+        cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = not_under_sanctions_tt
+				NOT = {
+					OR = {
+						any_other_country = {
+							is_in_array = { sanctions_targets = PREV }
+							NOT = { has_idea = non_power }
+							NOT = { has_idea = minor_power }
+						}
+						has_idea = international_sanctions
+						has_idea = Massive_International_Sanctions
+						has_idea = NKO_international_sanctions_idea
+						has_idea = NKO_international_sanctions_idea1
+						has_idea = NKO_international_sanctions_idea2
+						has_idea = NKO_international_sanctions_idea3
+						has_idea = NKO_international_sanctions_idea4
+						has_idea = IRQ_international_sanctions
+						has_idea = IRQ_international_sanctions2
+						has_idea = IRQ_international_sanctions3
+						has_idea = IRQ_international_sanctions4
+						has_idea = SER_International_Isolation
+						has_idea = SER_International_Isolation_1
+						check_variable = { embargo_modifier_value < -0.15 }
+					}
+				}
+			}
+		}
+
+        cancel_effect = {  }
+
+		ai_will_do = {
+			base = 500
+		}
+	}
+	national_avto_company = {
+		icon = generic_independence
+		fixed_random_seed = no
+
+		visible = {
+			OR = {
+				any_other_country = {
+					is_in_array = { sanctions_targets = PREV }
+					NOT = { has_idea = non_power }
+					NOT = { has_idea = minor_power }
+				}
+				has_idea = international_sanctions
+				has_idea = Massive_International_Sanctions
+				has_idea = NKO_international_sanctions_idea
+				has_idea = NKO_international_sanctions_idea1
+				has_idea = NKO_international_sanctions_idea2
+				has_idea = NKO_international_sanctions_idea3
+				has_idea = NKO_international_sanctions_idea4
+				has_idea = IRQ_international_sanctions
+				has_idea = IRQ_international_sanctions2
+				has_idea = IRQ_international_sanctions3
+				has_idea = IRQ_international_sanctions4
+				has_idea = PAL_quartet_very_high_sanctions
+				has_idea = PAL_quartet_high_sanctions
+				has_idea = PAL_quartet_moderate_sanctions
+				has_idea = SER_International_Isolation
+				has_idea = SER_International_Isolation_1
+				check_variable = { embargo_modifier_value < -0.15 }
+			}
+			NOT = { has_country_flag = importozemeshenie_avto }
+			has_tech = util_vehicle_0
+			is_dynamic_country = no
+		}
+
+		days_remove = 120
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 20 }
+		}
+
+		custom_cost_text = cost_20_0
+
+		complete_effect = {
+			set_temp_variable = { treasury_change = -20 }
+			modify_treasury_effect = yes
+			log = "[GetDateText]: [This.GetName]: decision national_avto_company executed"
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision national_avto_company"
+			random_list = {
+				55 = {
+					set_country_flag = importozemeshenie_avto
+					add_to_variable = { quarters_since_sanctions = 5 }
+					clamp_variable = { var = quarters_since_sanctions max = 50 }
+					calculate_sanctions_modifier = yes
+					custom_effect_tooltip = sanctions_resistance_tt
+					effect_tooltip = { add_ideas = Domestic_Automobilecompany_idea }
+					if = {
+						limit = {
+							has_country_flag = importozemeshenie_pharma
+							has_country_flag = importozemeshenie_eda
+							has_country_flag = importozemeshenie_avto
+							has_country_flag = importozemeshenie_elbrus
+							has_country_flag = importozemeshenie_poezda
+							has_country_flag = importozemeshenie_samoletu
+						}
+						if = {
+							limit = { NOT = { tag = SOV } }
+							country_event = sanctions.10
+						}
+						else = { country_event = sanctions.11 }
+					}
+					one_random_free_industrial_complex = yes
+				}
+				0 = {
+					modifier = {
+						add = corruption_factor
+						set_temp_variable = { corruption_factor = 0 }
+						if = {
+							limit = { has_idea = slight_corruption }
+							add_to_temp_variable = { corruption_factor = 5 }
+						}
+						if = {
+							limit = { has_idea = modest_corruption }
+							add_to_temp_variable = { corruption_factor = 10 }
+						}
+						if = {
+							limit = { has_idea = medium_corruption }
+							add_to_temp_variable = { corruption_factor = 15 }
+						}
+						if = {
+							limit = { has_idea = widespread_corruption }
+							add_to_temp_variable = { corruption_factor = 20 }
+						}
+						if = {
+							limit = { has_idea = systematic_corruption }
+							add_to_temp_variable = { corruption_factor = 25 }
+						}
+						if = {
+							limit = { has_idea = unrestrained_corruption }
+							add_to_temp_variable = { corruption_factor = 30 }
+						}
+						if = {
+							limit = { has_idea = rampant_corruption }
+							add_to_temp_variable = { corruption_factor = 35 }
+						}
+						if = {
+							limit = { has_idea = crippling_corruption }
+							add_to_temp_variable = { corruption_factor = 40 }
+						}
+						if = {
+							limit = { has_idea = paralyzing_corruption }
+							add_to_temp_variable = { corruption_factor = 45 }
+						}
+					}
+					country_event = sanctions.4 #Художественный фильм Спиздили
+				}
+			}
+		}
+
+        cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = not_under_sanctions_tt
+				NOT = {
+					OR = {
+						any_other_country = {
+							is_in_array = { sanctions_targets = PREV }
+							NOT = { has_idea = non_power }
+							NOT = { has_idea = minor_power }
+						}
+						has_idea = international_sanctions
+						has_idea = Massive_International_Sanctions
+						has_idea = NKO_international_sanctions_idea
+						has_idea = NKO_international_sanctions_idea1
+						has_idea = NKO_international_sanctions_idea2
+						has_idea = NKO_international_sanctions_idea3
+						has_idea = NKO_international_sanctions_idea4
+						has_idea = IRQ_international_sanctions
+						has_idea = IRQ_international_sanctions2
+						has_idea = IRQ_international_sanctions3
+						has_idea = IRQ_international_sanctions4
+						has_idea = SER_International_Isolation
+						has_idea = SER_International_Isolation_1
+						check_variable = { embargo_modifier_value < -0.15 }
+					}
+				}
+			}
+		}
+
+        cancel_effect = {  }
+
+		ai_will_do = {
+			base = 500
+		}
+	}
+	national_microelectronic_company = {
+		icon = generic_independence
+		fixed_random_seed = no
+
+		visible = {
+			OR = {
+				any_other_country = {
+					is_in_array = { sanctions_targets = PREV }
+					NOT = { has_idea = non_power }
+					NOT = { has_idea = minor_power }
+				}
+				has_idea = international_sanctions
+				has_idea = Massive_International_Sanctions
+				has_idea = NKO_international_sanctions_idea
+				has_idea = NKO_international_sanctions_idea1
+				has_idea = NKO_international_sanctions_idea2
+				has_idea = NKO_international_sanctions_idea3
+				has_idea = NKO_international_sanctions_idea4
+				has_idea = IRQ_international_sanctions
+				has_idea = IRQ_international_sanctions2
+				has_idea = IRQ_international_sanctions3
+				has_idea = IRQ_international_sanctions4
+				has_idea = PAL_quartet_very_high_sanctions
+				has_idea = PAL_quartet_high_sanctions
+				has_idea = PAL_quartet_moderate_sanctions
+				has_idea = SER_International_Isolation
+				has_idea = SER_International_Isolation_1
+				check_variable = { embargo_modifier_value < -0.15 }
+			}
+			NOT = { has_country_flag = importozemeshenie_elbrus }
+			has_tech = integrated_circuit
+			is_dynamic_country = no
+		}
+
+		days_remove = 120
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 20 }
+		}
+
+		custom_cost_text = cost_20_0
+
+		complete_effect = {
+			set_temp_variable = { treasury_change = -20 }
+			modify_treasury_effect = yes
+			log = "[GetDateText]: [This.GetName]: decision national_microelectronic_company executed"
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision national_microelectronic_company"
+			random_list = {
+				55 = {
+					set_country_flag = importozemeshenie_elbrus
+					add_to_variable = { quarters_since_sanctions = 5 }
+					clamp_variable = { var = quarters_since_sanctions max = 50 }
+					calculate_sanctions_modifier = yes
+					custom_effect_tooltip = sanctions_resistance_tt
+					effect_tooltip = { add_ideas = Domestic_Microelectronic_company_idea1 }
+					if = {
+						limit = {
+							has_country_flag = importozemeshenie_pharma
+							has_country_flag = importozemeshenie_eda
+							has_country_flag = importozemeshenie_avto
+							has_country_flag = importozemeshenie_elbrus
+							has_country_flag = importozemeshenie_poezda
+							has_country_flag = importozemeshenie_samoletu
+						}
+						if = {
+							limit = { NOT = { tag = SOV } }
+							country_event = sanctions.10
+						}
+						else = { country_event = sanctions.11 }
+					}
+					one_random_free_industrial_complex = yes
+				}
+				0 = {
+					modifier = {
+						add = corruption_factor
+						set_temp_variable = { corruption_factor = 0 }
+						if = {
+							limit = { has_idea = slight_corruption }
+							add_to_temp_variable = { corruption_factor = 5 }
+						}
+						if = {
+							limit = { has_idea = modest_corruption }
+							add_to_temp_variable = { corruption_factor = 10 }
+						}
+						if = {
+							limit = { has_idea = medium_corruption }
+							add_to_temp_variable = { corruption_factor = 15 }
+						}
+						if = {
+							limit = { has_idea = widespread_corruption }
+							add_to_temp_variable = { corruption_factor = 20 }
+						}
+						if = {
+							limit = { has_idea = systematic_corruption }
+							add_to_temp_variable = { corruption_factor = 25 }
+						}
+						if = {
+							limit = { has_idea = unrestrained_corruption }
+							add_to_temp_variable = { corruption_factor = 30 }
+						}
+						if = {
+							limit = { has_idea = rampant_corruption }
+							add_to_temp_variable = { corruption_factor = 35 }
+						}
+						if = {
+							limit = { has_idea = crippling_corruption }
+							add_to_temp_variable = { corruption_factor = 40 }
+						}
+						if = {
+							limit = { has_idea = paralyzing_corruption }
+							add_to_temp_variable = { corruption_factor = 45 }
+						}
+					}
+					country_event = sanctions.4 #Художественный фильм Спиздили
+				}
+			}
+		}
+
+        cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = not_under_sanctions_tt
+				NOT = {
+					OR = {
+						any_other_country = {
+							is_in_array = { sanctions_targets = PREV }
+							NOT = { has_idea = non_power }
+							NOT = { has_idea = minor_power }
+						}
+						has_idea = international_sanctions
+						has_idea = Massive_International_Sanctions
+						has_idea = NKO_international_sanctions_idea
+						has_idea = NKO_international_sanctions_idea1
+						has_idea = NKO_international_sanctions_idea2
+						has_idea = NKO_international_sanctions_idea3
+						has_idea = NKO_international_sanctions_idea4
+						has_idea = IRQ_international_sanctions
+						has_idea = IRQ_international_sanctions2
+						has_idea = IRQ_international_sanctions3
+						has_idea = IRQ_international_sanctions4
+						has_idea = SER_International_Isolation
+						has_idea = SER_International_Isolation_1
+						check_variable = { embargo_modifier_value < -0.15 }
+					}
+				}
+			}
+		}
+
+        cancel_effect = {  }
+
+		ai_will_do = {
+			base = 500
+		}
+	}
+	national_train_company = {
+		icon = generic_independence
+		fixed_random_seed = no
+
+		visible = {
+			OR = {
+				any_other_country = {
+					is_in_array = { sanctions_targets = PREV }
+					NOT = { has_idea = non_power }
+					NOT = { has_idea = minor_power }
+				}
+				has_idea = international_sanctions
+				has_idea = Massive_International_Sanctions
+				has_idea = NKO_international_sanctions_idea
+				has_idea = NKO_international_sanctions_idea1
+				has_idea = NKO_international_sanctions_idea2
+				has_idea = NKO_international_sanctions_idea3
+				has_idea = NKO_international_sanctions_idea4
+				has_idea = IRQ_international_sanctions
+				has_idea = IRQ_international_sanctions2
+				has_idea = IRQ_international_sanctions3
+				has_idea = IRQ_international_sanctions4
+				has_idea = PAL_quartet_very_high_sanctions
+				has_idea = PAL_quartet_high_sanctions
+				has_idea = PAL_quartet_moderate_sanctions
+				has_idea = SER_International_Isolation
+				has_idea = SER_International_Isolation_1
+				check_variable = { embargo_modifier_value < -0.15 }
+			}
+			NOT = { has_country_flag = importozemeshenie_poezda }
+			has_tech = early_freight_locomotive
+			is_dynamic_country = no
+		}
+
+		days_remove = 120
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 20 }
+		}
+
+		custom_cost_text = cost_20_0
+
+		complete_effect = {
+			set_temp_variable = { treasury_change = -20 }
+			modify_treasury_effect = yes
+			log = "[GetDateText]: [This.GetName]: decision national_train_company executed"
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision national_train_company"
+			random_list = {
+				55 = {
+					set_country_flag = importozemeshenie_poezda
+					add_to_variable = { quarters_since_sanctions = 5 }
+					clamp_variable = { var = quarters_since_sanctions max = 50 }
+					calculate_sanctions_modifier = yes
+					custom_effect_tooltip = sanctions_resistance_tt
+					effect_tooltip = { add_ideas = Domestic_Train_company_idea1 }
+					if = {
+						limit = {
+							has_country_flag = importozemeshenie_pharma
+							has_country_flag = importozemeshenie_eda
+							has_country_flag = importozemeshenie_avto
+							has_country_flag = importozemeshenie_elbrus
+							has_country_flag = importozemeshenie_poezda
+							has_country_flag = importozemeshenie_samoletu
+						}
+						if = {
+							limit = { NOT = { tag = SOV } }
+							country_event = sanctions.10
+						}
+						else = { country_event = sanctions.11 }
+					}
+					one_random_free_industrial_complex = yes
+				}
+				0 = {
+					modifier = {
+						add = corruption_factor
+						set_temp_variable = { corruption_factor = 0 }
+						if = {
+							limit = { has_idea = slight_corruption }
+							add_to_temp_variable = { corruption_factor = 5 }
+						}
+						if = {
+							limit = { has_idea = modest_corruption }
+							add_to_temp_variable = { corruption_factor = 10 }
+						}
+						if = {
+							limit = { has_idea = medium_corruption }
+							add_to_temp_variable = { corruption_factor = 15 }
+						}
+						if = {
+							limit = { has_idea = widespread_corruption }
+							add_to_temp_variable = { corruption_factor = 20 }
+						}
+						if = {
+							limit = { has_idea = systematic_corruption }
+							add_to_temp_variable = { corruption_factor = 25 }
+						}
+						if = {
+							limit = { has_idea = unrestrained_corruption }
+							add_to_temp_variable = { corruption_factor = 30 }
+						}
+						if = {
+							limit = { has_idea = rampant_corruption }
+							add_to_temp_variable = { corruption_factor = 35 }
+						}
+						if = {
+							limit = { has_idea = crippling_corruption }
+							add_to_temp_variable = { corruption_factor = 40 }
+						}
+						if = {
+							limit = { has_idea = paralyzing_corruption }
+							add_to_temp_variable = { corruption_factor = 45 }
+						}
+					}
+					country_event = sanctions.4 #Художественный фильм Спиздили
+				}
+			}
+		}
+
+        cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = not_under_sanctions_tt
+				NOT = {
+					OR = {
+						any_other_country = {
+							is_in_array = { sanctions_targets = PREV }
+							NOT = { has_idea = non_power }
+							NOT = { has_idea = minor_power }
+						}
+						has_idea = international_sanctions
+						has_idea = Massive_International_Sanctions
+						has_idea = NKO_international_sanctions_idea
+						has_idea = NKO_international_sanctions_idea1
+						has_idea = NKO_international_sanctions_idea2
+						has_idea = NKO_international_sanctions_idea3
+						has_idea = NKO_international_sanctions_idea4
+						has_idea = IRQ_international_sanctions
+						has_idea = IRQ_international_sanctions2
+						has_idea = IRQ_international_sanctions3
+						has_idea = IRQ_international_sanctions4
+						has_idea = SER_International_Isolation
+						has_idea = SER_International_Isolation_1
+						check_variable = { embargo_modifier_value < -0.15 }
+					}
+				}
+			}
+		}
+
+        cancel_effect = {  }
+
+		ai_will_do = {
+			base = 500
+		}
+	}
+	national_plane_company = {
+		icon = generic_independence
+		fixed_random_seed = no
+
+		visible = {
+			OR = {
+				any_other_country = {
+					is_in_array = { sanctions_targets = PREV }
+					NOT = { has_idea = non_power }
+					NOT = { has_idea = minor_power }
+				}
+				has_idea = international_sanctions
+				has_idea = Massive_International_Sanctions
+				has_idea = NKO_international_sanctions_idea
+				has_idea = NKO_international_sanctions_idea1
+				has_idea = NKO_international_sanctions_idea2
+				has_idea = NKO_international_sanctions_idea3
+				has_idea = NKO_international_sanctions_idea4
+				has_idea = IRQ_international_sanctions
+				has_idea = IRQ_international_sanctions2
+				has_idea = IRQ_international_sanctions3
+				has_idea = IRQ_international_sanctions4
+				has_idea = PAL_quartet_very_high_sanctions
+				has_idea = PAL_quartet_high_sanctions
+				has_idea = PAL_quartet_moderate_sanctions
+				has_idea = SER_International_Isolation
+				has_idea = SER_International_Isolation_1
+				check_variable = { embargo_modifier_value < -0.15 }
+			}
+			NOT = { has_country_flag = importozemeshenie_samoletu }
+			has_tech = gen_3_large
+			is_dynamic_country = no
+		}
+
+		days_remove = 120
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 20 }
+		}
+
+		custom_cost_text = cost_20_0
+
+		complete_effect = {
+			set_temp_variable = { treasury_change = -20 }
+			modify_treasury_effect = yes
+			log = "[GetDateText]: [This.GetName]: decision national_plane_company executed"
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision national_plane_company"
+			random_list = {
+				55 = {
+					set_country_flag = importozemeshenie_samoletu
+					add_to_variable = { quarters_since_sanctions = 5 }
+					clamp_variable = { var = quarters_since_sanctions max = 50 }
+					calculate_sanctions_modifier = yes
+					custom_effect_tooltip = sanctions_resistance_tt
+					effect_tooltip = { add_ideas = Domestic_Plane_company_idea1 }
+					if = {
+						limit = {
+							has_country_flag = importozemeshenie_pharma
+							has_country_flag = importozemeshenie_eda
+							has_country_flag = importozemeshenie_avto
+							has_country_flag = importozemeshenie_elbrus
+							has_country_flag = importozemeshenie_poezda
+							has_country_flag = importozemeshenie_samoletu
+						}
+						if = {
+							limit = { NOT = { tag = SOV } }
+							country_event = sanctions.10
+						}
+						else = { country_event = sanctions.11 }
+					}
+					one_random_free_industrial_complex = yes
+				}
+				0 = {
+					modifier = {
+						add = corruption_factor
+						set_temp_variable = { corruption_factor = 0 }
+						if = {
+							limit = { has_idea = slight_corruption }
+							add_to_temp_variable = { corruption_factor = 5 }
+						}
+						if = {
+							limit = { has_idea = modest_corruption }
+							add_to_temp_variable = { corruption_factor = 10 }
+						}
+						if = {
+							limit = { has_idea = medium_corruption }
+							add_to_temp_variable = { corruption_factor = 15 }
+						}
+						if = {
+							limit = { has_idea = widespread_corruption }
+							add_to_temp_variable = { corruption_factor = 20 }
+						}
+						if = {
+							limit = { has_idea = systematic_corruption }
+							add_to_temp_variable = { corruption_factor = 25 }
+						}
+						if = {
+							limit = { has_idea = unrestrained_corruption }
+							add_to_temp_variable = { corruption_factor = 30 }
+						}
+						if = {
+							limit = { has_idea = rampant_corruption }
+							add_to_temp_variable = { corruption_factor = 35 }
+						}
+						if = {
+							limit = { has_idea = crippling_corruption }
+							add_to_temp_variable = { corruption_factor = 40 }
+						}
+						if = {
+							limit = { has_idea = paralyzing_corruption }
+							add_to_temp_variable = { corruption_factor = 45 }
+						}
+					}
+					country_event = sanctions.4 #Художественный фильм Спиздили
+				}
+			}
+		}
+
+        cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = not_under_sanctions_tt
+				NOT = {
+					OR = {
+						any_other_country = {
+							is_in_array = { sanctions_targets = PREV }
+							NOT = { has_idea = non_power }
+							NOT = { has_idea = minor_power }
+						}
+						has_idea = international_sanctions
+						has_idea = Massive_International_Sanctions
+						has_idea = NKO_international_sanctions_idea
+						has_idea = NKO_international_sanctions_idea1
+						has_idea = NKO_international_sanctions_idea2
+						has_idea = NKO_international_sanctions_idea3
+						has_idea = NKO_international_sanctions_idea4
+						has_idea = IRQ_international_sanctions
+						has_idea = IRQ_international_sanctions2
+						has_idea = IRQ_international_sanctions3
+						has_idea = IRQ_international_sanctions4
+						has_idea = SER_International_Isolation
+						has_idea = SER_International_Isolation_1
+						check_variable = { embargo_modifier_value < -0.15 }
+					}
+				}
+			}
+		}
+
+        cancel_effect = {  }
+
+		ai_will_do = {
+			base = 500
+		}
+	}
+	start_shadow_fleet_hunt = {
+
+		icon = generic_independence
+
+		target_array = sanctions_targets
+
+		target_root_trigger = {
+			has_idea = naval_power_of_the_continent
+		}
+
+		target_trigger = {
+			ROOT = { NOT = { has_country_flag = shadow_fleet_hunt@FROM } }
+			ROOT = { is_in_array = { sanctions_targets = FROM } }
+			FROM = {
+				any_owned_state = {
+					is_coastal = yes
+				}
+				has_equipment = {
+    				convoy > 0
+				}
+			}
+		}
+
+		custom_cost_trigger = {
+			command_power > 24
+		}
+
+		custom_cost_text = command_power_more_than_25
+
+		complete_effect = {
+			add_command_power = -25
+			set_country_flag = shadow_fleet_hunt@FROM
+		}
+	}
+	shadow_fleet_PMC_deploy = {
+
+		icon = generic_independence
+
+		visible = {
+			NOT = { has_country_flag = PMC_shadow_fleet }
+			any_other_country = { has_country_flag = shadow_fleet_hunt@FROM }
+		}
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 2.4 }
+		}
+		custom_cost_text = cost_2_5
+
+		complete_effect = {
+			set_temp_variable = { treasury_change = -2.5 }
+			modify_treasury_effect = yes
+			set_country_flag = PMC_shadow_fleet
+		}
+	}
+	shadow_fleet_PMC_withdraw = {
+
+		icon = generic_independence
+
+		visible = {
+			has_country_flag = PMC_shadow_fleet
+		}
+
+		complete_effect = {
+			clr_country_flag = PMC_shadow_fleet
+		}
+
+	}
+}

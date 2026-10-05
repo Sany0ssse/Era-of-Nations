@@ -1,0 +1,64 @@
+# Author(s): AngriestBird
+# Reworked by Denzzerr
+
+public_war_weariness_effect = {
+	hidden_effect = {
+		add_timed_idea = { idea = three_months_of_war days = 90 }
+		add_timed_idea = { idea = six_months_of_war days = 180 }
+		add_timed_idea = { idea = nine_months_of_war days = 270 }
+		add_timed_idea = { idea = twelve_months_of_war days = 365 }
+	}
+	if = {
+		limit = { NOT = { has_variable = war_support_factor_var } }
+		set_variable = { war_support_factor_var = 0 }
+		add_dynamic_modifier = { modifier = public_war_weariness_effect }
+	}
+	FROM = {
+		hidden_effect = {
+			add_timed_idea = { idea = three_months_of_war days = 90 }
+			add_timed_idea = { idea = six_months_of_war days = 180 }
+			add_timed_idea = { idea = nine_months_of_war days = 270 }
+			add_timed_idea = { idea = twelve_months_of_war days = 365 }
+			if = {
+				limit = { NOT = { has_variable = war_support_factor_var } }
+				set_variable = { war_support_factor_var = 0 }
+				add_dynamic_modifier = { modifier = public_war_weariness_effect }
+			}
+		}
+	}
+}
+public_war_weariness_var_calculations = {
+	add_to_variable = { war_support_factor_var = -0.01 }
+	if = {
+		limit = { has_idea = partial_mobilization_economy }
+		add_to_variable = { war_support_factor_var = -0.01 }
+	}
+	else_if = {
+		limit = { has_idea = war_economy_mdc }
+		add_to_variable = { war_support_factor_var = -0.02 }
+	}
+	else_if = {
+		limit = { has_idea = total_war_economy }
+		add_to_variable = { war_support_factor_var = -0.03 }
+	}
+	if = {
+		limit = { has_negative_economy_vibe = yes }
+		add_to_variable = { war_support_factor_var = -0.01 }
+	}
+	every_owned_state = {
+		limit = {
+			is_controlled_by = PREV
+			has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+		}
+		PREV = { add_to_variable = { war_support_factor_var = -0.01 } }
+	}
+	if = {
+		limit = { has_idea = AB_partial_mobilization_idea }
+		add_to_variable = { war_support_factor_var = -0.01 }
+	}
+	else_if = {
+		limit = { has_idea = AB_full_mobilization_idea }
+		add_to_variable = { war_support_factor_var = -0.02 }
+	}
+	clamp_variable = { var = war_support_factor_var min = -1 max = 1 }
+}

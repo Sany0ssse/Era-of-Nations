@@ -1,0 +1,38 @@
+scripted_map_modes = {
+	SCO_map_mode = {
+		top = {
+			type = country
+			color = {
+				FROM = {
+					is_in_array = { global.possible_sco_member_state = THIS.id }
+					if = { limit = { is_sco = yes }
+						set_temp_variable = { red = 1 }
+						set_temp_variable = { green = 0 }
+						set_temp_variable = { blue = 0 }
+					}
+					else_if = { limit = { has_idea = sco_observer }
+						set_temp_variable = { red = 1 }
+						set_temp_variable = { green = 0.4 }
+						set_temp_variable = { blue = 0.6 }
+					}
+					else = {
+						set_temp_variable = { red = 1 }
+						set_temp_variable = { green = 0.255  }
+						set_temp_variable = { blue = 0.255 }
+						set_temp_variable = { alpha = 1 }
+					}
+				}
+			}
+
+			targets = { target_array = global.possible_sco_member_state }
+		}
+
+		bottom = {
+			type = none
+		}
+
+		far_text = country
+		near_text = none
+		update_daily = no
+	}
+}

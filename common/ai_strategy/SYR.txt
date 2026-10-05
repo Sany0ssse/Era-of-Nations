@@ -1,0 +1,843 @@
+#Syria is friends with Abkhazia
+SYR_relations_ABK = {
+	allowed = { original_tag = SYR }
+	enable = {
+		NOT = { has_war_with = ABK }
+		ABK = { has_government = communism }
+		SYR = { has_government = communism }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "ABK" value = 40 }
+}
+
+SYR_shia_ties_strengthened = {
+	allowed = { original_tag = SYR }
+	enable = {
+		OR = {
+			has_completed_focus = SYR_fund_hezbollah
+			has_country_leader = { name = "Bashar al-Assad" }
+		}
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend	id = "HEZ" value = 50 }
+	ai_strategy = { type = support id = "HEZ" value = 50 }
+	ai_strategy = { type = befriend	id = "PER" value = 50 }
+	ai_strategy = { type = support id = "PER" value = 50 }
+}
+
+SYR_shia_ties_strengthened_HEZ_version = {
+	allowed = { original_tag = HEZ }
+	enable = {
+		SYR = {
+			OR = {
+				has_completed_focus = SYR_fund_hezbollah
+				has_country_leader = { name = "Bashar al-Assad" }
+			}
+		}
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = {	type = befriend	id = "SYR" value = 50 }
+	ai_strategy = {	type = support id = "SYR" value = 50 }
+}
+
+SYR_shia_ties_strengthened_PER_version = {
+	allowed = { original_tag = PER }
+
+	enable = {
+		SYR = {
+			OR = {
+				has_completed_focus = SYR_fund_hezbollah
+				has_country_leader = { name = "Bashar al-Assad" }
+			}
+		}
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = {	type = befriend id = "SYR" value = 50 }
+	ai_strategy = {	type = support id = "SYR" value = 50 }
+}
+
+#NUS support Al Qaeda
+NUS_support_al_qaeda = {
+
+	allowed = {
+		original_tag = NUS
+	}
+
+	enable = {
+		has_government = fascism
+		has_country_flag = NUS_support_alqaeda
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = {	type = support id = "AQY" value = 200 }
+	ai_strategy = {	type = send_volunteers_desire id = "AQY" value = 200 }
+	ai_strategy = {	type = support id = "SHB" value = 200 }
+	ai_strategy = {	type = send_volunteers_desire id = "SHB" value = 200 }
+	ai_strategy = {	type = support id = "TAL" value = 200 }
+	ai_strategy = {	type = send_volunteers_desire id = "TAL" value = 200 }
+	ai_strategy = {	type = support id = "TTP" value = 200 }
+	ai_strategy = {	type = send_volunteers_desire id = "TTP" value = 200 }
+}
+
+#Resist Hezbollah
+Resist_hezbollah = {
+	allowed = { original_tag = SYR }
+	enable = {
+		has_completed_focus = SYR_against_hezbollah
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = antagonize id = "HEZ" value = 50 }
+	ai_strategy = { type = befriend id = "HEZ" value = -50 }
+	ai_strategy = {	type = contain id = "HEZ" value = 50 }
+
+}
+
+#Cooperation with Lebanon against Hezbollah
+SYR_help_Lebanon = {
+	allowed = {
+		OR = {
+			original_tag = SYR
+			original_tag = NUS
+			original_tag = FSA
+		}
+	}
+	enable = {
+		has_country_flag = LEB_agreed_to_help_SYR
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "LEB" value = 50 }
+	ai_strategy = {	type = support id = "LEB" value = 50 }
+	ai_strategy = {	type = alliance id = "LEB" value = 50 }
+}
+
+#Support Hezbollah
+Support_hezbollah = {
+	allowed = { original_tag = SYR }
+	enable = {
+		has_completed_focus = SYR_support_hezbollah
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = support id = "HEZ" value = 50 }
+	ai_strategy = { type = befriend id = "HEZ" value = 50 }
+
+}
+
+#Occupy resisting Lebanon
+SYR_occupy_Lebanon = {
+	allowed = {
+		OR = {
+			original_tag = SYR
+			original_tag = NUS
+			original_tag = FSA
+		}
+	}
+	enable = {
+		has_country_flag = Occupy_Lebanon
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {	type = conquer id = "LEB" value = 200 }
+	ai_strategy = {	type = conquer id = "HEZ" value = 200 }
+}
+
+SYR_bad_blood_with_baathists = {
+	allowed = { tag = SYR }
+	enable = {
+		has_government = communism
+		IRQ = { has_government = nationalist }
+		NOT = { has_completed_focus = SYR_repair_relations_with_iraq }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "IRQ" value = -100 }
+	ai_strategy = { type = support id = "IRQ" value = -100 }
+	ai_strategy = { type = antagonize id = "IRQ" value = 100 }
+}
+
+SYR_baathist_relations_repaired = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_repair_relations_with_iraq
+		has_government = communism
+		IRQ = { has_government = nationalist }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "IRQ" value = 50 }
+	ai_strategy = { type = support id = "IRQ" value = 50 }
+}
+
+SYR_baathist_relations_hostile = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_denounce_iraq
+		has_government = communism
+		IRQ = { has_government = nationalist }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "IRQ" value = -50 }
+	ai_strategy = { type = support id = "IRQ" value = -50 }
+	ai_strategy = { type = contain id = "IRQ" value = 50 }
+	ai_strategy = { type = antagonize id = "IRQ" value = 50 }
+}
+
+SYR_befriend_hamas = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_meet_hamas
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "HAM" value = 50 }
+
+}
+
+SYR_befriend_hamas_HAM_version = {
+	allowed = { tag = HAM }
+	enable = {
+		SYR = { has_completed_focus = SYR_meet_hamas }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 50 }
+
+}
+
+SYR_befriend_hamas_PAL_version = {
+	allowed = { tag = PAL }
+	enable = {
+		SYR = { has_completed_focus = SYR_meet_fatah }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 50 }
+
+}
+
+SYR_befriend_fatah = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_meet_fatah
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "PAL" value = 50 }
+
+}
+
+SYR_protect_palestine = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_meet_fatah
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = protect id = "PAL" value = 50 }
+
+}
+
+SYR_warming_up_israel = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_repair_relations_with_israel
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "ISR" value = 25 }
+	ai_strategy = { type = antagonize id = "ISR" value = -25 }
+
+}
+
+SYR_warming_up_israel_ISR_version = {
+	allowed = { tag = ISR }
+	enable = {
+		SYR = { has_completed_focus = SYR_repair_relations_with_israel }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 25 }
+	ai_strategy = { type = antagonize id = "SYR" value = -25 }
+
+}
+
+SYR_contain_israel = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_levant_defence_pact
+		has_completed_focus = SYR_diplomatic_pressure_on_israel
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "ISR" value = 50 }
+	ai_strategy = { type = antagonize id = "ISR" value = 50 }
+
+}
+
+SYR_contain_palestine = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_levant_defence_pact
+		has_completed_focus = SYR_one_state_solution
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "HAM" value = 50 }
+	ai_strategy = { type = antagonize id = "HAM" value = 50 }
+	ai_strategy = { type = contain id = "PAL" value = 50 }
+	ai_strategy = { type = antagonize id = "PAL" value = 50 }
+
+}
+
+SYR_befriend_saudis = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_meeting_with_kings
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SAU" value = 15 }
+
+}
+
+SYR_antagonize_turkey = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_reaffirm_claims_on_hatay
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "TUR" value = -50 }
+	ai_strategy = { type = antagonize id = "TUR" value = 50 }
+
+}
+
+SYR_befriend_turkey = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_turkish_delights
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "TUR" value = 100 }
+	ai_strategy = { type = antagonize id = "TUR" value = -50 }
+
+}
+
+SYR_befriend_turkey_TUR_version = {
+	allowed = { tag = TUR }
+	enable = {
+		has_completed_focus = SYR_close_pkk_border
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 100 }
+	ai_strategy = { type = protect id = "SYR" value = 50 }
+
+}
+
+SYR_befriend_armenia = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_approach_armenia
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "ARM" value = 50 }
+	ai_strategy = { type = protect id = "ARM" value = 50 }
+
+}
+
+SYR_befriend_armenia_ARM_version = {
+	allowed = { tag = ARM }
+	enable = {
+		SYR = { has_completed_focus = SYR_approach_armenia }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 50 }
+
+}
+
+SYR_befriend_greece = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_approach_greece
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "GRE" value = 50 }
+
+}
+
+SYR_befriend_greece_GRE_version = {
+	allowed = { tag = GRE }
+	enable = {
+		SYR = { has_completed_focus = SYR_approach_greece }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 50 }
+
+}
+
+SYR_befriend_cyprus = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_support_cyprus
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "CYP" value = 50 }
+	ai_strategy = { type = protect id = "CYP" value = 50 }
+
+}
+
+SYR_befriend_cyprus_CYP_version = {
+	allowed = { tag = CYP }
+	enable = {
+		SYR = { has_completed_focus = SYR_support_cyprus }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 50 }
+
+}
+
+SYR_befriend_azerbaijan = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_approach_azerbaijan
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "AZE" value = 50 }
+
+}
+
+SYR_befriend_azerbaijan_AZE_version = {
+	allowed = { tag = AZE }
+	enable = {
+		SYR = { has_completed_focus = SYR_approach_azerbaijan }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 50 }
+
+}
+
+SYR_befriend_northern_cyprus = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_support_nothern_cyprus
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "NCY" value = 50 }
+	ai_strategy = { type = protect id = "NCY" value = 50 }
+
+}
+
+SYR_befriend_northern_cyprus_NCY_version = {
+	allowed = { tag = NCY }
+	enable = {
+		SYR = { has_completed_focus = SYR_support_nothern_cyprus }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 50 }
+
+}
+
+SYR_befriend_usa = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_joint_us_operations
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "USA" value = 15 }
+	ai_strategy = { type = support id = "USA" value = 25 }
+
+}
+
+SYR_befriend_usa_USA_version = {
+	allowed = { tag = USA }
+	enable = {
+		SYR = { has_completed_focus = SYR_joint_us_operations }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 15 }
+	ai_strategy = { type = support id = "SYR" value = 25 }
+
+}
+
+SYR_befriend_france = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_closer_ties_to_france
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "FRA" value = 15 }
+
+}
+
+SYR_befriend_france_FRA_version = {
+	allowed = { tag = FRA }
+	enable = {
+		SYR = { has_completed_focus = SYR_joint_us_operations }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SYR" value = 15 }
+
+}
+
+SYR_antagonize_taliban = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_condemn_taliban
+		NOT = { is_in_faction_with = TAL }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "AFG" value = 25 }
+	ai_strategy = { type = support id = "AFG" value = 25 }
+	ai_strategy = { type = befriend id = "TAL" value = -50 }
+	ai_strategy = { type = antagonize id = "TAL" value = 50 }
+	ai_strategy = { type = befriend id = "TTP" value = -50 }
+	ai_strategy = { type = antagonize id = "TTP" value = 50 }
+}
+
+SYR_arm_hamas = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_arm_palestinians
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = support id = "HAM" value = 50 }
+}
+
+SYR_arm_taliban = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_supply_taliban
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = support id = "TAL" value = 50 }
+	ai_strategy = { type = support id = "TTP" value = 50 }
+}
+
+SYR_arm_al_shabaab = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_supply_al_shabaab
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = support id = "SHB" value = 50 }
+}
+
+SYR_ally_al_qaeda = {
+	allowed = { tag = SYR }
+	enable = {
+		has_completed_focus = SYR_ally_alqaeda
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {	type = befriend id = "TAL" value = 100 }
+	ai_strategy = {	type = support id = "TAL" value = 100 }
+	ai_strategy = {	type = alliance id = "TAL" value = 100 }
+	ai_strategy = {	type = befriend id = "TTP" value = 100 }
+	ai_strategy = {	type = support id = "TTP" value = 100 }
+	ai_strategy = {	type = alliance id = "TTP" value = 100 }
+	ai_strategy = {	type = befriend id = "AQY" value = 100 }
+	ai_strategy = {	type = support id = "AQY" value = 100 }
+	ai_strategy = {	type = alliance id = "AQY" value = 100 }
+	ai_strategy = {	type = befriend id = "SHB" value = 100 }
+	ai_strategy = {	type = support id = "SHB" value = 100 }
+	ai_strategy = {	type = alliance id = "SHB" value = 100 }
+}
+
+#Greater Syria strats
+SYR_SSNP_target_lebanon = {
+
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_lebanese_chaos
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "LEB" value = -100 }
+	ai_strategy = { type = antagonize id = "LEB" value = 200 }
+	ai_strategy = { type = contain id = "LEB" value = 200 }
+	ai_strategy = { type = conquer id = "LEB" value = 100 }
+	ai_strategy = { type = befriend id = "HEZ" value = -100 }
+	ai_strategy = { type = antagonize id = "HEZ" value = 200 }
+	ai_strategy = { type = contain id = "HEZ" value = 200 }
+	ai_strategy = { type = conquer id = "HEZ" value = 100 }
+}
+SYR_SSNP_target_jordan = {
+
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_assault_jordan
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "JOR" value = -100 }
+	ai_strategy = { type = antagonize id = "JOR" value = 200 }
+	ai_strategy = { type = contain id = "JOR" value = 200 }
+	ai_strategy = { type = conquer id = "JOR" value = 100 }
+}
+SYR_SSNP_target_israel = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_zionist_threat
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "ISR" value = -100 }
+	ai_strategy = { type = antagonize id = "ISR" value = 200 }
+	ai_strategy = { type = contain id = "ISR" value = 200 }
+	ai_strategy = { type = conquer id = "ISR" value = 100 }
+}
+SYR_SSNP_target_egypt = {
+
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_demand_sinai
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "EGY" value = -100 }
+	ai_strategy = { type = antagonize id = "EGY" value = 200 }
+	ai_strategy = { type = contain id = "EGY" value = 200 }
+}
+SYR_SSNP_target_egypt_conquer = {
+
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_demand_sinai
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = conquer id = "EGY" value = 100 }
+}
+SYR_SSNP_target_iraq = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_iraq_divisions
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "IRQ" value = -100 }
+	ai_strategy = { type = antagonize id = "IRQ" value = 200 }
+	ai_strategy = { type = contain id = "IRQ" value = 200 }
+	ai_strategy = { type = conquer id = "IRQ" value = 100 }
+}
+SYR_SSNP_target_kuwait = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_submission_kuwait
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "KUW" value = -100 }
+	ai_strategy = { type = antagonize id = "KUW" value = 200 }
+	ai_strategy = { type = contain id = "KUW" value = 200 }
+	ai_strategy = { type = conquer id = "KUW" value = 100 }
+}
+SYR_SSNP_target_saudi = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_crush_the_sauds
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SAU" value = -100 }
+	ai_strategy = { type = antagonize id = "SAU" value = 200 }
+	ai_strategy = { type = contain id = "SAU" value = 200 }
+}
+SYR_SSNP_target_saudi_conquer = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_crush_the_sauds
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = conquer id = "SAU" value = 100 }
+}
+SYR_SSNP_target_turkey = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_taurus_mountains
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "TUR" value = -100 }
+	ai_strategy = { type = antagonize id = "TUR" value = 200 }
+	ai_strategy = { type = contain id = "TUR" value = 200 }
+}
+SYR_SSNP_target_turkey_conquer = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_taurus_mountains
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = conquer id = "TUR" value = 100 }
+}
+SYR_SSNP_target_cyprus = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_claim_cyprus
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "CYP" value = -100 }
+	ai_strategy = { type = antagonize id = "CYP" value = 200 }
+	ai_strategy = { type = contain id = "CYP" value = 200 }
+	ai_strategy = { type = conquer id = "CYP" value = 100 }
+	ai_strategy = { type = befriend id = "NCY" value = -100 }
+	ai_strategy = { type = antagonize id = "NCY" value = 200 }
+	ai_strategy = { type = contain id = "NCY" value = 200 }
+	ai_strategy = { type = conquer id = "NCY" value = 100 }
+}
+SYR_SSNP_target_iran = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_weaken_iran
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "PER" value = -100 }
+	ai_strategy = { type = antagonize id = "PER" value = 200 }
+	ai_strategy = { type = contain id = "PER" value = 200 }
+}
+SYR_SSNP_target_iran_conquer = {
+	allowed = { original_tag = SYR }
+
+	enable = {
+		has_completed_focus = SYR_weaken_iran
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = conquer id = "PER" value = 100 }
+}
+
+SYR_invade_rojava_after_demands_refused = {
+	allowed = { original_tag = SYR }
+	enable = {
+		has_country_flag = SYR_Rojava_go_to_war
+		NOT = {
+			owns_state = 193
+			owns_state = 571
+			owns_state = 575
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = conquer id = "ROJ" value = 200 }
+	ai_strategy = { type = antagonize id = "ROJ" value = 200 }
+	ai_strategy = { type = declare_war id = "ROJ" value = 200 }
+}
+
+SYR_jerusalem_pact = {
+	allowed = { original_tag = SYR }
+	enable = {
+		OR = {
+			ISR = { has_faction_template = faction_template_jerusalem_defence_pact }
+			has_faction_template = faction_template_jerusalem_defence_pact
+		}
+		is_in_faction_with = ISR
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "ISR" value = 50 }
+	ai_strategy = { type = antagonize id = "ISR" value = 50 }
+}
+
+SYR_influence_lebanon = {
+	allowed = { original_tag = SYR }
+	enable = {
+		country_exists = LEB
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = influence id = "LEB" value = 250 }
+}
+
+SYR_influence_jordan = {
+	allowed = { original_tag = SYR }
+	enable = {
+		country_exists = JOR
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = influence id = "JOR" value = 250 }
+}
+
+SYR_influence_iraq = {
+	allowed = { original_tag = SYR }
+	enable = {
+		country_exists = IRQ
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = influence id = "IRQ" value = 250 }
+}
+
+SYR_influence_egypt = {
+	allowed = { original_tag = SYR }
+	enable = {
+		country_exists = EGY
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = influence id = "EGY" value = 250 }
+}

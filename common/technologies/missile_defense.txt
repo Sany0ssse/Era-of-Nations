@@ -1,0 +1,642 @@
+# Author(s): AngriestBird, Doolittle, TheBrokenDroid
+technologies = {
+	@1945 = 0
+	@1950 = 1
+	@1955 = 2
+	@1960 = 3
+	@1965 = 4
+	@1970 = 5
+	@1975 = 6
+	@1980 = 7
+	@1985 = 8
+	@1990 = 9
+	@1995 = 10
+	@2000 = 11
+	@2005 = 12
+	@2010 = 13
+	@2015 = 14
+	@2020 = 15
+	@2025 = 16
+	@2030 = 17
+	@2035 = 18
+	@2040 = 19
+	@2045 = 20
+	@2050 = 21
+
+	#Y Axis
+	@row1 = -4
+	@row2 = 0
+	@row3 = 4
+	@row4 = 8
+	@row5 = 12
+	@row6 = 16
+	@row7 = 20
+	@row8 = 24
+	@row9 = 28
+	@row10 = 32
+	@row11 = 36
+	@row12 = 40
+	@row13 = 44
+	@row14 = 48
+	@row15 = 52
+	@row16 = 56
+
+	air_defense = {
+		on_research_complete = {
+			log = "[GetDateText]: [Root.GetName]: add tech air_defense"
+			custom_effect_tooltip = {
+				localization_key = SP_UNLOCK_PROJECT
+				PROJECT = sp_missile_project
+			}
+		}
+		research_cost = 1
+		show_effect_as_desc = yes
+		start_year = 1945
+		enable_building = {
+			building = anti_air_building
+			level = 1
+		}
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @1945 }
+		}
+		path = {
+			leads_to_tech = SAM
+			research_cost_coeff = 1
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+	SAM = {
+		on_research_complete = {
+			log = "[GetDateText]: [Root.GetName]: add tech SAM"
+			add_missile_building_level = yes
+		}
+
+		allow = {
+			ROOT = {
+				is_special_project_completed = sp:sp_missile_project
+			}
+		}
+
+		research_cost = 1
+		show_effect_as_desc = yes
+		start_year = 1955
+		enable_building = {
+			building = anti_air_building
+			level = 2
+		}
+
+		enable_equipments = {
+			sam_missile_equipment
+			sam_missile_equipment_1
+			sam_missile_equipment_2
+			sam_missile_equipment_3
+			sam_missile_equipment_4
+			sam_missile_equipment_5
+			sam_missile_equipment_6
+			sam_missile_equipment_7
+			sam_missile_equipment_8
+		}
+
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @1955 }
+		}
+		path = {
+			leads_to_tech = SAM0
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = SAM0_ship
+			research_cost_coeff = 1
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+	SAM0 = {
+
+		allow = {
+			ROOT = {
+				is_special_project_completed = sp:sp_missile_project
+			}
+		}
+
+		research_cost = 1
+		start_year = 1965
+
+		enable_equipments = {
+			sam_missile_equipment_1
+		}
+
+		show_equipment_icon = yes
+
+		enable_building = {
+			building = anti_air_building
+			level = 3
+		}
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @1965 }
+		}
+		path = {
+			leads_to_tech = SAM1
+			research_cost_coeff = 1
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+
+	SAM1 = {
+
+		allow = {
+			ROOT = {
+				is_special_project_completed = sp:sp_missile_project
+			}
+		}
+
+		research_cost = 1
+		start_year = 1975
+
+		enable_equipments = {
+			sam_missile_equipment_2
+		}
+
+		show_equipment_icon = yes
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @1975 }
+		}
+		path = {
+			leads_to_tech = SAM2
+			research_cost_coeff = 1
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+
+		enable_building = {
+			building = anti_air_building
+			level = 4
+		}
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+	SAM2 = {
+
+		allow = {
+			ROOT = {
+				is_special_project_completed = sp:sp_missile_project
+			}
+		}
+
+		research_cost = 1
+		start_year = 1985
+
+		enable_equipments = {
+			sam_missile_equipment_3
+		}
+
+		
+		show_equipment_icon = yes
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @1985 }
+		}
+
+		enable_building = {
+			building = anti_air_building
+			level = 5
+		}
+
+		path = {
+			leads_to_tech = SAM3
+			research_cost_coeff = 1
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+
+	SAM3 = {
+
+		allow = {
+			ROOT = {
+				is_special_project_completed = sp:sp_missile_project
+			}
+		}
+
+		research_cost = 1
+		start_year = 1995
+
+		enable_equipments = {
+			sam_missile_equipment_4
+		}
+
+		
+		show_equipment_icon = yes
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @1995 }
+		}
+		path = {
+			leads_to_tech = SAM4
+			research_cost_coeff = 1
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+
+	SAM4 = {
+
+		allow = {
+			ROOT = {
+				is_special_project_completed = sp:sp_missile_project
+			}
+		}
+
+		research_cost = 1
+		start_year = 2005
+
+		enable_equipments = {
+			sam_missile_equipment_5
+		}
+
+		
+		show_equipment_icon = yes
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @2005 }
+		}
+		path = {
+			leads_to_tech = SAM5
+			research_cost_coeff = 1
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+
+	SAM5 = {
+
+		allow = {
+			ROOT = {
+				is_special_project_completed = sp:sp_missile_project
+			}
+		}
+
+		research_cost = 1
+		start_year = 2015
+
+		enable_equipments = {
+			sam_missile_equipment_6
+		}
+
+		
+		show_equipment_icon = yes
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @2015 }
+		}
+		path = {
+			leads_to_tech = SAM6
+			research_cost_coeff = 1
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+	SAM6 = {
+
+		allow = {
+			ROOT = {
+				is_special_project_completed = sp:sp_missile_project
+			}
+		}
+
+		research_cost = 1
+		start_year = 2025
+
+		enable_equipments = {
+			sam_missile_equipment_7
+		}
+
+		
+		show_equipment_icon = yes
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @2025 }
+		}
+		path = {
+			leads_to_tech = SAM7
+			research_cost_coeff = 1
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+	SAM7 = {
+
+		allow = {
+			ROOT = {
+				is_special_project_completed = sp:sp_missile_project
+			}
+		}
+
+		research_cost = 1
+		start_year = 2035
+
+		enable_equipments = {
+			sam_missile_equipment_8
+		}
+
+		
+		show_equipment_icon = yes
+		folder = {
+			name = cruise_missiles_folder
+			position = { x = 15 y = @2035 }
+		}
+		categories = {
+			CAT_Military
+			CAT_missile
+			CAT_sam
+		}
+		special_project_specialization = { specialization_air }
+
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.5
+				date < 2015.01.01
+			}
+			modifier = {
+				factor = 0.2
+				date < 2010.01.01
+			}
+			modifier = {
+				factor = 2
+				check_variable = { gdp_per_capita > 19.999 }
+			}
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = {
+						unique_missile_model_names = yes
+					}
+					check_variable = { gdp_per_capita < 20 }
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,27 @@
+on_actions = {					# By @randi_moth (Discord)
+	on_monthly = {
+		effect = {
+			every_controlled_state = {
+				limit = {
+					NOT = {
+						check_variable = { modifier@state_monthly_population = 0 }		# Don't want to do unnecessary calculations 
+					}
+				}		# Population change is calculated via population_change = POPULATION_YEARLY_GROWTH_BASE/12*(1+modifier@monthly_population)*state_population. Let's mark it as y = a/12*(1+b)*x, where we need to find x. x+y = x+a/12*(1+b)*x = x(1+a/12*(1+b)). Thus, x = (x+y)/(1+a/12*(1+b)). We know x + y, so it's a matter of inserting the values. Well, we plan to make it y = a/12*(1+b)*x*(1+z), where z is the state_monthly_population. a/12*(1+b)*x*(1+z)-a/12*(1+b)*x=z*a/12*(1+b)*x*(1+z)=zy, which is the amount we need to add.
+				set_temp_variable = { base_growth = 0.0009 } 										# Equal to the POPULATION_YEARLY_GROWTH_BASE define, change if that define is changed, a
+				divide_temp_variable = { base_growth = 12 }											# Becomes a/12
+				set_temp_variable = { current_population = state_population_k }						# The population of the state, x+y
+				set_temp_variable = { country_modifier = ROOT.modifier@monthly_population }			# This is b
+				add_to_temp_variable = { country_modifier = 1 }										# b + 1
+				multiply_temp_variable = { base_growth = country_modifier }							# a/12*(b+1)
+				add_to_temp_variable = { base_growth = 1 }											# 1+a/12*(1+b)
+				divide_temp_variable = { current_population = base_growth }							# (x+y)/(1+a/12*(1+b)), which is equal to x, or the population beforehand.
+				set_temp_variable = { population_change = state_population_k }						# Once again getting the current population of the state, or x+y.
+				subtract_from_temp_variable = { population_change = current_population }			# x + y - x = y.
+				multiply_temp_variable = { population_change = modifier@state_monthly_population } 	# zy, which we need to add
+				multiply_temp_variable = { population_change = 1000 }								# state_population_k is thousands of people, not people.
+				round_temp_variable = population_change												# A person is a person, you can't add only a half.
+				add_manpower = var:population_change												# Actually increments the population
+			}
+		}
+	}
+}	

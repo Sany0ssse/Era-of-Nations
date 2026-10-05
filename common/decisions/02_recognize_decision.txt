@@ -1,0 +1,39 @@
+#### Recognize Mechanic Decisions ########
+GENERIC_try_recognize_us_category = {
+	GENERIC_try_recognize_us = {
+		icon = GFX_decision_recognize_unn_button
+		days_remove = 15
+
+		cost = 100
+
+		target_root_trigger = {	is_subject = no	}
+
+		target_trigger = {
+			FROM = {
+				NOT = {
+					has_country_flag = generic_recognize_state@ROOT
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				is_owned_by = FROM
+				is_capital = yes
+			}
+		}
+
+		days_re_enable = 100
+
+		target_array = global.power_countries
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove GENERIC_try_recognize_us"
+			FROM = { country_event = redux_generic.24 }
+		}
+
+		ai_will_do = { 
+			factor = 125
+		}
+	}
+}

@@ -1,0 +1,159 @@
+#Political
+BLR_support_georgia = {
+	allowed = { original_tag = BLR }
+	enable = {
+		NOT = { has_war_with = GEO }
+		country_exists = ABK
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = contain id = "ABK" value = 50 }
+	ai_strategy = { type = befriend id = "GEO" value = 50 }
+}
+BLR_love_lpr = {
+	allowed = { original_tag = BLR }
+	enable = {
+		country_exists = LPR
+		NOT = { has_war_with = LPR }
+		OR = {
+			has_autonomy_state = autonomy_union_state
+			nationalist_fascist_are_in_power = yes
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = send_volunteers_desire id = "LPR" value = 1000 }
+	ai_strategy = { type = befriend id = "LPR" value = 100 }
+	ai_strategy = { type = support id = "LPR" value = 500 }
+}
+BLR_love_dpr = {
+	allowed = { original_tag = BLR }
+	enable = {
+		country_exists = DPR
+		NOT = { has_war_with = DPR }
+		OR = {
+			has_autonomy_state = autonomy_union_state
+			nationalist_fascist_are_in_power = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = send_volunteers_desire id = "DPR" value = 1000 }
+	ai_strategy = { type = befriend id = "DPR" value = 100 }
+	ai_strategy = { type = support id = "DPR" value = 500 }
+}
+BLR_love_hpr = {
+	allowed = { original_tag = BLR }
+	enable = {
+		country_exists = HPR
+		NOT = { has_war_with = HPR }
+		OR = {
+			has_autonomy_state = autonomy_union_state
+			nationalist_fascist_are_in_power = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = send_volunteers_desire id = "HPR" value = 1000 }
+	ai_strategy = { type = befriend id = "HPR" value = 100 }
+	ai_strategy = { type = support id = "HPR" value = 500 }
+}
+BLR_love_russia = {
+	allowed = { original_tag = BLR }
+	enable = {
+		country_exists = SOV
+		OR = {
+			is_subject_of = SOV
+			has_government = communism
+			nationalist_military_junta_are_in_power = yes
+			nationalist_fascist_are_in_power = yes
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "SOV" value = -100 }
+	ai_strategy = { type = antagonize id = "SOV" value = -100 }
+	ai_strategy = { type = befriend id = "SOV" value = 100 }
+	ai_strategy = { type = support id = "SOV" value = 100 }
+	ai_strategy = { type = send_volunteers_desire id = "SOV" value = 500 }
+}
+BLR_hate_russia = {
+	allowed = { original_tag = BLR }
+	enable = {
+		country_exists = SOV
+		OR = {
+			has_government = democratic
+			nationalist_right_wing_populists_are_in_power = yes
+			nationalist_monarchists_are_in_power = yes
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "SOV" value = 200 }
+	ai_strategy = { type = antagonize id = "SOV" value = 200 }
+	ai_strategy = { type = befriend id = "SOV" value = -100 }
+}
+BLR_friend_ukraine = {
+	allowed = { original_tag = BLR }
+	enable = {
+		UKR = { NOT = { is_subject_of = SOV } }
+		country_exists = UKR
+		OR = {
+			has_government = democratic
+			nationalist_right_wing_populists_are_in_power = yes
+			nationalist_monarchists_are_in_power = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = befriend id = "UKR" value = 100 }
+	ai_strategy = { type = influence id = "UKR" value = 50 }
+	ai_strategy = { type = support id = "UKR" value = 100 }
+	ai_strategy = { type = send_volunteers_desire id = "UKR" value = 100 }
+}
+BLR_friend_silesia = {
+	allowed = { original_tag = BLR }
+	enable = {
+		NOT = { has_war_with = SIL }
+		country_exists = SIL
+		SIL = { NOT = { is_subject_of = POL } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SIL" value = 100 }
+	ai_strategy = { type = influence id = "SIL" value = 150 }
+	ai_strategy = { type = support id = "SIL" value = 100 }
+	ai_strategy = { type = send_volunteers_desire id = "SIL" value = 150 }
+}
+BLR_friend_iraq = {
+	allowed = { original_tag = BLR }
+	enable = {
+		NOT = { has_war_with = IRQ }
+		country_exists = IRQ
+		IRQ = { NOT = { is_subject_of = USA } }
+		OR = {
+			nationalist_fascist_are_in_power = yes
+			emerging_communist_state_are_in_power = yes
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "IRQ" value = 100 }
+	ai_strategy = { type = influence id = "IRQ" value = 150 }
+	ai_strategy = { type = support id = "IRQ" value = 100 }
+	ai_strategy = { type = send_volunteers_desire id = "IRQ" value = 150 }
+}
+BLR_hate_west = {
+	allowed = { original_tag = BLR }
+	enable = {
+		nationalist_fascist_are_in_power = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = contain id = "USA" value = 200 }
+	ai_strategy = { type = antagonize id = "USA" value = 200 }
+	ai_strategy = { type = contain id = "FRA" value = 200 }
+	ai_strategy = { type = antagonize id = "FRA" value = 200 }
+	ai_strategy = { type = contain id = "GER" value = 200 }
+	ai_strategy = { type = antagonize id = "GER" value = 200 }
+	ai_strategy = { type = contain id = "ENG" value = 200 }
+	ai_strategy = { type = antagonize id = "ENG" value = 200 }
+	ai_strategy = { type = contain id = "SPR" value = 200 }
+	ai_strategy = { type = antagonize id = "SPR" value = 200 }
+}
+

@@ -1,0 +1,4134 @@
+influence_decisions = {
+	#Tags : #Terrorism Up Decisions #Terrorism Down Decisions
+	#Terrorism Up Decisions
+	#Terrorism - Al Quaida SAU
+	GENERIC_terrorism_up_sau = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 177
+			}
+			check_variable = { SAU.terrorism < 75 }
+			SAU = {
+				no_jihadist_government = yes
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 177
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_sau"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			SAU = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+				177 = {
+					controller = {
+						add_to_variable = { terrorism_mana = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_SAU = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				191 = {
+					controller = {
+						PREV.PREV = {
+							has_opinion = {
+								target = PREV
+								value < -50
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#Terrorism - UAE
+	GENERIC_terrorism_up_uae = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 180
+			}
+			check_variable = { UAE.terrorism < 75 }
+			UAE = {
+				NOT = { has_government = fascism }
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 180
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_uae"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			UAE = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+				180 = {
+					controller = {
+						add_to_variable = { terrorism_mana = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_UAE = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				191 = {
+					controller = {
+						PREV.PREV = {
+							has_opinion = {
+								target = PREV
+								value < -50
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#Terrorism - ISIS SYR
+	GENERIC_terrorism_up_isis_syr = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 191
+			}
+			check_variable = { SYR.terrorism < 75 }
+			SYR = {
+				NOT = { has_government = fascism }
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 191
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_isis_syr"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = ISI }
+			change_influence_percentage = yes
+			SYR = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+				191 = {
+					controller = {
+						add_to_variable = { terrorism_mana = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+				}
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+				ISI = {
+					hidden_effect =  {
+						set_temp_variable = { treasury_change = 0.005 }
+						modify_treasury_effect = yes
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_SYR = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				191 = {
+					controller = {
+						PREV.PREV = {
+							has_opinion = {
+								target = PREV
+								value < -50
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#Terrorism - ISIS IRQ
+	GENERIC_terrorism_up_isis_irq = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 166
+			}
+			NOT = {
+				owns_state = 167
+			}
+			NOT = {
+				owns_state = 168
+			}
+			NOT = {
+				owns_state = 641
+			}
+			check_variable = { IRQ.terrorism < 75 }
+			IRQ = {
+				NOT = { has_government = fascism }
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 166
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_isis_syr"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = ISI }
+			change_influence_percentage = yes
+			IRQ = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+				166 = {
+					controller = {
+						add_to_variable = { terrorism_mana = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+				}
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+				ISI = {
+					hidden_effect =  {
+						set_temp_variable = { treasury_change = 0.005 }
+						modify_treasury_effect = yes
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_IRQ = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				166 = {
+					controller = {
+						PREV.PREV = {
+							has_opinion = {
+								target = PREV
+								value < -50
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#Terrorism - ISIS Egypt
+	GENERIC_terrorism_up_isis_egy = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 216
+			}
+			check_variable = { EGY.terrorism < 75 }
+			EGY = {
+				owns_state = 216
+				NOT = {
+					has_government = fascism
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 216
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_isis_egy"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			EGY = {
+				set_temp_variable = { modify_terrorism = 1 }
+				add_to_variable = { terrorism_mana = 10 }
+				clamp_variable = {
+					var = terrorism_mana
+					min = 1
+					max = 100
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_EGY = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				has_opinion = {
+					target = EGY
+					value < -50
+				}
+			}
+		}
+	}
+	#Terrorism - ISIS Niger
+	GENERIC_terrorism_up_isis_nig = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 340
+			}
+			check_variable = { NIG.terrorism < 75 }
+			NIG = {
+				owns_state = 338
+				owns_state = 339
+				owns_state = 340
+				NOT = {
+					has_government = fascism
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 340
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_isis_nig"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			NIG = {
+				set_temp_variable = { modify_terrorism = 1 }
+				add_to_variable = { terrorism_mana = 10 }
+				clamp_variable = {
+					var = terrorism_mana
+					min = 1
+					max = 100
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_NIG = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				has_opinion = {
+					target = NIG
+					value < -50
+				}
+			}
+		}
+	}
+	#Terrorism - ISIS Algeria
+	GENERIC_terrorism_up_isis_alg = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 381
+			}
+			check_variable = { ALG.terrorism < 75 }
+			ALG = {
+				owns_state = 381
+				NOT = {
+					has_government = fascism
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 381
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_isis_alg"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			ALG = {
+				set_temp_variable = { modify_terrorism = 1 }
+				add_to_variable = { terrorism_mana = 10 }
+				clamp_variable = {
+					var = terrorism_mana
+					min = 1
+					max = 100
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_ALG = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				has_opinion = {
+					target = ALG
+					value < -50
+				}
+			}
+		}
+	}
+	#Terrorism - ISIS Tunisia
+	GENERIC_terrorism_up_isis_tun = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 390
+			}
+			check_variable = { TUN.terrorism < 75 }
+			TUN = {
+				owns_state = 390
+				NOT = {
+					has_government = fascism
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 390
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_isis_tun"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			TUN = {
+				set_temp_variable = { modify_terrorism = 1 }
+				add_to_variable = { terrorism_mana = 10 }
+				clamp_variable = {
+					var = terrorism_mana
+					min = 1
+					max = 100
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_TUN = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				has_opinion = {
+					target = TUN
+					value < -50
+				}
+			}
+		}
+	}
+	#Terrorism - ISIS Tajikistan
+	GENERIC_terrorism_up_isis_taj = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 723
+			}
+			check_variable = { TAJ.terrorism < 75 }
+			TAJ = {
+				owns_state = 723
+				NOT = {
+					has_government = fascism
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = TAJ
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_isis_taj"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			TAJ = {
+				set_temp_variable = { modify_terrorism = 1 }
+				add_to_variable = { terrorism_mana = 10 }
+				clamp_variable = {
+					var = terrorism_mana
+					min = 1
+					max = 100
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_TAJ = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				has_opinion = {
+					target = TAJ
+					value < -50
+				}
+			}
+		}
+	}
+	#Terrorism - Ingushi
+	GENERIC_terrorism_up_ing_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				country_exists = ING
+				owns_state = 1126
+			}
+			check_variable = { ING.terrorism < 75 }
+			ING = {
+				NOT = {
+					AND = {
+						country_exists = yes
+						has_government = fascism
+					}
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1126
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_ing_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = ING }
+			change_influence_percentage = yes
+			ING = {
+				set_temp_variable = { modify_terrorism = 1 }
+				1126 = {
+					controller = {
+						add_to_variable = { terrorism_mana = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+				hidden_effect =  {
+					set_temp_variable = { treasury_change = 0.005 }
+					modify_treasury_effect = yes
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_ING = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				1126 = {
+					controller = {
+						PREV.PREV = {
+							has_opinion = {
+								target = PREV
+								value < -50
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#Terrorism - Kabardinci
+	GENERIC_terrorism_up_kbk_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				country_exists = KBK
+				owns_state = 674
+			}
+			check_variable = { KBK.terrorism < 75 }
+			KBK = {
+				NOT = {
+					AND = {
+						country_exists = yes
+						has_government = fascism
+					}
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 674
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_kbk_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = KBK }
+			change_influence_percentage = yes
+			KBK = {
+				set_temp_variable = { modify_terrorism = 1 }
+				674 = {
+					controller = {
+						add_to_variable = { terrorism_mana = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+				hidden_effect =  {
+					set_temp_variable = { treasury_change = 0.005 }
+					modify_treasury_effect = yes
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_KBK = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				674 = {
+					controller = {
+						PREV.PREV = {
+							has_opinion = {
+								target = PREV
+								value < -50
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#Terrorism - Cherkesy
+	GENERIC_terrorism_up_kcc_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				country_exists = KCC
+				owns_state = 1125
+			}
+			check_variable = { KCC.terrorism < 75 }
+			KCC = {
+				NOT = {
+					AND = {
+						country_exists = yes
+						has_government = fascism
+					}
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1125
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_kcc_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = KCC }
+			change_influence_percentage = yes
+			KCC = {
+				set_temp_variable = { modify_terrorism = 1 }
+				1125 = {
+					controller = {
+						add_to_variable = { terrorism_mana = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+				hidden_effect =  {
+					set_temp_variable = { treasury_change = 0.005 }
+					modify_treasury_effect = yes
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_KCC = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				1125 = {
+					controller = {
+						PREV.PREV = {
+							has_opinion = {
+								target = PREV
+								value < -50
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#Terrorism - Dagestan
+	GENERIC_terrorism_up_dag_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				country_exists = DAG
+				owns_state = 671
+			}
+			check_variable = { DAG.terrorism < 75 }
+			DAG = {
+				NOT = {
+					AND = {
+						country_exists = yes
+						has_government = fascism
+					}
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 671
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_dag_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = DAG }
+			change_influence_percentage = yes
+			DAG = {
+				set_temp_variable = { modify_terrorism = 1 }
+				671 = {
+					controller = {
+						add_to_variable = { terrorism_mana = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+				hidden_effect =  {
+					set_temp_variable = { treasury_change = 0.005 }
+					modify_treasury_effect = yes
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_DAG = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				671 = {
+					controller = {
+						PREV.PREV = {
+							has_opinion = {
+								target = PREV
+								value < -50
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#Terrorism - Chechnya
+	GENERIC_terrorism_up_che_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				country_exists = CHE
+				owns_state = 672
+			}
+			check_variable = { CHE.terrorism < 75 }
+			CHE = {
+				NOT = {
+					AND = {
+						country_exists = yes
+						has_government = fascism
+					}
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				has_government = fascism
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 672
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_che_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = CHE }
+			change_influence_percentage = yes
+			CHE = {
+				set_temp_variable = { modify_terrorism = 1 }
+				672 = {
+					controller = {
+						add_to_variable = { terrorism_mana = 10 }
+						clamp_variable = {
+							var = terrorism_mana
+							min = 1
+							max = 100
+						}
+					}
+				}
+				modify_terrorism_support = yes
+				set_temp_variable = { party_index = 11 }
+				set_temp_variable = { party_popularity_increase = 0.01 }
+				set_temp_variable = { temp_outlook_increase = 0.01 }
+				add_relative_party_popularity = yes
+				hidden_effect =  {
+					set_temp_variable = { treasury_change = 0.005 }
+					modify_treasury_effect = yes
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_CHE = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				has_government = fascism
+				check_variable = { debt = 0 }
+			}
+			modifier = {
+				add = 150
+				check_variable = { debt = 0 }
+				672 = {
+					controller = {
+						PREV.PREV = {
+							has_opinion = {
+								target = PREV
+								value < -50
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#Terrorism - ASALA
+	GENERIC_terrorism_up_asala_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				country_exists = ARW
+				owns_state = 935
+				ARM = {
+					owns_state = 935
+				}
+			}
+			check_variable = { ARW.terrorism < 75 }
+			ARW = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			ARM = {
+				has_completed_focus = ARM_invite_asala
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+				original_tag = ARM
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 935
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_asala_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			set_temp_variable = { percent_change = 1 }
+			set_temp_variable = { tag_index = THIS }
+			set_temp_variable = { influence_target = ARW }
+			change_influence_percentage = yes
+			ARW = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+				hidden_effect =  {
+					set_temp_variable = { treasury_change = 0.005 }
+					modify_treasury_effect = yes
+				}
+			}
+			935 = {
+				controller = {
+					add_to_variable = { terrorism_mana = 10 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_ARW = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 200
+				original_tag = ARM
+			}
+		}
+	}
+	#Terrorism - Red Brigades
+	GENERIC_terrorism_up_red_brigades_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 81
+			}
+			check_variable = { ITA.terrorism < 75 }
+			ITA = {
+				owns_state = 81
+				owns_state = 78
+				owns_state = 1060
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 81
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_red_brigades_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			ITA = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+			}
+			81 = {
+				controller = {
+					add_to_variable = { terrorism_mana = 10 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			78 = {
+				controller = {
+					add_to_variable = { terrorism_mana = 10 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			1060 = {
+				controller = {
+					add_to_variable = { terrorism_mana = 10 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_ITA = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+				check_variable = { treasury > 50 }
+				has_opinion = {
+					target = ITA
+					value < -25
+				}
+			}
+			modifier = {
+				add = 20
+				has_war_with = ITA
+			}
+			modifier = {
+				add = -50
+				OR = {
+					check_variable = { display_income < display_expense }
+					check_variable = { debt > 0 }
+				}
+			}
+		}
+	}
+	#Terrorism - Red Army Faction
+	GENERIC_terrorism_up_red_army_faction_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 44
+			}
+			check_variable = { GER.terrorism < 75 }
+			GER = {
+				has_country_flag = GENERIC_terrorism_start_flag
+				owns_state = 44
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 44
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_red_army_faction_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			GER = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+			}
+			44 = {
+				controller = {
+					add_to_variable = { terrorism_mana = 10 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_GER = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+				check_variable = { treasury > 50 }
+				has_opinion = {
+					target = GER
+					value < -25
+				}
+			}
+			modifier = {
+				add = 20
+				has_war_with = GER
+			}
+			modifier = {
+				add = -50
+				OR = {
+					check_variable = { display_income < display_expense }
+					check_variable = { debt > 0 }
+				}
+			}
+		}
+	}
+	#Terrorism - People's Liberation League
+	GENERIC_terrorism_up_people_lib_league_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 30
+			}
+			check_variable = { NOR.terrorism < 75 }
+			NOR = {
+				has_country_flag = GENERIC_terrorism_start_flag
+				owns_state = 30
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 30
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_people_lib_league_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			NOR = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+			}
+			30 = {
+				controller = {
+					add_to_variable = { terrorism_mana = 10 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_NOR = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+				check_variable = { treasury > 50 }
+				has_opinion = {
+					target = NOR
+					value < -25
+				}
+			}
+			modifier = {
+				add = 20
+				has_war_with = NOR
+			}
+			modifier = {
+				add = -50
+				OR = {
+					check_variable = { display_income < display_expense }
+					check_variable = { debt > 0 }
+				}
+			}
+		}
+	}
+	#Terrorism - The Revolutionary Council of Vltava
+	GENERIC_terrorism_up_council_vtlava_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 1018
+			}
+			check_variable = { CZE.terrorism < 75 }
+			CZE = {
+				has_country_flag = GENERIC_terrorism_start_flag
+				owns_state = 1018
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1018
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_council_vtlava_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			CZE = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+			}
+			1018 = {
+				controller = {
+					add_to_variable = { terrorism_mana = 10 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_CZE = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+				check_variable = { treasury > 50 }
+				has_opinion = {
+					target = CZE
+					value < -25
+				}
+			}
+			modifier = {
+				add = 20
+				has_war_with = CZE
+			}
+			modifier = {
+				add = -50
+				OR = {
+					check_variable = { display_income < display_expense }
+					check_variable = { debt > 0 }
+				}
+			}
+		}
+	}
+	#Terrorism - Wild Commune
+	GENERIC_terrorism_up_wild_commune_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 122
+			}
+			check_variable = { HUN.terrorism < 75 }
+			HUN = {
+				has_country_flag = GENERIC_terrorism_start_flag
+				owns_state = 122
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 122
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_wild_commune_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			HUN = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+			}
+			122 = {
+				controller = {
+					add_to_variable = { terrorism_mana = 10 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_HUN = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+				check_variable = { treasury > 50 }
+				has_opinion = {
+					target = HUN
+					value < -25
+				}
+			}
+			modifier = {
+				add = 20
+				has_war_with = HUN
+			}
+			modifier = {
+				add = -50
+				OR = {
+					check_variable = { display_income < display_expense }
+					check_variable = { debt > 0 }
+				}
+			}
+		}
+	}
+	#Terrorism - The Committee on November 12th
+	GENERIC_terrorism_up_12th_november_up = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			check_variable = { treasury > 10 }
+		}
+		custom_cost_text = cost_10_0
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				owns_state = 286
+			}
+			check_variable = { AUS.terrorism < 75 }
+			AUS = {
+				has_country_flag = GENERIC_terrorism_start_flag
+				owns_state = 286
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+				has_idea = large_power
+				has_idea = regional_power
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 286
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_up_12th_november_up"
+			set_temp_variable = { treasury_change = -10 }
+			modify_treasury_effect = yes
+			AUS = {
+				set_temp_variable = { modify_terrorism = 1 }
+				modify_terrorism_support = yes
+			}
+			286 = {
+				controller = {
+					add_to_variable = { terrorism_mana = 10 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			hidden_effect = {
+				GENERIC_update_terrorism_rebellion_AUS = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				OR = {
+					emerging_communist_state_are_in_power = yes
+					neutrality_neutral_communism_are_in_power = yes
+				}
+				check_variable = { treasury > 50 }
+				has_opinion = {
+					target = AUS
+					value < -25
+				}
+			}
+			modifier = {
+				add = 20
+				has_war_with = AUS
+			}
+			modifier = {
+				add = -50
+				OR = {
+					check_variable = { display_income < display_expense }
+					check_variable = { debt > 0 }
+				}
+			}
+		}
+	}
+
+    #Terrorism Down Decisions
+	#Terrorism - ISIS - Down
+	GENERIC_terrorism_down_isis_191 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 191
+				any_other_country = {
+					owns_state = 191
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { SYR.terrorism > 0 }
+			SYR = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 191
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_191"
+			SYR = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { SYR.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 191
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS - Down
+	GENERIC_terrorism_down_isis_193 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 193
+				any_other_country = {
+					owns_state = 193
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { SYR.terrorism > 0 }
+			SYR = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 193
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_193"
+			SYR = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { SYR.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 193
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS - Down
+	GENERIC_terrorism_down_isis_995 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 995
+				any_other_country = {
+					owns_state = 995
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { SYR.terrorism > 0 }
+			SYR = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 995
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_995"
+			SYR = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { SYR.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 995
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS - Down
+	GENERIC_terrorism_down_isis_166 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 166
+				any_other_country = {
+					owns_state = 166
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { IRQ.terrorism > 0 }
+			IRQ = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 166
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_166"
+			IRQ = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { IRQ.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 166
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS - Down
+	GENERIC_terrorism_down_isis_167 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 167
+				any_other_country = {
+					owns_state = 167
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { IRQ.terrorism > 0 }
+			IRQ = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 167
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_167"
+			IRQ = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { IRQ.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 167
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS - Down
+	GENERIC_terrorism_down_isis_168 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 168
+				any_other_country = {
+					owns_state = 168
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { IRQ.terrorism > 0 }
+			IRQ = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 168
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_168"
+			IRQ = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { IRQ.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 168
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS - Down
+	GENERIC_terrorism_down_isis_641 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 641
+				any_other_country = {
+					owns_state = 641
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { IRQ.terrorism > 0 }
+			IRQ = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 641
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_641"
+			IRQ = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { IRQ.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 641
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ASALA - Down
+	GENERIC_terrorism_down_asala_935 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			NOT = {
+				country_exists = ARW
+				original_tag = ARM
+			}
+			OR = {
+				owns_state = 935
+				any_other_country = {
+					owns_state = 935
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ARW.terrorism > 0 }
+			ARW = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			ARM = {
+				has_completed_focus = ARM_invite_asala
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 935
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_asala_935"
+			ARW = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { ARW.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 935
+			}
+			modifier = {
+				factor = 0
+				tag = ARM
+			}
+		}
+	}
+	#Terrorism - ASALA - Down
+	GENERIC_terrorism_down_asala_163 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			NOT = {
+				country_exists = ARW
+				original_tag = ARM
+			}
+			OR = {
+				owns_state = 163
+				any_other_country = {
+					owns_state = 163
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ARW.terrorism > 0 }
+			ARW = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			ARM = {
+				has_completed_focus = ARM_invite_asala
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 163
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_asala_163"
+			ARW = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { ARW.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 163
+			}
+			modifier = {
+				factor = 0
+				tag = ARM
+			}
+		}
+	}
+	#Terrorism - Red Brigades - Down
+	GENERIC_terrorism_down_red_brigades_81 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			OR = {
+				AND = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+				}
+				any_other_country = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ITA.terrorism > 0 }
+			ITA = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 81
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_red_brigades_81"
+			ITA = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { ITA.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 81
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+				}
+			}
+		}
+	}
+	#Terrorism - Red Brigades - Down
+	GENERIC_terrorism_down_red_brigades_78 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			OR = {
+				AND = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+				}
+				any_other_country = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ITA.terrorism > 0 }
+			ITA = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 78
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_red_brigades_78"
+			ITA = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { ITA.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 78
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+				}
+			}
+		}
+	}
+	#Terrorism - Red Brigades - Down
+	GENERIC_terrorism_down_red_brigades_1060 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			OR = {
+				AND = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+				}
+				any_other_country = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ITA.terrorism > 0 }
+			ITA = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1060
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_red_brigades_1060"
+			ITA = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { ITA.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 1060
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+				}
+			}
+		}
+	}
+	#Terrorism - Red Army Faction - Down
+	GENERIC_terrorism_down_red_army_faction_44 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			OR = {
+				AND = {
+					original_tag = GER
+					owns_state = 44
+				}
+				any_other_country = {
+					original_tag = GER
+					owns_state = 44
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { GER.terrorism > 0 }
+			GER = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 44
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_red_army_faction_44"
+			GER = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { GER.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 44
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+				}
+			}
+		}
+	}
+	#Terrorism - People's Liberation League - Down
+	GENERIC_terrorism_down_people_lib_league_30 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			OR = {
+				AND = {
+					original_tag = NOR
+					owns_state = 30
+				}
+				any_other_country = {
+					original_tag = NOR
+					owns_state = 30
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { NOR.terrorism > 0 }
+			NOR = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 30
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_people_lib_league_30"
+			NOR = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { NOR.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 30
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+				}
+			}
+		}
+	}
+	#Terrorism - The Revolutionary Council of Vltava - Down
+	GENERIC_terrorism_down_council_vtlava_1018 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			OR = {
+				AND = {
+					original_tag = CZE
+					owns_state = 1018
+				}
+				any_other_country = {
+					original_tag = CZE
+					owns_state = 1018
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { CZE.terrorism > 0 }
+			CZE = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1018
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_council_vtlava_1018"
+			CZE = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { CZE.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 1018
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+				}
+			}
+		}
+	}
+	#Terrorism - Wild Commune - Down
+	GENERIC_terrorism_down_wild_commune_122 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			OR = {
+				AND = {
+					original_tag = HUN
+					owns_state = 122
+				}
+				any_other_country = {
+					original_tag = HUN
+					owns_state = 122
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { HUN.terrorism > 0 }
+			HUN = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 122
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_wild_commune_122"
+			HUN = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { HUN.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 122
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+				}
+			}
+		}
+	}
+	#Terrorism - The Committee on November 12th - Down
+	GENERIC_terrorism_down_12th_november_286 = {
+		icon = GFX_decision_terrorism_button
+		days_remove = 5
+		days_re_enable = 35
+
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+
+		visible = {
+			OR = {
+				AND = {
+					original_tag = AUS
+					owns_state = 286
+				}
+				any_other_country = {
+					original_tag = AUS
+					owns_state = 286
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { AUS.terrorism > 0 }
+			AUS = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 286
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_12th_november_286"
+			AUS = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { AUS.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 286
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					neutrality_neutral_communism_are_in_power = yes
+					emerging_communist_state_are_in_power  = yes
+				}
+			}
+		}
+	}
+	#Terrorism - ISIS Egypt - Down
+	GENERIC_terrorism_down_isis_egy_216 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 216
+				any_other_country = {
+					owns_state = 216
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { EGY.terrorism > 0 }
+			EGY = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 216
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_egy_216"
+			EGY = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { EGY.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 216
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS Niger - Down
+	GENERIC_terrorism_down_isis_nig_338 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 338
+				any_other_country = {
+					owns_state = 338
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { NIG.terrorism > 0 }
+			NIG = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 338
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_nig_338"
+			NIG = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { NIG.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 338
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS Niger - Down
+	GENERIC_terrorism_down_isis_nig_339 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 339
+				any_other_country = {
+					owns_state = 339
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { NIG.terrorism > 0 }
+			NIG = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 339
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_nig_339"
+			NIG = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { NIG.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 339
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS Niger - Down
+	GENERIC_terrorism_down_isis_nig_340 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 340
+				any_other_country = {
+					owns_state = 340
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { NIG.terrorism > 0 }
+			NIG = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 340
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_nig_340"
+			NIG = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { NIG.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 340
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS Algeria - Down
+	GENERIC_terrorism_down_isis_alg_381 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 381
+				any_other_country = {
+					owns_state = 381
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ALG.terrorism > 0 }
+			ALG = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 381
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_alg_381"
+			ALG = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { ALG.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 381
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS Tunisia - Down
+	GENERIC_terrorism_down_isis_tun_390 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 390
+				any_other_country = {
+					owns_state = 390
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { TUN.terrorism > 0 }
+			TUN = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 390
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_tun_390"
+			TUN = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { TUN.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 190
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - ISIS Tajikistan - Down
+	GENERIC_terrorism_down_isis_taj_723 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 723
+				any_other_country = {
+					owns_state = 723
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { TAJ.terrorism > 0 }
+			TAJ = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 723
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_taj_723"
+			TAJ = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { TAJ.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 723
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - SAU - Down
+	GENERIC_terrorism_down_sau = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 177
+				any_other_country = {
+					owns_state = 177
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { SAU.terrorism > 0 }
+			SAU = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 177
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_taj_723"
+			SAU = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { SAU.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 177
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - UAE - Down
+	GENERIC_terrorism_down_uae = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 180
+				any_other_country = {
+					owns_state = 180
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { UAE.terrorism > 0 }
+			UAE = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 180
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_taj_723"
+			UAE = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { UAE.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 180
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - Caucasus Emirate Ingushetia - Down
+	GENERIC_terrorism_down_isis_ing_1126 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 1126
+				any_other_country = {
+					owns_state = 1126
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ING.terrorism > 0 }
+			ING = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1126
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_ing_1126"
+			ING = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { ING.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 1126
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - Caucasus Emirate Kabardino-Balkaria - Down
+	GENERIC_terrorism_down_isis_kbk_674 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 674
+				any_other_country = {
+					owns_state = 674
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { KBK.terrorism > 0 }
+			KBK = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 674
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_kbk_674"
+			KBK = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { KBK.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 674
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - Caucasus Emirate Karachaevo Cherkessia - Down
+	GENERIC_terrorism_down_isis_kcc_1125 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 1125
+				any_other_country = {
+					owns_state = 1125
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { KCC.terrorism > 0 }
+			KCC = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 1125
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_kcc_1125"
+			KCC = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { KCC.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 1125
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - Caucasus Emirate Dagestan - Down
+	GENERIC_terrorism_down_isis_dag_671 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 671
+				any_other_country = {
+					owns_state = 671
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { DAG.terrorism > 0 }
+			DAG = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 671
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_dag_671"
+			DAG = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { DAG.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 671
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - Caucasus Emirate Chechnya - Down
+	GENERIC_terrorism_down_isis_che_672 = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 5
+		days_re_enable = 35
+
+		visible = {
+			OR = {
+				owns_state = 672
+				any_other_country = {
+					owns_state = 672
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { CHE.terrorism > 0 }
+			CHE = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 672
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		on_map_mode = map_only
+
+		complete_effect = {
+			add_command_power = -25
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GENERIC_terrorism_down_isis_che_672"
+			CHE = {
+				complete_ct_raid = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = { CHE.terrorism > 1 }
+			}
+			modifier = {
+				add = 50
+				owns_state = 672
+			}
+			modifier = {
+				factor = 0
+				jihadist_government = yes
+			}
+		}
+	}
+	#Terrorism - Caucasus Emirate Chechnya - Down
+	SOV_terrorism_down_north_caucasus = {
+		icon = GFX_decision_terrorism_button
+		custom_cost_trigger = {
+			command_power > 50
+		}
+		custom_cost_text = command_power_more_than_50
+		days_remove = 14
+
+		visible = {
+			has_idea = SOV_UGTNC_idea
+			OR = {
+				AND = {
+					owns_state = 672
+					check_variable = { CHE.terrorism > 0 }
+				}
+				AND = {
+					owns_state = 671
+					check_variable = { DAG.terrorism > 0 }
+				}
+				AND = {
+					owns_state = 674
+					check_variable = { KBK.terrorism > 0 }
+				}
+				AND = {
+					owns_state = 1125
+					check_variable = { KCC.terrorism > 0 }
+				}
+				AND = {
+					owns_state = 1126
+					check_variable = { ING.terrorism > 0 }
+				}
+			}
+		}
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = has_units_in_caucasus_states_tt
+				OR = {
+					any_unit_leader = {	check_variable = { num_units_in_state@672 > 0 } }
+					any_unit_leader = {	check_variable = { num_units_in_state@671 > 0 } }
+					any_unit_leader = {	check_variable = { num_units_in_state@674 > 0 } }
+					any_unit_leader = {	check_variable = { num_units_in_state@1125 > 0 } }
+					any_unit_leader = {	check_variable = { num_units_in_state@1126 > 0 } }
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_state_targets = {
+				state = 671
+			}
+			highlight_color_while_active = 3
+			highlight_color_before_active = 2
+		}
+
+		complete_effect = {
+			add_command_power = -50
+			custom_effect_tooltip = propaganda_campaign_costs_tt
+		}
+
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SOV_terrorism_down_north_caucasus"
+			SOV_debuff_terrorism_caucasus = yes
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 25
+				OR = {
+					check_variable = { CHE.terrorism > 1 }
+					check_variable = { DAG.terrorism > 1 }
+					check_variable = { KBK.terrorism > 1 }
+					check_variable = { KCC.terrorism > 1 }
+					check_variable = { ING.terrorism > 1 }
+				}
+			}
+		}
+	}
+	fight_salafists_radicalisation = {
+		icon = GFX_decision_fascism_button
+		days_remove = 120
+		days_re_enable = 30
+
+		visible = {
+			OR = {
+				tag = ALG
+				tag = NIG
+				tag = EGY
+				tag = TAJ
+				tag = SYR
+				tag = IRQ
+				tag = TUN
+				tag = UAE
+			}
+			check_variable = { party_pop_array^11 > 0.05 }
+			NOT = { has_government = fascism }
+		}
+
+		modifier = {
+			fascism_drift = -0.1
+			political_power_factor = -0.25
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decisionfight_salafists_radicalisation"
+			custom_effect_tooltip = propaganda_campaign_costs_tt
+			ingame_update_setup = yes
+		}
+
+		ai_will_do = { base = 100 }
+	}
+}

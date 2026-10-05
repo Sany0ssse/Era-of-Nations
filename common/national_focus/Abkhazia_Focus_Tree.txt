@@ -1,0 +1,2385 @@
+# Author(s): LordBogdanoff
+
+#NOW = ABKHAZIA IN NEW MILLENIUM
+shared_focus = {
+	id = ABK_In_New_Millenium
+	icon = Georgia_Abkhazia
+
+	x = 17
+	y = 10
+
+	cost = 1
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	allow_branch = { tag = ABK }
+
+	completion_reward = {
+		add_political_power = 150
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_CIS_create
+	icon = pmr_cis_2
+
+	x = 0
+	y = 1
+
+	relative_position_id = ABK_In_New_Millenium
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = { focus = ABK_In_New_Millenium }
+
+	available = {
+		NOT = { is_subject_of = GEO }
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_CIS_create"
+		SOV = {
+			country_event = abkh.1
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			add_ideas = ABK_cis_observer_member_state_idea
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+# Give Rights for Armenians
+shared_focus = {
+	id = ABK_Rights_for_Armenians
+	icon = abk_armenia_friend
+
+	x = 3
+	y = 1
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	relative_position_id = ABK_In_New_Millenium
+	prerequisite = { focus = ABK_In_New_Millenium }
+	mutually_exclusive = { focus = ABK_Purge_Bagramyan_Brigade }
+
+	available = {
+		country_exists = ARM
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Rights_for_Armenians"
+		add_manpower = 1500
+		custom_effect_tooltip = Baghr_revive_batt_tt
+		hidden_effect = {
+			division_template = {
+				name = "Baghramyan Battalion"
+				is_locked = yes
+				regiments = {
+					Militia_Bat = { x = 0 y = 0 }
+					Militia_Bat = { x = 0 y = 1 }
+					Militia_Bat = { x = 1 y = 0 }
+					Militia_Bat = { x = 1 y = 1 }
+					Militia_Bat = { x = 1 y = 2 }
+					Militia_Bat = { x = 2 y = 1 }
+					Arty_Bat = { x = 2 y = 0 }
+					Arty_Bat = { x = 2 y = 1 }
+					Arty_Bat = { x = 2 y = 2 }
+				}
+				support = {
+					Mot_Recce_Comp = { x = 0 y = 0 }
+					L_Engi_Comp = { x = 0 y = 1 }
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Baghramyan Battalion\" division_template = \"Baghramyan Battalion\" start_experience_factor = 4"
+					owner = ABK
+				}
+			}
+		}
+		add_opinion_modifier = { target = ARM modifier = diplomatic_support }
+		reverse_add_opinion_modifier = { target = ARM modifier = diplomatic_support }
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = ARM }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Purge_Bagramyan_Brigade
+	icon = militaryjunta_revolut
+
+	x = 5
+	y = 1
+	relative_position_id = ABK_In_New_Millenium
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	mutually_exclusive = { focus = ABK_Rights_for_Armenians }
+	prerequisite = { focus = ABK_In_New_Millenium }
+
+	available = {
+		country_exists = ARM
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Purge_Bagramyan_Brigade"
+		add_manpower = -1500
+		add_political_power = -15
+		add_stability = -0.02
+		set_temp_variable = { percent_change = -4 }
+		set_temp_variable = { tag_index = ARM }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Get_Rid_Armenians
+	icon = abk_garick_go_away
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Purge_Bagramyan_Brigade
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = { focus = ABK_Purge_Bagramyan_Brigade }
+
+	available = {
+		country_exists = ARM
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Get_Rid_Armenians"
+		add_manpower = -1500
+		set_temp_variable = { percent_change = 15 }
+		change_domestic_influence_percentage = yes
+		ABK	= {
+			add_opinion_modifier = {
+				target = ARM
+				modifier = major_breach_of_trust
+			}
+		}
+		set_temp_variable = { percent_change = -10 }
+		set_temp_variable = { tag_index = ARM }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Turkey_Support
+	icon = abk_turkey_friend
+
+	x = 2
+	y = 1
+	relative_position_id = ABK_Purge_Bagramyan_Brigade
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = { focus = ABK_Purge_Bagramyan_Brigade }
+
+	available = {
+		country_exists = TUR
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Turkey_Support"
+		add_opinion_modifier = { target = TUR modifier = diplomatic_support }
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = TUR }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		set_temp_variable = { treasury_change = 0.5 }
+		modify_treasury_effect = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Support_Islam
+	icon = abk_islamisti
+
+	x = -1
+	y = 1
+	relative_position_id = ABK_Turkey_Support
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	prerequisite = { focus = ABK_Turkey_Support }
+	prerequisite = { focus = ABK_Get_Rid_Armenians }
+
+	available = {
+		NOT = {
+			country_exists = MND
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus Support_Islam"
+		swap_ideas = {
+			remove_idea = orthodox_christian
+			add_idea = sunni
+		}
+		set_temp_variable = { party_index = 10 }
+		set_temp_variable = { party_popularity_increase = 0.10 }
+		add_relative_party_popularity = yes
+		every_other_country = {
+			limit = {
+				has_idea = sunni
+			}
+			add_opinion_modifier = { target = ABK modifier = diplomatic_support }
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Negotiate_Azer_Support
+	icon = abk_azer_friend
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Support_Islam
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = { focus = ABK_Support_Islam }
+
+	available = {
+		country_exists = AZE
+		NOT = {
+			has_war_with = AZE
+		}
+		AZE = {
+			has_opinion = {
+				target = ABK
+				value > 9
+			}
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Negotiate_Azer_Support"
+		AZE = {
+			country_event = md4.4
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			add_political_power = -100
+			army_experience = 25
+			add_command_power = 15
+			add_tech_bonus = {
+				name = ABK_expand_russian_base_time
+				uses = 1
+				bonus = 0.25
+				category = Cat_SPECIAL_FORCES
+			}
+			add_doctrine_cost_reduction = {
+				name = ABK_expand_russian_base_time
+				category = CAT_land_doctrine
+				uses = 1
+				cost_reduction = 0.25
+			}
+		}
+		newline = yes
+		set_temp_variable = {
+			percent_change = 2
+		}
+		set_temp_variable = {
+			tag_index = ABK
+		}
+		set_temp_variable = {
+			influence_target = AZE
+		}
+		change_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+#Support Armenian Diaspora
+shared_focus = {
+	id = ABK_Support_Armenian_Diaspora
+	icon = abk_garick_obshina
+
+	x = 0
+	y = 1
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	relative_position_id = ABK_Rights_for_Armenians
+	prerequisite = { focus = ABK_Rights_for_Armenians }
+
+	available = {
+		NOT = { is_subject_of = GEO }
+		country_exists = ARM
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Support_Armenian_Diaspora"
+		add_manpower = 1500
+		set_temp_variable = { int_investment_change = 5.5 }
+		modify_international_investment_effect = yes
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = ARM }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		ARM = { add_opinion_modifier = { target = ABK modifier = huge_increase } }
+		ABK = { add_opinion_modifier = { target = ARM modifier = huge_increase } }
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Legacy_Colchis
+	icon = abk_colhida
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Support_Armenian_Diaspora
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = { focus = ABK_Support_Armenian_Diaspora }
+
+	available = {
+		country_exists = ARM
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Legacy_Colchis"
+		add_ideas = ABK_colchis_legacy_idea
+		add_popularity = {
+			ideology = nationalist
+			popularity = 0.05
+		}
+		set_temp_variable = { percent_change = 1 }
+		set_temp_variable = { tag_index = ARM }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = GRE }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		add_opinion_modifier = { target = GRE modifier = diplomatic_support }
+		reverse_add_opinion_modifier = { target = GRE modifier = diplomatic_support }
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Grant_Parlaments_Seats_Armenians
+	icon = abk_armenia_parlament_seats
+
+	x = -1
+	y = 1
+	relative_position_id = ABK_Legacy_Colchis
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = { focus = ABK_Legacy_Colchis }
+	mutually_exclusive = { focus = ABK_Abkhazo_Armenian_State }
+
+	available = {
+		is_subject = no
+		NOT = {
+			has_war_with = ARM
+		}
+		country_exists = ARM
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Grant_Parlaments_Seats_Armenians"
+		ABK = {
+			add_opinion_modifier = {
+				target = ARM modifier = has_expressed_loyalty
+			}
+		}
+		add_opinion_modifier = { target = ABK modifier = has_expressed_loyalty }
+		set_temp_variable = { percent_change = 17.5 }
+		set_temp_variable = { tag_index = ARM }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		set_temp_variable = { receiver_nation = ABK.id }
+		set_temp_variable = { sender_nation = ARM }
+		set_improved_trade_agreement = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+#ABKHAZO-ARMENIAN STATE
+shared_focus = {
+	id = ABK_Abkhazo_Armenian_State
+	icon = abk_armenia_abkhazianstate
+
+	x = 1
+	y = 1
+	relative_position_id = ABK_Legacy_Colchis
+
+	cost = 5
+
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = { focus = ABK_Legacy_Colchis }
+	mutually_exclusive = { focus = ABK_Grant_Parlaments_Seats_Armenians }
+
+	available = {
+		is_subject = no
+		NOT = {
+			has_war_with = ARM
+		}
+		country_exists = ARM
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Abkhazo_Armenian_State"
+		ARM = {
+			country_event = abkh.20
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			ABK = {
+				every_core_state = { add_core_of = ARM }
+			}
+
+			ARM = {
+				change_tag_from = ABK
+				annex_country = {
+					target = ABK
+					transfer_troops = yes
+				}
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+#BiG Russia Brother
+shared_focus = {
+	id = ABK_Big_Brother
+	icon = abk_big_brother_russia
+
+	x = 10
+	y = 1
+	relative_position_id = ABK_In_New_Millenium
+
+	cost = 2
+
+	prerequisite = { focus = ABK_In_New_Millenium }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Big_Brother"
+		SOV = {
+			country_event = abkh.19
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			set_temp_variable = { percent_change = 6.5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ABK }
+			change_influence_percentage = yes
+			set_temp_variable = { treasury_change = 2.5 }
+			modify_treasury_effect = yes
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+# Absolute Loyality to Russia
+shared_focus = {
+	id = ABK_Absolute_Loyality
+	icon = abk_loyal_to_russia
+
+	x = -1
+	y = 1
+	relative_position_id = ABK_Big_Brother
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Big_Brother }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	mutually_exclusive = { focus = ABK_Pragmatic_Distance }
+
+	available = {
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Absolute_Loyality"
+		set_country_flag = SOV_loyal_puppet
+		custom_effect_tooltip = SOV_branches_open_tt
+		add_ideas = SOV_evraz_branch_idea
+		add_ideas = SOV_rusal_branch_idea
+		add_ideas = SOV_kaspersky_branch_idea
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+#Legalize Foreign Bussines
+shared_focus = {
+	id = ABK_Foreign_Business
+	icon = abk_russian_business
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Absolute_Loyality
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Absolute_Loyality }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Foreign_Business"
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		random_owned_controlled_state = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+# Ask Russian to commit more troops
+shared_focus = {
+	id = ABK_Russian_Troops
+	icon = abk_ask_russian_soldiers
+
+	x = 0
+	y = 2
+	relative_position_id = ABK_Foreign_Business
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Foreign_Business }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Russian_Troops"
+		SOV = { country_event = abkh.15 }
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			ABK = {
+				add_manpower = 5000
+				add_war_support = 0.15
+				ABK_genocide_army_script = yes
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+# Union State with Russia
+shared_focus = {
+	id = ABK_Russian_Union_State
+	icon = abk_union_state_russia
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Russian_Troops
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Russian_Troops }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		country_exists = SOV
+		NOT = {
+			has_war_with = SOV
+		}
+		is_subject = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Russian_Union_State"
+		SOV = { country_event = abkh.14 }
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			SOV = {
+				set_autonomy = {
+					target = ABK
+					autonomous_state = autonomy_union_state
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		base = 20
+	}
+}
+#Distance from Russia
+shared_focus = {
+	id = ABK_Pragmatic_Distance
+	icon = abk_russia_distance
+
+	x = 1
+	y = 1
+	relative_position_id = ABK_Big_Brother
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Big_Brother }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	mutually_exclusive = { focus = ABK_Absolute_Loyality }
+
+	available = {
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Pragmatic_Distance"
+		set_temp_variable = { percent_change = -2 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		add_political_power = -100
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+#Nationalize Russian Bussines
+shared_focus = {
+	id = ABK_Nationalize_Business
+	icon = abk_russian_business_ours
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Pragmatic_Distance
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Pragmatic_Distance }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Nationalize_Business"
+		add_opinion_modifier = { target = SOV modifier = major_breach_of_trust }
+		random_owned_controlled_state = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		set_temp_variable = { percent_change = -7 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+#Training on our own
+shared_focus = {
+	id = ABK_Own_Training
+	icon = abk_own_troops
+
+	x = 0
+	y = 2
+	relative_position_id = ABK_Nationalize_Business
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Nationalize_Business }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		is_subject = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Own_Training"
+		swap_ideas = {
+			remove_idea = ABK_outdated_army_idea
+			add_idea = ABK_outdated_army_idea2
+		}
+		set_temp_variable = { treasury_change = -2.5 }
+		modify_treasury_effect = yes
+		set_temp_variable = {
+			percent_change = 2
+		}
+		change_domestic_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Request_Aid
+	icon = abk_ask_money_russia
+
+	x = 1
+	y = 1
+	relative_position_id = ABK_Foreign_Business
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Foreign_Business focus = ABK_Nationalize_Business }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Request_Aid"
+		SOV = {
+			country_event = abkh.18
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			set_temp_variable = { treasury_change = 5 }
+			modify_treasury_effect = yes
+			set_temp_variable = { percent_change = 3 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ABK }
+			change_influence_percentage = yes
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+# Freedom Under Patronage
+shared_focus = {
+	id = ABK_Freedom_Patronage
+	icon = abk_freedom_under_russia
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Own_Training
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Own_Training }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		is_subject = no
+		NOT = {
+			has_war_with = SOV
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Freedom_Patronage"
+		add_ideas = ABK_ne_freedom_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+#Stabilization Abkhazia
+shared_focus = {
+	id = ABK_Stabilization_Country
+	icon = hun_orban_stab_programm
+
+	x = -6
+	y = 1
+	relative_position_id = ABK_In_New_Millenium
+
+	cost = 4
+
+	prerequisite = { focus = ABK_In_New_Millenium }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Stabilization_Country"
+		add_political_power = -60
+		add_ideas = ABK_state_stabilization_idea
+		set_temp_variable = { percent_change = 2 }
+		change_domestic_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Increase_Abilitties_of_state
+	icon = abk_president_up
+
+	x = 0.5
+	y = 1
+	relative_position_id = ABK_Stabilization_Country
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Stabilization_Country }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Increase_Abilitties_of_state"
+		swap_ideas = {
+			remove_idea = ABK_state_stabilization_idea
+			add_idea = ABK_state_stabilization_idea1
+		}
+		set_temp_variable = { treasury_change = -0.5 }
+		modify_treasury_effect = yes
+		set_temp_variable = { percent_change = 2 }
+		change_domestic_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Issue_Abkhazian_Passports
+	icon = abk_passports_give
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Increase_Abilitties_of_state
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Increase_Abilitties_of_state }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		swap_ideas = {
+			remove_idea = ABK_state_stabilization_idea1
+			add_idea = ABK_state_stabilization_idea2
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Revive_Wine_Industry
+	icon = abk_wine_industry
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Issue_Abkhazian_Passports
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Issue_Abkhazian_Passports }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		swap_ideas = {
+			remove_idea = ABK_state_stabilization_idea2
+			add_idea = ABK_state_stabilization_idea3
+		}
+		one_random_agriculture_district = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_RZhD_Contracts
+	icon = rjd
+
+	x = 1.23
+	y = 1
+	relative_position_id = ABK_Revive_Wine_Industry
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Revive_Wine_Industry }
+	prerequisite = { focus = ABK_Support_Abkhasian_Culture }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_RZhD_Contracts"
+		SOV = {
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = SOV }
+			set_temp_variable = { influence_target = ABK }
+			change_influence_percentage = yes
+			set_temp_variable = { treasury_change = -5.5 }
+			modify_treasury_effect = yes
+			set_temp_variable = { int_investment_change = 5.5 }
+			modify_international_investment_effect = yes
+		}
+		one_random_infrastructure = yes
+		set_country_flag = rjd_eblan
+		add_ideas = SOV_rjd_branch_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Pizdatiy_Akvafon
+	icon = abk_aquafon
+
+	x = -1
+	y = 1
+	relative_position_id = ABK_RZhD_Contracts
+
+	cost = 4
+
+	prerequisite = { focus = ABK_RZhD_Contracts }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Pizdatiy_Akvafon"
+		one_random_network_infrastructure = yes
+		set_country_flag = ABK_auqafon_idea_yes
+		add_ideas = ABK_aquafon_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Build_Tourist_Attractions
+	icon = economic_tourism
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Pizdatiy_Akvafon
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Pizdatiy_Akvafon }
+	prerequisite = { focus = ABK_A_Mobile }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Build_Tourist_Attractions"
+		add_ideas = ABK_tourism_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Turkish_Oil
+	icon = turkish_investments
+
+	x = -2
+	y = 1
+	relative_position_id = ABK_Build_Tourist_Attractions
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Build_Tourist_Attractions }
+	prerequisite = { focus = ABK_Free_Economic_Zone }
+	mutually_exclusive = { focus = ABK_Rossneft_Contract }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		NOT = {
+			has_idea = TUR_tpao_branch_idea
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Turkish_Oil"
+		set_country_flag = turkey_eblan
+		add_ideas = TUR_tpao_branch_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_A_Mobile
+	icon = abk_a_mobile
+
+	x = 1
+	y = 1
+	relative_position_id = ABK_RZhD_Contracts
+
+	cost = 4
+
+	prerequisite = { focus = ABK_RZhD_Contracts }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_A_Mobile"
+		one_random_network_infrastructure = yes
+		set_country_flag = ABK_a_mobile_idea_yes
+		add_ideas = ABK_a_mobile_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Shadows_of_the_Struggle
+	icon = abk_georgia_struggle
+
+	x = -14
+	y = 1
+	relative_position_id = ABK_In_New_Millenium
+
+	cost = 4
+
+	prerequisite = { focus = ABK_In_New_Millenium }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		NOT = { is_subject_of = GEO }
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Shadows_of_the_Struggle"
+		add_ideas = ABK_shadows_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Saving_what_we_have
+	icon = abk_who_we_are
+
+	x = -2
+	y = 1
+	relative_position_id = ABK_Shadows_of_the_Struggle
+
+	cost = 2
+
+	prerequisite = { focus = ABK_Shadows_of_the_Struggle }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		OR = {
+			has_government = communism
+			has_government = neutrality
+		}
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+		is_in_faction = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Saving_what_we_have"
+		set_temp_variable = {
+			percent_change = 5
+		}
+		change_domestic_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Request_Foreign_Protection
+	icon = abk_help_request
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Saving_what_we_have
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Saving_what_we_have }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		OR = {
+			has_government = communism
+			has_government = neutrality
+		}
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+		is_in_faction = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Request_Foreign_Protection"
+		SOV = {
+			country_event = abkh.10
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			ABK = {
+				country_event = abkh.6
+				give_guarantee = SOV
+				give_military_access = SOV
+			}
+			SOV = {
+				give_guarantee = ABK
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Ask_For_Recognition
+	icon = abk_recognition
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Request_Foreign_Protection
+
+	cost = 3
+
+	prerequisite = { focus = ABK_Request_Foreign_Protection }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		OR = {
+			has_government = communism
+			has_government = neutrality
+		}
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+		is_in_faction = no
+	}
+
+	bypass = {
+		NOT = {
+			has_idea = Non_State_Actor
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Ask_For_Recognition"
+		SOV = { country_event = redux_generic.24 }
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Aiaaira
+	icon = Abkhaz_Fight_For_Our_Freedom
+
+	x = 2
+	y = 2
+	relative_position_id = ABK_Ask_For_Recognition
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Ask_For_Recognition focus = ABK_Join_CSTO focus = ABK_Iberian_Federation focus = ABK_Reform_Of_Prosperity }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		NOT = { is_subject_of = GEO }
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Aiaaira"
+		add_political_power = 150
+		add_ideas = ABK_Aiaaira_idea
+		set_temp_variable = { percent_change = 5 }
+		set_temp_variable = { tag_index = SOV }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Join_CSTO
+	icon = csto_nation
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Ask_For_Recognition
+
+	cost = 3
+
+	prerequisite = { focus = ABK_Ask_For_Recognition }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		OR = {
+			has_government = communism
+			has_government = neutrality
+		}
+		country_exists = SOV
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOV
+		}
+		is_in_faction = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: ABK_Join_CSTO"
+		ABK = {
+			country_event = CSTO.3
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+# Negotiate with monadire and gelayev
+shared_focus = {
+	id = ABK_Negotiate_With_Monadire
+	icon = abk_dyplo_monadire
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Shadows_of_the_Struggle
+
+	cost = 2
+
+	prerequisite = { focus = ABK_Shadows_of_the_Struggle }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		has_government = nationalist
+		country_exists = MND
+	}
+
+	bypass = {
+		NOT = {
+			has_government = nationalist
+			country_exists = MND
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Negotiate_With_Monadire"
+		MND = {
+			country_event = abkh.11
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			ABK = {
+				country_event = abkh.6
+				give_guarantee = MND
+				give_military_access = MND
+			}
+			MND = {
+				give_guarantee = ABK
+				give_military_access = ABK
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Dialogue_With_Georgia
+	icon = abk_georgia_friend
+
+	x = 2
+	y = 1
+	relative_position_id = ABK_Shadows_of_the_Struggle
+
+	cost = 3
+
+	prerequisite = { focus = ABK_Shadows_of_the_Struggle }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		has_government = democratic
+		country_exists = GEO
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Dialogue_With_Georgia"
+		GEO = {
+			country_event = abkh.5
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			add_opinion_modifier = { target = GEO modifier = diplomatic_support }
+			reverse_add_opinion_modifier = { target = ABK modifier = diplomatic_support }
+			reverse_add_opinion_modifier = { target = GEO modifier = diplomatic_support }
+			add_political_power = 50
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Free_Economic_Zone
+	icon = kuban_economic_growth
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_A_Mobile
+
+	cost = 5
+
+	prerequisite = { focus = ABK_A_Mobile }
+	prerequisite = { focus = ABK_Pizdatiy_Akvafon }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Free_Economic_Zone"
+		set_temp_variable = { temp_productivity_change = 25 }
+		flat_productivity_change_effect = yes
+		set_temp_variable = {
+			percent_change = 5
+		}
+		change_domestic_influence_percentage = yes
+		one_random_industrial_complex = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Negotiate_Large_Autonomy
+	icon = abk_dyplo_autonomy
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Dialogue_With_Georgia
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Dialogue_With_Georgia }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		has_government = democratic
+		country_exists = GEO
+		is_subject = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Negotiate_Large_Autonomy"
+		GEO = {
+			country_event = abkh.8
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			ABK = {
+				country_event = abkh.6
+				give_guarantee = GEO
+				give_military_access = GEO
+			}
+			give_guarantee = ABK
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Federalization_With_Georgia
+	icon = abk_federalisation_geo
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Negotiate_Large_Autonomy
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Negotiate_Large_Autonomy }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		has_government = democratic
+		country_exists = GEO
+		is_subject = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Federalization_With_Georgia"
+		GEO = {
+			country_event = abkh.9
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			ABK = {
+				country_event = abkh.6
+			}
+			set_autonomy = {
+				target = ABK
+				autonomous_state = autonomy_puppet_federation
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Reform_Of_Prosperity
+	icon = GENERIC_trade3
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Federalization_With_Georgia
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Federalization_With_Georgia }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		has_government = democratic
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus = ABK_Reform_Of_Prosperity"
+		add_ideas = ABK_reforms_of_prosperity_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Negotiate_With_Osetia
+	icon = abk_south_ossetia_friend
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Negotiate_With_Monadire
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Negotiate_With_Monadire }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		has_government = nationalist
+		country_exists = SOO
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Negotiate_With_Osetia"
+		SOO = {
+			country_event = abkh.12
+		}
+		custom_effect_tooltip = ARM_effect_if_they_accept_TT
+		effect_tooltip = {
+			ABK = {
+				country_event = abkh.6
+				give_guarantee = SOO
+				give_military_access = SOO
+			}
+			SOO = {
+				give_guarantee = ABK
+				give_military_access = ABK
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Svanetia_Rebellion
+	icon = abk_svanetia_revoult
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Negotiate_With_Osetia
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Negotiate_With_Osetia }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		has_government = nationalist
+		GEO = {
+			owns_state = 707
+		}
+		NOT = {
+			is_in_faction_with = GEO
+			is_subject_of = GEO
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus = ABK_Svanetia_Rebellion"
+		declare_war_on = {
+			target = GEO
+			type = puppet_wargoal_focus
+		}
+		set_province_controller = 6674
+		if = {
+			limit = {
+				ABK = {
+					is_guaranteed_by = SOO
+				}
+			}
+			SOO = {
+				country_event = abkh.22
+			}
+		}
+		if = {
+			limit = {
+				ABK = {
+					is_guaranteed_by = MND
+				}
+			}
+			MND = {
+				country_event = abkh.22
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Iberian_Federation
+	icon = abk_iberia
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Svanetia_Rebellion
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Svanetia_Rebellion }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		has_government = nationalist
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Iberian_Federation"
+		MND = {
+			country_event = abkh.13
+		}
+		SOO = {
+			country_event = abkh.13
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Forced_Co_Management
+	icon = arm_geo_electric_agree
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Free_Economic_Zone
+
+	cost = 2
+
+	prerequisite = { focus = ABK_Free_Economic_Zone }
+	prerequisite = { focus = ABK_Build_Tourist_Attractions }
+	mutually_exclusive = { focus = ABK_No_Concessions_Georgians }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Forced_Co_Management"
+		unlock_decision_tooltip = Investment_Ingurskaya_hydro_plant
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = ingury_HPS_category_open } }
+				set_global_flag = ingury_HPS_category_open
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_No_Concessions_Georgians
+	icon = attack_georgia
+	x = 2
+	y = 1
+	relative_position_id = ABK_Free_Economic_Zone
+
+	cost = 2
+
+	prerequisite = { focus = ABK_Free_Economic_Zone }
+	prerequisite = { focus = ABK_Build_Tourist_Attractions }
+	mutually_exclusive = { focus = ABK_Forced_Co_Management }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		NOT = { is_subject_of = GEO }
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_No_Concessions_Georgians"
+		unlock_decision_tooltip = Close_Ingurskaya_hydro_plant
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = ingury_HPS_category_open } }
+				set_global_flag = ingury_HPS_category_open
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Rossneft_Contract
+	icon = sov_rosneft_new
+
+	x = -2
+	y = 1
+	relative_position_id = ABK_Free_Economic_Zone
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Free_Economic_Zone }
+	prerequisite = { focus = ABK_Build_Tourist_Attractions }
+	mutually_exclusive = { focus = ABK_Turkish_Oil }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		NOT = {
+			has_idea = SOV_rosneft_branch_idea
+		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Rossneft_Contract"
+		set_country_flag = bedniy_eblan
+		add_ideas = SOV_rosneft_branch_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Issues_of_the_refuguees
+	icon = abk_refugee
+
+	x = 3
+	y = 1
+	relative_position_id = ABK_Stabilization_Country
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Stabilization_Country }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Issues_of_the_refuguees"
+		add_political_power = 10
+		set_temp_variable = { treasury_change = -0.25 }
+		modify_treasury_effect = yes
+		remove_ideas = ABK_refugee_idea
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Circassian_Repatriation_Negotiations
+	icon = abk_cherkess_repatriation
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Issues_of_the_refuguees
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Issues_of_the_refuguees }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Circassian_Repatriation_Negotiations"
+		add_timed_idea = {
+			idea = ABK_repatriation_idea
+			days = 800
+		}
+		add_stability = 0.01
+		set_temp_variable = { treasury_change = -0.8 }
+		modify_treasury_effect = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Support_Abkhasian_Culture
+	icon = abk_culture
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Circassian_Repatriation_Negotiations
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Circassian_Repatriation_Negotiations }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Support_Abkhasian_Culture"
+		add_political_power = 50
+		set_temp_variable = { percent_change = 5 }
+		change_domestic_influence_percentage = yes
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+shared_focus = {
+	id = ABK_Invest_SGB
+	icon = abk_sgb_new
+
+	x = -3
+	y = 1
+	relative_position_id = ABK_Stabilization_Country
+
+	cost = 2
+
+	prerequisite = { focus = ABK_Stabilization_Country }
+
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Invest_SGB"
+		set_country_flag = ABK_they_really_have_special_service
+		if = {
+			limit = {
+				has_idea = ABK_sgb_idea
+			}
+			swap_ideas = {
+				remove_idea = ABK_sgb_idea
+				add_idea = ABK_sgb_idea1
+			}
+			remove_ideas = ABK_sgb_idea
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_idea = ABK_sgb_idea
+				}
+			}
+			effect_tooltip = {
+				add_ideas = ABK_sgb_idea1
+			}
+		}
+		set_temp_variable = { temp_opinion = 3 }
+		change_intelligence_community_opinion = yes
+	}
+
+	ai_will_do = {
+		factor = 20
+	}
+}
+shared_focus = {
+	id = ABK_Ally_With_Mafia
+	icon = arm_friendship_mafie_full
+
+	x = -1
+	y = 1
+	relative_position_id = ABK_Invest_SGB
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Invest_SGB }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	mutually_exclusive = { focus = ABK_Start_Police_Raid }
+
+	available = {
+		NOT = { is_subject_of = GEO }
+		NOT = { has_completed_focus = ABK_Start_Police_Raid }
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Ally_With_Mafia"
+		set_temp_variable = { treasury_change = 1.2 }
+		modify_treasury_effect = yes
+		swap_ideas = {
+			remove_idea = ABK_mafia_idea
+			add_idea = ABK_mafia_income_idea
+		}
+	}
+
+	ai_will_do = {
+		factor = 20
+	}
+}
+shared_focus = {
+	id = ABK_Benefits_Drug_Trade
+	icon = POR_decriminalize_drugs
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Ally_With_Mafia
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Ally_With_Mafia }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		NOT = { is_subject_of = GEO }
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: ABK_Benefits_Drug_Trade"
+		set_temp_variable = { treasury_change = 3.2 }
+		modify_treasury_effect = yes
+		swap_ideas = {
+			remove_idea = ABK_mafia_income_idea
+			add_idea = ABK_mafia2_idea
+		}
+	}
+
+	ai_will_do = {
+		factor = 20
+	}
+}
+shared_focus = {
+	id = ABK_Smuggle_Operation
+	icon = economic_drugs
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Benefits_Drug_Trade
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Benefits_Drug_Trade }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		NOT = { is_subject_of = GEO }
+
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Smuggle_Operation"
+		set_temp_variable = { treasury_change = 5.1 }
+		modify_treasury_effect = yes
+		swap_ideas = {
+			remove_idea = ABK_mafia2_idea
+			add_idea = ABK_mafia3_idea
+		}
+	}
+
+	ai_will_do = {
+		factor = 20
+	}
+}
+shared_focus = {
+	id = ABK_Narco_State_Of_Caucasus
+	icon = aue_arm_revol
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Smuggle_Operation
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Smuggle_Operation }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		is_subject = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Narco_State_Of_Caucasus"
+		swap_ideas = {
+			remove_idea = ABK_mafia3_idea
+			add_idea = ABK_mafia4_idea
+		}
+		increase_corruption = yes
+	}
+
+	ai_will_do = {
+		factor = 20
+	}
+}
+shared_focus = {
+	id = ABK_Start_Police_Raid
+	icon = bul_special_forces_police
+
+	x = 1
+	y = 1
+	relative_position_id = ABK_Invest_SGB
+
+	cost = 5
+
+	prerequisite = { focus = ABK_Invest_SGB }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	mutually_exclusive = { focus = ABK_Ally_With_Mafia }
+
+	available = {
+		NOT = { has_completed_focus = ABK_Ally_With_Mafia }
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Start_Police_Raid"
+		set_country_flag = ABK_mvd_zaebis
+		add_ideas = ABK_mvd_idea
+		decrease_corruption = yes
+	}
+
+	ai_will_do = {
+		factor = 20
+	}
+}
+shared_focus = {
+	id = ABK_Fight_Narco_Traffic
+	icon = police_siren
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Start_Police_Raid
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Start_Police_Raid }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Fight_Narco_Traffic"
+		set_temp_variable = { treasury_change = -5 }
+		modify_treasury_effect = yes
+		remove_ideas = ABK_mafia_idea
+		set_country_flag = ABK_mvd_zaebis1
+		if = {
+			limit = {
+				has_idea = ABK_mvd_idea
+			}
+			swap_ideas = {
+				remove_idea = ABK_mvd_idea
+				add_idea = ABK_mvd_idea1
+			}
+			remove_ideas = ABK_mvd_idea
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_idea = ABK_mvd_idea
+				}
+			}
+			effect_tooltip = {
+				add_ideas = ABK_mvd_idea1
+			}
+		}
+	}
+
+	ai_will_do = {
+		factor = 20
+	}
+}
+shared_focus = {
+	id = ABK_Expose_Georgian_Traffickers
+	icon = sxodki
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Fight_Narco_Traffic
+
+	cost = 4
+
+	prerequisite = { focus = ABK_Fight_Narco_Traffic }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_Expose_Georgian_Traffickers"
+		set_temp_variable = { percent_change = -5 }
+		set_temp_variable = { tag_index = GEO }
+		set_temp_variable = { influence_target = ABK }
+		change_influence_percentage = yes
+		add_opinion_modifier = {
+			target = GEO
+			modifier = hostile_status
+		}
+		reverse_add_opinion_modifier = {
+			target = GEO
+			modifier = hostile_status
+		}
+		set_temp_variable = { treasury_change = 5 }
+		modify_treasury_effect = yes
+	}
+
+	ai_will_do = {
+		factor = 20
+	}
+}
+shared_focus = {
+	id = ABK_Promote_Healthy_Lifestyle
+	icon = POR_sports_against_addictions
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_Expose_Georgian_Traffickers
+
+	cost = 3
+
+	prerequisite = { focus = ABK_Expose_Georgian_Traffickers }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: ABK_Promote_Healthy_Lifestyle"
+		add_timed_idea = {
+			idea = GENERIC_healthcare_reform_up_idea
+			days = 360
+		}
+	}
+
+	ai_will_do = {
+		factor = 20
+	}
+}
+#Increase United Nation Mandate
+shared_focus = {
+	id = ABK_UN_Mandate
+	icon = unn_support
+
+	x = -10
+	y = 1
+	relative_position_id = ABK_In_New_Millenium
+
+	cost = 3
+
+	prerequisite = { focus = ABK_In_New_Millenium }
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+
+	available = {
+		NOT = { has_war_with = MND }
+		NOT = { is_subject_of = GEO }
+		country_exists = MND
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_UN_Mandate"
+		country_event = abkh.17
+	}
+	ai_will_do = {
+		base = 20
+	}
+}
+#Artshakh friend
+shared_focus = {
+	id = ABK_artshakh_friend
+	icon = abk_artsakh_friend
+
+	x = 1
+	y = 1
+	relative_position_id = ABK_CIS_create
+
+	cost = 5
+
+	prerequisite = { focus = ABK_CIS_create }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = NKR
+		}
+		country_exists = NKR
+		is_in_faction = no
+		has_completed_focus = ABK_Rights_for_Armenians
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_artshakh_friend"
+		add_opinion_modifier = { target = NKR modifier = diplomatic_support }
+		reverse_add_opinion_modifier = { target = NKR modifier = diplomatic_support }
+		AZE = {
+			add_opinion_modifier = { target = ABK modifier = recognises_them_rival }
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+#Transistria friend
+shared_focus = {
+	id = ABK_transnistria_friend
+	icon = abk_transnistria_friend
+
+	x = -1
+	y = 1
+	relative_position_id = ABK_CIS_create
+
+	cost = 5
+
+	prerequisite = { focus = ABK_CIS_create }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = PMR
+		}
+		country_exists = PMR
+		is_in_faction = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_transnistria_friend"
+		add_opinion_modifier = { target = PMR modifier = diplomatic_support }
+		reverse_add_opinion_modifier = { target = PMR modifier = diplomatic_support }
+		MLV = {
+			add_opinion_modifier = { target = ABK modifier = recognises_them_rival }
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+#South osetia friend
+shared_focus = {
+	id = ABK_soo_friend
+	icon = abk_south_ossetia_friend
+
+	x = 0
+	y = 2
+	relative_position_id = ABK_CIS_create
+
+	cost = 5
+
+	prerequisite = {
+		focus = ABK_transnistria_friend
+		focus = ABK_artshakh_friend
+	}
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		NOT = {
+			is_subject_of = GEO
+			has_war_with = SOO
+		}
+		country_exists = SOO
+		is_in_faction = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_soo_friend"
+		add_opinion_modifier = { target = SOO modifier = diplomatic_support }
+		reverse_add_opinion_modifier = { target = SOO modifier = diplomatic_support }
+		GEO = {
+			add_opinion_modifier = { target = ABK modifier = recognises_them_rival }
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+# Create CIS 2
+shared_focus = {
+	id = ABK_CIS_Second_Create
+	icon = abk_cis2
+
+	x = 0
+	y = 1
+	relative_position_id = ABK_soo_friend
+
+	cost = 5
+
+	prerequisite = { focus = ABK_soo_friend }
+	search_filters = { FOCUS_FILTER_POLITICAL }
+
+	available = {
+		NOT = {
+			is_subject_of = GEO
+		}
+		OR = {
+			country_exists = SOO
+			country_exists = PMR
+			country_exists = NKR
+		}
+		is_in_faction = no
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus ABK_CIS_Second_Create"
+		SOO = {
+			country_event = abkh.21
+		}
+		NKR = {
+			country_event = abkh.21
+		}
+		PMR = {
+			country_event = abkh.21
+		}
+		add_opinion_modifier = { target = SOO modifier = diplomatic_support }
+		reverse_add_opinion_modifier = { target = SOO modifier = diplomatic_support }
+		GEO = {
+			add_opinion_modifier = { target = ABK modifier = recognises_them_rival }
+		}
+		add_opinion_modifier = { target = PMR modifier = diplomatic_support }
+		reverse_add_opinion_modifier = { target = PMR modifier = diplomatic_support }
+		MLV = {
+			add_opinion_modifier = { target = ABK modifier = recognises_them_rival }
+		}
+		add_opinion_modifier = { target = NKR modifier = diplomatic_support }
+		reverse_add_opinion_modifier = { target = NKR modifier = diplomatic_support }
+		AZE = {
+			add_opinion_modifier = { target = ABK modifier = recognises_them_rival }
+		}
+	}
+
+	ai_will_do = {
+		base = 20
+	}
+}
+

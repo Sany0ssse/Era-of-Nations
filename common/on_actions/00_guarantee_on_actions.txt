@@ -1,0 +1,34 @@
+on_actions = {
+    on_guarantee = {
+        effect = {
+            ROOT = {
+			    add_relation_modifier = {
+				    target = FROM
+				    modifier = guarantee_increased_military_support
+			    }
+            }
+        }
+    }
+    on_monthly = {
+        effect = {
+            every_other_country = {
+                limit = {
+                    NOT = { is_guaranteed_by = PREV }
+                    PREV = {
+						has_relation_modifier = {
+							target = PREV
+							modifier = guarantee_increased_military_support
+						}
+                    }
+                }
+				PREV = {
+                	remove_relation_modifier = {
+						target = PREV
+						modifier = guarantee_increased_military_support
+					}
+
+                }
+            }
+        }
+    }
+}

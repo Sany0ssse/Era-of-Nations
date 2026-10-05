@@ -1,0 +1,324 @@
+count_euro_inflation = {
+	set_variable = { global.average_euro_inflation = 0 }
+	set_variable = { global.euro_members_count = 0 }
+	every_country = {
+		limit = { has_idea = the_euro }
+		add_to_variable = { global.average_euro_inflation = inflation_percent }
+		add_to_variable = { global.euro_members_count = 1 }
+	}
+	divide_variable = { global.average_euro_inflation = global.euro_members_count }
+}
+
+count_euro_personal_inflation = {
+	if = {
+		limit = {
+			check_variable = { inflation_percent < global.average_euro_inflation }
+		}
+		set_variable = { euro_personal_inflation_multiplier = global.average_euro_inflation }
+		subtract_from_variable = { euro_personal_inflation_multiplier = inflation_percent }
+	}
+	else_if = {
+		limit = {
+			check_variable = { inflation_percent > global.average_euro_inflation }
+		}
+		set_variable = { euro_personal_inflation_multiplier = inflation_percent }
+		subtract_from_variable = { euro_personal_inflation_multiplier = global.average_euro_inflation }
+		multiply_variable = { euro_personal_inflation_multiplier = -1 }
+	}
+	else = {
+		set_variable = { euro_personal_inflation_multiplier = 0 }
+	}
+	if = {
+		limit = { check_variable = { euro_personal_inflation_multiplier < -0.05 } }
+		set_variable = { euro_personal_inflation_multiplier = -0.05 }
+	}
+	if = {
+		limit = { check_variable = { euro_personal_inflation_multiplier > 0.05 } }
+		set_variable = { euro_personal_inflation_multiplier = 0.05 }
+	}
+}
+
+count_visegrad_euro_inflation = {
+	set_variable = { global.average_visegrad_euro_inflation = 0 }
+	set_variable = { global.visegrad_euro_members_count = 0 }
+	every_country = {
+		limit = { has_idea = VG_visegrad_euro }
+		add_to_variable = { global.average_visegrad_euro_inflation = inflation_percent }
+		add_to_variable = { global.visegrad_euro_members_count = 1 }
+	}
+	divide_variable = { global.average_visegrad_euro_inflation = global.visegrad_euro_members_count }
+}
+
+count_visegrad_euro_personal_inflation = {
+	if = {
+		limit = {
+			check_variable = { inflation_percent < global.average_visegrad_euro_inflation }
+		}
+		set_variable = { visegrad_euro_personal_inflation_multiplier = global.average_visegrad_euro_inflation }
+		subtract_from_variable = { visegrad_euro_personal_inflation_multiplier = inflation_percent }
+	}
+	else_if = {
+		limit = {
+			check_variable = { inflation_percent > global.average_visegrad_euro_inflation }
+		}
+		set_variable = { visegrad_euro_personal_inflation_multiplier = inflation_percent }
+		subtract_from_variable = { visegrad_euro_personal_inflation_multiplier = global.average_visegrad_euro_inflation }
+		multiply_variable = { visegrad_euro_personal_inflation_multiplier = -1 }
+	}
+	else = {
+		set_variable = { visegrad_euro_personal_inflation_multiplier = 0 }
+	}
+	if = {
+		limit = { check_variable = { visegrad_euro_personal_inflation_multiplier < -0.05 } }
+		set_variable = { visegrad_euro_personal_inflation_multiplier = -0.05 }
+	}
+	if = {
+		limit = { check_variable = { visegrad_euro_personal_inflation_multiplier > 0.05 } }
+		set_variable = { visegrad_euro_personal_inflation_multiplier = 0.05 }
+	}
+}
+
+count_khaleeji_inflation = {
+	set_variable = { global.average_khaleeji_inflation = 0 }
+	set_variable = { global.khaleeji_members_count = 0 }
+	every_country = {
+		limit = { has_idea = khaleeji }
+		add_to_variable = { global.average_khaleeji_inflation = inflation_percent }
+		add_to_variable = { global.khaleeji_members_count = 1 }
+	}
+	divide_variable = { global.average_khaleeji_inflation = global.khaleeji_members_count }
+}
+
+count_khaleeji_personal_inflation = {
+	if = {
+		limit = {
+			check_variable = { inflation_percent < global.average_khaleeji_inflation }
+		}
+		set_variable = { khaleeji_personal_inflation_multiplier = global.average_khaleeji_inflation }
+		subtract_from_variable = { khaleeji_personal_inflation_multiplier = inflation_percent }
+	}
+	else_if = {
+		limit = {
+			check_variable = { inflation_percent > global.average_khaleeji_inflation }
+		}
+		set_variable = { khaleeji_personal_inflation_multiplier = inflation_percent }
+		subtract_from_variable = { khaleeji_personal_inflation_multiplier = global.average_khaleeji_inflation }
+		multiply_variable = { khaleeji_personal_inflation_multiplier = -1 }
+	}
+	else = {
+		set_variable = { khaleeji_personal_inflation_multiplier = 0 }
+	}
+	if = {
+		limit = { check_variable = { khaleeji_personal_inflation_multiplier < -0.05 } }
+		set_variable = { khaleeji_personal_inflation_multiplier = -0.05 }
+	}
+	if = {
+		limit = { check_variable = { khaleeji_personal_inflation_multiplier > 0.05 } }
+		set_variable = { khaleeji_personal_inflation_multiplier = 0.05 }
+	}
+}
+
+count_RAJ_BRICS_cur_inflation = {
+	set_variable = { global.average_RAJ_BRICS_cur_inflation = 0 }
+	set_variable = { global.RAJ_BRICS_cur_members_count = 0 }
+	every_country = {
+		limit = { has_idea = RAJ_BRICS_cur }
+		add_to_variable = { global.average_RAJ_BRICS_cur_inflation = inflation_percent }
+		add_to_variable = { global.RAJ_BRICS_cur_members_count = 1 }
+	}
+	divide_variable = { global.average_RAJ_BRICS_cur_inflation = global.RAJ_BRICS_cur_members_count }
+}
+
+count_RAJ_BRICS_cur_personal_inflation = {
+	if = {
+		limit = {
+			check_variable = { inflation_percent < global.average_RAJ_BRICS_cur_inflation }
+		}
+		set_variable = { RAJ_BRICS_cur_personal_inflation_multiplier = global.average_RAJ_BRICS_cur_inflation }
+		subtract_from_variable = { RAJ_BRICS_cur_personal_inflation_multiplier = inflation_percent }
+	}
+	else_if = {
+		limit = {
+			check_variable = { inflation_percent > global.average_RAJ_BRICS_cur_inflation }
+		}
+		set_variable = { RAJ_BRICS_cur_personal_inflation_multiplier = inflation_percent }
+		subtract_from_variable = { RAJ_BRICS_cur_personal_inflation_multiplier = global.average_RAJ_BRICS_cur_inflation }
+		multiply_variable = { RAJ_BRICS_cur_personal_inflation_multiplier = -1 }
+	}
+	else = {
+		set_variable = { RAJ_BRICS_cur_personal_inflation_multiplier = 0 }
+	}
+	if = {
+		limit = { check_variable = { RAJ_BRICS_cur_personal_inflation_multiplier < -0.05 } }
+		set_variable = { RAJ_BRICS_cur_personal_inflation_multiplier = -0.05 }
+	}
+	if = {
+		limit = { check_variable = { RAJ_BRICS_cur_personal_inflation_multiplier > 0.05 } }
+		set_variable = { RAJ_BRICS_cur_personal_inflation_multiplier = 0.05 }
+	}
+}
+
+count_eco_cur_inflation = {
+	set_variable = { global.average_eco_cur_inflation = 0 }
+	set_variable = { global.eco_cur_members_count = 0 }
+	every_country = {
+		limit = { has_idea = the_eco }
+		add_to_variable = { global.average_eco_cur_inflation = inflation_percent }
+		add_to_variable = { global.eco_cur_members_count = 1 }
+	}
+	divide_variable = { global.average_eco_cur_inflation = global.eco_cur_members_count }
+}
+
+count_eco_cur_personal_inflation = {
+	if = {
+		limit = {
+			check_variable = { inflation_percent < global.average_eco_cur_inflation }
+		}
+		set_variable = { eco_cur_personal_inflation_multiplier = global.average_eco_cur_inflation }
+		subtract_from_variable = { eco_cur_personal_inflation_multiplier = inflation_percent }
+	}
+	else_if = {
+		limit = {
+			check_variable = { inflation_percent > global.average_eco_cur_inflation }
+		}
+		set_variable = { eco_cur_personal_inflation_multiplier = inflation_percent }
+		subtract_from_variable = { eco_cur_personal_inflation_multiplier = global.average_eco_cur_inflation }
+		multiply_variable = { eco_cur_personal_inflation_multiplier = -1 }
+	}
+	else = {
+		set_variable = { eco_cur_personal_inflation_multiplier = 0 }
+	}
+	if = {
+		limit = { check_variable = { eco_cur_personal_inflation_multiplier < -0.05 } }
+		set_variable = { eco_cur_personal_inflation_multiplier = -0.05 }
+	}
+	if = {
+		limit = { check_variable = { eco_cur_personal_inflation_multiplier > 0.05 } }
+		set_variable = { eco_cur_personal_inflation_multiplier = 0.05 }
+	}
+}
+
+count_au_cur_inflation = {
+	set_variable = { global.average_au_cur_inflation = 0 }
+	set_variable = { global.au_cur_members_count = 0 }
+	every_country = {
+		limit = { has_idea = AU_member }
+		add_to_variable = { global.average_au_cur_inflation = inflation_percent }
+		add_to_variable = { global.au_cur_members_count = 1 }
+	}
+	divide_variable = { global.average_au_cur_inflation = global.au_cur_members_count }
+}
+
+count_au_cur_personal_inflation = {
+	if = {
+		limit = {
+			check_variable = { inflation_percent < global.average_au_cur_inflation }
+		}
+		set_variable = { au_cur_personal_inflation_multiplier = global.average_au_cur_inflation }
+		subtract_from_variable = { au_cur_personal_inflation_multiplier = inflation_percent }
+	}
+	else_if = {
+		limit = {
+			check_variable = { inflation_percent > global.average_au_cur_inflation }
+		}
+		set_variable = { au_cur_personal_inflation_multiplier = inflation_percent }
+		subtract_from_variable = { au_cur_personal_inflation_multiplier = global.average_au_cur_inflation }
+		multiply_variable = { au_cur_personal_inflation_multiplier = -1 }
+	}
+	else = {
+		set_variable = { au_cur_personal_inflation_multiplier = 0 }
+	}
+	if = {
+		limit = { check_variable = { au_cur_personal_inflation_multiplier < -0.05 } }
+		set_variable = { au_cur_personal_inflation_multiplier = -0.05 }
+	}
+	if = {
+		limit = { check_variable = { au_cur_personal_inflation_multiplier > 0.05 } }
+		set_variable = { au_cur_personal_inflation_multiplier = 0.05 }
+	}
+}
+
+count_USR_valute_inflation = {
+	set_variable = { global.average_USR_valute_inflation = 0 }
+	set_variable = { global.USR_valute_members_count = 0 }
+	every_country = {
+		limit = { has_idea = USR_valute_idea }
+		add_to_variable = { global.average_USR_valute_inflation = inflation_percent }
+		add_to_variable = { global.USR_valute_members_count = 1 }
+	}
+	divide_variable = { global.average_USR_valute_inflation = global.USR_valute_members_count }
+}
+
+count_USR_valute_personal_inflation = {
+	if = {
+		limit = {
+			check_variable = { inflation_percent < global.average_USR_valute_inflation }
+		}
+		set_variable = { USR_valute_personal_inflation_multiplier = global.average_USR_valute_inflation }
+		subtract_from_variable = { USR_valute_personal_inflation_multiplier = inflation_percent }
+	}
+	else_if = {
+		limit = {
+			check_variable = { inflation_percent > global.average_USR_valute_inflation }
+		}
+		set_variable = { USR_valute_personal_inflation_multiplier = inflation_percent }
+		subtract_from_variable = { USR_valute_personal_inflation_multiplier = global.average_USR_valute_inflation }
+		multiply_variable = { USR_valute_personal_inflation_multiplier = -1 }
+	}
+	else = {
+		set_variable = { USR_valute_personal_inflation_multiplier = 0 }
+	}
+	if = {
+		limit = { check_variable = { USR_valute_personal_inflation_multiplier < -0.05 } }
+		set_variable = { USR_valute_personal_inflation_multiplier = -0.05 }
+	}
+	if = {
+		limit = { check_variable = { USR_valute_personal_inflation_multiplier > 0.05 } }
+		set_variable = { USR_valute_personal_inflation_multiplier = 0.05 }
+	}
+}
+
+count_CFA_valute_inflation = {
+	set_variable = { inflation_multiplier_FRA_cfa_franc_custodian = additional_income_FRA_cfa_franc_custodian }
+	multiply_variable = { inflation_multiplier_FRA_cfa_franc_custodian = -0.1 }
+}
+
+count_mercosur_valute_inflation = {
+	set_variable = { global.average_mercosur_valute_inflation = 0 }
+	set_variable = { global.mercosur_valute_members_count = 0 }
+	every_country = {
+		limit = { has_idea = BRA_idea_mercosur_member_state }
+		add_to_variable = { global.average_mercosur_valute_inflation = inflation_percent }
+		add_to_variable = { global.mercosur_valute_members_count = 1 }
+	}
+	divide_variable = { global.average_mercosur_valute_inflation = global.mercosur_valute_members_count }
+}
+
+count_mercosur_valute_personal_inflation = {
+	if = {
+		limit = {
+			check_variable = { inflation_percent < global.average_mercosur_valute_inflation }
+		}
+		set_variable = { mercosur_valute_personal_inflation_multiplier = global.average_mercosur_valute_inflation }
+		subtract_from_variable = { mercosur_valute_personal_inflation_multiplier = inflation_percent }
+	}
+	else_if = {
+		limit = {
+			check_variable = { inflation_percent > global.average_mercosur_valute_inflation }
+		}
+		set_variable = { mercosur_valute_personal_inflation_multiplier = inflation_percent }
+		subtract_from_variable = { mercosur_valute_personal_inflation_multiplier = global.average_mercosur_valute_inflation }
+		multiply_variable = { mercosur_valute_personal_inflation_multiplier = -1 }
+	}
+	else = {
+		set_variable = { mercosur_valute_personal_inflation_multiplier = 0 }
+	}
+	if = {
+		limit = { check_variable = { mercosur_valute_personal_inflation_multiplier < -0.05 } }
+		set_variable = { mercosur_valute_personal_inflation_multiplier = -0.05 }
+	}
+	if = {
+		limit = { check_variable = { mercosur_valute_personal_inflation_multiplier > 0.05 } }
+		set_variable = { mercosur_valute_personal_inflation_multiplier = 0.05 }
+	}
+}

@@ -1,0 +1,2377 @@
+arctic_exploration_category = {
+
+	arctic_research_region = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 180
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = {
+                        check_variable = { global.arctic_controllers^arctic_region_to_research = ROOT }
+                    }
+                    set_temp_variable = { treasury_change = -5 }
+                    modify_treasury_effect = yes
+                    if = {
+                        limit = { check_variable = { global.arctic_labs^arctic_region_to_research = 1 } }
+                        add_to_variable = { global.arctic_possesion^arctic_region_to_research = 0.15 }
+                    }
+                    else = { add_to_variable = { global.arctic_possesion^arctic_region_to_research = 0.1 } }
+                    clamp_variable = { var = global.arctic_possesion^arctic_region_to_research max = 1 }
+                    if = {
+                        limit = { check_variable = { global.arctic_navy^arctic_region_to_research = 0 } }
+                        random = {
+                            chance = 1
+                            country_event = arctic.54
+                        }
+                    }
+                    random = {
+                        chance = 1
+                        country_event = arctic.55
+                        add_tech_bonus = {
+                            category = CAT_genes
+                            bonus = 0.15
+                            uses = 1
+                        }
+                    }
+                    random = {
+                        chance = 1
+                        country_event = arctic.56
+                        add_tech_bonus = {
+                            category = CAT_genes
+                            bonus = 0.15
+                            uses = 1
+                        }
+                    }
+                    random = {
+                        chance = 1
+                        country_event = arctic.57
+                        add_tech_bonus = {
+                            category = CAT_genes
+                            bonus = 0.15
+                            uses = 1
+                        }
+                        set_temp_variable = { treasury_change = 0.01 }
+                        modify_treasury_effect = yes
+                        add_political_power = 15
+                    }
+                    random = {
+                        chance = 1
+                        country_event = arctic.58
+                        set_temp_variable = { treasury_change = 0.05 }
+                        modify_treasury_effect = yes
+                        add_political_power = 25
+                    }
+                    if = {
+                        limit = {
+                            OR = {
+                                has_global_flag = arctic_resources_allowed
+                                has_country_flag = started_arctic_resources_extraction
+                            }
+                        }
+                        count_owned_resources = yes
+                        recalculate_arctic_resources = yes
+                        if = {
+                            limit = { NOT = { has_dynamic_modifier = { modifier = arctic_resources } } }
+                            add_dynamic_modifier = { modifier = arctic_resources }
+                        }
+                        every_other_country = {
+                            limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                            count_threaty_resources = yes
+                            recalculate_arctic_resources = yes
+                        }
+                        random = {
+                            chance = 1
+                            country_event = arctic.59
+                            add_tech_bonus = {
+                                category = CAT_construction_tech
+                                bonus = 0.15
+                                uses = 1
+                            }
+                        }
+                    }
+                    count_owned_research = yes
+                    recalculate_arctic_research = yes
+                    if = {
+                        limit = { NOT = { has_dynamic_modifier = { modifier = arctic_research } } }
+                        add_dynamic_modifier = { modifier = arctic_research }
+                    }
+                    every_other_country = {
+                        limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                        count_threaty_research = yes
+                        recalculate_arctic_research = yes
+                    }
+                    add_to_variable = { arctic_region_to_research = 1 }
+                    #country_event = {
+                    #    id = arctic.31
+                    #}
+                }
+            }
+        }
+    }
+
+	arctic_scientific_base = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 180
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = {
+                        check_variable = { global.arctic_controllers^arctic_region_to_build_lab = ROOT }
+                    }
+                    set_temp_variable = { treasury_change = -25 }
+                    modify_treasury_effect = yes
+                    labs_create = yes
+                    #country_event = {
+                    #    id = arctic.11
+                    #}
+                    count_owned_research = yes
+                    recalculate_arctic_research = yes
+                    if = {
+                        limit = { NOT = { has_dynamic_modifier = { modifier = arctic_research } } }
+                        add_dynamic_modifier = { modifier = arctic_research }
+                    }
+                    every_other_country = {
+                        limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                        count_threaty_research = yes
+                        recalculate_arctic_research = yes
+                    }
+                }
+            }
+        }
+    }
+
+	arctic_military_base = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 180
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = {
+                        check_variable = { global.arctic_controllers^arctic_region_to_build_military_base = ROOT }
+                    }
+                    set_temp_variable = { treasury_change = -50 }
+                    modify_treasury_effect = yes
+                    create_military_base = yes
+                    #country_event = {
+                    #    id = arctic.27
+                    #}
+                    count_arctic_military_bases = yes
+                    if = {
+                        limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+                        add_dynamic_modifier = { modifier = arctic_based }
+                    }
+                }
+            }
+        }
+    }
+
+	arctic_navy_base = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 180
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = {
+                        check_variable = { global.arctic_controllers^arctic_region_to_build_navy_base = ROOT }
+                    }
+                    set_temp_variable = { treasury_change = -50 }
+                    modify_treasury_effect = yes
+                    create_navy_base = yes
+                    #country_event = {
+                    #    id = arctic.43
+                    #}
+                    count_arctic_military_bases = yes
+                    if = {
+                        limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+                        add_dynamic_modifier = { modifier = arctic_based }
+                    }
+                }
+            }
+        }
+    }
+
+	arctic_air_base = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 180
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = {
+                        check_variable = { global.arctic_controllers^arctic_region_to_build_air_base = ROOT }
+                    }
+                    set_temp_variable = { treasury_change = -50 }
+                    modify_treasury_effect = yes
+                    create_air_base = yes
+                    #country_event = {
+                    #    id = arctic.42
+                    #}
+                    count_arctic_military_bases = yes
+                    if = {
+                        limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+                        add_dynamic_modifier = { modifier = arctic_based }
+                    }
+                }
+            }
+        }
+    }
+
+	arctic_nuclear_base = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 180
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = {
+                        check_variable = { global.arctic_controllers^arctic_region_to_build_nuclear_base = ROOT }
+                    }
+                    set_temp_variable = { treasury_change = -50 }
+                    modify_treasury_effect = yes
+                    create_nuclear_base = yes
+                    #country_event = {
+                    #    id = arctic.44
+                    #}
+                    count_arctic_military_bases = yes
+                    if = {
+                        limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+                        add_dynamic_modifier = { modifier = arctic_based }
+                    }
+                }
+            }
+        }
+    }
+
+	arctic_expand_land_peacefully = {
+
+		icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 180
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+		timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = {
+                        check_variable = { global.arctic_controllers^arctic_region_to_aquire_peacefully = NULL }
+                    }
+                    set_temp_variable = { treasury_change = -25 }
+                    modify_treasury_effect = yes
+                    set_variable = { global.arctic_controllers^arctic_region_to_aquire_peacefully = THIS }
+                    if = {
+                        limit = {
+                            OR = {
+                                has_country_flag = started_arctic_resources_extraction
+                                has_global_flag = arctic_resources_allowed
+                            }
+                        }
+                        count_owned_resources = yes
+                        recalculate_arctic_resources = yes
+                        if = {
+                            limit = { NOT = { has_dynamic_modifier = { modifier = arctic_resources } } }
+                            add_dynamic_modifier = { modifier = arctic_resources }
+                        }
+                        every_other_country = {
+                            limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                            count_threaty_resources = yes
+                            recalculate_arctic_resources = yes
+                        }
+                    }
+                    clear_variable = arctic_region_to_aquire_peacefully
+                }
+            }
+		}
+	}
+
+	arctic_expand_land = {
+
+		icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 180
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+		timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = {
+                        check_variable = { global.arctic_controllers^arctic_region_to_aquire = NULL }
+                    }
+                    set_temp_variable = { treasury_change = -50 }
+                    modify_treasury_effect = yes
+                    gain_direct_control = yes
+                    if = {
+                        limit = {
+                            OR = {
+                                has_country_flag = started_arctic_resources_extraction
+                                has_global_flag = arctic_resources_allowed
+                            }
+                        }
+                        count_owned_resources = yes
+                        recalculate_arctic_resources = yes
+                        if = {
+                            limit = { NOT = { has_dynamic_modifier = { modifier = arctic_resources } } }
+                            add_dynamic_modifier = { modifier = arctic_resources }
+                        }
+                        every_other_country = {
+                            limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                            count_threaty_resources = yes
+                            recalculate_arctic_resources = yes
+                        }
+                    }
+                    count_arctic_military_bases = yes
+                    if = {
+                        limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+                        add_dynamic_modifier = { modifier = arctic_based }
+                    }
+                    custom_effect_tooltip = kpp_vzyat_tt
+                    clear_variable = arctic_region_to_aquire
+                }
+            }
+		}
+	}
+
+	arctic_attack_region = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 7
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        cancel_trigger = {
+            OR = {
+                has_country_flag = autocomplete_arctic_attack
+                check_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 }
+                check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                check_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 }
+                check_variable = { global.arctic_unit_org^arctic_attacker_state = 0 }
+                AND = {
+                    has_country_flag = arctic_attack_from_sea
+                    OR = {
+                        check_variable = { virtual_arctic_sea_unit_strngth = 0 }
+                        check_variable = { virtual_arctic_sea_unit_org = 0 }
+                    }
+                }
+            }
+        }
+
+        cancel_effect = {
+            hidden_effect = {
+                if = {
+                    limit = { NOT = { has_country_flag = autocomplete_arctic_attack } }
+                    if = {
+                        limit = {
+                            OR = {
+                                check_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 }
+                                check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                            }
+                            NOT = {
+                                check_variable = { global.arctic_unit_org^arctic_attacker_state = 0 }
+                            }
+                            NOT = {
+                                check_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 }
+                            }
+                            NOT = { has_country_flag = arctic_attack_from_sea }
+                        }
+						add_to_variable = { war_support_factor_var = 0.01 }
+                        if = {
+                            limit = {
+                                OR = {
+                                    has_country_flag = started_arctic_resources_extraction
+                                    has_global_flag = arctic_resources_allowed
+                                }
+                            }
+                            count_owned_resources = yes
+                            recalculate_arctic_resources = yes
+                            if = {
+                                limit = { NOT = { has_dynamic_modifier = { modifier = arctic_resources } } }
+                                add_dynamic_modifier = { modifier = arctic_resources }
+                            }
+                            every_other_country = {
+                                limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                                count_threaty_resources = yes
+                                recalculate_arctic_resources = yes
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_labs^arctic_region_to_attack = 1 }
+                            }
+                            count_owned_research = yes
+                            recalculate_arctic_research = yes
+                            if = {
+                                limit = { NOT = { has_dynamic_modifier = { modifier = arctic_research } } }
+                                add_dynamic_modifier = { modifier = arctic_research }
+                            }
+                            every_other_country = {
+                                limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                                count_threaty_research = yes
+                                recalculate_arctic_research = yes
+                            }
+                        }
+                        if = {
+                            limit = {
+                                OR = {
+                                    check_variable = { global.arctic_military^arctic_region_to_attack = 1 }
+                                    check_variable = { global.arctic_air^arctic_region_to_attack = 1 }
+                                    check_variable = { global.arctic_navy^arctic_region_to_attack = 1 }
+                                    check_variable = { global.arctic_nuclear^arctic_region_to_attack = 1 }
+                                }
+                            }
+                            count_arctic_military_bases = yes
+                            if = {
+                                limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+                                add_dynamic_modifier = { modifier = arctic_based }
+                            }
+                        }
+                        var:global.arctic_controllers^arctic_region_to_attack = {
+                            country_event = arctic.12
+						    add_to_variable = { war_support_factor_var = -0.01 }
+                            if = {
+                                limit = {
+                                    OR = {
+                                        has_country_flag = started_arctic_resources_extraction
+                                        has_global_flag = arctic_resources_allowed
+                                    }
+                                }
+                                count_owned_resources = yes
+                                recalculate_arctic_resources = yes
+                                every_other_country = {
+                                    limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                                    count_threaty_resources = yes
+                                    recalculate_arctic_resources = yes
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_labs^arctic_region_to_attack = 1 } }
+                                }
+                                count_owned_research = yes
+                                recalculate_arctic_research = yes
+                                every_other_country = {
+                                    limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                                    count_threaty_research = yes
+                                    recalculate_arctic_research = yes
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    OR = {
+                                        PREV = { check_variable = { global.arctic_military^arctic_region_to_attack = 1 } }
+                                        PREV = { check_variable = { global.arctic_air^arctic_region_to_attack = 1 } }
+                                        PREV = { check_variable = { global.arctic_navy^arctic_region_to_attack = 1 } }
+                                        PREV = { check_variable = { global.arctic_nuclear^arctic_region_to_attack = 1 } }
+                                    }
+                                }
+                                count_arctic_military_bases = yes
+                            }
+                            if = {
+                                limit = {
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    country_event = arctic.17
+                                }
+                            }
+                        }
+                        country_event = arctic.13
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_terrain^arctic_region_to_attack = 0 }
+                                NOT = { has_country_flag = arctic_plains_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_plains_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_terrain^arctic_region_to_attack = 1 }
+                                NOT = { has_country_flag = arctic_hills_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_hills_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_terrain^arctic_region_to_attack = 2 }
+                                NOT = { has_country_flag = arctic_mountains_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_mountains_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_air_strngth^attacker_state > 0 }
+                                NOT = { has_country_flag = arctic_air_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_air_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_navy_size = {
+                                    size > 0
+                                }
+                                NOT = { has_country_flag = arctic_naval_general }
+                                has_country_flag = arctic_naval_warfare_active
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_naval_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_country_flag = won_cazino
+                                NOT = { has_country_flag = arctic_analyst_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_analyst_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_country_flag = shooted_air
+                                NOT = { has_country_flag = arctic_aa_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_aa_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.17
+                            }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { global.arctic_air_ace^arctic_attacker_state = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.18
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_air_ace^arctic_attacker_state = 0 }
+                                NOT = { check_variable = { global.arctic_air_strngth^arctic_attacker_state = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.19
+                                random_list = {
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 1 } }
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 2 } }
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 3 } }
+                                }
+                            }
+                        }
+                        if = {
+                            limit = {
+                                OR = {
+                                    check_variable = { global.arctic_unit_org^arctic_attacker_state = 0 }
+                                    check_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 }
+                                }
+                            }
+                            set_variable = { global.arctic_unit_org^arctic_attacker_state = 0 }
+                            set_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 }
+                            set_variable = { global.arctic_unit_xp^arctic_attacker_state = 0 }
+                        }
+                        else_if = {
+                            limit = { check_variable = { global.arctic_unit_xp^arctic_attacker_state < 6 } }
+                            add_to_variable = { global.arctic_unit_xp^arctic_attacker_state = 0.5 }
+                        }
+                        set_variable = { global.arctic_controllers^arctic_region_to_attack = THIS }
+                        set_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                        set_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 }
+                        set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 0 }
+                        set_variable = { global.arctic_air_xp^arctic_region_to_attack = 0 }
+                        set_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 }
+                        set_temp_variable = { arctic_region_to_build_military_base = arctic_region_to_attack }
+                        create_military_base = yes
+                    }
+                    else_if = {
+                        limit = {
+                            OR = {
+                                check_variable = { global.arctic_unit_org^arctic_attacker_state = 0 }
+                                check_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 }
+                            }
+                            NOT = { has_country_flag = arctic_attack_from_sea }
+                        }
+						add_to_variable = { war_support_factor_var = -0.01 }
+                        var:global.arctic_controllers^arctic_region_to_attack = {
+                            country_event = arctic.13
+						    add_to_variable = { war_support_factor_var = 0.01 }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 0 } }
+                                    NOT = { has_country_flag = arctic_plains_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_plains_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 1 } }
+                                    NOT = { has_country_flag = arctic_hills_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_hills_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 2 } }
+                                    NOT = { has_country_flag = arctic_mountains_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_mountains_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_air_strngth^arctic_region_to_attack > 0 } }
+                                    NOT = { has_country_flag = arctic_air_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_air_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    has_navy_size = {
+                                        size > 0
+                                    }
+                                    NOT = { has_country_flag = arctic_naval_general }
+                                    PREV = { has_country_flag = arctic_naval_warfare_active }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_naval_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    has_country_flag = won_cazino
+                                    NOT = { has_country_flag = arctic_analyst_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_analyst_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    has_country_flag = shooted_air
+                                    NOT = { has_country_flag = arctic_aa_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_aa_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    country_event = arctic.17
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    NOT = { check_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    country_event = arctic.18
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    check_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 }
+                                    NOT = { check_variable = { global.arctic_air_strngth^arctic_region_to_attack = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    country_event = arctic.19
+                                    random_list = {
+                                        50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 1 } }
+                                        50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 2 } }
+                                        50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 3 } }
+                                    }
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    check_variable = { global.arctic_unit_xp^arctic_region_to_attack < 6 }
+                                    NOT = { check_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 } }
+                                    NOT = { check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 } }
+                                }
+                                add_to_variable = { global.arctic_unit_xp^arctic_region_to_attack = 0.5 }
+                            }
+                        }
+                        country_event = arctic.12
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_unit_xp^arctic_attacker_state < 6 }
+                                NOT = { check_variable = { global.arctic_unit_org^arctic_attacker_state = 0 } }
+                                NOT = { check_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 } }
+                            }
+                            add_to_variable = { global.arctic_unit_xp^arctic_attacker_state = 0.5 }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.17
+                            }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { global.arctic_air_ace^arctic_attacker_state = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.18
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_air_ace^arctic_attacker_state = 0 }
+                                NOT = { check_variable = { global.arctic_air_strngth^arctic_attacker_state = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.19
+                                random_list = {
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 1 } }
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 2 } }
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 3 } }
+                                }
+                            }
+                        }
+                    }
+                    else_if = {
+                        limit = {
+                            OR = {
+                                check_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 }
+                                check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                            }
+                            NOT = {
+                                check_variable = { virtual_arctic_sea_unit_strngth = 0 }
+                            }
+                            NOT = {
+                                check_variable = { virtual_arctic_sea_unit_org = 0 }
+                            }
+                            has_country_flag = arctic_attack_from_sea
+                        }
+						add_to_variable = { war_support_factor_var = 0.01 }
+                        if = {
+                            limit = {
+                                OR = {
+                                    has_country_flag = started_arctic_resources_extraction
+                                    has_global_flag = arctic_resources_allowed
+                                }
+                            }
+                            count_owned_resources = yes
+                            recalculate_arctic_resources = yes
+                            if = {
+                                limit = { NOT = { has_dynamic_modifier = { modifier = arctic_resources } } }
+                                add_dynamic_modifier = { modifier = arctic_resources }
+                            }
+                            every_other_country = {
+                                limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                                count_threaty_resources = yes
+                                recalculate_arctic_resources = yes
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_labs^arctic_region_to_attack = 1 }
+                            }
+                            count_owned_research = yes
+                            recalculate_arctic_research = yes
+                            if = {
+                                limit = { NOT = { has_dynamic_modifier = { modifier = arctic_research } } }
+                                add_dynamic_modifier = { modifier = arctic_research }
+                            }
+                            every_other_country = {
+                                limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                                count_threaty_research = yes
+                                recalculate_arctic_research = yes
+                            }
+                        }
+                        if = {
+                            limit = {
+                                OR = {
+                                    check_variable = { global.arctic_military^arctic_region_to_attack = 1 }
+                                    check_variable = { global.arctic_air^arctic_region_to_attack = 1 }
+                                    check_variable = { global.arctic_navy^arctic_region_to_attack = 1 }
+                                    check_variable = { global.arctic_nuclear^arctic_region_to_attack = 1 }
+                                }
+                            }
+                            count_arctic_military_bases = yes
+                            if = {
+                                limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+                                add_dynamic_modifier = { modifier = arctic_based }
+                            }
+                        }
+                        var:global.arctic_controllers^arctic_region_to_attack = {
+                            country_event = arctic.12
+						    add_to_variable = { war_support_factor_var = -0.01 }
+                            if = {
+                                limit = {
+                                    OR = {
+                                        has_country_flag = started_arctic_resources_extraction
+                                        has_global_flag = arctic_resources_allowed
+                                    }
+                                }
+                                count_owned_resources = yes
+                                recalculate_arctic_resources = yes
+                                every_other_country = {
+                                    limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                                    count_threaty_resources = yes
+                                    recalculate_arctic_resources = yes
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_labs^arctic_region_to_attack = 1 } }
+                                }
+                                count_owned_research = yes
+                                recalculate_arctic_research = yes
+                                every_other_country = {
+                                    limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                                    count_threaty_research = yes
+                                    recalculate_arctic_research = yes
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    OR = {
+                                        PREV = { check_variable = { global.arctic_military^arctic_region_to_attack = 1 } }
+                                        PREV = { check_variable = { global.arctic_air^arctic_region_to_attack = 1 } }
+                                        PREV = { check_variable = { global.arctic_navy^arctic_region_to_attack = 1 } }
+                                        PREV = { check_variable = { global.arctic_nuclear^arctic_region_to_attack = 1 } }
+                                    }
+                                }
+                                count_arctic_military_bases = yes
+                            }
+                            if = {
+                                limit = {
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    country_event = arctic.17
+                                }
+                            }
+                        }
+                        country_event = arctic.13
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_terrain^arctic_region_to_attack = 0 }
+                                NOT = { has_country_flag = arctic_plains_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_plains_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_terrain^arctic_region_to_attack = 1 }
+                                NOT = { has_country_flag = arctic_hills_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_hills_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_terrain^arctic_region_to_attack = 2 }
+                                NOT = { has_country_flag = arctic_mountains_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_mountains_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_air_strngth^attacker_state > 0 }
+                                NOT = { has_country_flag = arctic_air_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_air_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_navy_size = {
+                                    size > 0
+                                }
+                                NOT = { has_country_flag = arctic_naval_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_naval_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_country_flag = won_cazino
+                                NOT = { has_country_flag = arctic_analyst_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_analyst_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_country_flag = shooted_air
+                                NOT = { has_country_flag = arctic_aa_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_aa_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.17
+                            }
+                        }
+                        set_variable = { global.arctic_controllers^arctic_region_to_attack = THIS }
+                        set_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                        set_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 }
+                        set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 0 }
+                        set_variable = { global.arctic_air_xp^arctic_region_to_attack = 0 }
+                        set_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 }
+                        set_temp_variable = { arctic_region_to_build_military_base = arctic_region_to_attack }
+                        create_military_base = yes
+                    }
+                    else_if = {
+                        limit = {
+                            OR = {
+                                check_variable = { virtual_arctic_sea_unit_strngth = 0 }
+                                check_variable = { virtual_arctic_sea_unit_org = 0 }
+                            }
+                            has_country_flag = arctic_attack_from_sea
+                        }
+						add_to_variable = { war_support_factor_var = -0.01 }
+                        var:global.arctic_controllers^arctic_region_to_attack = {
+                            country_event = arctic.13
+						    add_to_variable = { war_support_factor_var = 0.01 }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 0 } }
+                                    NOT = { has_country_flag = arctic_plains_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_plains_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 1 } }
+                                    NOT = { has_country_flag = arctic_hills_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_hills_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 2 } }
+                                    NOT = { has_country_flag = arctic_mountains_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_mountains_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    PREV = { check_variable = { global.arctic_air_strngth^arctic_region_to_attack > 0 } }
+                                    NOT = { has_country_flag = arctic_air_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_air_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    has_navy_size = {
+                                        size > 0
+                                    }
+                                    NOT = { has_country_flag = arctic_naval_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_naval_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    has_country_flag = won_cazino
+                                    NOT = { has_country_flag = arctic_analyst_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_analyst_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    has_country_flag = shooted_air
+                                    NOT = { has_country_flag = arctic_aa_general }
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    set_country_flag = arctic_aa_general
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    NOT = { check_variable = { arctic_general = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    country_event = arctic.17
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    NOT = { check_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    country_event = arctic.18
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    check_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 }
+                                    NOT = { check_variable = { global.arctic_air_strngth^arctic_region_to_attack = 0 } }
+                                }
+                                random = {
+                                    chance = 1
+                                    country_event = arctic.19
+                                    random_list = {
+                                        50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 1 } }
+                                        50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 2 } }
+                                        50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 3 } }
+                                    }
+                                }
+                            }
+                            if = {
+                                limit = {
+                                    check_variable = { global.arctic_unit_xp^arctic_region_to_attack < 6 }
+                                    NOT = { check_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 } }
+                                    NOT = { check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 } }
+                                }
+                                add_to_variable = { global.arctic_unit_xp^arctic_region_to_attack = 0.5 }
+                            }
+                        }
+                        country_event = arctic.12
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.17
+                            }
+                        }
+                    }
+                    clr_country_flag = arctic_attack_active
+                    clr_country_flag = arctic_naval_warfare_active
+                    clr_country_flag = won_cazino
+                    clr_country_flag = shooted_air
+                    clr_country_flag = arctic_attack_from_sea
+                    var:global.arctic_controllers^arctic_region_to_attack = {
+                        clr_country_flag = arctic_attack_incoming
+                        clr_country_flag = won_cazino
+                        clr_country_flag = shooted_air
+                    }
+                    clr_global_flag = arctic_battle_active
+                }
+                clr_country_flag = autocomplete_arctic_attack
+                clear_variable = virtual_arctic_sea_unit_strngth
+                clear_variable = virtual_arctic_sea_unit_org
+            }
+        }
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = {
+                        OR = {
+                            check_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 }
+                            check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                        }
+                        NOT = {
+                            check_variable = { global.arctic_unit_org^arctic_attacker_state = 0 }
+                        }
+                        NOT = {
+                            check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                        }
+                    }
+                    if = {
+                        limit = {
+                            OR = {
+                                has_country_flag = started_arctic_resources_extraction
+                                has_global_flag = arctic_resources_allowed
+                            }
+                        }
+                        count_owned_resources = yes
+                        recalculate_arctic_resources = yes
+                        if = {
+                            limit = { NOT = { has_dynamic_modifier = { modifier = arctic_resources } } }
+                            add_dynamic_modifier = { modifier = arctic_resources }
+                        }
+                        every_other_country = {
+                            limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                            count_threaty_resources = yes
+                            recalculate_arctic_resources = yes
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_labs^arctic_region_to_attack = 1 }
+                        }
+                        count_owned_research = yes
+                        recalculate_arctic_research = yes
+                        if = {
+                            limit = { NOT = { has_dynamic_modifier = { modifier = arctic_research } } }
+                            add_dynamic_modifier = { modifier = arctic_research }
+                        }
+                        every_other_country = {
+                            limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                            count_threaty_research = yes
+                            recalculate_arctic_research = yes
+                        }
+                    }
+                    if = {
+                        limit = {
+                            OR = {
+                                check_variable = { global.arctic_military^arctic_region_to_attack = 1 }
+                                check_variable = { global.arctic_air^arctic_region_to_attack = 1 }
+                                check_variable = { global.arctic_navy^arctic_region_to_attack = 1 }
+                                check_variable = { global.arctic_nuclear^arctic_region_to_attack = 1 }
+                            }
+                        }
+                        count_arctic_military_bases = yes
+                        if = {
+                            limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+                            add_dynamic_modifier = { modifier = arctic_based }
+                        }
+                    }
+                    var:global.arctic_controllers^arctic_region_to_attack = {
+                        country_event = arctic.12
+                        if = {
+                            limit = {
+                                OR = {
+                                    has_country_flag = started_arctic_resources_extraction
+                                    has_global_flag = arctic_resources_allowed
+                                }
+                            }
+                            count_owned_resources = yes
+                            recalculate_arctic_resources = yes
+                            every_other_country = {
+                                limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                                count_threaty_resources = yes
+                                recalculate_arctic_resources = yes
+                            }
+                        }
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_labs^arctic_region_to_attack = 1 } }
+                            }
+                            count_owned_research = yes
+                            recalculate_arctic_research = yes
+                            every_other_country = {
+                                limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                                count_threaty_research = yes
+                                recalculate_arctic_research = yes
+                            }
+                        }
+                        if = {
+                            limit = {
+                                OR = {
+                                    PREV = { check_variable = { global.arctic_military^arctic_region_to_attack = 1 } }
+                                    PREV = { check_variable = { global.arctic_air^arctic_region_to_attack = 1 } }
+                                    PREV = { check_variable = { global.arctic_navy^arctic_region_to_attack = 1 } }
+                                    PREV = { check_variable = { global.arctic_nuclear^arctic_region_to_attack = 1 } }
+                                }
+                            }
+                            count_arctic_military_bases = yes
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.17
+                            }
+                        }
+                    }
+                    country_event = arctic.13
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_terrain^arctic_region_to_attack = 0 }
+                            NOT = { has_country_flag = arctic_plains_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_plains_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_terrain^arctic_region_to_attack = 1 }
+                            NOT = { has_country_flag = arctic_hills_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_hills_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_terrain^arctic_region_to_attack = 2 }
+                            NOT = { has_country_flag = arctic_mountains_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_mountains_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_air_strngth^attacker_state > 0 }
+                            NOT = { has_country_flag = arctic_air_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_air_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            has_navy_size = {
+                                size > 0
+                            }
+                            NOT = { has_country_flag = arctic_naval_general }
+                            has_country_flag = arctic_naval_warfare_active
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_naval_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            has_country_flag = won_cazino
+                            NOT = { has_country_flag = arctic_analyst_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_analyst_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            has_country_flag = shooted_air
+                            NOT = { has_country_flag = arctic_aa_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_aa_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            country_event = arctic.17
+                        }
+                    }
+                    if = {
+                        limit = {
+                            NOT = { check_variable = { global.arctic_air_ace^arctic_attacker_state = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            country_event = arctic.18
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_air_ace^arctic_attacker_state = 0 }
+                            NOT = { check_variable = { global.arctic_air_strngth^arctic_attacker_state = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            country_event = arctic.19
+                            random_list = {
+                                50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 1 } }
+                                50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 2 } }
+                                50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 3 } }
+                            }
+                        }
+                    }
+                    if = {
+                        limit = {
+                            OR = {
+                                check_variable = { global.arctic_unit_org^arctic_attacker_state = 0 }
+                                check_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 }
+                            }
+                        }
+                        set_variable = { global.arctic_unit_org^arctic_attacker_state = 0 }
+                        set_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 }
+                        set_variable = { global.arctic_unit_xp^arctic_attacker_state = 0 }
+                    }
+                    else_if = {
+                        limit = { check_variable = { global.arctic_unit_xp^arctic_attacker_state < 6 } }
+                        add_to_variable = { global.arctic_unit_xp^arctic_attacker_state = 0.5 }
+                    }
+                    set_variable = { global.arctic_controllers^arctic_region_to_attack = THIS }
+                    set_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                    set_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 }
+                    set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 0 }
+                    set_variable = { global.arctic_air_xp^arctic_region_to_attack = 0 }
+                    set_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 }
+                    set_temp_variable = { arctic_region_to_build_military_base = arctic_region_to_attack }
+                    create_military_base = yes
+                }
+                else_if = {
+                    limit = {
+                        NOT = { has_country_flag = arctic_attack_from_sea }
+                    }
+                    var:global.arctic_controllers^arctic_region_to_attack = {
+                        country_event = arctic.13
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 0 } }
+                                NOT = { has_country_flag = arctic_plains_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_plains_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 1 } }
+                                NOT = { has_country_flag = arctic_hills_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_hills_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 2 } }
+                                NOT = { has_country_flag = arctic_mountains_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_mountains_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_air_strngth^arctic_region_to_attack > 0 } }
+                                NOT = { has_country_flag = arctic_air_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_air_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_navy_size = {
+                                    size > 0
+                                }
+                                NOT = { has_country_flag = arctic_naval_general }
+                                PREV = { has_country_flag = arctic_naval_warfare_active }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_naval_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_country_flag = won_cazino
+                                NOT = { has_country_flag = arctic_analyst_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_analyst_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_country_flag = shooted_air
+                                NOT = { has_country_flag = arctic_aa_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_aa_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.17
+                            }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.18
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 }
+                                NOT = { check_variable = { global.arctic_air_strngth^arctic_region_to_attack = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.19
+                                random_list = {
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 1 } }
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 2 } }
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 3 } }
+                                }
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_unit_xp^arctic_region_to_attack < 6 }
+                                NOT = { check_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 } }
+                                NOT = { check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 } }
+                            }
+                            add_to_variable = { global.arctic_unit_xp^arctic_region_to_attack = 0.5 }
+                        }
+                    }
+                    country_event = arctic.12
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_unit_xp^arctic_attacker_state < 6 }
+                            NOT = { check_variable = { global.arctic_unit_org^arctic_attacker_state = 0 } }
+                            NOT = { check_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 } }
+                        }
+                        add_to_variable = { global.arctic_unit_xp^arctic_attacker_state = 0.5 }
+                    }
+                    if = {
+                        limit = {
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            country_event = arctic.17
+                        }
+                    }
+                    if = {
+                        limit = {
+                            NOT = { check_variable = { global.arctic_air_ace^arctic_attacker_state = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            country_event = arctic.18
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_air_ace^arctic_attacker_state = 0 }
+                            NOT = { check_variable = { global.arctic_air_strngth^arctic_attacker_state = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            country_event = arctic.19
+                            random_list = {
+                                50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 1 } }
+                                50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 2 } }
+                                50 = { set_variable = { global.arctic_air_strngth^arctic_attacker_state = 3 } }
+                            }
+                        }
+                    }
+                }
+                else_if = {
+                    limit = {
+                        OR = {
+                            check_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 }
+                            check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                        }
+                        NOT = {
+                            check_variable = { virtual_arctic_sea_unit_strngth = 0 }
+                        }
+                        NOT = {
+                            check_variable = { virtual_arctic_sea_unit_org = 0 }
+                        }
+                        has_country_flag = arctic_attack_from_sea
+                    }
+                    if = {
+                        limit = {
+                            OR = {
+                                has_country_flag = started_arctic_resources_extraction
+                                has_global_flag = arctic_resources_allowed
+                            }
+                        }
+                        count_owned_resources = yes
+                        recalculate_arctic_resources = yes
+                        if = {
+                            limit = { NOT = { has_dynamic_modifier = { modifier = arctic_resources } } }
+                            add_dynamic_modifier = { modifier = arctic_resources }
+                        }
+                        every_other_country = {
+                            limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                            count_threaty_resources = yes
+                            recalculate_arctic_resources = yes
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_labs^arctic_region_to_attack = 1 }
+                        }
+                        count_owned_research = yes
+                        recalculate_arctic_research = yes
+                        if = {
+                            limit = { NOT = { has_dynamic_modifier = { modifier = arctic_research } } }
+                            add_dynamic_modifier = { modifier = arctic_research }
+                        }
+                        every_other_country = {
+                            limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                            count_threaty_research = yes
+                            recalculate_arctic_research = yes
+                        }
+                    }
+                    if = {
+                        limit = {
+                            OR = {
+                                check_variable = { global.arctic_military^arctic_region_to_attack = 1 }
+                                check_variable = { global.arctic_air^arctic_region_to_attack = 1 }
+                                check_variable = { global.arctic_navy^arctic_region_to_attack = 1 }
+                                check_variable = { global.arctic_nuclear^arctic_region_to_attack = 1 }
+                            }
+                        }
+                        count_arctic_military_bases = yes
+                        if = {
+                            limit = { NOT = { has_dynamic_modifier = { modifier = arctic_based } } }
+                            add_dynamic_modifier = { modifier = arctic_based }
+                        }
+                    }
+                    var:global.arctic_controllers^arctic_region_to_attack = {
+                        country_event = arctic.12
+                        if = {
+                            limit = {
+                                OR = {
+                                    has_country_flag = started_arctic_resources_extraction
+                                    has_global_flag = arctic_resources_allowed
+                                }
+                            }
+                            count_owned_resources = yes
+                            recalculate_arctic_resources = yes
+                            every_other_country = {
+                                limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                                count_threaty_resources = yes
+                                recalculate_arctic_resources = yes
+                            }
+                        }
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_labs^arctic_region_to_attack = 1 } }
+                            }
+                            count_owned_research = yes
+                            recalculate_arctic_research = yes
+                            every_other_country = {
+                                limit = { has_country_flag = arctic_mutual_research_treaty@PREV }
+                                count_threaty_research = yes
+                                recalculate_arctic_research = yes
+                            }
+                        }
+                        if = {
+                            limit = {
+                                OR = {
+                                    PREV = { check_variable = { global.arctic_military^arctic_region_to_attack = 1 } }
+                                    PREV = { check_variable = { global.arctic_air^arctic_region_to_attack = 1 } }
+                                    PREV = { check_variable = { global.arctic_navy^arctic_region_to_attack = 1 } }
+                                    PREV = { check_variable = { global.arctic_nuclear^arctic_region_to_attack = 1 } }
+                                }
+                            }
+                            count_arctic_military_bases = yes
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.17
+                            }
+                        }
+                    }
+                    country_event = arctic.13
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_terrain^arctic_region_to_attack = 0 }
+                            NOT = { has_country_flag = arctic_plains_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_plains_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_terrain^arctic_region_to_attack = 1 }
+                            NOT = { has_country_flag = arctic_hills_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_hills_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_terrain^arctic_region_to_attack = 2 }
+                            NOT = { has_country_flag = arctic_mountains_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_mountains_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_air_strngth^attacker_state > 0 }
+                            NOT = { has_country_flag = arctic_air_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_air_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            has_navy_size = {
+                                size > 0
+                            }
+                            NOT = { has_country_flag = arctic_naval_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_naval_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            has_country_flag = won_cazino
+                            NOT = { has_country_flag = arctic_analyst_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_analyst_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            has_country_flag = shooted_air
+                            NOT = { has_country_flag = arctic_aa_general }
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            set_country_flag = arctic_aa_general
+                        }
+                    }
+                    if = {
+                        limit = {
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            country_event = arctic.17
+                        }
+                    }
+                    set_variable = { global.arctic_controllers^arctic_region_to_attack = THIS }
+                    set_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 }
+                    set_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 }
+                    set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 0 }
+                    set_variable = { global.arctic_air_xp^arctic_region_to_attack = 0 }
+                    set_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 }
+                    set_temp_variable = { arctic_region_to_build_military_base = arctic_region_to_attack }
+                    create_military_base = yes
+                }
+                else_if = {
+                    limit = {
+                        has_country_flag = arctic_attack_from_sea
+                    }
+                    var:global.arctic_controllers^arctic_region_to_attack = {
+                        country_event = arctic.13
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 0 } }
+                                NOT = { has_country_flag = arctic_plains_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_plains_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 1 } }
+                                NOT = { has_country_flag = arctic_hills_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_hills_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_terrain^arctic_region_to_attack = 2 } }
+                                NOT = { has_country_flag = arctic_mountains_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_mountains_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                PREV = { check_variable = { global.arctic_air_strngth^arctic_region_to_attack > 0 } }
+                                NOT = { has_country_flag = arctic_air_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_air_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_navy_size = {
+                                    size > 0
+                                }
+                                NOT = { has_country_flag = arctic_naval_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_naval_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_country_flag = won_cazino
+                                NOT = { has_country_flag = arctic_analyst_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_analyst_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                has_country_flag = shooted_air
+                                NOT = { has_country_flag = arctic_aa_general }
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                set_country_flag = arctic_aa_general
+                            }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { arctic_general = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.17
+                            }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { check_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.18
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_air_ace^arctic_region_to_attack = 0 }
+                                NOT = { check_variable = { global.arctic_air_strngth^arctic_region_to_attack = 0 } }
+                            }
+                            random = {
+                                chance = 1
+                                country_event = arctic.19
+                                random_list = {
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 1 } }
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 2 } }
+                                    50 = { set_variable = { global.arctic_air_strngth^arctic_region_to_attack = 3 } }
+                                }
+                            }
+                        }
+                        if = {
+                            limit = {
+                                check_variable = { global.arctic_unit_xp^arctic_region_to_attack < 6 }
+                                NOT = { check_variable = { global.arctic_unit_org^arctic_region_to_attack = 0 } }
+                                NOT = { check_variable = { global.arctic_unit_strngth^arctic_region_to_attack = 0 } }
+                            }
+                            add_to_variable = { global.arctic_unit_xp^arctic_region_to_attack = 0.5 }
+                        }
+                    }
+                    country_event = arctic.12
+                    if = {
+                        limit = {
+                            check_variable = { global.arctic_unit_xp^arctic_attacker_state < 6 }
+                            NOT = { check_variable = { global.arctic_unit_org^arctic_attacker_state = 0 } }
+                            NOT = { check_variable = { global.arctic_unit_strngth^arctic_attacker_state = 0 } }
+                        }
+                        add_to_variable = { global.arctic_unit_xp^arctic_attacker_state = 0.5 }
+                    }
+                    if = {
+                        limit = {
+                            NOT = { check_variable = { arctic_general = 0 } }
+                        }
+                        random = {
+                            chance = 1
+                            country_event = arctic.17
+                        }
+                    }
+                }
+                clr_country_flag = arctic_attack_active
+                clr_country_flag = arctic_naval_warfare_active
+                clr_country_flag = won_cazino
+                clr_country_flag = shooted_air
+                clr_country_flag = arctic_attack_from_sea
+                var:global.arctic_controllers^arctic_region_to_attack = {
+                    clr_country_flag = arctic_attack_incoming
+                    clr_country_flag = won_cazino
+                    clr_country_flag = shooted_air
+                }
+                clr_global_flag = arctic_battle_active
+                clear_variable = virtual_arctic_sea_unit_strngth
+                clear_variable = virtual_arctic_sea_unit_org
+            }
+        }
+    }
+
+	arctic_kick_observer = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 30
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = { check_variable = { global.arctic_kick_observer_sugomusus > 0 } }
+                    remove_from_array = {
+                        array = global.arctic_observers
+                        value = global.arctic_observer_to_kick
+                    }
+                    var:global.arctic_observer_to_kick = { remove_ideas = arctic_council_member }
+                    every_country = {
+                        limit = { is_ai = no }
+                        set_variable = { arctic_observer_to_kick = global.arctic_observer_to_kick }
+                    }
+                    clear_variable = global.arctic_observer_to_kick
+                    news_event = arctic.36
+                }
+                else = {
+                    every_country = {
+                        limit = { is_ai = no }
+                        set_variable = { arctic_observer_to_kick = global.arctic_observer_to_kick }
+                    }
+                    clear_variable = global.arctic_observer_to_kick
+                    news_event = arctic.37
+                }
+                clr_global_flag = arctic_kick_observer_voting_started
+                clear_variable = global.arctic_kick_observer_sugomusus
+            }
+        }
+    }
+
+	arctic_kick_member = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 30
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = { check_variable = { global.arctic_kick_sugomusus > 0 } }
+                    remove_from_array = {
+                        array = global.arctic_council_members
+                        value = global.arctic_member_to_kick
+                    }
+                    var:global.arctic_member_to_kick = { remove_ideas = arctic_council_member }
+                    every_country = {
+                        limit = { is_ai = no }
+                        set_variable = { arctic_member_to_kick = global.arctic_member_to_kick }
+                    }
+                    clear_variable = global.arctic_member_to_kick
+                    news_event = arctic.9
+                }
+                else = {
+                    every_country = {
+                        limit = { is_ai = no }
+                        set_variable = { arctic_member_to_kick = global.arctic_member_to_kick }
+                    }
+                    clear_variable = global.arctic_member_to_kick
+                    news_event = arctic.10
+                }
+                clr_global_flag = arctic_kick_member_voting_started
+                clear_variable = global.arctic_kick_sugomusus
+            }
+        }
+    }
+
+	arctic_accept_new_member = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 30
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = { check_variable = { global.arctic_accept_amogus > 0 } }
+                    add_ideas = arctic_council_observer
+                    add_to_array = {
+                        array = global.arctic_observers
+                        value = THIS
+                    }
+                    news_event = arctic.22
+                }
+                else = { news_event = arctic.23 }
+                clr_global_flag = arctic_accept_amogus_voting_started
+                clear_variable = global.arctic_accept_amogus
+            }
+        }
+    }
+
+	arctic_accept_new_council = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 30
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = { check_variable = { global.arctic_council_accept_amogus > 0 } }
+                    add_ideas = arctic_council_member
+                    add_to_array = {
+                        array = global.arctic_council_members
+                        value = THIS
+                    }
+                    news_event = arctic.25
+                }
+                else = { news_event = arctic.26 }
+                clr_global_flag = arctic_council_accept_amogus_voting_started
+                clear_variable = global.arctic_council_accept_amogus
+            }
+        }
+    }
+
+	arctic_start_resources_vote = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 30
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = { check_variable = { global.arctic_resorces_amogusus > 0 } }
+                    news_event = arctic.6
+                    set_global_flag = arctic_resources_allowed
+                    every_country = {
+                        limit = {
+                            is_in_array = {
+                                array = global.arctic_controllers
+                                value = THIS
+                            }
+                        }
+                        if = {
+                            limit = {
+                                NOT = { has_dynamic_modifier = { modifier = arctic_resources } }
+                            }
+                            count_owned_resources = yes
+                            recalculate_arctic_resources = yes
+                            add_dynamic_modifier = { modifier = arctic_resources }
+                            every_other_country = {
+                                limit = { has_country_flag = arctic_mutual_resource_treaty@PREV }
+                                count_threaty_resources = yes
+                                recalculate_arctic_resources = yes
+                            }
+                        }
+                    }
+                }
+                else = { news_event = arctic.7 }
+                clr_global_flag = arctic_resources_voting_started
+                clear_variable = global.arctic_resorces_amogusus
+            }
+        }
+    }
+
+	arctic_trade_route = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 30
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                if = {
+                    limit = { check_variable = { global.arctic_trade_route_amogusus > 0 } }
+                    news_event = arctic.33
+                    set_global_flag = arctic_trade_route_created
+                    every_country = {
+                        limit = { has_idea = arctic_council_member }
+                        add_ideas = arctic_trade_route
+                    }
+                }
+                else = { news_event = arctic.34 }
+                clr_global_flag = arctic_trade_route_voting_started
+                clear_variable = global.arctic_trade_route_amogusus
+            }
+        }
+    }
+
+    arctic_chairman_election = {
+
+        icon = GFX_arctic_decision_button
+
+		days_mission_timeout = 30
+
+		available = {
+			always = no
+		}
+
+		activation = {
+			always = no
+		}
+
+		is_good = yes
+
+        timeout_effect = {
+            hidden_effect = {
+                find_highest_in_array = {
+                    array = global.arctic_chairman_voting
+                    value = temp_winner_value
+                    index = temp_winner_index
+                }
+                if = {
+                    limit = { check_variable = { temp_winner_value = 0 } }
+                    add_days_mission_timeout = {
+                        mission = arctic_chairman_election
+                        days = 30
+                    }
+                    clr_country_flag = voted_for_chairman
+                    every_other_country = {
+                        limit = { has_idea = arctic_council_member }
+                        add_days_mission_timeout = {
+                            mission = arctic_chairman_election
+                            days = 30
+                        }
+                        clr_country_flag = voted_for_chairman
+                    }
+                    news_event = arctic.45
+                }
+                else = {
+                    var:global.arctic_council_members^temp_winner_index = {
+                        add_timed_idea = {
+                            idea = arctic_council_chairman
+                            days = 720
+                        }
+                        set_country_flag = was_arctic_chairman
+                    }
+                    every_country = {
+                        limit = { is_ai = no }
+                        set_variable = { arctic_chairman = global.arctic_council_members^temp_winner_index }
+                        news_event = arctic.46
+                    }
+                    clear_array = global.arctic_chairman_voting
+                    clr_global_flag = arctic_council_chairman_voting_active
+                    clr_country_flag = voted_for_chairman
+                    every_other_country = {
+                        limit = { has_idea = arctic_council_member }
+                        clr_country_flag = voted_for_chairman
+                        remove_mission = arctic_chairman_election
+                    }
+                }
+            }
+        }
+    }
+
+}

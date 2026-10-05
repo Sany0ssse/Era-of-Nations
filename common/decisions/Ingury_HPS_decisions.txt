@@ -1,0 +1,259 @@
+Ingury_HPS_category = {
+	Close_Ingurskaya_hydro_plant = {
+
+		icon = GFX_ingury_HPS_close
+
+		visible = {
+			if = {
+				limit = { country_exists = ABK }
+				ABK = { has_completed_focus = ABK_No_Concessions_Georgians }
+			}
+			check_variable = { global.ingurskaya_hydroplant = 0 }
+			OR = {
+				AND = {
+					706 = { is_controlled_by = PREV }
+					706 = { NOT = { has_state_flag = expand_local_hydroelectric_infrastructure } }
+					707 = { NOT = { is_controlled_by = PREV } }
+					707 = { NOT = { has_state_flag = expand_local_hydroelectric_infrastructure } }
+					NOT = { has_war_with = 707.controller }
+				}
+				AND = {
+					706 = { NOT = { is_controlled_by = PREV } }
+					706 = { NOT = { has_state_flag = expand_local_hydroelectric_infrastructure } }
+					NOT = { has_war_with = 706.controller }
+					707 = { is_controlled_by = PREV }
+					707 = { NOT = { has_state_flag = expand_local_hydroelectric_infrastructure } }
+				}
+			}
+		}
+
+		cost = 50
+
+		complete_effect = {
+			if = {
+				limit = {
+					707 = { NOT = { is_controlled_by = PREV } }
+				}
+				706 = { set_variable = { global.ingurskaya_hydroplant = hydroelectric_energy_production_var } }
+				706 = { set_variable = { hydroelectric_energy_production_var = 0 } }
+				707 = { set_variable = { hydroelectric_energy_production_var = 0 } }
+				var:707.controller = {
+					add_opinion_modifier = {
+						target = PREV
+						modifier = ingurskaya_plant_closed
+					}
+				}
+			}
+			else = {
+				706 = { set_variable = { global.ingurskaya_hydroplant = hydroelectric_energy_production_var } }
+				706 = { set_variable = { hydroelectric_energy_production_var = 0 } }
+				707 = { set_variable = { hydroelectric_energy_production_var = 0 } }
+				var:706.controller = {
+					add_opinion_modifier = {
+						target = PREV
+						modifier = ingurskaya_plant_closed
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 100
+				date > 2000.01.02
+				check_variable = { energy_balance > 5 }
+				706 = { is_controlled_by = PREV }
+				707 = { NOT = { is_controlled_by = PREV } }
+				any_country = {
+					707 = { is_controlled_by = PREV }
+					PREV = { has_opinion = { target = PREV value < -99 } }
+				}
+			}
+			modifier = {
+				add = 100
+				date > 2000.01.02
+				check_variable = { energy_balance > 5 }
+				706 = { NOT = { is_controlled_by = PREV } }
+				any_country = {
+					706 = { is_controlled_by = PREV }
+					PREV = { has_opinion = { target = PREV value < -99 } }
+				}
+				707 = { is_controlled_by = PREV }
+			}
+		}
+	}
+	Open_Ingurskaya_hydro_plant = {
+
+		icon = GFX_ingury_HPS_open
+
+		visible = {
+			if = {
+				limit = { country_exists = ABK }
+				ABK = { NOT = { has_completed_focus = ABK_No_Concessions_Georgians } }
+			}
+			check_variable = { global.ingurskaya_hydroplant > 0 }
+			OR = {
+				AND = {
+					706 = { is_controlled_by = PREV }
+					707 = { NOT = { is_controlled_by = PREV } }
+					NOT = { has_war_with = 707.controller }
+				}
+				AND = {
+					706 = { NOT = { is_controlled_by = PREV } }
+					NOT = { has_war_with = 706.controller }
+					707 = { is_controlled_by = PREV }
+				}
+			}
+		}
+
+		cost = 50
+
+		complete_effect = {
+			if = {
+				limit = {
+					707 = { NOT = { is_controlled_by = PREV } }
+				}
+				706 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+				707 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+				set_variable = { global.ingurskaya_hydroplant = 0 }
+				var:707.controller = {
+					remove_opinion_modifier = {
+						target = PREV
+						modifier = ingurskaya_plant_closed
+					}
+				}
+			}
+			else = {
+				706 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+				707 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+				set_variable = { global.ingurskaya_hydroplant = 0 }
+				var:706.controller = {
+					remove_opinion_modifier = {
+						target = PREV
+						modifier = ingurskaya_plant_closed
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 100
+				date > 2000.01.02
+				check_variable = { energy_balance < 5 }
+				706 = { is_controlled_by = PREV }
+				707 = { NOT = { is_controlled_by = PREV } }
+				any_country = {
+					707 = { is_controlled_by = PREV }
+					PREV = { has_opinion = { target = PREV value > -75 } }
+				}
+			}
+			modifier = {
+				add = 100
+				date > 2000.01.02
+				check_variable = { energy_balance < 5 }
+				706 = { NOT = { is_controlled_by = PREV } }
+				any_country = {
+					706 = { is_controlled_by = PREV }
+					PREV = { has_opinion = { target = PREV value > -75 } }
+				}
+				707 = { is_controlled_by = PREV }
+			}
+		}
+	}
+	Investment_Ingurskaya_hydro_plant = {
+
+		icon = GFX_ingury_HPS_invest
+
+		visible = {
+			if = {
+				limit = { country_exists = ABK }
+				ABK = { has_completed_focus = ABK_Forced_Co_Management }
+			}
+			NOT = { has_global_flag = Investment_Ingurskaya_hydro_plant_timeout }
+			check_variable = { global.ingurskaya_hydroplant = 0 }
+			NOT = { has_active_mission = bankruptcy_incoming_collapse }
+			if = { limit = { check_variable = { 706.expanded_hydroelectric_infrastructure_times = 0 } } OR = { var:706.controller = { has_tech = construction1 } var:707.controller = { has_tech = construction1 } } }
+			else_if = { limit = { check_variable = { 706.expanded_hydroelectric_infrastructure_times = 1 } } OR = { var:706.controller = { has_tech = construction2 } var:707.controller = { has_tech = construction2 } } }
+			else_if = { limit = { check_variable = { 706.expanded_hydroelectric_infrastructure_times = 2 } } OR = { var:706.controller = { has_tech = construction3 } var:707.controller = { has_tech = construction3 } } }
+			else_if = { limit = { check_variable = { 706.expanded_hydroelectric_infrastructure_times = 3 } } OR = { var:706.controller = { has_tech = construction4 } var:707.controller = { has_tech = construction4 } } }
+			else_if = { limit = { check_variable = { 706.expanded_hydroelectric_infrastructure_times = 4 } } OR = { var:706.controller = { has_tech = construction5 } var:707.controller = { has_tech = construction5 } } }
+			else_if = { limit = { check_variable = { 706.expanded_hydroelectric_infrastructure_times = 5 } } OR = { var:706.controller = { has_tech = construction6 } var:707.controller = { has_tech = construction6 } } }
+			else_if = { limit = { check_variable = { 706.expanded_hydroelectric_infrastructure_times = 6 } } OR = { var:706.controller = { has_tech = construction7 } var:707.controller = { has_tech = construction7 } } }
+			else_if = { limit = { check_variable = { 706.expanded_hydroelectric_infrastructure_times = 7 } } OR = { var:706.controller = { has_tech = construction8 } var:707.controller = { has_tech = construction8 } } }
+			else_if = { limit = { check_variable = { 706.expanded_hydroelectric_infrastructure_times = 8 } } OR = { var:706.controller = { has_tech = construction9 } var:707.controller = { has_tech = construction9 } } }
+			OR = {
+				AND = {
+					706 = { is_controlled_by = PREV }
+					706 = { NOT = { has_state_flag = expand_local_hydroelectric_infrastructure } }
+					706 = { NOT = { has_state_flag = block_future_expand_local_hydroelectric_infrastructure } }
+					707 = { NOT = { is_controlled_by = PREV } }
+					707 = { NOT = { has_state_flag = expand_local_hydroelectric_infrastructure } }
+					707 = { NOT = { has_state_flag = block_future_expand_local_hydroelectric_infrastructure } }
+					NOT = { has_war_with = 707.controller }
+					var:707.controller = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+				}
+				AND = {
+					706 = { NOT = { is_controlled_by = PREV } }
+					706 = { NOT = { has_state_flag = expand_local_hydroelectric_infrastructure } }
+					706 = { NOT = { has_state_flag = block_future_expand_local_hydroelectric_infrastructure } }
+					NOT = { has_war_with = 706.controller }
+					var:706.controller = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+					707 = { is_controlled_by = PREV }
+					707 = { NOT = { has_state_flag = expand_local_hydroelectric_infrastructure } }
+					707 = { NOT = { has_state_flag = block_future_expand_local_hydroelectric_infrastructure } }
+				}
+			}
+		}
+
+		custom_cost_trigger = {
+			check_variable = { treasury > 2 }
+		}
+		custom_cost_text = more_than_treasury_2
+
+		complete_effect = {
+			if = {
+				limit = {
+					707 = { NOT = { is_controlled_by = PREV } }
+				}
+				var:707.controller = {
+					country_event = energy_selling.12
+				}
+			}
+			else = {
+				var:706.controller = {
+					country_event = energy_selling.12
+				}
+			}
+			set_global_flag = { flag = Investment_Ingurskaya_hydro_plant_timeout value = 1 days = 120 }
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 100
+				date > 2000.01.02
+				check_variable = { energy_balance < 1 }
+				706 = { is_controlled_by = PREV }
+				707 = { NOT = { is_controlled_by = PREV } }
+				any_country = {
+					707 = { is_controlled_by = PREV }
+					PREV = { has_opinion = { target = PREV value > -50 } }
+				}
+			}
+			modifier = {
+				add = 100
+				date > 2000.01.02
+				check_variable = { energy_balance < 1 }
+				706 = { NOT = { is_controlled_by = PREV } }
+				any_country = {
+					706 = { is_controlled_by = PREV }
+					PREV = { has_opinion = { target = PREV value > -50 } }
+				}
+				707 = { is_controlled_by = PREV }
+			}
+		}
+	}
+}

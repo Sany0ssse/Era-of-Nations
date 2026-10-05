@@ -1,0 +1,31 @@
+on_actions = {
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					check_variable = { base_unemployment_percent > 0 }
+					has_positive_economy_vibe = yes
+					has_war = no
+					check_variable = { overall_productivity > 300 }
+					has_idea = inflation_01
+				}
+				add_to_variable = { base_unemployment_percent = -0.01 }
+				clamp_variable = {
+					var = base_unemployment_percent
+					min = 0
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = { base_unemployment_percent < 0.15 }
+					OR = {
+						has_war = yes
+						NOT = { has_idea = inflation_01 }
+						has_negative_economy_vibe = yes
+					}
+				}
+				add_to_variable = { base_unemployment_percent = 0.01 }
+			}
+		}
+	}
+}

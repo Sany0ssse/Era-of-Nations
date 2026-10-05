@@ -1,0 +1,431 @@
+ideas = {
+	country = {
+		#Observer Commonwealth of Independent States
+		ABK_cis_observer_member_state_idea = {
+			allowed_civil_war = { always = yes } 
+			on_add = {
+				log = "[GetDateText]: [THIS.GetName]: add idea ABK_cis_observer_member_state_idea"
+				set_temp_variable = { percent_change = 1 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			picture = ideas_organizations_cis
+			modifier = {
+				political_power_factor = 0.01
+				econ_cycle_upg_cost_multiplier_modifier = -0.01
+				trade_opinion_factor = 0.01
+				fascism_drift = -0.01
+				stability_factor = 0.01
+			}
+			targeted_modifier = {
+				tag = SOV
+				trade_opinion_factor = 0.2
+			}
+			on_remove = {
+				set_temp_variable = { percent_change = -1 }
+				set_temp_variable = { tag_index = SOV }
+				set_temp_variable = { influence_target = THIS }
+				change_influence_percentage = yes
+			}
+			cancel = {
+				OR = {
+					has_government = nationalist
+					has_government = fascism
+					has_war_with = SOV
+					NOT = {
+						SOV = {
+							has_idea = CIS_member_state_sov_idea
+						}
+					}
+				}
+			}
+		}
+		ABK_reforms_of_prosperity_idea = {
+			allowed_civil_war = { always = yes } 
+			picture = abk_prosperty_idea
+
+			modifier = {
+				tax_gain_multiplier_modifier = 0.08
+				corporate_tax_income_multiplier_modifier = 0.06
+				population_tax_income_multiplier_modifier = 0.05
+				small_businesses_productivity_modifier = 0.08
+				small_businesses_tax_modifier = 0.06
+				civilian_factories_productivity = 0.06
+				offices_productivity = 0.05
+				inflation_multiplier_modifier = -0.05
+				inflation_defence_multiplier_modifier = 0.05
+				international_market_income_modifier = 0.08
+				international_market_purchase_modifier = -0.05
+			}
+		}
+		ABK_refugee_idea = {
+			allowed_civil_war = { always = yes } 
+			picture = migrant_crisis_europe
+
+			modifier = {
+				migration_rate_value_factor = 0.10
+				political_power_factor = -0.03
+				stability_factor = -0.03
+			}
+		}
+		ABK_victory_war_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			cancel = {
+				is_subject_of = GEO
+			}
+
+			picture = abk_win_war_idea
+
+			modifier = {
+				stability_factor = 0.2
+				war_support_factor = 0.04
+			}
+			targeted_modifier = {
+				tag = GEO
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.10
+			}
+		}
+		ABK_shadows_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			cancel = {
+				OR = {
+					is_in_faction_with = GEO
+					is_subject_of = GEO
+				}
+			}
+
+			picture = abk_anti_hinkali_idea
+
+			targeted_modifier = {
+				tag = GEO
+				attack_bonus_against = 0.10
+				defense_bonus_against = 0.05
+			}
+		}
+		ABK_ne_freedom_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			cancel = {
+				OR = {
+					is_subject = yes
+					has_war_with = SOV
+				}
+			}
+
+			picture = abk_patronage_russia_idea
+
+			modifier = {
+				political_power_factor = 0.01
+				Foreign_Intervention_Law_cost_factor = 1
+				opinion_gain_monthly_factor = -0.10
+				trade_laws_cost_factor = 0.10
+				trade_opinion_factor = -0.10
+				production_speed_buildings_factor = -0.10
+				expected_police_modifier = -1.00
+				resource_export_multiplier_modifier = 0.20
+				custom_modifier_tooltip = GENERIC_russia_branches_tt
+			}
+		}
+		ABK_tourism_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_tourism_idea
+			modifier = {
+				custom_modifier_tooltip = ABK_tourism_income_tt
+			}
+		}
+
+		ABK_outdated_army_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_bad_army_idea
+
+			modifier = {
+				army_attack_factor = -0.10
+				army_defence_factor = -0.10
+				industrial_capacity_factory = -0.25
+			}
+		}
+		ABK_outdated_army_idea2 = {
+			allowed_civil_war = { always = yes } 
+			name = ABK_outdated_army_idea
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_bad_army_idea
+
+			modifier = {
+				army_attack_factor = -0.05
+				army_defence_factor = -0.05
+				industrial_capacity_factory = -0.10
+			}
+		}
+		ABK_mafia_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_aue_state_idea
+			modifier = {
+				political_power_factor = -0.05
+				stability_factor = -0.05
+				industrial_capacity_factory = -0.05
+				corruption_cost_factor = 0.15
+				monthly_population = -0.03
+			}
+		}
+		ABK_mafia_income_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_aue_state_idea
+			modifier = {
+				custom_modifier_tooltip = ABK_mafia_income1_TT
+				political_power_factor = 0
+				stability_factor = 0
+				industrial_capacity_factory = -0.05
+				corruption_cost_factor = 0.20
+				monthly_population = -0.06
+			}
+		}
+		ABK_mafia2_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_aue_state_idea
+			modifier = {
+				custom_modifier_tooltip = ABK_mafia_income2_TT
+				political_power_factor = 0.05
+				stability_factor = 0.03
+				industrial_capacity_factory = -0.07
+				corruption_cost_factor = 0.25
+				monthly_population = -0.09
+			}
+		}
+		ABK_mafia3_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_aue_state_idea
+			modifier = {
+				custom_modifier_tooltip = ABK_mafia_income3_TT
+				political_power_factor = 0.10
+				stability_factor = 0.05
+				industrial_capacity_factory = -0.10
+				corruption_cost_factor = 0.35
+				monthly_population = -0.12
+			}
+		}
+		ABK_mafia4_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_aue_state_idea
+			modifier = {
+				custom_modifier_tooltip = ABK_mafia_income4_TT
+				political_power_factor = 0.17
+				stability_factor = 0.08
+				industrial_capacity_factory = -0.13
+				corruption_cost_factor = 0.50
+				monthly_population = -0.15
+			}
+		}
+		ABK_energy_problems_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_energy_bad_idea
+			modifier = {
+				industrial_capacity_factory = -0.1
+				stability_factor = -0.1
+				production_speed_buildings_factor = -0.1
+				energy_gain_multiplier = -0.20
+			}
+		}
+		ABK_energy_problems2_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_energy_bad_idea
+			modifier = {
+				industrial_capacity_factory = -0.06
+				stability_factor = -0.07
+				production_speed_buildings_factor = -0.06
+				energy_gain_multiplier = -0.10
+			}
+		}
+		ABK_repatriation_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_cherkess_idea
+			modifier = {
+				monthly_population = 0.04
+			}
+		}
+		ABK_state_stabilization_idea = {
+			allowed_civil_war = { always = yes } 
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_stabilization_idea
+
+			modifier = {
+				stability_factor = 0.06
+				population_tax_income_multiplier_modifier = 0.05
+				small_businesses_tax_modifier = 0.04
+				interest_rate_multiplier_modifier = -0.03
+			}
+		}
+		ABK_state_stabilization_idea1 = {
+			allowed_civil_war = { always = yes } 
+			name = ABK_state_stabilization_idea
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_stabilization_idea
+
+			modifier = {
+				stability_factor = 0.09
+				population_tax_income_multiplier_modifier = 0.05
+				small_businesses_tax_modifier = 0.04
+				interest_rate_multiplier_modifier = -0.03
+				bureaucracy_cost_multiplier_modifier = -0.15
+				corruption_cost_factor = -0.10
+			}
+		}
+		ABK_state_stabilization_idea2 = {
+			allowed_civil_war = { always = yes } 
+			name = ABK_state_stabilization_idea
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_stabilization_idea
+
+			modifier = {
+				stability_factor = 0.11
+				population_tax_income_multiplier_modifier = 0.05
+				small_businesses_tax_modifier = 0.04
+				interest_rate_multiplier_modifier = -0.03
+				bureaucracy_cost_multiplier_modifier = -0.15
+				corruption_cost_factor = -0.10
+				political_power_gain = 0.03
+			}
+		}
+		ABK_state_stabilization_idea3 = {
+			allowed_civil_war = { always = yes } 
+			name = ABK_state_stabilization_idea
+			allowed = {
+				original_tag = ABK
+			}
+
+			picture = abk_stabilization_idea
+
+			modifier = {
+				stability_factor = 0.11
+				population_tax_income_multiplier_modifier = 0.08
+				interest_rate_multiplier_modifier = -0.03
+				bureaucracy_cost_multiplier_modifier = -0.15
+				corruption_cost_factor = -0.10
+				political_power_gain = 0.03
+				small_businesses_productivity_modifier = 0.06
+				small_businesses_tax_modifier = 0.05
+			}
+		}
+		CIS_two_member_state_idea = {
+			cancel = {
+				OR = {
+					is_subject = yes
+					NOT = {
+						PMR = {
+							has_idea = CIS_two_member_state_idea
+						}
+						SOO = {
+							has_idea = CIS_two_member_state_idea
+						}
+						ABK = {
+							has_idea = CIS_two_member_state_idea
+						}
+						NKR = {
+							has_idea = CIS_two_member_state_idea
+						}
+					}
+				}
+			}
+
+			picture = abk_cis_2_idea
+
+			modifier = {
+				political_power_factor = 0.03
+				trade_opinion_factor = 0.04
+				stability_factor = 0.01
+			}
+		}
+		ABK_Aiaaira_idea = {
+			allowed_civil_war = { always = yes } 
+			picture = abk_aiiira_idea
+
+			modifier = {
+				political_power_factor = 0.10
+				trade_opinion_factor = 0.08
+				stability_factor = 0.10
+				interest_rate_multiplier_modifier = -0.05
+				foreign_influence_defense_modifier = 0.10
+				migration_rate_value_factor = 0.10
+				receiving_investment_duration_modifier = -0.10
+				civilian_factories_productivity = 0.08
+				country_productivity_growth_modifier = 0.10
+				population_tax_income_multiplier_modifier = 0.05
+
+			}
+		}
+		ABK_colchis_legacy_idea = {
+			allowed_civil_war = { always = yes } 
+			picture = abk_colchis_idea
+
+			modifier = {
+				resistance_activity = -0.1
+				war_support_factor = 0.1
+				influence_coup_modifier = 0.1
+			}
+		}
+	}
+}

@@ -1,0 +1,272 @@
+﻿capital = 490
+2000.1.1 = {
+	set_cosmetic_tag = BAN
+	set_country_flag = dynamic_flag
+	set_country_flag = dynamic_rebel_flag
+	set_variable = { gdp_per_capita = 2.267 }
+	set_variable = { capitalization = 0.010 }
+	set_variable = { count_companies = 0 }
+	
+	set_naval_oob = "BAN_2000_naval_mtg"
+
+	set_technology = {
+		patrol_boats = 1
+		cruise_missile = 1
+		GLCM = 1
+		TEL_launched_missiles = 1
+		corvette_hull_1 = 1
+
+		frigate_hull_1 = 1
+
+		destroyer_hull_1 = 1
+
+		tech_naval_systems_engineering = 1
+		tech_power_systems = 1
+
+		tech_combat_support_systems = 1
+		tech_fire_control = 1
+
+		tech_naval_weapon_systems = 1
+
+		tech_point_defense_system = 1
+
+		tech_landing_craft = 1
+	}
+	complete_special_project = sp:sp_missile_project
+
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency
+	}
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency_trade
+	}
+
+	if = {
+		limit = { has_dlc = "No Step Back" }
+
+		set_oob = "BAN_2000_nsb"
+
+		set_technology = {
+			mbt_tech_ops = 1
+			mbt_tech = 1
+
+			nsb_artillery_0 = 1
+			nsb_Arty_upgrade_1 = 1
+
+			nsb_Anti_Air_0 = 1
+		}
+		else = {
+			set_oob = "BAN_2000_nonnsb"
+
+			set_technology = {
+				MBT_1 = 1
+				Early_APC = 1
+				APC_1 = 1
+				IFV_1 = 1
+				artillery_0 = 1
+				Arty_upgrade_1 = 1
+				SP_arty_0 = 1
+				Anti_Air_0 = 1
+			}
+		}
+	}
+
+	if = {
+		limit = { has_dlc = "By Blood Alone" }
+		set_air_oob = "BAN_2000_bba"
+		else = {
+			set_air_oob = "BAN_2000_nonbba"
+		}
+	}
+
+	# Israel blockade
+	set_country_flag = blockade_israel_yes
+
+	add_ideas = {		#Freedom Laws
+		censorship_02
+		assembly_02
+		freedom_religion_03
+		lgbt_laws_04
+		freedom_trade_unions_02
+		internet_02
+
+		paralyzing_corruption
+		sunni
+		saudi_aid
+		fast_growth
+		defence_02
+		edu_01
+		health_01
+		social_01
+		bureau_01
+		police_01
+		semi_consumption_economy
+		volunteer_army
+		volunteer_women
+		small_medium_business_owners
+		industrial_conglomerates
+		the_ulema
+		commonwealth_of_nations_member
+		officer_advanced_training
+		GENERIC_structures_idea3
+		GENERIC_structures_idea1
+		GENERIC_structures_idea2
+		GENERIC_no_rest_idea
+		GENERIC_wto_idea
+		frontier_market
+		population_pyramid_1
+		ban_weapons
+		GENERIC_petrodollar_idea
+	}
+
+
+	set_technology = {
+		integrated_transportation_system = 1
+		post_conventional_rail = 1
+		early_freight_locomotive = 1
+
+
+		infantry_mass_assault = 1
+
+		night_vision_1 = 1
+
+		#For Templates
+		infantry_weapons = 1
+		support_weapons = 1
+		special_forces = 1
+
+		combat_eng_equipment = 1
+		command_control_equipment = 1
+		Anti_tank_0 = 1
+		Heavy_Anti_tank_0 = 1
+		util_vehicle_0 = 1
+
+		basic_computing = 1
+		integrated_circuit = 1
+		computing1 = 1
+		decryption1 = 1
+		encryption1 = 1
+		radar = 1
+		internet1 = 1 	#1G
+
+		industrial_electrospun_polymeric_nanofibers = 1
+		stereolitography = 1
+		fuel_refining = 1
+		construction1 = 1
+	}
+
+
+	add_opinion_modifier = { target = RAJ modifier = large_commercial_relations }
+	add_opinion_modifier = { target = CHI modifier = large_commercial_relations }
+	add_opinion_modifier = { target = GER modifier = large_commercial_relations }
+	add_opinion_modifier = { target = USA modifier = large_commercial_relations }
+	add_opinion_modifier = { target = ENG modifier = large_commercial_relations }
+	add_opinion_modifier = { target = FRA modifier = large_commercial_relations }
+	add_opinion_modifier = { target = SPR modifier = large_commercial_relations }
+
+	#Influence system
+	init_influence = yes
+	set_variable = { domestic_influence_amount = 128 }
+	add_to_array = { influence_array = RAJ.id }
+	add_to_array = { influence_array_val = 81 }
+	add_to_array = { influence_array = JAP.id }
+	add_to_array = { influence_array_val = 18 }
+	add_to_array = { influence_array = ENG.id }
+	add_to_array = { influence_array_val = 16 }
+	add_to_array = { influence_array = CHI.id }
+	add_to_array = { influence_array_val = 81 }
+	add_to_array = { influence_array = PAK.id }
+	add_to_array = { influence_array_val = 10 }
+	add_to_array = { influence_array = USA.id }
+	add_to_array = { influence_array_val = 9 }
+	startup_influence = yes
+
+	### Economy
+	set_variable = { var = debt value = 24.3 }
+	set_variable = { var = int_investments value = 0.2 }
+	set_variable = { var = treasury value = 0.3800 }
+	set_variable = { var = corporate_tax_rate value = 35 }
+	set_variable = { var = population_tax_rate value = 25 }
+
+	###BAN###
+	set_popularities = {
+		democratic = 10.3
+		communism = 44.0
+		fascism = 4.3
+		neutrality = 0.0
+		nationalist = 41.4
+	}
+	set_politics = {
+		ruling_party = communism
+		last_election = "1998.3.30"
+		election_frequency = 48
+		elections_allowed = yes
+	}
+
+	start_politics_input = yes
+
+	### Party Popularities
+	set_variable = { party_pop_array^0 = 0 } #Western_Autocracy
+	set_variable = { party_pop_array^1 = 0.094 } #conservatism
+	set_variable = { party_pop_array^2 = 0.009 } #liberalism
+	set_variable = { party_pop_array^3 = 0.0 } #socialism
+	set_variable = { party_pop_array^4 = 0.01 } #Communist-State
+	set_variable = { party_pop_array^5 = 0.02 } #anarchist_communism
+	set_variable = { party_pop_array^6 = 0.41 } #Conservative
+	set_variable = { party_pop_array^7 = 0 } #Autocracy
+	set_variable = { party_pop_array^8 = 0 } #Mod_Vilayat_e_Faqih
+	set_variable = { party_pop_array^9 = 0 } #Vilayat_e_Faqih
+	set_variable = { party_pop_array^10 = 0 } #Kingdom
+	set_variable = { party_pop_array^11 = 0.043 } #Caliphate
+	set_variable = { party_pop_array^12 = 0 } #Neutral_Muslim_Brotherhood
+	set_variable = { party_pop_array^13 = 0 } #Neutral_Autocracy
+	set_variable = { party_pop_array^14 = 0 } #Neutral_conservatism
+	set_variable = { party_pop_array^15 = 0 } #oligarchism
+	set_variable = { party_pop_array^16 = 0 } #Neutral_Libertarian
+	set_variable = { party_pop_array^17 = 0 } #Neutral_green
+	set_variable = { party_pop_array^18 = 0 } #neutral_Social
+	set_variable = { party_pop_array^19 = 0 } #Neutral_Communism
+	set_variable = { party_pop_array^20 = 0.414 } #Nat_Populism
+	set_variable = { party_pop_array^21 = 0 } #Nat_Fascism
+	set_variable = { party_pop_array^22 = 0 } #Nat_Autocracy
+	set_variable = { party_pop_array^23 = 0 } #Monarchist
+
+	### Ruling Party
+	add_to_array = { ruling_party = 6 }
+
+	startup_politics = yes
+
+	create_country_leader = {
+		name = "Sheikh Hasina"
+		picture = "BAN_Sheikh_Hasina.dds"
+		ideology = Conservative
+		traits = {
+			emerging_Conservative
+		}
+	}
+	set_variable = { overall_productivity = 342 }
+
+	recruit_character = BAN_m_harunarrashid
+	recruit_character = BAN_mohammad_maksudur_rahman
+	recruit_character = BAN_ibne_fazal_shayekhuzzaman
+	recruit_character = BAN_mustafizur_rahman
+	recruit_character = BAN_hasan_mashhud_chowdhury
+	recruit_character = BAN_moeen_u_ahmed
+	recruit_character = BAN_mohammed_abdul_mubeen
+	recruit_character = BAN_iqbal_karim_bhuiyan
+	recruit_character = BAN_abu_taher
+	recruit_character = BAN_zahir_uddin_ahmed
+	recruit_character = BAN_m_hasan_ali_khan
+	recruit_character = BAN_mohammed_rafiqul_islam
+	recruit_character = BAN_fakhrul_azam
+	recruit_character = BAN_masud_uddin_chowdhury
+	recruit_character = BAN_md_mainul_islam
+	recruit_character = BAN_md_mahfuzur_rahman
+	recruit_character = BAN_waker_uz_zaman
+	recruit_character = BAN_m_farid_habib
+	recruit_character = BAN_shah_mohammad_ziaur_rahman
+	recruit_character = BAN_enamul_bari
+	recruit_character = BAN_shafiul_azam
+}

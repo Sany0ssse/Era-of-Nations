@@ -1,0 +1,512 @@
+on_actions = {
+	on_monthly_SOV = {
+		effect = {
+			if = {
+				limit = {
+					USA = {
+						is_ai = yes
+						has_idea = NATO_member
+						NOT = { has_war_with = SOV }
+					}
+					GER = {
+						has_idea = NATO_member
+					}
+					NOT = { has_global_flag = NATO_war_againts_powerfull_russia }
+					has_added_tension_amount > 5
+					exists = yes
+					has_capitulated = no
+					NOT = {
+						SOV = {
+							has_idea = NATO_member
+						}
+					}
+				}
+				set_variable = { NATO_war_againts_powerfull_russia = 0 }
+				if = {
+					limit = {
+						OR = {
+							owns_state = 114
+							owns_state = 119
+							POL = {
+								is_subject_of = SOV
+							}
+							SLO = {
+								is_subject_of = SOV
+							}
+						}
+					}
+					add_to_variable = { NATO_war_againts_powerfull_russia = 1 }
+				}
+				if = {
+					limit = {
+						OR = {
+							owns_state = 76
+							owns_state = 117
+							owns_state = 150
+							CZE = {
+								is_subject_of = SOV
+							}
+							AUS = {
+								is_subject_of = SOV
+							}
+							ROM = {
+								is_subject_of = SOV
+							}
+						}
+					}
+					add_to_variable = { NATO_war_againts_powerfull_russia = 1 }
+				}
+				if = {
+					limit = {
+						check_variable = { NATO_war_againts_powerfull_russia = 1 }
+					}
+					country_event = brown_line_crossed.1
+				}
+			}
+		}
+	}
+	on_monthly_POL= {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							USA = {
+								is_ai = yes
+								has_idea = NATO_member
+							}
+							GER = {
+								has_idea = NATO_member
+							}
+							NOT = { has_global_flag = NATO_war_againts_powerfull_poland }
+						}
+						AND = {
+							SOV = {
+								is_ai = yes
+								OR = {
+									has_government = communism
+									has_government = nationalist
+								}
+							}
+							NOT = { has_global_flag = SOV_war_againts_powerfull_poland }
+						}
+					}
+					has_added_tension_amount > 5
+					exists = yes
+					has_capitulated = no
+				}
+				set_variable = { NATO_war_againts_powerfull_poland = 0 }
+				set_variable = { SOV_war_againts_powerfull_poland = 0 }
+				if = {
+					limit = {
+						NOT = { has_global_flag = NATO_war_againts_powerfull_poland }
+						OR = {
+							owns_state = 150
+							owns_state = 121
+							HUN = {
+								is_subject_of = POL
+							}
+							ROM = {
+								is_subject_of = POL
+							}
+						}
+					}
+					add_to_variable = { NATO_war_againts_powerfull_poland = 1 }
+				}
+				if = {
+					limit = {
+						NOT = { has_global_flag = NATO_war_againts_powerfull_poland }
+						OR = {
+							owns_state = 119
+							owns_state = 117
+							CZE = {
+								is_subject_of = POL
+							}
+							SLO = {
+								is_subject_of = POL
+							}
+						}
+					}
+					add_to_variable = { NATO_war_againts_powerfull_poland = 1 }
+				}
+				if = {
+					limit = {
+						check_variable = { NATO_war_againts_powerfull_poland = 1 }
+						USA = {
+							is_ai = yes
+							has_idea = NATO_member
+						}
+						GER = {
+							has_idea = NATO_member
+						}
+					}
+					country_event = brown_line_crossed.2
+				}
+				if = {
+					limit = {
+						NOT = { has_global_flag = SOV_war_againts_powerfull_poland }
+						OR = {
+							owns_state = 703
+							BLR = {
+								is_subject_of = POL
+							}
+						}
+					}
+					add_to_variable = { SOV_war_againts_powerfull_poland = 1 }
+				}
+				if = {
+					limit = {
+						NOT = { has_global_flag = SOV_war_againts_powerfull_poland }
+						OR = {
+							owns_state = 698
+							owns_state = 110
+							UKR = {
+								is_subject_of = POL
+							}
+							LIT = {
+								is_subject_of = POL
+							}
+						}
+					}
+					add_to_variable = { SOV_war_againts_powerfull_poland = 1 }
+				}
+				if = {
+					limit = {
+						NOT = { has_global_flag = SOV_war_againts_powerfull_poland }
+						OR = {
+							owns_state = 149
+							owns_state = 147
+							PMR = {
+								is_subject_of = POL
+							}
+							MLV = {
+								is_subject_of = POL
+							}
+						}
+					}
+					add_to_variable = { SOV_war_againts_powerfull_poland = 1 }
+				}
+				if = {
+					limit = {
+						check_variable = { SOV_war_againts_powerfull_poland > 0 }
+						check_variable = { SOV_war_againts_powerfull_poland < 3 }
+						SOV = {
+							is_ai = yes
+							OR = {
+								has_government = communism
+								has_government = nationalist
+							}
+						}
+					}
+					country_event = brown_line_crossed.7
+				}
+			}
+		}
+	}
+	on_monthly_HUN= {
+		effect = {
+			if = {
+				limit = {
+					USA = {
+						is_ai = yes
+						has_idea = NATO_member
+					}
+					GER = {
+						has_idea = NATO_member
+					}
+					NOT = { has_global_flag = NATO_war_againts_powerfull_hungary }
+					has_added_tension_amount > 5
+					exists = yes
+					has_capitulated = no
+				}
+				set_variable = { NATO_war_againts_powerfull_hungary = 0 }
+				if = {
+					limit = {
+						OR = {
+							owns_state = 76
+							owns_state = 119
+							owns_state = 150
+							AUS = {
+								is_subject_of = HUN
+							}
+							SLO = {
+								is_subject_of = HUN
+							}
+							ROM = {
+								is_subject_of = HUN
+							}
+						}
+					}
+					add_to_variable = { NATO_war_againts_powerfull_hungary = 1 }
+				}
+				if = {
+					limit = {
+						OR = {
+							owns_state = 117
+							owns_state = 114
+							POL = {
+								is_subject_of = HUN
+							}
+							CZE = {
+								is_subject_of = HUN
+							}
+						}
+					}
+					add_to_variable = { NATO_war_againts_powerfull_hungary = 1 }
+				}
+				if = {
+					limit = {
+						check_variable = { NATO_war_againts_powerfull_hungary = 1 }
+					}
+					country_event = brown_line_crossed.3
+				}
+			}
+		}
+	}
+	on_monthly_UKR= {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							USA = {
+								is_ai = yes
+								has_idea = NATO_member
+							}
+							GER = {
+								has_idea = NATO_member
+							}
+							NOT = { has_global_flag = NATO_war_againts_powerfull_ukraine }
+						}
+						AND = {
+							SOV = {
+								is_ai = yes
+								OR = {
+									has_government = communism
+									has_government = nationalist
+								}
+							}
+							NOT = { has_global_flag = SOV_war_againts_powerfull_ukraine }
+						}
+					}
+					has_added_tension_amount > 5
+					exists = yes
+					has_capitulated = no
+				}
+				set_variable = { NATO_war_againts_powerfull_ukraine = 0 }
+				set_variable = { SOV_war_againts_powerfull_ukraine = 0 }
+				if = {
+					limit = {
+						NOT = { has_global_flag = NATO_war_againts_powerfull_ukraine }
+						OR = {
+							owns_state = 119
+							owns_state = 121
+							owns_state = 150
+							ROM = {
+								is_subject_of = UKR
+							}
+							HUN = {
+								is_subject_of = UKR
+							}
+							SLO = {
+								is_subject_of = UKR
+							}
+						}
+					}
+					add_to_variable = { NATO_war_againts_powerfull_ukraine = 1 }
+				}
+				if = {
+					limit = {
+						NOT = { has_global_flag = NATO_war_againts_powerfull_ukraine }
+						OR = {
+							owns_state = 117
+							owns_state = 114
+							POL = {
+								is_subject_of = UKR
+							}
+							CZE = {
+								is_subject_of = UKR
+							}
+						}
+					}
+					add_to_variable = { NATO_war_againts_powerfull_ukraine = 1 }
+				}
+				if = {
+					limit = {
+						check_variable = { NATO_war_againts_powerfull_ukraine = 1 }
+						USA = {
+							is_ai = yes
+							has_idea = NATO_member
+						}
+						GER = {
+							has_idea = NATO_member
+						}
+						NOT = { has_global_flag = NATO_war_againts_powerfull_ukraine }
+					}
+					country_event = brown_line_crossed.4
+				}
+				if = {
+					limit = {
+						NOT = { has_global_flag = SOV_war_againts_powerfull_ukraine }
+						OR = {
+							owns_state = 703
+							owns_state = 110
+							BLR = {
+								is_subject_of = UKR
+							}
+							LIT = {
+								is_subject_of = UKR
+							}
+						}
+					}
+					add_to_variable = { SOV_war_againts_powerfull_ukraine = 1 }
+				}
+				if = {
+					limit = {
+						NOT = { has_global_flag = SOV_war_againts_powerfull_ukraine }
+						OR = {
+							owns_state = 149
+							owns_state = 147
+							PMR = {
+								is_subject_of = UKR
+							}
+							MLV = {
+								is_subject_of = UKR
+							}
+						}
+					}
+					add_to_variable = { SOV_war_againts_powerfull_ukraine = 1 }
+				}
+				if = {
+					limit = {
+						check_variable = { SOV_war_againts_powerfull_ukraine = 1 }
+						SOV = {
+							is_ai = yes
+							OR = {
+								has_government = communism
+								has_government = nationalist
+							}
+						}
+					}
+					country_event = brown_line_crossed.5
+				}
+			}
+		}
+	}
+	on_monthly_BLR= {
+		effect = {
+			if = {
+				limit = {
+					NOT = { has_global_flag = SOV_war_againts_powerfull_belarus }
+					has_added_tension_amount > 5
+					exists = yes
+					has_capitulated = no
+					SOV = {
+						is_ai = yes
+						OR = {
+							has_government = communism
+							has_government = nationalist
+						}
+					}
+				}
+				set_variable = { SOV_war_againts_powerfull_belarus = 0 }
+				if = {
+					limit = {
+						OR = {
+							owns_state = 698
+							owns_state = 110
+							UKR = {
+								is_subject_of = BLR
+							}
+							LIT = {
+								is_subject_of = BLR
+							}
+						}
+					}
+					add_to_variable = { SOV_war_againts_powerfull_belarus = 1 }
+				}
+				if = {
+					limit = {
+						OR = {
+							owns_state = 149
+							owns_state = 147
+							PMR = {
+								is_subject_of = BLR
+							}
+							MLV = {
+								is_subject_of = BLR
+							}
+						}
+					}
+					add_to_variable = { SOV_war_againts_powerfull_belarus = 1 }
+				}
+				if = {
+					limit = {
+						check_variable = { SOV_war_againts_powerfull_belarus = 1 }
+						SOV = {
+							is_ai = yes
+							OR = {
+								has_government = communism
+								has_government = nationalist
+							}
+						}
+					}
+					country_event = brown_line_crossed.6
+				}
+			}
+		}
+	}
+	on_daily = {
+		effect = {
+			if = {
+				limit = {
+					is_ai = no
+					NOT = { has_country_flag = has_been_brownlined }
+					NOT = { has_country_flag = has_been_nuked }
+					has_added_tension_amount > 5
+					OR = {
+						check_variable = { num_equipment@nuclear_missile_equipment > 9 }
+						check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 9 }
+					}
+					NOT = {
+						has_idea = non_nuclear_power
+						has_idea = nuclear_energy
+					}
+					exists = yes
+					has_capitulated = no
+					any_country = {
+						exists = yes
+						has_capitulated = no
+						is_ai = yes
+						OR = {
+							check_variable = { num_equipment@nuclear_missile_equipment > 9 }
+							check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 9 }
+						}
+						has_idea = full_first_use
+						set_temp_variable = { nuclear_potential_difference_percent = nuclear_potential }
+						if = {
+							limit = { PREV = { check_variable = { nuclear_potential = 0 } } }
+							set_temp_variable = { nuclear_potential_difference_percent = 2 }
+						}
+						else = { divide_temp_variable = { nuclear_potential_difference_percent = PREV.nuclear_potential }}
+						if = {
+							limit = { has_country_leader_with_trait = iron_dimon }
+							check_variable = { nuclear_potential_difference_percent > 1 }
+						}
+						else = { check_variable = { nuclear_potential_difference_percent > 2 } }
+						has_opinion = {
+							target = PREV
+							value < -100
+						}
+						has_opinion = {
+							target = PREV
+							value > -201
+						}
+					}
+				}
+				set_country_flag = has_been_brownlined
+				country_event = brown_line_crossed.8
+			}
+		}
+	}
+}

@@ -1,0 +1,168 @@
+﻿capital = 146
+2000.1.1 = {
+	#oob = "TAG_2000"
+
+	set_variable = { gdp_per_capita = 14.104 }
+	set_variable = { capitalization = 0.010 }
+	set_variable = { count_companies = 0 }
+	
+
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency
+	}
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency_trade
+	}
+	add_ideas = {		#Freedom Laws
+		censorship_01
+		assembly_01
+		freedom_religion_02
+		lgbt_laws_03
+		freedom_trade_unions_02
+		internet_02
+
+		medium_corruption
+		sunni
+		Lacks_International_Recognition
+		fast_growth
+		defence_03
+		edu_03
+		health_03
+		social_04
+		bureau_02
+		police_02
+		volunteer_army
+		volunteer_women
+		landowners
+		small_medium_business_owners
+		international_bankers
+		officer_basic_training
+		population_pyramid_2
+		ban_weapons
+		GENERIC_petrodollar_idea
+	}
+
+	#Economy
+	set_variable = { var = corporate_tax_rate value = 24 }
+	set_variable = { var = population_tax_rate value = 18 }
+
+	#Statehood system
+	add_to_array = {
+		global.Unrecognised_States = THIS
+	}
+
+	CYP = { set_country_flag = original_owner_NCY }
+	GRE = { set_country_flag = supports_original_owner_NCY }
+	TUR = { set_country_flag = Recognised_NCY }
+	add_to_variable = {
+		var = NCY.Granted_Recognition
+		value = 1
+	}
+
+	#Influence system
+	init_influence = yes
+	set_variable = { domestic_influence_amount = 40 }
+	add_to_array = { influence_array = TUR.id }
+	add_to_array = { influence_array_val = 60 }
+	startup_influence = yes
+
+	set_technology = {
+
+		combined_arms = 1
+		#For templates
+		infantry_weapons = 1
+		command_control_equipment = 1
+		Anti_tank_0 = 1
+
+		body_armor_1980 = 1
+
+		basic_computing = 1
+		integrated_circuit = 1
+		computing1 = 1
+		decryption1 = 1
+		encryption1 = 1
+		radar = 1
+		internet1 = 1 	#1G
+		fuel_silos = 1
+
+		industrial_electrospun_polymeric_nanofibers = 1
+		stereolitography = 1
+		fuel_refining = 1
+		fuel_refining2 = 1
+		energy_efficiency = 1
+		energy_efficiency2 = 1
+		fuel_efficiency = 1
+		construction1 = 1
+	}
+	if = {
+		limit = { has_dlc = "No Step Back" }
+
+		set_technology = {
+			nsb_Anti_Air_0 = 1
+		}
+		else = {
+			set_technology = {
+				Anti_Air_0 = 1
+			}
+		}
+	}
+
+	give_military_access = TUR
+
+	set_popularities = {
+		democratic = 59.0
+		communism = 2.0
+		fascism = 0.0
+		neutrality = 38.0
+		nationalist = 1.0
+	}
+	set_politics = {
+		ruling_party = democratic
+		last_election = "1995.4.10"
+		election_frequency = 60
+		elections_allowed = yes
+	}
+
+	start_politics_input = yes
+
+	set_variable = { party_pop_array^0 = 0 } #Western_Autocracy
+	set_variable = { party_pop_array^1 = 0.41 } #conservatism
+	set_variable = { party_pop_array^2 = 0.04 } #liberalism
+	set_variable = { party_pop_array^3 = 0.14 } #socialism
+	set_variable = { party_pop_array^4 = 0.02 } #Communist-State
+	set_variable = { party_pop_array^5 = 0 } #anarchist_communism
+	set_variable = { party_pop_array^6 = 0 } #Conservative
+	set_variable = { party_pop_array^7 = 0 } #Autocracy
+	set_variable = { party_pop_array^8 = 0 } #Mod_Vilayat_e_Faqih
+	set_variable = { party_pop_array^9 = 0 } #Vilayat_e_Faqih
+	set_variable = { party_pop_array^10 = 0 } #Kingdom
+	set_variable = { party_pop_array^11 = 0 } #Caliphate
+	set_variable = { party_pop_array^12 = 0 } #Neutral_Muslim_Brotherhood
+	set_variable = { party_pop_array^13 = 0 } #Neutral_Autocracy
+	set_variable = { party_pop_array^14 = 0.23 } #Neutral_conservatism
+	set_variable = { party_pop_array^15 = 0 } #oligarchism
+	set_variable = { party_pop_array^16 = 0 } #Neutral_Libertarian
+	set_variable = { party_pop_array^17 = 0 } #Neutral_green
+	set_variable = { party_pop_array^18 = 0.15 } #neutral_Social
+	set_variable = { party_pop_array^19 = 0 } #Neutral_Communism
+	set_variable = { party_pop_array^20 = 0.01 } #Nat_Populism
+	set_variable = { party_pop_array^21 = 0 } #Nat_Fascism
+	set_variable = { party_pop_array^22 = 0 } #Nat_Autocracy
+	set_variable = { party_pop_array^23 = 0 } #Monarchist
+	add_to_array = { ruling_party = 1 }
+	startup_politics = yes
+
+	create_country_leader = {
+		name = "Rauf Denktas"
+		picture = "rauf_denktas.dds"
+		ideology = conservatism
+		traits = {
+			western_conservatism
+		}
+	}
+	recruit_character = NCY_secme_akin
+	recruit_character = NCY_sezai_ozturk
+	set_variable = { overall_productivity = 367 }
+}

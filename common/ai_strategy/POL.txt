@@ -1,0 +1,210 @@
+poland_hates_russia = {
+	allowed = { original_tag = POL }
+	enable = {
+		country_exists = SOV
+		# not emerging Poland
+		NOT = { POL = { has_emerging_aligned_government = yes } }
+		NOT = {
+			POL = {
+				OR = {
+					is_in_array = { ruling_party = 20 }
+					is_in_array = { ruling_party = 23 }
+				}
+			}
+		}
+		# do not hate neutral or pro-western Russia
+		SOV = {
+			OR = {
+				has_emerging_aligned_government = yes
+				has_nationalist_government = yes
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = contain id = "SOV" value = 25 }
+	ai_strategy = { type = antagonize id = "SOV" value = 35 }
+	ai_strategy = { type = befriend id = "SOV" value = -35 }
+}
+
+poland_loves_western_ukr = {
+	allowed = { original_tag = POL }
+	enable = {
+		country_exists = UKR
+		# not emering Poland
+		POL = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+		# luv ukraine
+		UKR = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "UKR" value = 50 }
+	ai_strategy = { type = protect id = "UKR" value = 50 }
+	ai_strategy = { type = influence id = "UKR" value = 50 }
+	ai_strategy = { type = support id = "UKR" value = 50 }
+}
+
+poland_loves_western_blr = {
+	allowed = { original_tag = POL }
+	enable = {
+		country_exists = BLR
+		# not emering Poland
+		POL = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+		# luv belarus
+		BLR = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "BLR" value = 50 }
+	ai_strategy = { type = protect id = "BLR" value = 50 }
+	ai_strategy = { type = influence id = "BLR" value = 50 }
+	ai_strategy = { type = support id = "BLR" value = 50 }
+}
+
+poland_attempting_to_unite_visegrad1 = {
+	allowed = { original_tag = POL }
+	enable = {
+		country_exists = CZE
+		# not emering Poland
+		POL = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+		# luv czech republic
+		CZE = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "CZE" value = 100 }
+	ai_strategy = { type = protect id = "CZE" value = 50 }
+	ai_strategy = { type = influence id = "CZE" value = 50 }
+	ai_strategy = { type = support id = "CZE" value = 100 }
+}
+poland_attempting_to_unite_visegrad2 = {
+	allowed = { original_tag = POL }
+	enable = {
+		country_exists = SLO
+		# not emering Poland
+		POL = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+		# luv slovakia
+		SLO = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "SLO" value = 100 }
+	ai_strategy = { type = protect id = "SLO" value = 50 }
+	ai_strategy = { type = influence id = "SLO" value = 50 }
+	ai_strategy = { type = support id = "SLO" value = 100 }
+}
+poland_attempting_to_unite_visegrad3 = {
+	allowed = { original_tag = POL }
+	enable = {
+		country_exists = HUN
+		# not emering Poland
+		POL = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+		# luv hungary
+		HUN = {
+			OR = {
+				has_western_aligned_government = yes
+				has_neutral_government = yes
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = befriend id = "HUN" value = 100 }
+	ai_strategy = { type = protect id = "HUN" value = 50 }
+	ai_strategy = { type = influence id = "HUN" value = 50 }
+	ai_strategy = { type = support id = "HUN" value = 100 }
+}
+POL_influence_LRP = {
+	allowed = { original_tag = POL }
+	enable = {
+		NOT = { has_war_with = LRP }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = befriend id = "LRP" value = 100 }
+	ai_strategy = { type = support id = "LRP" value = 500 }
+	ai_strategy = { type = send_volunteers_desire id = "LRP" value = 1000 }
+}
+POL_influence_VRP = {
+	allowed = { original_tag = POL }
+	enable = {
+		LPR = { has_completed_focus = LRP_polish_suplly }
+		NOT = { has_war_with = VRP }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = befriend id = "VRP" value = 100 }
+	ai_strategy = { type = support id = "VRP" value = 500 }
+	ai_strategy = { type = send_volunteers_desire id = "VRP" value = 1000 }
+}
+#Prometeus plan preparation
+POL_Prometeus_plan_preparation = {
+	allowed = { original_tag = POL }
+	enable = {
+		country_exists = SOV
+		POL = {
+			has_completed_focus = POL_project_intermarium
+			NOT = { has_completed_focus = POL_plan_prometheus }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = influence id = SOV value = 200 }
+	ai_strategy = { type = operative_mission value = 200 mission = build_intel_network mission_target = SOV }
+}
+#Visegrad Unite
+poland_visegrad_unite = {
+    allowed = { original_tag = POL }
+    enable = {
+		has_idea = Visegrad_group
+        has_country_flag = visegrad_leader
+        NOT = { is_subject = yes }
+	}
+    abort_when_not_enabled = yes
+    ai_strategy = { type = influence id = "HUN" value = 200 }
+    ai_strategy = { type = influence id = "CZE" value = 200 }
+    ai_strategy = { type = influence id = "SLO" value = 200 }
+    ai_strategy = { type = force_build_armies value = 50 }
+}

@@ -1,0 +1,39 @@
+NATO_decisions = {
+	icon = GFX_decision_generic_join_nato
+
+	allowed = {
+		OR = {
+			has_idea = NATO_member
+			has_idea = Major_Non_NATO_Ally
+			AND = {
+				NOT = { has_government = fascism }
+				NOT = {
+					emerging_communist_state_are_in_power = yes
+					emerging_anarchist_communism_are_in_power = yes
+					neutrality_Neutral_Communism_are_in_power = yes
+					neutrality_neutral_social_are_in_power = yes
+					emerging_moderate_Shiite_are_in_power = yes
+					emerging_Hardline_Shiite_are_in_power = yes
+					nationalist_fascist_are_in_power = yes
+					nationalist_military_junta_are_in_power = yes
+				}
+				OR = {
+					is_european_nation = yes
+					is_Caucasus = yes
+					original_tag = CAN
+					original_tag = USA
+					original_tag = TUR
+					check_variable = { gdp_total > 350 }
+					NOT = {
+						has_idea = non_power 
+						has_government = democratic
+					}
+				}
+			}
+		}
+	}
+
+	visible = {
+		NOT = { has_global_flag = GAME_RULE_nato_disabled }
+	}
+}

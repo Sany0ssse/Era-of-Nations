@@ -1,0 +1,1246 @@
+country_fulfills_current_age_objective = {
+	if = {
+		limit = {
+			check_variable = { age_objective = 1 }
+		}
+		is_in_faction = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 2 }
+		}
+		internet_station > 4
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 3 }
+		}
+		threat < 0.1
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 4 }
+		}
+		has_tech = internet3
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 5 }
+		}
+		OR = {
+			has_idea = recently_acceded_to_wto
+			has_idea = GENERIC_wto_idea
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 6 }
+		}
+		amount_research_slots > 4
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 7 }
+		}
+		rubber_refinery > 2
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 8 }
+		}
+		OR = {
+			AFG = {
+				has_volunteers_amount_from = {
+					tag = ROOT
+					count > 0
+				}
+			}
+			has_war_with = TAL
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 9 }
+		}
+		has_stability > 0.6
+		OR = {
+			has_idea = social_04
+			has_idea = social_05
+			has_idea = social_06
+		}
+		OR = {
+			has_idea = health_04
+			has_idea = health_05
+			has_idea = health_06
+		}
+		OR = {
+			has_idea = edu_03
+			has_idea = edu_04
+			has_idea = edu_05
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 10 }
+		}
+		ROOT = {
+			OR = {
+				has_war_with = ISI
+				has_war_with = AQY
+				has_war_with = TAL
+				any_country = {
+					has_government = fascism
+					has_war_with = ROOT
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 11 }
+		}
+		has_idea = police_05
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 12 }
+		}
+		ROOT = {
+			custom_trigger_tooltip = {
+				tooltip = atleast_60_independence_TT
+				check_variable = { domestic_influence_amount > 59.99 }
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 13 }
+		}
+		AND = {
+            OR = {
+                has_idea = slight_corruption
+                has_idea = negligible_corruption
+            }
+        }
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 14 }
+		}
+		if = {
+			limit = {
+				NOT = { has_government = fascism}
+			}
+			ROOT = {
+				has_war_with = ISI
+			}
+		}
+		if = {
+			limit = {
+				has_government = fascism
+			}
+			has_war_with_major = yes
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 15 }
+		}
+		any_country = {
+            has_volunteers_amount_from = {
+				tag = ROOT
+				count > 0
+			}
+        }
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 16 }
+		}
+		ROOT = {
+			num_subjects > 2
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 17 }
+		}
+		custom_trigger_tooltip = {
+			tooltip = 10000_total_gdp_tt
+			check_variable = { gdp_total > 10000 }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 18 }
+		}
+		OR = {
+			has_idea = intervention_global_interventionism
+			has_idea = intervention_neo_imperialism
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 19 }
+		}
+		custom_trigger_tooltip = {
+			tooltip = sent_grey_men_eu4_TT
+			OR = {
+				has_country_flag = military_services_sent_mercenaries
+				has_country_flag = sent_grey_men_epochs
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 20 }
+		}
+		has_idea = bureau_05
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 21 }
+		}
+		any_guaranteed_country = {
+			is_guaranteed_by = ROOT
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 22 }
+		}
+		custom_trigger_tooltip = {
+			tooltip = recently_exploited_this_nation_eu4_TT
+			any_other_country = {
+                meta_trigger = {
+                  	text = {
+                      	has_idea = tribute_idea_[PREVTAG]
+                    }
+                    PREVTAG = "[PREV.GetTag]"
+                }
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 23 }
+		}
+		ROOT = {
+			is_faction_leader = yes
+			num_faction_members > 4
+		}
+		any_guaranteed_country = {
+			is_guaranteed_by = ROOT
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 24 }
+		}
+		OR = {
+			has_idea = defence_07
+			has_idea = defence_08
+		}
+		has_war_support > 0.5
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 25 }
+		}
+		custom_trigger_tooltip = {
+			tooltip = hired_pmc_true_TT
+			ROOT = {
+				OR = {
+					has_country_flag = blackwater_sel
+					has_country_flag = aegis_sel
+					has_country_flag = constellis_sel
+					has_country_flag = wagner_sel
+					has_country_flag = md_sel
+					has_country_flag = mpri_sel
+					has_country_flag = rsb_sel
+					has_country_flag = sandline_sel
+					has_country_flag = kbr_sel
+					has_country_flag = nirtal_sel
+					has_country_flag = halo_sel
+					has_country_flag = defense_sel
+					has_country_flag = gardaworld_sel
+					has_country_flag = esa_sel
+					has_country_flag = g4s_sel
+					has_country_flag = asgard_sel
+					has_country_flag = union_sel
+					has_country_flag = gard_sel
+					has_country_flag = patriot_sel
+					has_country_flag = dewe_sel
+					has_country_flag = over_sel
+					has_country_flag = front_sel
+					has_country_flag = redut_sel
+					has_country_flag = gaz_sel
+					has_country_flag = iron_sel
+					has_country_flag = sheriff_sel
+					has_country_flag = lukoil_sel
+					has_country_flag = rosneft_sel
+					has_country_flag = sberbank_sel
+					has_country_flag = vtb_sel
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 26 }
+		}
+		any_country = {
+			has_idea = regional_power
+			has_defensive_war_with = ROOT
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 27 }
+		}
+		any_country = {
+			has_civil_war = yes
+			has_volunteers_amount_from = {
+				tag = ROOT
+				count > 2
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 28 }
+		}
+		AND = {
+			industrial_complex > 130
+			arms_factory > 80
+			dockyard > 30
+			OR = {
+				has_tech = internet4
+				has_tech = computing5
+				has_tech = early_ai_robotics
+				has_tech = advanced_ai
+				has_tech = advanced_industrial_robotics
+			}
+			OR = {
+				has_tech = mbt_tech_2
+				has_tech = mbt_tech_3
+				has_tech = gen_5_light
+				has_tech = gen_5_medium
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 29 }
+		}
+		OR = {
+			if = {
+				limit = {
+					NOT = {
+						original_tag = USA
+					}
+				}
+				USA = {
+					is_subject_of = ROOT
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						original_tag = SOV
+					}
+				}
+				SOV = {
+					is_subject_of = ROOT
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						original_tag = CHI
+					}
+				}
+				CHI = {
+					is_subject_of = ROOT
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						original_tag = PER
+					}
+				}
+				PER = {
+					is_subject_of = ROOT
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 30 }
+		}
+		ROOT = {
+			all_core_state = {
+				arms_factory > 0
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 31 }
+		}
+		threat > 0.9
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 32 }
+		}
+		has_stability > 0.7
+		has_war_support > 0.7
+		has_idea = defence_09
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 33 }
+		}
+		any_country = {
+			OR = {
+				has_idea = great_power
+				has_idea = superpower
+			}
+			has_war_with = ROOT
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 34 }
+		}
+		custom_trigger_tooltip = {
+			tooltip = researched_last_mil_tech_TT
+			ROOT = {
+				OR = {
+					has_tech = mbt_tech_4
+					has_tech = tank_components_tech_5
+					has_tech = diesel_engine_tech_7
+					has_tech = electric_engine_tech_4
+					has_tech = armor_tech_4
+					has_tech = nera_armor_tech_3
+					has_tech = defensive_systems_5
+					has_tech = future_ammo
+					has_tech = small_autocannon_tech_4
+					has_tech = big_autocannon_tech_4
+					has_tech = small_medium_gun_tech_4
+					has_tech = medium_gun_tech_4
+					has_tech = large_gun_tech_3
+					has_tech = assault_gun_tech_4
+					has_tech = infantry_weapons7
+					has_tech = util_vehicle_7
+					has_tech = autonomous_fire_support_drone
+					has_tech = augmented_vision_2
+					has_tech = special_forces6
+					has_tech = command_control_equipment6
+					has_tech = land_Drone_equipment5
+					has_tech = body_armor_2030
+					has_tech = exoskeleton_2
+					has_tech = camouflage5
+					has_tech = artillery_4
+					has_tech = nsb_gun_technology_5
+					has_tech = nsb_artillery_ammo_5
+					has_tech = Anti_tank_4
+					has_tech = Heavy_Anti_tank_4
+					has_tech = nsb_AA_autocannon_4
+					has_tech = nsb_SHORAD_missile_4
+					has_tech = Anti_Air_4
+					has_tech = corvette_hull_6
+					has_tech = stealth_corvette_hull_3
+					has_tech = frigate_hull_6
+					has_tech = stealth_frigate_hull_3
+					has_tech = destroyer_hull_5
+					has_tech = stealth_destroyer_hull_3
+					has_tech = cruiser_hull_5
+					has_tech = helicopter_operator_hull_4
+					has_tech = carrier_hull_5
+					has_tech = attack_submarine_hull_6
+					has_tech = missile_submarine_hull_6
+					has_tech = transport_helicopter5
+					has_tech = nsb_attack_helicopter_tech_5
+					has_tech = nsb_engine_tech_5
+					has_tech = nsb_atgm_tech_5
+					has_tech = nsb_rocket_pods_tech_5
+					has_tech = nsb_gun_pods_tech_5
+					has_tech = nsb_light_nose_gun_tech_3
+					has_tech = nsb_defense_tech_4
+					has_tech = nsb_drone_tech_3
+					has_tech = gen_6_medium
+					has_tech = gen_6_light
+					has_tech = gen_6_large
+					has_tech = Air_Kamikaze4
+					has_tech = solar_engines_2
+					has_tech = engines_5
+					has_tech = stealth_tech_2
+					has_tech = future_wingform_designs
+					has_tech = internal_weapons_3
+					has_tech = special_mad_3
+					has_tech = naval_weapons_4
+					has_tech = rapid_dragon
+					has_tech = ag_weapons_4
+					has_tech = tgp_recon_3
+					has_tech = air_weapons_4
+					has_tech = countermeasures_4
+					has_tech = tech_submarine_engineering_4
+					has_tech = tech_power_systems_3
+					has_tech = tech_nuclear_power_systems_3
+					has_tech = tech_fire_control_3
+					has_tech = tech_combat_radar_5
+					has_tech = tech_combat_sonar_5
+					has_tech = tech_light_guns_3
+					has_tech = tech_rail_guns_3
+					has_tech = tech_point_defense_system_6
+					has_tech = tech_turret_missiles_surface_5
+					has_tech = tech_turret_missiles_aa_5
+					has_tech = tech_vls_surface_5
+					has_tech = tech_vls_aa_5
+					has_tech = tech_torpedoes_5
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 35 }
+		}
+		any_country = {
+			OR = {
+				has_idea = superpower
+				has_idea = great_power
+			}
+			strength_ratio = {
+				tag = ROOT
+				ratio < 1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 36 }
+		}
+		ROOT = {
+			has_war = yes
+			casualties < 30000
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 37 }
+		}
+		ROOT = {
+			has_war = yes
+			OR = {
+				has_idea = defence_03
+				has_idea = defence_02
+				has_idea = defence_01
+				has_idea = defence_00
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 38 }
+		}
+		any_country = {
+			has_war_with = ROOT
+			casualties_inflicted_by = {
+				opponent = ROOT
+				thousands > 1000
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 39 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					original_tag = USA
+				}
+				USA = {
+					exists = yes
+				}
+			}
+			USA = {
+				is_subject_of = ROOT
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					original_tag = SOV
+				}
+				SOV = {
+					exists = yes
+				}
+			}
+			SOV = {
+				is_subject_of = ROOT
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					original_tag = CHI
+				}
+				CHI = {
+					exists = yes
+				}
+			}
+			CHI = {
+				is_subject_of = ROOT
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 40 }
+		}
+		OR = {
+			45 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+			56 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+			13 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+			81 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+			1182 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+			652 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+			547 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+			615 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+			431 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+			405 = {
+				is_controlled_by = ROOT
+				NOT = {
+					is_core_of = ROOT
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 41 }
+		}
+		any_country = {
+			has_war_with = ROOT
+			has_country_flag = has_been_nuked
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_objective = 42 }
+		}
+		has_army_manpower = {
+			size > 1500000
+		}
+	}
+}
+
+can_select_current_age_ability = {
+	hidden_trigger = {
+		NOT = { is_in_array = { currently_selected_age_abilities = age_ability } }
+	}
+	custom_trigger_tooltip = {
+		tooltip = AGE_ABILITY_HAS_AT_LEAST_800_SPLENDOR
+		NOT = { check_variable = { current_splendor < 800 } }
+	}
+	if = {
+		limit = {
+			check_variable = { age_ability = 2 }
+		}
+		custom_trigger_tooltip = {
+			tooltip = 1000_total_gdp_tt
+			check_variable = { gdp_total > 1000 }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 3 }
+		}
+		has_government = democratic
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 5 }
+		}
+		agriculture_district > 2
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 6 }
+		}
+		num_of_civilian_factories > 4
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 7 }
+		}
+		AND = {
+			has_idea = economic_boom
+			NOT = {
+				has_idea = depression
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 10 }
+		}
+		has_political_power > 200
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 14 }
+		}
+		OR = {
+			has_idea = police_03
+			has_idea = police_04
+			has_idea = police_05
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 15 }
+		}
+		has_dlc = "La Resistance"
+		has_intelligence_agency = yes
+		num_of_operatives > 3
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 16 }
+		}
+		has_stability > 0.4
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 17 }
+		}
+		has_dlc = "La Resistance"
+		has_intelligence_agency = no
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 18 }
+		}
+		NOT = {
+			OR = {
+				has_idea = widespread_corruption
+				has_idea = systematic_corruption
+				has_idea = unrestrained_corruption
+				has_idea = rampant_corruption
+				has_idea = crippling_corruption
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 39 }
+		}
+		ROOT = {
+			any_owned_state = { is_coastal = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 47 }
+		}
+		ROOT = {
+			num_of_civilian_factories > 1
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 56 }
+		}
+		has_war = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 57 }
+		}
+		has_war = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 58 }
+		}
+		has_war = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 61 }
+		}
+		has_war = yes
+	}
+}
+
+can_select_current_unique_age_ability = {
+	if = {
+		limit = {
+			check_variable = { age_ability = 8 }
+		}
+		set_temp_variable = { age_ability_country = USA }
+		original_tag = USA
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 9 }
+		}
+		set_temp_variable = { age_ability_country = CHI }
+		original_tag = CHI
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 10 }
+		}
+		set_temp_variable = { age_ability_country = SOV }
+		original_tag = SOV
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 11 }
+		}
+		set_temp_variable = { age_ability_country = EUU }
+		has_idea = EU_member
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 19 }
+		}
+		set_temp_variable = { age_ability_country = FRA }
+		original_tag = FRA
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 20 }
+		}
+		set_temp_variable = { age_ability_country = GER }
+		original_tag = GER
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 21 }
+		}
+		set_temp_variable = { age_ability_country = ENG }
+		original_tag = ENG
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 22 }
+		}
+		set_temp_variable = { age_ability_country = USA }
+		original_tag = USA
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 30 }
+		}
+		set_temp_variable = { age_ability_country = USA }
+		original_tag = USA
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 31 }
+		}
+		set_temp_variable = { age_ability_country = SOV }
+		original_tag = SOV
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 32 }
+		}
+		set_temp_variable = { age_ability_country = PER }
+		original_tag = PER
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 33 }
+		}
+		set_temp_variable = { age_ability_country = CHI }
+		original_tag = CHI
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 41 }
+		}
+		set_temp_variable = { age_ability_country = EUU }
+		has_idea = EU_member
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 42 }
+		}
+		set_temp_variable = { age_ability_country = SOV }
+		original_tag = SOV
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 43 }
+		}
+		set_temp_variable = { age_ability_country = USA }
+		original_tag = USA
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 44 }
+		}
+		set_temp_variable = { age_ability_country = CHI }
+		original_tag = CHI
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 52 }
+		}
+		set_temp_variable = { age_ability_country = USA }
+		original_tag = USA
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 53 }
+		}
+		set_temp_variable = { age_ability_country = EUU }
+		has_idea = EU_member
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 54 }
+		}
+		set_temp_variable = { age_ability_country = CHI }
+		original_tag = CHI
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 55 }
+		}
+		set_temp_variable = { age_ability_country = SOV }
+		original_tag = SOV
+		has_war = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 63 }
+		}
+		set_temp_variable = { age_ability_country = EUU }
+		has_idea = EU_member
+		has_war = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 64 }
+		}
+		set_temp_variable = { age_ability_country = SOV }
+		original_tag = SOV
+		has_war = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 65 }
+		}
+		set_temp_variable = { age_ability_country = CHI }
+		original_tag = CHI
+		has_war = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { age_ability = 66 }
+		}
+		set_temp_variable = { age_ability_country = USA }
+		original_tag = USA
+		has_war = yes
+	}
+}
+
+is_fulfilling_3_age_objectives = {
+	set_temp_variable = { num_of_fulfilled_age_objectives = 0 }
+	all_of = {
+		array = global.current_age_objectives
+		value = v
+		set_temp_variable = { age_objective = v }
+		if = {
+			limit = {
+				country_fulfills_current_age_objective = yes
+			}
+			add_to_temp_variable = { num_of_fulfilled_age_objectives = 1 }
+		}
+	}
+	check_variable = { num_of_fulfilled_age_objectives > 2 }
+}
+
+are_triggers_met_for_age_1 = {
+	hidden_trigger = {
+		check_variable = { global.current_age < 1 }
+		NOT = { has_global_flag = age_has_begun_1 }
+	}
+	date > 2000.1.1
+}
+
+are_triggers_met_for_age_2 = {
+	hidden_trigger = {
+		check_variable = { global.current_age < 2 }
+		AND = {
+			NOT = {
+				OR = {
+					has_global_flag = age_has_begun_2
+					has_global_flag = age_has_begun_3
+					has_global_flag = age_has_begun_4
+					has_global_flag = age_has_begun_5
+					has_global_flag = age_has_begun_6
+				}
+			}
+			has_global_flag = age_has_begun_1
+		}
+		set_temp_variable = { current_age_temp = 2 }
+	}
+	OR = {
+		custom_trigger_tooltip = {
+			tooltip = AGE_TRIGGERS_WERE_MET
+			check_variable = { global.next_age = 2 }
+		}
+		date > 2001.9.11
+		USA = {
+			OR = {
+				has_war_with = ISI
+				has_war_with = AQY
+				has_war_with = TAL
+				any_country = {
+					has_government = fascism
+					has_war_with = USA
+				}
+				custom_trigger_tooltip = {
+					tooltip = otkroy_rotik_letit_samoletik_tt
+					OR = {
+						has_country_flag = terrorist_attacks_succeed_no_fourth_plane
+						has_country_flag = terrorist_attacks_succeed_fourth_plane
+						has_country_flag = major_terrorist_attacks_discovered
+					}
+				}
+			}
+		}
+	}
+}
+
+are_triggers_met_for_age_3 = {
+	hidden_trigger = {
+		check_variable = { global.current_age < 3 }
+		AND = {
+			NOT = {
+				OR = {
+					has_global_flag = age_has_begun_3
+					has_global_flag = age_has_begun_4
+					has_global_flag = age_has_begun_5
+					has_global_flag = age_has_begun_6
+				}
+			}
+			has_global_flag = age_has_begun_2
+		}
+		set_temp_variable = { current_age_temp = 3 }
+	}
+	OR = {
+		custom_trigger_tooltip = {
+			tooltip = AGE_TRIGGERS_WERE_MET
+			check_variable = { global.next_age = 3 }
+		}
+		date > 2014.1.1
+		threat > 0.3
+	}
+}
+
+are_triggers_met_for_age_4 = {
+	hidden_trigger = {
+		check_variable = { global.current_age < 4 }
+		AND = {
+			NOT = {
+				OR = {
+					has_global_flag = age_has_begun_4
+					has_global_flag = age_has_begun_5
+					has_global_flag = age_has_begun_6
+				}
+			}
+			has_global_flag = age_has_begun_3
+		}
+		set_temp_variable = { current_age_temp = 4 }
+	}
+	OR = {
+		custom_trigger_tooltip = {
+			tooltip = AGE_TRIGGERS_WERE_MET
+			check_variable = { global.next_age = 4 }
+		}
+		date > 2020.1.1
+		OR = {
+			threat > 0.45
+			custom_trigger_tooltip = {
+				tooltip = new_superpower_emerged_tt
+				any_country = {
+					AND = {
+						NOT = {
+						OR = {
+							original_tag = CHI
+							original_tag = USA
+						}
+					}
+					has_idea = superpower
+					is_in_faction = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+are_triggers_met_for_age_5 = {
+	hidden_trigger = {
+		check_variable = { global.current_age < 5 }
+		AND = {
+			NOT = {
+				OR = {
+					has_global_flag = age_has_begun_5
+					has_global_flag = age_has_begun_6
+				}
+			}
+			OR = {
+				has_global_flag = age_has_begun_1
+				has_global_flag = age_has_begun_2
+				has_global_flag = age_has_begun_3
+				has_global_flag = age_has_begun_4
+			}
+		}
+		set_temp_variable = { current_age_temp = 5 }
+	}
+	OR = {
+		custom_trigger_tooltip = {
+			tooltip = AGE_TRIGGERS_WERE_MET
+			check_variable = { global.next_age = 5 }
+		}
+		date > 2027.1.1
+		threat > 0.65
+	}
+}
+
+are_triggers_met_for_age_6 = {
+	hidden_trigger = {
+		set_temp_variable = { num_of_major_faction_leaders = 0 }
+		check_variable = { global.current_age < 6 }
+		AND = {
+			NOT = { has_global_flag = age_has_begun_6 }
+			OR = {
+				has_global_flag = age_has_begun_1
+				has_global_flag = age_has_begun_2
+				has_global_flag = age_has_begun_3
+				has_global_flag = age_has_begun_4
+				has_global_flag = age_has_begun_5
+			}
+		}
+		set_temp_variable = { current_age_temp = 6 }
+	}
+	OR = {
+		date > 2035.1.1
+		any_country = {
+			is_faction_leader = yes
+			num_faction_members > 4
+			has_civil_war = no
+			custom_trigger_tooltip = {
+				tooltip = AGE_TRIGGER_IS_AT_WAR_WITH_FACTION_LEADER_OF_LARGE_FACTION
+				any_other_country = {
+					is_faction_leader = yes
+					num_faction_members > 4
+					has_war_with = PREV
+					has_civil_war = no
+				}
+			}
+		}
+		any_country = {
+			AND = {
+				OR = {
+					has_idea = superpower
+					has_idea = great_power
+				}
+				is_major = yes
+				custom_trigger_tooltip = {
+					tooltip = has_war_with_another_superpower_true
+					any_other_country = {
+						OR = {
+							has_idea = superpower
+							has_idea = great_power
+						}
+						has_war_with = PREV
+						is_major = yes
+					}
+				}
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = global_superpowers_at_war_true
+			OR = {
+				USA = {
+					OR = {
+						has_war_with = SOV
+						has_war_with = CHI
+					}
+				}
+				CHI = {
+					OR = {
+						has_war_with = SOV
+						has_war_with = USA
+					}
+				}
+				SOV = {
+					OR = {
+						has_war_with = CHI
+						has_war_with = USA
+					}
+				}
+			}
+		}
+	}
+}

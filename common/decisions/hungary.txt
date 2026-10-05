@@ -1,0 +1,1356 @@
+HUN_requiem_for_the_great = {
+    #Cancel Paris Peace Treaties
+    HUN_paris_treaty_null = {
+        icon = GFX_decision_arm_kalash_button
+        available = {
+            if = {
+                limit = { has_government = democratic }
+                threat > 0.5
+            }
+            else_if = {
+                limit = { has_government = nationalist }
+                threat > 0.15
+            }
+            else = {
+                threat > 0.25
+            }
+            AND = {
+                NOT = {
+                    has_idea = HUN_outdate_army
+                }
+                hidden_trigger = {
+                    NOT = { has_idea = HUN_outdate_army1 }
+                }
+            }
+        }
+        fire_only_once = yes
+        cost = 200
+        complete_effect = {
+            set_country_flag = HUN_paris_treaty_canceled
+            add_named_threat = {
+                threat = 25
+                name = HUN_paris_treat_null
+            }
+            news_event = hungary_great.17
+            if = {
+                limit = { country_exists = FRA }
+                FRA = {
+                    add_opinion_modifier = {
+                        target = HUN
+                        modifier = hungary_paris_treaty
+                    }
+                }
+            }
+            if = {
+                limit = { country_exists = ENG }
+                ENG = {
+                    add_opinion_modifier = {
+                        target = HUN
+                        modifier = hungary_paris_treaty
+                    }
+                }
+            }
+            if = {
+                limit = { country_exists = SOV }
+                SOV = {
+                    add_opinion_modifier = {
+                        target = HUN
+                        modifier = hungary_paris_treaty
+                    }
+                }
+            }
+            if = {
+                limit = { country_exists = USA }
+                USA = {
+                    add_opinion_modifier = {
+                        target = HUN
+                        modifier = hungary_paris_treaty
+                    }
+                }
+            }
+            every_neighbor_country = {
+                add_opinion_modifier = {
+                    target = HUN
+                    modifier = hungary_paris_treaty
+                }
+            }
+        }
+
+    }
+    #Slovakia
+    HUN_slovakia_ultimatum = {
+        icon = GFX_HUN_great_hungary_ultimatum_decision_button
+        visible = {
+            country_exists = SLO
+            NOT = {
+                has_war_with = SLO
+            }
+        }
+        available = {
+            fighting_army_strength_ratio = {
+				tag = SLO
+				ratio > 0.5
+			}
+            NOT = {
+                is_in_faction_with = SLO
+            }
+            custom_trigger_tooltip = {
+                tooltip = HUN_paris_treaty_canceled_tt
+                has_country_flag = HUN_paris_treaty_canceled
+            }
+        }
+        fire_only_once = yes
+        cost = 150
+        complete_effect = { 
+            119 = {
+                add_claim_by = HUN
+            }
+            120 = {
+                add_claim_by = HUN
+            }
+            every_country = {
+                limit = {
+                    NOT = { original_tag = HUN }
+                    OR = {
+                        119 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                        120 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                    }
+                }
+                country_event = { id = hungary_great.1 days = 1 }
+            }
+        }
+    }
+    #Karpatia Rus
+    HUN_ukraine_ultimatum = {
+        icon = GFX_HUN_great_hungary_ultimatum_decision_button
+        visible = {
+            NOT = {
+                701 = {
+                    is_owned_and_controlled_by = PREV
+                }
+            }
+            NOT = {
+                has_war_with = UKR
+            }
+        }
+        available = {
+            fighting_army_strength_ratio = {
+				tag = UKR
+				ratio > 0.5
+			}
+            NOT = {
+                is_in_faction_with = UKR
+            }
+            custom_trigger_tooltip = {
+                tooltip = HUN_paris_treaty_canceled_tt
+                has_country_flag = HUN_paris_treaty_canceled
+            }
+        }
+        fire_only_once = yes
+        cost = 150
+        complete_effect = {
+            701 = {
+                add_claim_by = HUN
+            }
+            every_country = {
+                limit = {
+                    OR = {
+                        701 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                    }
+                }
+                country_event = { id = hungary_great.4 days = 1 }
+            }
+        }
+    }
+    #Transilvania
+    HUN_romania_ultimatum = {
+        icon = GFX_HUN_great_hungary_ultimatum_decision_button
+        visible = {
+            NOT = {
+                909 = {
+                is_owned_and_controlled_by = HUN
+                }
+                151 = {
+                    is_owned_and_controlled_by = HUN
+                }
+                910 = {
+                    is_owned_and_controlled_by = HUN
+                }
+            }
+            NOT = {
+                has_war_with = ROM
+            }
+        }
+        fire_only_once = yes
+        available = {
+            fighting_army_strength_ratio = {
+				tag = ROM
+				ratio > 0.5
+			}
+            NOT = {
+                is_in_faction_with = ROM
+            }
+            custom_trigger_tooltip = {
+                tooltip = HUN_paris_treaty_canceled_tt
+                has_country_flag = HUN_paris_treaty_canceled
+            }
+        }
+        cost = 150
+        complete_effect = {
+            909 = {
+                add_claim_by = HUN
+            }
+            151 = {
+                add_claim_by = HUN
+            }
+            910 = {
+                add_claim_by = HUN
+            }
+            every_country = {
+                limit = {
+                    NOT = { original_tag = HUN }
+                    OR = {
+                        909 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                        151 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                        910 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                    }
+                }
+                country_event = { id = hungary_great.7 days = 1 }
+            }
+        }
+    }
+    #Banat
+    HUN_serbia_ultimatum = {
+        icon = GFX_HUN_great_hungary_ultimatum_decision_button
+        visible = {
+            NOT = {
+                998 = {
+                   is_owned_and_controlled_by = HUN
+                }
+                130 = {
+                   is_owned_and_controlled_by = HUN
+                }
+            }
+            if = {
+                limit = { country_exists = VOJ }
+                NOT = {
+                    has_war_with = VOJ
+                }
+            }
+            else = {
+                NOT = {
+                    has_war_with = SER
+                }
+            }
+        }
+        fire_only_once = yes
+        available = {
+            if = {
+                limit = { country_exists = VOJ }
+                fighting_army_strength_ratio = {
+                    tag = VOJ
+                    ratio > 0.5
+                }
+                NOT = {
+                    is_in_faction_with = VOJ
+                }
+            }
+            else = {
+                fighting_army_strength_ratio = {
+                    tag = SER
+                    ratio > 0.5
+                }
+                NOT = {
+                    is_in_faction_with = SER
+                }
+            }
+            custom_trigger_tooltip = {
+                tooltip = HUN_paris_treaty_canceled_tt
+                has_country_flag = HUN_paris_treaty_canceled
+            }
+        }
+        cost = 150
+        complete_effect = {
+            998 = {
+                add_claim_by = HUN
+            }
+            130 = {
+                add_claim_by = HUN
+            }
+            every_country = {
+                limit = {
+                    NOT = { original_tag = HUN }
+                    OR = {
+                        998 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                        130 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                    }
+                }
+                country_event = { id = hungary_great.10 days = 1 }
+            }
+        }
+    }
+    #Croatia
+    HUN_croatia_ultimatum = {
+        icon = GFX_HUN_great_hungary_ultimatum_decision_button
+        visible = {
+            country_exists = CRO
+            NOT = {
+                has_war_with = CRO
+            }
+        }
+        available = {
+            fighting_army_strength_ratio = {
+                tag = CRO
+                ratio > 0.5
+            }
+            NOT = {
+                is_in_faction_with = CRO
+            }
+            custom_trigger_tooltip = {
+                tooltip = HUN_paris_treaty_canceled_tt
+                has_country_flag = HUN_paris_treaty_canceled
+            }
+        }
+        fire_only_once = yes
+        cost = 150
+        complete_effect = {
+            127 = {
+                add_claim_by = HUN
+            }
+            126 = {
+                add_claim_by = HUN
+            }
+            every_country = {
+                limit = {
+                    NOT = { original_tag = HUN }
+                    OR = {
+                        127 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                        126 = {
+                            is_owned_and_controlled_by = PREV
+                        }
+                    }
+                }
+                country_event = { id = hungary_great.13 days = 1 }
+            }
+        }
+    }
+    #Proclaim Great Hungary
+    HUN_proclaim_great_hungary = {
+        icon = GFX_HUN_great_hungary_decision_category
+        visible = {
+            NOT = { has_country_flag = HUN_great_hungary_has_created }
+        }
+        available = {
+            119 = { is_owned_and_controlled_by = HUN } 
+            120 = { is_owned_and_controlled_by = HUN }
+            126 = { is_owned_and_controlled_by = HUN }
+            127 = { is_owned_and_controlled_by = HUN }
+            998 = { is_owned_and_controlled_by = HUN }
+            909 = { is_owned_and_controlled_by = HUN }
+            151 = { is_owned_and_controlled_by = HUN }
+            910 = { is_owned_and_controlled_by = HUN }
+            130 = { is_owned_and_controlled_by = HUN }
+            701 = { is_owned_and_controlled_by = HUN } 
+        }
+        fire_only_once = yes
+        cost = 300
+        complete_effect = {
+            news_event = hungary_great.16
+            add_named_threat = {
+                name = HUN_great_proclaim
+                threat = 10
+            }
+            set_country_flag = HUN_great_hungary_has_created
+            set_cosmetic_tag = HUN_great
+            119 = { add_core_of = HUN } 
+            120 = { add_core_of = HUN }
+            126 = { add_core_of = HUN }
+            127 = { add_core_of = HUN }
+            998 = { add_core_of = HUN }
+            909 = { add_core_of = HUN }
+            151 = { add_core_of = HUN }
+            910 = { add_core_of = HUN }
+            130 = { add_core_of = HUN }
+            701 = { add_core_of = HUN } 
+        }
+    }
+}
+#Economy Decisions
+HUN_economy_category = {
+    HUN_agricultire_stats = {
+        icon = GFX_HUN_agriculture_prod_decision_button
+        available = {
+            always = no
+        }
+        visible = {
+            has_completed_focus = HUN_export_of_agricultural_products
+        }
+        complete_effect = {
+            custom_effect_tooltip = HUN_agricultire_stats_tt
+        }
+    }
+    sale_agricultural_products_to = {
+        icon = GFX_HUN_agriculture_prod_decision_button
+        cost = 25
+        days_re_enable = 120
+        visible = {
+            has_completed_focus = HUN_export_of_agricultural_products
+            NOT = {
+                FROM = { has_idea = HUN_purchase_of_hungarian_agricultural_products_idea }
+            }
+        }
+        target_array = neighbors
+        complete_effect = {
+            FROM = { 
+                country_event = { id = hungary_economy.8 days = 1 }
+            }
+            custom_effect_tooltip = effect_if_they_accept_TT
+            effect_tooltip = {
+                FROM = {
+                    add_ideas = HUN_purchase_of_hungarian_agricultural_products_idea
+                }
+                set_temp_variable = { modify_capitalization =  0.025 }
+			    modify_capitalization_support = yes
+            }
+        }
+        ai_will_do = {
+            factor = 10
+        }
+    }
+    #Organize the import of raw materials
+    HUN_organize_metall_export_GER = {
+        icon = GFX_HUN_export_decision_button
+        cost = 25
+        visible = {
+            NOT = { has_country_flag = German_Steel_Export }
+            has_completed_focus = HUN_organize_import_of_raw_materials
+        }
+        available = {
+            GER = {
+                has_opinion = {
+                    target = HUN
+                    value > 9
+                }
+            }
+        }
+        days_re_enable = 240
+        complete_effect = {
+            
+            GER = { country_event = { id = hungary_economy.14 days = 1 random_hours = 5 } }
+        }
+    }
+    HUN_organize_oil_export_SOV = {
+        icon = GFX_HUN_export_decision_button
+        cost = 25
+        visible = {
+            NOT = { has_country_flag = Russian_Oil_Export }
+            has_completed_focus = HUN_organize_import_of_raw_materials
+        }
+        available = {
+            SOV = {
+                has_opinion = {
+                    target = HUN
+                    value > 9
+                }
+            }
+        }
+        days_re_enable = 240
+        complete_effect = {
+            SOV = { country_event = { id = hungary_economy.17 days = 1 random_hours = 5 } }
+        }
+    }
+    HUN_organize_aluminium_export_CHI = {
+        icon = GFX_HUN_export_decision_button
+        cost = 25
+        visible = {
+            NOT = { has_country_flag = Chinese_light_metall_Export }
+            has_completed_focus = HUN_organize_import_of_raw_materials
+        }
+        available = {
+            CHI = {
+                has_opinion = {
+                    target = HUN
+                    value > 9
+                }
+            }
+        }
+        days_re_enable = 240
+        complete_effect = {
+            CHI = { country_event = { id = hungary_economy.20 days = 1 random_hours = 5 } }
+        }
+    }
+}
+HUN_millitary_category = {
+    HUN_sold_mig29 = {
+        icon = GFX_HUN_mig_29_decision_button
+        cost = 25
+        visible = {
+            has_country_flag = mig_29_found_buyer
+        }
+        available = {
+            NOT = { has_country_flag = mig_29_buy_block }
+            FROM = {
+                has_opinion = {
+                    target = HUN
+                    value > 10
+                }
+            }
+        }
+        target_array = neighbors
+        complete_effect = {
+            set_country_flag = mig_29_buy_block
+            FROM = {
+                country_event = { id = hungary_army.11 days = 1 random_hours = 10 }
+            }
+        }
+    }
+    HUN_buy_iranian_equipments = {
+        icon = GFX_HUN_iranian_guns_decision_button
+        visible = {
+            original_tag = HUN
+            has_completed_focus = HUN_support_iran
+            country_exists = PER
+        }
+        available = {
+            PER = {
+                has_opinion = {
+                    target = HUN
+                    value > 10
+                }
+            }
+        }
+        days_re_enable = 360
+        complete_effect = {
+            PER = { country_event = { id = hungary_foreign.7 days = 1 random_hours = 10 } }
+        }
+    }
+}
+HUN_habsburg_empire_category = {
+    HUN_assimilate_territories = {
+        icon = GFX_HUN_assimilation_decision_button
+        visible = {
+            OR = {
+                998 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                130 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                910 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                151 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                909 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                701 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                120 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                119 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                1018 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                118 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                117 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                1017 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                76 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                75 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                286 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                125 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                124 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                285 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                700 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                335 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+                1098 = {
+                    is_owned_and_controlled_by = HUN
+                    NOT = { is_core_of = HUN}
+                }
+            }
+        }
+        days_remove = 120
+        days_re_enable = 15
+        modifier = {
+            army_personnel_cost_multiplier_modifier = 0.07
+            police_cost_multiplier_modifier = 0.3
+            bureaucracy_cost_multiplier_modifier = 0.25
+            social_cost_multiplier_modifier = 0.05
+            tax_gain_multiplier_modifier = 0.07
+        }
+        remove_effect = {
+            if = {
+                limit = {
+                    151 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                151 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    1098 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                1098 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    335 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                335 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    700 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                700 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    910 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                910 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    130 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                130 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    998 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                998 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    285 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                285 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    124 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                124 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    186 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                186 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    75 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                75 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    76 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                76 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    1017 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                1017 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    117 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                117 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    118 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                118 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    1018 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                1018 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    119 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                119 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    120 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                120 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    701 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                701 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    125 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                125 = {
+                    add_core_of = HUN
+                }
+            }
+            if = {
+                limit = {
+                    909 = {
+                        is_owned_and_controlled_by = HUN
+                        NOT = { is_core_of = HUN}
+                    }
+                }
+                909 = {
+                    add_core_of = HUN
+                }
+            }
+        }
+    }
+    HUN_restore_AUS_HUN = {
+        icon = GFX_HUN_aus_hun_restore_decision_button
+        visible = {
+            has_completed_focus = HUN_restoration_of_union
+        }
+        days_remove = 60
+        available = {
+            75 = {
+                is_owned_and_controlled_by = HUN
+            }
+            76 = {
+                is_owned_and_controlled_by = HUN
+            }
+            286 = {
+                is_owned_and_controlled_by = HUN
+            }
+        }
+        fire_only_once = yes
+        remove_effect = {
+            75 = {
+                add_core_of = HUN
+            }
+            76 = {
+                add_core_of = HUN
+            }
+            286 = {
+                add_core_of = HUN
+            }
+            add_political_power = 125
+            set_cosmetic_tag = HUN_AUS
+            news_event = hungary_monarch.16
+        }
+    }
+}
+HUN_commi_category = {
+    #Slovakia
+    HUN_coup_in_slovakia = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            SLO = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = SLO
+            has_completed_focus = HUN_communist_takeover_in_central_europe
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            SLO = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = SLO }
+			change_influence_percentage = yes
+            SLO = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Czechia
+    HUN_coup_in_czech = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            CZE = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = CZE
+            has_completed_focus = HUN_communist_takeover_in_central_europe
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            CZE = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = CZE }
+			change_influence_percentage = yes
+            CZE = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Poland
+    HUN_coup_in_poland = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            POL = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = POL
+            has_completed_focus = HUN_communist_takeover_in_central_europe
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            POL = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = POL }
+			change_influence_percentage = yes
+            POL = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Austria
+    HUN_coup_in_austria = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            AUS = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = AUS
+            has_completed_focus = HUN_communist_takeover_in_central_europe
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            POL = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = AUS }
+			change_influence_percentage = yes
+            AUS = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Serbia
+    HUN_coup_in_serbia = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            SER = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = SER
+            has_completed_focus = HUN_promote_communist_ideas_in_balkans
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            SER = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = SER }
+			change_influence_percentage = yes
+            SER = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Bosnia
+    HUN_coup_in_bosnia = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            BOS = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = BOS
+            has_completed_focus = HUN_promote_communist_ideas_in_balkans
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            BOS = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = BOS }
+			change_influence_percentage = yes
+            BOS = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Greece
+    HUN_coup_in_greece = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            GRE = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = GRE
+            has_completed_focus = HUN_promote_communist_ideas_in_balkans
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            GRE = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = GRE }
+			change_influence_percentage = yes
+            BOS = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Bulgaria
+    HUN_coup_in_bulgaria = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            BUL = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = BUL
+            has_completed_focus = HUN_promote_communist_ideas_in_balkans
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            BUL = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = BUL }
+			change_influence_percentage = yes
+            BUL = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Romania
+    HUN_coup_in_romania = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            ROM = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = ROM
+            has_completed_focus = HUN_promote_communist_ideas_in_balkans
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            ROM = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = ROM }
+			change_influence_percentage = yes
+            ROM = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Croatia
+    HUN_coup_in_croatia = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            CRO = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = CRO
+            has_completed_focus = HUN_promote_communist_ideas_in_balkans
+        }
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            CRO = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = CRO }
+			change_influence_percentage = yes
+            CRO = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+    #Albania
+    HUN_coup_in_albania = {
+        icon = GFX_POL_commi_propaganda_decision_button
+        visible = {
+            ALB = {
+                emerging_communist_state_are_not_in_power = yes
+            }
+            country_exists = ALB
+            has_completed_focus = HUN_promote_communist_ideas_in_balkans
+        }
+        custom_cost_trigger = {
+			check_variable = { treasury > 4.9 }
+		}
+        custom_cost_text = cost_5_0
+        days_remove = 30
+        days_re_enable = 30
+        complete_effect = {
+            ALB = {
+                add_timed_idea = {
+                    idea = HUN_communist_activity
+                    days = 30
+                }
+            }
+        }
+        modifier = {
+            foreign_influence_modifier = 0.02
+        }
+        remove_effect = {
+            set_temp_variable = { percent_change = 2 }
+			set_temp_variable = { tag_index = HUN }
+			set_temp_variable = { influence_target = ALB }
+			change_influence_percentage = yes
+            ALB = {
+                set_temp_variable = { party_index = 4 }
+                set_temp_variable = { party_popularity_increase = 0.05 }
+                set_temp_variable = { temp_outlook_increase = 0.05 }
+                add_relative_party_popularity = yes
+            }
+        }
+    }
+
+}

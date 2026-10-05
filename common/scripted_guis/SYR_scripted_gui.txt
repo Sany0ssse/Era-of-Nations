@@ -1,0 +1,355 @@
+scripted_gui = {
+
+	syrian_economy = {
+		context_type = decision_category
+
+		window_name = "SYR_economic_decisions_GUI"
+
+		dirty = global.update_syria_ui
+
+		visible = {
+		}
+		triggers = {
+			syrian_daraa_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				184 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_suweida_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				185 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_south_der_az_zor_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				192 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_damascus_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				186 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_north_deir_es_zor_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				995 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_hasakah_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				193 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_central_desert_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				561 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_south_raqqa_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				994 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_homs_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				188 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_aleppo_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				566 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_azaz_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				575 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_latakia_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				189 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_idlib_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				190 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_hama_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				571 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+			syrian_norraqqa_icon_click_enabled = {
+				NOT = { has_country_flag = syr_region_dec }
+				191 = {
+					is_owned_and_controlled_by = SYR
+				}
+			}
+		}
+		effects = {
+			syrian_update_button_click = {
+				SYR_state_of_regions_calculate = yes
+				update_syria_dirty = yes
+			}
+			syrian_daraa_icon_click = {
+				set_variable = { selected_syrian_region = 1 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				update_syria_dirty = yes
+			}
+			syrian_suweida_icon_click = {
+				set_variable = { selected_syrian_region = 2 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				update_syria_dirty = yes
+			}
+			syrian_south_der_az_zor_icon_click = {
+				set_variable = { selected_syrian_region = 3 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_south_der_az_zor_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_south_der_az_zor_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_south_der_az_zor_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_damascus_icon_click = {
+				set_variable = { selected_syrian_region = 4 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_damascus_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_damascus_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_damascus_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_north_deir_es_zor_icon_click = {
+				set_variable = { selected_syrian_region = 5 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_north_deir_es_zor_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_north_deir_es_zor_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_north_deir_es_zor_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_hasakah_icon_click = {
+				set_variable = { selected_syrian_region = 6 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				update_syria_dirty = yes
+			}
+			syrian_central_desert_icon_click = {
+				set_variable = { selected_syrian_region = 7 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_central_desert_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_central_desert_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_central_desert_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_south_raqqa_icon_click = {
+				set_variable = { selected_syrian_region = 8 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_south_der_az_zor_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_south_der_az_zor_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_south_der_az_zor_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_homs_icon_click = {
+				set_variable = { selected_syrian_region = 9 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_homs_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_homs_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_homs_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_aleppo_icon_click = {
+				set_variable = { selected_syrian_region = 10 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_aleppo_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_aleppo_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_aleppo_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_azaz_icon_click = {
+				set_variable = { selected_syrian_region = 11 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_azaz_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_azaz_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_azaz_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_latakia_icon_click = {
+				set_variable = { selected_syrian_region = 12 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				update_syria_dirty = yes
+			}
+			syrian_idlib_icon_click = {
+				set_variable = { selected_syrian_region = 13 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_idlib_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_idlib_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_idlib_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_hama_icon_click = {
+				set_variable = { selected_syrian_region = 14 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_hama_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_hama_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_hama_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_norraqqa_icon_click = {
+				set_variable = { selected_syrian_region = 15 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				if = {
+					limit = { NOT = { has_country_flag = syrian_norraqqa_economic_support_completed } }
+					set_country_flag = economic_support_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_norraqqa_closure_of_underground_madrassas_completed } }
+					set_country_flag = closure_of_underground_madrassas_available
+				}
+				if = {
+					limit = { NOT = { has_country_flag = syrian_norraqqa_selecting_a_priority_sector_completed } }
+					set_country_flag = selecting_a_priority_sector_available
+				}
+				update_syria_dirty = yes
+			}
+			syrian_generic_decision_button_click = {
+				set_variable = { selected_syrian_region = 0 }
+				clr_country_flag = economic_support_available
+				clr_country_flag = closure_of_underground_madrassas_available
+				clr_country_flag = selecting_a_priority_sector_available
+				update_syria_dirty = yes
+			}
+		}
+	}
+}

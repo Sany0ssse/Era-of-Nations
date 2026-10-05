@@ -1,0 +1,218 @@
+ideas = {
+	religion = {
+		law = yes
+		use_list_view = yes
+		lithuanian_paganism_idea = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			picture = Religion_baltic
+			modifier = {
+				nationalist_acceptance = 10
+				political_power_factor = 0.02
+				stability_factor = 0.03
+				democratic_drift = -0.03
+				nationalist_drift = 0.03
+				fascism_drift = -0.07
+			}
+		}
+	}
+	wto = {
+		law = yes
+		use_list_view = yes
+		#WTO
+		GENERIC_wto_idea = {
+			cost = 400
+			picture = generic_org_wto_idea
+			allowed_civil_war = { always = yes }
+			allowed = {
+				NOT = {
+					original_tag = ISI
+				}
+			}
+			modifier = {
+				trade_opinion_factor = 0.25
+				production_speed_buildings_factor = 0.1
+				research_speed_factor = 0.1
+			}
+			ai_will_do = {
+				factor = 10
+			}
+		}
+		#ETS
+		GENERIC_ets_idea = {
+			cost = 400
+			picture = generic_org_wto_idea
+			allowed_civil_war = { always = yes }
+			allowed = {
+				NOT = {
+					original_tag = ISI
+				}
+			}
+			visible = {
+				SOV = {
+					has_completed_focus = SOV_zyuga_ets
+					emerging_communist_state_are_in_power = yes
+				}
+			}
+			modifier = {
+				trade_opinion_factor = 0.25
+				production_speed_buildings_factor = 0.1
+				research_speed_factor = 0.1
+			}
+			ai_will_do = {
+				factor = 0
+				modifier = {
+					add = 100
+					SOV = { 
+						is_top3_influencer = yes 
+					}
+				}
+				modifier = {
+					add = 100
+					is_in_faction_with = SOV
+				}
+				modifier = {
+					add = 100
+					is_subject_of = SOV
+				}
+			}
+		}
+	}
+	military_pacts = {
+		law = yes
+		use_list_view = yes
+		#CFE
+		GENERIC_cfe_idea = {
+			cost = 120
+			picture = generic_miltreaty_cfe_idea
+			allowed_civil_war = { always = yes }
+			allowed = {
+				OR = {
+					#Post USSR
+					original_tag = SOV
+					original_tag = UKR
+					original_tag = BLR
+					original_tag = ARM
+					original_tag = AZE
+					original_tag = MLV
+					original_tag = GEO
+					#NATO
+					original_tag = BEL
+					original_tag = BUL
+					original_tag = ENG
+					original_tag = HUN
+					original_tag = GER
+					original_tag = HOL
+					original_tag = GRE
+					original_tag = DEN
+					original_tag = SPR
+					original_tag = ITA
+					original_tag = NOR
+					original_tag = ROM
+					original_tag = SLO
+					original_tag = TUR
+					original_tag = CZE
+					original_tag = FRA
+					original_tag = POL
+					original_tag = USA
+					original_tag = CAN
+				}
+			}
+			visible = {
+				NOT = {
+					has_country_flag = CFE_end
+				}
+			}
+			cancel = {
+				OR = {
+					threat > 0.5
+					has_defensive_war = yes
+					USA = { NOT = { has_idea = GENERIC_cfe_idea } }
+                    SOV = { NOT = { has_idea = GENERIC_cfe_idea } }
+				}
+			}
+			on_remove = {
+				set_country_flag = CFE_end
+				country_event = redux_generic.10
+			}
+			modifier = {
+				Military_Spending_cost_factor = 1.5
+				war_support_factor = -0.10
+				hidden_modifier = {
+					training_time_army_factor = 9999
+				}
+				custom_modifier_tooltip = cfe_training_blocked_tt
+			}
+		}
+		GENERIC_no_rest_idea = {
+			cost = 120
+			picture = generic_miltreaty_free_idea
+			allowed_civil_war = { always = yes }
+			allowed = { always = yes }
+			on_add = {
+				country_lock_all_division_template = no
+			}
+			modifier = {
+				Military_Spending_cost_factor = -0.05
+				war_support_factor = 0.05
+			}
+			ai_will_do = {
+				factor = 500
+				modifier = {
+					add = -500
+					is_subject = yes
+				}
+				modifier = {
+					add = -500
+					NOT = {
+						OR = {
+							threat > 0.5
+							has_defensive_war = yes
+							USA = { NOT = { has_idea = GENERIC_cfe_idea } }
+							SOV = { NOT = { has_idea = GENERIC_cfe_idea } }
+						}
+					}
+				}
+			}
+		}
+		GENERIC_rest_idea = {
+			cost = 120
+			picture = generic_miltreaty_ban_idea
+			allowed_civil_war = { always = yes }
+			visible = {
+				NOT = {
+					has_idea = GENERIC_cfe_idea
+				}
+			}
+			on_add = {
+				country_lock_all_division_template = yes
+			}
+			cancel = {
+				has_defensive_war = yes
+			}
+			on_remove = {
+				country_lock_all_division_template = no
+				if = {
+					limit = {
+						NOT = {
+							has_idea = GENERIC_no_rest_idea
+						}
+					}
+					add_ideas = GENERIC_no_rest_idea
+				}
+			}
+			modifier = {
+				Military_Spending_cost_factor = 1.0
+				war_support_factor = -0.10
+			}
+			ai_will_do = {
+				factor = 0
+			}
+		}
+	}
+	#No Available slot
+	no_available_slot = {
+		law = yes
+		use_list_view = yes
+	}
+}

@@ -1,0 +1,2311 @@
+##### VISEGRAD GROUP FOCUS TREE #####
+#####          BY DUKE          #####
+joint_focus = {
+	id = visegrad_group_shared_focus
+	icon = Visegrad_group
+	x = -10
+	y = 18
+
+	# Offsets for Custom Focus Trees
+	offset = {
+		x = 22 
+		y = 10 
+		trigger = { tag = POL }
+	}
+    offset = {
+		x = 7
+		y = 1
+		trigger = { tag = HUN }
+	}
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    allow_branch = {
+		has_idea = Visegrad_group
+	}
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+
+    cost = 4
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus visegrad_group_shared_focus"
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus visegrad_group_shared_focus"
+        set_temp_variable = { visegrad_cohesion_change = 5 }
+        visegrad_cohesion_update = yes
+        set_temp_variable = { visegrad_influence_change = 2 }
+        visegrad_influence_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus visegrad_group_shared_focus"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#International Visegrad Fund
+joint_focus = {
+	id = VG_visegrad_group_fund
+	icon = Visegrad_Fund
+	x = -3
+	y = 1
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = visegrad_group_shared_focus }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_group_fund"
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_group_fund"
+        set_temp_variable = { visegrad_influence_change = 4 }
+        visegrad_influence_update = yes
+        set_temp_variable = { visegrad_fund_treasury_change = 15 }
+        visegrad_fund_treasury_update = yes
+        set_temp_variable = { treasury_change = -15.00 }
+        modify_treasury_effect = yes
+        set_temp_variable = { visegrad_cohesion_change = 2 }
+        visegrad_cohesion_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_group_fund"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Visegrad Patent Institute
+joint_focus = {
+	id = VG_visegrad_patent_institute
+	icon = vg_patent_institute
+	x = -3
+	y = 2
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_visegrad_group_fund }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        custom_trigger_tooltip = {
+            tooltip = VG_visegrad_patent_institute_available_tt
+            check_variable = { global.visegrad_fund_treasury > 14.99 }
+        }
+    }
+
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_patent_institute"
+        custom_effect_tooltip = VG_visegrad_patent_institute_tt
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_patent_institute"
+        set_temp_variable = { visegrad_fund_treasury_change = -15.00 }
+        visegrad_fund_treasury_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_patent_institute"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Foreign funding
+joint_focus = {
+	id = VG_foreign_funding
+	icon = vg_foreign_invest
+	x = -5
+	y = 2
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_visegrad_group_fund }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_foreign_funding"
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_foreign_funding"
+        GER = {
+            country_event = visegrad_group.1
+        }
+        AUS = {
+            country_event = visegrad_group.1
+        }
+        UKR = {
+            country_event = visegrad_group.1
+        }
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_foreign_funding"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#American Investments
+joint_focus = {
+	id = VG_american_investments
+	icon = vg_american_invest
+	x = -6
+	y = 3
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_foreign_funding }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_american_investments"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_us_investments
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_american_investments"
+        set_temp_variable = { visegrad_influence_change = 5 }
+        visegrad_influence_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_american_investments"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#European Investments
+joint_focus = {
+	id = VG_european_investments
+	icon = vg_eu_invest
+	x = -4
+	y = 3
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_foreign_funding }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_european_investments"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_eng_investments
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_european_investments"
+        set_temp_variable = { visegrad_influence_change = 2 }
+        visegrad_influence_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_european_investments"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#South Korean Investments
+joint_focus = {
+	id = VG_korean_investments
+	icon = vg_korean_invest
+	x = -5
+	y = 4
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_american_investments focus = VG_european_investments }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_korean_investments"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_kor_investments
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_korean_investments"
+        set_temp_variable = { visegrad_influence_change = 2 }
+        visegrad_influence_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_korean_investments"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Domestic investment
+joint_focus = {
+	id = VG_domestic_investment
+	icon = vg_domestic_invest
+	x = -1
+	y = 2
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_visegrad_group_fund }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_domestic_investment"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_infra_invest_domestic
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_domestic_investment"
+        set_temp_variable = { visegrad_influence_change = 2 }
+        visegrad_influence_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_domestic_investment"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Energy expansion
+joint_focus = {
+	id = VG_energy_expansion
+	icon = vg_energy_invest
+	x = 0
+	y = 3
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_domestic_investment }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_energy_expansion"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_energy_invest_domestic
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_energy_expansion"
+        set_temp_variable = { visegrad_influence_change = 3 }
+        visegrad_influence_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_energy_expansion"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Expansion of industry
+joint_focus = {
+	id = VG_industry_expansion
+	icon = vg_industry_invest
+	x = -2
+	y = 3
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_domestic_investment }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 7.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_industry_expansion"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_industry_invest_domestic
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_industry_expansion"
+        set_temp_variable = { visegrad_influence_change = 3 }
+        visegrad_influence_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_industry_expansion"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Development of Nuclear Energy
+joint_focus = {
+	id = VG_development_nuclear_energy
+	icon = vg_nuclear_reactor
+	x = -1
+	y = 4
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_industry_expansion }
+    prerequisite = { focus = VG_energy_expansion }
+    joint_trigger = {
+        has_idea = Visegrad_group
+        all_country = {
+            if = {
+                limit = {
+                    has_idea = Visegrad_group
+                }
+                has_tech = reactor1
+            }
+		}
+    }
+
+    cost = 8
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_development_nuclear_energy"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_nuclear_invest_domestic
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_development_nuclear_energy"
+        set_temp_variable = { visegrad_influence_change = 4 }
+        visegrad_influence_update = yes
+        set_temp_variable = { visegrad_cohesion_change = 5 }
+        visegrad_cohesion_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_development_nuclear_energy"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Construction of Nuclear Complexes
+joint_focus = {
+	id = VG_construction_nuclear_complexes
+	icon = vg_nuclear_complex
+	x = 0
+	y = 5
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_development_nuclear_energy }
+    joint_trigger = {
+        has_idea = Visegrad_group
+        all_country = {
+            if = {
+                limit = {
+                    has_idea = Visegrad_group
+                }
+                has_tech = reactor3
+            }
+		}
+    }
+
+    cost = 10
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_construction_nuclear_complexes"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_nuclear_complex_invest_domestic
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_construction_nuclear_complexes"
+        set_temp_variable = { visegrad_influence_change = 10 }
+        visegrad_influence_update = yes
+        set_temp_variable = { visegrad_cohesion_change = 7 }
+        visegrad_cohesion_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_construction_nuclear_complexes"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Visegrad Nuclear Company
+joint_focus = {
+	id = VG_visegrad_nuclear_company
+	icon = vg_nuclear_company
+	x = -1
+	y = 6
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_construction_nuclear_complexes }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 8
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_nuclear_company"
+        custom_effect_tooltip = VG_visegrad_nuclear_company_tt
+        effect_tooltip = {
+            add_ideas = VG_atomic_four_idea
+        }
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_nuclear_company"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_nuclear_company"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Automobile factories
+joint_focus = {
+	id = VG_automobile_factories
+	icon = vg_auto
+	x = -3
+	y = 4
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_european_investments }
+    prerequisite = { focus = VG_industry_expansion }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_automobile_factories"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_automobile_invest
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_automobile_factories"
+        set_temp_variable = { visegrad_influence_change = 2 }
+        visegrad_influence_update = yes
+        set_temp_variable = { visegrad_cohesion_change = 1 }
+        visegrad_cohesion_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_automobile_factories"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Hyundai
+joint_focus = {
+	id = VG_hyundai
+	icon = vg_hyndai
+	x = -4
+	y = 5
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_automobile_factories }
+    prerequisite = { focus = VG_korean_investments }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_hyundai"
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_hyundai"
+        KOR = {
+            country_event = visegrad_group.8
+        }
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_hyundai"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Ford
+joint_focus = {
+	id = VG_ford
+	icon = vg_ford
+	x = -2
+	y = 5
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_automobile_factories }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_ford"
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_ford"
+        USA = {
+            country_event = visegrad_group.5
+        }
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_ford"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Eastern Investments
+joint_focus = {
+	id = VG_eastern_investments
+	icon = vg_east_invest
+	x = -3
+	y = 6
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_hyundai }
+    prerequisite = { focus = VG_ford }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_eastern_investments"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_rus_investments
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_eastern_investments"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_eastern_investments"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Visegrad Battle Group
+joint_focus = {
+	id = VG_visegrad_battle_group
+	icon = vg_battle_group
+	x = 3
+	y = 1
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = visegrad_group_shared_focus }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 8
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_battle_group"
+        every_other_country = {
+			limit = { has_idea = Visegrad_group }
+			diplomatic_relation = {
+				country = PREV
+				relation = military_access
+				active = yes
+			}
+        }
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_battle_group"
+        set_temp_variable = { visegrad_cohesion_change = 10 }
+        visegrad_cohesion_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_battle_group"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Defense Treaty
+joint_focus = {
+	id = VG_defense_treaty
+	icon = vg_defence_treaty
+	x = 4
+	y = 2
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_visegrad_battle_group }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_defense_treaty"
+        every_country = {
+			limit = { has_idea = Visegrad_group }
+			diplomatic_relation = {
+				country = PREV
+				relation = guarantee
+				active = yes
+			}
+        }
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_defense_treaty"
+        set_temp_variable = { visegrad_cohesion_change = 10 }
+        visegrad_cohesion_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_defense_treaty"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Border Defense Plan
+joint_focus = {
+	id = VG_border_defense_plan
+	icon = vg_military_invest
+	x = 5
+	y = 3
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_defense_treaty }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 8
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_border_defense_plan"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_arms_invest_domestic 
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_border_defense_plan"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_border_defense_plan"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Modernization according to Polish standards
+joint_focus = {
+	id = VG_modernization_polish_standards
+	icon = vg_polish_standarts
+	x = 2
+	y = 2
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_visegrad_battle_group }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_modernization_polish_standards"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_go_to_gepard
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_modernization_polish_standards"
+        POL = {
+            set_temp_variable = { visegrad_influence_change = 12 }
+            visegrad_influence_update = yes
+        }
+        set_temp_variable = { visegrad_cohesion_change = 7 }
+        visegrad_cohesion_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_modernization_polish_standards"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Conducting joint exercises
+joint_focus = {
+	id = VG_joint_exercises
+	icon = vg_joint_exercises
+	x = 3
+	y = 3
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_modernization_polish_standards }
+    prerequisite = { focus = VG_defense_treaty }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_joint_exercises"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_start_joint_exercises 
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_joint_exercises"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_joint_exercises"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#V4 + Croatia
+joint_focus = {
+	id = VG_v4croatia
+	icon = vg_v4_croatia
+	x = 4
+	y = 4
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_joint_exercises }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_v4croatia"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_start_croatia_exercises
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_v4croatia"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_v4croatia"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#V4 + Ukraine
+joint_focus = {
+	id = VG_v4ukraine
+	icon = vg_v4_ukraine
+	x = 2
+	y = 4
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_joint_exercises }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_v4ukraine"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_start_ukraine_exercises
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_v4ukraine"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_v4ukraine"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#V4 + Baltic
+joint_focus = {
+	id = VG_v4baltic
+	icon = vg_v4_baltica
+	x = 3
+	y = 5
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_v4ukraine focus = VG_v4croatia }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_v4baltic"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_start_baltic_exercises
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_v4baltic"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_v4baltic"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Single unit
+joint_focus = {
+	id = VG_single_unit
+	icon = vg_single_unit
+	x = 2
+	y = 6
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_v4baltic }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+
+    available = {
+        custom_trigger_tooltip = {
+            tooltip = VG_single_unit_tt
+            check_variable = { global.visegrad_fund_treasury > 29.99 }
+        }
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_single_unit"
+        custom_effect_tooltip = {
+			localization_key = UNLOCK_DECISION_IN_CATEGORY
+			DECISION = VG_hire_army
+			DECISION_CATEGORY = visegrad_category
+		}
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_single_unit"
+        set_temp_variable = { visegrad_fund_treasury_change = -30.00 }
+        visegrad_fund_treasury_update = yes
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_single_unit"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Project of unification
+joint_focus = {
+	id = VG_project_of_unification
+	icon = vg_project_unification
+	x = 0
+	y = 7
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+    prerequisite = { focus = VG_single_unit }
+    prerequisite = { focus = VG_eastern_investments }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+	available = {
+		if = {
+			limit = { original_tag = POL }
+			if = {
+				limit = { 
+					HUN = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = HUN
+					ratio > 0.5
+				}
+				HUN = {
+					influence_higher_70 = yes
+				}
+			}
+			if = {
+				limit = { 
+					SLO = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = SLO
+					ratio > 0.5
+				}
+				SLO = {
+					influence_higher_70 = yes
+				}
+			}
+			if = {
+				limit = { 
+					CZE = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = CZE
+					ratio > 0.5
+				}
+				CZE = {
+					influence_higher_70 = yes
+				}
+			}
+		}
+		if = {
+			limit = { original_tag = HUN }
+			if = {
+				limit = { 
+					POL = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = POL
+					ratio > 0.5
+				}
+				POL = {
+					influence_higher_70 = yes
+				}
+			}
+			if = {
+				limit = { 
+					SLO = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = SLO
+					ratio > 0.5
+				}
+				SLO = {
+					influence_higher_70 = yes
+				}
+			}
+			if = {
+				limit = { 
+					CZE = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = CZE
+					ratio > 0.5
+				}
+				CZE = {
+					influence_higher_70 = yes
+				}
+			}
+		}
+		if = {
+			limit = { original_tag = SLO }
+			if = {
+				limit = { 
+					POL = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = POL
+					ratio > 0.5
+				}
+				POL = {
+					influence_higher_70 = yes
+				}
+			}
+			if = {
+				limit = { 
+					HUN = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = HUN
+					ratio > 0.5
+				}
+				HUN = {
+					influence_higher_70 = yes
+				}
+			}
+			if = {
+				limit = { 
+					CZE = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = CZE
+					ratio > 0.5
+				}
+				CZE = {
+					influence_higher_70 = yes
+				}
+			}
+		}
+		if = {
+			limit = { original_tag = CZE }
+			if = {
+				limit = { 
+					POL = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = POL
+					ratio > 0.5
+				}
+				POL = {
+					influence_higher_70 = yes
+				}
+			}
+			if = {
+				limit = { 
+					SLO = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = SLO
+					ratio > 0.5
+				}
+				SLO = {
+					influence_higher_70 = yes
+				}
+			}
+			if = {
+				limit = { 
+					HUN = { 
+						exists = yes
+						has_idea = Visegrad_group 
+					} 
+				}
+				fighting_army_strength_ratio = {
+					tag = HUN
+					ratio > 0.5
+				}
+				HUN = {
+					influence_higher_70 = yes
+				}
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = VG_project_of_unification_tt
+			check_variable = { global.visegrad_cohesion > 95 }
+			check_variable = { visegrad_influence = 100 }
+		}
+	}
+
+    cost = 10
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_project_of_unification"
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_project_of_unification"
+        set_country_flag = visegrad_leader
+        custom_effect_tooltip = visegrad_leader_tt
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_project_of_unification"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Visegrad Union
+joint_focus = {
+	id = VG_visegrad_union
+	icon = vg_confederation_unite
+	x = 0
+	y = 14
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_center_of_influence focus = VG_center_of_power }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_union"
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_union"
+        create_faction_from_template = faction_template_pol_visegrad
+        if = {
+            limit = { POL = { has_idea = Visegrad_group } }
+            if = {
+                limit = { has_idea = NATO_member }
+                NATO_leave = yes
+            }
+            add_to_faction = POL
+        }
+        if = {
+            limit = { HUN = { has_idea = Visegrad_group } }
+            if = {
+                limit = { has_idea = NATO_member }
+                NATO_leave = yes
+            }
+            add_to_faction = HUN
+        }
+        if = {
+            limit = { CZE = { has_idea = Visegrad_group } }
+            if = {
+                limit = { has_idea = NATO_member }
+                NATO_leave = yes
+            }
+            add_to_faction = CZE
+        }
+        if = {
+            limit = { SLO = { has_idea = Visegrad_group } }
+            if = {
+                limit = { has_idea = NATO_member }
+                NATO_leave = yes
+            }
+            add_to_faction = SLO
+        }
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_union"
+    }
+
+	ai_will_do = {
+		base = 200
+	}
+}
+#Project Confederation
+joint_focus = {
+	id = VG_project_confederation
+	icon = vg_confederation_project
+	x = 1
+	y = 8
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_project_of_unification }
+    mutually_exclusive = { focus = VG_centralized_unification }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 6.5
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_project_confederation"
+        add_ideas = Confederation_member
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_project_confederation"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_project_confederation"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Centralized unification
+joint_focus = {
+	id = VG_centralized_unification
+	icon = vg_cenatralisation
+	x = -1
+	y = 8
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_project_of_unification }
+    mutually_exclusive = { focus = VG_project_confederation }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_centralized_unification"
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_centralized_unification"
+        add_ideas = VG_centralized_management
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_centralized_unification"
+        add_ideas = VG_centralized_management_puppet
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Economic reorganization
+joint_focus = {
+	id = VG_economic_reorganization
+	icon = vg_economic_reorganization
+	x = 0
+	y = 9
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_centralized_unification focus = VG_project_confederation }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 8
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_economic_reorganization"
+        add_timed_idea = {
+            idea = VG_economic_reorganization
+            days = 120
+        }
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_economic_reorganization"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_economic_reorganization"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Single currency
+joint_focus = {
+	id = VG_single_currency
+	icon = vg_v4euro
+	x = 0
+	y = 10
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_economic_reorganization }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+        custom_trigger_tooltip = {
+            tooltip = VG_single_currency_tt
+            has_idea = VG_economic_reorganization1
+        }
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_single_currency"
+        swap_ideas = {
+            remove_idea = VG_economic_reorganization1
+            add_idea = VG_visegrad_euro
+        }
+        add_dynamic_modifier = { modifier = visegrad_euro_inflation_modifier }
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_single_currency"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_single_currency"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Visegrad Passport
+joint_focus = {
+	id = VG_visegrad_passport
+	icon = vg_visegrad_passport
+	x = -2
+	y = 9
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_centralized_unification }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 6
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_passport"
+        add_ideas = VG_visegrad_passport
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_passport"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_passport"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Merger of departments
+joint_focus = {
+	id = VG_merger_of_departments
+	icon = vg_merge_deportaments
+	x = -2
+	y = 10
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_visegrad_passport }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_merger_of_departments"
+        custom_effect_tooltip = VG_merger_of_departments_tt
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_merger_of_departments"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_merger_of_departments"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Deal with problem of bureaucracy
+joint_focus = {
+	id = VG_deal_with_bureaucracy
+	icon = vg_bureaucracy
+	x = 2
+	y = 9
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_project_confederation }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 6
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_deal_with_bureaucracy"
+        add_ideas = VG_problem_of_bureaucracy
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_deal_with_bureaucracy"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_deal_with_bureaucracy"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Political reconstruction
+joint_focus = {
+	id = VG_political_reconstruction
+	icon = vg_politic_reconstruction
+	x = 2
+	y = 10
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_deal_with_bureaucracy }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_political_reconstruction"
+        swap_ideas = {
+            remove_idea = Confederation_member
+            add_idea = Confederation_member1
+        }
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_political_reconstruction"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_political_reconstruction"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Visegrad Confederation
+joint_focus = {
+	id = VG_visegrad_confederation
+	icon = vg_confederation
+	x = 1
+	y = 11
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_political_reconstruction }
+    prerequisite = { focus = VG_single_currency }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 10
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_confederation"
+        if = {
+            limit = { POL = { has_idea = Visegrad_group } }
+            POL = {
+                set_cosmetic_tag = POL_VISEGRAD
+            }
+        }
+        if = {
+            limit = { SLO = { has_idea = Visegrad_group } }
+            SLO = {
+                set_cosmetic_tag = SLO_VISEGRAD
+            }
+        }
+        if = {
+            limit = { CZE = { has_idea = Visegrad_group } }
+            CZE = {
+                set_cosmetic_tag = CZE_VISEGRAD
+            }
+        }
+        if = {
+            limit = { HUN = { has_idea = Visegrad_group } }
+            HUN = {
+                set_cosmetic_tag = HUN_VISEGRAD
+            }
+        }
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_confederation"
+        if = {
+            limit = { original_tag = POL }
+            if = {
+                limit = { SLO = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = SLO
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+            if = {
+                limit = { CZE = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = CZE
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+            if = {
+                limit = { HUN = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = HUN
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+        }
+        if = {
+            limit = { original_tag = HUN }
+            if = {
+                limit = { SLO = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = SLO
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+            if = {
+                limit = { CZE = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = CZE
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+            if = {
+                limit = { POL = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = POL
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+        }
+        if = {
+            limit = { original_tag = SLO }
+            if = {
+                limit = { POL = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = POL
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+            if = {
+                limit = { CZE = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = CZE
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+            if = {
+                limit = { HUN = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = HUN
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+        }
+        if = {
+            limit = { original_tag = CZE }
+            if = {
+                limit = { POL = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = POL
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+            if = {
+                limit = { SLO = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = SLO
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+            if = {
+                limit = { HUN = { has_idea = Visegrad_group } }
+                set_autonomy = {
+                    target = HUN
+                    autonomous_state = autonomy_visegrad_subject
+                }
+            }
+        }
+    }
+    
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_confederation"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Visegrad Federation
+joint_focus = {
+	id = VG_visegrad_federation
+	icon = vg_central_europe
+	x = -1
+	y = 11
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_merger_of_departments }
+    prerequisite = { focus = VG_single_currency }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 10
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_federation"
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_federation"
+        if = {
+            limit = { original_tag = POL }
+            if = {
+                limit = { SLO = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = SLO
+                    transfer_troops = yes
+                }
+                SLO = {
+                    every_core_state = {
+                        add_core_of = POL
+                    }
+                	every_unit_leader = { set_nationality = POL	}
+				}
+				POL = {
+					add_to_variable = { treasury = SLO.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = SLO.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = SLO.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+            if = {
+                limit = { CZE = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = CZE
+                    transfer_troops = yes
+                }
+                CZE = {
+                    every_core_state = {
+                        add_core_of = POL
+                    }
+					every_unit_leader = { set_nationality = POL	}
+				}
+				POL = {
+					add_to_variable = { treasury = CZE.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = CZE.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = CZE.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+            if = {
+                limit = { HUN = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = HUN
+                    transfer_troops = yes
+                }
+                HUN = {
+                    every_core_state = {
+                        add_core_of = POL
+                    }
+                    every_unit_leader = { set_nationality = POL	}
+				}
+				POL = {
+					add_to_variable = { treasury = HUN.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = HUN.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = HUN.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+        }
+        if = {
+            limit = { original_tag = HUN }
+            if = {
+                limit = { SLO = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = SLO
+                    transfer_troops = yes
+                }
+                SLO = {
+                    every_core_state = {
+                        add_core_of = HUN
+                    }
+                    every_unit_leader = { set_nationality = HUN	}
+				}
+				HUN = {
+					add_to_variable = { treasury = SLO.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = SLO.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = SLO.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+                
+            }
+            if = {
+                limit = { CZE = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = CZE
+                    transfer_troops = yes
+                }
+                CZE = {
+                    every_core_state = {
+                        add_core_of = HUN
+                    }
+                    every_unit_leader = { set_nationality = HUN }
+				}
+				HUN = {
+					add_to_variable = { treasury = CZE.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = CZE.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = CZE.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+            if = {
+                limit = { POL = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = POL
+                    transfer_troops = yes
+                }
+                POL = {
+                    every_core_state = {
+                        add_core_of = HUN
+                    }
+                    every_unit_leader = { set_nationality = HUN	}
+				}
+				HUN = {
+					add_to_variable = { treasury = POL.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = POL.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = POL.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+        }
+        if = {
+            limit = { original_tag = SLO }
+            if = {
+                limit = { POL = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = POL
+                    transfer_troops = yes
+                }
+                POL = {
+                    every_core_state = {
+                        add_core_of = SLO
+                    }
+                    every_unit_leader = { set_nationality = SLO	}
+				}
+				SLO = {
+					add_to_variable = { treasury = POL.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = POL.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = POL.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+            if = {
+                limit = { CZE = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = CZE
+                    transfer_troops = yes
+                }
+                CZE = {
+                    every_core_state = {
+                        add_core_of = SLO
+                    }
+                    every_unit_leader = { set_nationality = SLO	}
+				}
+				SLO = {
+					add_to_variable = { treasury = CZE.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = CZE.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = CZE.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+            if = {
+                limit = { HUN = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = HUN
+                    transfer_troops = yes
+                }
+                HUN = {
+                    every_core_state = {
+                        add_core_of = SLO
+                    }
+                    every_unit_leader = { set_nationality = SLO	}
+				}
+				SLO = {
+					add_to_variable = { treasury = HUN.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = HUN.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = HUN.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+        }
+        if = {
+            limit = { original_tag = CZE }
+            if = {
+                limit = { POL = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = POL
+                    transfer_troops = yes
+                }
+                POL = {
+                    every_core_state = {
+                        add_core_of = CZE
+                    }
+                    every_unit_leader = { set_nationality = CZE	}
+				}
+				CZE = {
+					add_to_variable = { treasury = POL.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = POL.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = POL.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+            if = {
+                limit = { SLO = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = SLO
+                    transfer_troops = yes
+                }
+                SLO = {
+                    every_core_state = {
+                        add_core_of = CZE
+                    }
+                    every_unit_leader = { set_nationality = CZE	}
+				}
+				CZE = {
+					add_to_variable = { treasury = SLO.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = SLO.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = SLO.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+            if = {
+                limit = { HUN = { has_idea = Visegrad_group } }
+                annex_country = {
+                    target = HUN
+                    transfer_troops = yes
+                }
+                HUN = {
+                    every_core_state = {
+                        add_core_of = CZE
+                    }
+                    every_unit_leader = { set_nationality = CZE	}
+				}
+				CZE = {
+					add_to_variable = { treasury = HUN.treasury }
+					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
+					add_to_variable = { debt = HUN.debt }
+	    			clamp_variable = { var = debt min = 0 max = 1000000 }
+					add_to_variable = { int_investments = HUN.int_investments }
+            		clamp_variable = { var = int_investments min = 0 max = 1000000 }
+				}
+            }
+        }
+        set_cosmetic_tag = VISEGRAD_FEDERATION
+        news_event = visegrad_group.16
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_visegrad_federation"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Reorganization of the Armed Forces
+joint_focus = {
+	id = VG_reorganization_armed_forces
+	icon = vg_army_reorganization
+	x = 0
+	y = 12
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_visegrad_confederation focus = VG_visegrad_federation }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 6
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_reorganization_armed_forces"
+        add_ideas = VG_visegrad_armed_forces
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_reorganization_armed_forces"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_reorganization_armed_forces"
+    }
+
+	ai_will_do = {
+		base = 200
+	}
+}
+#Center of Power
+joint_focus = {
+	id = VG_center_of_power
+	icon = vg_center_of_power
+	x = -1
+	y = 13
+    relative_position_id = visegrad_group_shared_focus
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_reorganization_armed_forces }
+    mutually_exclusive = { focus = VG_center_of_influence }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_center_of_power"
+        swap_ideas = {
+            remove_idea = VG_visegrad_armed_forces
+            add_idea = VG_visegrad_armed_forces1
+        }
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_center_of_power"
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_center_of_power"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}
+#Center of influence
+joint_focus = {
+	id = VG_center_of_influence
+	icon = vg_center_of_infuence
+	x = 1
+	y = 13
+    relative_position_id = visegrad_group_shared_focus
+    mutually_exclusive = { focus = VG_center_of_power }
+
+    search_filters = { FOCUS_FILTER_VISEGRAD }
+	prerequisite = { focus = VG_reorganization_armed_forces }
+    joint_trigger = {
+        has_idea = Visegrad_group
+    }
+    available = {
+        has_country_flag = visegrad_leader
+    }
+
+    cost = 7
+
+    completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus VG_center_of_influence"
+        add_ideas = VG_center_of_influence_idea
+	}
+    completion_reward_joint_originator = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_center_of_influence"
+        every_neighbor_country = {
+            set_temp_variable = { percent_change = 4 }
+            set_temp_variable = { tag_index = FROM }
+            set_temp_variable = { influence_target = THIS }
+            change_influence_percentage = yes
+        }
+    }
+    completion_reward_joint_member = {
+        log = "[GetDateText]: [Root.GetName]: Focus VG_center_of_influence"
+    }
+
+	ai_will_do = {
+		factor = 150
+        modifier = {
+            original_tag = CZE
+            factor = -100
+        }
+	}
+}

@@ -1,0 +1,337 @@
+﻿capital = 149
+2000.1.1 = {
+	if = {
+		limit = { has_dlc = "No Step Back" }
+
+		set_oob = "PMR_2000_nsb"
+		else = {
+			set_oob = "PMR_2000_nonnsb"
+		}
+	}
+	if = { limit = { has_dlc = "By Blood Alone" }
+		set_air_oob = "PMR_2000_bba"
+	}
+
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency
+	}
+	reverse_add_opinion_modifier = {
+		target = USA
+   		modifier = same_petrocurrency_trade
+	}
+
+
+	set_cosmetic_tag = PMR
+	set_variable = { gdp_per_capita = 2.4 }
+	set_variable = { capitalization = 0.010 }
+	set_variable = { count_companies = 0 }
+	add_to_array = { global.petro_minor_state = THIS }
+	add_ideas = {		#Freedom Laws
+		censorship_01
+		assembly_01
+		freedom_religion_02
+		lgbt_laws_03
+		freedom_trade_unions_02
+		internet_02
+
+		#Economic Cycle
+		stagnation
+		#Corruption
+		rampant_corruption
+		#Faction 1
+		small_medium_business_owners
+		#Faction 2
+		communist_cadres
+		#Faction 3
+		oligarchs
+
+		#Bureacracy
+		bureau_03
+		#Military Spending
+		defence_05
+		#Internal Security
+		police_02
+		#Education budget
+		edu_03
+		#Health budget
+		health_02
+		#Social spending
+		social_02
+
+		#Trade Law
+		#??
+		#Conscription Law
+		draft_army
+		#Women in the military
+		volunteer_women
+		#Foreign Intervention Law
+
+		#Officer Training
+		officer_advanced_training
+
+		#Other
+		orthodox_christian
+		Lacks_International_Recognition
+		GENERIC_structures_idea3
+		GENERIC_structures_idea1
+		GENERIC_structures_idea2
+		GENERIC_no_rest_idea
+		frontier_market
+		PMR_disorganized_army
+		PMR_14_army
+		PMR_sheriff
+		PMR_fragment_ussr
+		PMR_victory_moldova
+		PMR_transnistrian_army_idea
+		PMR_null_airforce
+		PMR_denomination_idea
+		PMR_transnistrian_economy_idea
+		multi_ethnic_state_idea
+		population_pyramid_2
+		GENERIC_petrodollar_idea
+	}
+
+	#Economic
+	set_variable = { var = corporate_tax_rate value = 34 }
+	set_variable = { var = population_tax_rate value = 28 }
+
+	#Statehood system
+	add_to_array = {
+		global.Unrecognised_States = THIS
+	}
+	MLV = { set_country_flag = original_owner_@FROM }
+
+	add_opinion_modifier = { target = SOO modifier = russian_proficient }
+	reverse_add_opinion_modifier = { target = SOO modifier = russian_proficient }
+	add_opinion_modifier = { target = ABK modifier = russian_proficient }
+	reverse_add_opinion_modifier = { target = ABK modifier = russian_proficient }
+
+	# Starting tech
+	set_technology = {
+
+		armoured_mass_assault = 1
+
+		#For templates
+		infantry_weapons = 1
+
+		command_control_equipment = 1
+		Anti_tank_0 = 1
+		Heavy_Anti_tank_0 = 1
+		util_vehicle_0 = 1
+
+		basic_computing = 1
+		integrated_circuit = 1
+		computing1 = 1
+		decryption1 = 1
+		encryption1 = 1
+
+		radar = 1
+		internet1 = 1 	#1G
+		fuel_silos = 1
+
+		industrial_electrospun_polymeric_nanofibers = 1
+		stereolitography = 1
+		fuel_refining = 1
+		construction1 = 1
+	}
+	if = {
+		limit = { has_dlc = "No Step Back" }
+
+		complete_special_project = sp:sp_armoured_vehicle_project
+		set_technology = {
+			mbt_tech_ops = 1
+			helo_ops_tech = 1
+			nsb_attack_helicopter_tech_1 = 1
+			mbt_tech = 1
+			early_cold_war_ammo = 1
+			defensive_systems = 1
+			nsb_gun_technology_1 = 1
+			nsb_artillery_ammo_1 = 1
+			nsb_special_ammo_0 = 1
+			nsb_AA_autocannon_0 = 1
+			mbt_tech_1 = 1
+			defensive_systems_2 = 1
+			nsb_gun_technology_2 = 1
+			nsb_artillery_ammo_2 = 1
+			nsb_special_ammo_1 = 1
+			nsb_AA_autocannon_1 = 1
+			mbt_tech_2 = 1
+			nsb_Anti_Air_0 = 1
+		}
+		create_equipment_variant = {
+			name = "GT-MU SPG-9"
+			type = medium_tank_flame_chassis_0
+			parent_version = 0
+			modules = {
+				main_armament_slot = afv_assault_gun
+				reload_type_slot = automatic_loading
+				ammunition_load_slot = mixed_main_ammo_1
+				turret_type_slot = tank_base_tank_turret
+				suspension_type_slot = tank_torsion_bar_suspension_medium
+				armor_type_slot = tank_steel_armor_gen1
+				engine_type_slot = tank_diesel_engine_gen1
+				secondary_armament_slot = empty
+				special_type_slot_1 = empty
+				special_type_slot_2 = empty
+				special_type_slot_3 = afv_troop_capacity
+				special_type_slot_4 = tank_battlestation_1
+			}
+			icon = "gfx/interface/technologies/PMR/LAND/GTMUSPG.dds"
+			model = "SOV_BMP1_entity"
+		}
+		create_equipment_variant = {
+			name = "BTRG-127 Bumblebee"
+		 	type = medium_tank_amphibious_chassis_1
+		 	parent_version = 0
+		 	modules = {
+		 		main_armament_slot = afv_machine_gun
+				reload_type_slot = automatic_loading
+				ammunition_load_slot = machine_gun_ammo_1
+		 		turret_type_slot = tank_no_turret
+		 		suspension_type_slot = tank_torsion_bar_suspension_medium
+		 		armor_type_slot = tank_steel_armor_gen1
+		 		engine_type_slot = afv_gasoline_engine_gen1
+				special_type_slot_1 = afv_troop_capacity
+		 	}
+		 	upgrades = {
+		 		tank_nsb_armor_upgrade = 1
+		 	}
+		 	obsolete = yes
+		 	icon = "gfx/interface/technologies/PMR/LAND/BTR127.dds"
+		 	model = "SOV_MTLB_entity"
+		 }
+		create_equipment_variant = {
+			name = "1ST Pribor-1"
+			type = medium_tank_rocket_chassis_0
+			parent_version = 0
+			modules = {
+				main_armament_slot = art_med_rocket_gen1
+				turret_type_slot = tank_base_tank_turret
+				reload_type_slot = eight_missile_pack
+				ammunition_load_slot = artillery_medium_ammo_1
+				suspension_type_slot = tank_wheeled_suspension_medium
+				engine_type_slot = afv_gasoline_engine_gen2
+
+				special_type_slot_1 = fire_ammo_1
+				special_type_slot_4 = tank_battlestation_1
+			}
+			upgrades = {
+				tank_nsb_fire_upgrade = 2
+			}
+			obsolete = yes
+			icon = "gfx/interface/technologies/PMR/LAND/pribor1.dds"
+		}
+		create_equipment_variant = {
+			name = "2ST Pribor-2"
+			type = medium_tank_rocket_chassis_1
+			parent_version = 0
+			modules = {
+				main_armament_slot = art_med_rocket_gen1
+				turret_type_slot = tank_base_tank_turret
+				reload_type_slot = eight_missile_pack
+				ammunition_load_slot = artillery_medium_ammo_1
+				suspension_type_slot = tank_wheeled_suspension_medium
+				engine_type_slot = afv_gasoline_engine_gen2
+
+				special_type_slot_1 = fire_ammo_1
+				special_type_slot_4 = tank_battlestation_1
+			}
+			upgrades = {
+				tank_nsb_fire_upgrade = 3
+			}
+			obsolete = yes
+			icon = "gfx/interface/technologies/PMR/LAND/pribor2.dds"
+		}
+
+		else = {
+			set_technology = {
+				Early_APC = 1
+				APC_1 = 1
+				MBT_1 = 1
+				IFV_1 = 1
+				artillery_0 = 1
+				SP_arty_0 = 1
+				SP_R_arty_0 = 1
+				Anti_Air_0 = 1
+			}
+		}
+	}
+
+	#Influence system
+	init_influence = yes
+	set_variable = { domestic_influence_amount = 30 }
+	add_to_array = { influence_array = SOV.id }
+	add_to_array = { influence_array_val = 65 }
+	add_to_array = { influence_array = UKR.id }
+	add_to_array = { influence_array_val = 3 }
+	add_to_array = { influence_array = ROM.id }
+	add_to_array = { influence_array_val = 1 }
+	add_to_array = { influence_array = MLV.id }
+	add_to_array = { influence_array_val = 2 }
+	startup_influence = yes
+
+	set_popularities = {
+		democratic = 23.0
+		communism = 50.0
+		fascism = 0.0
+		neutrality = 20.0
+		nationalist = 7.0
+	}
+	set_politics = {
+		ruling_party = communism
+		last_election = "1996.12.11"
+		election_frequency = 60
+		elections_allowed = yes
+	}
+
+	start_politics_input = yes
+
+	### Party Popularities
+	set_variable = { party_pop_array^0 = 0 } #Western_Autocracy
+	set_variable = { party_pop_array^1 = 0 } #conservatism
+	set_variable = { party_pop_array^2 = 0 } #liberalism
+	set_variable = { party_pop_array^3 = 0.07 } #socialism
+	set_variable = { party_pop_array^4 = 0.14 } #Communist-State
+	set_variable = { party_pop_array^5 = 0.1 } #anarchist_communism
+	set_variable = { party_pop_array^6 = 0.0 } #Conservative
+	set_variable = { party_pop_array^7 = 0.50 } #Autocracy
+	set_variable = { party_pop_array^8 = 0 } #Mod_Vilayat_e_Faqih
+	set_variable = { party_pop_array^9 = 0 } #Vilayat_e_Faqih
+	set_variable = { party_pop_array^10 = 0 } #Kingdom
+	set_variable = { party_pop_array^11 = 0 } #Caliphate
+	set_variable = { party_pop_array^12 = 0 } #Neutral_Muslim_Brotherhood
+	set_variable = { party_pop_array^13 = 0 } #Neutral_Autocracy
+	set_variable = { party_pop_array^14 = 0 } #Neutral_conservatism
+	set_variable = { party_pop_array^15 = 0.07 } #oligarchism
+	set_variable = { party_pop_array^16 = 0 } #Neutral_Libertarian
+	set_variable = { party_pop_array^17 = 0 } #Neutral_green
+	set_variable = { party_pop_array^18 = 0.09 } #neutral_Social
+	set_variable = { party_pop_array^19 = 0 } #Neutral_Communism
+	set_variable = { party_pop_array^20 = 0.03 } #Nat_Populism
+	set_variable = { party_pop_array^21 = 0 } #Nat_Fascism
+	set_variable = { party_pop_array^22 = 0 } #Nat_Autocracy
+	set_variable = { party_pop_array^23 = 0 } #Monarchist
+
+	### Ruling Party
+	add_to_array = { ruling_party = 7 }
+
+	startup_politics = yes
+
+	create_country_leader = {
+		name = "Igor Smirnov"
+		picture = "igor_smirnov.dds"
+		ideology = Autocracy
+		traits = {
+			emerging_Autocracy
+			ex_engineer
+			pro_russia
+			corruptible
+		}
+	}
+
+	recruit_character = PMR_vladimir_atamanyuk
+	recruit_character = PMR_oleg_gomenyuk
+	recruit_character = PMR_air_chief
+	set_variable = { overall_productivity = 336 }
+}

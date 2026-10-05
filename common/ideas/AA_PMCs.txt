@@ -1,0 +1,108 @@
+ideas = {
+	country = {
+		#Wagner Foreign - Africa
+		SOV_wagner_foreign_africa = {
+			allowed_civil_war = { always = yes }
+			picture = WAG_wagner_helmet_idea
+			cancel = {
+				has_war_with = SOV
+			}
+			on_remove = {
+				SOV = { country_event = sov_gru.13 }
+				delete_unit_template_and_units = {
+					division_template = "Wagner Light Unit"
+					disband = no
+				}
+			}
+			modifier = {
+				special_forces_training_time_factor = -0.02
+				max_planning = 0.04
+				special_forces_cap = 0.01
+			}
+		}
+		#Gazprom PMCs
+		SOV_gazprom_pmc = {
+			allowed_civil_war = {
+				always = yes
+			}
+			picture = sov_gazprom_pmc
+			cancel = {
+				has_war = no
+			}
+			on_remove = {
+				delete_unit_template_and_units = {
+					division_template = "Gazprom PMC"
+					disband = no
+				}
+			}
+		}
+		#Blackwater Foreign
+		USA_blackwater_foreign = {
+			allowed_civil_war = { always = yes }
+			picture = usa_blackwater_pmc
+			cancel = {
+				has_war_with = USA
+			}
+			on_remove = {
+				USA = { country_event = pmc_events.10 }
+				delete_unit_template_and_units = {
+					division_template = "Blackwater Light Unit"
+					disband = no
+				}
+			}
+			modifier = {
+				experience_gain_army_factor = 0.05
+				root_out_resistance_effectiveness_factor = 0.10
+				foreign_subversive_activites = -0.10
+				resistance_damage_to_garrison = -0.07
+			}
+		}
+		#MRPI Foreign
+		USA_mrpi_foreign = {
+			allowed_civil_war = { always = yes }
+			picture = usa_mrpi_pmc
+			cancel = {
+				has_war_with = USA
+			}
+			on_remove = {
+				USA = {
+					hidden_effect = {
+						set_temp_variable = { modify_pmc_mrpi = 1 }
+						modify_pmc_mrpi_support = yes
+					}
+				}
+			}
+			modifier = {
+				army_attack_factor = 0.08
+				army_org_factor = 0.07
+				max_planning_factor = 0.09
+			}
+		}
+		#Lusitânia Security Foreign
+		POR_lusitania_security_foreign = {
+			allowed_civil_war = { always = yes }
+			picture = por_lus_pmc
+			cancel = {
+				has_war_with = POR
+			}
+			on_remove = {
+				delete_unit_template_and_units = {
+					division_template = "Lusitânia Security PMC"
+					disband = no
+				}
+				POR = {
+					hidden_effect = {
+						set_temp_variable = { modify_pmc_lus = 1 }
+						modify_pmc_lus_support = yes
+					}
+				}
+			}
+			modifier = {
+				army_attack_factor = 0.03
+				naval_invasion_penalty = -0.01
+				naval_invasion_capacity = 1
+				invasion_preparation = -0.03
+			}
+		}
+	}
+}

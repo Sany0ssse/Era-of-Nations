@@ -1,0 +1,1557 @@
+focus_tree = {
+	id = monadire_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 30
+			original_tag = MND
+		}
+	}
+	continuous_focus_position = { x = 5 y = 1500 }
+
+	focus = {
+		id = MND_kvitsianis_gamble
+		icon = kvitsiani_yobik
+
+		x = 0
+		y = 0
+
+		cost = 4
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_kvitsianis_gamble"
+			add_political_power = 100
+			add_ideas = MND_kvitsianis_gamble_idea
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_request_money_from_georgia
+		icon = georgia_give_money
+
+		x = 0
+		y = 1
+
+		cost = 4
+
+		prerequisite = { focus = MND_kvitsianis_gamble }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_request_money_from_georgia"
+			GEO = {
+				country_event = MND_policy.5
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_recruit_khevsureli
+		icon = khevsureti
+
+		x = 2
+		y = 1
+
+		cost = 4
+
+		prerequisite = { focus = MND_kvitsianis_gamble }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_recruit_khevsureli"
+			set_temp_variable = { treasury_change = -0.5 }
+			modify_treasury_effect = yes
+			add_political_power = 25
+			add_war_support = 0.03
+			add_manpower = 400
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = 500
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = L_AT_Equipment
+				amount = 40
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = AA_Equipment
+				amount = 20
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = command_control_equipment
+				amount = 30
+				producer = SOV
+			}
+			division_template = {
+				name = "Svan-Khevsur"
+				division_names_group = CAS_INF_02
+
+				regiments = {
+					L_Inf_Bat = { x = 0 y = 0 }
+					L_Inf_Bat = { x = 0 y = 1 }
+					Militia_Bat = { x = 0 y = 2 }
+				}
+
+				support = {
+					L_Recce_Comp = { x = 0 y = 0 }
+					Arty_Battery = { x = 0 y = 1 }
+				}
+
+			}
+			capital_scope = {
+				create_unit = {
+					owner = ROOT
+					division = "name = \"Svan-Khevsur Group\" division_template = \"Svan-Khevsur\" start_experience_factor = 0.9 start_equipment_factor = 1"
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_attempt_negotiations_with_Russia
+		icon = kvitsiani_rus
+
+		x = 4
+		y = 1
+
+		cost = 4
+
+		prerequisite = { focus = MND_kvitsianis_gamble }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_attempt_negotiations_with_Russia"
+			SOV = {
+				country_event = MND_policy.19
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_accept_gelayevs_proposal
+		icon = accept_gelayev
+
+		x = -2
+		y = 1
+
+		cost = 4
+
+		prerequisite = { focus = MND_kvitsianis_gamble }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+			CHE = {
+				NOT = {
+					has_war_with = SOV
+				}
+			}
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_accept_gelayevs_proposal"
+			army_experience = 35
+			add_command_power = 25
+			add_war_support = 0.06
+			hidden_effect = {
+				division_template = {
+					name = "Gelayev Fighters Infantry"
+					division_names_group = CAS_INF_02
+					regiments = {
+						L_Inf_Bat = { x = 0 y = 0 }
+						L_Inf_Bat = { x = 0 y = 1 }
+						L_Inf_Bat = { x = 1 y = 0 }
+						L_Inf_Bat = { x = 1 y = 1 }
+					}
+
+					support = {
+						Mot_Recce_Comp = { x = 0 y = 0 }
+						L_Engi_Comp = { x = 0 y = 1 }
+						Arty_Battery = { x = 0 y = 2 }
+					}
+				}
+			}
+			CHE = {
+				CHE_ruslan_gelayev = {
+					remove_unit_leader_role = yes
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					owner = ROOT
+					division = "name = \"Gelayev Group\" division_template = \"Gelayev Fighters Infantry\" start_experience_factor = 0.9 start_equipment_factor = 0.99"
+				}
+			}
+			create_corps_commander = {
+				name = "Ruslan Gelayev"
+				portrait_path = "gfx/leaders/CHE/Ruslan_Gelayev.dds"
+				traits = { desperate_defender ambusher guerrilla_leader_trait commando }
+				skill = 5
+				attack_skill = 5
+				defense_skill = 3
+				planning_skill = 4
+				logistics_skill = 4
+			}
+			add_ideas = MND_chechen_volunteers
+			hidden_effect = {
+				country_event = {
+					id = MND_news.1
+					days = 1
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = MND_hunting_and_food_salvaging_efforts
+		icon = monadire_sosiska
+
+		x = -4
+		y = 1
+
+		cost = 4
+
+		prerequisite = { focus = MND_kvitsianis_gamble }
+
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_hunting_and_food_salvaging_efforts"
+			swap_ideas = {
+				remove_idea = MND_kvitsianis_gamble_idea
+				add_idea = MND_kvitsianis_gamble_idea2
+			}
+		}
+
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = MND_smuggle_weapons_from_svanetia
+		icon = svanskaya_sol
+
+		x = 0
+		y = 2
+
+		cost = 4
+
+		prerequisite = { focus = MND_request_money_from_georgia }
+		prerequisite = { focus = MND_recruit_khevsureli }
+		prerequisite = { focus = MND_attempt_negotiations_with_Russia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_smuggle_weapons_from_svanetia"
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = 400
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = L_AT_Equipment
+				amount = 60
+				producer = SOV
+			}
+			add_equipment_to_stockpile = {
+				type = AA_Equipment
+				amount = 30
+				producer = SOV
+			}
+			add_manpower = 150
+			capital_scope = {
+				create_unit = {
+					owner = ROOT
+					division = "name = \"Svan-Khevsur Group\" division_template = \"Svan-Khevsur\" start_experience_factor = 0.9 start_equipment_factor = 1"
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_get_money_from_un
+		icon = ban_international_aid
+
+		x = 2
+		y = 2
+
+		cost = 4
+
+		prerequisite = { focus = MND_request_money_from_georgia }
+		prerequisite = { focus = MND_recruit_khevsureli }
+		prerequisite = { focus = MND_attempt_negotiations_with_Russia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_get_money_from_un"
+			add_stability = -0.02
+			set_temp_variable = { treasury_change = 2 }
+			modify_treasury_effect = yes
+			hidden_effect = {
+				country_event = {
+					id = MND_news.2
+					days = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_propaganda_in_svanetia
+		icon = svanskaya_solevaya_propaganda
+
+		x = 4
+		y = 2
+
+		cost = 4
+
+		prerequisite = { focus = MND_request_money_from_georgia }
+		prerequisite = { focus = MND_recruit_khevsureli }
+		prerequisite = { focus = MND_attempt_negotiations_with_Russia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_propaganda_in_svanetia"
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.06
+			}
+			set_temp_variable = { treasury_change = -0.5 }
+			modify_treasury_effect = yes
+			add_political_power = 150
+			set_temp_variable = { percent_change = 7.5 }
+			change_domestic_influence_percentage = yes
+			add_ideas = MND_svanetia_propaganda_idea
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = MND }
+			set_temp_variable = { influence_target = GEO }
+			change_influence_percentage = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_plant_chaos_in_abkhazian_society
+		icon = abkhaz_chaos
+
+		x = 6
+		y = 2
+
+		cost = 4
+
+		prerequisite = { focus = MND_request_money_from_georgia }
+		prerequisite = { focus = MND_recruit_khevsureli }
+		prerequisite = { focus = MND_attempt_negotiations_with_Russia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_plant_chaos_in_abkhazian_society"
+			add_political_power = -200
+			set_temp_variable = { treasury_change = -0.35 }
+			modify_treasury_effect = yes
+			custom_effect_tooltip = MND_abk_hate_TT
+			ABK = {
+				country_event = {
+					id = MND_policy.22
+					days = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_establish_chechen_bases
+		icon = chechenbaza
+
+		x = -2
+		y = 2
+
+		cost = 4
+
+		prerequisite = { focus = MND_accept_gelayevs_proposal }
+		prerequisite = { focus = MND_hunting_and_food_salvaging_efforts }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+			controls_state = 1222
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_establish_chechen_bases"
+			1222 = {
+				add_building_construction = {
+					type = bunker
+					level = 1
+					instant_build = yes
+					province = 672
+				}
+			}
+			add_manpower = 2000
+			add_equipment_to_stockpile = {
+				type = Inf_equipment
+				amount = 1000
+				producer = SOV
+			}
+			capital_scope = {
+				create_unit = {
+					owner = ROOT
+					division = "name = \"Gelayev Group\" division_template = \"Gelayev Fighters Infantry\" start_experience_factor = 0.9 start_equipment_factor = 1"
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_covertly_support_pankis_valley_efforts
+		icon = pankis_help
+
+		x = -4
+		y = 2
+
+		cost = 4
+
+		prerequisite = { focus = MND_accept_gelayevs_proposal }
+		prerequisite = { focus = MND_hunting_and_food_salvaging_efforts }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_covertly_support_pankis_valley_efforts"
+			hidden_effect = {
+				add_manpower = 4500
+				add_equipment_to_stockpile = {
+					type = Inf_equipment
+					amount = 1000
+					producer = SOV
+				}
+				add_equipment_to_stockpile = {
+					type = L_AT_Equipment
+					amount = 30
+					producer = SOV
+				}
+				add_equipment_to_stockpile = {
+					type = AA_Equipment
+					amount = 15
+					producer = SOV
+				}
+				add_equipment_to_stockpile = {
+					type = command_control_equipment
+					amount = 50
+					producer = SOV
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					owner = ROOT
+					division = "name = \"Gelayev Group 1\" division_template = \"Gelayev Fighters Infantry\" start_experience_factor = 0.9 start_equipment_factor = 1"
+				}
+				create_unit = {
+					owner = ROOT
+					division = "name = \"Gelayev Group 2\" division_template = \"Gelayev Fighters Infantry\" start_experience_factor = 0.9 start_equipment_factor = 1"
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = MND_attempts_at_local_drug_production
+		icon = kvitsik_narkoman
+
+		x = -6
+		y = 2
+
+		cost = 4
+
+		prerequisite = { focus = MND_accept_gelayevs_proposal }
+		prerequisite = { focus = MND_hunting_and_food_salvaging_efforts }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_attempts_at_local_drug_production"
+			set_temp_variable = { debt_change = 0.03 }
+			modify_debt_effect = yes
+			set_temp_variable = { treasury_change = 0.7 }
+			modify_treasury_effect = yes
+			set_temp_variable = { base_inflation_percent_change = 0.1 }
+			modify_base_inflation_effect = yes
+			set_temp_variable = { temp_opinion = 5 }
+			change_small_medium_business_owners_opinion = yes
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_proclaim_yourself_interim
+		icon = kvitsik_abkhaz_interim
+
+		x = 0
+		y = 3
+
+		cost = 4
+
+		prerequisite = { focus = MND_smuggle_weapons_from_svanetia }
+		prerequisite = { focus = MND_get_money_from_un }
+		prerequisite = { focus = MND_establish_chechen_bases }
+		prerequisite = { focus = MND_propaganda_in_svanetia }
+		prerequisite = { focus = MND_covertly_support_pankis_valley_efforts }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_proclaim_yourself_interim"
+			hidden_effect = {
+				country_event = {
+					id = MND_news.4
+					days = 1
+				}
+			}
+			set_temp_variable = { treasury_change = -0.5 }
+			modify_treasury_effect = yes
+			add_war_support = 0.06
+			army_experience = 30
+			add_command_power = 30
+			add_state_core = 706
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_start_raid_on_abkhazia
+		icon = abkhaz_raid
+
+		x = -3
+		y = 3
+
+		cost = 4
+
+		prerequisite = { focus = MND_smuggle_weapons_from_svanetia }
+		prerequisite = { focus = MND_get_money_from_un }
+		prerequisite = { focus = MND_establish_chechen_bases }
+		prerequisite = { focus = MND_propaganda_in_svanetia }
+		prerequisite = { focus = MND_covertly_support_pankis_valley_efforts }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_start_raid_on_abkhazia"
+			hidden_effect = {
+				country_event = {
+					id = MND_news.3
+					days = 1
+				}
+			}
+			add_political_power = -100
+			set_temp_variable = { treasury_change = -0.3 }
+			modify_treasury_effect = yes
+			custom_effect_tooltip = MND_raid1_TT
+			newline = yes
+			if = {
+                limit = {
+                    num_divisions > 5
+                }
+                random_list = {
+                    70 = {
+						custom_effect_tooltip = MND_raid_1_TT
+						hidden_effect = {
+							ABK = {
+								country_event = {
+									id = MND_policy.8
+									days = 1
+								}
+							}
+							country_event = MND_policy.11
+						}
+					}
+                    20 = {
+						custom_effect_tooltip = MND_raid_2_TT
+						hidden_effect = {
+							ABK = {
+								country_event = {
+									id = MND_policy.9
+									days = 1
+								}
+							}
+							country_event = MND_policy.12
+						}
+					}
+                    10 = {
+						custom_effect_tooltip = MND_raid_3_TT
+						hidden_effect = {
+							ABK = {
+								country_event = {
+									id = MND_policy.10
+									days = 1
+								}
+							}
+							country_event = MND_policy.13
+						}
+					}
+                }
+            }
+            else_if = {
+                limit = {
+                    num_divisions > 2
+                }
+                random_list = {
+                    40 = {
+						custom_effect_tooltip = MND_raid_1_TT
+						hidden_effect = {
+							ABK = {
+								country_event = {
+									id = MND_policy.8
+									days = 1
+								}
+							}
+							country_event = MND_policy.11
+						}
+					}
+                    40 = {
+						custom_effect_tooltip = MND_raid_2_TT
+						hidden_effect = {
+							ABK = {
+								country_event = {
+									id = MND_policy.9
+									days = 1
+								}
+							}
+							country_event = MND_policy.12
+						}
+					}
+                    20 = {
+						custom_effect_tooltip = MND_raid_3_TT
+						hidden_effect = {
+							ABK = {
+								country_event = {
+									id = MND_policy.10
+									days = 1
+								}
+							}
+							country_event = MND_policy.13
+						}
+					}
+                }
+            }
+            else = {
+                random_list = {
+                    10 = {
+						custom_effect_tooltip = MND_raid_1_TT
+						hidden_effect = {
+							ABK = {
+								country_event = {
+									id = MND_policy.8
+									days = 1
+								}
+							}
+							country_event = MND_policy.11
+						}
+					}
+                    30 = {
+						custom_effect_tooltip = MND_raid_2_TT
+						hidden_effect = {
+							ABK = {
+								country_event = {
+									id = MND_policy.9
+									days = 1
+								}
+							}
+							country_event = MND_policy.12
+						}
+					}
+                    60 = {
+						custom_effect_tooltip = MND_raid_3_TT
+						hidden_effect = {
+							ABK = {
+								country_event = {
+									id = MND_policy.10
+									days = 1
+								}
+							}
+							country_event = MND_policy.13
+						}
+					}
+            	}
+			}
+			newline = yes
+			custom_effect_tooltip = MND_raid2_TT
+		}
+
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	focus = {
+		id = MND_stop_svanetia
+		icon = abk_svanetia_revoult
+
+		x = 3
+		y = 3
+
+		cost = 4
+
+		prerequisite = { focus = MND_smuggle_weapons_from_svanetia }
+		prerequisite = { focus = MND_get_money_from_un }
+		prerequisite = { focus = MND_establish_chechen_bases }
+		prerequisite = { focus = MND_propaganda_in_svanetia }
+		prerequisite = { focus = MND_covertly_support_pankis_valley_efforts }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_stop_svanetia"
+			country_event = MND_policy.2
+			custom_effect_tooltip = MND_stop_svanetia_TT
+			hidden_effect = {
+				GEO = {
+					remove_ideas = MND_georgian_funding_for_GEO
+				}
+			}
+			newline = yes
+			swap_ideas = {
+				remove_idea = MND_georgian_funding
+				add_idea = MND_sovereign_mountain_economy
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_real_owner_of_sakartvelo
+		icon = mnd_attack_geo
+
+		x = 1
+		y = 4
+
+		cost = 4
+
+		prerequisite = { focus = MND_stop_svanetia }
+		prerequisite = { focus = MND_proclaim_yourself_interim }
+		prerequisite = { focus = MND_start_raid_on_abkhazia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_real_owner_of_sakartvelo"
+			add_state_core = 707
+			add_state_core = 466
+			add_state_core = 1033
+			add_state_core = 708
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.05
+			}
+			add_stability = 0.03
+			add_war_support = 0.03
+			GEO = {
+				country_event = {
+					id = MND_policy.1
+					days = 1
+				}
+			}
+			if = {
+				limit = {
+					is_subject_of = GEO
+				}
+				add_autonomy_score = { value = 1500 }
+				add_political_power = 300
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_true_lord_of_abkhazia
+		icon = mnd_attack_abkhazia
+
+		x = -1
+		y = 4
+
+		cost = 4
+
+		prerequisite = { focus = MND_stop_svanetia }
+		prerequisite = { focus = MND_proclaim_yourself_interim }
+		prerequisite = { focus = MND_start_raid_on_abkhazia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+			is_subject = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_true_lord_of_abkhazia"
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.15
+			}
+			set_temp_variable = { percent_change = 10 }
+			change_domestic_influence_percentage = yes
+			add_country_leader_trait = interventionist
+			if = {
+				limit = {
+					NOT = { has_war_with = ABK }
+				}
+				declare_war_on = {
+					target = ABK
+					type = annex_everything
+				}
+			}
+			GEO = {
+				country_event = MND_policy.27
+				create_wargoal = {
+					type = annex_everything
+					target = ABK
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1000
+		}
+	}
+
+	focus = {
+		id = MND_support_ichkeria
+		icon = mnd_ichkeria_friend
+
+		x = -4
+		y = 5
+
+		cost = 4
+
+		prerequisite = { focus = MND_rebellion_in_azerbaijan }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_support_ichkeria"
+			set_temp_variable = { treasury_change = -1 }
+			modify_treasury_effect = yes
+			SOV = {
+				country_event = {
+					id = MND_policy.26
+					days = 2
+				}
+			}
+			CHE = {
+				set_temp_variable = { modify_terrorism = 5 }
+				modify_terrorism_support = yes
+			}
+			672 = {
+				owner = {
+					add_to_variable = { terrorism_mana = 5 }
+					clamp_variable = {
+						var = terrorism_mana
+						min = 1
+						max = 100
+					}
+				}
+			}
+			set_temp_variable = { percent_change = 5 }
+			set_temp_variable = { tag_index = MND }
+			set_temp_variable = { influence_target = CHE }
+			change_influence_percentage = yes
+			custom_effect_tooltip = MND_rus_ichk2_TT
+			custom_effect_tooltip = MND_rus_ichk_TT
+			hidden_effect = {
+				country_event = {
+					id = MND_news.10
+					days = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	focus = {
+		id = MND_raids_into_dagestan
+		icon = mnd_attack_dagestan
+
+		x = 3
+		y = 6
+
+		cost = 4
+
+		prerequisite = { focus = MND_subjugate_armenia }
+		prerequisite = { focus = MND_demand_ossetia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_raids_into_dagestan"
+			set_temp_variable = { treasury_change = -1 }
+			modify_treasury_effect = yes
+			SOV = {
+				country_event = {
+					id = MND_policy.4
+					days = 1
+				}
+			}
+			custom_effect_tooltip = MND_chaos_dag_TT2
+			custom_effect_tooltip = MND_rus_ichk_TT
+			hidden_effect = {
+				country_event = {
+					id = MND_news.11
+					days = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	focus = {
+		id = MND_claim_adyghe_lands
+		icon = mnd_adygea_capture
+
+		x = -2
+		y = 5
+
+		cost = 4
+
+		prerequisite = { focus = MND_rebellion_in_azerbaijan }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_claim_adyghe_lands"
+			add_state_core = 1125
+			add_state_core = 1127
+			add_state_core = 674
+			add_state_core = 1140
+			add_state_core = 670
+			add_war_support = 0.03
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_demand_ossetia
+		icon = mnd_attack_ossetia
+
+		x = 2
+		y = 5
+
+		cost = 4
+
+		prerequisite = { focus = MND_true_lord_of_abkhazia }
+		prerequisite = { focus = MND_real_owner_of_sakartvelo }
+		prerequisite = { focus = MND_stop_svanetia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+			is_subject = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_demand_ossetia"
+			add_state_core = 673
+			add_state_core = 705
+			if = {
+				limit = {
+					NOT = { has_war_with = SOV }
+				}
+				create_wargoal = {
+					type = annex_everything
+					target = SOV
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_war_with = SOO }
+				}
+				create_wargoal = {
+					type = annex_everything
+					target = SOO
+				}
+			}
+			add_war_support = 0.03
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_declare_confederation
+		icon = mnd_confederation_caucas
+
+		x = 0
+		y = 5
+
+		cost = 4
+
+		prerequisite = { focus = MND_true_lord_of_abkhazia }
+		prerequisite = { focus = MND_real_owner_of_sakartvelo }
+		prerequisite = { focus = MND_start_raid_on_abkhazia }
+		prerequisite = { focus = MND_stop_svanetia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+			is_subject = no
+			has_completed_focus = MND_claim_adyghe_lands
+			has_completed_focus = MND_support_ichkeria
+			has_completed_focus = MND_raids_into_dagestan
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_dedlare_confederation"
+			unlock_decision_category_tooltip = MND_confederation_category
+			set_country_flag = MND_start_confederation
+			remove_ideas = MND_food_shortage_idea
+			set_cosmetic_tag = MND_caucas_federation
+			hidden_effect = {
+				country_event = {
+					id = MND_news.7
+					days = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_firm_grip_of_emzar
+		icon = Emzar_Firm_Cock
+
+		x = 1
+		y = 6
+
+		cost = 3
+
+		prerequisite = { focus = MND_declare_confederation }
+		mutually_exclusive = { focus = MND_gelayevs_coup }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_firm_grip_of_emzar"
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.15
+			}
+			add_war_support = 0.05
+			add_country_leader_trait = hands_that_crafted_the_nation
+			custom_effect_tooltip = MND_gelayevs_coup_not_TT
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_gelayevs_coup
+		icon = gelayev_zhim
+
+		x = -1
+		y = 6
+
+		cost = 3
+
+		prerequisite = { focus = MND_declare_confederation }
+		mutually_exclusive = { focus = MND_firm_grip_of_emzar }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_gelayevs_coup"
+			set_politics = {
+				ruling_party = fascism
+				elections_allowed = no
+			}
+			add_popularity = {
+				ideology = fascism
+				popularity = 0.25
+			}
+			clear_array = ruling_party
+			clear_array = gov_coalition_array
+			add_to_array = { ruling_party = 11 }
+			update_government_coalition_strength = yes
+			MND_ruslan_gelayev = {
+				remove_unit_leader_role = yes
+			}
+			create_country_leader = {
+				name = "Ruslan Gelayev"
+				picture = "gfx/leaders/CHE/ruslan_gelayev.dds"
+				ideology = Caliphate
+				traits = {
+					salafist_Caliphate
+					guerrilla_leader
+					ideological_crusader
+					backroom_backstabber
+					tribalist
+					warmonger
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_rebellion_in_azerbaijan
+		icon = mnd_azer_dead
+
+		x = -3
+		y = 4
+
+		prerequisite = { focus = MND_start_raid_on_abkhazia }
+		prerequisite = { focus = MND_proclaim_yourself_interim }
+		prerequisite = { focus = MND_stop_svanetia }
+
+		cost = 4
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+			has_completed_focus = MND_true_lord_of_abkhazia
+			is_subject = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_rebellion_in_azerbaijan"
+			country_event = MND_policy.23
+			hidden_effect = {
+				country_event = {
+					id = MND_news.5
+					days = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	focus = {
+		id = MND_subjugate_armenia
+		icon = mnd_arm_dead
+
+		x = 4
+		y = 5
+
+		cost = 4
+
+		prerequisite = { focus = MND_stop_svanetia }
+		prerequisite = { focus = MND_proclaim_yourself_interim }
+		prerequisite = { focus = MND_start_raid_on_abkhazia }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+			has_completed_focus = MND_true_lord_of_abkhazia
+			is_subject = no
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_subjugate_armenia"
+			country_event = MND_policy.16
+			hidden_effect = {
+				country_event = {
+					id = MND_news.6
+					days = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	focus = {
+		id = MND_sufi_sunni_harmonization
+		icon = kavkazemir
+
+		x = -1
+		y = 7
+
+		cost = 4
+
+		prerequisite = { focus = MND_gelayevs_coup }
+
+		available = {
+			has_country_leader = { name = "Ruslan Gelayev" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_sufi_sunni_harmonization"
+			add_popularity = {
+				ideology = nationalist
+				popularity = 0.06
+			}
+			add_popularity = {
+				ideology = fascism
+				popularity = 0.1
+			}
+			add_ideas = MND_sufi_sunni_idea
+			add_ideas = sunni
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_jlhadist_haven
+		icon = effective_jizya
+
+		x = -3
+		y = 7
+
+		cost = 4
+
+		prerequisite = { focus = MND_gelayevs_coup }
+
+		available = {
+			has_country_leader = { name = "Ruslan Gelayev" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_jlhadist_haven"
+			add_popularity = {
+				ideology = fascism
+				popularity = 0.12
+			}
+			add_ideas = MND_jihadist_haven_idea
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_caucasian_nationalism
+		icon = northcac_nat
+
+		x = 1
+		y = 7
+
+		cost = 4
+
+		prerequisite = { focus = MND_firm_grip_of_emzar }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_caucasian_nationalism"
+			set_temp_variable = { treasury_change = -1.5 }
+			modify_treasury_effect = yes
+			GEO = {
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.075
+				}
+			}
+			SOV = {
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.075
+				}
+			}
+			AZE = {
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.075
+				}
+			}
+			ARM = {
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.075
+				}
+			}
+			ABK = {
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.075
+				}
+			}
+			MND = {
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.075
+				}
+			}
+			SOO = {
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.075
+				}
+			}
+			NKR = {
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.075
+				}
+			}
+			CHE = {
+				add_popularity = {
+					ideology = nationalist
+					popularity = 0.075
+				}
+			}
+			newline = yes
+			ADJ = {
+				set_temp_variable = { modify_separatism = 6 }
+				modify_separatism_support = yes
+			}
+			TLS = {
+				set_temp_variable = { modify_separatism = 6 }
+				modify_separatism_support = yes
+			}
+			DAG = {
+				set_temp_variable = { modify_separatism = 6 }
+				modify_separatism_support = yes
+			}
+			ING = {
+				set_temp_variable = { modify_separatism = 6 }
+				modify_separatism_support = yes
+			}
+			ADY = {
+				set_temp_variable = { modify_separatism = 6 }
+				modify_separatism_support = yes
+			}
+			KBK = {
+				set_temp_variable = { modify_separatism = 6 }
+				modify_separatism_support = yes
+			}
+			KCC = {
+				set_temp_variable = { modify_separatism = 6 }
+				modify_separatism_support = yes
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_secularization_for_the_sake_of_stability
+		icon = stop_neon_moon
+		x = 3
+		y = 7
+
+		cost = 4
+
+		prerequisite = { focus = MND_firm_grip_of_emzar }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_secularization_for_the_sake_of_stability"
+			add_political_power = -67
+			set_temp_variable = { temp_opinion = 5 }
+			change_landowners_opinion = yes
+			add_ideas = MND_secular_stability_idea
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_crowning_ourselves_as_kings
+		icon = king_of_kovkaz
+
+		x = 2
+		y = 8
+
+		cost = 4
+
+		prerequisite = { focus = MND_caucasian_nationalism }
+		prerequisite = { focus = MND_secularization_for_the_sake_of_stability }
+
+		available = {
+			has_country_leader = { name = "Emzar Kvitsiani" }
+			has_completed_focus = MND_support_ichkeria
+			has_completed_focus = MND_claim_adyghe_lands
+			has_completed_focus = MND_raids_into_dagestan
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_crowning_oursehves_as_kings"
+			add_war_support = 0.05
+			set_temp_variable = { percent_change = 15 }
+			change_domestic_influence_percentage = yes
+			add_ideas = MND_king_of_the_mountains
+			hidden_effect = {
+				country_event = {
+					id = MND_news.9
+					days = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+
+	focus = {
+		id = MND_caucasian_emirate
+		icon = emir_of_kavkaz
+
+		x = -2
+		y = 8
+
+		cost = 4
+
+		prerequisite = { focus = MND_sufi_sunni_harmonization }
+		prerequisite = { focus = MND_jlhadist_haven }
+
+		available = {
+			has_country_leader = { name = "Ruslan Gelayev" }
+			has_completed_focus = MND_support_ichkeria
+			has_completed_focus = MND_claim_adyghe_lands
+			has_completed_focus = MND_raids_into_dagestan
+		}
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MND_caucasian_emirate"
+			add_war_support = 0.1
+			add_stability = 0.05
+			add_popularity = {
+				ideology = fascism
+				popularity = 0.25
+			}
+			add_ideas = MND_caucasian_emirate_idea
+			hidden_effect = {
+				country_event = {
+					id = MND_news.8
+					days = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 1
+		}
+	}
+}

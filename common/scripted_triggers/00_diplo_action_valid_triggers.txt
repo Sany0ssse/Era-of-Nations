@@ -1,0 +1,70 @@
+
+# is_diplomatic_action_valid_TOKEN can be used for diplo action validity checks. if not valid it won't appear
+# scope is target country
+# from is action initatior country
+
+# in some cases this trigger is checked for only initatior country, in that case both from & this is same
+
+is_diplomatic_action_valid_stage_coup = {
+	NOT = { has_dlc = "La Resistance" } # we have operation for it
+}
+
+is_diplomatic_action_valid_boost_party_popularity = {
+	NOT = { has_dlc = "La Resistance" } # we have operation for it
+}
+
+is_autonomy_that_cannot_change_level = {
+	OR = {
+		has_autonomy_state = autonomy_republic_khm
+		has_autonomy_state = autonomy_warsaw
+		has_autonomy_state = autonomy_state_rf
+		has_autonomy_state = autonomy_republic_rf
+		has_autonomy_state = autonomy_kray_rf
+		has_autonomy_state = autonomy_oblast_rf
+		has_autonomy_state = autonomy_okrug_rf
+		has_autonomy_state = autonomy_governorate_rf
+		has_autonomy_state = autonomy_pmc_wagner
+		has_autonomy_state = autonomy_state_cis
+		has_autonomy_state = autonomy_cuban_confederation
+		has_autonomy_state = autonomy_marz_arm
+		has_autonomy_state = autonomy_armenia_state
+		has_autonomy_state = autonomy_special_administrative_region_HKG
+		has_autonomy_state = autonomy_special_administrative_region_MAC
+		has_autonomy_state = autonomy_special_administrative_region_TAI
+		has_autonomy_state = autonomy_special_administrative_region_TIB
+		has_autonomy_state = autonomy_special_administrative_region_ETK
+		has_autonomy_state = autonomy_special_administrative_region_MON
+		has_autonomy_state = danish_crown_holding
+		has_autonomy_state = autonomy_islamic_republic
+		has_autonomy_state = autonomy_socialist_union
+		has_autonomy_state = autonomy_federal_state_iran
+		has_autonomy_state = autonomy_fifty_first_state_iraq
+		has_autonomy_state = autonomy_authority_of_palestine
+		has_autonomy_state = autonomy_provisional_security_of_gaza
+		has_autonomy_state = autonomy_autonomous_province
+		has_autonomy_state = autonomy_autonomous_province1
+		has_autonomy_state = autonomy_balkan_federation
+		has_autonomy_state = autonomy_irn_province
+		has_autonomy_state = TAJ_autonomy_administrative_region
+		has_autonomy_state = TUR_eyalet_province
+		has_autonomy_state = autonomy_republic_ukr
+		has_autonomy_state = autonomy_union_state
+	}
+}
+root_supports_an_enemy_of_this_country = {
+	any_enemy_country = {
+		OR = {
+			has_volunteers_amount_from = { tag = ROOT count > 0 }
+			has_attache_from = ROOT
+			ROOT = { is_lend_leasing = PREV }
+		}
+	}
+}
+this_concretely_threatened = {
+	any_other_country = {
+		OR = {
+			has_wargoal_against = PREV
+			is_justifying_wargoal_against = PREV
+		}
+	}
+}

@@ -1,0 +1,88 @@
+scripted_gui = {
+
+	# Opens the actual international system GUI
+	open_the_international_scripted_gui = {
+		context_type = player_context
+		window_name = "IS_open_the_international_system_gui_window"
+		parent_window_name = "MapmodesInterface_Ingame"
+		dirty = global.num_days
+
+		visible = { is_ai = no }
+
+		effects = {
+			open_the_international_system_click = {
+				if = { limit = { NOT = { has_country_flag = international_systems_selection_open } }
+					set_country_flag = international_systems_selection_open
+					update_international_system_dirty = yes
+				}
+				else = {
+					clr_country_flag = international_systems_selection_open
+				}
+			}
+		}
+	}
+
+	International_systems_list_main = {
+		context_type = player_context
+		window_name = International_systems_list_main
+
+		dirty = global.international_system_refresh_gui
+
+		triggers = {
+			international_orgs_list_button_click_enabled = {
+				if = {
+					limit = { check_variable = { i = 1 } }
+					NOT = { has_global_flag = GAME_RULE_eu_disabled }
+					NOT = { has_global_flag = usoe_formed }
+					is_ai = no
+				}
+			}
+		}
+
+		effects = {
+			International_systems_list_close_button_click = {
+				clr_country_flag = international_systems_selection_open
+			}
+			international_orgs_list_button_click = {
+				if = {
+					limit = { check_variable = { i = 0 } }
+					if = { limit = { NOT = { has_country_flag = arctic_gui_open } }
+						set_country_flag = arctic_gui_open
+					}
+					else = {
+						clr_country_flag = arctic_gui_open
+					}
+					update_arctic_dirty_variable = yes
+				}
+				else_if = {
+					limit = { check_variable = { i = 1 } }
+					eu_screen_selection = yes
+					if = { limit = { NOT = { has_country_flag = new_EU_open } }
+						set_country_flag = new_EU_open
+					}
+					else = {
+						clr_country_flag = new_EU_open
+					}
+					set_country_flag = show_offices_screen
+					update_eu_dirty_variable = yes
+				}
+			}
+		}
+
+		visible = {
+			has_country_flag = international_systems_selection_open
+		}
+
+		dynamic_lists = {
+			international_organizations_gridbox = {
+				array = global.international_organizations
+				entry_container = international_orgs_list_entry
+			}
+		}
+		properties = {
+			international_orgs_list_button = {
+				image = "GFX_IS2_[?i]"
+			}
+		}
+	}
+}

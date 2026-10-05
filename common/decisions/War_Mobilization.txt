@@ -1,0 +1,1306 @@
+war_wariness_decision_category = {
+
+	AB_special_czechoslovak_operation = { #Special operation for Slovakia to restore Czechoslovakia
+		icon = GFX_decision_kalash_button
+		targets = { CZE }
+		target_root_trigger = { has_country_flag = special_czechoslovak_operation_avaliable }
+		available = {
+			CZE = {
+				exists = yes
+				NOT = { is_subject_of = PREV }
+			}
+			has_idea = SLO_structures_vos_idea
+			network_strength = {
+				target = CZE
+				value > 70
+			}
+			CZE = {
+				influence_higher_30 = yes
+			}
+		}
+		custom_cost_trigger = { command_power > 50 }
+		custom_cost_text = command_power_more_than_50
+		fire_only_once = yes
+		complete_effect = {
+			add_command_power = -50
+			clr_country_flag = special_czechoslovak_operation_avaliable
+			if = {
+				limit = { is_ai = yes }
+				create_wargoal = {
+					target = CZE
+					type = annex_everything
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						emerging_communist_state_are_in_power = yes
+						neutrality_Neutral_Communism_are_in_power = yes
+					}
+				}
+				set_cosmetic_tag = CZE_SLO_czechoslovakia_commi
+			}
+			else = {
+				set_cosmetic_tag = CZE_SLO_czechoslovakia
+			}
+			CZE = {
+				NATO_leave = yes
+				if = {
+					limit = { SLO = { has_government = democratic } }
+					start_civil_war = {
+						ideology = democratic
+						size = party_popularity@democratic
+						capital = 9567
+						states = {
+							1018
+						}
+					}
+					every_country = {
+						limit = {
+							original_tag = CZE
+							is_dynamic_country = yes
+						}
+						SLO = {
+							if = {
+								limit = {
+									has_global_flag = GAME_RULE_allow_colored_puppets
+								}
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state_colored
+								}
+							}
+							else = {
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state
+								}
+							}
+							declare_war_on = {
+								target = CZE
+								type = annex_everything
+							}
+						}
+						declare_war_on = {
+							target = CZE
+							type = annex_everything
+						}
+						set_variable = { domestic_influence_amount = 0 }
+						clear_array = influence_array
+						clear_array = influence_array_val
+						set_temp_variable = { percent_change = 100.00 }
+						set_temp_variable = { tag_index = SLO }
+						set_temp_variable = { influence_target = THIS }
+						change_influence_percentage = yes
+						set_province_controller = 6590
+						set_province_controller = 6576
+					}
+				}
+				else_if = {
+					limit = { SLO = { has_government = neutrality } }
+					start_civil_war = {
+						ideology = neutrality
+						size = party_popularity@neutrality
+						capital = 9567
+						states = {
+							1018
+						}
+					}
+					every_country = {
+						limit = {
+							original_tag = CZE
+							is_dynamic_country = yes
+						}
+						SLO = {
+							if = {
+								limit = {
+									has_global_flag = GAME_RULE_allow_colored_puppets
+								}
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state_colored
+								}
+							}
+							else = {
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state
+								}
+							}
+							declare_war_on = {
+								target = CZE
+								type = annex_everything
+							}
+						}
+						declare_war_on = {
+							target = CZE
+							type = annex_everything
+						}
+						set_variable = { domestic_influence_amount = 0 }
+						clear_array = influence_array
+						clear_array = influence_array_val
+						set_temp_variable = { percent_change = 100.00 }
+						set_temp_variable = { tag_index = SLO }
+						set_temp_variable = { influence_target = THIS }
+						change_influence_percentage = yes
+						set_province_controller = 6590
+						set_province_controller = 6576
+					}
+				}
+				else_if = {
+					limit = { SLO = { has_government = communism } }
+					start_civil_war = {
+						ideology = communism
+						size = party_popularity@communism
+						capital = 9567
+						states = {
+							1018
+						}
+					}
+					every_country = {
+						limit = {
+							original_tag = CZE
+							is_dynamic_country = yes
+						}
+						SLO = {
+							if = {
+								limit = {
+									has_global_flag = GAME_RULE_allow_colored_puppets
+								}
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state_colored
+								}
+							}
+							else = {
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state
+								}
+							}
+							declare_war_on = {
+								target = CZE
+								type = annex_everything
+							}
+						}
+						declare_war_on = {
+							target = CZE
+							type = annex_everything
+						}
+						set_variable = { domestic_influence_amount = 0 }
+						clear_array = influence_array
+						clear_array = influence_array_val
+						set_temp_variable = { percent_change = 100.00 }
+						set_temp_variable = { tag_index = SLO }
+						set_temp_variable = { influence_target = THIS }
+						change_influence_percentage = yes
+						set_province_controller = 6590
+						set_province_controller = 6576
+					}
+				}
+				else_if = {
+					limit = { SLO = { has_government = nationalist } }
+					start_civil_war = {
+						ideology = nationalist
+						size = party_popularity@nationalist
+						capital = 9567
+						states = {
+							1018
+						}
+					}
+					every_country = {
+						limit = {
+							original_tag = CZE
+							is_dynamic_country = yes
+						}
+						SLO = {
+							if = {
+								limit = {
+									has_global_flag = GAME_RULE_allow_colored_puppets
+								}
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state_colored
+								}
+							}
+							else = {
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state
+								}
+							}
+							declare_war_on = {
+								target = CZE
+								type = annex_everything
+							}
+						}
+						declare_war_on = {
+							target = CZE
+							type = annex_everything
+						}
+						set_variable = { domestic_influence_amount = 0 }
+						clear_array = influence_array
+						clear_array = influence_array_val
+						set_temp_variable = { percent_change = 100.00 }
+						set_temp_variable = { tag_index = SLO }
+						set_temp_variable = { influence_target = THIS }
+						change_influence_percentage = yes
+						set_province_controller = 6590
+						set_province_controller = 6576
+					}
+				}
+				else = {
+					start_civil_war = {
+						ideology = fascism
+						size = party_popularity@fascism
+						capital = 9567
+						states = {
+							1018
+						}
+					}
+					every_country = {
+						limit = {
+							original_tag = CZE
+							is_dynamic_country = yes
+						}
+						SLO = {
+							if = {
+								limit = {
+									has_global_flag = GAME_RULE_allow_colored_puppets
+								}
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state_colored
+								}
+							}
+							else = {
+								set_autonomy = {
+									target = PREV
+									autonomy_state = autonomy_autonomous_state
+								}
+							}
+							declare_war_on = {
+								target = CZE
+								type = annex_everything
+							}
+						}
+						declare_war_on = {
+							target = CZE
+							type = annex_everything
+						}
+						set_variable = { domestic_influence_amount = 0 }
+						clear_array = influence_array
+						clear_array = influence_array_val
+						set_temp_variable = { percent_change = 100.00 }
+						set_temp_variable = { tag_index = SLO }
+						set_temp_variable = { influence_target = THIS }
+						change_influence_percentage = yes
+						set_province_controller = 6590
+						set_province_controller = 6576
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	AB_plan_mobilisation = { ##Planning Mobilization
+	    icon = GFX_decision_generic_mob_plan_button
+		visible = { NOT = { has_idea = mobilization_planned } }
+		custom_cost_trigger = { command_power > 50 }
+		custom_cost_text = command_power_more_than_50
+		days_remove = 30
+		complete_effect = { add_command_power = -50 }
+		remove_effect = {
+		  add_timed_idea = {
+			  idea = mobilization_planned
+			  days = 365
+		  }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 25
+				threat > 0.25
+			}
+			modifier = {
+				add = 25
+				threat > 0.5
+			}
+			modifier = {
+				add = 25
+				threat > 0.75
+			}
+			modifier = {
+				add = 25
+				has_global_flag = age_has_begun_4
+			}
+		}
+	}
+
+    AB_Oboronzakaz = { ##Oboronzakaz
+	    icon = GFX_decision_generic_order_mod_button
+		visible = {
+			OR = {
+				NOT = { has_idea = defence_00 }
+				NOT = { has_idea = defence_01 }
+				NOT = { has_idea = defence_02 }
+			}
+		}
+		custom_cost_trigger = { check_variable = { treasury > 2 } }
+		custom_cost_text = cost_2_0
+		days_remove = 120
+		complete_effect = {
+			set_temp_variable = { treasury_change = -2 }
+			modify_treasury_effect = yes
+			set_temp_variable = { temp_opinion = 2 }
+			change_the_military_opinion = yes
+		}
+		modifier = {
+			industrial_capacity_factory = 0.15
+			industrial_capacity_dockyard = 0.15
+			production_factory_efficiency_gain_factor = 0.15
+			production_factory_max_efficiency_factor = 0.15
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+    #AB_Mil_Production_development = { ##More Zavods
+	#    icon = GFX_decision_generic_invest_in_military_button
+	#	visible = {
+	#		OR = {
+	#			NOT = { has_idea = defence_00 }
+	#			NOT = { has_idea = defence_01 }
+	#			NOT = { has_idea = defence_02 }
+	#		}
+	#		any_state = {
+	#			is_owned_and_controlled_by = PREV
+	#			free_building_slots = {
+	#				building = arms_factory
+	#				size > 0
+	#			}
+	#		}
+	#	}
+	#	custom_cost_trigger = { check_variable = { treasury > 5 } }
+	#	custom_cost_text = cost_5_0
+	#	days_remove = 180
+	#	complete_effect = {
+	#		set_temp_variable = { treasury_change = -5 }
+	#		modify_treasury_effect = yes
+	#		set_temp_variable = { temp_opinion = 5 }
+	#		change_the_military_opinion = yes
+	#	}
+	#	remove_effect = {
+	#		hidden_effect = {
+	#			random_owned_controlled_state = {
+	#				limit = {
+	#					free_building_slots = {
+	#						building = arms_factory
+	#						size > 0
+	#					}
+	#				}
+	#				add_building_construction = {
+	#					type = arms_factory
+	#					level = 1
+	#					instant_build = yes
+	#				}
+	#			}
+	#		}
+	#	}
+	#	ai_will_do = {
+	#		base = 25
+	#	}
+	#}
+
+	AB_prepare_civil_bunkers = { ##Reopen Bunkers
+	      icon = GFX_decision_generic_civil_bunkers_button
+		  visible = {
+			  any_state = {
+				  is_owned_and_controlled_by = PREV
+				  civil_bunker < 1
+			  }
+			  OR = {
+				has_war = yes
+				threat > 0.25
+				has_global_flag = age_has_begun_4
+			  }
+		  }
+		  custom_cost_trigger = { check_variable = { treasury > 1 } }
+		  custom_cost_text = cost_1_0
+		  days_remove = 120
+		  complete_effect = {
+			  set_temp_variable = { treasury_change = -1 }
+			  modify_treasury_effect = yes
+		  }
+		  remove_effect = {
+			hidden_effect = {
+				random_state = {
+					limit = {
+						is_owned_and_controlled_by = PREV
+						civil_bunker < 1
+					}
+					add_building_construction = {
+						type = civil_bunker
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+		  }
+		  ai_will_do = {
+			  base = 10
+			  modifier = {
+				  add = 50
+				  threat > 0.5
+			  }
+			  modifier = {
+				add = 25
+				has_global_flag = age_has_begun_4
+			}
+		  }
+	}
+	AB_war_support_campaigns = {
+		cost = 100
+		icon = GFX_decisions_war_campaign_button
+		available = {
+			has_war_support < 0.80
+			has_war = yes
+		}
+		visible = {
+			has_war = yes
+		}
+		days_remove = 90
+		days_re_enable = 30
+		fire_only_once = no
+		modifier = {
+			war_support_weekly = 0.001
+		}
+
+		ai_will_do = {
+			base = 5
+			modifier = {
+				add = 25
+				has_war_support < 0.20
+			}
+			modifier = {
+				add = 25
+				has_war_support < 0.35
+			}
+			modifier = {
+				add = 25
+				has_war_support < 0.50
+			}
+		}
+	}
+	AB_promises_of_pecae = {
+		cost = 100
+		icon = GFX_decisions_promice_peace_button
+		available = {
+			has_war = yes
+			has_stability < 0.80
+		}
+		visible = {
+			has_war = yes
+		}
+		days_remove = 90
+		days_re_enable = 30
+		fire_only_once = no
+		modifier = {
+			stability_weekly = 0.001
+			war_support_weekly = -0.001
+		}
+		ai_will_do = {
+			factor = 5
+			modifier = {
+				add = 50
+				has_stability < 0.30
+			}
+		}
+	}
+
+	#Deconservation of weapons stocks
+	AB_weapon_deconservation = {
+		icon = GFX_decision_generic_deconserv_weapons_button
+		visible = {
+			check_variable = { weapons_deconservated < num_owned_states }
+			OR = {
+				has_war = yes
+				threat > 0.25
+				has_global_flag = age_has_begun_4
+			}
+			OR = {
+				original_tag = SOV
+				original_tag = ENG
+				original_tag = USA
+				original_tag = ITA
+				original_tag = GER
+				original_tag = FRA
+				original_tag = POL
+				original_tag = SPR
+				original_tag = CZE
+				original_tag = SER
+				original_tag = UKR
+				original_tag = KAZ
+				original_tag = BLR
+				original_tag = FIN
+				original_tag = SWE
+				original_tag = TUR
+				original_tag = JAP
+				original_tag = ARM
+				original_tag = GEO
+				original_tag = CHI
+				original_tag = KOR
+				original_tag = NKO
+				original_tag = VIE
+				original_tag = AZE
+				original_tag = POR
+				original_tag = TRK
+				original_tag = UZB
+				original_tag = TAJ
+				original_tag = KYR
+				original_tag = GRE
+				original_tag = MLV
+				original_tag = ROM
+				original_tag = BUL
+				original_tag = HUN
+				original_tag = SLO
+				original_tag = CAN
+			}
+		}
+		custom_cost_trigger = {
+			command_power > 25
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 30
+		complete_effect = { add_command_power = -25 }
+		remove_effect = {
+			add_to_variable = { weapons_deconservated = 1 }
+			if = {
+				limit = {
+					has_idea = mobilization_planned
+					OR = {
+						has_idea = negligible_corruption
+						has_idea = slight_corruption
+					}
+				}
+				if = {
+					limit = { has_tech = infantry_weapons }
+					add_equipment_to_stockpile = {
+						type = infantry_weapons
+						amount = 4500
+					}
+				}
+				if = {
+					limit = { has_tech = util_vehicle_0 }
+					add_equipment_to_stockpile = {
+						type = util_vehicle_0
+						amount = 2000
+					}
+				}
+				if = {
+					limit = { has_tech = command_control_equipment }
+					add_equipment_to_stockpile = {
+						type = command_control_equipment
+						amount = 3000
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_artillery_0 }
+					add_equipment_to_stockpile = {
+						type = artillery_0
+						amount = 2500
+					}
+				}
+				if = {
+					limit = { has_tech = Anti_tank_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_tank_0
+						amount = 3000
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_Anti_Air_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_Air_0
+						amount = 3000
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { has_idea = mobilization_planned }
+					OR = {
+						has_idea = negligible_corruption
+						has_idea = slight_corruption
+					}
+				}
+				if = {
+					limit = { has_tech = infantry_weapons }
+					add_equipment_to_stockpile = {
+						type = infantry_weapons
+						amount = 3500
+					}
+				}
+				if = {
+					limit = { has_tech = util_vehicle_0 }
+					add_equipment_to_stockpile = {
+						type = util_vehicle_0
+						amount = 1500
+					}
+				}
+				if = {
+					limit = { has_tech = command_control_equipment }
+					add_equipment_to_stockpile = {
+						type = command_control_equipment
+						amount = 2500
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_artillery_0 }
+					add_equipment_to_stockpile = {
+						type = artillery_0
+						amount = 2000
+					}
+				}
+				if = {
+					limit = { has_tech = Anti_tank_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_tank_0
+						amount = 2500
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_Anti_Air_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_Air_0
+						amount = 2500
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = mobilization_planned
+					OR = {
+						has_idea = modest_corruption
+						has_idea = medium_corruption
+					}
+					}
+				if = {
+					limit = { has_tech = infantry_weapons }
+					add_equipment_to_stockpile = {
+						type = infantry_weapons
+						amount = 3000
+					}
+				}
+				if = {
+					limit = { has_tech = util_vehicle_0 }
+					add_equipment_to_stockpile = {
+						type = util_vehicle_0
+						amount = 1000
+					}
+				}
+				if = {
+					limit = { has_tech = command_control_equipment }
+					add_equipment_to_stockpile = {
+						type = command_control_equipment
+						amount = 2000
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_artillery_0 }
+					add_equipment_to_stockpile = {
+						type = artillery_0
+						amount = 1500
+					}
+				}
+				if = {
+					limit = { has_tech = Anti_tank_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_tank_0
+						amount = 2000
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_Anti_Air_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_Air_0
+						amount = 2000
+					}
+				}
+			}
+			else_if = {
+				limit = { has_idea = mobilization_planned }
+				if = {
+					limit = { has_tech = infantry_weapons }
+					add_equipment_to_stockpile = {
+						type = infantry_weapons
+						amount = 2500
+					}
+				}
+				if = {
+					limit = { has_tech = util_vehicle_0 }
+					add_equipment_to_stockpile = {
+						type = util_vehicle_0
+						amount = 500
+					}
+				}
+				if = {
+					limit = { has_tech = command_control_equipment }
+					add_equipment_to_stockpile = {
+						type = command_control_equipment
+						amount = 1500
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_artillery_0 }
+					add_equipment_to_stockpile = {
+						type = artillery_0
+						amount = 1000
+					}
+				}
+				if = {
+					limit = { has_tech = Anti_tank_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_tank_0
+						amount = 1500
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_Anti_Air_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_Air_0
+						amount = 1500
+					}
+				}
+			}
+			else_if = {
+				limit = { NOT = { has_idea = mobilization_planned } }
+				if = {
+					limit = { has_tech = infantry_weapons }
+					add_equipment_to_stockpile = {
+						type = infantry_weapons
+						amount = 2000
+					}
+				}
+				if = {
+					limit = { has_tech = util_vehicle_0 }
+					add_equipment_to_stockpile = {
+						type = util_vehicle_0
+						amount = 500
+					}
+				}
+				if = {
+					limit = { has_tech = command_control_equipment }
+					add_equipment_to_stockpile = {
+						type = command_control_equipment
+						amount = 1000
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_artillery_0 }
+					add_equipment_to_stockpile = {
+						type = artillery_0
+						amount = 500
+					}
+				}
+				if = {
+					limit = { has_tech = Anti_tank_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_tank_0
+						amount = 1000
+					}
+				}
+				if = {
+					limit = { has_tech = nsb_Anti_Air_0 }
+					add_equipment_to_stockpile = {
+						type = Anti_Air_0
+						amount = 1000
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 25
+			modifier = {
+				add = 25
+				OR = {
+					check_variable = { num_equipment@infantry_weapons < 0 }
+					check_variable = { num_equipment@util_vehicle_equipment < 0 }
+					check_variable = { num_equipment@command_control_equipment < 0 }
+					check_variable = { num_equipment@artillery < 0 }
+					check_variable = { num_equipment@Anti_tank < 0 }
+					check_variable = { num_equipment@Anti_Air < 0 }
+				}
+			}
+		}
+	}
+
+	#Partial mobilization
+	AB_partial_mobilization = {
+		custom_cost_trigger = {
+			command_power > 20
+		}
+		custom_cost_text = command_power_more_than_20
+		icon = GFX_decision_mobilization_button
+		visible = {
+			NOT = { has_country_flag = AB_partial_mobilization }
+			NOT = { has_idea = AB_full_mobilization_idea }
+			NOT = { has_idea = AB_demobilization }
+			NOT = { has_country_flag = full_mobilization_is_underway }
+			has_war = yes
+		}
+		fire_only_once = no
+		days_remove = 30
+		cancel_trigger = {
+			has_country_flag = full_mobilization_is_underway
+		}
+		modifier = {
+			war_support_weekly = -0.001
+			stability_weekly = -0.001
+			conscription_factor = 0.05
+		}
+		complete_effect = {
+			set_country_flag = partial_mobilization_is_underway
+		}
+		remove_effect = {
+			set_country_flag = AB_partial_mobilization
+			clr_country_flag = partial_mobilization_is_underway
+			set_country_flag = { 
+				flag = AB_recent_mobilization 
+				days = 360 
+			}
+			add_timed_idea = {
+			 	idea = AB_recent_mobilization_idea
+				days = 180
+			}
+			country_event = AB_mobilization.1
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_manpower < 100000
+			}
+			modifier = {
+				add = 100
+				any_enemy_country = {
+					OR = {
+						has_idea = superpower
+						has_idea = great_power
+						has_idea = large_power
+					}
+				}
+			}
+			modifier = {
+				add = 100
+				alliance_strength_ratio < 1
+			}
+		}
+	}
+
+	#Full Mobilization
+	AB_full_mobilization = {
+		custom_cost_trigger = {
+			command_power > 50
+		}
+		custom_cost_text = command_power_more_than_50
+		icon = GFX_decision_mobilization_button
+		visible = {
+			NOT = { has_idea = AB_recent_mobilization_idea }
+			NOT = { has_country_flag = partial_mobilization_is_underway }
+			NOT = { has_country_flag = AB_full_mobilization }
+			NOT = { has_idea = AB_full_mobilization_idea }
+			NOT = { has_idea = AB_demobilization }
+			has_war = yes
+		}
+		fire_only_once = no
+		days_remove = 30
+		modifier = {
+			war_support_weekly = -0.005
+			stability_weekly = -0.005
+			conscription_factor = 0.15
+		}
+		complete_effect = {
+			set_country_flag = full_mobilization_is_underway
+		}
+		remove_effect = {
+			set_country_flag = AB_full_mobilization
+			set_country_flag = {
+				flag = recent_mobilization 
+				days = 360 
+			}
+			country_event = AB_mobilization.2
+			clr_country_flag = full_mobilization_is_underway
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_manpower < 20000
+			}
+			modifier = {
+				add = 100
+				any_enemy_country = {
+					OR = {
+						has_idea = superpower
+						has_idea = great_power
+						has_idea = large_power
+					}
+				}
+			}
+			modifier = {
+				add = 100
+				alliance_strength_ratio < 2
+			}
+		}
+	}
+
+	#Raise the militia
+	AB_raise_militia = {
+		custom_cost_trigger = {
+			command_power > 50
+		}
+		custom_cost_text = command_power_more_than_50
+		icon = GFX_decision_raise_militia_button
+		visible = {
+			has_war = yes
+			NOT = { has_idea = AB_militia_has_been_raised_idea }
+		}
+		available = {
+			OR = {
+				has_idea = AB_partial_mobilization_idea
+				has_idea = AB_full_mobilization_idea
+			}
+			NOT = { has_idea = AB_demobilization }
+		}
+
+		days_remove = 15
+
+		fire_only_once = no
+
+		remove_effect = {
+			country_event = AB_mobilization.3
+		}
+		ai_will_do = {
+			factor = 10
+			modifier = {
+				add = 50
+				has_war_with_major = yes
+			}
+		}
+	}
+
+    AB_evacuate_factories = { ##Evacuation of factories
+	    icon = GFX_decision_generic_factories_evacuate_button
+		visible = {
+			AND = {
+				OR = {
+					AND = {
+						has_war = yes
+						any_state = {
+							is_controlled_by = PREV
+							OR = {
+								industrial_complex > 0
+								arms_factory > 0
+							}
+							any_neighbor_state = {
+								THIS.controller = { has_war_with = PREV.PREV.PREV }
+							}
+						}
+					}
+					AND = {
+						has_war = yes
+						any_state = {
+							is_controlled_by = PREV
+							days_since_last_strategic_bombing < 60
+							OR = {
+								industrial_complex > 0
+								arms_factory > 0
+							}
+						}
+					}
+				}
+				any_state = {
+					is_controlled_by = PREV
+					days_since_last_strategic_bombing > 60
+					NOT = {
+						any_neighbor_state = {
+							THIS.controller = { has_war_with = PREV.PREV.PREV }
+						}
+					}
+					OR = {
+						free_building_slots = {
+							building = arms_factory
+							size > 0
+						}
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+						}
+					}
+				}
+			}
+		}
+		custom_cost_trigger = {
+			command_power > 25
+			check_variable = { num_equipment@train_equipment > 10 }
+		}
+		custom_cost_text = command_power_more_than_25
+		days_remove = 30
+		complete_effect = {
+			add_command_power = -25
+			hidden_effect = {
+				send_equipment = {
+					equipment = train_equipment
+					amount = 10
+					target = EUU
+				}
+			}
+			if = {
+				limit = { has_idea = mobilization_planned }
+				add_timed_idea = {
+					idea = military_faction_evacuation_1
+					days = 30
+				}
+			}
+			else = {
+				add_timed_idea = {
+					idea = military_faction_evacuation
+					days = 30
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						has_war = yes
+						OR = {
+							any_state = {
+								is_controlled_by = PREV
+								OR = {
+									industrial_complex > 0
+									arms_factory > 0
+								}
+								any_neighbor_state = {
+									THIS.controller = { has_war_with = PREV.PREV.PREV }
+								}
+							}
+							any_state = {
+								is_controlled_by = PREV
+								OR = {
+									industrial_complex > 0
+									arms_factory > 0
+								}
+								days_since_last_strategic_bombing < 60
+							}
+						}
+						any_state = {
+							is_controlled_by = PREV
+							days_since_last_strategic_bombing > 60
+							NOT = {
+								any_neighbor_state = {
+									THIS.controller = { has_war_with = PREV.PREV.PREV }
+								}
+							}
+							OR = {
+								free_building_slots = {
+									building = arms_factory
+									size > 0
+								}
+								free_building_slots = {
+									building = industrial_complex
+									size > 0
+								}
+							}
+						}
+					}
+					every_state = {
+						limit = {
+							is_controlled_by = PREV
+							OR = {
+								days_since_last_strategic_bombing < 60
+								any_neighbor_state = {
+									THIS.controller = { has_war_with = PREV.PREV.PREV }
+								}
+								OR = {
+									industrial_complex > 0
+									arms_factory > 0
+								}
+							}
+						}
+						set_temp_variable = { military_factories_to_evacuate = building_level@arms_factory }
+						set_temp_variable = { civil_factories_to_evacuate = building_level@industrial_complex }
+						while_loop_effect = {
+							limit = {
+								OR = {
+									check_variable = { military_factories_to_evacuate > 0 }
+									check_variable = { civil_factories_to_evacuate > 0 }
+								}
+							}
+							random_state = {
+								limit = {
+									is_controlled_by = PREV.PREV
+									days_since_last_strategic_bombing > 60
+									NOT = {
+										AND = {
+											any_neighbor_state = {
+												THIS.controller = { has_war_with = PREV.PREV.PREV.PREV }
+											}
+											any_state = {
+												is_controlled_by = PREV.PREV.PREV
+												check_variable = { distance_to@PREV.PREV > PREV.distance_to@PREV.PREV }
+											}
+										}
+									}
+									OR = {
+										free_building_slots = {
+											building = arms_factory
+											size > 0
+										}
+										free_building_slots = {
+											building = industrial_complex
+											size > 0
+										}
+									}
+								}
+								if = {
+									limit = { check_variable = { military_factories_to_evacuate > 0 } }
+									add_building_construction = {
+										type = arms_factory
+										level = 1
+										instant_build = yes
+									}
+									add_to_temp_variable = { military_factories_to_evacuate = -1 }
+									PREV = {
+										remove_building = {
+											type = arms_factory
+											level = 1
+										}
+									}
+								}
+								if = {
+									limit = { check_variable = { civil_factories_to_evacuate > 0 } }
+									add_building_construction = {
+										type = industrial_complex
+										level = 1
+										instant_build = yes
+									}
+									add_to_temp_variable = { civil_factories_to_evacuate = -1 }
+									PREV = {
+										remove_building = {
+											type = industrial_complex
+											level = 1
+										}
+									}
+								}
+							}
+							if = {
+								limit = {
+									NOT = {
+										any_state = {
+											is_controlled_by = PREV
+											days_since_last_strategic_bombing > 60
+											NOT = {
+												any_neighbor_state = {
+													THIS.controller = { has_war_with = PREV.PREV.PREV }
+												}
+											}
+											free_building_slots = {
+												building = arms_factory
+												size > 0
+											}
+										}
+									}
+								}
+								set_temp_variable = { military_factories_to_evacuate = 0 }
+							}
+							if = {
+								limit = {
+									NOT = {
+										any_state = {
+											is_controlled_by = PREV
+											days_since_last_strategic_bombing > 60
+											NOT = {
+												any_neighbor_state = {
+													THIS.controller = { has_war_with = PREV.PREV.PREV }
+												}
+											}
+											free_building_slots = {
+												building = industrial_complex
+												size > 0
+											}
+										}
+									}
+								}
+								set_temp_variable = { civil_factories_to_evacuate = 0 }
+							}
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+
+    AB_evacuate_people = { ##Evacuation of people
+	    icon = GFX_decision_generic_refugees_evacuate_button
+		cost = 150
+		visible = {
+			AND = {
+				has_war = yes
+				any_state = {
+					is_controlled_by = PREV
+					has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+					any_neighbor_state = {
+						is_controlled_by = PREV.PREV
+						NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier4 } }
+						NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier5 } }
+						NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier6 } }
+						NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier7 } }
+						NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier8 } }
+					}
+				}
+			}
+		}
+		days_remove = 120
+		complete_effect = {
+			add_stability = 0.05
+			hidden_effect = {
+				send_equipment = {
+					equipment = train_equipment
+					amount = 10
+					target = EUU
+				}
+				every_state = {
+					limit = {
+						is_controlled_by = PREV
+						has_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+					}
+					remove_dynamic_modifier = { modifier = dependents_productivity_modifier4 }
+					add_dynamic_modifier = { modifier = dependents_productivity_modifier5 days = 120 }
+					every_neighbor_state = {
+						limit = {
+							is_controlled_by = PREV.PREV
+							NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier4 } }
+							NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier5 } }
+							NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier6 } }
+							NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier7 } }
+							NOT = { has_dynamic_modifier = { modifier = dependents_productivity_modifier8 } }
+						}
+						add_dynamic_modifier = { modifier = dependents_productivity_modifier6 days = 120 }
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 25
+		}
+	}
+}

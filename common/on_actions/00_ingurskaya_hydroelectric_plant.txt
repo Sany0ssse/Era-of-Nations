@@ -1,0 +1,233 @@
+on_actions = {
+	on_war_relation_added = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							706 = { is_controlled_by = ROOT }
+							707 = { is_controlled_by = FROM }
+						}
+						AND = {
+							706 = { is_controlled_by = FROM }
+							707 = { is_controlled_by = ROOT }
+						}
+					}
+				}
+				706 = { set_variable = { global.ingurskaya_hydroplant = hydroelectric_energy_production_var } }
+				706 = { set_variable = { hydroelectric_energy_production_var = 0 } }
+				707 = { set_variable = { hydroelectric_energy_production_var = 0 } }
+				clr_global_flag = ingury_HPS_category_open
+			}
+		}
+	}
+	on_peaceconference_ended = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							706 = { is_controlled_by = ROOT }
+							707 = { is_controlled_by = FROM }
+						}
+						AND = {
+							706 = { is_controlled_by = FROM }
+							707 = { is_controlled_by = ROOT }
+						}
+					}
+				}
+				706 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+				707 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+				set_variable = { global.ingurskaya_hydroplant = 0 }
+				clr_global_flag = ingurskaya_plant_united
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								706 = { is_controlled_by = ABK }
+								707 = { is_controlled_by = FROM }
+							}
+							AND = {
+								706 = { is_controlled_by = FROM }
+								707 = { is_controlled_by = ABK }
+							}
+						}
+						OR = {
+							ABK = { has_completed_focus = ABK_Forced_Co_Management }
+							ABK = { has_completed_focus = ABK_No_Concessions_Georgians }
+						}
+					}
+					set_global_flag = ingury_HPS_category_open
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							OR = {
+								AND = {
+									706 = { is_controlled_by = ABK }
+									707 = { is_controlled_by = FROM }
+								}
+								AND = {
+									706 = { is_controlled_by = FROM }
+									707 = { is_controlled_by = ABK }
+								}
+							}
+							ABK = { NOT = { has_completed_focus = ABK_Forced_Co_Management } }
+							ABK = { NOT = { has_completed_focus = ABK_No_Concessions_Georgians } }
+						}
+					}
+					set_global_flag = ingury_HPS_category_open
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						AND = {
+							706 = { is_controlled_by = ROOT }
+							707 = { is_controlled_by = ROOT }
+						}
+						AND = {
+							706 = { is_controlled_by = FROM }
+							707 = { is_controlled_by = FROM }
+						}
+					}
+				}
+				706 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+				707 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+				set_variable = { global.ingurskaya_hydroplant = 0 }
+				set_global_flag = ingurskaya_plant_united
+			}
+		}
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = { NOT = { has_global_flag = ingurskaya_plant_on_monthly_done } }
+				if = {
+					limit = {
+						has_global_flag = ingury_HPS_category_open
+						706 = { is_controlled_by = PREV }
+						707 = { is_controlled_by = PREV }
+					}
+					set_global_flag = { flag = ingurskaya_plant_on_monthly_done days = 1 value = 1}
+					clr_global_flag = ingury_HPS_category_open
+					if = {
+						limit = {
+							OR = {
+								706 = { check_variable = { hydroelectric_energy_production_var = 0 } }
+								707 = { check_variable = { hydroelectric_energy_production_var = 0 } }
+							}
+						}
+						706 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+						707 = { set_variable = { hydroelectric_energy_production_var = global.ingurskaya_hydroplant } }
+						set_variable = { global.ingurskaya_hydroplant = 0 }
+					}
+					set_global_flag = ingurskaya_plant_united
+				}
+				if = {
+					limit = {
+						has_war = no
+						NOT = { has_global_flag = ingury_HPS_category_open }
+						OR = {
+							AND = {
+								706 = { is_controlled_by = PREV }
+								707 = { NOT = { is_controlled_by = PREV } }
+							}
+							AND = {
+								707 = { is_controlled_by = PREV }
+								706 = { NOT = { is_controlled_by = PREV } }
+							}
+						}
+					}
+					if = {
+						limit = {
+							OR = {
+								AND = {
+									706 = { is_controlled_by = ABK }
+									707 = { NOT = { is_controlled_by = ABK } }
+								}
+								AND = {
+									706 = { NOT = { is_controlled_by = ABK } }
+									707 = { is_controlled_by = ABK }
+								}
+							}
+							OR = {
+								ABK = { has_completed_focus = ABK_Forced_Co_Management }
+								ABK = { has_completed_focus = ABK_No_Concessions_Georgians }
+							}
+						}
+						set_global_flag = ingury_HPS_category_open
+					}
+					else_if = {
+						limit = {
+							NOT = {
+								OR = {
+									AND = {
+										706 = { is_controlled_by = ABK }
+										707 = { NOT = { is_controlled_by = ABK } }
+									}
+									AND = {
+										706 = { NOT = { is_controlled_by = ABK } }
+										707 = { is_controlled_by = ABK }
+									}
+								}
+								ABK = { NOT = { has_completed_focus = ABK_Forced_Co_Management } }
+								ABK = { NOT = { has_completed_focus = ABK_No_Concessions_Georgians } }
+							}
+						}
+						set_global_flag = ingury_HPS_category_open
+					}
+					clr_global_flag = ingurskaya_plant_united
+				}
+				set_global_flag = { flag = ingurskaya_plant_on_monthly_done days = 1 value = 1}
+			}
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = { FROM.FROM = { state = 706 } }
+				every_country = {
+					remove_opinion_modifier = {
+						target = FROM
+						modifier = ingurskaya_plant_closed
+					}
+					remove_opinion_modifier = {
+						target = FROM
+						modifier = ingurskaya_plant_investitions
+					}
+					remove_opinion_modifier = {
+						target = ROOT
+						modifier = ingurskaya_plant_closed
+					}
+					remove_opinion_modifier = {
+						target = ROOT
+						modifier = ingurskaya_plant_investitions
+					}
+				}
+			}
+			else_if = {
+				limit = { FROM.FROM = { state = 707 } }
+				every_country = {
+					remove_opinion_modifier = {
+						target = FROM
+						modifier = ingurskaya_plant_closed
+					}
+					remove_opinion_modifier = {
+						target = FROM
+						modifier = ingurskaya_plant_investitions
+					}
+					remove_opinion_modifier = {
+						target = ROOT
+						modifier = ingurskaya_plant_closed
+					}
+					remove_opinion_modifier = {
+						target = ROOT
+						modifier = ingurskaya_plant_investitions
+					}
+				}
+			}
+		}
+	}
+}

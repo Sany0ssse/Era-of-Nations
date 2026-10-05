@@ -1,0 +1,1623 @@
+#################################################
+#	Investment System - Written by AngriestBird #
+#################################################
+# Inspired by the original Allied Construction Project https://steamcommunity.com/sharedfiles/filedetails/?id=1368202826
+# ROOT is the investor nation
+# PREV is state
+# PREV = { CONTROLLER = { is country being invested in } }
+
+# AC_build_amount determines how many buildings to build
+# Indexes for WHAT type of building
+# AC_building_type_selected = 1 = Civilian Industry
+# AC_building_type_selected = 2 = Military Industry
+# AC_building_type_selected = 3 = Naval Dockyards
+# AC_building_type_selected = 4 = Infrastructure
+# AC_building_type_selected = 5 = Offices
+# AC_building_type_selected = 6 = Surface to Air Missiles
+# AC_building_type_selected = 7 = Radar
+# AC_building_type_selected = 8 = Air Bases
+# AC_building_type_selected = 9 = Fuel Silo
+# AC_building_type_selected = 10 = Internet Station
+# AC_building_type_selected = 11 = Renewable Energy Infrastructure
+# AC_building_type_selected = 12 = Fossil Fuel Powerplant
+# AC_building_type_selected = 13 = Nuclear Reactor
+# AC_building_type_selected = 14 = Agriculture District
+# AC_building_type_selected = 15 = Rubber Refinery
+scripted_gui = {
+	AC_show_Investment_window = {
+		context_type = selected_state_context
+		window_name = "AC_show_Investment_window"
+
+		parent_window_token = selected_state_view
+
+		dirty = global.refresh_gui
+
+		visible = {
+			NOT = { is_controlled_by = ROOT }
+			ROOT = { has_country_flag = AC_hide_investment_window }
+		}
+
+		effects = {
+			AC_up_arrow_click = {
+				ROOT = { clr_country_flag = AC_hide_investment_window }
+				refresh_gui = yes
+			}
+		}
+	}
+
+	# Foreign Investment Menu
+	AC_allied_construction_window = {
+		context_type = selected_state_context
+		window_name = "AC_allied_construction_window"
+		parent_window_token = selected_state_view
+
+		dirty = global.refresh_gui
+
+		visible = {
+			NOT = { is_controlled_by = ROOT }
+			ROOT = { NOT = { has_country_flag = AC_hide_investment_window } }
+		}
+
+		# Graphics for the Buildings
+		properties = {
+			AC_building_cic_button = { image = "[AC_GetCicButtonTexture]" }
+			AC_building_mic_button = { image = "[AC_GetMicButtonTexture]" }
+			AC_building_nic_button = { image = "[AC_GetNicButtonTexture]" }
+			AC_building_infra_button = { image = "[AC_GetInfraButtonTexture]" }
+			AC_building_offices_button = { image = "[AC_GetOfficesButtonTexture]" }
+			AC_building_antiair_button = { image = "[AC_GetAntiairButtonTexture]" }
+			AC_building_radar_button = { image = "[AC_GetRadarButtonTexture]" }
+			AC_building_airbase_button = { image = "[AC_GetAirbaseButtonTexture]" }
+			AC_building_fuel_silos_button = { image = "[AC_GetFuelSiloButtonTexture]" }
+			AC_building_internet_station_button = { image = "[AC_InternetStationButtonTexture]" }
+			AC_building_ref_button = { image = "[AC_GetRefButtonTexture]" }
+			AC_building_power_plant_button = { image = "[AC_GetPowerPlantButtonTexture]" }
+			AC_building_nuclear_reactor_button = { image = "[AC_GetNuclearReactorButtonTexture]" }
+			AC_building_agriculture_district_button = { image = "[AC_GetAgricultureDistrictButtonTexture]" }
+			AC_building_rubber_refinery_button = { image = "[AC_GetRubberRefinetyButtonTexture]" }
+			AC_influence_icon = { image = "[AC_GainInfluence]" }
+		}
+
+		effects = {
+			# Hides Investment Window
+			AC_down_arrow_click = {
+				# ROOT is the investor nation
+				ROOT = { set_country_flag = AC_hide_investment_window }
+				refresh_gui = yes
+			}
+			# Begins project or cancels the project if you have one active in a given state
+			AC_build_button_click = {
+				if = { limit = { NOT = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } } }
+					# PREV is the state target
+					THIS = {
+						set_variable = { ROOT.AC_state_target = THIS.id }
+						# CONTROLLER is pretty obvious
+						CONTROLLER = {
+							set_variable = { ROOT.AC_nation_target = THIS.id }
+							ROOT = { set_country_flag = { flag = this_investment_offer_pending@PREV days = 90 value = 1 } }
+						}
+					}
+					ROOT = {
+						update_gui = yes
+						refresh_gui = yes
+						country_event = { id = AC_event.3 }
+					}
+				}
+				else = {
+					ROOT = {
+						set_variable = { project = PREV.project_target_state_@ROOT }
+						end_project = yes
+						refresh_gui = yes
+						if = { limit = { has_global_flag = GAME_RULE_gain_0_5_percent_invest }
+							set_temp_variable = { percent_change = -1.0 }
+						}
+						else_if = { limit = { has_global_flag = GAME_RULE_gain_2_percent_invest }
+							set_temp_variable = { percent_change = -2.50 }
+						}
+						else = {
+							set_temp_variable = { percent_change = -1.50 }
+						}
+						set_temp_variable = { tag_index = ROOT.id }
+						PREV = {
+							CONTROLLER = {
+								set_temp_variable = { influence_target = THIS.id }
+							}
+						}
+						change_influence_percentage = yes
+					}
+				}
+			}
+
+			# Increase/Decrease the number of buildings
+			AC_building_amount_increase_button_click = { #increases AC_build_amount & update build time/cost
+				ROOT = {
+					# Max amount depends on the selected building type
+					# Antiair Building
+					if = { limit = { check_variable = { project_building_type^-1 = 6 } }
+						add_to_variable = { project_build_amount^-1 = 1 }
+						clamp_variable = { var = project_build_amount^-1 max = 5 }
+					}
+					# Radar Station
+					else_if = { limit = { check_variable = { project_building_type^-1 = 7 } }
+						add_to_variable = { project_build_amount^-1 = 1 }
+						clamp_variable = { var = project_build_amount^-1 max = 6 }
+					}
+					# Fuel Silos
+					else_if = { limit = { check_variable = { project_building_type^-1 = 9 } }
+						add_to_variable = { project_build_amount^-1 = 1 }
+						clamp_variable = { var = project_build_amount^-1 max = 5 }
+					}
+					# Internet Station
+					else_if = { limit = { check_variable = { project_building_type^-1 = 10 } }
+						add_to_variable = { project_build_amount^-1 = 1 }
+						clamp_variable = { var = project_build_amount^-1 max = 6 }
+					}
+					# Infrastructure
+					else_if = { limit = { check_variable = { project_building_type^-1 = 4 } }
+						add_to_variable = { project_build_amount^-1 = 1 }
+						clamp_variable = { var = project_build_amount^-1 max = 5 }
+					}
+					# Office Sectors
+					# Reverted to 5 from 10 Office Sectors
+					else_if = { limit = { check_variable = { project_building_type^-1 = 5 } }
+						add_to_variable = { project_build_amount^-1 = 1 }
+						clamp_variable = { var = project_build_amount^-1 max = 5 }
+					}
+					# Rubber Refineries
+					else_if = { limit = { check_variable = { project_building_type^-1 = 15 } }
+						add_to_variable = { project_build_amount^-1 = 1 }
+						clamp_variable = { var = project_build_amount^-1 max = 3 }
+					}
+					else = {
+						add_to_variable = { project_build_amount^-1 = 1 }
+						clamp_variable = { var = project_build_amount^-1 max = 10 }
+					}
+					update_gui = yes
+				}
+				refresh_gui = yes
+			}
+			AC_building_amount_decrease_button_click = { ##decreases AC_build_amount & update build time/cost
+				ROOT = {
+					# Max amount depends on the selected building type
+					# Antiair Building
+					if = { limit = { check_variable = { project_building_type^-1 = 6 } }
+						add_to_variable = { project_build_amount^-1 = -1 }
+						clamp_variable = { var = project_build_amount^-1 min = 1 }
+					}
+					# Radar Station
+					else_if = { limit = { check_variable = { project_building_type^-1 = 7 } }
+						add_to_variable = { project_build_amount^-1 = -1 }
+						clamp_variable = { var = project_build_amount^-1 min = 1 }
+					}
+					# Fuel Silos
+					else_if = { limit = { check_variable = { project_building_type^-1 = 9 } }
+						add_to_variable = { project_build_amount^-1 = -1 }
+						clamp_variable = { var = project_build_amount^-1 min = 1 }
+					}
+					# Internet Station
+					else_if = { limit = { check_variable = { project_building_type^-1 = 10 } }
+						add_to_variable = { project_build_amount^-1 = -1 }
+						clamp_variable = { var = project_build_amount^-1 min = 1 }
+					}
+					# Infrastructure
+					else_if = { limit = { check_variable = { project_building_type^-1 = 4 } }
+						add_to_variable = { project_build_amount^-1 = -1 }
+						clamp_variable = { var = project_build_amount^-1 min = 1 }
+					}
+					# Office Sectors
+					else_if = { limit = { check_variable = { project_building_type^-1 = 5 } }
+						add_to_variable = { project_build_amount^-1 = -1 }
+						clamp_variable = { var = project_build_amount^-1 min = 1 }
+					}
+					# Rubber Refineries
+					else_if = { limit = { check_variable = { project_building_type^-1 = 15 } }
+						add_to_variable = { project_build_amount^-1 = -1 }
+						clamp_variable = { var = project_build_amount^-1 min = 1 }
+					}
+					else = {
+						add_to_variable = { project_build_amount^-1 = -1 }
+						clamp_variable = { var = project_build_amount^-1 min = 1 }
+					}
+					update_gui = yes
+				}
+				refresh_gui = yes
+			}
+
+			# Button Indexes and Positions
+			# Page 1
+			# line One - CIC - 1, MIC - 2, NIC - 3
+			# Line Two - Infrastructure - 4, Offices - 5, SAM - 6, Radar - 7
+			# Page 2
+			# Line One - Air Bases - 8, Fuel Silo - 9, Internet Station - 10
+			# Line Two - Biofuel Refineries - 11, Nuclear Reactor - 12
+			# Positions of Line One: { 8, 45, 82, 119 }, 45
+			# Positions of Line Two: { 8, 45, 82, 119 }, 76
+			# AC_buiding_xxxx_button_click sets variables for specific buildings and updates build time/cost
+
+			# Shows the Current Set Page of Buildings
+			AC_increase_page_click = {
+				ROOT = {
+					# 1 is page one
+					if = { limit = { NOT = { has_variable = constructable_buildings } }
+						set_variable = { constructable_buildings = 1 }
+					}
+					if = { limit = { check_variable = { constructable_buildings = 1 } }
+						add_to_variable = { constructable_buildings = 1 }
+					}
+					else_if = { limit = { check_variable = { constructable_buildings = 2 } }
+						add_to_variable = { constructable_buildings = 1 }
+					}
+					else_if = { limit = { check_variable = { constructable_buildings = 3 } }
+						set_variable = { constructable_buildings = 1 }
+					}
+				}
+				refresh_gui = yes
+			}
+
+			# Investable Buildings
+			# Index 1: CIC
+			AC_building_cic_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 1 }
+					update_gui = yes
+				}
+				refresh_gui = yes
+			}
+			# Index 2: MIC
+			AC_building_mic_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 2 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			# Index 3: NIC
+			AC_building_nic_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 3 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			# Index 4: Infrastructure
+			AC_building_infra_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 4 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			# Index 5: Offices
+			AC_building_offices_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 5 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			# Index 6: SAM
+			AC_building_antiair_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 6 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			# Index 7: Radar
+			AC_building_radar_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 7 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			# Index 8: Air Bases
+			AC_building_airbase_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 8 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			#Index 9: Fuel Silos
+			AC_building_fuel_silos_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 9 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			#Index 10: Internet Station
+			AC_building_internet_station_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 10 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			#Index 11: Renewable Energy Infrastructure
+			AC_building_ref_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 11 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			#Index 12: Biofuel Refineries
+			AC_building_power_plant_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 12 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			#Index 13: Nuclear Reactor
+			AC_building_nuclear_reactor_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 13 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			#Index 14: Agriculture District
+			AC_building_agriculture_district_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 14 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+			#Index 15: Rubber Refinery
+			AC_building_rubber_refinery_button_click = {
+				ROOT = {
+					set_variable = { project_build_amount^-1 = 1 }
+					set_variable = { project_building_type^-1 = 15 }
+					update_gui = yes
+				}
+
+				refresh_gui = yes
+			}
+		}
+
+		triggers = {
+			# Build Button Click Enabled
+			AC_build_button_click_enabled = {
+				hidden_trigger = {
+					PREV = { CONTROLLER = { NOT = { tag = ROOT } } }
+				}
+				# #Cannot be at war
+				# NOT = { OWNER = { has_war_with = ROOT } }
+				# NOT = { ROOT = { controls_state = PREV.id } }
+				# #Cannot be being justified upon investment country
+				# ROOT = { not = { is_justifying_wargoal_against = PREV } }
+				if = { limit = { NOT = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } } currently_is_considering_a_project = yes }
+					ROOT = {
+						check_variable = { active_projects < 15 }
+						check_variable = { project_building_type^-1 > 0 }
+						check_variable = { project_build_amount^-1 > 0 }
+						NOT = { has_war_with = PREV.CONTROLLER }
+						NOT = { is_justifying_wargoal_against = PREV.CONTROLLER }
+						# General things
+						has_available_treasury_investment = yes
+						currently_is_considering_a_project = yes
+					}
+					if = { limit = { check_variable = { ROOT.project_building_type^-1 = 1 } }
+						AC_building_cic_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 2 } }
+						AC_building_mic_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 3 } }
+						AC_building_nic_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 4 } }
+						AC_building_infra_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 5 } }
+						AC_building_offices_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 6 } }
+						AC_building_antiair_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 7 } }
+						AC_building_radar_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 8 } }
+						AC_building_airbase_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 9 } }
+						building_fuel_silos_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 10 } }
+						building_internet_station_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 11 } }
+						AC_building_ref_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 12 } }
+						AC_building_foss_fuel_powerplant_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 13 } }
+						AC_building_reactor_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 14 } }
+						AC_building_agriculture_district_available = yes
+					}
+					else_if = { limit = { check_variable = { ROOT.project_building_type^-1 = 15 } }
+						AC_building_rubber_refinery_available = yes
+					}
+				}
+				else_if = { limit = { NOT = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } currently_is_considering_a_project = yes } }
+					currently_is_considering_a_project = yes
+				}
+				else = {
+					always = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = disabled_foreign_investment_flag_tt
+					ROOT = { NOT = { has_country_flag = disabled_foreign_investment } }
+				}
+				custom_trigger_tooltip = {
+					tooltip = int_auto_reject_investment_flag_tt
+					PREV = { CONTROLLER = { NOT = { has_country_flag = int_auto_reject_investment_flag } } }
+				}
+			}
+
+			# Investable Buildings
+			# Page 1 - Index One: Civilian Industry
+			AC_building_cic_button_click_enabled = {
+				AC_building_cic_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_cic_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 1 } }
+			}
+			# Index Two: Military Industry
+			AC_building_mic_button_click_enabled = {
+				AC_building_mic_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_mic_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 1 } }
+			}
+			# Index Three: Naval Dockyard
+			AC_building_nic_button_click_enabled = {
+				AC_building_nic_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_nic_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 1 } }
+			}
+			# Index Four: Infrastructure
+			AC_building_infra_button_click_enabled = {
+				AC_building_infra_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_infra_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 1 } }
+			}
+			# Index Five: Offices
+			AC_building_offices_button_click_enabled = {
+				AC_building_offices_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_offices_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 1 } }
+			}
+			# Index Six: SAM
+			AC_building_antiair_button_click_enabled = {
+				AC_building_antiair_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_antiair_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 1 } }
+			}
+			# Index Seven: Radar
+			AC_building_radar_button_click_enabled = {
+				AC_building_radar_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_radar_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 1 } }
+			}
+			# Page Two
+			# Index Eight: Air Bases
+			AC_building_airbase_button_click_enabled = {
+				AC_building_airbase_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_airbase_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 2 } }
+			}
+			# Index Nine: Fuel Silo
+			AC_building_fuel_silos_button_click_enabled = {
+				building_fuel_silos_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_fuel_silos_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 2 } }
+			}
+			# Index Ten: Internet Station
+			AC_building_internet_station_button_click_enabled = {
+				building_internet_station_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_internet_station_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 2 } }
+			}
+			# Index Eleven: Refineries
+			AC_building_ref_button_click_enabled = {
+				AC_building_ref_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_ref_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 2 } }
+			}
+			# Index Eleven: Fossil Power Plant
+			AC_building_power_plant_button_click_enabled = {
+				AC_building_foss_fuel_powerplant_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_power_plant_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 2 } }
+			}
+			# Index Twelve: Nuclear Reactor
+			AC_building_nuclear_reactor_button_click_enabled = {
+				AC_building_reactor_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_nuclear_reactor_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 2 } }
+			}
+			# Index Fourteen: Agriculture District
+			AC_building_agriculture_district_button_click_enabled = {
+				AC_building_agriculture_district_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_agriculture_district_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 2 } }
+			}
+			# Index Fifteen: Rubber Refinery
+			AC_building_rubber_refinery_button_click_enabled = {
+				AC_building_rubber_refinery_available = yes
+				currently_is_considering_a_project = yes
+			}
+			AC_building_rubber_refinery_button_visible = {
+				ROOT = { check_variable = { constructable_buildings = 3 } }
+			}
+		}
+	}
+
+	# Owned State Investment Menu
+	show_owned_state_investment_menu = {
+		context_type = selected_state_context
+		window_name = "show_owned_state_investment_menu"
+
+		parent_window_token = selected_state_view
+
+		dirty = global.refresh_gui
+
+		visible = {
+			is_controlled_by = ROOT
+			ROOT = { has_country_flag = AC_hide_owned_investment_window }
+		}
+
+		effects = {
+			show_owned_state_investment_button_click = {
+				ROOT = { clr_country_flag = AC_hide_owned_investment_window }
+				refresh_gui = yes
+			}
+		}
+	}
+
+	owned_state_investment_menu = {
+		context_type = selected_state_context
+		window_name = "owned_state_investment_menu"
+		parent_window_token = selected_state_view
+
+		dirty = global.refresh_gui
+
+		visible = {
+			is_controlled_by = ROOT
+			ROOT = { NOT = { has_country_flag = AC_hide_owned_investment_window } }
+		}
+
+		triggers = {
+			# Stated Owned Investment Projects
+			encourage_investments_in_state_click_enabled = {
+				check_for_investment_project_limits = yes
+				NOT = { has_state_flag = currently_encouraged_investments }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			encourage_productivity_in_state_click_enabled = {
+				check_for_investment_project_limits = yes
+				NOT = { has_state_flag = encourage_productivity_in_state }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			expand_local_building_capacity_click_enabled = {
+				check_for_investment_project_limits = yes
+				NOT = { has_state_flag = expand_local_building_capacity }
+				NOT = { has_state_flag = block_future_expand_local_building_capacity }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			expand_local_infrastructure_click_enabled = {
+				check_for_investment_project_limits = yes
+				NOT = { has_state_flag = expand_local_infrastructure }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			expand_local_military_infrastructure_click_enabled = {
+				check_for_investment_project_limits = yes
+				NOT = { has_state_flag = expand_local_military_infrastructure }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			expand_local_energy_infrastructure_click_enabled = {
+				check_for_investment_project_limits = yes
+				NOT = { has_state_flag = expand_local_energy_infrastructure }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			improve_rebuilding_efforts_click_enabled = {
+				check_for_investment_project_limits = yes
+				NOT = {
+					OR = {
+						has_state_flag = improve_rebuilding_efforts
+						is_owned_by = ROOT
+						is_core_of = ROOT
+					}
+				}
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			expand_local_hydroelectric_infrastructure_click_enabled = {
+				if = {
+					limit = {
+						OR = {
+							state = 706
+							state = 707
+						}
+					}
+					has_global_flag = ingurskaya_plant_united
+				}
+				check_for_investment_project_limits = yes
+				has_dynamic_modifier = { modifier = hydroelectric_infrastructure_in_state }
+				NOT = { has_state_flag = expand_local_hydroelectric_infrastructure }
+				NOT = { has_state_flag = block_future_expand_local_hydroelectric_infrastructure }
+				if = { limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 0 } } ROOT = { has_tech = construction1 } }
+				else_if = { limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 1 } } ROOT = { has_tech = construction2 } }
+				else_if = { limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 2 } } ROOT = { has_tech = construction3 } }
+				else_if = { limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 3 } } ROOT = { has_tech = construction4 } }
+				else_if = { limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 4 } } ROOT = { has_tech = construction5 } }
+				else_if = { limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 5 } } ROOT = { has_tech = construction6 } }
+				else_if = { limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 6 } } ROOT = { has_tech = construction7 } }
+				else_if = { limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 7 } } ROOT = { has_tech = construction8 } }
+				else_if = { limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 8 } } ROOT = { has_tech = construction9 } }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			expand_local_geothermal_infrastructure_click_enabled = {
+				check_for_investment_project_limits = yes
+				has_dynamic_modifier = { modifier = geothermal_infrastructure_in_state }
+				NOT = { has_state_flag = expand_local_geothermal_infrastructure }
+				NOT = { has_state_flag = block_future_expand_local_geothermal_infrastructure }
+				if = { limit = { check_variable = { expanded_geothermal_infrastructure_times = 0 } } ROOT = { has_tech = excavation4 } }
+				else_if = { limit = { check_variable = { expanded_geothermal_infrastructure_times = 1 } } ROOT = { has_tech = excavation5 } }
+				else_if = { limit = { check_variable = { expanded_geothermal_infrastructure_times = 2 } } ROOT = { has_tech = excavation6 } }
+				else_if = { limit = { check_variable = { expanded_geothermal_infrastructure_times = 3 } } ROOT = { has_tech = excavation7 } }
+				else_if = { limit = { check_variable = { expanded_geothermal_infrastructure_times = 4 } } ROOT = { has_tech = excavation8 } }
+				else_if = { limit = { check_variable = { expanded_geothermal_infrastructure_times = 5 } } ROOT = { has_tech = excavation9 } }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			# Custom National Content
+			improve_local_conservation_efforts_visible = {
+				ROOT = { original_tag = BRA }
+			}
+			improve_local_conservation_efforts_click_enabled = {
+				check_for_investment_project_limits = yes
+				NOT = { has_state_flag = improve_local_conservation_efforts }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			core_state_click_enabled = {
+				check_for_investment_project_limits = yes
+				compliance > 75
+				ROOT = {
+					NOT = {
+						has_country_flag = GENERIC_regions_integration_idea
+					}
+				}
+				NOT = {
+					is_core_of = ROOT
+					has_state_flag = core_state
+				}
+				NOT = {
+					OR = {
+						AND = {
+							var:controller = { tag = TUR }
+							OR = {
+								state = 935
+								state = 162
+								state = 1205
+							}
+						}
+						AND = {
+							var:controller = { tag = SUD }
+							state = 224
+						}
+						AND = {
+							var:controller = { tag = TAJ }
+							state = 722
+						}
+					}
+				}
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			fix_damaged_state_click_enabled = {
+				check_for_investment_project_limits = yes
+				OR = {
+					has_dynamic_modifier = { modifier = Damaged_state_1_level }
+					has_dynamic_modifier = { modifier = Damaged_state_2_level }
+					has_dynamic_modifier = { modifier = Damaged_state_3_level }
+					has_dynamic_modifier = { modifier = Damaged_state_4_level }
+					has_dynamic_modifier = { modifier = Damaged_state_5_level }
+				}
+				NOT = { has_state_flag = state_restoration }
+				ROOT = { NOT = { has_active_mission = bankruptcy_incoming_collapse } }
+			}
+
+			encourage_migrants_click_enabled = {
+				check_for_investment_project_limits = yes
+				NOT = { has_dynamic_modifier = { modifier = migrants_attraction } }
+				custom_trigger_tooltip = {
+					tooltip = Positive_immigration_rate_tt
+					ROOT = { check_variable = { net_immigration_rate > 0 } }
+				}
+			}
+		}
+
+		effects = {
+			# Hides Investment Window
+			hide_owned_state_investment_button_click = {
+				# ROOT is the investor nation
+				ROOT = { set_country_flag = AC_hide_owned_investment_window }
+				refresh_gui = yes
+			}
+
+			# State Options
+			encourage_investments_in_state_click = {
+				custom_effect_tooltip = encourage_investments_in_state_click_tt
+				set_state_flag = { flag = currently_encouraged_investments value = 1 days = 120 }
+				set_temp_variable = { ii_cost = 10 }
+				calculate_internal_investments_costs = yes
+			}
+
+			encourage_productivity_in_state_click = {
+				custom_effect_tooltip = encourage_productivity_in_state_click_tt
+				set_state_flag = { flag = encourage_productivity_in_state value = 1 days = 120 }
+				set_temp_variable = { ii_cost = 7.5 }
+				set_temp_variable = { temp_pop = ROOT.population_total_m }
+				set_temp_variable = { temp_pop2 = state_population_k }
+				multiply_temp_variable = { temp_pop2 = 0.001 }
+				divide_temp_variable = { temp_pop = ROOT.num_of_controlled_states }
+				divide_temp_variable = { temp_pop2 = temp_pop }
+				multiply_temp_variable = { ii_cost = temp_pop2 }
+				calculate_internal_investments_costs = yes
+			}
+
+			expand_local_building_capacity_click = {
+				set_state_flag = { flag = expand_local_building_capacity value = 1 days = 120 }
+				add_extra_state_shared_building_slots = 2
+				if = {
+					limit = {
+						OR = {
+							has_state_category = state_00
+							has_state_category = state_01
+						}
+					}
+					set_temp_variable = { ii_cost = 2.5 }
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_state_category = state_02
+							has_state_category = state_03
+							has_state_category = state_04
+							has_state_category = state_05
+						}
+					}
+					set_temp_variable = { ii_cost = 4.5 }
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_state_category = state_11
+							has_state_category = state_12
+							has_state_category = state_13
+							has_state_category = state_14
+							has_state_category = state_15
+							has_state_category = state_16
+							has_state_category = state_17
+							has_state_category = state_18
+						}
+					}
+					set_temp_variable = { ii_cost = 7 }
+				}
+				else = { set_temp_variable = { ii_cost = 6 } }
+				set_temp_variable = { ii_cost_multiplier = expanded_building_slot_times }
+				multiply_temp_variable = { ii_cost_multiplier = 0.2 }
+				add_to_temp_variable = { ii_cost_multiplier = 1 }
+				multiply_temp_variable = { ii_cost = ii_cost_multiplier }
+				custom_effect_tooltip = expand_local_building_capacity_click_tt
+				add_to_variable = { expanded_building_slot_times = 1 }
+				if = {
+					limit = { check_variable = { expanded_building_slot_times = 5 } }
+					set_state_flag = block_future_expand_local_building_capacity
+				}
+				ROOT = {
+					set_temp_variable = { treasury_change = display_income }
+					multiply_temp_variable = { treasury_change = 0.1 } # 10% of weekly income
+					multiply_temp_variable = { treasury_change = ii_cost } #we multiply our 10% on the temp var, so having ii_cost = 7.5 means 75% of weekly income
+					set_temp_variable = { ii_cost_modifier = 1 }
+					add_to_temp_variable = { ii_cost_modifier = modifier@internal_investments_money_cost_modifier }
+					multiply_temp_variable = { treasury_change = ii_cost_modifier }
+					clamp_temp_variable = { var = treasury_change min = 0.5 max = 50 }
+					multiply_temp_variable = { treasury_change = -1 }
+					modify_treasury_effect = yes
+					state_owned_concurrent_investment_limit_implement = yes
+				}
+				refresh_gui = yes
+			}
+
+			expand_local_infrastructure_click = {
+				custom_effect_tooltip = expand_local_infrastructure_click_tt
+				set_state_flag = { flag = expand_local_infrastructure value = 1 days = 120 }
+
+				add_dynamic_modifier = {
+					modifier = state_owned_local_infrastructure_modifier
+					days = 120
+				}
+				set_temp_variable = { ii_cost = 7.5 }
+				calculate_internal_investments_costs = yes
+			}
+
+			expand_local_military_infrastructure_click = {
+				custom_effect_tooltip = expand_local_military_infrastructure_click_tt
+				set_state_flag = { flag = expand_local_military_infrastructure value = 1 days = 120 }
+
+				add_dynamic_modifier = {
+					modifier = state_owned_local_military_infrastructure_modifier
+					days = 120
+				}
+				set_temp_variable = { ii_cost = 7.5 }
+				calculate_internal_investments_costs = yes
+
+				ROOT = {
+					set_temp_variable = { temp_opinion = 5 }
+					change_the_military_opinion = yes
+					change_intelligence_community_opinion = yes
+				}
+			}
+
+			expand_local_energy_infrastructure_click = {
+				custom_effect_tooltip = expand_local_energy_infrastructure_click_tt
+				set_state_flag = { flag = expand_local_energy_infrastructure value = 1 days = 120 }
+
+				add_dynamic_modifier = {
+					modifier = state_owned_local_energy_infrastructure_modifier
+					days = 120
+				}
+				set_temp_variable = { ii_cost = 7.5 }
+				calculate_internal_investments_costs = yes
+
+				ROOT = {
+					set_temp_variable = { temp_opinion = 5 }
+					change_fossil_fuel_industry_opinion = yes
+				}
+			}
+
+			improve_rebuilding_efforts_click = {
+				custom_effect_tooltip = improve_rebuilding_efforts_click_tt
+				set_state_flag = { flag = improve_rebuilding_efforts value = 1 days = 120 }
+
+				add_dynamic_modifier = {
+					modifier = state_owned_improve_rebuilding_efforts_modifier
+					days = 120
+				}
+
+				set_temp_variable = { ii_cost = 5 }
+				set_temp_variable = { temp_pop = ROOT.population_total_m }
+				set_temp_variable = { temp_pop2 = state_population_k }
+				multiply_temp_variable = { temp_pop2 = 0.001 }
+				divide_temp_variable = { temp_pop = ROOT.num_of_controlled_states }
+				divide_temp_variable = { temp_pop2 = temp_pop }
+				multiply_temp_variable = { ii_cost = temp_pop2 }
+
+				calculate_internal_investments_costs = yes
+			}
+
+			expand_local_hydroelectric_infrastructure_click = {
+				set_state_flag = { flag = expand_local_hydroelectric_infrastructure value = 1 days = 120 }
+				if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 0 } check_variable = { expanded_hydroelectric_infrastructure_times = 1 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.2 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.5 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 5 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 3.5 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 2 } check_variable = { expanded_hydroelectric_infrastructure_times = 3 } check_variable = { expanded_hydroelectric_infrastructure_times = 4 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.25 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.6 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 6 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 5 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 5 } check_variable = { expanded_hydroelectric_infrastructure_times = 6 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.3 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.7 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 7 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 6 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_hydroelectric_infrastructure_times = 7 } check_variable = { expanded_hydroelectric_infrastructure_times = 8 } } }
+					set_temp_variable = { hydroelectric_energy_production_var_increase = hydroelectric_energy_production_var }
+					multiply_temp_variable = { hydroelectric_energy_production_var_increase = 0.35 }
+					set_temp_variable = { min_hydroelectric_energy_production_var_increase = 0.8 }
+					set_temp_variable = { max_hydroelectric_energy_production_var_increase = 8 }
+					clamp_temp_variable = {
+						var = hydroelectric_energy_production_var_increase
+						min = min_hydroelectric_energy_production_var_increase
+						max = max_hydroelectric_energy_production_var_increase
+					}
+					add_to_variable = { hydroelectric_energy_production_var = hydroelectric_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 6.5 }
+				}
+				custom_effect_tooltip = expand_local_hydroelectric_infrastructure_click_tt
+				add_to_variable = { expanded_hydroelectric_infrastructure_times = 1 }
+				if = {
+					limit = { check_variable = { expanded_hydroelectric_infrastructure_times = 9 } }
+					set_state_flag = block_future_expand_local_hydroelectric_infrastructure
+				}
+				ROOT = {
+					set_temp_variable = { treasury_change = display_income }
+					multiply_temp_variable = { treasury_change = 0.1 } # 10% of weekly income
+					multiply_temp_variable = { treasury_change = ii_cost } #we multiply our 10% on the temp var, so having ii_cost = 7.5 means 75% of weekly income
+					set_temp_variable = { ii_cost_modifier = 1 }
+					add_to_temp_variable = { ii_cost_modifier = modifier@internal_investments_money_cost_modifier }
+					multiply_temp_variable = { treasury_change = ii_cost_modifier }
+					clamp_temp_variable = { var = treasury_change min = 0.75 max = 20 }
+					multiply_temp_variable = { treasury_change = -1 }
+					modify_treasury_effect = yes
+					state_owned_concurrent_investment_limit_implement = yes
+				}
+				refresh_gui = yes
+			}
+
+			expand_local_geothermal_infrastructure_click = {
+				set_state_flag = { flag = expand_local_geothermal_infrastructure value = 1 days = 120 }
+				ROOT = { set_temp_variable = { expanding_local_geothermal_infrastructure = 1 } }
+				if = {
+					limit = { OR = { check_variable = { expanded_geothermal_infrastructure_times = 0 } check_variable = { expanded_geothermal_infrastructure_times = 1 } } }
+					set_temp_variable = { geothermal_energy_production_var_increase = geothermal_energy_production_var }
+					multiply_temp_variable = { geothermal_energy_production_var_increase = 0.4 }
+					set_temp_variable = { min_geothermal_energy_production_var_increase = 0.75 }
+					set_temp_variable = { max_geothermal_energy_production_var_increase = 6 }
+					clamp_temp_variable = {
+						var = geothermal_energy_production_var_increase
+						min = min_geothermal_energy_production_var_increase
+						max = max_geothermal_energy_production_var_increase
+					}
+					add_to_variable = { geothermal_energy_production_var = geothermal_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 4 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_geothermal_infrastructure_times = 2 } check_variable = { expanded_geothermal_infrastructure_times = 3 } } }
+					set_temp_variable = { geothermal_energy_production_var_increase = geothermal_energy_production_var }
+					multiply_temp_variable = { geothermal_energy_production_var_increase = 0.5 }
+					set_temp_variable = { min_geothermal_energy_production_var_increase = 0.9 }
+					set_temp_variable = { max_geothermal_energy_production_var_increase = 7.5 }
+					clamp_temp_variable = {
+						var = geothermal_energy_production_var_increase
+						min = min_geothermal_energy_production_var_increase
+						max = max_geothermal_energy_production_var_increase
+					}
+					add_to_variable = { geothermal_energy_production_var = geothermal_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 5.5 }
+				}
+				else_if = {
+					limit = { OR = { check_variable = { expanded_geothermal_infrastructure_times = 4 } check_variable = { expanded_geothermal_infrastructure_times = 5 } } }
+					set_temp_variable = { geothermal_energy_production_var_increase = geothermal_energy_production_var }
+					multiply_temp_variable = { geothermal_energy_production_var_increase = 0.6 }
+					set_temp_variable = { min_geothermal_energy_production_var_increase = 1.25 }
+					set_temp_variable = { max_geothermal_energy_production_var_increase = 9 }
+					clamp_temp_variable = {
+						var = geothermal_energy_production_var_increase
+						min = min_geothermal_energy_production_var_increase
+						max = max_geothermal_energy_production_var_increase
+					}
+					add_to_variable = { geothermal_energy_production_var = geothermal_energy_production_var_increase }
+					set_temp_variable = { ii_cost = 6.5 }
+				}
+				custom_effect_tooltip = expand_local_geothermal_infrastructure_click_tt
+				add_to_variable = { expanded_geothermal_infrastructure_times = 1 }
+				if = {
+					limit = { check_variable = { expanded_geothermal_infrastructure_times = 6 } }
+					set_state_flag = block_future_expand_local_geothermal_infrastructure
+				}
+				ROOT = {
+					set_temp_variable = { treasury_change = display_income }
+					multiply_temp_variable = { treasury_change = 0.1 } # 10% of weekly income
+					multiply_temp_variable = { treasury_change = ii_cost } #we multiply our 10% on the temp var, so having ii_cost = 7.5 means 75% of weekly income
+					set_temp_variable = { ii_cost_modifier = 1 }
+					add_to_temp_variable = { ii_cost_modifier = modifier@internal_investments_money_cost_modifier }
+					multiply_temp_variable = { treasury_change = ii_cost_modifier }
+					clamp_temp_variable = { var = treasury_change min = 1 max = 30 }
+					multiply_temp_variable = { treasury_change = -1 }
+					modify_treasury_effect = yes
+					state_owned_concurrent_investment_limit_implement = yes
+				}
+				refresh_gui = yes
+			}
+
+			core_state_click = {
+				custom_effect_tooltip = core_state_click_tt
+				set_country_flag = { flag = GENERIC_regions_integration_idea value = 1 days = 100 }
+				set_state_flag = { flag = core_state value = 1 days = 100 }
+
+				add_core_of = ROOT
+				ROOT = {
+					set_country_flag = { flag = GENERIC_regions_integration days = 100 value = 1 }
+					if = {
+                    	limit = { PREV = { has_state_category = state_00 } }
+                    	add_to_variable = { states_difference = -0.5 }
+                    }
+					else_if = {
+						limit = { PREV = { has_state_category = state_01 } }
+                    	add_to_variable = { states_difference = -1 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_02 } }
+                    	add_to_variable = { states_difference = -1.5 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_03 } }
+                    	add_to_variable = { states_difference = -2 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_04 } }
+                    	add_to_variable = { states_difference = -2.5 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_05 } }
+                    	add_to_variable = { states_difference = -3 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_06 } }
+                    	add_to_variable = { states_difference = -3.5 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_07 } }
+                    	add_to_variable = { states_difference = -4 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_08 } }
+                    	add_to_variable = { states_difference = -4.5 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_09 } }
+                    	add_to_variable = { states_difference = -5 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_10 } }
+                    	add_to_variable = { states_difference = -5.5 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_11 } }
+                    	add_to_variable = { states_difference = -6 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_12 } }
+                    	add_to_variable = { states_difference = -6.5 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_13 } }
+                    	add_to_variable = { states_difference = -7 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_14 } }
+                    	add_to_variable = { states_difference = -7.5 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_15 } }
+                    	add_to_variable = { states_difference = -8 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_16 } }
+                    	add_to_variable = { states_difference = -8.5 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_17 } }
+                    	add_to_variable = { states_difference = -9 }
+					}
+					else_if = {
+						limit = { PREV = { has_state_category = state_18 } }
+                    	add_to_variable = { states_difference = -10 }
+					}
+                	if = {
+                    	limit = {
+                    	    check_variable = { states_difference < -9 }
+                    	}
+                    	set_temp_variable = { debuff_to_add = states_difference }
+                    	multiply_temp_variable = { debuff_to_add = 0.1 }
+                    	round_temp_variable = debuff_to_add
+                    	multiply_temp_variable = { debuff_to_add = 0.01 }
+                    	add_to_variable = { anti_map_paint_var = debuff_to_add }
+                    	clamp_variable = { var = anti_map_paint_var min = 0 max = 0.95 }
+                    	set_variable = { anti_map_paint_minus_var = anti_map_paint_var }
+                    	multiply_variable = { anti_map_paint_minus_var = -1 }
+                    	set_variable = { states_difference = 0 }
+                	}
+				}
+				set_temp_variable = { ii_cost = 7.5 }
+				calculate_internal_investments_costs = yes
+			}
+
+			fix_damaged_state_click = {
+				add_to_variable = { state_damage = -20 }
+				calculate_damaged_state = yes
+				set_state_flag = { flag = state_restoration days = 120 value = 1 }
+				set_temp_variable = { ii_cost = 20 }
+				calculate_internal_investments_costs = yes
+			}
+
+			encourage_migrants_click = {
+				add_dynamic_modifier = { modifier = migrants_attraction days = 120 }
+				set_temp_variable = { ii_cost = 10 }
+				calculate_internal_investments_costs = yes
+			}
+
+			# Custom National Content
+			# Brazil
+			improve_local_conservation_efforts_click = {
+				custom_effect_tooltip = improve_local_conservation_efforts_click_tt
+				set_state_flag = { flag = improve_local_conservation_efforts value = 1 days = 120 }
+
+				set_temp_variable = { ii_cost = 7.5 }
+				calculate_internal_investments_costs = yes
+
+				hidden_effect = {
+					ROOT = {
+						BRA_calculate_amazon_system = yes
+					}
+				}
+			}
+		}
+		ai_enabled = { always = yes }
+		ai_test_interval = 2880 # 30 Days
+		ai_max_weight_taken_per_test = 12
+		ai_test_scopes = test_self_controlled_states
+		ai_weights = {
+			encourage_investments_in_state_click = {
+				ai_will_do = {
+					base = 5
+					modifier = {
+						add = 150
+						var:owner = {
+							AND = {
+								check_variable = { modifier@receiving_investment_cost_modifier < 0 }
+								check_variable = { modifier@receiving_investment_duration_modifier < 0 }
+							}
+						}
+					}
+					modifier = {
+						var:owner = {
+							check_variable = { interest_rate > 10 }
+						}
+						factor = 0
+					}
+				}
+			}
+			encourage_productivity_in_state_click = {
+				ai_will_do = {
+					base = 100
+					modifier = {
+						var:owner = {
+							check_variable = { interest_rate > 10 }
+						}
+						factor = 0
+					}
+				}
+			}
+			expand_local_building_capacity_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						add = 100
+						infrastructure > 4
+						free_building_slots = {
+							building = industrial_complex
+							size = 0
+						}
+						NOT = {
+							var:owner = {
+								any_owned_state = {
+									infrastructure > 4
+									free_building_slots = {
+										building = industrial_complex
+										size > 0
+									}
+								}
+							}
+						}
+					}
+					modifier = {
+						add = 500
+						NOT = {
+							var:owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = industrial_complex
+										size > 0
+									}
+								}
+							}
+						}
+					}
+					modifier = {
+						var:owner = {
+							check_variable = { interest_rate > 10 }
+						}
+						factor = 0
+					}
+				}
+			}
+			expand_local_infrastructure_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						add = 100
+						OR = {
+							free_building_slots = { building = infrastructure size > 0 include_locked = no }
+							free_building_slots = { building = internet_station size > 0 include_locked = no }
+						}
+					}
+					modifier = {
+						var:owner = {
+							check_variable = { interest_rate > 10 }
+						}
+						factor = 0
+					}
+				}
+			}
+			expand_local_military_infrastructure_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						add = 50
+						OR = {
+							AND = {
+								OR = {
+									threat > 0.5
+									has_global_flag = age_has_begun_4
+								}
+								free_building_slots = { building = radar_station size > 0 include_locked = no }
+								var:owner = {
+									num_of_available_civilian_factories > 15
+								}
+							}
+							AND = {
+								OR = {
+									threat > 0.5
+									has_global_flag = age_has_begun_4
+								}
+								free_building_slots = { building = anti_air_building size > 0 include_locked = no }
+								var:owner = {
+									num_of_available_civilian_factories > 15
+								}
+							}
+							AND = {
+								OR = {
+									threat > 0.5
+									has_global_flag = age_has_begun_4
+								}
+								free_building_slots = { building = rocket_site size > 0 include_locked = no }
+								var:owner = {
+									num_of_available_civilian_factories > 15
+									OR = {
+										check_variable = { num_equipment@guided_missile_equipment > 5000 }
+										check_variable = { num_equipment@hypersonic_missile_equipment > 5000 }
+										check_variable = { num_equipment@ballistic_missile_equipment > 5000 }
+										check_variable = { num_equipment@sam_missile_equipment > 5000 }
+										AND = {
+											any_owned_state = { is_coastal = yes }
+											check_variable = { num_equipment@anti_ship_missile_equipment > 5000 }
+										}
+									}
+								}
+							}
+							AND = {
+								OR = {
+									threat > 0.5
+									has_global_flag = age_has_begun_4
+								}
+								free_building_slots = { building = air_base size > 0 include_locked = no }
+								var:owner = {
+									num_of_available_civilian_factories > 15
+									OR = {
+										check_variable = { num_equipment@small_plane_airframe > 1000 }
+										check_variable = { num_equipment@medium_plane_airframe > 1000 }
+										check_variable = { num_equipment@large_plane_airframe > 1000 }
+										check_variable = { num_equipment@mothership_equipment > 1000 }
+									}
+								}
+							}
+						}
+					}
+					modifier = {
+						factor = 0
+						NOT = {
+							OR = {
+								free_building_slots = { building = radar_station size > 0 include_locked = no }
+								free_building_slots = { building = anti_air_building size > 0 include_locked = no }
+								free_building_slots = { building = rocket_site size > 0 include_locked = no }
+								free_building_slots = { building = air_base size > 0 include_locked = no }
+							}
+						}
+					}
+					modifier = {
+						var:owner = {
+							check_variable = { interest_rate > 10 }
+						}
+						factor = 0
+					}
+				}
+			}
+			expand_local_energy_infrastructure_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						add = 50
+						var:owner = {
+							check_variable = { energy_sum < energy_consumption }
+						}
+					}
+					modifier = {
+						add = 5
+						date < 2008.1.1
+						var:owner = {
+							has_tech = reactor1
+							check_variable = { nuclear_reactors < 5 }
+							check_variable = { enrichment_facilities > 0 }
+						}
+					}
+					modifier = {
+						add = 15
+						date > 2003.1.1
+						var:owner = {
+							has_tech = reactor1
+							check_variable = { total_unemployed_percentage_display < 0.010 } # 1% unemployment
+						}
+					}
+					modifier = {
+						add = 25
+						date > 2010.1.1
+						var:owner = {
+							check_variable = { total_unemployed_percentage_display < 0.010 } # 1% unemployment
+						}
+					}
+					modifier = {
+						factor = 0
+						var:owner = {
+							check_variable = { display_income < display_expense }
+						}
+					}
+					modifier = {
+						factor = 0
+						NOT = {
+							OR = {
+								AND = {
+									var:owner = { NOT = { has_idea = non_nuclear_power } }
+									free_building_slots = { building = nuclear_reactor size > 0 include_locked = no }
+								}
+								free_building_slots = { building = synthetic_refinery size > 0 include_locked = no }
+								free_building_slots = { building = fossil_powerplant size > 0 include_locked = no }
+							}
+						}
+					}
+				}
+			}
+			improve_rebuilding_efforts_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						add = 500
+						compliance < 75
+					}
+				}
+			}
+			expand_local_hydroelectric_infrastructure_click = {
+				ai_will_do = {
+					base = 10
+					modifier = {
+						factor = 0
+						var:controller = {
+							check_variable = { display_income < display_expense }
+						}
+					}
+					modifier = {
+						var:controller = {
+							check_variable = { energy_balance < 6 }
+						}
+						factor = 1.5
+					}
+					modifier = {
+						var:controller = {
+							check_variable = { energy_balance < 0 }
+						}
+						factor = 5
+					}
+					modifier = {
+						var:controller = {
+							check_variable = { energy_balance < -5 }
+						}
+						factor = 10
+					}
+					modifier = {
+						var:controller = {
+							OR = {
+								has_idea = some_power_restrictions_spirit
+								has_idea = heavy_power_restrictions_spirit
+							}
+						}
+						factor = 20
+					}
+					modifier = {
+						var:controller = {
+							NOT = { has_idea = heavy_additional_consumption_spirit }
+						}
+						factor = 1.25
+					}
+					modifier = {
+						var:controller = {
+							has_idea = heavy_additional_consumption_spirit
+						}
+						factor = 0.5
+					}
+				}
+			}
+			expand_local_geothermal_infrastructure_click = {
+				ai_will_do = {
+					base = 10
+					modifier = {
+						factor = 0
+						var:controller = {
+							check_variable = { display_income < display_expense }
+						}
+					}
+					modifier = {
+						var:controller = {
+							check_variable = { energy_balance < 6 }
+						}
+						factor = 1.5
+					}
+					modifier = {
+						var:controller = {
+							check_variable = { energy_balance < 0 }
+						}
+						factor = 5
+					}
+					modifier = {
+						var:controller = {
+							check_variable = { energy_balance < -5 }
+						}
+						factor = 10
+					}
+					modifier = {
+						var:controller = {
+							OR = {
+								has_idea = some_power_restrictions_spirit
+								has_idea = heavy_power_restrictions_spirit
+							}
+						}
+						factor = 20
+					}
+					modifier = {
+						var:controller = {
+							NOT = { has_idea = heavy_additional_consumption_spirit }
+						}
+						factor = 1.25
+					}
+					modifier = {
+						var:controller = {
+							has_idea = heavy_additional_consumption_spirit
+						}
+						factor = 0.5
+					}
+				}
+			}
+			core_state_click = {
+				ai_will_do = {
+					base = 500
+				}
+			}
+			fix_damaged_state_click = {
+				ai_will_do = {
+					base = 1000
+				}
+			}
+			encourage_migrants_click = {
+				ai_will_do = {
+					base = 0
+					modifier = {
+						add = 100
+						var:controller = {
+							OR = {
+								has_dynamic_modifier = { modifier = low_unemployment_modifier }
+								has_manpower < 10000
+							}
+						}
+					}
+				}
+			}
+			improve_local_conservation_efforts_click = {
+				ai_will_do = {
+					factor = 250
+				}
+			}
+		}
+	}
+}

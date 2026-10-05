@@ -1,0 +1,415 @@
+ideas = {
+	country = {
+		#Base in PMR
+		USA_pmr_base_idea = {
+			picture = usa_pmr_base
+			cancel = {
+				OR = {
+					has_war_with = PMR
+					PMR = {
+						is_subject = yes
+					}
+					NOT = {
+						country_exists = USA
+					}
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = USA_foreign_policy_military_base_TT
+				experience_gain_army = 0.02
+			}
+			targeted_modifier = {
+				tag = MLV
+				defense_bonus_against = 0.07
+			}
+			targeted_modifier = {
+				tag = UKR
+				defense_bonus_against = 0.07
+			}
+			targeted_modifier = {
+				tag = ROM
+				defense_bonus_against = 0.07
+			}
+		}
+		USA_quad_member_idea = {
+			picture = usa_quad_idea
+			cancel = {
+				OR = {
+					has_war_with = USA
+					NOT = {
+						country_exists = USA
+					}
+					is_subject_of = CHI
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = QUAD_china_agression_TT
+				experience_gain_army = 0.02
+			}
+			targeted_modifier = {
+				tag = CHI
+				defense_bonus_against = 0.10
+			}
+			targeted_modifier = {
+				tag = SOV
+				defense_bonus_against = 0.05
+			}
+			targeted_modifier = {
+				tag = PER
+				defense_bonus_against = 0.05
+			}
+		}
+		USA_military_cooperation_idea = {
+
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = NATO_army_exercises
+
+			cancel = {
+				OR = {
+					has_war_with = USA
+					NOT = {
+						country_exists = USA
+					}
+					has_opinion = {
+						target = USA
+						value < 15
+					}
+				}
+			}
+
+			modifier = {
+				custom_modifier_tooltip = USA_foreign_policy_military_base_TT
+				experience_gain_army = 0.3
+				experience_gain_navy = 0.3
+				experience_gain_air = 0.3
+				army_speed_factor = 0.1
+				army_org_factor = 0.1
+				army_org_regain = 0.05
+				land_night_attack = 0.05
+				army_attack_factor = 0.05
+				army_defence_factor = 0.1
+			}
+		}
+		#Nigerian Deal
+		USA_nigerian_deal_idea = {
+
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_nig_oil_deal
+
+			cancel = {
+				OR = {
+					has_war_with = NIG
+					NOT = {
+						country_exists = NIG
+					}
+					has_opinion = {
+						target = NIG
+						value < 15
+					}
+					NIG = {
+						NOT = {
+							has_idea = NIG_american_deal_idea
+						}
+					}
+				}
+			}
+
+			modifier = {
+				country_resource_oil = 5
+			}
+		}
+		#Nigerian Deal
+		NIG_american_deal_idea = {
+			name = USA_nigerian_deal_idea
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_nig_oil_deal
+
+			cancel = {
+				OR = {
+					has_war_with = USA
+					NOT = {
+						country_exists = USA
+					}
+					has_opinion = {
+						target = USA
+						value < 15
+					}
+					USA = {
+						NOT = {
+							has_idea = USA_nigerian_deal_idea
+						}
+					}
+				}
+			}
+
+			modifier = {
+				country_resource_oil = -5
+				oil_export_multiplier_modifier = 0.25
+				custom_modifier_tooltip = capitalization_up_tt
+			}
+		}
+		#Congo Deal
+		USA_congo_deal_idea = {
+
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_cng_resource_deal
+
+			cancel = {
+				OR = {
+					has_war_with = CNG
+					NOT = {
+						country_exists = CNG
+					}
+					CNG = {
+						NOT = {
+							has_idea = CNG_american_deal_idea
+						}
+					}
+				}
+			}
+
+			modifier = {
+				country_resource_chromium = 5
+			}
+		}
+		#Congo Deal
+		CNG_american_deal_idea = {
+			name = USA_congo_deal_idea
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_cng_resource_deal
+
+			cancel = {
+				OR = {
+					has_war_with = USA
+					NOT = {
+						country_exists = USA
+					}
+					USA = {
+						NOT = {
+							has_idea = USA_congo_deal_idea
+						}
+					}
+				}
+			}
+
+			modifier = {
+				country_resource_chromium = -5
+				chromium_export_multiplier_modifier = 0.25
+				custom_modifier_tooltip = capitalization_up_tt
+			}
+		}
+		#Angola Deal
+		USA_angola_deal_idea = {
+
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_agl_resource_deal
+
+			cancel = {
+				OR = {
+					has_war_with = AGL
+					NOT = {
+						country_exists = AGL
+					}
+					has_opinion = {
+						target = AGL
+						value < 15
+					}
+					AGL = {
+						NOT = {
+							has_idea = AGL_american_deal_idea
+						}
+					}
+				}
+			}
+
+			modifier = {
+				country_resource_chromium = 5
+			}
+		}
+		#Angola Deal
+		AGL_american_deal_idea = {
+			name = USA_angola_deal_idea
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_agl_resource_deal
+
+			cancel = {
+				OR = {
+					has_war_with = USA
+					NOT = {
+						country_exists = USA
+					}
+					has_opinion = {
+						target = USA
+						value < 15
+					}
+					USA = {
+						NOT = {
+							has_idea = USA_angola_deal_idea
+						}
+					}
+				}
+			}
+
+			modifier = {
+				country_resource_chromium = -5
+				chromium_export_multiplier_modifier = 0.25
+				custom_modifier_tooltip = capitalization_up_tt
+			}
+		}
+		#USA-Taiwan Economic Cooperation
+		USA_tai_cooperation_idea = {
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_taiwan_coop
+
+			cancel = {
+				OR = {
+					TAI = {
+						country_exists = USA
+						is_subject_of = CHI
+						has_war_with = USA
+						has_opinion = {
+							target = USA
+							value < 0
+						}
+					}
+				}
+			}
+
+			modifier = {
+				production_speed_industrial_complex_factor = 0.10
+				production_speed_internet_station_factor = 0.10 
+				research_speed_factor = 0.03
+			}
+		}
+		#USA-China Economic Cooperation
+		USA_china_cooperation_idea = {
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_india_coop
+
+			cancel = {
+				OR = {
+					CHI = {
+						country_exists = USA
+						is_subject_of = TAI
+						has_war_with = USA
+						has_opinion = {
+							target = USA
+							value < 0
+						}
+					}
+				}
+			}
+
+			modifier = {
+				research_speed_factor = 0.05
+				production_speed_offices_factor = 0.05
+				agricolture_productivity_modifier = 0.05
+				production_speed_industrial_complex_factor = 0.15
+				economic_cycles_cost_factor = -0.03
+			}
+		}
+		#USA-India Space Cooperation
+		USA_india_cooperation_idea = {
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_india_coop
+
+			cancel = {
+				OR = {
+					RAJ = {
+						country_exists = USA
+						has_war_with = USA
+						has_opinion = {
+							target = USA
+							value < 0
+						}
+					}
+				}
+			}
+
+			modifier = {
+				research_speed_factor = 0.05
+				encryption_factor = 0.05
+			}
+		}
+		#India Resource Deal
+		USA_india_deal_idea = {
+
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_india_coop
+
+			cancel = {
+				OR = {
+					has_war_with = RAJ
+					NOT = {
+						country_exists = RAJ
+					}
+					has_opinion = {
+						target = RAJ
+						value < 15
+					}
+					RAJ = {
+						NOT = {
+							has_idea = RAJ_american_deal_idea
+						}
+					}
+				}
+			}
+
+			modifier = {
+				country_resource_steel = 10
+			}
+		}
+		#India Resource Deal
+		RAJ_american_deal_idea = {
+			name = USA_india_deal_idea
+			allowed = { always = yes }
+			allowed_civil_war = { always = yes }
+			picture = usa_india_coop
+
+			cancel = {
+				OR = {
+					has_war_with = USA
+					NOT = {
+						country_exists = USA
+					}
+					has_opinion = {
+						target = USA
+						value < 15
+					}
+					USA = {
+						NOT = {
+							has_idea = USA_india_deal_idea
+						}
+					}
+				}
+			}
+
+			modifier = {
+				country_resource_steel = -10
+				steel_export_multiplier_modifier = 0.25
+				custom_modifier_tooltip = capitalization_up_tt
+			}
+		}
+	}
+	hidden_ideas = {
+		QUAD_intervention_active = {
+			cancel = {
+				has_war = no
+			}
+			modifier = {
+				surrender_limit = 0.03
+			}
+		}
+	}
+}

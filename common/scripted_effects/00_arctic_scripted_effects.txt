@@ -1,0 +1,1130 @@
+gain_direct_control = {
+    if = {
+        limit = {
+            check_variable = { global.arctic_controllers^arctic_region_to_aquire = NULL }
+        }
+        set_variable = { global.arctic_controllers^arctic_region_to_aquire = ROOT }
+        set_variable = { global.arctic_military^arctic_region_to_aquire = 1}
+        add_named_threat = { threat = 2 name = arctic_region_taken }
+        set_variable = { arctic_region_to_build_military_base = arctic_region_to_aquire }
+        create_military_base = yes
+    }
+}
+
+labs_create = {
+    if = {
+        limit = {
+            check_variable = { global.arctic_controllers^arctic_region_to_build_lab = ROOT }
+        }
+        set_variable = { global.arctic_labs^arctic_region_to_build_lab = 1 }
+        add_to_variable = { global.arctic_possesion^arctic_region_to_build_lab = 0.05}
+        clamp_variable = { var = global.arctic_possesion^arctic_region_to_build_lab max = 1 }
+    }
+    add_to_variable = { arctic_region_to_build_lab = 1 }
+}
+
+create_military_base = {
+    if = {
+        limit = {
+            check_variable = { global.arctic_controllers^arctic_region_to_build_military_base = ROOT }
+        }
+        set_variable = { global.arctic_military^arctic_region_to_build_military_base = 1}
+        add_named_threat = { threat = 5 name = arctic_military_base_threat }
+        every_other_country = {
+            limit = {
+                has_idea = arctic_council_member
+            }
+            add_opinion_modifier = {
+				target = ROOT
+				modifier = agressive_expansion_in_arctic
+			}
+        }
+        set_variable = { arctic_region_to_place_military_unit = arctic_region_to_build_military_base }
+        create_arctic_military_unit = yes
+        if = {
+            limit = {
+                NOT = { has_country_flag = can_hire_arctic_general }
+            }
+            set_country_flag = can_hire_arctic_general
+        }
+    }
+    add_to_variable = { arctic_region_to_build_military_base = 1 }
+}
+
+create_arctic_military_unit = {
+    if = {
+        limit = {
+            check_variable = { global.arctic_controllers^arctic_region_to_place_military_unit = ROOT }
+            check_variable = { global.arctic_military^arctic_region_to_place_military_unit = 1 }
+            check_variable = { global.arctic_unit_org^arctic_region_to_place_military_unit = 0 }
+            check_variable = { global.arctic_unit_strngth^arctic_region_to_place_military_unit = 0 }
+        }
+        add_manpower = -1480
+        send_equipment = {
+            equipment = command_control_equipment
+            amount = 82
+            target = EUU
+        }
+        send_equipment = {
+            equipment = AA_Equipment
+            amount = 8
+            target = EUU
+        }
+        send_equipment = {
+            equipment = L_AT_Equipment
+            amount = 12
+            target = EUU
+        }
+        send_equipment = {
+            equipment = H_AT_Equipment
+            amount = 6
+            target = EUU
+        }
+        send_equipment = {
+            equipment = Inf_equipment
+            amount = 243
+            target = EUU
+        }
+        send_equipment = {
+            equipment = medium_tank_chassis
+            amount = 42
+            target = EUU
+        }
+        send_equipment = {
+            equipment = util_vehicle_equipment
+            amount = 20
+            target = EUU
+        }
+        send_equipment = {
+            equipment = heavy_tank_amphibious_chassis
+            amount = 20
+            target = EUU
+        }
+        send_equipment = {
+            equipment = medium_tank_artillery_chassis
+            amount = 6
+            target = EUU
+        }
+        send_equipment = {
+            equipment = medium_tank_aa_chassis
+            amount = 6
+            target = EUU
+        }
+        send_equipment = {
+            equipment = medium_tank_destroyer_chassis
+            amount = 14
+            target = EUU
+        }
+        send_equipment = {
+            equipment = medium_tank_flame_chassis
+            amount = 60
+            target = EUU
+        }
+        set_variable = { global.arctic_unit_org^arctic_region_to_place_military_unit = 1 }
+        set_variable = { global.arctic_unit_strngth^arctic_region_to_place_military_unit = 1 }
+    }
+}
+
+create_air_base = {
+    if = {
+        limit = {
+            check_variable = { global.arctic_controllers^arctic_region_to_build_air_base = ROOT }
+        }
+        set_variable = { global.arctic_air^arctic_region_to_build_air_base = 1}
+        add_named_threat = { threat = 5 name = arctic_air_base_threat }
+        every_other_country = {
+            limit = {
+                has_idea = arctic_council_member
+            }
+            add_opinion_modifier = {
+				target = ROOT
+				modifier = agressive_expansion_in_arctic
+			}
+        }
+        set_variable = { arctic_region_to_place_air_unit = arctic_region_to_build_air_base }
+        create_arctic_air_unit = yes
+    }
+    add_to_variable = { arctic_region_to_build_air_base = 1 }
+}
+
+create_arctic_air_unit = {
+    if = {
+        limit = {
+            check_variable = { global.arctic_controllers^arctic_region_to_place_air_unit = ROOT }
+            check_variable = { global.arctic_air^arctic_region_to_place_air_unit = 1 }
+            check_variable = { global.arctic_air_strngth^arctic_region_to_place_air_unit = 0 }
+        }
+        add_manpower = -10
+        send_equipment = {
+            equipment = small_plane_strike_airframe
+            amount = 10
+            target = EUU
+        }
+        set_variable = { global.arctic_air_strngth^arctic_region_to_place_air_unit = 10 }
+    }
+}
+
+create_navy_base = {
+    if = {
+        limit = {
+            check_variable = { global.arctic_controllers^arctic_region_to_build_navy_base = ROOT }
+        }
+        set_variable = { global.arctic_navy^arctic_region_to_build_navy_base = 1}
+        add_named_threat = { threat = 5 name = arctic_navy_base_threat }
+        every_other_country = {
+            limit = {
+                has_idea = arctic_council_member
+            }
+            add_opinion_modifier = {
+				target = ROOT
+				modifier = agressive_expansion_in_arctic
+			}
+        }
+    }
+    add_to_variable = { arctic_region_to_build_navy_base = 1 }
+}
+
+create_nuclear_base = {
+    if = {
+        limit = {
+            check_variable = { global.arctic_controllers^arctic_region_to_build_nuclear_base = ROOT }
+        }
+        set_variable = { global.arctic_nuclear^arctic_region_to_build_nuclear_base = 1}
+        add_named_threat = { threat = 10 name = arctic_nuclear_base_threat }
+        every_other_country = {
+            limit = {
+                has_idea = arctic_council_member
+            }
+            add_opinion_modifier = {
+				target = ROOT
+				modifier = agressive_expansion_in_arctic
+			}
+        }
+    }
+    add_to_variable = { arctic_region_to_build_nuclear_base = 1 }
+}
+
+buy_arctic_region = {
+    if = {
+        limit = {
+            check_variable = { global.arctic_controllers^arctic_region_buy_land = FROM}
+        }
+        set_variable = { global.arctic_controllers^arctic_region_buy_land = ROOT}
+    }
+}
+
+count_arctic_warfare_land_buffs = {
+    #Arctic Warfare Country Flag
+    if = {
+        limit = {
+            has_country_flag = arctic_warfare
+        }
+        add_to_variable = { arctic_warfare_land_buff = 15 }
+    }
+    #Arctic Wagners
+    #Бля Илья я не ебу как они должны работать :) Но вот тебе кантри флаг который если весит то типа бафф ко всем юнитам в Арктике этой страны
+    if = {
+        limit = {
+            has_country_flag = arctic_wagner
+        }
+        add_to_variable = { arctic_warfare_land_buff = 5 }
+    }
+    #Acclimatisation Factor
+    set_temp_variable = { arctic_acclimatisation_buff = acclimatization_cold_climate_gain_factor }
+    multiply_temp_variable = { arctic_acclimatisation_buff = 10 }
+    add_to_variable = { arctic_warfare_land_buff = arctic_acclimatisation_buff }
+    #Recon Factor
+    set_temp_variable = { arctic_recon_buff = recon_factor }
+    multiply_temp_variable = { arctic_recon_buff = 10 }
+    add_to_variable = { arctic_warfare_land_buff = arctic_recon_buff }
+    #Infantry tech
+    if = {
+        limit = { has_tech = infantry_weapons }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = infantry_weapons1 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = infantry_weapons2 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = infantry_weapons3 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = infantry_weapons4 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = infantry_weapons5 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = infantry_weapons6 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = support_weapons }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = squad_automatic_weapon }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tandem_charge_warheads }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = support_weapons2 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = support_weapons3 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = support_weapons4 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = body_armor_1980 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = body_armor_2000 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = body_armor_2010 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = command_control_equipment }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = command_control_equipment1 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = command_control_equipment2 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = command_control_equipment3 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = command_control_equipment4 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = command_control_equipment5 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = land_Drone_equipment }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = land_Drone_equipment1 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = land_Drone_equipment2 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = land_Drone_equipment3 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = land_Drone_equipment4 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    #Tanks and BMP tech
+    if = {
+        limit = { has_tech = mbt_tech_ops }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = mbt_tech }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = mbt_tech_1 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = mbt_tech_2 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = mbt_tech_3 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    #Arty Tech
+    if = {
+        limit = { has_tech = nsb_gun_technology_1 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = nsb_gun_technology_2 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = nsb_gun_technology_3 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = nsb_gun_technology_4 }
+        add_to_variable = { arctic_warfare_land_buff = 1 }
+    }
+}
+
+count_arctic_warfare_air_buffs = {
+    #Light planes base (cause ice is fragile, no large planes)
+    if = {
+        limit = { has_tech = gen_3_light }
+        add_to_variable = { arctic_warfare_air_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = gen_4_light }
+        add_to_variable = { arctic_warfare_air_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = gen_5_light }
+        add_to_variable = { arctic_warfare_air_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = ag_weapons_1 }
+        add_to_variable = { arctic_warfare_air_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = ag_weapons_2 }
+        add_to_variable = { arctic_warfare_air_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = ag_weapons_3 }
+        add_to_variable = { arctic_warfare_air_buff = 1 }
+    }
+}
+
+count_arctic_warfare_navy_buffs = {
+    #navy techs
+    if = {
+        limit = { has_tech = tech_early_naval_weapon_systems }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_naval_weapon_systems }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_light_guns }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_light_guns_1 }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_light_guns_2 }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_vls_surface }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_vls_surface_1 }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_vls_surface_2 }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_vls_surface_3 }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_vls_surface_4 }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_landing_craft }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_amphibious_assault_ship }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_air_cushioned_landing_craft }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_modern_landing_craft }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_specialized_protective_equipment }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = tech_advanced_landing_craft }
+        add_to_variable = { arctic_warfare_navy_buff = 1 }
+    }
+    #ledokols
+    if = {
+        limit = { has_country_flag = ledokols }
+        add_to_variable = { arctic_warfare_navy_buff = 25 }
+    }
+}
+
+count_arctic_warfare_aa_buffs = {
+    if = {
+        limit = { has_tech = nsb_SHORAD_missile_0 }
+        add_to_variable = { arctic_warfare_aa_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = nsb_SHORAD_missile_1 }
+        add_to_variable = { arctic_warfare_aa_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = nsb_SHORAD_missile_2 }
+        add_to_variable = { arctic_warfare_aa_buff = 1 }
+    }
+    if = {
+        limit = { has_tech = nsb_SHORAD_missile_3 }
+        add_to_variable = { arctic_warfare_aa_buff = 1 }
+    }
+}
+
+select_arctic_attacker_state = {
+    set_temp_variable = { arctic_unit_strngth_prev = 0 }
+    set_temp_variable = { arctic_unit_org_prev = 0 }
+    set_temp_variable = { arctic_unit_xp_prev = 0 }
+    set_temp_variable = { arctic_air_strngth_prev = 0 }
+    set_temp_variable = { arctic_air_xp_prev = 0 }
+    set_temp_variable = { arctic_air_ace_prev = 0 }
+    for_each_loop = {
+        array = global.arctic_controllers
+        value = v
+        index = i
+        set_temp_variable = { state_to_check_if_neighbor = i }
+        if = {
+            limit = {
+                arctic_state_is_neighbor = yes
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_unit_strngth^i > arctic_unit_strngth_prev }
+            }
+            set_temp_variable = { arctic_unit_strngth_prev = global.arctic_unit_strngth^i }
+            set_variable = { arctic_attacker_state = i }
+        }
+        else_if = {
+            limit = {
+                arctic_state_is_neighbor = yes
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_unit_org^i > arctic_unit_org_prev }
+            }
+            set_temp_variable = { arctic_unit_org_prev = global.arctic_unit_org^i }
+            set_variable = { arctic_attacker_state = i }
+        }
+        else_if = {
+            limit = {
+                arctic_state_is_neighbor = yes
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_unit_xp^i > arctic_unit_xp_prev }
+            }
+            set_temp_variable = { arctic_unit_xp_prev = global.arctic_unit_xp^i }
+            set_variable = { arctic_attacker_state = i }
+        }
+        else_if = {
+            limit = {
+                arctic_state_is_neighbor = yes
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_air_strngth^i > arctic_air_strngth_prev }
+            }
+            set_temp_variable = { arctic_air_strngth_prev = global.arctic_air_strngth^i }
+            set_variable = { arctic_attacker_state = i }
+        }
+        else_if = {
+            limit = {
+                arctic_state_is_neighbor = yes
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_air_xp^i > arctic_air_xp_prev }
+            }
+            set_temp_variable = { arctic_air_xp_prev = global.arctic_air_xp^i }
+            set_variable = { arctic_attacker_state = i }
+        }
+        else_if = {
+            limit = {
+                arctic_state_is_neighbor = yes
+                check_variable = { v = ROOT }
+                check_variable = { arctic_air_ace_prev = 0 }
+                NOT = { check_variable = { global.arctic_air_ace^i = 0 } }
+            }
+            set_temp_variable = { arctic_air_ace_prev = global.arctic_air_ace^i }
+            set_variable = { arctic_attacker_state = i }
+        }
+    }
+}
+
+count_attack_effect = {
+    add_to_variable = { divisions_in_offensive_combat_consumption = 10 }
+    add_fuel = -10
+    set_temp_variable = { attacker_attack = global.arctic_unit_strngth^attacker_state }
+    set_temp_variable = { attacker_org = global.arctic_unit_org^attacker_state }
+    multiply_temp_variable = { attacker_org = 0.5 }
+    add_to_temp_variable = { attacker_attack = attacker_org }
+    add_to_temp_variable = { attacker_attack = arctic_warfare_land_buff }
+    multiply_temp_variable = { attacker_attack = 0.001 }
+    if = {
+        limit = { has_idea = recent_arctic_exercises }
+        add_to_temp_variable = { attacker_attack = 0.005 }
+    }
+    if = {
+        limit = { check_variable = { global.arctic_air_strngth^attacker_state > 0 } }
+        add_to_variable = { air_ammo_consumption = 1 }
+        add_fuel = -10
+        set_temp_variable = { defender_aa = var:defender.arctic_warfare_aa_buff }
+        multiply_temp_variable = { defender_aa = 0.0005 }
+        set_temp_variable = { attacker_air = var:attaker.arctic_warfare_air_buff }
+        set_temp_variable = { attacker_air_multiplyier = global.arctic_air_strngth^attacker_state }
+        multiply_temp_variable = { attacker_air_multiplyier = 0.1 }
+        multiply_temp_variable = { attacker_air = attacker_air_multiplyier }
+        multiply_temp_variable = { attacker_air = 0.001 }
+        set_temp_variable = { max_attacker_air_death_rate = defender_aa }
+        if = {
+            limit = {
+                check_variable = { max_attacker_air_death_rate > 0.49 }
+            }
+            set_temp_variable = { max_attacker_air_death_rate = 2 }
+        }
+        else = {
+            set_temp_variable = { max_attacker_air_death_rate = 1 }
+        }
+        subtract_from_temp_variable = { attacker_air = defender_aa }
+        add_to_temp_variable = { attacker_attack = attacker_air }
+        random = {
+            chance = 1
+            subtract_from_variable = { global.arctic_air_strngth^attacker_state = max_attacker_air_death_rate }
+            set_country_flag = shooted_air
+        }
+    }
+    if = {
+        limit = {
+            OR = {
+                check_variable = { defender_state = 0 }
+                check_variable = { defender_state = 1 }
+                check_variable = { defender_state = 2 }
+                check_variable = { defender_state = 3 }
+                check_variable = { defender_state = 4 }
+                check_variable = { defender_state = 6 }
+                check_variable = { defender_state = 7 }
+                check_variable = { defender_state = 13 }
+                check_variable = { defender_state = 14 }
+                check_variable = { defender_state = 15 }
+                check_variable = { defender_state = 16 }
+                check_variable = { defender_state = 18 }
+            }
+        }
+        set_temp_variable = { attacker_navy = var:attacker.arctic_warfare_navy_buff }
+        multiply_temp_variable = { attacker_navy = var:attacker.alliance_naval_strength_ratio }
+        multiply_temp_variable = { attacker_navy = 0.001 }
+        add_to_temp_variable = { attacker_attack = attacker_navy }
+    }
+    if = {
+        limit = {
+            OR = {
+                AND = {
+                    var:attacker = { has_country_flag = arctic_analyst_general }
+                    var:defender = { has_country_flag = arctic_analyst_general }
+                }
+                AND = {
+                    NOT = { var:attacker = { has_country_flag = arctic_analyst_general } }
+                    NOT = { var:defender = { has_country_flag = arctic_analyst_general } }
+                }
+            }
+        }
+        random = {
+            chance = 5
+            add_to_temp_variable = { attacker_attack = 0.005 }
+            set_country_flag = won_cazino
+        }
+    }
+    else_if = {
+        limit = { var:attacker = { has_country_flag = arctic_analyst_general } }
+        random = {
+            chance = 10
+            add_to_temp_variable = { attacker_attack = 0.005 }
+            set_country_flag = won_cazino
+        }
+    }
+    if = {
+        limit = {
+            var:attacker = { has_country_flag = Dark_general }
+        }
+        add_to_temp_variable = { attacker_attack = 0.005 }
+    }
+    set_temp_variable = { attacker_attack_modifier = army_attack_factor }
+    add_to_temp_variable = { attacker_attack_modifier = 1 }
+    multiply_temp_variable = { attacker_attack = attacker_attack_modifier }
+    subtract_from_variable = { global.arctic_unit_org^defender_state = attacker_attack }
+    clamp_variable = {
+        var = global.arctic_unit_org^defender_state
+        min = 0
+    }
+    set_temp_variable = { strngth_to_subtract = attacker_attack }
+    multiply_temp_variable = { strngth_to_subtract = 0.1 }
+    subtract_from_variable = { global.arctic_unit_strngth^defender_state = strngth_to_subtract }
+    clamp_variable = {
+        var = global.arctic_unit_strngth^defender_state
+        min = 0
+    }
+}
+
+count_virtual_sea_attack_effect = {
+    add_to_variable = { divisions_in_offensive_combat_consumption = 10 }
+    add_fuel = -10
+    set_temp_variable = { attacker_attack = virtual_arctic_sea_unit_strngth }
+    set_temp_variable = { attacker_org = virtual_arctic_sea_unit_org }
+    multiply_temp_variable = { attacker_org = 0.5 }
+    add_to_temp_variable = { attacker_attack = attacker_org }
+    add_to_temp_variable = { attacker_attack = arctic_warfare_land_buff }
+    multiply_temp_variable = { attacker_attack = 0.001 }
+    if = {
+        limit = { has_idea = recent_arctic_exercises }
+        add_to_temp_variable = { attacker_attack = 0.005 }
+    }
+    if = {
+        limit = { check_variable = { virtual_arctic_sea_air_strngth > 0 } }
+        add_to_variable = { air_ammo_consumption = 1 }
+        add_fuel = -10
+        set_temp_variable = { defender_aa = var:defender.arctic_warfare_aa_buff }
+        multiply_temp_variable = { defender_aa = 0.0005 }
+        set_temp_variable = { attacker_air = var:attaker.arctic_warfare_air_buff }
+        set_temp_variable = { attacker_air_multiplyier = virtual_arctic_sea_air_strngth }
+        multiply_temp_variable = { attacker_air_multiplyier = 0.1 }
+        multiply_temp_variable = { attacker_air = attacker_air_multiplyier }
+        multiply_temp_variable = { attacker_air = 0.001 }
+        subtract_from_temp_variable = { attacker_air = defender_aa }
+        add_to_temp_variable = { attacker_attack = attacker_air }
+    }
+    set_temp_variable = { attacker_navy = var:attacker.arctic_warfare_navy_buff }
+    multiply_temp_variable = { attacker_navy = var:attacker.alliance_naval_strength_ratio }
+    multiply_temp_variable = { attacker_navy = 0.001 }
+    add_to_temp_variable = { attacker_attack = attacker_navy }
+    if = {
+        limit = {
+            OR = {
+                AND = {
+                    var:attacker = { has_country_flag = arctic_analyst_general }
+                    var:defender = { has_country_flag = arctic_analyst_general }
+                }
+                AND = {
+                    NOT = { var:attacker = { has_country_flag = arctic_analyst_general } }
+                    NOT = { var:defender = { has_country_flag = arctic_analyst_general } }
+                }
+            }
+        }
+        random = {
+            chance = 5
+            add_to_temp_variable = { attacker_attack = 0.005 }
+            set_country_flag = won_cazino
+        }
+    }
+    else_if = {
+        limit = { var:attacker = { has_country_flag = arctic_analyst_general } }
+        random = {
+            chance = 10
+            add_to_temp_variable = { attacker_attack = 0.005 }
+            set_country_flag = won_cazino
+        }
+    }
+    if = {
+        limit = {
+            var:attacker = { has_country_flag = Dark_general }
+        }
+        add_to_temp_variable = { attacker_attack = 0.005 }
+    }
+    multiply_temp_variable = { attacker_attack = 0.25 }
+    set_temp_variable = { attacker_attack_modifier = army_attack_factor }
+    add_to_temp_variable = { attacker_attack_modifier = 1 }
+    multiply_temp_variable = { attacker_attack = attacker_attack_modifier }
+    subtract_from_variable = { global.arctic_unit_org^defender_state = attacker_attack }
+    clamp_variable = {
+        var = global.arctic_unit_org^defender_state
+        min = 0
+    }
+    set_temp_variable = { strngth_to_subtract = attacker_attack }
+    multiply_temp_variable = { strngth_to_subtract = 0.1 }
+    subtract_from_variable = { global.arctic_unit_strngth^defender_state = strngth_to_subtract }
+    clamp_variable = {
+        var = global.arctic_unit_strngth^defender_state
+        min = 0
+    }
+}
+
+count_virtual_sea_defend_effect = {
+    add_to_variable = { divisions_in_defensive_combat_consumption = 10 }
+    add_fuel = -10
+    set_temp_variable = { attacker_attack = global.arctic_unit_strngth^attacker_state }
+    set_temp_variable = { attacker_org = global.arctic_unit_org^attacker_state }
+    multiply_temp_variable = { attacker_org = 0.5 }
+    add_to_temp_variable = { attacker_attack = attacker_org }
+    add_to_temp_variable = { attacker_attack = arctic_warfare_land_buff }
+    multiply_temp_variable = { attacker_attack = 0.001 }
+    if = {
+        limit = { has_idea = recent_arctic_exercises }
+        add_to_temp_variable = { attacker_attack = 0.005 }
+    }
+    if = {
+        limit = { check_variable = { global.arctic_air_strngth^attacker_state > 0 } }
+        add_to_variable = { air_ammo_consumption = 1 }
+        add_fuel = -10
+        set_temp_variable = { defender_aa = var:defender.arctic_warfare_aa_buff }
+        multiply_temp_variable = { defender_aa = 0.0005 }
+        set_temp_variable = { attacker_air = var:attaker.arctic_warfare_air_buff }
+        set_temp_variable = { attacker_air_multiplyier = global.arctic_air_strngth^attacker_state }
+        multiply_temp_variable = { attacker_air_multiplyier = 0.1 }
+        multiply_temp_variable = { attacker_air = attacker_air_multiplyier }
+        multiply_temp_variable = { attacker_air = 0.001 }
+        set_temp_variable = { max_attacker_air_death_rate = defender_aa }
+        if = {
+            limit = {
+                check_variable = { max_attacker_air_death_rate > 0.49 }
+            }
+            set_temp_variable = { max_attacker_air_death_rate = 2 }
+        }
+        else = {
+            set_temp_variable = { max_attacker_air_death_rate = 1 }
+        }
+        subtract_from_temp_variable = { attacker_air = defender_aa }
+        add_to_temp_variable = { attacker_attack = attacker_air }
+        random = {
+            chance = 1
+            subtract_from_variable = { var:defender.virtual_arctic_sea_air_strngth = max_attacker_air_death_rate }
+            set_country_flag = shooted_air
+        }
+    }
+    set_temp_variable = { attacker_navy = var:attacker.arctic_warfare_navy_buff }
+    multiply_temp_variable = { attacker_navy = var:attacker.alliance_naval_strength_ratio }
+    multiply_temp_variable = { attacker_navy = 0.001 }
+    add_to_temp_variable = { attacker_attack = attacker_navy }
+    if = {
+        limit = {
+            OR = {
+                AND = {
+                    var:attacker = { has_country_flag = arctic_analyst_general }
+                    var:defender = { has_country_flag = arctic_analyst_general }
+                }
+                AND = {
+                    NOT = { var:attacker = { has_country_flag = arctic_analyst_general } }
+                    NOT = { var:defender = { has_country_flag = arctic_analyst_general } }
+                }
+            }
+        }
+        random = {
+            chance = 5
+            add_to_temp_variable = { attacker_attack = 0.005 }
+            set_country_flag = won_cazino
+        }
+    }
+    else_if = {
+        limit = { var:attacker = { has_country_flag = arctic_analyst_general } }
+        random = {
+            chance = 10
+            add_to_temp_variable = { attacker_attack = 0.005 }
+            set_country_flag = won_cazino
+        }
+    }
+    if = {
+        limit = {
+            var:attacker = { has_country_flag = Dark_general }
+        }
+        add_to_temp_variable = { attacker_attack = 0.005 }
+    }
+    set_temp_variable = { attacker_attack_modifier = army_attack_factor }
+    add_to_temp_variable = { attacker_attack_modifier = 1 }
+    multiply_temp_variable = { attacker_attack = attacker_attack_modifier }
+    subtract_from_variable = { var:defender.virtual_arctic_sea_unit_org = attacker_attack }
+    clamp_variable = {
+        var = var:defender.virtual_arctic_sea_unit_org
+        min = 0
+    }
+    set_temp_variable = { strngth_to_subtract = attacker_attack }
+    multiply_temp_variable = { strngth_to_subtract = 0.1 }
+    subtract_from_variable = { var:defender.virtual_arctic_sea_unit_strngth = strngth_to_subtract }
+    clamp_variable = {
+        var = var:defender.virtual_arctic_sea_unit_strngth
+        min = 0
+    }
+}
+
+count_owned_resources = {
+    clear_variable = arctic_owned_oil
+    clear_variable = arctic_owned_tungsten
+    clear_variable = arctic_owned_chromium
+    for_each_loop = {
+        array = global.arctic_controllers
+        value = v
+        index = i
+        if = {
+            limit = { check_variable = { v = ROOT } }
+            set_temp_variable = { current_posession = global.arctic_possesion^i }
+            multiply_temp_variable = { current_posession = 0.325 }
+            set_temp_variable = { adding_oil = global.arctic_oil^i }
+            multiply_temp_variable = { adding_oil = current_posession }
+            add_to_variable = { arctic_owned_oil = adding_oil }
+            set_temp_variable = { adding_tungsten = global.arctic_tungsten^i }
+            multiply_temp_variable = { adding_tungsten = current_posession }
+            add_to_variable = { arctic_owned_tungsten = adding_tungsten }
+            set_temp_variable = { adding_chromium = global.arctic_chromium^i }
+            multiply_temp_variable = { adding_chromium = current_posession }
+            add_to_variable = { arctic_owned_chromium = adding_chromium }
+            set_temp_variable = { excavation_techs_count = 0 }
+            if = {
+                limit = { has_tech = excavation1 }
+                add_to_variable = { excavation_techs_count = 1 }
+            }
+            if = {
+                limit = { has_tech = excavation2 }
+                add_to_variable = { excavation_techs_count = 1 }
+            }
+            if = {
+                limit = { has_tech = excavation3 }
+                add_to_variable = { excavation_techs_count = 1 }
+            }
+            if = {
+                limit = { has_tech = excavation4 }
+                add_to_variable = { excavation_techs_count = 1 }
+            }
+            if = {
+                limit = { has_tech = excavation5 }
+                add_to_variable = { excavation_techs_count = 1 }
+            }
+            if = {
+                limit = { has_tech = excavation6 }
+                add_to_variable = { excavation_techs_count = 1 }
+            }
+            if = {
+                limit = { has_tech = excavation7 }
+                add_to_variable = { excavation_techs_count = 1 }
+            }
+            if = {
+                limit = { has_tech = excavation8 }
+                add_to_variable = { excavation_techs_count = 1 }
+            }
+            if = {
+                limit = { has_tech = excavation9 }
+                add_to_variable = { excavation_techs_count = 1 }
+            }
+            multiply_temp_variable = { excavation_techs_count = 0.075 }
+            set_temp_variable = { adding_oil = global.arctic_oil^i }
+            multiply_temp_variable = { adding_oil = excavation_techs_count }
+            add_to_variable = { arctic_owned_oil = adding_oil }
+            set_temp_variable = { adding_tungsten = global.arctic_tungsten^i }
+            multiply_temp_variable = { adding_tungsten = excavation_techs_count }
+            add_to_variable = { arctic_owned_tungsten = adding_tungsten }
+            set_temp_variable = { adding_chromium = global.arctic_chromium^i }
+            multiply_temp_variable = { adding_chromium = excavation_techs_count }
+            add_to_variable = { arctic_owned_chromium = adding_chromium }
+        }
+    }
+}
+count_threaty_resources = {
+    clear_variable = arctic_treaty_oil
+    clear_variable = arctic_treaty_tungsten
+    clear_variable = arctic_treaty_chromium
+    for_each_loop = {
+        array = global.countries
+        value = v1
+        if = {
+            limit = { var:v1 = { has_country_flag = arctic_mutual_resource_treaty@PREV } }
+            var:v1 = { PREV = { set_temp_variable = { adding_oil = PREV.arctic_owned_oil } } }
+            var:v1 = { PREV = { set_temp_variable = { adding_tungsten = PREV.arctic_owned_tungsten } } }
+            var:v1 = { PREV = { set_temp_variable = { adding_chromium = PREV.arctic_owned_chromium } } }
+            multiply_temp_variable = { adding_oil = 0.1 }
+            add_to_variable = { arctic_treaty_oil = adding_oil }
+            multiply_temp_variable = { adding_tungsten = 0.1 }
+            add_to_variable = { arctic_treaty_tungsten = adding_tungsten }
+            multiply_temp_variable = { adding_chromium = 0.1 }
+            add_to_variable = { arctic_treaty_chromium = adding_chromium }
+        }
+    }
+}
+recalculate_arctic_resources = {
+    set_variable = { arctic_oil = arctic_owned_oil }
+    add_to_variable = { arctic_oil = arctic_treaty_oil }
+    round_variable = arctic_oil
+    set_variable = { arctic_tungsten = arctic_owned_tungsten }
+    add_to_variable = { arctic_tungsten = arctic_treaty_tungsten }
+    round_variable = arctic_tungsten
+    set_variable = { arctic_chromium = arctic_owned_chromium }
+    add_to_variable = { arctic_chromium = arctic_treaty_chromium }
+    round_variable = arctic_chromium
+}
+
+count_owned_research = {
+    clear_variable = owned_arctic_research
+    clear_variable = arctic_research_count
+    for_each_loop = {
+        array = global.arctic_controllers
+        value = v
+        index = i
+        if = {
+            limit = {
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_labs^i = 1 }
+            }
+            add_to_variable = { arctic_research_count = 1 }
+            set_temp_variable = { current_posession = global.arctic_possesion^i }
+            multiply_temp_variable = { current_posession = 10 }
+            add_to_variable = { owned_arctic_research = current_posession }
+        }
+    }
+}
+count_threaty_research = {
+    clear_variable = treaty_arctic_research
+    for_each_loop = {
+        array = global.countries
+        value = v1
+        if = {
+            limit = { var:v1 = { has_country_flag = arctic_mutual_research_treaty@PREV } }
+            var:v1 = { PREV = { set_temp_variable = { adding_research = PREV.owned_arctic_research } } }
+            multiply_temp_variable = { adding_research = 0.1 }
+            add_to_variable = { treaty_arctic_research = adding_research }
+        }
+    }
+}
+recalculate_arctic_research = {
+    set_variable = { arctic_research = owned_arctic_research }
+    add_to_variable = { arctic_research = treaty_arctic_research }
+    multiply_variable = { arctic_research = 0.01875 }
+    clamp_variable = { var = arctic_research max = 0.75 }
+}
+
+count_arctic_military_bases = {
+    clear_variable = arctic_based_level
+    clear_variable = arctic_air_level
+    clear_variable = arctic_navy_level
+    clear_variable = arctic_nuclear_level
+    for_each_loop = {
+        array = global.arctic_controllers
+        value = v
+        index = i
+        if = {
+            limit = {
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_military^i = 1 }
+            }
+            add_to_variable = { arctic_based_level = 0.01 }
+        }
+        if = {
+            limit = {
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_air^i = 1 }
+            }
+            add_to_variable = { arctic_air_level = 0.01 }
+        }
+        if = {
+            limit = {
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_navy^i = 1 }
+            }
+            add_to_variable = { arctic_navy_level = 0.01 }
+        }
+        if = {
+            limit = {
+                check_variable = { v = ROOT }
+                check_variable = { global.arctic_nuclear^i = 1 }
+            }
+            add_to_variable = { arctic_nuclear_level = 1 }
+        }
+    }
+    set_variable = { arctic_bases_count = arctic_based_level }
+    multiply_variable = { arctic_bases_count = 100 }
+    multiply_variable = { arctic_based_level = 0.79 }
+    clamp_variable = { var = arctic_based_level min = 0 max = 0.15 }
+    set_variable = { arctic_air_count = arctic_air_level }
+    multiply_variable = { arctic_air_count = 100 }
+    multiply_variable = { arctic_air_level = 0.79 }
+    clamp_variable = { var = arctic_air_level min = 0 max = 0.15 }
+    set_variable = { arctic_navy_count = arctic_navy_level }
+    multiply_variable = { arctic_navy_count = 100 }
+    multiply_variable = { arctic_navy_level = 1.25 }
+    clamp_variable = { var = arctic_navy_level min = 0 max = 0.15 }
+    set_variable = { arctic_nuclear_count = arctic_nuclear_level }
+    multiply_variable = { arctic_nuclear_level = 0.658 }
+    clamp_variable = { var = arctic_nuclear_level min = 0 max = 12.5 }
+    set_variable = { arctic_air_level_fuel = arctic_air_level }
+    multiply_variable = { arctic_air_level_fuel = -1 }
+    set_variable = { arctic_navy_level_fuel = arctic_navy_level }
+    multiply_variable = { arctic_navy_level_fuel = -1 }
+}
+
+update_arctic_dirty_variable = {
+    if = { limit = { NOT = { has_variable = global.update_arctic_gui } }
+		set_variable = { global.update_arctic_gui = 0 }
+	}
+	else = {
+		add_to_variable = { global.update_arctic_gui = 1 }
+	}
+    if = {
+        limit = {
+            has_global_flag = arctic_accept_amogus_voting_started
+            NOT = { any_country = { has_active_mission = arctic_accept_new_member } }
+        }
+         clr_global_flag = arctic_accept_amogus_voting_started
+    }
+    if = {
+        limit = {
+            has_global_flag = arctic_council_accept_amogus_voting_started
+            NOT = { any_country = { has_active_mission = arctic_accept_new_council } }
+        }
+        clr_global_flag = arctic_council_accept_amogus_voting_started
+    }
+    if = {
+        limit = {
+            has_global_flag = arctic_kick_observer_voting_started
+            NOT = { any_country = { has_active_mission = arctic_kick_observer } }
+        }
+        clr_global_flag = arctic_kick_observer_voting_started
+    }
+    if = {
+        limit = {
+            has_global_flag = arctic_kick_member_voting_started
+            NOT = { any_country = { has_active_mission = arctic_kick_member } }
+        }
+        clr_global_flag = arctic_kick_member_voting_started
+    }
+    if = {
+        limit = {
+            has_global_flag = arctic_resources_voting_started
+            NOT = { any_country = { has_active_mission = arctic_start_resources_vote } }
+        }
+        clr_global_flag = arctic_resources_voting_started
+    }
+    if = {
+        limit = {
+            has_global_flag = arctic_trade_route_voting_started
+            NOT = { any_country = { has_active_mission = arctic_trade_route } }
+        }
+        clr_global_flag = arctic_trade_route_voting_started
+    }
+    if = {
+        limit = {
+            has_global_flag = arctic_council_chairman_voting_active
+            NOT = { any_country = { has_active_mission = arctic_chairman_election } }
+        }
+        clr_global_flag = arctic_council_chairman_voting_active
+        news_event = arctic.45
+    }
+}
