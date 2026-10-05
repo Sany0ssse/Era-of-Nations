@@ -891,47 +891,87 @@ sco_category = {
 
 		remove_effect = {
 			if = {
-				limit = { NOT = { has_country_flag = SCO_membership_rejected } }
-				add_to_array = { global.sco_members = ROOT }
+				# Revalidate the application after the existing 90-day negotiation period.
+				limit = {
+					NOT = { has_country_flag = SCO_membership_rejected }
+					has_idea = sco_observer
+					NOT = { is_sco = yes }
+					CHI = { is_sco = yes }
+					is_subject = no
+					if = {
+						limit = { CHI = { has_government = communism } }
+						NOT = { has_government = democratic }
+					}
+					NOT = {
+						has_war_with = CHI
+					}
+					if = {
+						limit = { CHI = { NOT = { has_completed_focus = CHI_Chinese_Dominance } } }
+						NOT = { has_war_with = SOV }
+					}
+					if = {
+						limit = { has_idea = ASEAN_Member }
+						CHI = {
+							has_completed_focus = CHI_Undermine_ASEAN
+						}
+					}
+					if = {
+						limit = { original_tag = UKR }
+						OR = {
+							AND = {
+								emerging_communist_state_are_in_power = yes
+								has_completed_focus = UKR_commie_china_trade
+							}
+							AND = {
+								emerging_reactionaries_are_in_power = yes
+								has_completed_focus = UKR_party_regions_inaguration
+							}
+						}
+					}
+				}
+				while_loop_effect = {
+					limit = { is_in_array = { global.sco_members = THIS } }
+					remove_from_array = { global.sco_members = THIS }
+				}
+				add_to_array = { global.sco_members = THIS }
 				SCO_dirty_update = yes
 				if = {
-					limit = {
-						NOT = { has_country_flag = SCO_membership_rejected }
-						CHI = { has_idea = sco_member_econ }
-					}
+					limit = { CHI = { has_idea = sco_member_econ } }
 					add_ideas = sco_member_econ
 				}
 				else_if = {
-					limit = {
-						NOT = { has_country_flag = SCO_membership_rejected }
-						CHI = { has_idea = sco_member_pol }
-					}
+					limit = { CHI = { has_idea = sco_member_pol } }
 					add_ideas = sco_member_pol
 				}
 				else_if = {
-					limit = {
-						NOT = { has_country_flag = SCO_membership_rejected }
-						CHI = { has_idea = sco_member_mil }
-					}
+					limit = { CHI = { has_idea = sco_member_mil } }
 					add_ideas = sco_member_mil
 				}
 				else_if = {
-					limit = {
-						NOT = { has_country_flag = SCO_membership_rejected }
-						CHI = { has_idea = sco_member }
-					}
+					limit = { CHI = { has_idea = sco_member } }
 					add_ideas = sco_member
 				}
 				if = {
 					limit = {
 						CHI = { has_completed_focus = CHI_Split_CSTO }
 						is_in_faction_with = SOV
+						has_faction_template = faction_template_csto
 					}
-					leave_faction = yes
+					CSTO_leave = yes
 				}
+				# Civil membership does not force a transfer into an unrelated Chinese faction.
 				if = {
-					limit = { CHI = { has_completed_focus = CHI_An_Alliance_to_Rival_NATO } }
-					CHI = { add_to_faction = ROOT }
+					limit = {
+						CHI = {
+							has_completed_focus = CHI_An_Alliance_to_Rival_NATO
+							has_faction_template = faction_template_sco
+						}
+						OR = {
+							is_in_faction = no
+							is_in_faction_with = CHI
+						}
+					}
+					CHI = { add_to_faction = PREV }
 				}
 				if = {
 					limit = { has_idea = ASEAN_Member }
@@ -982,28 +1022,28 @@ sco_category = {
 		cost = 50
 
 		complete_effect = {
-			remove_from_array = { global.sco_members = ROOT }
 			if = {
-				limit = { has_idea = sco_member }
+				limit = {
+					OR = {
+						is_sco = yes
+						is_in_array = { global.sco_members = THIS }
+					}
+				}
+				while_loop_effect = {
+					limit = { is_in_array = { global.sco_members = THIS } }
+					remove_from_array = { global.sco_members = THIS }
+				}
 				remove_ideas = sco_member
-			}
-			else_if = {
-				limit = { has_idea = sco_member_econ }
 				remove_ideas = sco_member_econ
-			}
-			else_if = {
-				limit = { has_idea = sco_member_pol }
 				remove_ideas = sco_member_pol
-			}
-			else_if = {
-				limit = { has_idea = sco_member_mil }
 				remove_ideas = sco_member_mil
+				if = {
+					limit = { has_faction_template = faction_template_sco }
+					leave_faction = yes
+				}
+				SCO_dirty_update = yes
+				news_event = { id = sco.8 }
 			}
-			if = {
-				limit = { is_in_faction_with = CHI }
-				leave_faction = yes
-			}
-			news_event = { id = sco.8 }
 		}
 
 		ai_will_do = {

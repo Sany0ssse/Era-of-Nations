@@ -110,10 +110,19 @@ scripted_gui = {
 				check_variable = { temp_nuclear_fuel_price > 0 }
 			}
 			confirm_energy_sell_click_enabled = {
-				NOT = { has_country_flag = question_about_contract }
+				custom_trigger_tooltip = {
+					tooltip = eon_energy_no_pending_tt
+					NOT = { has_country_flag = question_about_contract }
+				}
 				NOT = { tag = energy_selling_selected_TAG }
 				has_variable = energy_selling_selected_TAG
-				var:energy_selling_selected_TAG = { NOT = { has_country_flag = question_about_contract } }
+				has_country_flag = energy_agreement@energy_selling_selected_TAG
+				var:energy_selling_selected_TAG = {
+					exists = yes
+					has_country_flag = energy_agreement@PREV
+					NOT = { has_country_flag = question_about_contract }
+					NOT = { has_war_with = PREV }
+				}
 			}
 			confirm_nuclear_fuel_sell_click_enabled = {
 				NOT = { has_country_flag = currently_considering_an_offer }
@@ -552,255 +561,46 @@ scripted_gui = {
 				ingame_update_setup = yes
 			}
 			confirm_energy_sell_click = {
+				# Repeat guards inside the effect: AI/direct GUI execution must obey them too.
 				if = {
-					limit = { check_variable = { temp_energy_ammount > 0 } }
-					if = {
-						limit = { is_ai = yes }
-						set_country_flag = { flag = energy_recall_calldown@energy_selling_selected_TAG days = 365 value = 1 }
-					}
-					if = {
-						limit = {
-							NOT = {
-								is_in_array = {
-									array = energy_contractors
-									value = energy_selling_selected_TAG
-								}
-							}
-						}
-						set_country_flag = question_about_contract
-						var:energy_selling_selected_TAG = {
-							country_event = energy_selling.4
-							set_country_flag = question_about_contract
-						}
-					}
-					else = {
-						for_each_loop = {
-							array = energy_contractors
-							value = v
-							index = i
-							break = break
-							if = {
-								limit = { check_variable = { v = energy_selling_selected_TAG } }
-								if = {
-									limit = {
-										OR = {
-											NOT = { check_variable = { energy_contracts_ammount^i = temp_energy_ammount } }
-											NOT = { check_variable = { energy_contracts_price^i = temp_energy_price } }
-										}
-									}
-									set_variable = { index_to_remove = i }
-									add_to_variable = { break = 1 }
-								}
-								else = {
-									add_to_variable = { break = 1 }
-								}
-							}
-						}
-						if = {
-							limit = { has_variable = index_to_remove }
-							remove_from_array = {
-								array = energy_contractors
-								index = index_to_remove
-							}
-							remove_from_array = {
-								array = energy_contracts_ammount
-								index = index_to_remove
-							}
-							remove_from_array = {
-								array = energy_contracts_price
-								index = index_to_remove
-							}
-							clear_variable = index_to_remove
-							set_country_flag = question_about_contract
-							var:energy_selling_selected_TAG = {
-								for_each_loop = {
-									array = energy_contractors
-									value = v
-									index = i
-									break = break
-									if = {
-										limit = { check_variable = { v = PREV } }
-										set_variable = { index_to_remove = i }
-										add_to_variable = { break = 1 }
-									}
-								}
-								remove_from_array = {
-									array = energy_contractors
-									index = index_to_remove
-								}
-								remove_from_array = {
-									array = energy_contracts_ammount
-									index = index_to_remove
-								}
-								remove_from_array = {
-									array = energy_contracts_price
-									index = index_to_remove
-								}
-								clear_variable = index_to_remove
-								set_country_flag = question_about_contract
-								country_event = energy_selling.4
-							}
-						}
-					}
-				}
-				else_if = {
-					limit = { check_variable = { temp_energy_ammount < 0 } }
-					if = {
-						limit = { is_ai = yes }
-						set_country_flag = { flag = energy_recall_calldown@energy_selling_selected_TAG days = 365 value = 1 }
-					}
-					if = {
-						limit = {
-							NOT = {
-								is_in_array = {
-									array = energy_contractors
-									value = energy_selling_selected_TAG
-								}
-							}
-						}
-						set_country_flag = question_about_contract
-						var:energy_selling_selected_TAG = {
-							country_event = energy_selling.1
-							set_country_flag = question_about_contract
-						}
-					}
-					else = {
-						for_each_loop = {
-							array = energy_contractors
-							value = v
-							index = i
-							break = break
-							if = {
-								limit = { check_variable = { v = energy_selling_selected_TAG } }
-								if = {
-									limit = {
-										OR = {
-											NOT = { check_variable = { energy_contracts_ammount^i = temp_energy_ammount } }
-											NOT = { check_variable = { energy_contracts_price^i = temp_energy_price } }
-										}
-									}
-									set_variable = { index_to_remove = i }
-									add_to_variable = { break = 1 }
-								}
-								else = {
-									add_to_variable = { break = 1 }
-								}
-							}
-						}
-						if = {
-							limit = { has_variable = index_to_remove }
-							remove_from_array = {
-								array = energy_contractors
-								index = index_to_remove
-							}
-							remove_from_array = {
-								array = energy_contracts_ammount
-								index = index_to_remove
-							}
-							remove_from_array = {
-								array = energy_contracts_price
-								index = index_to_remove
-							}
-							clear_variable = index_to_remove
-							set_country_flag = question_about_contract
-							var:energy_selling_selected_TAG = {
-								for_each_loop = {
-									array = energy_contractors
-									value = v
-									index = i
-									break = break
-									if = {
-										limit = { check_variable = { v = PREV } }
-										set_variable = { index_to_remove = i }
-										add_to_variable = { break = 1 }
-									}
-								}
-								remove_from_array = {
-									array = energy_contractors
-									index = index_to_remove
-								}
-								remove_from_array = {
-									array = energy_contracts_ammount
-									index = index_to_remove
-								}
-								remove_from_array = {
-									array = energy_contracts_price
-									index = index_to_remove
-								}
-								clear_variable = index_to_remove
-								set_country_flag = question_about_contract
-								country_event = energy_selling.1
-							}
-						}
-					}
-				}
-				else_if = {
 					limit = {
-						check_variable = { temp_energy_ammount = 0 }
-						is_in_array = {
-							array = energy_contractors
-							value = energy_selling_selected_TAG
-						}
-					}
-					if = {
-						limit = { is_ai = yes }
-						set_country_flag = { flag = energy_recall_calldown@energy_selling_selected_TAG days = 365 value = 1 }
-					}
-					for_each_loop = {
-						array = energy_contractors
-						value = v
-						index = i
-						break = break
-						if = {
-							limit = { check_variable = { v = energy_selling_selected_TAG } }
-							set_variable = { index_to_remove = i }
-							add_to_variable = { break = 1 }
-						}
-					}
-					if = {
-						limit = { has_variable = index_to_remove }
-						remove_from_array = {
-							array = energy_contractors
-							index = index_to_remove
-						}
-						remove_from_array = {
-							array = energy_contracts_ammount
-							index = index_to_remove
-						}
-						remove_from_array = {
-							array = energy_contracts_price
-							index = index_to_remove
-						}
-						clear_variable = index_to_remove
-						set_country_flag = question_about_contract
+						has_variable = energy_selling_selected_TAG
+						NOT = { tag = energy_selling_selected_TAG }
+						NOT = { has_country_flag = question_about_contract }
 						var:energy_selling_selected_TAG = {
-							for_each_loop = {
-								array = energy_contractors
-								value = v
-								index = i
-								break = break
-								if = {
-									limit = { check_variable = { v = PREV } }
-									set_variable = { index_to_remove = i }
-									add_to_variable = { break = 1 }
-								}
-							}
-							remove_from_array = {
-								array = energy_contractors
-								index = index_to_remove
-							}
-							remove_from_array = {
-								array = energy_contracts_ammount
-								index = index_to_remove
-							}
-							remove_from_array = {
-								array = energy_contracts_price
-								index = index_to_remove
-							}
-							clear_variable = index_to_remove
-							set_country_flag = question_about_contract
-							country_event = energy_selling.5
+							exists = yes
+							NOT = { has_country_flag = question_about_contract }
+							NOT = { has_war_with = PREV }
+							has_country_flag = energy_agreement@PREV
 						}
+						has_country_flag = energy_agreement@energy_selling_selected_TAG
+						check_variable = { energy_contractors^num = energy_contracts_ammount^num }
+						check_variable = { energy_contractors^num = energy_contracts_price^num }
+					}
+					set_temp_variable = { eon_energy_pair_partner = energy_selling_selected_TAG }
+					eon_energy_read_pair_record = yes
+					if = {
+						limit = { check_variable = { temp_energy_ammount = 0 } }
+						if = {
+							limit = { check_variable = { eon_energy_current_count > 0 } }
+							if = {
+								limit = { is_ai = yes }
+								set_country_flag = { flag = energy_recall_calldown@energy_selling_selected_TAG days = 365 value = 1 }
+							}
+							eon_energy_end_pair = yes
+						}
+					}
+					else_if = {
+						limit = {
+							check_variable = { eon_energy_current_count < 2 }
+							check_variable = { temp_energy_price > -0.001 }
+							OR = {
+								check_variable = { eon_energy_current_count = 0 }
+								NOT = { check_variable = { eon_energy_current_amount = temp_energy_ammount } }
+								NOT = { check_variable = { eon_energy_current_price = temp_energy_price } }
+							}
+						}
+						eon_energy_send_offer = yes
 					}
 				}
 			}

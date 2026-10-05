@@ -363,10 +363,22 @@ on_actions = {
 				remove_ideas = faction_brics_alliance
 			}
 			if = {
-				limit = { has_idea = CSTO_member }
-				remove_ideas = CSTO_member
-				remove_from_array = { global.CSTO_member = THIS }
-				ROOT = { remove_from_tech_sharing_group = CSTO_Tech_Share }
+				limit = {
+					OR = {
+						has_idea = NATO_member
+						is_in_array = { global.nato_members = THIS }
+					}
+				}
+				NATO_leave_idea = yes
+			}
+			if = {
+				limit = {
+					OR = {
+						has_idea = CSTO_member
+						is_in_array = { global.CSTO_member = THIS }
+					}
+				}
+				CSTO_leave_idea = yes
 			}
 			if = {
 				limit = { has_idea = faction_baltic_black_sea_union_member }

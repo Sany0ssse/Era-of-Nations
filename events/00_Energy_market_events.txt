@@ -4,33 +4,22 @@ add_namespace = energy_selling
 country_event = {
 	id = energy_selling.1
 	title = energy_selling.1.t
-	desc = energy_selling.1.desc
+	desc = {
+		trigger = { has_country_flag = eon_energy_offer_cancelled }
+		text = eon_energy_offer_cancelled_desc
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = eon_energy_offer_cancelled } }
+		text = eon_energy_offer_import_desc
+	}
 	picture = GFX_energy_sell_buy
 	is_triggered_only = yes
 
     immediate = {
-		if = {
-			limit = { FROM = { is_ai = yes } }
-			clamp_variable = { var = FROM.temp_energy_price min = 0.01 }
-			if = {
-				limit = { check_variable = { FROM.energy_balance > 0 } }
-				set_temp_variable = {
-					energy_balance_minus = {
-						value = FROM.energy_balance
-						multiply = -1
-					}
-				}
-				clamp_variable = { var = FROM.temp_energy_ammount min = energy_balance_minus }
-				round_variable = FROM.temp_energy_ammount
-			}
-			clamp_variable = { var = FROM.temp_energy_ammount max = -1 }
-		}
-		set_variable = { contract_energy_ammount = FROM.temp_energy_ammount }
-		multiply_variable = { contract_energy_ammount = -1 }
-		set_variable = { ai_accept_chance = 0 }
+		set_variable = { eon_energy_ai_accept_chance = 0 }
 		if = {
 			limit = { has_idea = heavy_additional_consumption_spirit }
-			add_to_variable = { ai_accept_chance = -50 }
+			add_to_variable = { eon_energy_ai_accept_chance = -50 }
 		}
 		else_if = {
 			limit = {
@@ -44,14 +33,14 @@ country_event = {
 					check_variable = { energy_temp < 0 }
 				}
 				multiply_temp_variable = { energy_temp = -1 }
-				set_temp_variable = { energy_temp_diviation = FROM.temp_energy_ammount }
+				set_temp_variable = { energy_temp_diviation = FROM.eon_energy_offer_amount }
 				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
 				if = {
 					limit = {
 						check_variable = { energy_temp_diviation > 0 }
 						check_variable = { energy_temp_diviation < 11 }
 					}
-					add_to_variable = { ai_accept_chance = 50 }
+					add_to_variable = { eon_energy_ai_accept_chance = 50 }
 				}
 			}
 		}
@@ -67,14 +56,14 @@ country_event = {
 					check_variable = { energy_temp < 0 }
 				}
 				multiply_temp_variable = { energy_temp = -1 }
-				set_temp_variable = { energy_temp_diviation = FROM.temp_energy_ammount }
+				set_temp_variable = { energy_temp_diviation = FROM.eon_energy_offer_amount }
 				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
 				if = {
 					limit = {
 						check_variable = { energy_temp_diviation > 0 }
 						check_variable = { energy_temp_diviation < 11 }
 					}
-					add_to_variable = { ai_accept_chance = 50 }
+					add_to_variable = { eon_energy_ai_accept_chance = 50 }
 				}
 			}
 		}
@@ -90,14 +79,14 @@ country_event = {
 					check_variable = { energy_temp < 0 }
 				}
 				multiply_temp_variable = { energy_temp = -1 }
-				set_temp_variable = { energy_temp_diviation = FROM.temp_energy_ammount }
+				set_temp_variable = { energy_temp_diviation = FROM.eon_energy_offer_amount }
 				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
 				if = {
 					limit = {
 						check_variable = { energy_temp_diviation > 0 }
 						check_variable = { energy_temp_diviation < 11 }
 					}
-					add_to_variable = { ai_accept_chance = 50 }
+					add_to_variable = { eon_energy_ai_accept_chance = 50 }
 				}
 			}
 		}
@@ -110,24 +99,24 @@ country_event = {
 					check_variable = { energy_temp < 0 }
 				}
 				multiply_temp_variable = { energy_temp = -1 }
-				set_temp_variable = { energy_temp_diviation = FROM.temp_energy_ammount }
+				set_temp_variable = { energy_temp_diviation = FROM.eon_energy_offer_amount }
 				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
 				if = {
 					limit = {
 						check_variable = { energy_temp_diviation > 0 }
 						check_variable = { energy_temp_diviation < 11 }
 					}
-					add_to_variable = { ai_accept_chance = 50 }
+					add_to_variable = { eon_energy_ai_accept_chance = 50 }
 				}
 			}
 		}
 		if = {
 			limit = { check_variable = { energy_balance < 10 } }
-			add_to_variable = { ai_accept_chance = 50 }
+			add_to_variable = { eon_energy_ai_accept_chance = 50 }
 		}
 		if = {
 			limit = { check_variable = { display_income < display_expense } }
-			add_to_variable = { ai_accept_chance = -100 }
+			add_to_variable = { eon_energy_ai_accept_chance = -100 }
 		}
 		if = {
 			limit = {
@@ -138,59 +127,26 @@ country_event = {
 					}
 				}
 			}
-			add_to_variable = { ai_accept_chance = 50 }
+			add_to_variable = { eon_energy_ai_accept_chance = 50 }
 		}
-		set_temp_variable = { price_adjust = FROM.temp_energy_price }
+		set_temp_variable = { price_adjust = eon_energy_offer_price }
 		add_to_temp_variable = { price_adjust = -0.05 }
 		multiply_temp_variable = { price_adjust = -1000 }
-		add_to_variable = { ai_accept_chance = price_adjust }
-		add_to_variable = { ai_accept_chance = contract_energy_ammount }
+		add_to_variable = { eon_energy_ai_accept_chance = price_adjust }
+		add_to_variable = { eon_energy_ai_accept_chance = eon_energy_offer_amount }
 	}
 
 	option = {
 		name = energy_selling.1.a
 		log = "[GetDateText]: [This.GetName]: energy_selling.1.a executed"
-		custom_effect_tooltip = energy_selling_decision_tt
-		add_to_array = {
-			array = energy_contractors
-			value = FROM
-		}
-		multiply_variable = { FROM.temp_energy_ammount = -1 }
-		add_to_array = {
-			array = energy_contracts_ammount
-			value = FROM.temp_energy_ammount
-		}
-		add_to_array = {
-			array = energy_contracts_price
-			value = FROM.temp_energy_price
-		}
-		multiply_variable = { FROM.temp_energy_ammount = -1 }
-		clear_variable = contract_energy_ammount
-		FROM = {
-			add_to_array = {
-				array = energy_contractors
-				value = PREV
-			}
-			add_to_array = {
-				array = energy_contracts_ammount
-				value = temp_energy_ammount
-			}
-			add_to_array = {
-				array = energy_contracts_price
-				value = temp_energy_price
-			}
-			country_event = energy_selling.2
-			clear_variable = temp_energy_ammount
-			clear_variable = temp_energy_price
-			clear_variable = energy_selling_selected_TAG
-		}
-		clear_variable = ai_accept_chance
+		custom_effect_tooltip = eon_energy_accept_import_tt
+		eon_energy_accept_offer = yes
 		ai_chance = {
 			base = 100
 			modifier = {
 				factor = 0
 				check_variable = {
-    				var = ai_accept_chance
+				var = eon_energy_ai_accept_chance
     				value = 0
     				compare = less_than_or_equals
 				}
@@ -199,19 +155,21 @@ country_event = {
 	}
 	option = {
 		name = energy_selling.1.b
-		log = "[GetDateText]: [This.GetName]: energy_selling.1.a executed"
-		FROM = {
-			country_event = energy_selling.3
-			clear_variable = temp_energy_ammount
-			clear_variable = temp_energy_price
-			clear_variable = energy_selling_selected_TAG
+		log = "[GetDateText]: [This.GetName]: energy_selling.1.b executed"
+		custom_effect_tooltip = eon_energy_refuse_tt
+		if = {
+			limit = {
+				has_country_flag = eon_energy_incoming_offer
+				check_variable = { eon_energy_offer_partner = FROM }
+			}
+			FROM = { country_event = energy_selling.3 }
+			eon_energy_finish_response = yes
 		}
-		clear_variable = ai_accept_chance
 		ai_chance = {
 			base = 100
 			modifier = {
 				factor = 0
-				check_variable = { ai_accept_chance > 0 }
+				check_variable = { eon_energy_ai_accept_chance > 0 }
 			}
 		}
 	}
@@ -225,8 +183,6 @@ country_event = {
 	is_triggered_only = yes
 	option = {
 		name = energy_selling.2.a
-		clr_country_flag = question_about_contract
-		FROM = { clr_country_flag = question_about_contract }
 		log = "[GetDateText]: [This.GetName]: energy_selling.2.a executed"
 	}
 }
@@ -239,8 +195,6 @@ country_event = {
 	is_triggered_only = yes
 	option = {
 		name = energy_selling.3.a
-		clr_country_flag = question_about_contract
-		FROM = { clr_country_flag = question_about_contract }
 		log = "[GetDateText]: [This.GetName]: energy_selling.3.a executed"
 	}
 }
@@ -248,98 +202,55 @@ country_event = {
 country_event = {
 	id = energy_selling.4
 	title = energy_selling.4.t
-	desc = energy_selling.4.desc
+	desc = {
+		trigger = { has_country_flag = eon_energy_offer_cancelled }
+		text = eon_energy_offer_cancelled_desc
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = eon_energy_offer_cancelled } }
+		text = eon_energy_offer_export_desc
+	}
 	picture = GFX_energy_sell_buy
 	is_triggered_only = yes
 
     immediate = {
-		if = {
-			limit = { FROM = { is_ai = yes } }
-			clamp_variable = { var = FROM.temp_energy_price min = 0.01 }
-			if = {
-				limit = { check_variable = { FROM.energy_balance < 0 } }
-				set_temp_variable = {
-					energy_balance_minus = {
-						value = FROM.energy_balance
-						multiply = -1
-					}
-				}
-				clamp_variable = { var = FROM.temp_energy_ammount max = energy_balance_minus }
-				round_variable = FROM.temp_energy_ammount
-			}
-			else = { clamp_variable = { var = FROM.temp_energy_ammount max = 1 } }
-		}
-		set_variable = { contract_energy_ammount = FROM.temp_energy_ammount }
-		multiply_variable = { contract_energy_ammount = -1 }
-		set_variable = { ai_accept_chance = 0 }
+		set_variable = { eon_energy_ai_accept_chance = 0 }
 		if = {
 			limit = { check_variable = { energy_balance > 10 } }
-			add_to_variable = { ai_accept_chance = 50 }
+			add_to_variable = { eon_energy_ai_accept_chance = 50 }
 		}
 		if = {
 			limit = { NOT = { has_idea = heavy_additional_consumption_spirit } }
-			add_to_variable = { ai_accept_chance = -50 }
+			add_to_variable = { eon_energy_ai_accept_chance = -50 }
 		}
 		if = {
 			limit = { check_variable = { display_income < display_expense } }
-			add_to_variable = { ai_accept_chance = 100 }
+			add_to_variable = { eon_energy_ai_accept_chance = 100 }
 		}
 		if = {
 			limit = {
-				check_variable = { FROM.temp_energy_price = 0 }
+				check_variable = { eon_energy_offer_price = 0 }
 			}
-			add_to_variable = { ai_accept_chance = -1000 }
+			add_to_variable = { eon_energy_ai_accept_chance = -1000 }
 		}
-		set_temp_variable = { price_adjust = FROM.temp_energy_price }
+		set_temp_variable = { price_adjust = eon_energy_offer_price }
 		add_to_temp_variable = { price_adjust = -0.05 }
 		multiply_temp_variable = { price_adjust = 1000 }
-		add_to_variable = { ai_accept_chance = price_adjust }
-		add_to_variable = { ai_accept_chance = contract_energy_ammount }
+		add_to_variable = { eon_energy_ai_accept_chance = price_adjust }
+		add_to_variable = { eon_energy_ai_accept_chance = eon_energy_offer_amount }
 	}
 
 	option = {
 		name = energy_selling.4.a
 		log = "[GetDateText]: [This.GetName]: energy_selling.4.a executed"
-		custom_effect_tooltip = energy_buying_decision_tt
-		add_to_array = {
-			array = energy_contractors
-			value = FROM
-		}
-		multiply_variable = { FROM.temp_energy_ammount = -1 }
-		add_to_array = {
-			array = energy_contracts_ammount
-			value = FROM.temp_energy_ammount
-		}
-		add_to_array = {
-			array = energy_contracts_price
-			value = FROM.temp_energy_price
-		}
-		multiply_variable = { FROM.temp_energy_ammount = -1 }
-		clear_variable = contract_energy_ammount
-		FROM = {
-			add_to_array = {
-				array = energy_contractors
-				value = PREV
-			}
-			add_to_array = {
-				array = energy_contracts_ammount
-				value = temp_energy_ammount
-			}
-			add_to_array = {
-				array = energy_contracts_price
-				value = temp_energy_price
-			}
-			country_event = energy_selling.2
-			clear_variable = temp_energy_ammount
-			clear_variable = temp_energy_price
-			clear_variable = energy_selling_selected_TAG
-		}
+		custom_effect_tooltip = eon_energy_accept_export_tt
+		eon_energy_accept_offer = yes
 		ai_chance = {
 			base = 100
 			modifier = {
 				factor = 0
 				check_variable = {
-    				var = ai_accept_chance
+				var = eon_energy_ai_accept_chance
     				value = 0
     				compare = less_than_or_equals
 				}
@@ -348,18 +259,21 @@ country_event = {
 	}
 	option = {
 		name = energy_selling.4.b
-		log = "[GetDateText]: [This.GetName]: energy_selling.4.a executed"
-		FROM = {
-			clear_variable = temp_energy_ammount
-			clear_variable = temp_energy_price
-			clear_variable = energy_selling_selected_TAG
-			country_event = energy_selling.3
+		log = "[GetDateText]: [This.GetName]: energy_selling.4.b executed"
+		custom_effect_tooltip = eon_energy_refuse_tt
+		if = {
+			limit = {
+				has_country_flag = eon_energy_incoming_offer
+				check_variable = { eon_energy_offer_partner = FROM }
+			}
+			FROM = { country_event = energy_selling.3 }
+			eon_energy_finish_response = yes
 		}
 		ai_chance = {
 			base = 100
 			modifier = {
 				factor = 0
-				check_variable = { ai_accept_chance > 0 }
+				check_variable = { eon_energy_ai_accept_chance > 0 }
 			}
 		}
 	}
@@ -374,13 +288,6 @@ country_event = {
 	option = {
 		name = energy_selling.5.a
 		log = "[GetDateText]: [This.GetName]: energy_selling.5.a executed"
-		clr_country_flag = question_about_contract
-		FROM = {
-			clr_country_flag = question_about_contract
-			clear_variable = temp_energy_ammount
-			clear_variable = temp_energy_price
-			clear_variable = energy_selling_selected_TAG
-		}
 	}
 }
 

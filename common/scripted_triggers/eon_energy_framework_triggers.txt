@@ -1,0 +1,33 @@
+# Receiver scope, ROOT = sender, as documented by scripted diplomatic actions.
+eon_energy_framework_terms_available = {
+	exists = yes
+	is_neighbor_of = ROOT
+	NOT = { has_country_flag = energy_agreement@ROOT }
+	NOT = { has_war_with = ROOT }
+	has_opinion = { target = ROOT value > 10 }
+	ROOT = {
+		exists = yes
+		NOT = { has_country_flag = energy_agreement@PREV }
+	}
+	# Preserve the inherited faction-partner eligibility policy in this package.
+	if = {
+		limit = { is_in_faction = yes any_allied_country = { exists = yes } }
+		any_allied_country = { NOT = { has_war_with = ROOT } }
+	}
+}
+
+# Each country reserves one native framework request until its callback is consumed.
+eon_energy_framework_send_ready = {
+	eon_energy_framework_terms_available = yes
+	check_variable = { eon_energy_framework_pending_sender = 0 }
+	check_variable = { pending_energy_offer_country = 0 }
+	ROOT = {
+		check_variable = { eon_energy_framework_pending_sender = 0 }
+		check_variable = { pending_energy_offer_country = 0 }
+	}
+}
+
+eon_energy_framework_response_current = {
+	check_variable = { eon_energy_framework_pending_sender = ROOT.id }
+	ROOT = { check_variable = { pending_energy_offer_country = PREV.id } }
+}

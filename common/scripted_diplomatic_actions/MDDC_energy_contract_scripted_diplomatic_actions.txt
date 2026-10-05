@@ -8,27 +8,21 @@ scripted_diplomatic_actions = {
 			}
 		}
 		selectable = {
-			is_neighbor_of = ROOT
 			custom_trigger_tooltip = {
-				tooltip = PROPOSE_ENERGY_AGREEMENT_TOOLTIP
-				THIS = {
-					NOT = { has_country_flag = energy_contract@ROOT }
-				}
+				tooltip = eon_diplo_no_pending_energy_framework_tt
+				eon_energy_framework_send_ready = yes
 			}
-			THIS = {
-				NOT = { has_war_with = ROOT }
-				has_opinion = { target = ROOT value > 10 }
-				if = {
-					limit = {
-						is_in_faction = yes
-						any_allied_country = {
-							exists = yes
-						}
-					}
-					any_allied_country = {
-						NOT = { has_war_with = ROOT }
-					}
-				}
+		}
+		can_be_sent = {
+			eon_energy_framework_send_ready = yes
+		}
+		can_be_accepted = {
+			custom_trigger_tooltip = {
+				tooltip = eon_diplo_energy_framework_response_valid_tt
+				eon_energy_framework_terms_available = yes
+				eon_energy_framework_response_current = yes
+				NOT = { has_country_flag = eon_energy_framework_withdrawn }
+				ROOT = { NOT = { has_country_flag = eon_energy_framework_withdrawn } }
 			}
 		}
 		cost = 75
@@ -39,39 +33,55 @@ scripted_diplomatic_actions = {
 
 		on_sent_effect = {
 			log = "[GetDateText]: [Root.GetName]: diplomatic action on_sent_effect propose_improved_energy_agreement"
+			set_variable = { eon_energy_framework_pending_sender = ROOT.id }
 			ROOT = { set_variable = { pending_energy_offer_country = PREV.id } }
 		}
 		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect propose_improved_energy_agreement"
-			set_country_flag = energy_agreement@ROOT
-			ROOT = {
-				clear_variable = pending_energy_offer_country
-				set_country_flag = energy_agreement@PREV
-			}
-			THIS = {
-				add_opinion_modifier = { target = ROOT modifier = energy_agreement_accept }
-				reverse_add_opinion_modifier = { target = ROOT modifier = energy_agreement_accept }
-				set_temp_variable = { percent_change = 1 }
-				set_temp_variable = { tag_index = ROOT.id }
-				set_temp_variable = { influence_target = THIS.id }
-				change_influence_percentage = yes
+			if = {
+				limit = {
+					eon_energy_framework_terms_available = yes
+					eon_energy_framework_response_current = yes
+					NOT = { has_country_flag = eon_energy_framework_withdrawn }
+					ROOT = { NOT = { has_country_flag = eon_energy_framework_withdrawn } }
+				}
+				log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect propose_improved_energy_agreement"
+				set_country_flag = energy_agreement@ROOT
 				ROOT = {
+					set_country_flag = energy_agreement@PREV
+				}
+				THIS = {
+					add_opinion_modifier = { target = ROOT modifier = energy_agreement_accept }
+					reverse_add_opinion_modifier = { target = ROOT modifier = energy_agreement_accept }
 					set_temp_variable = { percent_change = 1 }
-					set_temp_variable = { tag_index = PREV.id }
+					set_temp_variable = { tag_index = ROOT.id }
 					set_temp_variable = { influence_target = THIS.id }
 					change_influence_percentage = yes
+					ROOT = {
+						set_temp_variable = { percent_change = 1 }
+						set_temp_variable = { tag_index = PREV.id }
+						set_temp_variable = { influence_target = THIS.id }
+						change_influence_percentage = yes
+					}
 				}
+
 			}
+			eon_energy_framework_finish_response = yes
 		}
 		reject_effect = {
-			log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect propose_improved_trade_agreement"
-			ROOT = {
-				clear_variable = pending_energy_offer_country
+			if = {
+				limit = {
+					eon_energy_framework_response_current = yes
+					NOT = { has_country_flag = eon_energy_framework_withdrawn }
+					ROOT = { NOT = { has_country_flag = eon_energy_framework_withdrawn } }
+				}
+				log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect propose_improved_energy_agreement"
+				THIS = {
+					add_opinion_modifier = { target = ROOT modifier = energy_agreement_reject }
+					reverse_add_opinion_modifier = { target = ROOT modifier = energy_agreement_reject }
+				}
+
 			}
-			THIS = {
-				add_opinion_modifier = { target = ROOT modifier = energy_agreement_reject }
-				reverse_add_opinion_modifier = { target = ROOT modifier = energy_agreement_reject }
-			}
+			eon_energy_framework_finish_response = yes
 		}
 
 		accept_title = PROPOSE_ENERGY_AGREEMENT_ACCEPT_TT
@@ -177,70 +187,30 @@ scripted_diplomatic_actions = {
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: diplomatic action cancel_energy_agreement"
-			clr_country_flag = energy_agreement@ROOT
-			ROOT = {
-				clear_variable = pending_energy_offer_country
-				clr_country_flag = energy_agreement@PREV
-			}
-			THIS = {
-				remove_opinion_modifier = { target = ROOT modifier = energy_agreement_accept }
-				for_each_loop = {
-					array = energy_contractors
-					value = v
-					index = i
-					break = break
-					if = {
-						limit = { check_variable = { v = ROOT } }
-						set_variable = { index_to_remove = i }
-						add_to_variable = { break = 1 }
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = energy_agreement@ROOT
+						ROOT = { has_country_flag = energy_agreement@PREV }
 					}
 				}
-				if = {
-					limit = { has_variable = index_to_remove }
-					remove_from_array = {
-						array = energy_contractors
-						index = index_to_remove
-					}
-					remove_from_array = {
-						array = energy_contracts_ammount
-						index = index_to_remove
-					}
-					remove_from_array = {
-						array = energy_contracts_price
-						index = index_to_remove
-					}
-					clear_variable = index_to_remove
+				clr_country_flag = energy_agreement@ROOT
+				remove_opinion_modifier = { target = ROOT modifier = energy_agreement_accept }
+				ROOT = {
+					clr_country_flag = energy_agreement@PREV
+					remove_opinion_modifier = { target = PREV modifier = energy_agreement_accept }
 				}
 				ROOT = {
-					remove_opinion_modifier = { target = PREV modifier = energy_agreement_accept }
-					for_each_loop = {
-						array = energy_contractors
-						value = v
-						index = i
-						break = break
-						if = {
-							limit = { check_variable = { v = PREV } }
-							set_variable = { index_to_remove = i }
-							add_to_variable = { break = 1 }
-						}
-					}
-					if = {
-						limit = { has_variable = index_to_remove }
-						remove_from_array = {
-							array = energy_contractors
-							index = index_to_remove
-						}
-						remove_from_array = {
-							array = energy_contracts_ammount
-							index = index_to_remove
-						}
-						remove_from_array = {
-							array = energy_contracts_price
-							index = index_to_remove
-						}
-						clear_variable = index_to_remove
-					}
+					set_temp_variable = { eon_energy_pair_partner = PREV }
+					eon_energy_end_pair = yes
 				}
+			}
+			# Withdraw pending invitations of this pair; their old response drains the locks.
+			set_temp_variable = { eon_energy_pair_partner = ROOT }
+			eon_energy_framework_withdraw_pair = yes
+			ROOT = {
+				set_temp_variable = { eon_energy_pair_partner = PREV }
+				eon_energy_framework_withdraw_pair = yes
 			}
 		}
 

@@ -1,0 +1,48 @@
+# Native scripted diplomatic action callback: ROOT = sender, THIS = receiver.
+eon_energy_framework_clear_pending = {
+	clear_variable = pending_energy_offer_country
+	clear_variable = eon_energy_framework_pending_sender
+	clr_country_flag = eon_energy_framework_withdrawn
+}
+
+eon_energy_framework_finish_response = {
+	ROOT = {
+		if = {
+			limit = { check_variable = { pending_energy_offer_country = PREV.id } }
+			clear_variable = pending_energy_offer_country
+			clr_country_flag = eon_energy_framework_withdrawn
+		}
+	}
+	if = {
+		limit = { check_variable = { eon_energy_framework_pending_sender = ROOT.id } }
+		clear_variable = eon_energy_framework_pending_sender
+		clr_country_flag = eon_energy_framework_withdrawn
+	}
+}
+
+# Caller/partner are one pair. Unrelated invitations must retain their reservations.
+eon_energy_framework_withdraw_pair = {
+	if = {
+		limit = {
+			OR = {
+				check_variable = { pending_energy_offer_country = eon_energy_pair_partner }
+				check_variable = { eon_energy_framework_pending_sender = eon_energy_pair_partner }
+			}
+		}
+		set_country_flag = eon_energy_framework_withdrawn
+	}
+}
+
+# Annexed partners cannot answer. Clear only references to that vanished country.
+eon_energy_framework_cleanup_annexed_pair = {
+	if = {
+		limit = { check_variable = { pending_energy_offer_country = eon_energy_pair_partner } }
+		clear_variable = pending_energy_offer_country
+		clr_country_flag = eon_energy_framework_withdrawn
+	}
+	if = {
+		limit = { check_variable = { eon_energy_framework_pending_sender = eon_energy_pair_partner } }
+		clear_variable = eon_energy_framework_pending_sender
+		clr_country_flag = eon_energy_framework_withdrawn
+	}
+}

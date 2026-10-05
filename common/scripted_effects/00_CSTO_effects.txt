@@ -1,29 +1,65 @@
 # Scripted effects for CSTO
 CSTO_join = {
-	add_to_array = { global.CSTO_member = THIS }
-	add_ideas = CSTO_member
-	ROOT = { add_to_tech_sharing_group = CSTO_Tech_Share }
+	set_temp_variable = { eon_CSTO_new_membership = 0 }
+	if = {
+		limit = { NOT = { has_idea = CSTO_member } }
+		set_temp_variable = { eon_CSTO_new_membership = 1 }
+	}
+	# Scope the accepted applicant through PREV rather than the event's ROOT.
 	random_scope_in_array = {
 		array = global.CSTO_member
 		limit = {
+			has_idea = CSTO_member
 			is_faction_leader = yes
+			has_faction_template = faction_template_csto
 		}
-		add_to_faction = ROOT
+		if = {
+			limit = { NOT = { is_in_faction_with = PREV } }
+			add_to_faction = PREV
+		}
 	}
-	hidden_effect = { news_event = { id = CSTO.4 hours = 6 } }
+	if = {
+		limit = { has_faction_template = faction_template_csto }
+		if = {
+			limit = { check_variable = { eon_CSTO_new_membership = 1 } }
+			hidden_effect = { news_event = { id = CSTO.4 hours = 6 } }
+		}
+		add_ideas = CSTO_member
+		while_loop_effect = {
+			limit = { is_in_array = { global.CSTO_member = THIS } }
+			remove_from_array = { global.CSTO_member = THIS }
+		}
+		add_to_array = { global.CSTO_member = THIS }
+		add_to_tech_sharing_group = CSTO_Tech_Share
+	}
 }
 
 CSTO_leave = {
-	remove_from_array = { global.CSTO_member = THIS }
-	remove_ideas = CSTO_member
-	ROOT = { remove_from_tech_sharing_group = CSTO_Tech_Share }
-	leave_faction = yes
-	hidden_effect = { news_event = { id = CSTO.5 hours = 6 } }
+	CSTO_leave_idea = yes
 }
 
 CSTO_leave_idea = {
-	remove_from_array = { global.CSTO_member = THIS }
-	ROOT = { remove_from_tech_sharing_group = CSTO_Tech_Share }
-	leave_faction = yes
-	hidden_effect = { news_event = { id = CSTO.5 hours = 6 } }
+	if = {
+		limit = {
+			NOT = { has_country_flag = eon_CSTO_membership_cleanup }
+			OR = {
+				has_idea = CSTO_member
+				is_in_array = { global.CSTO_member = THIS }
+				has_faction_template = faction_template_csto
+			}
+		}
+		set_country_flag = eon_CSTO_membership_cleanup
+		while_loop_effect = {
+			limit = { is_in_array = { global.CSTO_member = THIS } }
+			remove_from_array = { global.CSTO_member = THIS }
+		}
+		remove_from_tech_sharing_group = CSTO_Tech_Share
+		if = {
+			limit = { has_faction_template = faction_template_csto }
+			leave_faction = yes
+		}
+		remove_ideas = CSTO_member
+		hidden_effect = { news_event = { id = CSTO.5 hours = 6 } }
+		clr_country_flag = eon_CSTO_membership_cleanup
+	}
 }

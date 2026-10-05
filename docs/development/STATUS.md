@@ -6,12 +6,17 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit is complete. Two narrow organization-membership
-fixes have been applied: SCO rejection now blocks the entire admission result
-and resets on a new application; Arctic observer expulsion removes the observer
-idea. Source checks and independent review passed. New-campaign acceptance is
-pending; broader diplomacy changes remain proposals. See
-[DIPLOMACY_AUDIT_UK.md](DIPLOMACY_AUDIT_UK.md) for findings, priorities and limits.
+The existing diplomacy audit and first implementation package are complete at
+source level. The earlier SCO rejection and Arctic observer repairs are retained.
+The new package reconciles ordinary NATO/CSTO/SCO membership and native exits,
+repairs investment cancellation, debt assumption and operative ransom/exchange,
+and gives the existing energy agreement a guarded proposal/response/execution/
+revision/termination cycle. Reproducible source models and independent reviews
+passed. This package has not been launched in HOI4; new-campaign acceptance,
+native callback timing, actual accounting and save/load remain pending. See
+[DIPLOMACY_PACKAGE_01_UK.md](DIPLOMACY_PACKAGE_01_UK.md) for changes, checks and
+the runtime checklist, and [DIPLOMACY_AUDIT_UK.md](DIPLOMACY_AUDIT_UK.md) for the
+earlier baseline audit and subsequent priorities.
 
 ## Completed setup
 
