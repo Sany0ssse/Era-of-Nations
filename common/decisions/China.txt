@@ -871,6 +871,7 @@ sco_category = {
 		cost = 200
 
 		complete_effect = {
+			clr_country_flag = SCO_membership_rejected
 			CHI = {
 				country_event = { id = sco.2 }
 			}
@@ -889,53 +890,56 @@ sco_category = {
 		days_remove = 90
 
 		remove_effect = {
-			add_to_array = { global.sco_members = ROOT }
-			SCO_dirty_update = yes
 			if = {
-				limit = {
-					NOT = { has_country_flag = SCO_membership_rejected }
-					CHI = { has_idea = sco_member_econ }
+				limit = { NOT = { has_country_flag = SCO_membership_rejected } }
+				add_to_array = { global.sco_members = ROOT }
+				SCO_dirty_update = yes
+				if = {
+					limit = {
+						NOT = { has_country_flag = SCO_membership_rejected }
+						CHI = { has_idea = sco_member_econ }
+					}
+					add_ideas = sco_member_econ
 				}
-				add_ideas = sco_member_econ
-			}
-			else_if = {
-				limit = {
-					NOT = { has_country_flag = SCO_membership_rejected }
-					CHI = { has_idea = sco_member_pol }
+				else_if = {
+					limit = {
+						NOT = { has_country_flag = SCO_membership_rejected }
+						CHI = { has_idea = sco_member_pol }
+					}
+					add_ideas = sco_member_pol
 				}
-				add_ideas = sco_member_pol
-			}
-			else_if = {
-				limit = {
-					NOT = { has_country_flag = SCO_membership_rejected }
-					CHI = { has_idea = sco_member_mil }
+				else_if = {
+					limit = {
+						NOT = { has_country_flag = SCO_membership_rejected }
+						CHI = { has_idea = sco_member_mil }
+					}
+					add_ideas = sco_member_mil
 				}
-				add_ideas = sco_member_mil
-			}
-			else_if = {
-				limit = {
-					NOT = { has_country_flag = SCO_membership_rejected }
-					CHI = { has_idea = sco_member }
+				else_if = {
+					limit = {
+						NOT = { has_country_flag = SCO_membership_rejected }
+						CHI = { has_idea = sco_member }
+					}
+					add_ideas = sco_member
 				}
-				add_ideas = sco_member
-			}
-			if = {
-				limit = {
-					CHI = { has_completed_focus = CHI_Split_CSTO }
-					is_in_faction_with = SOV
+				if = {
+					limit = {
+						CHI = { has_completed_focus = CHI_Split_CSTO }
+						is_in_faction_with = SOV
+					}
+					leave_faction = yes
 				}
-				leave_faction = yes
+				if = {
+					limit = { CHI = { has_completed_focus = CHI_An_Alliance_to_Rival_NATO } }
+					CHI = { add_to_faction = ROOT }
+				}
+				if = {
+					limit = { has_idea = ASEAN_Member }
+					remove_ideas = ASEAN_Member
+				}
+				news_event = { id = sco.7 }
+				remove_ideas = sco_observer
 			}
-			if = {
-				limit = { CHI = { has_completed_focus = CHI_An_Alliance_to_Rival_NATO } }
-				CHI = { add_to_faction = ROOT }
-			}
-			if = {
-				limit = { has_idea = ASEAN_Member }
-				remove_ideas = ASEAN_Member
-			}
-			news_event = { id = sco.7 }
-			remove_ideas = sco_observer
 		}
 
 		ai_will_do = {

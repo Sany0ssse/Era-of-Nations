@@ -6,7 +6,12 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-Diplomacy research is discussion-only; gameplay has not changed.
+The existing diplomacy audit is complete. Two narrow organization-membership
+fixes have been applied: SCO rejection now blocks the entire admission result
+and resets on a new application; Arctic observer expulsion removes the observer
+idea. Source checks and independent review passed. New-campaign acceptance is
+pending; broader diplomacy changes remain proposals. See
+[DIPLOMACY_AUDIT_UK.md](DIPLOMACY_AUDIT_UK.md) for findings, priorities and limits.
 
 ## Completed setup
 
