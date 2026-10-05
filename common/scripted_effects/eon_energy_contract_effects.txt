@@ -44,6 +44,8 @@ eon_energy_clear_pending = {
 	clr_country_flag = eon_energy_outgoing_offer
 	clr_country_flag = eon_energy_incoming_offer
 	clr_country_flag = eon_energy_offer_cancelled
+	clr_country_flag = eon_energy_counter_draft_owner
+	clr_country_flag = eon_energy_counter_awaiting
 	clr_country_flag = question_about_contract
 	clear_variable = eon_energy_offer_partner
 	clear_variable = eon_energy_offer_amount
@@ -54,6 +56,10 @@ eon_energy_clear_pending = {
 	clear_variable = eon_energy_offer_old_amount
 	clear_variable = eon_energy_offer_old_price
 	clear_variable = eon_energy_offer_old_weekly
+	clear_variable = eon_energy_offer_counter_depth
+	clear_variable = eon_energy_counter_ready
+	clear_variable = eon_energy_counter_amount
+	clear_variable = eon_energy_counter_price
 	clear_variable = eon_energy_ai_accept_chance
 }
 
@@ -65,7 +71,11 @@ eon_energy_invalidate_pair_pending = {
 			has_variable = eon_energy_offer_partner
 			check_variable = { eon_energy_offer_partner = eon_energy_pair_partner }
 		}
-		set_country_flag = eon_energy_offer_cancelled
+		if = {
+			limit = { OR = { has_country_flag = eon_energy_counter_draft_owner has_country_flag = eon_energy_counter_awaiting } }
+			eon_energy_clear_pending = yes
+		}
+		else = { set_country_flag = eon_energy_offer_cancelled }
 	}
 }
 
@@ -97,6 +107,7 @@ eon_energy_end_pair = {
 
 # GUI sender: all mutable controls are copied before the receiving event is fired.
 eon_energy_send_offer = {
+	set_variable = { eon_energy_offer_counter_depth = eon_energy_next_counter_depth }
 	set_variable = { eon_energy_offer_partner = energy_selling_selected_TAG }
 	set_variable = { eon_energy_offer_amount = temp_energy_ammount }
 	set_variable = { eon_energy_offer_price = temp_energy_price }
@@ -134,6 +145,7 @@ eon_energy_send_offer = {
 			multiply_variable = { eon_energy_offer_old_weekly = -1 }
 		}
 		multiply_variable = { eon_energy_offer_old_weekly = eon_energy_offer_old_price }
+		set_variable = { eon_energy_offer_counter_depth = PREV.eon_energy_offer_counter_depth }
 		set_variable = { eon_energy_offer_partner = PREV }
 		set_variable = { eon_energy_offer_amount = PREV.eon_energy_offer_amount }
 		multiply_variable = { eon_energy_offer_amount = -1 }
@@ -154,55 +166,9 @@ eon_energy_send_offer = {
 # Recipient event: validate current records against both frozen pre-offer snapshots.
 eon_energy_validate_offer = {
 	set_temp_variable = { eon_energy_offer_valid = 0 }
-	set_temp_variable = { eon_energy_pair_partner = FROM }
-	eon_energy_read_pair_record = yes
 	if = {
-		limit = {
-			exists = yes
-			has_country_flag = eon_energy_incoming_offer
-			NOT = { has_country_flag = eon_energy_offer_cancelled }
-			has_country_flag = question_about_contract
-			check_variable = { eon_energy_offer_partner = FROM }
-			has_country_flag = energy_agreement@FROM
-			NOT = { has_war_with = FROM }
-			check_variable = { energy_contractors^num = energy_contracts_ammount^num }
-			check_variable = { energy_contractors^num = energy_contracts_price^num }
-			check_variable = { eon_energy_current_count = eon_energy_offer_old_count }
-			check_variable = { eon_energy_current_count < 2 }
-			check_variable = { eon_energy_current_amount = eon_energy_offer_old_amount }
-			check_variable = { eon_energy_current_price = eon_energy_offer_old_price }
-			check_variable = { eon_energy_offer_price > -0.001 }
-			NOT = { check_variable = { eon_energy_offer_amount = 0 } }
-			FROM = {
-				exists = yes
-				has_country_flag = eon_energy_outgoing_offer
-				NOT = { has_country_flag = eon_energy_offer_cancelled }
-				has_country_flag = question_about_contract
-				check_variable = { eon_energy_offer_partner = PREV }
-				has_country_flag = energy_agreement@PREV
-				check_variable = { eon_energy_offer_price = PREV.eon_energy_offer_price }
-			}
-		}
-		set_temp_variable = { eon_energy_mirror_amount = FROM.eon_energy_offer_amount }
-		multiply_temp_variable = { eon_energy_mirror_amount = -1 }
-		if = {
-			limit = { check_variable = { eon_energy_offer_amount = eon_energy_mirror_amount } }
-			FROM = {
-				set_temp_variable = { eon_energy_pair_partner = PREV }
-				eon_energy_read_pair_record = yes
-				if = {
-					limit = {
-						check_variable = { energy_contractors^num = energy_contracts_ammount^num }
-						check_variable = { energy_contractors^num = energy_contracts_price^num }
-						check_variable = { eon_energy_current_count = eon_energy_offer_old_count }
-						check_variable = { eon_energy_current_count < 2 }
-						check_variable = { eon_energy_current_amount = eon_energy_offer_old_amount }
-						check_variable = { eon_energy_current_price = eon_energy_offer_old_price }
-					}
-					PREV = { set_temp_variable = { eon_energy_offer_valid = 1 } }
-				}
-			}
-		}
+		limit = { eon_energy_normal_response_current = yes }
+		set_temp_variable = { eon_energy_offer_valid = 1 }
 	}
 	# The supplier may lose capacity while the frozen proposal waits for an answer.
 	if = {
@@ -220,6 +186,8 @@ eon_energy_validate_offer = {
 eon_energy_finish_response = {
 	if = {
 		limit = {
+			NOT = { has_country_flag = eon_energy_counter_draft_owner }
+			NOT = { has_country_flag = eon_energy_counter_awaiting }
 			has_country_flag = eon_energy_incoming_offer
 			check_variable = { eon_energy_offer_partner = FROM }
 		}
@@ -260,6 +228,6 @@ eon_energy_accept_offer = {
 	}
 	else = {
 		custom_effect_tooltip = eon_energy_offer_invalid_tt
-		eon_energy_finish_response = yes
+		eon_energy_refuse_offer = yes
 	}
 }

@@ -124,11 +124,22 @@ later_energy_paths = {
     'localisation/english/eon_energy_contract_l_english.yml',
     'localisation/russian/eon_energy_contract_l_russian.yml',
 }
+# Package05 proves these later negotiation files against688f independently.
+later_negotiation_paths = {
+    'common/scripted_effects/eon_energy_ai_effects.txt',
+    'common/scripted_effects/eon_energy_negotiation_effects.txt',
+    'common/scripted_triggers/eon_energy_negotiation_triggers.txt',
+    'common/scripted_diplomatic_actions/eon_energy_negotiation_actions.txt',
+    'events/eon_energy_negotiation_events.txt',
+    'localisation/english/eon_energy_negotiation_l_english.yml',
+    'localisation/russian/eon_energy_negotiation_l_russian.yml',
+}
+later_energy_paths |= later_negotiation_paths
 tracked_changes = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 owned_paths = {item['path'] for item in receipt}
 assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths, ('Unowned gameplay changes', tracked_changes)
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-assert set(untracked) <= new_paths | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
+assert set(untracked) <= new_paths | later_negotiation_paths | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 assert not set(new_paths).intersection(baseline_paths), 'New files overwrite existing baseline sources'
 passed('unchanged_tracked_gameplay_path_boundary')
@@ -190,7 +201,12 @@ assert one(action, 'complete_effect') == ast('if = { limit = { eon_defensive_all
 assert one(action, 'reject_effect') == ast('eon_defensive_alliance_offer_finish_response = yes')
 actions = [b['key'] for file in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
            for b in blocks(file.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1]
-assert len(actions) == len(set(actions)) == 55
+assert len(actions) == len(set(actions)) == 57
+assert set(actions) - {'eon_withdraw_energy_offer', 'eon_resume_energy_counter_offer'} == {
+    b['key'] for file in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
+    if file.name != 'eon_energy_negotiation_actions.txt'
+    for b in blocks(file.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1
+}
 passed('accepted_only_action_structure_and_unique_diplomatic_ids', len(actions))
 
 locale = {}

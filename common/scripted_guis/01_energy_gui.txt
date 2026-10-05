@@ -52,6 +52,9 @@ scripted_gui = {
 		}
 
 		triggers = {
+			country_view_flag_button_click_enabled = {
+				custom_trigger_tooltip = { tooltip = eon_energy_counter_partner_locked_tt NOT = { has_country_flag = eon_energy_counter_draft_owner } }
+			}
 			build_enrichment_facility_button_click_enabled = {
 				NOT = { has_active_mission = bankruptcy_incoming_collapse }
 				NOT = { has_active_mission = energy_building_enrichment_facilities }
@@ -118,6 +121,11 @@ scripted_gui = {
 				check_variable = { temp_nuclear_fuel_price > 0 }
 			}
 			confirm_energy_sell_click_enabled = {
+				if = {
+					limit = { has_country_flag = eon_energy_counter_draft_owner }
+					custom_trigger_tooltip = { tooltip = eon_energy_counter_draft_ready_tt eon_energy_counter_draft_send_ready = yes }
+				}
+				else = {
 				custom_trigger_tooltip = {
 					tooltip = eon_energy_no_pending_tt
 					NOT = { has_country_flag = question_about_contract }
@@ -137,6 +145,7 @@ scripted_gui = {
 					tooltip = eon_energy_capacity_tt
 					eon_energy_proposed_capacity_available = yes
 				}
+							}
 			}
 			confirm_nuclear_fuel_sell_click_enabled = {
 				NOT = { has_country_flag = currently_considering_an_offer }
@@ -516,6 +525,8 @@ scripted_gui = {
 				ingame_update_setup = yes
 			}
 			country_view_flag_button_click = {
+				if = {
+					limit = { NOT = { has_country_flag = eon_energy_counter_draft_owner } }
 				clear_variable = energy_selling_selected_TAG
 				clear_array = temp_energy_sell_selection_countries
 				every_other_country = {
@@ -529,6 +540,7 @@ scripted_gui = {
 				}
 				set_country_flag = open_energy_sell_country_selection
 				ingame_update_setup = yes
+							}
 			}
 			country_view_flag_button1_click = {
 				clear_variable = nuclear_fuel_selling_selected_TAG
@@ -575,6 +587,11 @@ scripted_gui = {
 				ingame_update_setup = yes
 			}
 			confirm_energy_sell_click = {
+				if = {
+					limit = { has_country_flag = eon_energy_counter_draft_owner }
+					eon_energy_submit_counter_draft = yes
+				}
+				else = {
 				# Repeat guards inside the effect: AI/direct GUI execution must obey them too.
 				if = {
 					limit = {
@@ -617,9 +634,11 @@ scripted_gui = {
 								NOT = { check_variable = { eon_energy_current_price = temp_energy_price } }
 							}
 						}
-						eon_energy_send_offer = yes
+						set_temp_variable = { eon_energy_next_counter_depth = 0 }
+					eon_energy_send_offer = yes
 					}
 				}
+							}
 			}
 			confirm_nuclear_fuel_sell_click = {
 				if = {
@@ -996,6 +1015,8 @@ scripted_gui = {
 		}
 		effects = {
 			country_list_flag_button_click = {
+				if = {
+					limit = { NOT = { has_country_flag = eon_energy_counter_draft_owner } }
 				set_variable = { energy_selling_selected_TAG = ROOT.temp_energy_sell_selection_countries^i }
 				if = {
 					limit = {
@@ -1025,6 +1046,7 @@ scripted_gui = {
 				}
 				clr_country_flag = open_energy_sell_country_selection
 				ingame_update_setup = yes
+							}
 			}
 			close_button_click = {
 				if = {

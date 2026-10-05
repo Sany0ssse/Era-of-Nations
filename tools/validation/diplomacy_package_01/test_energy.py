@@ -38,10 +38,20 @@ framework_effects_path=ROOT/'common/scripted_effects/eon_energy_framework_effect
 if framework_effects_path.exists():
     effects.update({k:v for k,o,v in ast(framework_effects_path.read_text(encoding='utf-8-sig'))})
 
+# Package 05 keeps negotiation/evaluation helpers separate from record storage.
+# Interpret their actual ordered source when installed; unknown nodes still fail.
+for stem in ('eon_energy_ai', 'eon_energy_negotiation'):
+    path = ROOT / 'common/scripted_effects' / (stem + '_effects.txt')
+    if path.exists():
+        effects.update({k:v for k,o,v in ast(path.read_text(encoding='utf-8-sig'))})
+
 # Package 04 adds native trigger-compatible capacity math. Read its actual source
 # so existing lifecycle callbacks still exercise the whole current validation.
 capacity_path = ROOT/'common/scripted_triggers/eon_energy_capacity_triggers.txt'
 capacity_triggers = {k:v for k,o,v in ast(capacity_path.read_text(encoding='utf-8-sig'))} if capacity_path.exists() else {}
+negotiation_trigger_path = ROOT/'common/scripted_triggers/eon_energy_negotiation_triggers.txt'
+if negotiation_trigger_path.exists():
+    capacity_triggers.update({k:v for k,o,v in ast(negotiation_trigger_path.read_text(encoding='utf-8-sig'))})
 
 # Package 02 extends the same annex hooks. Execute its actual cleanup helpers
 # as well, so energy regressions still exercise the whole current callback.
@@ -174,12 +184,17 @@ def execute(nodes,s,c):
             elif k.startswith('multiply_'): dest[key]=current*rhs
             else: dest[key]=current-rhs
         elif k=='clear_variable': country['variables'].pop(v,None)
-        elif k=='clamp_variable':
-            d={a:z for a,b,z in v}; dest=country['variables']; key=d['var']
+        elif k in ('clamp_variable','clamp_temp_variable'):
+            d={a:z for a,b,z in v}; dest=s['temp'] if k=='clamp_temp_variable' else country['variables']; key=d['var']
             current=dest.get(key,0)
             if 'min' in d: current=max(current,value(s,c,d['min']))
             if 'max' in d: current=min(current,value(s,c,d['max']))
             dest[key]=current
+        elif k=='round_temp_variable':
+            # Fixtures avoid half-way ties: the native docs do not define ties.
+            import math
+            current=s['temp'].get(v,0)
+            s['temp'][v]=math.floor(current+0.5) if current>=0 else math.ceil(current-0.5)
         elif k=='set_country_flag':
             name=v if isinstance(v,str) else one(v,'flag'); country['flags'].add(flag_name(s,c,name))
         elif k=='clr_country_flag': country['flags'].discard(flag_name(s,c,v))
@@ -216,7 +231,7 @@ def execute(nodes,s,c):
         elif k=='remove_opinion_modifier':
             # Membership/opinion validation belongs to the full action tests.
             s.setdefault('removed_opinions',[]).append((c['scope'],v))
-        elif k in ('log','name','ai_chance','custom_effect_tooltip'): pass
+        elif k in ('log','name','ai_chance','custom_effect_tooltip','trigger'): pass
         else: raise AssertionError(('Unhandled effect',k,o,v))
 
 def state():

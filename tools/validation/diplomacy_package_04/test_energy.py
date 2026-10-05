@@ -73,13 +73,17 @@ def ai_reply(s, sender='A', recipient='B'):
     for key, op, option in event:
         if key != 'option':
             continue
+        available = [body for name, op, body in option if name == 'trigger']
+        if available and not trigger(available[0], s, context(recipient, sender)):
+            weights[one(option, 'name')] = 0
+            continue
         chance = one(option, 'ai_chance')
         weight = float(one(chance, 'base'))
         for k, o, modifier in chance:
             if k == 'modifier' and trigger([n for n in modifier if n[0] != 'factor'], s, context(recipient, sender)):
                 weight *= float(one(modifier, 'factor'))
         weights[one(option, 'name')] = weight
-    assert weights[event_id + '.a'] + weights[event_id + '.b'] > 0, 'AI must retain a possible response'
+    assert sum(weights.values()) > 0, 'AI must retain a possible response'
     return event_id, weights, s['countries'][recipient]['variables']['eon_energy_ai_accept_chance']
 
 

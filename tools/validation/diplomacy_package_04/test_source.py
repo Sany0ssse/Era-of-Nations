@@ -4,6 +4,7 @@ Preservation evidence is separate from the executed behavioural scenarios.
 This does not compile HOI4 or establish native trigger evaluation timing.
 """
 from collections import Counter
+from functools import lru_cache
 from pathlib import Path
 import hashlib
 import json
@@ -13,6 +14,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = 'bb018ea1b6a083104b3fd797b83ad1127f77b1bf'
+PACKAGE05_BASELINE = '688f1116fbcb377215181edca6af50f36538532e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, format_preserved, one
 
@@ -34,6 +36,69 @@ def restore(after, old, selector):
     return after
 
 
+@lru_cache(maxsize=None)
+def package05_before(path):
+    return subprocess.check_output(['git', 'show', PACKAGE05_BASELINE + ':' + path], cwd=ROOT)
+
+
+def without_package05(path, after):
+    """Validate later named ranges against 688f before the original 04 bounds."""
+    scoped = {'common/scripted_guis/01_energy_gui.txt',
+              'events/00_Energy_market_events.txt',
+              'common/scripted_effects/eon_energy_contract_effects.txt',
+              'localisation/english/eon_energy_contract_l_english.yml',
+              'localisation/russian/eon_energy_contract_l_russian.yml'}
+    if path not in scoped:
+        return after
+    old = package05_before(path)
+    format_preserved(old, after)
+    restored = after
+    if path.endswith('01_energy_gui.txt'):
+        added = [b for b in blocks(restored)
+                 if b['key'] == 'country_view_flag_button_click_enabled'
+                 and b['parent'] == 'triggers' and b['depth'] == 3]
+        assert not any(b['key'] == 'country_view_flag_button_click_enabled' for b in blocks(old))
+        assert len(added) == 1, 'Package05 partner selection guard identity changed'
+        block = added[0]
+        start = restored.rfind(b'\n', 0, block['start']) + 1
+        assert restored[start:block['start']] == b'\t\t\t'
+        assert restored[block['end']:block['end'] + 1] == b'\n'
+        restored = restored[:start] + restored[block['end'] + 1:]
+        keys = {('confirm_energy_sell_click_enabled', 'triggers'),
+                ('confirm_energy_sell_click', 'effects'),
+                ('country_view_flag_button_click', 'effects')}
+        def selector(data, b):
+            if (b['key'], b['parent']) in keys and b['depth'] == 3:
+                return b['key']
+            if b['key'] == 'country_list_flag_button_click' and b['parent'] == 'effects':
+                gui = next(p for p in blocks(data) if p['key'] == 'energy_sell_country_selection_gui')
+                if gui['start'] < b['start'] < gui['end']:
+                    return 'energy_country_selection'
+            return None
+        restored = restore(restored, old, selector)
+    elif path.endswith('00_Energy_market_events.txt'):
+        def selector(data, b):
+            if b['key'] != 'country_event' or b['depth'] != 0:
+                return None
+            ident = re.search(rb'\bid\s*=\s*([^\s{}]+)', data[b['start']:b['end']])[1].decode()
+            return ident if ident in ('energy_selling.1', 'energy_selling.4') else None
+        restored = restore(restored, old, selector)
+    elif path.endswith('eon_energy_contract_effects.txt'):
+        keys = {'eon_energy_clear_pending', 'eon_energy_invalidate_pair_pending',
+                'eon_energy_send_offer', 'eon_energy_validate_offer',
+                'eon_energy_finish_response', 'eon_energy_accept_offer'}
+        restored = restore(restored, old, lambda data, b: b['key']
+                           if b['depth'] == 0 and b['key'] in keys else None)
+    else:
+        pattern = rb'(?m)^ eon_energy_offer_cancelled_desc:0 "[^\r\n]*"'
+        original, current = re.findall(pattern, old), re.findall(pattern, restored)
+        assert len(original) == len(current) == 1, path
+        restored = restored.replace(current[0], original[0], 1)
+    assert restored == old, ('Unrelated package05 bytes changed', path)
+    groups['later_package05_owned_boundaries'] += 1
+    return restored
+
+
 def record(path, old, after):
     format_preserved(old, after)
     assert '\ufffd' not in after.decode('utf-8-sig')
@@ -43,7 +108,8 @@ def record(path, old, after):
 
 
 path = 'events/00_Energy_market_events.txt'
-old, after = before(path), (ROOT / path).read_bytes()
+old, actual = before(path), (ROOT / path).read_bytes()
+after = without_package05(path, actual)
 def immediate_selector(data, block):
     if block['key'] != 'immediate' or block['parent'] != 'country_event':
         return None
@@ -52,10 +118,11 @@ def immediate_selector(data, block):
     ident = re.search(rb'\bid\s*=\s*([^\s{}]+)', data[event['start']:event['end']])[1].decode()
     return ident if ident in ('energy_selling.1', 'energy_selling.4') else None
 assert restore(after, old, immediate_selector) == old, 'Other event bytes changed'
-record(path, old, after)
+record(path, old, actual)
 
 path = 'common/scripted_guis/01_energy_gui.txt'
-old, after = before(path), (ROOT / path).read_bytes()
+old, actual = before(path), (ROOT / path).read_bytes()
+after = without_package05(path, actual)
 keys = {'increase_energy_ammount_number_click_enabled',
         'decrease_energy_ammount_number_click_enabled',
         'confirm_energy_sell_click_enabled', 'confirm_energy_sell_click'}
@@ -68,13 +135,14 @@ def gui_selector(data, block):
             return 'energy_country_selection'
     return None
 assert restore(after, old, gui_selector) == old, 'Unrelated energy/nuclear GUI bytes changed'
-record(path, old, after)
+record(path, old, actual)
 
 path = 'common/scripted_effects/eon_energy_contract_effects.txt'
-old, after = before(path), (ROOT / path).read_bytes()
+old, actual = before(path), (ROOT / path).read_bytes()
+after = without_package05(path, actual)
 assert restore(after, old, lambda data, b: b['key'] if b['depth'] == 0
                and b['key'] == 'eon_energy_validate_offer' else None) == old, 'Other lifecycle helper bytes changed'
-record(path, old, after)
+record(path, old, actual)
 
 path = 'common/scripted_effects/!_energy_effects.txt'
 old, after = before(path), (ROOT / path).read_bytes()
@@ -95,7 +163,8 @@ record(path, old, after)
 locale = {}
 for language in ('english', 'russian'):
     path = f'localisation/{language}/eon_energy_contract_l_{language}.yml'
-    old, after = before(path), (ROOT / path).read_bytes()
+    old, actual = before(path), (ROOT / path).read_bytes()
+    after = without_package05(path, actual)
     assert after.startswith(b'\xef\xbb\xbf')
     def entries(data):
         text = data.decode('utf-8-sig')
@@ -115,7 +184,7 @@ for language in ('english', 'russian'):
     assert len(previous_line) == len(current_line) == 1
     assert restored.replace(current_line[0], previous_line[0]) == old, 'Unrelated energy locale bytes changed'
     locale[language] = current
-    record(path, old, after)
+    record(path, old, actual)
 assert locale['english'].keys() == locale['russian'].keys()
 for key in locale['english']:
     assert re.findall(r'\[.*?\]', locale['english'][key]) == re.findall(r'\[.*?\]', locale['russian'][key])
@@ -154,10 +223,19 @@ if docs.exists():
 game_trees = ('common', 'history', 'events', 'interface', 'gfx', 'localisation', 'music', 'map', 'sound')
 owned = {r['path'] for r in receipts}
 new = {path}
+later_package05_new = {
+    'common/scripted_effects/eon_energy_ai_effects.txt',
+    'common/scripted_effects/eon_energy_negotiation_effects.txt',
+    'common/scripted_triggers/eon_energy_negotiation_triggers.txt',
+    'common/scripted_diplomatic_actions/eon_energy_negotiation_actions.txt',
+    'events/eon_energy_negotiation_events.txt',
+    'localisation/english/eon_energy_negotiation_l_english.yml',
+    'localisation/russian/eon_energy_negotiation_l_russian.yml',
+}
 tracked = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-assert set(tracked) <= owned | new, ('Unowned package04 gameplay edits', tracked)
-assert set(untracked) <= new, ('Unowned package04 gameplay additions', untracked)
+assert set(tracked) <= owned | new | later_package05_new, ('Unowned package04 gameplay edits', tracked)
+assert set(untracked) <= new | later_package05_new, ('Unowned package04 gameplay additions', untracked)
 groups['whole_gameplay_git_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,
                   'baseline': BASELINE, 'owned_existing_files': receipts,

@@ -1,0 +1,145 @@
+# Negotiations reserve both countries; delivery/payment records change only on acceptance.
+eon_energy_open_counter_draft = {
+	if = {
+		limit = { has_country_flag = eon_energy_counter_draft_owner }
+		set_variable = { energy_selling_selected_TAG = eon_energy_offer_partner }
+		set_country_flag = open_energy_screen
+		set_country_flag = energy_sell
+		clr_country_flag = energy_main
+		clr_country_flag = open_energy_sell_country_selection
+		update_energy_dirty_variable = yes
+	}
+}
+
+eon_energy_prepare_counter_draft = {
+	if = {
+		limit = { eon_energy_normal_response_current = yes }
+		set_country_flag = eon_energy_counter_draft_owner
+		var:eon_energy_offer_partner = { set_country_flag = eon_energy_counter_awaiting }
+		set_variable = { temp_energy_ammount = eon_energy_offer_amount }
+		set_variable = { temp_energy_price = eon_energy_offer_price }
+		eon_energy_open_counter_draft = yes
+		if = {
+			limit = { is_ai = no }
+			var:eon_energy_offer_partner = { country_event = eon_energy_negotiation.19 }
+		}
+	}
+	# Conditions may change after the option is rendered. Its consumed modal
+	# must still resolve an invalid request; duplicate draft callbacks stay inert.
+	else = { eon_energy_refuse_offer = yes }
+}
+
+# The original modal has been consumed by choosing a counteroffer. Atomically
+# replace its reservation with the new reverse-direction frozen proposal.
+eon_energy_submit_counter_draft = {
+	if = {
+		limit = { eon_energy_counter_draft_send_ready = yes }
+		set_temp_variable = { eon_energy_counter_submit_partner = eon_energy_offer_partner }
+		set_temp_variable = { eon_energy_next_counter_depth = eon_energy_offer_counter_depth }
+		add_to_temp_variable = { eon_energy_next_counter_depth = 1 }
+		var:eon_energy_counter_submit_partner = { eon_energy_clear_pending = yes }
+		eon_energy_clear_pending = yes
+		set_temp_variable = { eon_energy_pair_partner = eon_energy_counter_submit_partner }
+		eon_energy_read_pair_record = yes
+		eon_energy_send_offer = yes
+	}
+}
+
+eon_energy_send_ai_counter = {
+	# Recompute at execution time; the initial event assessment is only a preview.
+	eon_energy_evaluate_offer = yes
+	eon_energy_prepare_ai_counter = yes
+	if = {
+		limit = { check_variable = { eon_energy_counter_ready = 1 } }
+		set_temp_variable = { eon_energy_counter_send_amount = eon_energy_counter_amount }
+		set_temp_variable = { eon_energy_counter_send_price = eon_energy_counter_price }
+		eon_energy_prepare_counter_draft = yes
+		set_variable = { temp_energy_ammount = eon_energy_counter_send_amount }
+		set_variable = { temp_energy_price = eon_energy_counter_send_price }
+		eon_energy_submit_counter_draft = yes
+	}
+	else = { eon_energy_refuse_offer = yes }
+}
+
+eon_energy_withdraw_pending_pair = {
+	if = {
+		limit = {
+			has_country_flag = question_about_contract
+			has_variable = eon_energy_offer_partner
+			NOT = { has_country_flag = eon_energy_offer_cancelled }
+			OR = {
+				has_country_flag = eon_energy_outgoing_offer
+				has_country_flag = eon_energy_counter_draft_owner
+			}
+			var:eon_energy_offer_partner = {
+				has_country_flag = question_about_contract
+				check_variable = { eon_energy_offer_partner = PREV }
+			}
+		}
+		set_temp_variable = { eon_energy_withdraw_partner = eon_energy_offer_partner }
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = eon_energy_counter_draft_owner
+					has_country_flag = eon_energy_counter_awaiting
+				}
+			}
+			var:eon_energy_withdraw_partner = { eon_energy_clear_pending = yes }
+			eon_energy_clear_pending = yes
+		}
+		else = {
+			# The original recipient event still exists: retain both locks until consumed.
+			set_country_flag = eon_energy_offer_cancelled
+			var:eon_energy_withdraw_partner = { set_country_flag = eon_energy_offer_cancelled }
+		}
+		var:eon_energy_withdraw_partner = { country_event = eon_energy_negotiation.11 }
+		update_energy_dirty_variable = yes
+	}
+}
+
+# Notices have immutable event IDs and static text. They never clear later locks.
+eon_energy_refuse_offer = {
+	if = {
+		limit = {
+			has_country_flag = eon_energy_incoming_offer
+			check_variable = { eon_energy_offer_partner = FROM }
+			NOT = { has_country_flag = eon_energy_counter_draft_owner }
+			NOT = { has_country_flag = eon_energy_counter_awaiting }
+		}
+		set_temp_variable = { eon_energy_capacity_partner = FROM }
+		set_temp_variable = { eon_energy_capacity_amount = eon_energy_offer_amount }
+		if = {
+			limit = { has_country_flag = eon_energy_offer_cancelled }
+			FROM = { country_event = eon_energy_negotiation.11 }
+		}
+		else_if = {
+			limit = { NOT = { eon_energy_normal_response_current = yes } }
+			FROM = { country_event = eon_energy_negotiation.12 }
+		}
+		else_if = {
+			limit = { NOT = { eon_energy_proposed_capacity_available = yes } }
+			FROM = { country_event = eon_energy_negotiation.13 }
+		}
+		else_if = {
+			limit = { is_ai = no }
+			FROM = { country_event = eon_energy_negotiation.10 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { eon_energy_offer_amount > 0 }
+				check_variable = { display_income < display_expense }
+			}
+			FROM = { country_event = eon_energy_negotiation.14 }
+		}
+		else_if = {
+			limit = { check_variable = { eon_energy_offer_amount > 0 } }
+			FROM = { country_event = eon_energy_negotiation.15 }
+		}
+		else_if = {
+			limit = { check_variable = { eon_energy_offer_price = 0 } }
+			FROM = { country_event = eon_energy_negotiation.16 }
+		}
+		else = { FROM = { country_event = eon_energy_negotiation.17 } }
+		eon_energy_finish_response = yes
+	}
+}

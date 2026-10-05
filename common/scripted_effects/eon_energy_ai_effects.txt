@@ -1,0 +1,266 @@
+# Era of Nations: shared assessment and one bounded automatic energy counteroffer.
+# Temporary assessment inputs never replace the frozen live proposal.
+# Existing needs, budget and price policy is preserved; volume contributes at most 20 points.
+eon_energy_assess_import_offer = {
+	set_variable = { eon_energy_ai_accept_chance = 0 }
+	if = {
+		limit = { has_idea = heavy_additional_consumption_spirit }
+		add_to_variable = { eon_energy_ai_accept_chance = -50 }
+	}
+	else_if = {
+		limit = {
+			has_idea = heavy_power_restrictions_spirit
+		}
+		set_temp_variable = { energy_temp = energy_consumption }
+		multiply_temp_variable = { energy_temp = 1.4 }
+		subtract_from_temp_variable = { energy_temp = energy_sum }
+		if = {
+			limit = {
+				check_variable = { energy_temp > 0 }
+			}
+			set_temp_variable = { energy_temp_diviation = eon_energy_ai_amount }
+			subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
+			if = {
+				limit = {
+					check_variable = { energy_temp_diviation > 0 }
+					check_variable = { energy_temp_diviation < 11 }
+				}
+				add_to_variable = { eon_energy_ai_accept_chance = 50 }
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_idea = some_power_restrictions_spirit
+		}
+		set_temp_variable = { energy_temp = energy_consumption }
+		multiply_temp_variable = { energy_temp = 1.3 }
+		subtract_from_temp_variable = { energy_temp = energy_sum }
+		if = {
+			limit = {
+				check_variable = { energy_temp > 0 }
+			}
+			set_temp_variable = { energy_temp_diviation = eon_energy_ai_amount }
+			subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
+			if = {
+				limit = {
+					check_variable = { energy_temp_diviation > 0 }
+					check_variable = { energy_temp_diviation < 11 }
+				}
+				add_to_variable = { eon_energy_ai_accept_chance = 50 }
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_idea = some_additional_consumption_spirit
+		}
+		set_temp_variable = { energy_temp = energy_consumption }
+		multiply_temp_variable = { energy_temp = 1.1 }
+		subtract_from_temp_variable = { energy_temp = energy_sum }
+		if = {
+			limit = {
+				check_variable = { energy_temp > 0 }
+			}
+			set_temp_variable = { energy_temp_diviation = eon_energy_ai_amount }
+			subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
+			if = {
+				limit = {
+					check_variable = { energy_temp_diviation > 0 }
+					check_variable = { energy_temp_diviation < 11 }
+				}
+				add_to_variable = { eon_energy_ai_accept_chance = 50 }
+			}
+		}
+	}
+	else = {
+		set_temp_variable = { energy_temp = energy_consumption }
+		multiply_temp_variable = { energy_temp = 1.2 }
+		subtract_from_temp_variable = { energy_temp = energy_sum }
+		if = {
+			limit = {
+				check_variable = { energy_temp > 0 }
+			}
+			set_temp_variable = { energy_temp_diviation = eon_energy_ai_amount }
+			subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
+			if = {
+				limit = {
+					check_variable = { energy_temp_diviation > 0 }
+					check_variable = { energy_temp_diviation < 11 }
+				}
+				add_to_variable = { eon_energy_ai_accept_chance = 50 }
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { energy_balance < 10 } }
+		add_to_variable = { eon_energy_ai_accept_chance = 50 }
+	}
+	if = {
+		limit = { check_variable = { display_income < display_expense } }
+		add_to_variable = { eon_energy_ai_accept_chance = -100 }
+	}
+	if = {
+		limit = {
+			NOT = {
+				any_other_country = {
+					has_country_flag = energy_agreement@ROOT
+					check_variable = { energy_balance > 1 }
+				}
+			}
+		}
+		add_to_variable = { eon_energy_ai_accept_chance = 50 }
+	}
+	set_temp_variable = { price_adjust = eon_energy_ai_price }
+	add_to_temp_variable = { price_adjust = -0.05 }
+	multiply_temp_variable = { price_adjust = -1000 }
+	add_to_variable = { eon_energy_ai_accept_chance = price_adjust }
+	# Quantity supports a deal without overriding every price and policy concern.
+	set_temp_variable = { eon_energy_ai_volume_bonus = eon_energy_ai_quantity }
+	clamp_temp_variable = { var = eon_energy_ai_volume_bonus min = 0 max = 20 }
+	add_to_variable = { eon_energy_ai_accept_chance = eon_energy_ai_volume_bonus }
+}
+
+eon_energy_assess_export_offer = {
+	set_variable = { eon_energy_ai_accept_chance = 0 }
+	if = {
+		limit = { check_variable = { energy_balance > 10 } }
+		add_to_variable = { eon_energy_ai_accept_chance = 50 }
+	}
+	if = {
+		limit = { NOT = { has_idea = heavy_additional_consumption_spirit } }
+		add_to_variable = { eon_energy_ai_accept_chance = -50 }
+	}
+	if = {
+		limit = { check_variable = { display_income < display_expense } }
+		add_to_variable = { eon_energy_ai_accept_chance = 100 }
+	}
+	if = {
+		limit = {
+			check_variable = { eon_energy_ai_price = 0 }
+		}
+		add_to_variable = { eon_energy_ai_accept_chance = -1000 }
+	}
+	set_temp_variable = { price_adjust = eon_energy_ai_price }
+	add_to_temp_variable = { price_adjust = -0.05 }
+	multiply_temp_variable = { price_adjust = 1000 }
+	add_to_variable = { eon_energy_ai_accept_chance = price_adjust }
+	# Quantity supports a deal without overriding every price and policy concern.
+	set_temp_variable = { eon_energy_ai_volume_bonus = eon_energy_ai_quantity }
+	clamp_temp_variable = { var = eon_energy_ai_volume_bonus min = 0 max = 20 }
+	add_to_variable = { eon_energy_ai_accept_chance = eon_energy_ai_volume_bonus }
+}
+
+eon_energy_evaluate_offer = {
+	set_temp_variable = { eon_energy_ai_amount = eon_energy_offer_amount }
+	set_temp_variable = { eon_energy_ai_price = eon_energy_offer_price }
+	set_temp_variable = { eon_energy_ai_quantity = eon_energy_offer_quantity }
+	if = {
+		limit = { check_variable = { eon_energy_ai_amount > 0 } }
+		eon_energy_assess_import_offer = yes
+	}
+	else_if = {
+		limit = { check_variable = { eon_energy_ai_amount < 0 } }
+		eon_energy_assess_export_offer = yes
+	}
+	else = { set_variable = { eon_energy_ai_accept_chance = 0 } }
+}
+
+# A receiving AI may revise price or reduce quantity to currently available
+# whole GW. The existing contract and original snapshot remain untouched.
+eon_energy_prepare_ai_counter = {
+	set_variable = { eon_energy_counter_ready = 0 }
+	set_variable = { eon_energy_counter_amount = 0 }
+	set_variable = { eon_energy_counter_price = 0 }
+	if = {
+		limit = {
+			is_ai = yes
+			check_variable = { eon_energy_offer_counter_depth < 1 }
+			eon_energy_normal_response_current = yes
+		}
+		set_temp_variable = { eon_energy_ai_original_score = eon_energy_ai_accept_chance }
+		set_temp_variable = { eon_energy_ai_original_capacity = 0 }
+		set_temp_variable = { eon_energy_capacity_partner = FROM }
+		set_temp_variable = { eon_energy_capacity_amount = eon_energy_offer_amount }
+		# Fail closed if a structural supplier check stops before calculating
+		# balance: this sentinel yields zero available quantity after re-credit.
+		set_temp_variable = { eon_energy_projected_balance = eon_energy_offer_quantity }
+		multiply_temp_variable = { eon_energy_projected_balance = -1 }
+		if = {
+			limit = { eon_energy_proposed_capacity_available = yes }
+			set_temp_variable = { eon_energy_ai_original_capacity = 1 }
+		}
+		# The capacity trigger leaves the supplier's projected balance. Adding
+		# back this offer yields capacity after releasing only this old pair.
+		set_temp_variable = { eon_energy_ai_available_quantity = eon_energy_projected_balance }
+		add_to_temp_variable = { eon_energy_ai_available_quantity = eon_energy_offer_quantity }
+		clamp_temp_variable = { var = eon_energy_ai_available_quantity min = 0 }
+		set_temp_variable = { eon_energy_ai_quantity = eon_energy_offer_quantity }
+		if = {
+			limit = { check_variable = { eon_energy_ai_available_quantity < eon_energy_ai_quantity } }
+			set_temp_variable = { eon_energy_ai_quantity = eon_energy_ai_available_quantity }
+		}
+		# Native nearest rounding followed by correction implements floor for
+		# this nonnegative capacity; it never offers an unavailable fractional GW.
+		set_temp_variable = { eon_energy_ai_unrounded_quantity = eon_energy_ai_quantity }
+		round_temp_variable = eon_energy_ai_quantity
+		if = {
+			limit = { check_variable = { eon_energy_ai_quantity > eon_energy_ai_unrounded_quantity } }
+			subtract_from_temp_variable = { eon_energy_ai_quantity = 1 }
+		}
+		set_temp_variable = { eon_energy_ai_amount = eon_energy_ai_quantity }
+		if = {
+			limit = { check_variable = { eon_energy_offer_amount < 0 } }
+			multiply_temp_variable = { eon_energy_ai_amount = -1 }
+		}
+		set_temp_variable = { eon_energy_ai_price = eon_energy_offer_price }
+		if = {
+			limit = {
+				check_variable = { eon_energy_ai_amount > 0 }
+				check_variable = { eon_energy_ai_price > 0.05 }
+			}
+			set_temp_variable = { eon_energy_ai_price = 0.05 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { eon_energy_ai_amount < 0 }
+				check_variable = { eon_energy_ai_price < 0.05 }
+			}
+			set_temp_variable = { eon_energy_ai_price = 0.05 }
+		}
+		if = {
+			limit = {
+				check_variable = { eon_energy_ai_quantity > 0 }
+				OR = {
+					NOT = { check_variable = { eon_energy_ai_amount = eon_energy_offer_amount } }
+					NOT = { check_variable = { eon_energy_ai_price = eon_energy_offer_price } }
+				}
+				OR = {
+					NOT = { check_variable = { eon_energy_ai_original_score > 0 } }
+					check_variable = { eon_energy_ai_original_capacity = 0 }
+				}
+			}
+			if = {
+				limit = { check_variable = { eon_energy_ai_amount > 0 } }
+				eon_energy_assess_import_offer = yes
+			}
+			else = { eon_energy_assess_export_offer = yes }
+			set_temp_variable = { eon_energy_capacity_partner = FROM }
+			set_temp_variable = { eon_energy_capacity_amount = eon_energy_ai_amount }
+			if = {
+				limit = {
+					check_variable = { eon_energy_ai_accept_chance > 0 }
+					eon_energy_proposed_capacity_available = yes
+				}
+				set_variable = { eon_energy_counter_amount = eon_energy_ai_amount }
+				set_variable = { eon_energy_counter_price = eon_energy_ai_price }
+				set_variable = { eon_energy_counter_ready = 1 }
+			}
+		}
+		# Candidate scoring is side-effect free for the live frozen terms.
+		set_variable = { eon_energy_ai_accept_chance = eon_energy_ai_original_score }
+		set_temp_variable = { eon_energy_ai_amount = eon_energy_offer_amount }
+		set_temp_variable = { eon_energy_ai_price = eon_energy_offer_price }
+		set_temp_variable = { eon_energy_ai_quantity = eon_energy_offer_quantity }
+	}
+}

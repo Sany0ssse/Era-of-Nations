@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and three implementation packages are complete at
+The existing diplomacy audit and five implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -41,12 +41,25 @@ the reported gameplay sale is unverified.
 The old signed-volume AI acceptance cliff was reproduced for a human buying
 from an AI supplier; GUI replacement limits affect both directions. The latest
 cached balance is used without immediate global-generation recalculation.
-Existing raw-GW AI weights may still outweigh need/budget penalties; full
-contract affordability is not proven. No physical grid or new budget law is added.
+The later package05 caps the former raw-GW bonus at 20 points; full
+contract affordability remains unproven. No physical grid or new budget law is added.
 See [DIPLOMACY_PACKAGE_04_UK.md](DIPLOMACY_PACKAGE_04_UK.md) for scope and runtime
 acceptance criteria. [DIPLOMACY_ROADMAP_UK.md](DIPLOMACY_ROADMAP_UK.md) explains
 why alliances came first and prioritises one existing energy negotiation cycle,
 state support, consultations and mediation before broader new relations.
+
+The fifth package develops the existing energy agreement into editable human
+counteroffers, one automatic AI counteroffer, proposal withdrawal, draft reopening
+and immutable reason notices. Active deliveries/payments persist until agreement;
+counterdraft zero/reversal and stale responses are guarded. Contracts remain
+explicitly indefinite. The bounded volume bonus cannot override every price or
+budget concern merely through huge GW. Source scenarios, byte boundaries and
+independent review passed 4620 cumulative scenarios (110 new) and 86 new source
+checks. Two invalidated-response P2 findings were repaired and reproduced;
+no unresolved P1/P2 findings remain. See [DIPLOMACY_PACKAGE_05_UK.md](DIPLOMACY_PACKAGE_05_UK.md).
+Native GUI/callbacks, real AI choice, accounting and save/load still require
+new-campaign acceptance. Next implementation scope is existing economic aid
+and debt support, followed by consultations and consensual mediation.
 
 ## Completed setup
 

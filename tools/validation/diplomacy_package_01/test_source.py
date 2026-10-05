@@ -1,5 +1,6 @@
 from pathlib import Path
-import re, hashlib, json
+import re, hashlib, json, subprocess
+from functools import lru_cache
 from _support import ROOT as root, baseline
 TOKEN=re.compile(rb'"(?:\\.|[^"\\])*"|#[^\r\n]*|[{}]|[=<>!]+|[^\s{}=<>!#"]+')
 def blocks(data):
@@ -16,10 +17,81 @@ def selected(data,key,parent,index=0):
 def restore_body(data,before,key,parent,index=0):
     now=selected(data,key,parent,index); old=selected(before,key,parent,index)
     return data[:now['brace']+1]+before[old['brace']+1:old['end']-1]+data[now['end']-1:]
+
+PACKAGE05_BASELINE = '688f1116fbcb377215181edca6af50f36538532e'
+package05_receipt = []
+
+
+@lru_cache(maxsize=None)
+def package05_before(path):
+    return subprocess.check_output(['git', 'show', PACKAGE05_BASELINE + ':' + path], cwd=root)
+
+
+def without_package05(path, after):
+    """Prove only named 05 ranges changed, then retain the historical 01 proof."""
+    scoped = {'common/scripted_guis/01_energy_gui.txt',
+              'events/00_Energy_market_events.txt',
+              'common/scripted_effects/eon_energy_contract_effects.txt',
+              'localisation/english/eon_energy_contract_l_english.yml',
+              'localisation/russian/eon_energy_contract_l_russian.yml'}
+    if path not in scoped:
+        return after
+    old = package05_before(path)
+    assert old.startswith(b'\xef\xbb\xbf') == after.startswith(b'\xef\xbb\xbf'), path
+    assert old.endswith(b'\n') == after.endswith(b'\n'), path
+    if b'\r\n' in old:
+        assert after.count(b'\r\n') == after.count(b'\n'), path
+    else:
+        assert b'\r' not in after, path
+    after.decode('utf-8-sig')
+    restored = after
+    if path.endswith('01_energy_gui.txt'):
+        added = [b for b in blocks(restored)
+                 if b['key'] == 'country_view_flag_button_click_enabled'
+                 and b['parent'] == 'triggers' and b['depth'] == 3]
+        assert not any(b['key'] == 'country_view_flag_button_click_enabled' for b in blocks(old))
+        assert len(added) == 1, 'Package05 partner selection guard identity changed'
+        block = added[0]
+        start = restored.rfind(b'\n', 0, block['start']) + 1
+        assert restored[start:block['start']] == b'\t\t\t'
+        assert restored[block['end']:block['end'] + 1] == b'\n'
+        restored = restored[:start] + restored[block['end'] + 1:]
+        for key, parent, index in (
+            ('confirm_energy_sell_click_enabled', 'triggers', 0),
+            ('confirm_energy_sell_click', 'effects', 0),
+            ('country_view_flag_button_click', 'effects', 0),
+            ('country_list_flag_button_click', 'effects', 0),
+        ):
+            restored = restore_body(restored, old, key, parent, index)
+    elif path.endswith('00_Energy_market_events.txt'):
+        def event_map(data):
+            return {re.search(rb'\bid\s*=\s*([^\s{}]+)', data[b['start']:b['end']])[1]: b
+                    for b in blocks(data) if b['key'] == 'country_event' and b['depth'] == 0}
+        prior, current = event_map(old), event_map(restored)
+        assert prior.keys() == current.keys(), 'Package05 existing event IDs changed'
+        for ident, block in sorted(current.items(), key=lambda row: row[1]['start'], reverse=True):
+            if ident in (b'energy_selling.1', b'energy_selling.4'):
+                original = prior[ident]
+                restored = restored[:block['start']] + old[original['start']:original['end']] + restored[block['end']:]
+    elif path.endswith('eon_energy_contract_effects.txt'):
+        for key in ('eon_energy_clear_pending', 'eon_energy_invalidate_pair_pending',
+                    'eon_energy_send_offer', 'eon_energy_validate_offer',
+                    'eon_energy_finish_response', 'eon_energy_accept_offer'):
+            restored = restore_body(restored, old, key, None)
+    else:
+        pattern = rb'(?m)^ eon_energy_offer_cancelled_desc:0 "[^\r\n]*"'
+        original, current = re.findall(pattern, old), re.findall(pattern, restored)
+        assert len(original) == len(current) == 1, path
+        restored = restored.replace(current[0], original[0], 1)
+    assert restored == old, ('Unrelated package05 bytes changed', path)
+    package05_receipt.append({'path': path, 'baseline': PACKAGE05_BASELINE,
+                              'owned_ranges_only': True})
+    return restored
+
 files=['common/scripted_guis/01_energy_gui.txt','events/00_Energy_market_events.txt','common/on_actions/00_costili.txt']
 receipt=[]
 for rel in files:
-    before=baseline(rel); after=(root/rel).read_bytes()
+    before=baseline(rel); actual=(root/rel).read_bytes(); after=without_package05(rel,actual)
     assert before.startswith(b'\xef\xbb\xbf')==after.startswith(b'\xef\xbb\xbf')
     assert b'\r' not in after
     blocks(after)
@@ -73,9 +145,10 @@ for rel in files:
         current=next(b for b in blocks(restored) if b['key']=='on_monthly' and b'check_variable = { energy_balance < -1 }' in restored[b['start']:b['end']])
         restored=restored[:current['start']]+before[original['start']:original['end']]+restored[current['end']:]
         assert restored==before,'Unrelated on_actions bytes changed'
-    receipt.append({'path':rel,'before_sha256':hashlib.sha256(before).hexdigest(),'after_sha256':hashlib.sha256(after).hexdigest(),'bom_preserved':True,'lf_preserved':True,'unrelated_bytes_exact':True})
+    receipt.append({'path':rel,'before_sha256':hashlib.sha256(before).hexdigest(),'after_sha256':hashlib.sha256(actual).hexdigest(),'bom_preserved':True,'lf_preserved':True,'unrelated_bytes_exact':True})
 for rel in ['common/scripted_effects/eon_energy_contract_effects.txt','localisation/english/eon_energy_contract_l_english.yml','localisation/russian/eon_energy_contract_l_russian.yml']:
     data=(root/rel).read_bytes()
+    without_package05(rel, data)
     if rel.endswith('.yml'):
         assert data.startswith(b'\xef\xbb\xbf'); assert data.count(b'\r\n')==data.count(b'\n')
     else: blocks(data)
@@ -91,7 +164,7 @@ def loc_keys(lang):
 en=loc_keys('english'); ru=loc_keys('russian'); assert en.keys()==ru.keys()
 for key in en:
     assert re.findall(r'\[.*?\]',en[key])==re.findall(r'\[.*?\]',ru[key]),('Localization placeholder mismatch',key)
-report={'method':'exact reversible byte comparison of owned blocks, braces/IDs/BOM/EOL and localization placeholders; not engine parser','files':receipt,'localization_keys':len(en),'ru_placeholders_equal_en':True}
+report={'method':'exact reversible byte comparison of owned blocks, braces/IDs/BOM/EOL and localization placeholders; not engine parser','files':receipt,'localization_keys':len(en),'ru_placeholders_equal_en':True,'later_package05_boundaries':package05_receipt}
 
 # Preserve byte format in every existing gameplay file touched by this package.
 existing = [

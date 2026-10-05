@@ -4,134 +4,18 @@ add_namespace = energy_selling
 country_event = {
 	id = energy_selling.1
 	title = energy_selling.1.t
+	desc = { trigger = { has_country_flag = eon_energy_offer_cancelled } text = eon_energy_offer_cancelled_desc }
 	desc = {
-		trigger = { has_country_flag = eon_energy_offer_cancelled }
-		text = eon_energy_offer_cancelled_desc
+		trigger = { NOT = { has_country_flag = eon_energy_offer_cancelled } check_variable = { eon_energy_offer_counter_depth > 0 } }
+		text = eon_energy_counter_pending_import_desc
 	}
 	desc = {
-		trigger = { NOT = { has_country_flag = eon_energy_offer_cancelled } }
+		trigger = { NOT = { has_country_flag = eon_energy_offer_cancelled } NOT = { check_variable = { eon_energy_offer_counter_depth > 0 } } }
 		text = eon_energy_offer_import_desc
 	}
 	picture = GFX_energy_sell_buy
 	is_triggered_only = yes
-
-    immediate = {
-		set_variable = { eon_energy_ai_accept_chance = 0 }
-		if = {
-			limit = { has_idea = heavy_additional_consumption_spirit }
-			add_to_variable = { eon_energy_ai_accept_chance = -50 }
-		}
-		else_if = {
-			limit = {
-				has_idea = heavy_power_restrictions_spirit
-			}
-			set_temp_variable = { energy_temp = energy_consumption }
-			multiply_temp_variable = { energy_temp = 1.4 }
-			subtract_from_temp_variable = { energy_temp = energy_sum }
-			if = {
-				limit = {
-					check_variable = { energy_temp > 0 }
-				}
-				set_temp_variable = { energy_temp_diviation = eon_energy_offer_amount }
-				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
-				if = {
-					limit = {
-						check_variable = { energy_temp_diviation > 0 }
-						check_variable = { energy_temp_diviation < 11 }
-					}
-					add_to_variable = { eon_energy_ai_accept_chance = 50 }
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_idea = some_power_restrictions_spirit
-			}
-			set_temp_variable = { energy_temp = energy_consumption }
-			multiply_temp_variable = { energy_temp = 1.3 }
-			subtract_from_temp_variable = { energy_temp = energy_sum }
-			if = {
-				limit = {
-					check_variable = { energy_temp > 0 }
-				}
-				set_temp_variable = { energy_temp_diviation = eon_energy_offer_amount }
-				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
-				if = {
-					limit = {
-						check_variable = { energy_temp_diviation > 0 }
-						check_variable = { energy_temp_diviation < 11 }
-					}
-					add_to_variable = { eon_energy_ai_accept_chance = 50 }
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				has_idea = some_additional_consumption_spirit
-			}
-			set_temp_variable = { energy_temp = energy_consumption }
-			multiply_temp_variable = { energy_temp = 1.1 }
-			subtract_from_temp_variable = { energy_temp = energy_sum }
-			if = {
-				limit = {
-					check_variable = { energy_temp > 0 }
-				}
-				set_temp_variable = { energy_temp_diviation = eon_energy_offer_amount }
-				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
-				if = {
-					limit = {
-						check_variable = { energy_temp_diviation > 0 }
-						check_variable = { energy_temp_diviation < 11 }
-					}
-					add_to_variable = { eon_energy_ai_accept_chance = 50 }
-				}
-			}
-		}
-		else = {
-			set_temp_variable = { energy_temp = energy_consumption }
-			multiply_temp_variable = { energy_temp = 1.2 }
-			subtract_from_temp_variable = { energy_temp = energy_sum }
-			if = {
-				limit = {
-					check_variable = { energy_temp > 0 }
-				}
-				set_temp_variable = { energy_temp_diviation = eon_energy_offer_amount }
-				subtract_from_temp_variable = { energy_temp_diviation = energy_temp }
-				if = {
-					limit = {
-						check_variable = { energy_temp_diviation > 0 }
-						check_variable = { energy_temp_diviation < 11 }
-					}
-					add_to_variable = { eon_energy_ai_accept_chance = 50 }
-				}
-			}
-		}
-		if = {
-			limit = { check_variable = { energy_balance < 10 } }
-			add_to_variable = { eon_energy_ai_accept_chance = 50 }
-		}
-		if = {
-			limit = { check_variable = { display_income < display_expense } }
-			add_to_variable = { eon_energy_ai_accept_chance = -100 }
-		}
-		if = {
-			limit = {
-				NOT = {
-					any_other_country = {
-						has_country_flag = energy_agreement@ROOT
-						check_variable = { energy_balance > 1 }
-					}
-				}
-			}
-			add_to_variable = { eon_energy_ai_accept_chance = 50 }
-		}
-		set_temp_variable = { price_adjust = eon_energy_offer_price }
-		add_to_temp_variable = { price_adjust = -0.05 }
-		multiply_temp_variable = { price_adjust = -1000 }
-		add_to_variable = { eon_energy_ai_accept_chance = price_adjust }
-		add_to_variable = { eon_energy_ai_accept_chance = eon_energy_offer_amount }
-	}
-
+	immediate = { eon_energy_evaluate_offer = yes eon_energy_prepare_ai_counter = yes }
 	option = {
 		name = energy_selling.1.a
 		log = "[GetDateText]: [This.GetName]: energy_selling.1.a executed"
@@ -141,10 +25,10 @@ country_event = {
 			base = 100
 			modifier = {
 				factor = 0
-				check_variable = {
-				var = eon_energy_ai_accept_chance
-    				value = 0
-    				compare = less_than_or_equals
+				OR = {
+					NOT = { check_variable = { eon_energy_ai_accept_chance > 0 } }
+					NOT = { eon_energy_normal_response_current = yes }
+					NOT = { eon_energy_current_offer_capacity_available = yes }
 				}
 			}
 		}
@@ -153,21 +37,25 @@ country_event = {
 		name = energy_selling.1.b
 		log = "[GetDateText]: [This.GetName]: energy_selling.1.b executed"
 		custom_effect_tooltip = eon_energy_refuse_tt
-		if = {
-			limit = {
-				has_country_flag = eon_energy_incoming_offer
-				check_variable = { eon_energy_offer_partner = FROM }
-			}
-			FROM = { country_event = energy_selling.3 }
-			eon_energy_finish_response = yes
-		}
+		eon_energy_refuse_offer = yes
 		ai_chance = {
 			base = 100
 			modifier = {
 				factor = 0
-				check_variable = { eon_energy_ai_accept_chance > 0 }
+				OR = {
+					AND = { check_variable = { eon_energy_counter_ready = 1 } eon_energy_normal_response_current = yes }
+					AND = { check_variable = { eon_energy_ai_accept_chance > 0 } eon_energy_normal_response_current = yes eon_energy_current_offer_capacity_available = yes }
+				}
 			}
 		}
+	}
+	option = {
+		name = eon_energy_counter_offer
+		trigger = { eon_energy_normal_response_current = yes OR = { is_ai = no check_variable = { eon_energy_counter_ready = 1 } } }
+		custom_effect_tooltip = eon_energy_counter_prepare_tt
+		if = { limit = { is_ai = yes } eon_energy_send_ai_counter = yes }
+		else = { eon_energy_prepare_counter_draft = yes }
+		ai_chance = { base = 100 modifier = { factor = 0 OR = { is_ai = no NOT = { check_variable = { eon_energy_counter_ready = 1 } } } } }
 	}
 }
 
@@ -198,44 +86,18 @@ country_event = {
 country_event = {
 	id = energy_selling.4
 	title = energy_selling.4.t
+	desc = { trigger = { has_country_flag = eon_energy_offer_cancelled } text = eon_energy_offer_cancelled_desc }
 	desc = {
-		trigger = { has_country_flag = eon_energy_offer_cancelled }
-		text = eon_energy_offer_cancelled_desc
+		trigger = { NOT = { has_country_flag = eon_energy_offer_cancelled } check_variable = { eon_energy_offer_counter_depth > 0 } }
+		text = eon_energy_counter_pending_export_desc
 	}
 	desc = {
-		trigger = { NOT = { has_country_flag = eon_energy_offer_cancelled } }
+		trigger = { NOT = { has_country_flag = eon_energy_offer_cancelled } NOT = { check_variable = { eon_energy_offer_counter_depth > 0 } } }
 		text = eon_energy_offer_export_desc
 	}
 	picture = GFX_energy_sell_buy
 	is_triggered_only = yes
-
-    immediate = {
-		set_variable = { eon_energy_ai_accept_chance = 0 }
-		if = {
-			limit = { check_variable = { energy_balance > 10 } }
-			add_to_variable = { eon_energy_ai_accept_chance = 50 }
-		}
-		if = {
-			limit = { NOT = { has_idea = heavy_additional_consumption_spirit } }
-			add_to_variable = { eon_energy_ai_accept_chance = -50 }
-		}
-		if = {
-			limit = { check_variable = { display_income < display_expense } }
-			add_to_variable = { eon_energy_ai_accept_chance = 100 }
-		}
-		if = {
-			limit = {
-				check_variable = { eon_energy_offer_price = 0 }
-			}
-			add_to_variable = { eon_energy_ai_accept_chance = -1000 }
-		}
-		set_temp_variable = { price_adjust = eon_energy_offer_price }
-		add_to_temp_variable = { price_adjust = -0.05 }
-		multiply_temp_variable = { price_adjust = 1000 }
-		add_to_variable = { eon_energy_ai_accept_chance = price_adjust }
-		add_to_variable = { eon_energy_ai_accept_chance = eon_energy_offer_quantity }
-	}
-
+	immediate = { eon_energy_evaluate_offer = yes eon_energy_prepare_ai_counter = yes }
 	option = {
 		name = energy_selling.4.a
 		log = "[GetDateText]: [This.GetName]: energy_selling.4.a executed"
@@ -245,10 +107,10 @@ country_event = {
 			base = 100
 			modifier = {
 				factor = 0
-				check_variable = {
-				var = eon_energy_ai_accept_chance
-    				value = 0
-    				compare = less_than_or_equals
+				OR = {
+					NOT = { check_variable = { eon_energy_ai_accept_chance > 0 } }
+					NOT = { eon_energy_normal_response_current = yes }
+					NOT = { eon_energy_current_offer_capacity_available = yes }
 				}
 			}
 		}
@@ -257,21 +119,25 @@ country_event = {
 		name = energy_selling.4.b
 		log = "[GetDateText]: [This.GetName]: energy_selling.4.b executed"
 		custom_effect_tooltip = eon_energy_refuse_tt
-		if = {
-			limit = {
-				has_country_flag = eon_energy_incoming_offer
-				check_variable = { eon_energy_offer_partner = FROM }
-			}
-			FROM = { country_event = energy_selling.3 }
-			eon_energy_finish_response = yes
-		}
+		eon_energy_refuse_offer = yes
 		ai_chance = {
 			base = 100
 			modifier = {
 				factor = 0
-				check_variable = { eon_energy_ai_accept_chance > 0 }
+				OR = {
+					AND = { check_variable = { eon_energy_counter_ready = 1 } eon_energy_normal_response_current = yes }
+					AND = { check_variable = { eon_energy_ai_accept_chance > 0 } eon_energy_normal_response_current = yes eon_energy_current_offer_capacity_available = yes }
+				}
 			}
 		}
+	}
+	option = {
+		name = eon_energy_counter_offer
+		trigger = { eon_energy_normal_response_current = yes OR = { is_ai = no check_variable = { eon_energy_counter_ready = 1 } } }
+		custom_effect_tooltip = eon_energy_counter_prepare_tt
+		if = { limit = { is_ai = yes } eon_energy_send_ai_counter = yes }
+		else = { eon_energy_prepare_counter_draft = yes }
+		ai_chance = { base = 100 modifier = { factor = 0 OR = { is_ai = no NOT = { check_variable = { eon_energy_counter_ready = 1 } } } } }
 	}
 }
 

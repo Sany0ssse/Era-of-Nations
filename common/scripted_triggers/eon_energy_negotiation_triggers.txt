@@ -1,0 +1,140 @@
+# Caller owns a frozen pair snapshot. Partner input is country-valued and temporary.
+# This native trigger calculation does not change the active delivery arrays.
+eon_energy_pair_snapshot_current = {
+	check_variable = { energy_contractors^num = energy_contracts_ammount^num }
+	check_variable = { energy_contractors^num = energy_contracts_price^num }
+	set_temp_variable = { eon_energy_snapshot_count = 0 }
+	set_temp_variable = { eon_energy_snapshot_amount = 0 }
+	set_temp_variable = { eon_energy_snapshot_price = 0 }
+	all_of = {
+		array = energy_contractors
+		value = eon_energy_snapshot_record_partner
+		index = eon_energy_snapshot_record_index
+		if = {
+			limit = { check_variable = { eon_energy_snapshot_record_partner = eon_energy_snapshot_partner } }
+			add_to_temp_variable = { eon_energy_snapshot_count = 1 }
+			set_temp_variable = { eon_energy_snapshot_amount = energy_contracts_ammount^eon_energy_snapshot_record_index }
+			set_temp_variable = { eon_energy_snapshot_price = energy_contracts_price^eon_energy_snapshot_record_index }
+		}
+	}
+	check_variable = { eon_energy_snapshot_count < 2 }
+	check_variable = { eon_energy_snapshot_count = eon_energy_offer_old_count }
+	check_variable = { eon_energy_snapshot_amount = eon_energy_offer_old_amount }
+	check_variable = { eon_energy_snapshot_price = eon_energy_offer_old_price }
+}
+
+# Incoming country scope; eon_energy_response_partner is a temporary country input.
+# Capacity is deliberately separate: a smaller counteroffer may remain possible.
+eon_energy_offer_identity_current = {
+	exists = yes
+	has_country_flag = eon_energy_incoming_offer
+	has_country_flag = question_about_contract
+	NOT = { has_country_flag = eon_energy_offer_cancelled }
+	check_variable = { eon_energy_offer_partner = eon_energy_response_partner }
+	has_country_flag = energy_agreement@eon_energy_response_partner
+	NOT = { has_war_with = eon_energy_response_partner }
+	check_variable = { eon_energy_offer_price >= 0 }
+	NOT = { check_variable = { eon_energy_offer_amount = 0 } }
+	set_temp_variable = { eon_energy_snapshot_partner = eon_energy_response_partner }
+	eon_energy_pair_snapshot_current = yes
+	set_temp_variable = { eon_energy_response_mirror_amount = eon_energy_offer_amount }
+	multiply_temp_variable = { eon_energy_response_mirror_amount = -1 }
+	var:eon_energy_response_partner = {
+		exists = yes
+		has_country_flag = eon_energy_outgoing_offer
+		has_country_flag = question_about_contract
+		NOT = { has_country_flag = eon_energy_offer_cancelled }
+		NOT = { has_war_with = PREV }
+		check_variable = { eon_energy_offer_partner = PREV }
+		has_country_flag = energy_agreement@PREV
+		check_variable = { eon_energy_offer_price = PREV.eon_energy_offer_price }
+		check_variable = { eon_energy_offer_amount = eon_energy_response_mirror_amount }
+		set_temp_variable = { eon_energy_snapshot_partner = PREV }
+		eon_energy_pair_snapshot_current = yes
+	}
+}
+
+# Modal response paths cannot consume the reservation of a prepared counter draft.
+eon_energy_normal_response_current = {
+	set_temp_variable = { eon_energy_response_partner = FROM }
+	NOT = { has_country_flag = eon_energy_counter_draft_owner }
+	NOT = { has_country_flag = eon_energy_counter_awaiting }
+	eon_energy_offer_identity_current = yes
+	var:eon_energy_response_partner = {
+		NOT = { has_country_flag = eon_energy_counter_draft_owner }
+		NOT = { has_country_flag = eon_energy_counter_awaiting }
+	}
+}
+
+# GUI country scope. Both parties remain reserved while the recipient edits terms.
+eon_energy_counter_draft_send_ready = {
+	has_country_flag = eon_energy_counter_draft_owner
+	set_temp_variable = { eon_energy_response_partner = eon_energy_offer_partner }
+	eon_energy_offer_identity_current = yes
+	var:eon_energy_response_partner = { has_country_flag = eon_energy_counter_awaiting }
+	has_variable = energy_selling_selected_TAG
+	check_variable = { energy_selling_selected_TAG = eon_energy_offer_partner }
+	NOT = { check_variable = { temp_energy_ammount = 0 } }
+	OR = {
+		AND = {
+			check_variable = { eon_energy_offer_amount > 0 }
+			check_variable = { temp_energy_ammount > 0 }
+		}
+		AND = {
+			check_variable = { eon_energy_offer_amount < 0 }
+			check_variable = { temp_energy_ammount < 0 }
+		}
+	}
+	check_variable = { temp_energy_price >= 0 }
+	set_temp_variable = { eon_energy_capacity_partner = eon_energy_offer_partner }
+	set_temp_variable = { eon_energy_capacity_amount = temp_energy_ammount }
+	eon_energy_proposed_capacity_available = yes
+}
+
+# Event response conditions must initialize their own inputs after AI calculations.
+eon_energy_current_offer_capacity_available = {
+	set_temp_variable = { eon_energy_capacity_partner = FROM }
+	set_temp_variable = { eon_energy_capacity_amount = eon_energy_offer_amount }
+	eon_energy_proposed_capacity_available = yes
+}
+
+# Native diplomacy: ROOT is the actor; THIS is the other reserved country.
+# Ordinary withdrawal is sender-owned. Either party can abandon a counter draft.
+eon_energy_withdraw_available = {
+	exists = yes
+	NOT = { tag = ROOT }
+	has_country_flag = question_about_contract
+	NOT = { has_country_flag = eon_energy_offer_cancelled }
+	check_variable = { eon_energy_offer_partner = ROOT }
+	ROOT = {
+		exists = yes
+		is_ai = no
+		has_country_flag = question_about_contract
+		NOT = { has_country_flag = eon_energy_offer_cancelled }
+		check_variable = { eon_energy_offer_partner = PREV }
+		OR = {
+			has_country_flag = eon_energy_outgoing_offer
+			has_country_flag = eon_energy_counter_draft_owner
+		}
+	}
+}
+
+# Reopening a draft is harmless after conditions change; sending revalidates them.
+eon_energy_resume_counter_available = {
+	exists = yes
+	NOT = { tag = ROOT }
+	has_country_flag = question_about_contract
+	has_country_flag = eon_energy_outgoing_offer
+	has_country_flag = eon_energy_counter_awaiting
+	NOT = { has_country_flag = eon_energy_offer_cancelled }
+	check_variable = { eon_energy_offer_partner = ROOT }
+	ROOT = {
+		exists = yes
+		is_ai = no
+		has_country_flag = question_about_contract
+		has_country_flag = eon_energy_incoming_offer
+		has_country_flag = eon_energy_counter_draft_owner
+		NOT = { has_country_flag = eon_energy_offer_cancelled }
+		check_variable = { eon_energy_offer_partner = PREV }
+	}
+}
