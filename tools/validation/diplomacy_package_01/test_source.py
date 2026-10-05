@@ -26,6 +26,11 @@ for rel in files:
     if rel.endswith('01_energy_gui.txt'):
         restored=restore_body(after,before,'confirm_energy_sell_click','effects')
         restored=restore_body(restored,before,'confirm_energy_sell_click_enabled','triggers')
+        # Package 04 checks these exact later deltas against bb018ea1 separately.
+        for key in ('increase_energy_ammount_number_click_enabled',
+                    'decrease_energy_ammount_number_click_enabled'):
+            restored=restore_body(restored,before,key,'triggers')
+        restored=restore_body(restored,before,'country_list_flag_button_click','effects',0)
         assert restored==before,'Unrelated GUI bytes changed'
     elif rel.endswith('00_Energy_market_events.txt'):
         def eventid(data,b):

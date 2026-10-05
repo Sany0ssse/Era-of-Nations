@@ -112,11 +112,23 @@ new_paths = {
     'localisation/russian/eon_defensive_alliance_l_russian.yml',
 }
 game_trees = ('common', 'history', 'events', 'interface', 'gfx', 'localisation', 'music', 'map', 'sound')
+# Package 04 proves the exact later byte deltas against bb018ea1 in its own
+# test_source.py; ordinary-alliance and national-policy boundaries remain exact.
+later_energy_paths = {
+    'common/scripted_guis/01_energy_gui.txt',
+    'common/scripted_effects/eon_energy_contract_effects.txt',
+    'common/scripted_effects/!_energy_effects.txt',
+    'common/scripted_triggers/eon_energy_capacity_triggers.txt',
+    'events/00_Energy_market_events.txt',
+    'interface/MD_energy_scripted.gui',
+    'localisation/english/eon_energy_contract_l_english.yml',
+    'localisation/russian/eon_energy_contract_l_russian.yml',
+}
 tracked_changes = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 owned_paths = {item['path'] for item in receipt}
-assert set(tracked_changes) <= owned_paths | new_paths, ('Unowned gameplay changes', tracked_changes)
+assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths, ('Unowned gameplay changes', tracked_changes)
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-assert set(untracked) <= new_paths, ('Unowned new gameplay files', untracked)
+assert set(untracked) <= new_paths | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 assert not set(new_paths).intersection(baseline_paths), 'New files overwrite existing baseline sources'
 passed('unchanged_tracked_gameplay_path_boundary')

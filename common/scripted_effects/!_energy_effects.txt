@@ -9,6 +9,9 @@
 # Effect: calculate_energy_use
 # Purpose: Calculates the Energy Use of a nation for the Energy System
 calculate_energy_use = {
+	# Shared temporary variables must start clean for every country calculation.
+	set_temp_variable = { all_sell_energy_use = 0 }
+	set_temp_variable = { all_buy_energy_generation = 0 }
 	# Add the Dynamic Modifiers for the System in case they are not present
 	if = { limit = { NOT = { has_dynamic_modifier = { modifier = energy_dynamic_modifier } } } add_dynamic_modifier = { modifier = energy_dynamic_modifier } }
 	if = { limit = { NOT = { has_dynamic_modifier = { modifier = no_fuel_penalties_modifier } } } add_dynamic_modifier = { modifier = no_fuel_penalties_modifier } }

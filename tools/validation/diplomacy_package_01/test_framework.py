@@ -33,7 +33,15 @@ context, switch, country_ref = base['context'], base['switch'], base['country_re
 
 def trigger(nodes, s, c):
     country = s['countries'][c['scope']]
-    for k, op, v in nodes:
+    index = 0
+    while index < len(nodes):
+        k, op, v = nodes[index]
+        group = [nodes[index]]
+        index += 1
+        if k == 'if':
+            while index < len(nodes) and nodes[index][0] in ('else_if', 'else'):
+                group.append(nodes[index])
+                index += 1
         if k in triggers:
             passed = trigger(triggers[k], s, c) == (v == 'yes')
         elif k == 'custom_trigger_tooltip':
@@ -50,10 +58,8 @@ def trigger(nodes, s, c):
             passed = bool(country['allies']) == (v == 'yes')
         elif k == 'any_allied_country':
             passed = any(trigger(v, s, switch(c, ally)) for ally in country['allies'])
-        elif k == 'if':
-            passed = not trigger(one(v, 'limit'), s, c) or trigger([n for n in v if n[0] != 'limit'], s, c)
         else:
-            passed = old_trigger([(k, op, v)], s, c)
+            passed = old_trigger(group, s, c)
         if not passed:
             return False
     return True

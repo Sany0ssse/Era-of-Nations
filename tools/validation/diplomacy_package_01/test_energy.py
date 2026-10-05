@@ -38,6 +38,11 @@ framework_effects_path=ROOT/'common/scripted_effects/eon_energy_framework_effect
 if framework_effects_path.exists():
     effects.update({k:v for k,o,v in ast(framework_effects_path.read_text(encoding='utf-8-sig'))})
 
+# Package 04 adds native trigger-compatible capacity math. Read its actual source
+# so existing lifecycle callbacks still exercise the whole current validation.
+capacity_path = ROOT/'common/scripted_triggers/eon_energy_capacity_triggers.txt'
+capacity_triggers = {k:v for k,o,v in ast(capacity_path.read_text(encoding='utf-8-sig'))} if capacity_path.exists() else {}
+
 # Package 02 extends the same annex hooks. Execute its actual cleanup helpers
 # as well, so energy regressions still exercise the whole current callback.
 for stem in ('eon_trade_treaty', 'eon_investment_treaty', 'eon_investment_project'):
@@ -85,10 +90,34 @@ def compare(left,op,right):
 def trigger(nodes,s,c):
     country=s['countries'][c['scope']]
     result=[]
-    for k,o,v in nodes:
+    index=0
+    while index<len(nodes):
+        k,o,v=nodes[index]; index+=1
         if k=='NOT': passed=not trigger(v,s,c)
         elif k=='OR': passed=any(trigger([n],s,c) for n in v)
         elif k=='AND': passed=trigger(v,s,c)
+        elif k in capacity_triggers: passed=trigger(capacity_triggers[k],s,c)==(v=='yes')
+        elif k=='always': passed=v=='yes'
+        elif k=='custom_trigger_tooltip': passed=trigger([n for n in v if n[0]!='tooltip'],s,c)
+        elif k in ('set_temp_variable','add_to_temp_variable','subtract_from_temp_variable','multiply_temp_variable'):
+            execute([(k,o,v)],s,c); passed=True
+        elif k=='all_of':
+            parameters={a:z for a,b,z in v if a in ('array','value','index')}
+            body=[n for n in v if n[0] not in parameters]
+            passed=True
+            for array_index,element in enumerate(country['arrays'].get(parameters['array'],[])):
+                s['temp'][parameters.get('value','v')]=element
+                s['temp'][parameters.get('index','i')]=array_index
+                if not trigger(body,s,c): passed=False; break
+        elif k=='if':
+            branches=[v]
+            while index<len(nodes) and nodes[index][0] in ('else_if','else'):
+                branches.append(nodes[index][2]); index+=1
+            passed=True
+            for branch in branches:
+                limits=[z for a,b,z in branch if a=='limit']
+                if not limits or trigger(limits[0],s,c):
+                    passed=trigger([n for n in branch if n[0]!='limit'],s,c); break
         elif k=='check_variable':
             if len(v)==1:
                 var,op,comp=v[0]; passed=compare(value(s,c,var),op,value(s,c,comp))
@@ -191,7 +220,9 @@ def execute(nodes,s,c):
         else: raise AssertionError(('Unhandled effect',k,o,v))
 
 def state():
-    return {'countries':{c:{'variables':{},'arrays':{'energy_contractors':[],'energy_contracts_ammount':[],'energy_contracts_price':[]},'flags':set(),'wars':set(),'exists':True,'ai':False} for c in ('A','B','C','D')},'temp':{},'events':[],'recalculations':[],'ui_updates':0}
+    # Existing lifecycle cases supply ample cached production. Capacity boundaries
+    # use explicit smaller inputs in package 04; this fixture is not a campaign.
+    return {'countries':{c:{'variables':{'energy_balance':1000},'arrays':{'energy_contractors':[],'energy_contracts_ammount':[],'energy_contracts_price':[]},'flags':set(),'wars':set(),'exists':True,'ai':False} for c in ('A','B','C','D')},'temp':{},'events':[],'recalculations':[],'ui_updates':0}
 def framework(s,a,b):
     s['countries'][a]['flags'].add('energy_agreement@'+b); s['countries'][b]['flags'].add('energy_agreement@'+a)
 def record(s,a,b,amount,price):

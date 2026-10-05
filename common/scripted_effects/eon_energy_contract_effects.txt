@@ -204,6 +204,16 @@ eon_energy_validate_offer = {
 			}
 		}
 	}
+	# The supplier may lose capacity while the frozen proposal waits for an answer.
+	if = {
+		limit = { check_variable = { eon_energy_offer_valid = 1 } }
+		set_temp_variable = { eon_energy_capacity_partner = FROM }
+		set_temp_variable = { eon_energy_capacity_amount = eon_energy_offer_amount }
+		if = {
+			limit = { NOT = { eon_energy_proposed_capacity_available = yes } }
+			set_temp_variable = { eon_energy_offer_valid = 0 }
+		}
+	}
 }
 
 # Recipient event. Cleanup is immediate; acknowledgement events cannot unlock later offers.

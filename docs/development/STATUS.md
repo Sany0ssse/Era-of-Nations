@@ -30,6 +30,24 @@ Standard no-DLC creator callback coverage, native rule composition and exact
 selected-war treaty obligations remain runtime acceptance items. [DIPLOMACY_AUDIT_UK.md](DIPLOMACY_AUDIT_UK.md) preserves the earlier
 baseline audit and subsequent priorities.
 
+The fourth diplomacy package implements a bounded repair after the player's
+report of rejected larger electricity exports. It covers signed quantity,
+buyer/seller AI inputs, replacement capacity, partner selection, current cached
+supplier-capacity rechecks and initial resets of contractual aggregates.
+Fresh cumulative source models passed 4510 scenarios (4423 earlier plus 87 new),
+with 27 new source assertions and the repeated package 03 source checks.
+Final independent review completed with no unresolved P1/P2 findings;
+the reported gameplay sale is unverified.
+The old signed-volume AI acceptance cliff was reproduced for a human buying
+from an AI supplier; GUI replacement limits affect both directions. The latest
+cached balance is used without immediate global-generation recalculation.
+Existing raw-GW AI weights may still outweigh need/budget penalties; full
+contract affordability is not proven. No physical grid or new budget law is added.
+See [DIPLOMACY_PACKAGE_04_UK.md](DIPLOMACY_PACKAGE_04_UK.md) for scope and runtime
+acceptance criteria. [DIPLOMACY_ROADMAP_UK.md](DIPLOMACY_ROADMAP_UK.md) explains
+why alliances came first and prioritises one existing energy negotiation cycle,
+state support, consultations and mediation before broader new relations.
+
 ## Completed setup
 
 - Imported all 74,465 source files directly into `E:\Era of Nations`; the archive

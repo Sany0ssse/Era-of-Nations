@@ -1,0 +1,44 @@
+# Capacity inputs are temporary: partner and candidate amount in caller's sign.
+# Current balance includes active contracts. Release only the pair being replaced.
+# These are native trigger calculations, not scripted effects in GUI conditions.
+eon_energy_supplier_capacity_available = {
+	exists = yes
+	check_variable = { energy_contractors^num = energy_contracts_ammount^num }
+	check_variable = { energy_contractors^num = energy_contracts_price^num }
+	set_temp_variable = { eon_energy_capacity_count = 0 }
+	set_temp_variable = { eon_energy_capacity_old_amount = 0 }
+	all_of = {
+		array = energy_contractors
+		value = eon_energy_capacity_record_partner
+		index = eon_energy_capacity_record_index
+		if = {
+			limit = { check_variable = { eon_energy_capacity_record_partner = eon_energy_capacity_counterparty } }
+			add_to_temp_variable = { eon_energy_capacity_count = 1 }
+			set_temp_variable = { eon_energy_capacity_old_amount = energy_contracts_ammount^eon_energy_capacity_record_index }
+		}
+	}
+	check_variable = { eon_energy_capacity_count < 2 }
+	set_temp_variable = { eon_energy_projected_balance = energy_balance }
+	subtract_from_temp_variable = { eon_energy_projected_balance = eon_energy_capacity_old_amount }
+	subtract_from_temp_variable = { eon_energy_projected_balance = eon_energy_capacity_quantity }
+	NOT = { check_variable = { eon_energy_projected_balance < 0 } }
+}
+
+eon_energy_proposed_capacity_available = {
+	set_temp_variable = { eon_energy_capacity_quantity = eon_energy_capacity_amount }
+	if = {
+		limit = { check_variable = { eon_energy_capacity_quantity < 0 } }
+		multiply_temp_variable = { eon_energy_capacity_quantity = -1 }
+	}
+	if = {
+		limit = { check_variable = { eon_energy_capacity_amount > 0 } }
+		set_temp_variable = { eon_energy_capacity_counterparty = THIS }
+		var:eon_energy_capacity_partner = { eon_energy_supplier_capacity_available = yes }
+	}
+	else_if = {
+		limit = { check_variable = { eon_energy_capacity_amount < 0 } }
+		set_temp_variable = { eon_energy_capacity_counterparty = eon_energy_capacity_partner }
+		eon_energy_supplier_capacity_available = yes
+	}
+	else = { always = yes } # Zero ends a contract even when supply is deficient.
+}
