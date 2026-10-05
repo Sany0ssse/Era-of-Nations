@@ -1,0 +1,128 @@
+# Creating a faction and joining one are separate political rights.
+eon_defensive_alliance_creator_eligible = {
+	exists = yes
+	is_subject = no
+	is_in_faction = no
+	has_rule = can_create_factions
+	has_offensive_war = no
+	NOT = {
+		OR = {
+			has_idea = CIW_member
+			has_idea = European_Security_Council
+			has_idea = EDU_major_non_EU_ally
+			has_idea = BLR_neutrality_politic
+		}
+	}
+}
+eon_defensive_alliance_member_eligible = {
+	exists = yes
+	is_subject = no
+	is_in_faction = no
+	has_rule = can_join_factions
+	has_offensive_war = no
+	NOT = {
+		has_idea = BLR_neutrality_politic
+	}
+	# Preserve the country's current rank/law/idea world-tension threshold.
+	set_temp_variable = { eon_defensive_alliance_join_tension = modifier@join_faction_tension }
+	threat >= eon_defensive_alliance_join_tension
+}
+# No engine "any template" trigger is documented. These are the 72 story/MP IDs.
+# Generic is legacy plumbing, not an ordinary identity by itself: it still needs an explicit leader marker.
+# Keep the inventory in source tests so a new story template cannot inherit a stale marker.
+eon_defensive_alliance_has_nonordinary_template = {
+	OR = {
+		has_faction_template = faction_template_ARM_the_fifth_international
+		has_faction_template = faction_template_EEP
+		has_faction_template = faction_template_all_of_geo
+		has_faction_template = faction_template_anti_armenia
+		has_faction_template = faction_template_anti_turanic_coalition
+		has_faction_template = faction_template_antillian_confederation
+		has_faction_template = faction_template_aor
+		has_faction_template = faction_template_arab_liberation_front
+		has_faction_template = faction_template_aryavarta_pact
+		has_faction_template = faction_template_balkan_socialist_union
+		has_faction_template = faction_template_baltic_sea_union
+		has_faction_template = faction_template_brics
+		has_faction_template = faction_template_british_alliance
+		has_faction_template = faction_template_cento
+		has_faction_template = faction_template_chinese_united_front
+		has_faction_template = faction_template_cis2_abk
+		has_faction_template = faction_template_cis_alliance
+		has_faction_template = faction_template_commonwealth
+		has_faction_template = faction_template_coptic_alliance
+		has_faction_template = faction_template_csto
+		has_faction_template = faction_template_east_asian_pact
+		has_faction_template = faction_template_edu
+		has_faction_template = faction_template_eurasian_alliance
+		has_faction_template = faction_template_fao
+		has_faction_template = faction_template_fep
+		has_faction_template = faction_template_firstborn_faction
+		has_faction_template = faction_template_gca_alliance
+		has_faction_template = faction_template_gcc
+		has_faction_template = faction_template_generic_islamic_states
+		has_faction_template = faction_template_geo_aog
+		has_faction_template = faction_template_greater_spanish_alliance
+		has_faction_template = faction_template_hol_gu
+		has_faction_template = faction_template_hun_cesu
+		has_faction_template = faction_template_imperial_bloc
+		has_faction_template = faction_template_intermarium_faction
+		has_faction_template = faction_template_islamic_ulema
+		has_faction_template = faction_template_jap_communist_alliance
+		has_faction_template = faction_template_jap_democratic_alliance
+		has_faction_template = faction_template_jerusalem_defence_pact
+		has_faction_template = faction_template_juche
+		has_faction_template = faction_template_lba_anti_colonial
+		has_faction_template = faction_template_levant_liberation
+		has_faction_template = faction_template_morsan_allianc
+		has_faction_template = faction_template_mto_alliance
+		has_faction_template = faction_template_muslim_brotherhood
+		has_faction_template = faction_template_nato
+		has_faction_template = faction_template_nig_islamic_states
+		has_faction_template = faction_template_paris_accord
+		has_faction_template = faction_template_peninsula_sword
+		has_faction_template = faction_template_periphery_pact
+		has_faction_template = faction_template_pol_intermarium
+		has_faction_template = faction_template_pol_polish_crown
+		has_faction_template = faction_template_pol_visegrad
+		has_faction_template = faction_template_pol_wp
+		has_faction_template = faction_template_por_commonwealth
+		has_faction_template = faction_template_rajpact
+		has_faction_template = faction_template_sco
+		has_faction_template = faction_template_seato
+		has_faction_template = faction_template_sis
+		has_faction_template = faction_template_sov_antante
+		has_faction_template = faction_template_sov_russian_sphere
+		has_faction_template = faction_template_swiss_alliance
+		has_faction_template = faction_template_taj_alliance
+		has_faction_template = faction_template_teamD
+		has_faction_template = faction_template_teama
+		has_faction_template = faction_template_teamb
+		has_faction_template = faction_template_teamc
+		has_faction_template = faction_template_unasul
+		has_faction_template = faction_template_united_arab_alliance
+		has_faction_template = faction_template_warsaw_pact
+		has_faction_template = faction_template_western_alliance
+		has_faction_template = faction_template_wstf
+	}
+}
+eon_defensive_alliance_is_member = {
+	exists = yes
+	is_in_faction = yes
+	NOT = {
+		eon_defensive_alliance_has_nonordinary_template = yes
+	}
+	OR = {
+		has_faction_template = eon_defensive_alliance_template
+		faction_leader = {
+			has_country_flag = eon_defensive_alliance_member
+		}
+	}
+}
+# The native call context has no documented selected-war identifier.
+# Conservatively refuse mixed offensive/defensive wars as well as offensive-only calls.
+eon_defensive_alliance_war_eligible = {
+	exists = yes
+	has_defensive_war = yes
+	has_offensive_war = no
+}

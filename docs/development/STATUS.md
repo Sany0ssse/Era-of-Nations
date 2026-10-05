@@ -1,12 +1,12 @@
 # Era of Nations 0.1.0 — initial development baseline
 
-Verified on 2026-10-05.
+Source status updated on 2026-10-06; earlier startup evidence remains dated 2026-10-05.
 
 The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and two implementation packages are complete at
+The existing diplomacy audit and three implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -15,14 +15,19 @@ revision/termination cycle. Reproducible source models and independent reviews
 passed. The second package guards trade and mutual investment treaty proposals,
 responses and bilateral cleanup, freezes foreign building proposals before
 consent, rechecks execution conditions and repairs refunds. It retains existing
-prices, political rules and separate storyline paths. Neither diplomacy package
-has been launched in HOI4; new-campaign acceptance,
+prices, political rules and separate storyline paths. The third package opens
+ordinary defensive alliances without a great-power rank: a consensual diplomatic
+proposal, a native template, current national rights, retained join thresholds,
+defensive call guards and lifecycle cleanup. AI national alliance-desire modifiers
+are retained. No diplomacy package has been launched in HOI4; new-campaign acceptance,
 native callback timing, actual accounting and save/load remain pending. See
+[DIPLOMACY_PACKAGE_03_UK.md](DIPLOMACY_PACKAGE_03_UK.md),
 [DIPLOMACY_PACKAGE_02_UK.md](DIPLOMACY_PACKAGE_02_UK.md) and
 [DIPLOMACY_PACKAGE_01_UK.md](DIPLOMACY_PACKAGE_01_UK.md) for changes, checks and
 runtime checklists. [ORDINARY_ALLIANCES_PLAN_UK.md](ORDINARY_ALLIANCES_PLAN_UK.md)
-describes the next ordinary defensive-alliance task; its gameplay is not yet
-implemented. [DIPLOMACY_AUDIT_UK.md](DIPLOMACY_AUDIT_UK.md) preserves the earlier
+retains the original D1 audit; its source implementation is now package 03.
+Standard no-DLC creator callback coverage, native rule composition and exact
+selected-war treaty obligations remain runtime acceptance items. [DIPLOMACY_AUDIT_UK.md](DIPLOMACY_AUDIT_UK.md) preserves the earlier
 baseline audit and subsequent priorities.
 
 ## Completed setup

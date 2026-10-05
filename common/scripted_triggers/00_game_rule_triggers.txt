@@ -613,6 +613,20 @@ DIPLOMACY_SEND_VOLUNTEERS_ENABLE_TRIGGER = {
 }
 
 DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER = {
+	# Ordinary defensive alliances cannot extend an offensive or mixed war.
+	if = {
+		limit = {
+			OR = {
+				eon_defensive_alliance_is_member = yes
+				FROM = { eon_defensive_alliance_is_member = yes }
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = eon_defensive_alliance_call_tt
+			eon_defensive_alliance_war_eligible = yes
+		}
+	}
+
 	#NATO countries can only call allies in defensive wars
 	if = {
 		limit = {
@@ -696,6 +710,20 @@ DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER = {
 }
 
 DIPLOMACY_JOIN_ALLY_ENABLE_TRIGGER = {
+	# FROM is the ally whose war the current country proposes to join.
+	if = {
+		limit = {
+			OR = {
+				eon_defensive_alliance_is_member = yes
+				FROM = { eon_defensive_alliance_is_member = yes }
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = eon_defensive_alliance_call_tt
+			FROM = { eon_defensive_alliance_war_eligible = yes }
+		}
+	}
+
 	#NATO countries can only join allies in defensive wars
 	if = {
 		limit = {
@@ -810,6 +838,16 @@ DIPLOMACY_JOIN_ALLY_ENABLE_TRIGGER = {
 }
 
 DIPLOMACY_JOIN_FACTION_ENABLE_TRIGGER = {
+	# Joining remains voluntary and respects the candidate's current policy.
+	if = {
+		limit = { FROM = { eon_defensive_alliance_is_member = yes } }
+		custom_trigger_tooltip = {
+			tooltip = eon_defensive_alliance_join_tt
+			eon_defensive_alliance_member_eligible = yes
+			FROM = { is_subject = no has_offensive_war = no }
+		}
+	}
+
 	#Other countries can't join NATO
 	if = {
 		limit = {
@@ -1046,6 +1084,17 @@ DIPLOMACY_JOIN_FACTION_ENABLE_TRIGGER = {
 }
 
 DIPLOMACY_OFFER_JOIN_FACTION_ENABLE_TRIGGER = {
+	# The invitation uses the same candidate conditions as a join request.
+	if = {
+		limit = { eon_defensive_alliance_is_member = yes }
+		custom_trigger_tooltip = {
+			tooltip = eon_defensive_alliance_join_tt
+			is_subject = no
+			has_offensive_war = no
+			FROM = { eon_defensive_alliance_member_eligible = yes }
+		}
+	}
+
 	#Can't invite other countries to NATO
 	if = {
 		limit = {

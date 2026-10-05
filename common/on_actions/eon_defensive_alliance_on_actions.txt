@@ -1,0 +1,161 @@
+on_actions = {
+	# Native legacy pair creation: ROOT creator, FROM initial joining country.
+	# This does not claim coverage of a single-founder legacy creation callback.
+	on_create_faction = {
+		effect = {
+			if = {
+				limit = {
+					NOT = { has_dlc = "No Compromise, No Surrender" }
+					exists = yes
+					is_subject = no
+					is_in_faction = yes
+					is_faction_leader = yes
+					has_rule = can_create_factions
+					has_offensive_war = no
+					NOT = {
+						OR = {
+							has_idea = CIW_member
+							has_idea = European_Security_Council
+							has_idea = EDU_major_non_EU_ally
+							has_idea = BLR_neutrality_politic
+							eon_defensive_alliance_has_nonordinary_template = yes
+						}
+					}
+					FROM = {
+						exists = yes
+						is_in_faction_with = ROOT
+					}
+				}
+				eon_defensive_alliance_mark_leader_membership = yes
+				FROM = {
+					eon_defensive_alliance_mark_membership = yes
+				}
+			}
+		}
+	}
+	# ROOT joining member; FROM actual faction leader.
+	on_join_faction = {
+		effect = {
+			if = {
+				limit = {
+					exists = yes
+					FROM = {
+						exists = yes
+						is_faction_leader = yes
+						eon_defensive_alliance_is_member = yes
+						is_in_faction_with = ROOT
+					}
+				}
+				eon_defensive_alliance_mark_membership = yes
+			}
+			else_if = {
+				limit = {
+					exists = yes
+					is_in_faction = yes
+					eon_defensive_alliance_has_nonordinary_template = yes
+				}
+				eon_defensive_alliance_clear_membership = yes
+			}
+		}
+	}
+	# ROOT leader; FROM invited country. Also handles scripted add_to_faction.
+	on_offer_join_faction = {
+		effect = {
+			if = {
+				limit = {
+					exists = yes
+					is_faction_leader = yes
+					eon_defensive_alliance_is_member = yes
+					FROM = {
+						exists = yes
+						is_in_faction_with = ROOT
+					}
+				}
+				FROM = {
+					eon_defensive_alliance_mark_membership = yes
+				}
+			}
+			else_if = {
+				limit = {
+					exists = yes
+					is_faction_leader = yes
+					FROM = {
+						exists = yes
+						is_in_faction_with = ROOT
+						eon_defensive_alliance_has_nonordinary_template = yes
+					}
+				}
+				FROM = {
+					eon_defensive_alliance_clear_membership = yes
+				}
+			}
+		}
+	}
+	# ROOT new leader; FROM former leader, still in the same actual faction.
+	on_assume_faction_leadership = {
+		effect = {
+			if = {
+				limit = {
+					exists = yes
+					is_in_faction = yes
+					is_faction_leader = yes
+					NOT = {
+						eon_defensive_alliance_has_nonordinary_template = yes
+					}
+					OR = {
+						has_faction_template = eon_defensive_alliance_template
+						FROM = {
+							exists = yes
+							has_country_flag = eon_defensive_alliance_member
+							is_in_faction_with = ROOT
+						}
+					}
+				}
+				eon_defensive_alliance_mark_leader_membership = yes
+				every_faction_member = {
+					eon_defensive_alliance_mark_membership = yes
+				}
+			}
+		}
+	}
+	on_leave_faction = {
+		effect = {
+			eon_defensive_alliance_clear_membership = yes
+		}
+	}
+	# ROOT annexer; FROM annexed country, still present when this callback fires.
+	# Surviving members keep their markers for an actual successor leader.
+	on_annex = {
+		effect = {
+			every_country = {
+				limit = {
+					exists = yes
+					NOT = { tag = FROM }
+				}
+				set_temp_variable = { eon_defensive_alliance_annexed_partner = FROM.id }
+				eon_defensive_alliance_cleanup_annexed_pair = yes
+			}
+			FROM = {
+				eon_defensive_alliance_clear_pending = yes
+				eon_defensive_alliance_clear_membership = yes
+			}
+		}
+	}
+	# Native 01_tfv/03_wtt: ROOT annexed subject; FROM overlord.
+	on_subject_annexed = {
+		effect = {
+			every_country = {
+				limit = {
+					exists = yes
+					NOT = { tag = ROOT }
+				}
+				set_temp_variable = { eon_defensive_alliance_annexed_partner = ROOT.id }
+				eon_defensive_alliance_cleanup_annexed_pair = yes
+			}
+			ROOT = {
+				eon_defensive_alliance_clear_pending = yes
+				eon_defensive_alliance_clear_membership = yes
+			}
+		}
+	}
+}

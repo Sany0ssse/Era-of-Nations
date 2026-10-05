@@ -1,0 +1,48 @@
+# Native diplomacy context: ROOT = sender, THIS = recipient.
+# Country eligibility keeps explicit national policy and the recipient's join threshold.
+eon_defensive_alliance_offer_terms_available = {
+	exists = yes
+	NOT = { tag = ROOT }
+	is_subject = no
+	is_in_faction = no
+	has_offensive_war = no
+	NOT = { has_war_with = ROOT }
+	eon_defensive_alliance_member_eligible = yes
+	eon_defensive_alliance_offer_existing_policy = yes
+	ROOT = {
+		exists = yes
+		is_subject = no
+		is_in_faction = no
+		has_offensive_war = no
+		NOT = { has_war_with = PREV }
+		eon_defensive_alliance_creator_eligible = yes
+	}
+}
+
+eon_defensive_alliance_offer_no_pending = {
+	check_variable = { eon_defensive_alliance_pending_recipient = 0 }
+	check_variable = { eon_defensive_alliance_pending_sender = 0 }
+	ROOT = {
+		check_variable = { eon_defensive_alliance_pending_recipient = 0 }
+		check_variable = { eon_defensive_alliance_pending_sender = 0 }
+	}
+}
+
+eon_defensive_alliance_offer_send_ready = {
+	ROOT = { is_ai = no }
+	eon_defensive_alliance_offer_terms_available = yes
+	eon_defensive_alliance_offer_no_pending = yes
+}
+
+eon_defensive_alliance_offer_response_current = {
+	# Pair matching cannot distinguish a duplicate old native reply from a newer same-pair offer.
+	check_variable = { eon_defensive_alliance_pending_sender = ROOT.id }
+	ROOT = {
+		check_variable = { eon_defensive_alliance_pending_recipient = PREV.id }
+	}
+}
+
+eon_defensive_alliance_offer_response_valid = {
+	eon_defensive_alliance_offer_response_current = yes
+	eon_defensive_alliance_offer_terms_available = yes
+}

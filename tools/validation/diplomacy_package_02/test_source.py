@@ -155,7 +155,9 @@ for language in ('english', 'russian'):
 
 actions = [b['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
            for b in blocks(path.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1]
-assert len(actions) == len(set(actions)) == 54
+# Package 03 adds one separately validated ordinary-alliance action. Keep the
+# original count and uniqueness checks when running an older package checkout.
+assert len(actions) == len(set(actions)) == 54 + actions.count('eon_propose_defensive_alliance')
 print(json.dumps({'all_passed': True, 'method': 'exact reversible source boundaries and format/locale/ID checks',
                   'owned_existing_files': receipt, 'new_locale_keys_per_language': len(new_keys),
                   'unique_action_ids': len(actions), 'not_proven': 'HOI4 engine parsing, UI or campaign'}, indent=2))

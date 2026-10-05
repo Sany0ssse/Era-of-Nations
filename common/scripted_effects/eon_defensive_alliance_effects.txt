@@ -1,0 +1,27 @@
+# Explicit creation caller uses this only after successful creation, before adding its partner.
+eon_defensive_alliance_mark_leader_membership = {
+	if = {
+		limit = {
+			exists = yes
+			is_in_faction = yes
+			is_faction_leader = yes
+			NOT = {
+				eon_defensive_alliance_has_nonordinary_template = yes
+			}
+		}
+		set_country_flag = eon_defensive_alliance_member
+	}
+}
+# The current member must share an actual ordinary leader/template.
+# A country's own old marker never establishes its membership.
+eon_defensive_alliance_mark_membership = {
+	if = {
+		limit = {
+			eon_defensive_alliance_is_member = yes
+		}
+		set_country_flag = eon_defensive_alliance_member
+	}
+}
+eon_defensive_alliance_clear_membership = {
+	clr_country_flag = eon_defensive_alliance_member
+}

@@ -1,0 +1,106 @@
+# Native response helpers run in the recipient country: ROOT = original sender.
+# A status change retains both reservations until the original native reply is consumed.
+eon_defensive_alliance_offer_start = {
+	set_variable = { eon_defensive_alliance_pending_sender = ROOT.id }
+	ROOT = {
+		set_variable = { eon_defensive_alliance_pending_recipient = PREV.id }
+	}
+}
+
+# Clear only fields concerning this callback's pair; never a third country's request.
+eon_defensive_alliance_offer_finish_response = {
+	ROOT = {
+		if = {
+			limit = {
+				check_variable = { eon_defensive_alliance_pending_recipient = PREV.id }
+			}
+			clear_variable = eon_defensive_alliance_pending_recipient
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { eon_defensive_alliance_pending_sender = ROOT.id }
+		}
+		clear_variable = eon_defensive_alliance_pending_sender
+	}
+}
+
+# Execute only after reciprocal reservation and current rights are checked.
+eon_defensive_alliance_offer_establish = {
+	ROOT = {
+		# The validated proposer is factionless; discard an old membership witness.
+		eon_defensive_alliance_clear_membership = yes
+		# Keep the creation witness and its reads in the same country scope.
+		set_temp_variable = { eon_defensive_alliance_offer_created = 0 }
+		if = {
+			limit = { has_dlc = "No Compromise, No Surrender" }
+			create_faction_from_template = eon_defensive_alliance_template
+		}
+		else = {
+			create_faction = eon_defensive_alliance_name
+		}
+		if = {
+			limit = {
+				is_in_faction = yes
+				is_faction_leader = yes
+			}
+			set_temp_variable = { eon_defensive_alliance_offer_created = 1 }
+			# Native creation can omit the join hook for its leader.
+			eon_defensive_alliance_mark_leader_membership = yes
+			if = {
+				limit = { has_country_flag = eon_defensive_alliance_member }
+				add_to_faction = PREV
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { eon_defensive_alliance_offer_created = 1 }
+				is_faction_leader = yes
+				has_country_flag = eon_defensive_alliance_member
+				PREV = { is_in_faction_with = ROOT }
+			}
+			PREV = { eon_defensive_alliance_mark_membership = yes }
+		}
+		else_if = {
+			limit = { check_variable = { eon_defensive_alliance_offer_created = 1 } }
+			# Roll back only the faction created by this response if it is still empty.
+			# An unexpected admission of another country must never dismantle its faction.
+			if = {
+				limit = {
+					is_in_faction = yes
+					is_faction_leader = yes
+					NOT = { any_allied_country = { always = yes } }
+				}
+				dismantle_faction = yes
+				eon_defensive_alliance_clear_membership = yes
+			}
+		}
+	}
+}
+
+# Annex cleanup: current country owns its fields; temporary peer ID is the annexed country.
+# No response is possible from an annexed peer, so release only that peer's reservation.
+eon_defensive_alliance_cleanup_annexed_pair = {
+	if = {
+		limit = {
+			check_variable = {
+				eon_defensive_alliance_pending_recipient = eon_defensive_alliance_annexed_partner
+			}
+		}
+		clear_variable = eon_defensive_alliance_pending_recipient
+	}
+	if = {
+		limit = {
+			check_variable = {
+				eon_defensive_alliance_pending_sender = eon_defensive_alliance_annexed_partner
+			}
+		}
+		clear_variable = eon_defensive_alliance_pending_sender
+	}
+}
+
+# For the annexed country itself; never use as a generic status-change cancellation.
+eon_defensive_alliance_clear_pending = {
+	clear_variable = eon_defensive_alliance_pending_recipient
+	clear_variable = eon_defensive_alliance_pending_sender
+}
