@@ -2,6 +2,12 @@
 
 Verified on 2026-10-05.
 
+The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
+DirectX 11 startup passed mapping and compilation checks; visual acceptance of
+the unobstructed menu and campaign controls remains pending. See
+[UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
+Diplomacy research is discussion-only; gameplay has not changed.
+
 ## Completed setup
 
 - Imported all 74,465 source files directly into `E:\Era of Nations`; the archive
@@ -47,10 +53,12 @@ project promotional controls and links.
   `sub_unit_bonus` token; unit/Special_Forces references also report errors.
 - Some mesh/entity, landmark, radio-song and particle references are missing or
   duplicated in the source.
-- The source omitted `gfx/main_menu/main_menu.dds`. A byte-identical copy of the
-  existing neutral `load_1.dds` now supplies this referenced static fallback.
-  The first startup log predates this addition; a restart after it has not been
-  checked.
+- The earlier generated `gfx/main_menu/main_menu.dds` fallback has been removed;
+  the static sprite directly references existing `gfx/loadingscreens/load_1.dds`.
+  The final restart has no former missing-path message, but still reports two
+  binary-token parse errors for that DDS. The inherited frontend lacks the
+  current game's root background and selector types; the exact internal parser
+  call is unverified. This compatibility issue remains unresolved.
 
 No observed startup error names the replaced Era of Nations textures or changed
 localisation syntax. This is a development baseline for further work; campaign
