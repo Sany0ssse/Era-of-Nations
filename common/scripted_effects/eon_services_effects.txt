@@ -1,0 +1,315 @@
+# The inherited service prices are upfront and nonrefundable. No personnel,
+# transport route, escrow, or delivery expenditure is invented by this package.
+eon_services_clear_pending = {
+ clr_country_flag = eon_services_pending
+ clr_country_flag = eon_services_live
+ clr_country_flag = eon_services_cancelled
+ clear_variable = eon_services_partner
+ clear_variable = eon_services_kind
+}
+
+eon_services_retire_pending_pair = {
+ if = {
+  limit = { has_country_flag = eon_services_pending }
+  if = {
+   limit = { eon_services_partner_identified = yes }
+   var:eon_services_partner = {
+    PREV = { set_country_flag = eon_services_retired_pair@PREV }
+   }
+  }
+  else = { set_country_flag = eon_services_quarantined }
+ }
+}
+
+eon_services_send_offer = {
+ if = {
+  limit = { eon_services_selection_ready = yes }
+  set_variable = { eon_services_partner = FROM.FROM }
+  set_variable = { eon_services_kind = eon_services_requested_kind }
+  set_country_flag = eon_services_pending
+  set_country_flag = { flag = eon_services_live days = 30 value = 1 }
+  clr_country_flag = eon_services_cancelled
+  var:eon_services_partner = {
+   if = {
+    limit = { check_variable = { PREV.eon_services_kind = 1 } }
+    country_event = { id = eon_services.1 }
+   }
+   else = { country_event = { id = eon_services.6 } }
+  }
+  update_dirty_influence_var = yes
+ }
+}
+
+eon_services_clear_logistics = {
+ if = {
+  limit = { has_country_flag = eon_services_logistics_owned }
+  remove_ideas = military_services_logistics_idea
+ }
+ clr_country_flag = eon_services_logistics_owned
+ clr_country_flag = eon_services_logistics_live
+ clear_variable = eon_services_logistics_provider
+}
+
+eon_services_clear_recon = {
+ if = {
+  limit = { has_country_flag = eon_services_recon_owned }
+  remove_ideas = military_services_recon_idea
+ }
+ clr_country_flag = eon_services_recon_owned
+ clr_country_flag = eon_services_recon_live
+ clear_variable = eon_services_recon_provider
+}
+
+eon_services_accept_offer = {
+ if = {
+  limit = { eon_services_response_pending = yes eon_services_response_kind_matches = yes }
+  if = {
+   limit = { eon_services_response_ready = yes }
+   # Consume the provider record before payment and benefits; a second response
+   # cannot debit the receiver, credit the provider, or grant a second service.
+   FROM = { eon_services_clear_pending = yes }
+   set_temp_variable = { treasury_change = eon_services_fee }
+   multiply_temp_variable = { treasury_change = -1 }
+   modify_treasury_effect = yes
+   FROM = {
+    set_temp_variable = { treasury_change = PREV.eon_services_fee }
+    modify_treasury_effect = yes
+    set_temp_variable = { temp_opinion = 3 }
+    change_the_military_opinion = yes
+    ingame_update_setup = yes
+   }
+   if = {
+    limit = { check_variable = { eon_services_requested_kind = 1 } }
+    set_variable = { eon_services_logistics_provider = FROM }
+    set_country_flag = eon_services_logistics_owned
+    set_country_flag = { flag = eon_services_logistics_live days = 80 value = 1 }
+    add_timed_idea = { idea = military_services_logistics_idea days = 80 }
+    set_temp_variable = { percent_change = 1.5 }
+   }
+   else = {
+    set_variable = { eon_services_recon_provider = FROM }
+    set_country_flag = eon_services_recon_owned
+    set_country_flag = { flag = eon_services_recon_live days = 80 value = 1 }
+    add_timed_idea = { idea = military_services_recon_idea days = 80 }
+    set_temp_variable = { percent_change = 2 }
+   }
+   set_temp_variable = { tag_index = FROM.id }
+   set_temp_variable = { influence_target = THIS.id }
+   change_influence_percentage = yes
+   FROM = { country_event = { id = eon_services.2 } }
+   ingame_update_setup = yes
+   update_dirty_influence_var = yes
+  }
+  else = {
+   FROM = {
+    eon_services_clear_pending = yes
+    country_event = { id = eon_services.8 }
+   }
+   update_dirty_influence_var = yes
+  }
+ }
+}
+
+eon_services_reject_offer = {
+ if = {
+  limit = { eon_services_response_pending = yes eon_services_response_kind_matches = yes }
+  if = {
+   limit = { eon_services_response_ready = yes }
+   if = {
+    limit = { NOT = { has_country_flag = refused_military_aid } }
+    set_temp_variable = { percent_change = 2 }
+    change_domestic_influence_percentage = yes
+    set_country_flag = { flag = refused_military_aid value = 1 days = 180 }
+   }
+  }
+  FROM = { eon_services_clear_pending = yes country_event = { id = eon_services.8 } }
+  update_dirty_influence_var = yes
+ }
+}
+
+eon_services_withdraw_offer = {
+ if = {
+  limit = { eon_services_withdraw_available = yes }
+  ROOT = { set_country_flag = eon_services_cancelled }
+  country_event = { id = eon_services.3 }
+  update_dirty_influence_var = yes
+ }
+}
+
+eon_services_end_logistics = {
+ if = {
+  limit = { eon_services_end_logistics_available = yes }
+  if = {
+   limit = { has_country_flag = eon_services_logistics_owned check_variable = { eon_services_logistics_provider = ROOT } }
+   eon_services_clear_logistics = yes
+  }
+  ROOT = {
+   if = {
+    limit = { has_country_flag = eon_services_logistics_owned check_variable = { eon_services_logistics_provider = PREV } }
+    eon_services_clear_logistics = yes
+   }
+  }
+  country_event = { id = eon_services.7 }
+  update_dirty_influence_var = yes
+ }
+}
+
+eon_services_end_recon = {
+ if = {
+  limit = { eon_services_end_recon_available = yes }
+  if = {
+   limit = { has_country_flag = eon_services_recon_owned check_variable = { eon_services_recon_provider = ROOT } }
+   eon_services_clear_recon = yes
+  }
+  ROOT = {
+   if = {
+    limit = { has_country_flag = eon_services_recon_owned check_variable = { eon_services_recon_provider = PREV } }
+    eon_services_clear_recon = yes
+   }
+  }
+  country_event = { id = eon_services.7 }
+  update_dirty_influence_var = yes
+ }
+}
+
+# Original influence.506 is not an ownership receipt for a paid contract.
+# It can close legacy type flags only; never touch an owned pending proposal.
+eon_services_legacy_close = {
+ FROM = {
+  if = {
+   limit = { NOT = { has_country_flag = eon_services_pending } }
+   clr_country_flag = military_services_sent_logistics
+   clr_country_flag = military_services_sent_recon
+  }
+ }
+}
+
+eon_services_cleanup_active = {
+ if = {
+  limit = {
+   has_country_flag = eon_services_logistics_owned
+   OR = {
+    exists = no
+    NOT = { has_country_flag = eon_services_logistics_live }
+    NOT = { has_idea = military_services_logistics_idea }
+    AND = { has_civil_war = no has_war = no }
+    NOT = { eon_services_logistics_provider_identified = yes }
+    var:eon_services_logistics_provider = { exists = no }
+    has_war_with = eon_services_logistics_provider
+   }
+  }
+  eon_services_clear_logistics = yes
+ }
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_services_logistics_owned }
+   OR = {
+    has_country_flag = eon_services_logistics_live
+    NOT = { check_variable = { eon_services_logistics_provider = 0 } }
+   }
+  }
+  # Missing owned marker gives no right to remove a pre-upgrade native idea.
+  eon_services_clear_logistics = yes
+ }
+ if = {
+  limit = {
+   has_country_flag = eon_services_recon_owned
+   OR = {
+    exists = no
+    NOT = { has_country_flag = eon_services_recon_live }
+    NOT = { has_idea = military_services_recon_idea }
+    AND = { has_civil_war = no has_war = no }
+    NOT = { eon_services_recon_provider_identified = yes }
+    var:eon_services_recon_provider = { exists = no }
+    has_war_with = eon_services_recon_provider
+   }
+  }
+  eon_services_clear_recon = yes
+ }
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_services_recon_owned }
+   OR = {
+    has_country_flag = eon_services_recon_live
+    NOT = { check_variable = { eon_services_recon_provider = 0 } }
+   }
+  }
+  eon_services_clear_recon = yes
+ }
+}
+
+eon_services_daily_update = {
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_services_pending }
+   OR = {
+    has_country_flag = eon_services_live
+    has_country_flag = eon_services_cancelled
+    NOT = { check_variable = { eon_services_partner = 0 } }
+    NOT = { check_variable = { eon_services_kind = 0 } }
+   }
+  }
+  set_country_flag = eon_services_quarantined
+  eon_services_clear_pending = yes
+  country_event = { id = eon_services.5 }
+ }
+ if = {
+  limit = {
+   has_country_flag = eon_services_pending
+   OR = {
+    exists = no
+    NOT = { eon_services_partner_identified = yes }
+    NOT = { has_country_flag = eon_services_live }
+    var:eon_services_partner = { exists = no }
+    NOT = { OR = { check_variable = { eon_services_kind = 1 } check_variable = { eon_services_kind = 2 } } }
+   }
+  }
+  eon_services_retire_pending_pair = yes
+  eon_services_clear_pending = yes
+  if = {
+   limit = { has_country_flag = eon_services_quarantined }
+   country_event = { id = eon_services.5 }
+  }
+  else = { country_event = { id = eon_services.4 } }
+ }
+ eon_services_cleanup_active = yes
+}
+
+# Caller initialized the country being annexed. Terminate only matching owned
+# records, even when this hook runs before the engine marks that country dead.
+eon_services_annex_update = {
+ if = {
+  limit = { has_country_flag = eon_services_pending check_variable = { eon_services_partner = eon_services_annexed_partner } }
+  eon_services_retire_pending_pair = yes
+  eon_services_clear_pending = yes
+ }
+ if = {
+  limit = { has_country_flag = eon_services_logistics_owned check_variable = { eon_services_logistics_provider = eon_services_annexed_partner } }
+  eon_services_clear_logistics = yes
+ }
+ if = {
+  limit = { has_country_flag = eon_services_recon_owned check_variable = { eon_services_recon_provider = eon_services_annexed_partner } }
+  eon_services_clear_recon = yes
+ }
+}
+
+eon_services_clear_annexed_country = {
+ if = {
+  limit = { has_country_flag = eon_services_pending }
+  eon_services_retire_pending_pair = yes
+ }
+ else_if = {
+  limit = {
+   OR = {
+    has_country_flag = eon_services_live
+    has_country_flag = eon_services_cancelled
+    NOT = { check_variable = { eon_services_partner = 0 } }
+    NOT = { check_variable = { eon_services_kind = 0 } }
+   }
+  }
+  set_country_flag = eon_services_quarantined
+ }
+ eon_services_clear_pending = yes
+ eon_services_clear_logistics = yes
+ eon_services_clear_recon = yes
+}

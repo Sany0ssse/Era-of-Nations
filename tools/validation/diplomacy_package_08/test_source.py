@@ -69,6 +69,11 @@ from diplomacy_package_16.test_source import (
     historical_actions as package16_historical_actions, check_owned_existing as check_later_package16_owned,
 )
 check_later_package16_owned()
+from diplomacy_package_17.test_source import (
+    NEW as LATER_PACKAGE17_NEW, package17_original_bytes, package17_historical_existing,
+    historical_actions as package17_historical_actions, check_owned_existing as check_later_package17_owned,
+)
+check_later_package17_owned()
 BASELINE = 'b86a187f8ff3dfc88a577db4b2c52525fd5cf2fd'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, one
@@ -128,9 +133,9 @@ assert 'eon_mediation_prepare_draft' in helpers
 # gameplay source may change, including all earlier package implementations.
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
-changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW]
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
-untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW]
+untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW]
 assert set(changed) | set(untracked) == NEW | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unexpected package 08 gameplay source boundary', changed, untracked)
 assert not set(changed).intersection(baseline_paths), 'Existing gameplay bytes changed'
 assert not NEW.intersection(baseline_paths), 'New mediation source overwrites old game files'

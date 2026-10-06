@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and sixteen implementation packages are complete at
+The existing diplomacy audit and seventeen implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -293,6 +293,35 @@ reconstructed. No game, save, launcher, Workshop, DLC, playset or attribution
 change is part of this package. Next: existing logistics/reconnaissance aid and
 foreign support, then permanent diplomatic relations; the current broad peace
 helper needs a separate war/authority audit before executing mediation outcomes.
+
+## Diplomacy package 17
+
+The seventeenth package develops the existing paid logistics and reconnaissance
+choices in influence.501. New responses own a concrete supplier, recipient and
+service; the old unsigned influence.506 cannot establish a new paid agreement.
+Acceptance checks the payer's funds, full supplier credit and current conditions
+before applying the original 3/4 upfront fee, 80-day idea and political effects.
+Unaccepted withdrawal is free. Active cooperation records its supplier; either
+party can end the selected service type in both matching directions. Other
+partners, service types and pending offers remain separate.
+
+Official pre-2000 logistics and classified-information agreements inform the
+procedural design. Their country-specific legal regimes are not universal game
+rules. The original upfront fee has no proportional early-termination refund;
+actual freight, personnel capacity, disclosure controls and full performance
+accounting remain future work. See
+[DIPLOMACY_PACKAGE_17_UK.md](DIPLOMACY_PACKAGE_17_UK.md).
+The cumulative runner passed 6413 source-model scenarios (6240 retained,
+173 new in 61 groups), 2 separate scoped-temporary adapter checks, and
+180 new source checks (164 API/structure + 16 memory-only byte-boundary
+mutations). All 43 older behavior/helper/runner Python files remain raw-byte
+unchanged; 15 historical source validators retain their assertions and counters
+through exact byte journals. Typed logistics/recon response events prevent an
+old response of the other service type from closing a new proposal for the same
+pair; arbitrary consumed same-pair/same-type replay lacks a native generation
+token and remains outside the proof. Native engine acceptance remains
+outstanding. No game launch or changes to saves, launcher configuration,
+Workshop files or playsets are made here.
 
 ## Completed setup
 

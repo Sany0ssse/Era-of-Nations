@@ -1,0 +1,255 @@
+add_namespace = eon_services
+
+# An owned response is deliberately separate from unsigned legacy influence.506.
+country_event = {
+ id = eon_services.1
+ title = eon_services.1.t
+ desc = eon_services.1.d
+ picture = GFX_special_forces
+ is_triggered_only = yes
+ option = {
+  name = eon_services.1.a
+  trigger = {
+   set_temp_variable = { eon_services_requested_kind = 1 }
+   eon_services_response_ready = yes
+  }
+  set_temp_variable = { eon_services_requested_kind = 1 }
+  custom_effect_tooltip = eon_services_logistics_terms_tt
+  eon_services_accept_offer = yes
+  ai_chance = { #Sacrifice Influence for logistics services
+			factor = 150
+			modifier = {
+				factor = 0.05
+				has_government = nationalist
+			}
+			modifier = {
+				has_war = yes
+				factor = 5.5
+			}
+			modifier = {
+				any_neighbor_country = {
+					is_justifying_wargoal_against = THIS
+				}
+				factor = 2.0
+			}
+			modifier = {
+				factor = 0.01
+				has_government = fascism
+				ROOT = { NOT = { has_government = fascism } }
+			}
+			modifier = {
+				factor = 1.0
+				has_opinion = { target = FROM value < 10 }
+			}
+			modifier = {
+				factor = 0.90
+				has_opinion = { target = FROM value < -10 }
+			}
+			modifier = {
+				factor = 0.75
+				has_opinion = { target = FROM value < -30 }
+			}
+			modifier = {
+				factor = 0.45
+				has_opinion = { target = FROM value < -60 }
+			}
+			modifier = {
+				factor = 0.30
+				has_opinion = { target = FROM value < -80 }
+			}
+			modifier = {
+				factor = 0.10
+				has_opinion = { target = FROM value < -90 }
+			}
+			modifier = {
+				factor = 0
+				has_opinion = { target = FROM value < -100 }
+			}
+		}
+ }
+ option = {
+  name = eon_services.1.c
+  trigger = {
+   set_temp_variable = { eon_services_requested_kind = 1 }
+   eon_services_response_pending = yes
+   eon_services_response_kind_matches = yes
+  }
+  set_temp_variable = { eon_services_requested_kind = 1 }
+  custom_effect_tooltip = eon_services_decline_tt
+  eon_services_reject_offer = yes
+  ai_chance = { #Should be more likely to reject if they don't need it
+			factor = 5
+			modifier = {
+				factor = 100
+				has_idea = no_military
+			}
+			modifier = {
+				OR = {
+					has_government = nationalist
+					has_government = fascism
+				}
+				factor = 0.1
+			}
+		}
+ }
+ option = {
+  name = eon_services.ack
+  trigger = {
+   set_temp_variable = { eon_services_requested_kind = 1 }
+   NOT = {
+    AND = { eon_services_response_pending = yes eon_services_response_kind_matches = yes }
+   }
+  }
+  custom_effect_tooltip = eon_services_unmatched_tt
+  ai_chance = { factor = 100 }
+ }
+}
+
+country_event = {
+ id = eon_services.6
+ title = eon_services.1.t
+ desc = eon_services.1.d
+ picture = GFX_special_forces
+ is_triggered_only = yes
+ option = {
+  name = eon_services.1.b
+  trigger = {
+   set_temp_variable = { eon_services_requested_kind = 2 }
+   eon_services_response_ready = yes
+  }
+  set_temp_variable = { eon_services_requested_kind = 2 }
+  custom_effect_tooltip = eon_services_recon_terms_tt
+  eon_services_accept_offer = yes
+  ai_chance = { #Sacrifice Influence for recon services
+			factor = 150
+
+			modifier = {
+				factor = 0.05
+				has_government = nationalist
+			}
+			modifier = {
+				has_war = yes
+				factor = 1.5
+			}
+			modifier = {
+				any_neighbor_country = {
+					is_justifying_wargoal_against = THIS
+				}
+				factor = 2.0
+			}
+			modifier = {
+				factor = 2.90
+				has_opinion = { target = FROM value < 10 }
+			}
+			modifier = {
+				factor = 1.25
+				has_opinion = { target = FROM value < -10 }
+			}
+			modifier = {
+				factor = 1.35
+				has_opinion = { target = FROM value < -30 }
+			}
+			modifier = {
+				factor = 1.50
+				has_opinion = { target = FROM value < -60 }
+			}
+			modifier = {
+				factor = 1.60
+				has_opinion = { target = FROM value < -80 }
+			}
+			modifier = {
+				factor = 2.0
+				has_opinion = { target = FROM value < -90 }
+			}
+			modifier = { #Never Accept the issue
+				factor = 100
+				has_opinion = { target = FROM value < -100 }
+			}
+		}
+ }
+ option = {
+  name = eon_services.1.c
+  trigger = {
+   set_temp_variable = { eon_services_requested_kind = 2 }
+   eon_services_response_pending = yes
+   eon_services_response_kind_matches = yes
+  }
+  set_temp_variable = { eon_services_requested_kind = 2 }
+  custom_effect_tooltip = eon_services_decline_tt
+  eon_services_reject_offer = yes
+  ai_chance = { #Should be more likely to reject if they don't need it
+			factor = 5
+			modifier = {
+				factor = 100
+				has_idea = no_military
+			}
+			modifier = {
+				OR = {
+					has_government = nationalist
+					has_government = fascism
+				}
+				factor = 0.1
+			}
+		}
+ }
+ option = {
+  name = eon_services.ack
+  trigger = {
+   set_temp_variable = { eon_services_requested_kind = 2 }
+   NOT = {
+    AND = { eon_services_response_pending = yes eon_services_response_kind_matches = yes }
+   }
+  }
+  custom_effect_tooltip = eon_services_unmatched_tt
+  ai_chance = { factor = 100 }
+ }
+}
+
+country_event = {
+ id = eon_services.2
+ title = eon_services.2.t
+ desc = eon_services.2.d
+ picture = GFX_special_forces
+ is_triggered_only = yes
+ option = { name = eon_services.ack }
+}
+country_event = {
+ id = eon_services.3
+ title = eon_services.3.t
+ desc = eon_services.3.d
+ picture = GFX_special_forces
+ is_triggered_only = yes
+ option = { name = eon_services.ack }
+}
+country_event = {
+ id = eon_services.4
+ title = eon_services.4.t
+ desc = eon_services.4.d
+ picture = GFX_special_forces
+ is_triggered_only = yes
+ option = { name = eon_services.ack }
+}
+country_event = {
+ id = eon_services.5
+ title = eon_services.5.t
+ desc = eon_services.5.d
+ picture = GFX_special_forces
+ is_triggered_only = yes
+ option = { name = eon_services.ack }
+}
+country_event = {
+ id = eon_services.7
+ title = eon_services.7.t
+ desc = eon_services.7.d
+ picture = GFX_special_forces
+ is_triggered_only = yes
+ option = { name = eon_services.ack }
+}
+country_event = {
+ id = eon_services.8
+ title = eon_services.8.t
+ desc = eon_services.8.d
+ picture = GFX_special_forces
+ is_triggered_only = yes
+ option = { name = eon_services.ack }
+}

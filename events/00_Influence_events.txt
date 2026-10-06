@@ -2798,70 +2798,24 @@ country_event = {
 	option = {
 		name = influence.501.a
 		trigger = {
-			FROM.FROM = {
-				OR = {
-					has_civil_war = yes
-					has_war = yes
-				}
-				NOT = {
-					has_idea = military_services_logistics_idea
-				}
-			}
+			set_temp_variable = { eon_services_requested_kind = 1 }
+			eon_services_selection_ready = yes
 		}
-		log = "[GetDateText]: [This.GetName]: influence.501.a executed"
-		set_country_flag = military_services_sent_logistics
-		effect_tooltip = {
-			set_temp_variable = { percent_change = 2 }
-			set_temp_variable = { tag_index = ROOT.id }
-			set_temp_variable = { influence_target = FROM.FROM.id }
-			change_influence_percentage = yes
-			set_temp_variable = { temp_opinion = 3 }
-			change_the_military_opinion = yes
-			FROM.FROM = { #Should be the targeted influencing nation
-				add_timed_idea = {
-					idea = military_services_logistics_idea
-					days = 80
-				}
-			}
-		}
-		FROM.FROM = { #Targeted Influencer should recieve this
-			country_event = { id = influence.506 } #Logistics sent
-		}
+		set_temp_variable = { eon_services_requested_kind = 1 }
+		custom_effect_tooltip = eon_services_logistics_offer_tt
+		eon_services_send_offer = yes
 	}
 
 	#RECON
 	option = {
 		name = influence.501.b
 		trigger = {
-			FROM.FROM = {
-				OR = {
-					has_civil_war = yes
-					has_war = yes
-				}
-				NOT = {
-					has_idea = military_services_recon_idea
-				}
-			}
+			set_temp_variable = { eon_services_requested_kind = 2 }
+			eon_services_selection_ready = yes
 		}
-		log = "[GetDateText]: [This.GetName]: influence.501.b executed"
-		set_country_flag = military_services_sent_recon
-		effect_tooltip = {
-			set_temp_variable = { percent_change = 3 }
-			set_temp_variable = { tag_index = ROOT.id }
-			set_temp_variable = { influence_target = FROM.FROM.id }
-			change_influence_percentage = yes
-			set_temp_variable = { temp_opinion = 3 }
-			change_the_military_opinion = yes
-			FROM.FROM = { #Should be the targeted influencing nation
-				add_timed_idea = {
-					idea = military_services_recon_idea
-					days = 80
-				}
-			}
-		}
-		FROM.FROM = { #Targeted Influencer should receive this
-			country_event = { id = influence.506 } #Recon sent
-		}
+		set_temp_variable = { eon_services_requested_kind = 2 }
+		custom_effect_tooltip = eon_services_recon_offer_tt
+		eon_services_send_offer = yes
 	}
 
 	#MERCENARIES
@@ -3024,197 +2978,25 @@ country_event = {
 country_event = {
 	id = influence.506
 	title = influence.506.t
-	desc = influence.506.d
+	desc = eon_services_legacy_desc
 	picture = GFX_special_forces
 	is_triggered_only = yes
-
-	option = { #Accept if chosen logistics
+	# Retain the old option IDs/order for stale native replies, without admission.
+	option = {
 		name = influence.506.a
-		trigger = {
-			FROM = { has_country_flag = military_services_sent_logistics }
-		}
-		log = "[GetDateText]: [This.GetName]: influence.506.a executed"
-		FROM = { clr_country_flag = military_services_sent_logistics }
-		FROM = {
-			set_temp_variable = { treasury_change = 3 }
-			modify_treasury_effect = yes
-			set_temp_variable = { temp_opinion = 3 }
-			change_the_military_opinion = yes
-		}
-		set_temp_variable = { treasury_change = -3 }
-		modify_treasury_effect = yes
-		add_timed_idea = {
-			idea = military_services_logistics_idea
-			days = 80
-		}
-		set_temp_variable = { percent_change = 1.5 }
-		set_temp_variable = { tag_index = FROM.id }
-		set_temp_variable = { influence_target = THIS.id }
-		change_influence_percentage = yes
-
-		FROM = { country_event = { id = diplomatic_response.1 } }
-		ai_chance = { #Sacrifice Influence for logistics services
-			factor = 150
-			modifier = {
-				factor = 0.05
-				has_government = nationalist
-			}
-			modifier = {
-				has_war = yes
-				factor = 5.5
-			}
-			modifier = {
-				any_neighbor_country = {
-					is_justifying_wargoal_against = THIS
-				}
-				factor = 2.0
-			}
-			modifier = {
-				factor = 0.01
-				has_government = fascism
-				ROOT = { NOT = { has_government = fascism } }
-			}
-			modifier = {
-				factor = 1.0
-				has_opinion = { target = FROM value < 10 }
-			}
-			modifier = {
-				factor = 0.90
-				has_opinion = { target = FROM value < -10 }
-			}
-			modifier = {
-				factor = 0.75
-				has_opinion = { target = FROM value < -30 }
-			}
-			modifier = {
-				factor = 0.45
-				has_opinion = { target = FROM value < -60 }
-			}
-			modifier = {
-				factor = 0.30
-				has_opinion = { target = FROM value < -80 }
-			}
-			modifier = {
-				factor = 0.10
-				has_opinion = { target = FROM value < -90 }
-			}
-			modifier = {
-				factor = 0
-				has_opinion = { target = FROM value < -100 }
-			}
-		}
+		trigger = { always = no }
+		eon_services_legacy_close = yes
 	}
-
-	option = { #Accept if chosen recon services
+	option = {
 		name = influence.506.b
-		trigger = {
-			FROM = { has_country_flag = military_services_sent_recon }
-		}
-		log = "[GetDateText]: [This.GetName]: influence.506.b executed"
-		FROM = { clr_country_flag = military_services_sent_recon }
-		FROM = {
-			set_temp_variable = { treasury_change = 4 }
-			modify_treasury_effect = yes
-			set_temp_variable = { temp_opinion = 3 }
-			change_the_military_opinion = yes
-		}
-		set_temp_variable = { treasury_change = -4 }
-		modify_treasury_effect = yes
-		add_timed_idea = {
-			idea = military_services_recon_idea
-			days = 80
-		}
-		set_temp_variable = { percent_change = 2 }
-		set_temp_variable = { tag_index = FROM.id }
-		set_temp_variable = { influence_target = THIS.id }
-		change_influence_percentage = yes
-
-		FROM = { country_event = { id = diplomatic_response.1 } }
-		ai_chance = { #Sacrifice Influence for recon services
-			factor = 150
-
-			modifier = {
-				factor = 0.05
-				has_government = nationalist
-			}
-			modifier = {
-				has_war = yes
-				factor = 1.5
-			}
-			modifier = {
-				any_neighbor_country = {
-					is_justifying_wargoal_against = THIS
-				}
-				factor = 2.0
-			}
-			modifier = {
-				factor = 2.90
-				has_opinion = { target = FROM value < 10 }
-			}
-			modifier = {
-				factor = 1.25
-				has_opinion = { target = FROM value < -10 }
-			}
-			modifier = {
-				factor = 1.35
-				has_opinion = { target = FROM value < -30 }
-			}
-			modifier = {
-				factor = 1.50
-				has_opinion = { target = FROM value < -60 }
-			}
-			modifier = {
-				factor = 1.60
-				has_opinion = { target = FROM value < -80 }
-			}
-			modifier = {
-				factor = 2.0
-				has_opinion = { target = FROM value < -90 }
-			}
-			modifier = { #Never Accept the issue
-				factor = 100
-				has_opinion = { target = FROM value < -100 }
-			}
-		}
+		trigger = { always = no }
+		eon_services_legacy_close = yes
 	}
-
-	#Refusal
 	option = {
 		name = influence.506.c
-		trigger = {
-			FROM = {
-				OR = {
-					has_country_flag = military_services_sent_logistics
-					has_country_flag = military_services_sent_recon
-				}
-			}
-		}
-		log = "[GetDateText]: [This.GetName]: influence.506.c executed"
-		if = { limit = { NOT = { has_country_flag = refused_military_aid } }
-			set_temp_variable = { percent_change = 2 }
-			change_domestic_influence_percentage = yes
-			set_country_flag = { flag = refused_military_aid value = 1 days = 180 }
-			custom_effect_tooltip = domestic_influence_six_months_TT
-		}
-		else = {
-			custom_effect_tooltip = domestic_timer_military_aid_tt
-		}
-
-		FROM = { country_event = { id = diplomatic_response.2 } }
-		ai_chance = { #Should be more likely to reject if they don't need it
-			factor = 5
-			modifier = {
-				factor = 100
-				has_idea = no_military
-			}
-			modifier = {
-				OR = {
-					has_government = nationalist
-					has_government = fascism
-				}
-				factor = 0.1
-			}
-		}
+		custom_effect_tooltip = eon_services_legacy_close_tt
+		eon_services_legacy_close = yes
+		ai_chance = { factor = 100 }
 	}
 }
 

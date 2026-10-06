@@ -13,6 +13,14 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = '0e70f281145041d9e707089623ef5ecb610b744f'
+import sys as package17_sys
+package17_sys.path.insert(0, str(ROOT / 'tools/validation'))
+from diplomacy_package_17.test_source import (
+    NEW as LATER_PACKAGE17_NEW, package17_original_bytes, package17_historical_existing,
+    package17_original_validator_bytes, historical_actions as package17_historical_actions,
+    check_owned_existing as check_later_package17_owned,
+)
+check_later_package17_owned()
 ACTION = 'common/scripted_diplomatic_actions/MDC_send_ammo.txt'
 FX = 'common/scripted_effects/eon_ammo_effects.txt'
 TR = 'common/scripted_triggers/eon_ammo_triggers.txt'
@@ -120,6 +128,7 @@ def check_owned_existing():
 
 def historical_actions(actions):
     """Only older source proofs omit the single separately checked addition."""
+    actions = package17_historical_actions(actions)
     return [identity for identity in actions if identity != 'eon_ammo_withdraw_offer']
 
 
@@ -606,6 +615,7 @@ HISTORICAL_SOURCE_EDITS = {'tools/validation/diplomacy_package_02/test_source.py
 
 
 def package16_original_validator_bytes(path, actual):
+    actual = package17_original_validator_bytes(path, actual)
     if path not in HISTORICAL_SOURCE_EDITS: return actual
     original = baseline_bytes(path)
     lines = original.decode('utf-8').splitlines(keepends=True)
@@ -634,6 +644,8 @@ def main():
              'portraits', 'tutorial', 'descriptions', 'scenario_tests', 'descriptor.mod', 'era_of_nations.mod', 'thumbnail.png')
     changed = set(subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines())
     untracked = set(subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines())
+    changed -= package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW
+    untracked -= LATER_PACKAGE17_NEW
     assert changed - NEW == EXISTING and (changed | untracked) - EXISTING == NEW, (changed, untracked)
     assert not subprocess.check_output(['git', 'diff', '--name-only', '--diff-filter=D', BASELINE, '--', *trees], cwd=ROOT).strip()
     passed('exact_full_gameplay_tree_three_existing_seven_new_no_unowned_deletions')
@@ -780,6 +792,7 @@ def main():
     old_ids = [key for path in subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--',
                'common/scripted_diplomatic_actions'], cwd=ROOT).decode().splitlines() if path.endswith('.txt')
                for key, op, val in one(ast(baseline_bytes(path)), 'scripted_diplomatic_actions')]
+    native_ids = package17_historical_actions(native_ids)
     assert len(old_ids) == len(set(old_ids)) == 65 and len(native_ids) == len(set(native_ids)) == 66
     assert set(native_ids) == set(old_ids) | {'eon_ammo_withdraw_offer'}
     passed('all65_existing_native_IDs_plus_one_unique_addition_no_migration')

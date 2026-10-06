@@ -1,0 +1,204 @@
+# Existing military-service policy, receiver scope, explicitly frozen provider.
+# No cooldown check here: the inherited GUI already sets its 60-day pair timer
+# before the provider chooses a service. No political entry check ends a paid
+# service merely because influence rank or government later changes.
+eon_services_policy_allowed = {
+ exists = yes
+ NOT = { tag = eon_services_policy_provider }
+ OR = { has_civil_war = yes has_war = yes }
+ NOT = { has_war_with = eon_services_policy_provider }
+ OR = {
+  check_variable = { influence_array^0 = eon_services_policy_provider }
+  check_variable = { influence_array^1 = eon_services_policy_provider }
+  check_variable = { influence_array^2 = eon_services_policy_provider }
+  check_variable = { influence_array^3 = eon_services_policy_provider }
+  check_variable = { influence_array^4 = eon_services_policy_provider }
+  check_variable = { influence_array^5 = eon_services_policy_provider }
+  check_variable = { influence_array^6 = eon_services_policy_provider }
+ }
+ var:eon_services_policy_provider = {
+  exists = yes
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_services_policy_provider }
+  OR = {
+   has_idea = defense_industry
+   num_of_military_factories > 10
+   has_country_flag = can_sent_military_aid
+  }
+  if = {
+   limit = { is_ai = yes }
+   PREV = { has_government = eon_services_policy_provider }
+  }
+  if = {
+   limit = { original_tag = ERI has_country_flag = ETH_transitional_government_FLAG }
+   NOT = { has_country_leader = { name = "Eritrean Transitional Government" } }
+  }
+ }
+}
+
+# Provider country scope. Country-only existence plus the exact ID protects
+# variable scopes; a known dead country still identifies an old pair safely.
+eon_services_partner_identified = {
+ check_variable = { eon_services_partner > 0 }
+ var:eon_services_partner = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_services_partner }
+ }
+}
+
+# Existing influence.501 selection: ROOT/THIS provider, FROM.FROM receiver.
+# Temporary requested_kind is separate from the permanent frozen kind.
+eon_services_selection_ready = {
+ exists = yes
+ NOT = { has_country_flag = eon_services_quarantined }
+ NOT = { has_country_flag = eon_services_pending }
+ NOT = { has_country_flag = eon_services_live }
+ NOT = { has_country_flag = eon_services_cancelled }
+ NOT = { has_country_flag = military_services_sent_logistics }
+ NOT = { has_country_flag = military_services_sent_recon }
+ check_variable = { eon_services_partner = 0 }
+ check_variable = { eon_services_kind = 0 }
+ OR = {
+  check_variable = { eon_services_requested_kind = 1 }
+  check_variable = { eon_services_requested_kind = 2 }
+ }
+ set_temp_variable = { eon_services_selection_provider = THIS }
+ FROM.FROM = {
+  set_temp_variable = { eon_services_policy_provider = PREV.eon_services_selection_provider }
+  eon_services_policy_allowed = yes
+  if = {
+   limit = { check_variable = { PREV.eon_services_requested_kind = 1 } }
+   NOT = { has_idea = military_services_logistics_idea }
+   NOT = { has_country_flag = eon_services_logistics_owned }
+  }
+  else = {
+   NOT = { has_idea = military_services_recon_idea }
+   NOT = { has_country_flag = eon_services_recon_owned }
+  }
+  var:eon_services_policy_provider = {
+   NOT = { has_country_flag = eon_services_retired_pair@PREV }
+  }
+ }
+}
+
+# New recipient response: ROOT/THIS receiver, FROM original provider. Identity
+# alone admits cleanup, including cancelled or no-longer-payable proposals.
+eon_services_response_pending = {
+ FROM = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  has_country_flag = eon_services_pending
+  eon_services_partner_identified = yes
+  check_variable = { eon_services_partner = PREV }
+ }
+}
+
+eon_services_response_kind_matches = {
+ OR = {
+  check_variable = { eon_services_requested_kind = 1 }
+  check_variable = { eon_services_requested_kind = 2 }
+ }
+ FROM = { check_variable = { eon_services_kind = PREV.eon_services_requested_kind } }
+}
+
+eon_services_response_ready = {
+ eon_services_response_pending = yes
+ eon_services_response_kind_matches = yes
+ FROM = {
+  exists = yes
+  has_country_flag = eon_services_live
+  NOT = { has_country_flag = eon_services_cancelled }
+ }
+ set_temp_variable = { eon_services_policy_provider = FROM }
+ eon_services_policy_allowed = yes
+ if = {
+  limit = { check_variable = { eon_services_requested_kind = 1 } }
+  NOT = { has_idea = military_services_logistics_idea }
+  NOT = { has_country_flag = eon_services_logistics_owned }
+  set_temp_variable = { eon_services_fee = 3 }
+ }
+ else = {
+  NOT = { has_idea = military_services_recon_idea }
+  NOT = { has_country_flag = eon_services_recon_owned }
+  set_temp_variable = { eon_services_fee = 4 }
+ }
+ check_variable = { treasury >= eon_services_fee }
+ check_variable = { treasury <= 1000000 }
+ FROM = {
+  check_variable = { treasury >= -1000000 }
+  set_temp_variable = { eon_services_projected_treasury = treasury }
+  add_to_temp_variable = { eon_services_projected_treasury = PREV.eon_services_fee }
+  check_variable = { eon_services_projected_treasury <= 1000000 }
+ }
+}
+
+# Native action ROOT provider, THIS receiver. A withdrawal preserves the old
+# response identity until consumed or forcibly retired after its 30-day timer.
+eon_services_withdraw_available = {
+ exists = yes
+ NOT = { tag = ROOT }
+ ROOT = {
+  exists = yes
+  has_country_flag = eon_services_pending
+  eon_services_partner_identified = yes
+  check_variable = { eon_services_partner = PREV }
+  NOT = { has_country_flag = eon_services_cancelled }
+ }
+}
+
+eon_services_logistics_provider_identified = {
+ check_variable = { eon_services_logistics_provider > 0 }
+ var:eon_services_logistics_provider = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_services_logistics_provider }
+ }
+}
+
+eon_services_recon_provider_identified = {
+ check_variable = { eon_services_recon_provider > 0 }
+ var:eon_services_recon_provider = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_services_recon_provider }
+ }
+}
+
+# Native ROOT actor/THIS counterparty. Ending a service type with this partner
+# ends both matching directed services; other types and pending replies stay.
+eon_services_end_logistics_available = {
+ exists = yes
+ NOT = { tag = ROOT }
+ ROOT = { exists = yes }
+ OR = {
+  AND = {
+   has_country_flag = eon_services_logistics_owned
+   eon_services_logistics_provider_identified = yes
+   check_variable = { eon_services_logistics_provider = ROOT }
+  }
+  ROOT = {
+   has_country_flag = eon_services_logistics_owned
+   eon_services_logistics_provider_identified = yes
+   check_variable = { eon_services_logistics_provider = PREV }
+  }
+ }
+}
+
+eon_services_end_recon_available = {
+ exists = yes
+ NOT = { tag = ROOT }
+ ROOT = { exists = yes }
+ OR = {
+  AND = {
+   has_country_flag = eon_services_recon_owned
+   eon_services_recon_provider_identified = yes
+   check_variable = { eon_services_recon_provider = ROOT }
+  }
+  ROOT = {
+   has_country_flag = eon_services_recon_owned
+   eon_services_recon_provider_identified = yes
+   check_variable = { eon_services_recon_provider = PREV }
+  }
+ }
+}

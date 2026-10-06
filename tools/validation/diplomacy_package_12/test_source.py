@@ -28,6 +28,11 @@ from diplomacy_package_16.test_source import (
     historical_actions as package16_historical_actions, check_owned_existing as check_later_package16_owned,
 )
 check_later_package16_owned()
+from diplomacy_package_17.test_source import (
+    NEW as LATER_PACKAGE17_NEW, package17_original_bytes, package17_historical_existing,
+    historical_actions as package17_historical_actions, check_owned_existing as check_later_package17_owned,
+)
+check_later_package17_owned()
 import sys as package13_sys
 package13_sys.path.insert(0, str(ROOT / 'tools/validation'))
 
@@ -175,9 +180,9 @@ def main():
            'portraits','tutorial','descriptions','scenario_tests','descriptor.mod','era_of_nations.mod','thumbnail.png')
     baseline_paths=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
-    changed=[path for path in changed if path not in (package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE))-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW]
+    changed=[path for path in changed if path not in (package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE))-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW]
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
-    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW]
+    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW]
     assert set(changed)|set(untracked)==EXISTING|NEW|LATER_PACKAGE13_NEW,('Unowned gameplay edits',changed,untracked)
     assert set(changed).intersection(baseline_paths)==EXISTING
     assert not NEW.intersection(baseline_paths) and set(untracked)<=NEW|LATER_PACKAGE13_NEW
