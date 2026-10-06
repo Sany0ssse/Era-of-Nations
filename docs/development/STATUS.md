@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and thirteen implementation packages are complete at
+The existing diplomacy audit and fourteen implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -209,10 +209,31 @@ byte-exact. The previous capacity-overwrite description has been corrected;
 the append-only archive of prior evidence is preserved. See
 [DIPLOMACY_PACKAGE_13_UK.md](DIPLOMACY_PACKAGE_13_UK.md).
 Native scopes/timers/arrays/modifiers/UI/AI/save-load and campaign acceptance
-remain unverified. Civilian GNSS/COM's original tier0 ban is still deferred.
-Old unknown callbacks, SPY weather base calculation,
-COM soft AI zero-divide guards, shared cooldown and immediate traffic/base
-freshness need follow-up. No game, saves, launcher or Workshop changes were made.
+remain unverified. The civilian GNSS/COM tier0 ban and old SPY weather
+base/COM AI predicates were deferred at this stage and addressed by package14.
+Unknown legacy callbacks, shared COM cooldown and immediate traffic/base
+freshness remain open. No game, saves, launcher or Workshop changes were made.
+
+The fourteenth package admits working first-generation civilian GNSS/COM
+services using positive corresponding satellite counts in current system stats,
+and applies their native tier0 bonus caps. It fixes the negative SPY weather
+base interval and adds explicit nonpositive-capacity branches to two projected
+COM AI predicates. Positive-capacity arithmetic, traffic thresholds, native
+action IDs/weights, proposal/consent lifecycle and weekly stats cadence are retained.
+The native documentation gives divide_temp_variable a default if_zero=0;
+the reproduced defect was a permissive AI traffic result, not a proven crash.
+Fresh checks passed 6026 cumulative source-model scenarios (5932 earlier plus
+94 new actual-source scenarios),
+with two adapter checks counted separately and 108 new source/boundary checks.
+Six existing game files changed in nine blocks/eight locale lines; 68,315 others
+remain byte-exact. Historical assertions remain enabled through narrow byte
+restoration, with two old absent-system fixtures made explicit about zero inventory.
+Independent review binds the current six game hashes. See
+[DIPLOMACY_PACKAGE_14_UK.md](DIPLOMACY_PACKAGE_14_UK.md).
+Game acceptance remains pending. Shared COM accepted cooldown migration and
+immediate provider/recipient traffic/base freshness are the next bounded stage;
+unknown legacy callbacks retain their prior limitations. No game, saves,
+launcher, Workshop, DLC, source ZIP or attribution changes were made.
 
 ## Completed setup
 

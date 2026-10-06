@@ -7,6 +7,15 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
+import sys as package14_sys
+package14_sys.path.insert(0, str(ROOT / 'tools/validation'))
+
+# Package14 proves its six files before restoring nine blocks/eight locale lines.
+from diplomacy_package_14.test_source import (
+    EXISTING as LATER_PACKAGE14_EXISTING, check_owned_existing as check_later_package14_owned,
+    package14_original_bytes, package14_historical_existing,
+)
+check_later_package14_owned()
 import sys as package13_sys
 package13_sys.path.insert(0, str(ROOT / 'tools/validation'))
 
@@ -127,7 +136,8 @@ def main():
     groups,receipts,sources,helpers,kinds=Counter(),[],{},{},{}
     for path in sorted(NEW):
         assert (ROOT/path).is_file(),('Missing civilian satellite lifecycle source',path)
-        data=(ROOT/path).read_bytes()
+        actual_data=(ROOT/path).read_bytes()
+        data=package14_original_bytes(path,actual_data)
         assert b'\r' not in data and data.endswith(b'\n'),('New LF/EOF convention',path)
         assert data.startswith(b'\xef\xbb\xbf')==path.endswith('.yml'),('New BOM convention',path)
         assert '\ufffd' not in data.decode('utf-8-sig'),path
@@ -138,7 +148,7 @@ def main():
                 assert key.startswith('eon_sat_') and key not in helpers,('Unowned/duplicate helper',key)
                 helpers[key]=value
                 kinds[key]='effects' if '/scripted_effects/' in path else 'triggers'
-        receipts.append({'path':path,'sha256':hashlib.sha256(data).hexdigest()})
+        receipts.append({'path':path,'sha256':hashlib.sha256(actual_data).hexdigest()})
         groups['new_encoding_braces_and_owned_namespace']+=1
     check_owned_existing()
     for path in sorted(EXISTING):
@@ -152,6 +162,7 @@ def main():
            'portraits','tutorial','descriptions','scenario_tests','descriptor.mod','era_of_nations.mod','thumbnail.png')
     baseline_paths=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
+    changed=[path for path in changed if path not in package14_historical_existing(BASELINE)-EXISTING]
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
     assert set(changed)|set(untracked)==EXISTING|NEW|LATER_PACKAGE13_NEW,('Unowned gameplay edits',changed,untracked)
     assert set(changed).intersection(baseline_paths)==EXISTING
@@ -226,7 +237,8 @@ def main():
     expected_locale|={'eon_sat_'+family+'_'+suffix+'_tt' for family in ('gnss','com') for suffix in ('available','proposal','closed','withdraw','granted','revoke')}
     assert len(expected_locale)==18
     for language in ('english','russian'):
-        data=(ROOT/f'localisation/{language}/eon_satellite_l_{language}.yml').read_text(encoding='utf-8-sig')
+        locale_path=f'localisation/{language}/eon_satellite_l_{language}.yml'
+        data=package14_original_bytes(locale_path,(ROOT/locale_path).read_bytes()).decode('utf-8-sig')
         assert data.splitlines()[0]=='l_'+language+':'
         pairs=re.findall(r'^ ([\w.]+):0 "(.*)"$',data,re.M)
         assert len(pairs)==len(dict(pairs)) and len(pairs)==18
@@ -373,7 +385,7 @@ def main():
                      'common/scripted_guis/missiles_scripted_gui.txt',
                      'common/scripted_triggers/MD_missile_scripted_triggers.txt')
     for path in protected_files:
-        assert (ROOT/path).read_bytes()==subprocess.check_output(['git','show',BASELINE+':'+path],cwd=ROOT),('Original capability tables/GUI/national AI policy modified',path)
+        assert package14_original_bytes(path,(ROOT/path).read_bytes())==subprocess.check_output(['git','show',BASELINE+':'+path],cwd=ROOT),('Original capability tables/GUI/national AI policy modified',path)
         groups['original_global_capability_tables_GUI_array_IDs_and_AI_policy_byte_unchanged']+=1
     models=ast((ROOT/'common/scripted_effects/00_missiles_models.txt').read_bytes())
     for family,fields in bonus_fields.items():

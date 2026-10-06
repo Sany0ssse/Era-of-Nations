@@ -40,6 +40,13 @@ from diplomacy_package_13.test_source import (
 )
 check_later_package13_owned()
 
+# Package14 proves its six files before restoring nine blocks/eight locale lines.
+from diplomacy_package_14.test_source import (
+    EXISTING as LATER_PACKAGE14_EXISTING, check_owned_existing as check_later_package14_owned,
+    package14_original_bytes, package14_historical_existing,
+)
+check_later_package14_owned()
+
 # Package09 independently owns exactly these eight additions and one pre-clear hook.
 LATER_PACKAGE09_NEW = {
     'common/scripted_effects/eon_mediation_terms_effects.txt',
@@ -221,7 +228,7 @@ later_mediation_paths = {
     'localisation/russian/eon_mediation_l_russian.yml',
 }
 tracked_changes = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
-tracked_changes = [path for path in tracked_changes if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING]
+tracked_changes = [path for path in tracked_changes if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE)]
 owned_paths = {item['path'] for item in receipt}
 assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths | later_support_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned gameplay changes', tracked_changes)
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
@@ -238,7 +245,7 @@ exact_paths = [p for p in baseline_paths if p.startswith(('common/ideas/', 'comm
 exact_paths += [p for p in baseline_paths if p.startswith('common/factions/templates/') and p != 'common/factions/templates/00_multiplayer.txt']
 prime_baselines(exact_paths)
 for unchanged in exact_paths:
-    assert package10_original_bytes(unchanged, (ROOT / unchanged).read_bytes()) == baseline(unchanged), 'Preserved policy bytes changed: ' + unchanged
+    assert package10_original_bytes(unchanged, package14_original_bytes(unchanged, (ROOT / unchanged).read_bytes())) == baseline(unchanged), 'Preserved policy bytes changed: ' + unchanged
 passed('national_story_rules_thresholds_and_old_templates_exact_bytes', len(exact_paths))
 
 helpers, helper_paths = {}, {}

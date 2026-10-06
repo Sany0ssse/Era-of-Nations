@@ -168,9 +168,9 @@ eon_sat_refresh_gnss = {
  set_variable = { var_GNSS_civ_production_speed_buildings_factor = var_GNSS_civ_production_speed_buildings_factor_base }
  set_variable = { var_GNSS_civ_production_speed_infrastructure_factor = var_GNSS_civ_production_speed_infrastructure_factor_base }
  set_variable = { var_GNSS_civ_local_resources_factor = var_GNSS_civ_local_resources_factor_base }
- set_temp_variable = { eon_sat_gnss_highest = 0 }
+ set_temp_variable = { eon_sat_gnss_highest = -1 }
  for_each_scope_loop = { array = GNSS_civ_access_array
-  if = { limit = { exists = yes eon_sat_gnss_valid_level = yes check_variable = { var_GNSS_civ_system_idx > 0 }
+  if = { limit = { exists = yes eon_sat_gnss_valid_level = yes OR = { check_variable = { var_GNSS_civ_system_idx > 0 } AND = { check_variable = { var_GNSS_civ_system_idx = 0 } check_variable = { var_GNSS_civ_sat_system_num > 0 } } }
  NOT = { has_war_with = PREV }
  PREV = { eon_sat_gnss_valid_level = yes }
  OR = { check_variable = { THIS.var_GNSS_civ_system_idx = PREV.var_GNSS_civ_system_idx } check_variable = { THIS.var_GNSS_civ_system_idx > PREV.var_GNSS_civ_system_idx } } }
@@ -180,7 +180,7 @@ eon_sat_refresh_gnss = {
    if = { limit = { check_variable = { THIS.var_GNSS_civ_system_idx > eon_sat_gnss_highest } } set_temp_variable = { eon_sat_gnss_highest = THIS.var_GNSS_civ_system_idx } }
   }
  }
- if = { limit = { check_variable = { eon_sat_gnss_highest > 0 } }
+ if = { limit = { check_variable = { eon_sat_gnss_highest > -1 } }
   clamp_variable = { var = var_GNSS_civ_production_speed_buildings_factor max = global.GNSS_civ_production_speed_buildings_factor_max_array^eon_sat_gnss_highest }
   clamp_variable = { var = var_GNSS_civ_production_speed_infrastructure_factor max = global.GNSS_civ_production_speed_infrastructure_factor_max_array^eon_sat_gnss_highest }
   clamp_variable = { var = var_GNSS_civ_local_resources_factor max = global.GNSS_civ_local_resources_factor_max_array^eon_sat_gnss_highest }
@@ -359,9 +359,9 @@ eon_sat_refresh_com = {
  set_variable = { var_COM_civ_encryption_factor = var_COM_civ_encryption_factor_base }
  set_variable = { var_COM_civ_intel_network_gain_factor = var_COM_civ_intel_network_gain_factor_base }
  set_variable = { var_COM_civ_operation_outcome = var_COM_civ_operation_outcome_base }
- set_temp_variable = { eon_sat_com_highest = 0 }
+ set_temp_variable = { eon_sat_com_highest = -1 }
  for_each_scope_loop = { array = COM_civ_access_array
-  if = { limit = { exists = yes eon_sat_com_valid_level = yes check_variable = { var_COM_civ_system_idx > 0 }
+  if = { limit = { exists = yes eon_sat_com_valid_level = yes OR = { check_variable = { var_COM_civ_system_idx > 0 } AND = { check_variable = { var_COM_civ_system_idx = 0 } check_variable = { var_COM_civ_sat_system_num > 0 } } }
  NOT = { has_war_with = PREV }
  PREV = { eon_sat_com_valid_level = yes }
  OR = { check_variable = { THIS.var_COM_civ_system_idx = PREV.var_COM_civ_system_idx } check_variable = { THIS.var_COM_civ_system_idx > PREV.var_COM_civ_system_idx } } }
@@ -373,7 +373,7 @@ eon_sat_refresh_com = {
    if = { limit = { check_variable = { THIS.var_COM_civ_system_idx > eon_sat_com_highest } } set_temp_variable = { eon_sat_com_highest = THIS.var_COM_civ_system_idx } }
   }
  }
- if = { limit = { check_variable = { eon_sat_com_highest > 0 } }
+ if = { limit = { check_variable = { eon_sat_com_highest > -1 } }
   clamp_variable = { var = var_COM_civ_political_power_factor max = global.COM_civ_political_power_factor_max_array^eon_sat_com_highest }
   clamp_variable = { var = var_COM_civ_decryption_factor max = global.COM_civ_decryption_factor_max_array^eon_sat_com_highest }
   clamp_variable = { var = var_COM_civ_encryption_factor max = global.COM_civ_encryption_factor_max_array^eon_sat_com_highest }

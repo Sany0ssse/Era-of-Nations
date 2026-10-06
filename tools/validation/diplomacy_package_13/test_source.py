@@ -7,6 +7,15 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
+import sys as package14_sys
+package14_sys.path.insert(0, str(ROOT / 'tools/validation'))
+
+# Package14 proves its six files before restoring nine blocks/eight locale lines.
+from diplomacy_package_14.test_source import (
+    EXISTING as LATER_PACKAGE14_EXISTING, check_owned_existing as check_later_package14_owned,
+    package14_original_bytes, package14_historical_existing,
+)
+check_later_package14_owned()
 BASELINE = '150cb6f114f7f8896495f57206a1a854af06e056'
 EXISTING = {
     'common/scripted_diplomatic_actions/MD_missile_scripted_diplomatic_actions.txt',
@@ -86,6 +95,7 @@ def rows(nodes):
 
 def package13_original_bytes(path, actual):
     """Restore only twelve enumerated native actions or ten satellite effect blocks."""
+    actual=package14_original_bytes(path,actual)
     if path not in EXISTING:
         return actual
     old = subprocess.check_output(['git','show',BASELINE + ':' + path],cwd=ROOT)
@@ -158,13 +168,14 @@ def main():
         data=(ROOT/path).read_bytes()
         old=subprocess.check_output(['git','show',BASELINE+':'+path],cwd=ROOT)
         assert package13_original_bytes(path,data)==old
-        sources[path]=ast(data)
+        sources[path]=ast(package14_original_bytes(path,data))
         receipts.append({'path':path,'sha256':hashlib.sha256(data).hexdigest(),'all_unowned_bytes_exact':True})
         groups['only_enumerated_existing_twelve_native_or_ten_effect_ranges_changed']+=1
     trees=('common','history','events','interface','gfx','localisation','music','map','sound',
            'portraits','tutorial','descriptions','scenario_tests','descriptor.mod','era_of_nations.mod','thumbnail.png')
     baseline_paths=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
+    changed=[path for path in changed if path not in package14_historical_existing(BASELINE)-EXISTING]
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
     assert set(changed)|set(untracked)==EXISTING|NEW,('Unowned gameplay edits',changed,untracked)
     assert set(changed).intersection(baseline_paths)==EXISTING
@@ -379,7 +390,7 @@ def main():
                     'common/on_actions/eon_satellite_on_actions.txt','localisation/english/eon_satellite_l_english.yml',
                     'localisation/russian/eon_satellite_l_russian.yml'}
     for path in sorted(civilian_files):
-        assert (ROOT/path).read_bytes()==subprocess.check_output(['git','show',BASELINE+':'+path],cwd=ROOT),('Previous civilian package12 gameplay changed',path)
+        assert package14_original_bytes(path,(ROOT/path).read_bytes())==subprocess.check_output(['git','show',BASELINE+':'+path],cwd=ROOT),('Previous civilian package12 gameplay changed',path)
         groups['all_previous_package12_civilian_gameplay_files_byte_exact']+=1
     for path in sorted(NEW):
         if not path.endswith('.txt'): continue
@@ -433,7 +444,7 @@ def main():
                      'common/scripted_guis/missiles_scripted_gui.txt',
                      'common/scripted_triggers/MD_missile_scripted_triggers.txt')
     for path in protected_files:
-        assert (ROOT/path).read_bytes()==subprocess.check_output(['git','show',BASELINE+':'+path],cwd=ROOT),('Original capability tables/GUI/national AI policy modified',path)
+        assert package14_original_bytes(path,(ROOT/path).read_bytes())==subprocess.check_output(['git','show',BASELINE+':'+path],cwd=ROOT),('Original capability tables/GUI/national AI policy modified',path)
         groups['original_global_capability_tables_GUI_array_IDs_and_AI_policy_byte_unchanged']+=1
     models=ast((ROOT/'common/scripted_effects/00_missiles_models.txt').read_bytes())
     primary_ui=(ROOT/'localisation/english/MD_missiles_l_english.yml').read_text(encoding='utf-8-sig')

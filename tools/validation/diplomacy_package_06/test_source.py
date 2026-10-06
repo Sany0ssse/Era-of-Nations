@@ -52,6 +52,13 @@ from diplomacy_package_13.test_source import (
     check_owned_existing as check_later_package13_owned, package13_original_bytes,
 )
 check_later_package13_owned()
+
+# Package14 proves its six files before restoring nine blocks/eight locale lines.
+from diplomacy_package_14.test_source import (
+    EXISTING as LATER_PACKAGE14_EXISTING, check_owned_existing as check_later_package14_owned,
+    package14_original_bytes, package14_historical_existing,
+)
+check_later_package14_owned()
 BASELINE = '551d7100f6c35cd062a36520f6a7eed199b13a2e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, format_preserved, one
@@ -110,7 +117,7 @@ LATER_PACKAGE08_ACTIONS = {'eon_request_war_mediation', 'eon_withdraw_mediation'
 def before(path):
     return subprocess.check_output(['git', 'show', BASELINE + ':' + path], cwd=ROOT)
 
-def read(path): return (ROOT / path).read_bytes()
+def read(path): return package14_original_bytes(path, (ROOT / path).read_bytes())
 def parsed(path): return ast(read(path))
 def restore(after, old, selector):
     previous = {selector(old, b): b for b in blocks(old) if selector(old, b)}
@@ -433,7 +440,7 @@ if docs.exists():
 
 TREES = ('common', 'history', 'events', 'interface', 'gfx', 'localisation', 'music', 'map', 'sound')
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
-changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING]
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE)]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
 assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unexpected package06 gameplay scope', changed, untracked)
 assert set(untracked) <= NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned new source', untracked)

@@ -1290,6 +1290,8 @@ NOT_share_satellites_with_foes = {
 }
 
 NOT_share_COM_mil_satellites_above_network_traffic_limit = {
+	if = {
+		limit = { check_variable = { ROOT.var_COM_mil_receiver_cap > 0 } }
 	OR = {
 		check_variable = {
 			ROOT.var_sat_network_traffic_mil > 1.249
@@ -1308,9 +1310,13 @@ NOT_share_COM_mil_satellites_above_network_traffic_limit = {
 			}
 		}
 	}
+	}
+	else = { always = yes }
 }
 
 NOT_share_COM_civ_satellites_above_network_traffic_limit = {
+	if = {
+		limit = { check_variable = { ROOT.var_COM_civ_receiver_cap > 0 } }
 	OR = {
 		check_variable = { ROOT.var_sat_network_traffic_civ > 1.249 }
 		AND = {
@@ -1327,4 +1333,6 @@ NOT_share_COM_civ_satellites_above_network_traffic_limit = {
 			}
 		}
 	}
+	}
+	else = { always = yes }
 }

@@ -20,7 +20,7 @@ eon_sat_gnss_withdraw_ready = { exists = yes is_ai = no has_country_flag = eon_s
 
 eon_sat_gnss_request_terms = {
  eon_sat_gnss_pair_live = yes
- PREV = { eon_sat_gnss_valid_level = yes check_variable = { var_GNSS_civ_system_idx > 0 } }
+ PREV = { eon_sat_gnss_valid_level = yes OR = { check_variable = { var_GNSS_civ_system_idx > 0 } AND = { check_variable = { var_GNSS_civ_system_idx = 0 } check_variable = { var_GNSS_civ_sat_system_num > 0 } } } }
  eon_sat_gnss_valid_level = yes
  OR = { check_variable = { PREV.var_GNSS_civ_system_idx = var_GNSS_civ_system_idx } check_variable = { PREV.var_GNSS_civ_system_idx > var_GNSS_civ_system_idx } }
  NOT = { is_in_array = { array = GNSS_civ_access_array value = PREV.id } }
@@ -38,7 +38,7 @@ eon_sat_gnss_request_authorized = {
 
 eon_sat_gnss_offer_terms = {
  eon_sat_gnss_pair_live = yes
- eon_sat_gnss_valid_level = yes check_variable = { var_GNSS_civ_system_idx > 0 }
+ eon_sat_gnss_valid_level = yes OR = { check_variable = { var_GNSS_civ_system_idx > 0 } AND = { check_variable = { var_GNSS_civ_system_idx = 0 } check_variable = { var_GNSS_civ_sat_system_num > 0 } } }
  PREV = { eon_sat_gnss_valid_level = yes }
  OR = { check_variable = { var_GNSS_civ_system_idx = PREV.var_GNSS_civ_system_idx } check_variable = { var_GNSS_civ_system_idx > PREV.var_GNSS_civ_system_idx } }
  NOT = { is_in_array = { array = PREV.GNSS_civ_access_array value = THIS.id } }
@@ -80,7 +80,7 @@ eon_sat_com_withdraw_ready = { exists = yes is_ai = no has_country_flag = eon_sa
 
 eon_sat_com_request_terms = {
  eon_sat_com_pair_live = yes
- PREV = { eon_sat_com_valid_level = yes check_variable = { var_COM_civ_system_idx > 0 } }
+ PREV = { eon_sat_com_valid_level = yes OR = { check_variable = { var_COM_civ_system_idx > 0 } AND = { check_variable = { var_COM_civ_system_idx = 0 } check_variable = { var_COM_civ_sat_system_num > 0 } } } }
  eon_sat_com_valid_level = yes
  OR = { check_variable = { PREV.var_COM_civ_system_idx = var_COM_civ_system_idx } check_variable = { PREV.var_COM_civ_system_idx > var_COM_civ_system_idx } }
  NOT = { is_in_array = { array = COM_civ_access_array value = PREV.id } }
@@ -98,7 +98,7 @@ eon_sat_com_request_authorized = {
 
 eon_sat_com_offer_terms = {
  eon_sat_com_pair_live = yes
- eon_sat_com_valid_level = yes check_variable = { var_COM_civ_system_idx > 0 }
+ eon_sat_com_valid_level = yes OR = { check_variable = { var_COM_civ_system_idx > 0 } AND = { check_variable = { var_COM_civ_system_idx = 0 } check_variable = { var_COM_civ_sat_system_num > 0 } } }
  PREV = { eon_sat_com_valid_level = yes }
  OR = { check_variable = { var_COM_civ_system_idx = PREV.var_COM_civ_system_idx } check_variable = { var_COM_civ_system_idx > PREV.var_COM_civ_system_idx } }
  NOT = { is_in_array = { array = PREV.COM_civ_access_array value = THIS.id } }

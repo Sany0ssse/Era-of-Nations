@@ -509,7 +509,9 @@ if focus is None:
             seed_consent(result, upper, duplicates=2 if mutation == 'duplicate equal providers' else 1)
             seed_consent(result, upper, provider='C')
             if mutation == 'provider changed tier': result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = 5
-            elif mutation == 'provider dormant zero': result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = 0
+            elif mutation == 'provider dormant zero':
+                result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = 0
+                result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 0
             elif mutation == 'provider below own tier': result['countries']['A']['variables']['var_' + upper + '_civ_system_idx'] = 4
             elif mutation == 'provider invalid fractional tier': result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = 3.5
             elif mutation == 'provider beyond supported tier': result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = 8
@@ -553,6 +555,7 @@ if focus is None:
 
         for level in (0, 1, 7, 8, -1, 3.5):
             result = state(); result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = level
+            if level == 0: result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 0
             ready = send(result, family)
             assert ready == (level in (1, 7)), (family, level, ready)
             if ready: assert response(result, family) and indices(result, 'A', upper) == [level]

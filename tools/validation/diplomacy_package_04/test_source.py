@@ -55,6 +55,13 @@ from diplomacy_package_13.test_source import (
     check_owned_existing as check_later_package13_owned, package13_original_bytes,
 )
 check_later_package13_owned()
+
+# Package14 proves its six files before restoring nine blocks/eight locale lines.
+from diplomacy_package_14.test_source import (
+    EXISTING as LATER_PACKAGE14_EXISTING, check_owned_existing as check_later_package14_owned,
+    package14_original_bytes, package14_historical_existing,
+)
+check_later_package14_owned()
 BASELINE = 'bb018ea1b6a083104b3fd797b83ad1127f77b1bf'
 PACKAGE05_BASELINE = '688f1116fbcb377215181edca6af50f36538532e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
@@ -318,7 +325,7 @@ later_package08_new = {
     'localisation/russian/eon_mediation_l_russian.yml',
 }
 tracked = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
-tracked = [path for path in tracked if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING]
+tracked = [path for path in tracked if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE)]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
 assert set(tracked) <= owned | new | later_package05_new | later_package06_paths | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned package04 gameplay edits', tracked)
 assert set(untracked) <= new | later_package05_new | later_package06_new | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned package04 gameplay additions', untracked)

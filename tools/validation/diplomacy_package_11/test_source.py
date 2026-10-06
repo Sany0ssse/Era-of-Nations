@@ -23,6 +23,13 @@ from diplomacy_package_13.test_source import (
     check_owned_existing as check_later_package13_owned, package13_original_bytes,
 )
 check_later_package13_owned()
+
+# Package14 proves its six files before restoring nine blocks/eight locale lines.
+from diplomacy_package_14.test_source import (
+    EXISTING as LATER_PACKAGE14_EXISTING, check_owned_existing as check_later_package14_owned,
+    package14_original_bytes, package14_historical_existing,
+)
+check_later_package14_owned()
 BASELINE = '77faaeb976af35b1185979ee85eabe7a6efc454a'
 EXISTING = {'common/decisions/MDDC_Terrorist_again.txt'}
 NEW = {
@@ -186,7 +193,7 @@ def main():
     baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-    changed = [path for path in changed if path not in LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING]
+    changed = [path for path in changed if path not in LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE)]
     assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned gameplay changes', changed, untracked)
     assert set(changed).intersection(baseline_paths) == EXISTING
     assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW
