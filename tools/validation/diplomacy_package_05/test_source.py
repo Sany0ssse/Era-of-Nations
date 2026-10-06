@@ -173,9 +173,30 @@ if docs.exists():
     native = {'checked': True, 'path': str(docs), 'round_then_correct_nonnegative_floor': True}
 
 trees = ('common', 'history', 'events', 'interface', 'gfx', 'localisation', 'music', 'map', 'sound')
+# Package06 protects these exact later aid/debt files against551d; the energy
+# block, helper, AI policy and locale assertions above are unchanged.
+later_package06_new = {
+    'common/scripted_effects/eon_aid_effects.txt',
+    'common/scripted_effects/eon_support_effects.txt',
+    'common/scripted_triggers/eon_aid_triggers.txt',
+    'common/scripted_triggers/eon_debt_support_triggers.txt',
+    'common/on_actions/eon_support_on_actions.txt',
+    'common/scripted_diplomatic_actions/eon_support_actions.txt',
+    'events/eon_support_events.txt',
+    'localisation/english/eon_support_l_english.yml',
+    'localisation/russian/eon_support_l_russian.yml',
+}
+later_package06_existing = {
+    'common/scripted_diplomatic_actions/00_scripted_diplomatic_actions.txt',
+    'common/scripted_guis/influence_scripted_gui.txt',
+    'events/00_Influence_events.txt',
+    'localisation/english/MDC_scripted_diplomatic_actions_l_english.yml',
+    'localisation/russian/MDDC_scripted_diplomatic_actions_l_russian.yml',
+}
+later_package06_paths = later_package06_new | later_package06_existing
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new, ('Unexpected gameplay changes', changed, untracked)
+assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new | later_package06_paths, ('Unexpected gameplay changes', changed, untracked)
 groups['whole_gameplay_git_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,
                   'baseline': BASELINE, 'owned_existing_files': receipts, 'native_primary_documentation': native,

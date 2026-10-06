@@ -1,0 +1,46 @@
+eon_debt_offer_existing_policy = {
+	if = { limit = { NOT = { is_subject_of = ROOT } }
+		#selected country has lower GDP/C than us
+		custom_trigger_tooltip = {
+			set_temp_variable = { gdp_total_temp = ROOT.gdp_total }
+			multiply_temp_variable = { gdp_total_temp = 2 }
+			check_variable = { gdp_total_temp > THIS.gdp_total }
+			tooltip = gdp_total_cannot_be_double_ours
+		}
+		gdp_debt_ratio_higher_25 = yes
+		ROOT = {
+			gdp_debt_ratio_lower_75 = yes
+		}
+		NOT = { has_war_with = ROOT }
+	}
+	THIS = {
+		has_opinion = { target = ROOT value > 49 }
+	}
+	if = {
+		limit = { is_in_faction = yes }
+		any_allied_country = {
+			NOT = { has_war_with = ROOT }
+		}
+	}
+	THIS = {
+		custom_trigger_tooltip = {
+			set_temp_variable = { tmp = debt }
+			multiply_temp_variable = { tmp = 0.25 }
+			check_variable = { tmp > 0 }
+			check_variable = { var = ROOT.treasury value = tmp compare = greater_than_or_equals }
+			tooltip = treasury_more_than_25_debt_tt
+		}
+	}
+	ROOT = { custom_trigger_tooltip = { tooltip = eon_diplo_no_pending_debt_offer_tt check_variable = { pending_assume_debt_offer = 0 } } }
+	ERI_is_not_transitional_government = yes
+
+}
+
+# A disappeared partner can retain an unconsumed native reply. Keep only that
+# outgoing pair closed after cleanup, rather than locking unrelated support.
+eon_debt_offer_pair_available = {
+	custom_trigger_tooltip = {
+		tooltip = eon_debt_retired_pair_available_tt
+		ROOT = { NOT = { has_country_flag = eon_debt_retired_pair@PREV } }
+	}
+}

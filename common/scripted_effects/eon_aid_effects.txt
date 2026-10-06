@@ -1,0 +1,252 @@
+# A reservation belongs to one aid modal at a time. Escrow is donor-owned;
+# recipient cash and political consequences change only on explicit acceptance.
+eon_aid_clear_pending = {
+	clr_country_flag = eon_aid_reserved
+	clr_country_flag = eon_aid_draft_owner
+	clr_country_flag = eon_aid_draft_recipient
+	clr_country_flag = eon_aid_outgoing
+	clr_country_flag = eon_aid_incoming
+	clr_country_flag = eon_aid_cancelled
+	clear_variable = eon_aid_partner
+	clear_variable = eon_aid_amount
+	clear_variable = eon_aid_escrow
+}
+
+# Recipient GUI scope, ROOT donor. Repeat policy and lock checks at execution.
+eon_aid_prepare_draft = {
+	if = {
+		limit = { eon_aid_gui_ready = yes }
+		set_variable = { eon_aid_partner = ROOT }
+		set_variable = { eon_aid_amount = 0 }
+		set_country_flag = eon_aid_reserved
+		set_country_flag = eon_aid_draft_recipient
+		ROOT = {
+			set_variable = { eon_aid_partner = PREV }
+			set_variable = { eon_aid_amount = 0 }
+			set_variable = { eon_aid_escrow = 0 }
+			set_country_flag = eon_aid_reserved
+			set_country_flag = eon_aid_draft_owner
+		}
+		country_event = { id = influence.0 }
+		update_dirty_influence_var = yes
+	}
+}
+
+# Hidden recipient callback uses the frozen donor pointer, not a shared target.
+eon_aid_dispatch_draft = {
+	if = {
+		limit = {
+			has_country_flag = eon_aid_reserved
+			has_country_flag = eon_aid_draft_recipient
+			check_variable = { eon_aid_partner = FROM }
+			var:eon_aid_partner = {
+				has_country_flag = eon_aid_reserved
+				has_country_flag = eon_aid_draft_owner
+				check_variable = { eon_aid_partner = PREV }
+			}
+		}
+		var:eon_aid_partner = { country_event = { id = influence.1 } }
+	}
+}
+
+# Donor selection modal has been consumed; no recipient reply exists yet.
+eon_aid_cancel_draft = {
+	if = {
+		limit = {
+			has_country_flag = eon_aid_reserved
+			has_country_flag = eon_aid_draft_owner
+			check_variable = { eon_aid_partner = FROM }
+		}
+		var:eon_aid_partner = {
+			if = {
+				limit = {
+					has_country_flag = eon_aid_draft_recipient
+					check_variable = { eon_aid_partner = PREV }
+				}
+				eon_aid_clear_pending = yes
+			}
+		}
+		eon_aid_clear_pending = yes
+		custom_effect_tooltip = eon_aid_draft_cancelled_tt
+		country_event = { id = eon_support.14 }
+		update_dirty_influence_var = yes
+	}
+}
+
+# Donor scope. The actual held balance is authoritative even when an offer became
+# invalid; queue refund before clearing, so treasury clamping cannot lose cash.
+eon_aid_refund_escrow = {
+	if = {
+		limit = { check_variable = { eon_aid_escrow > 0 } }
+		set_temp_variable = { eon_support_refund_amount = eon_aid_escrow }
+		set_variable = { eon_aid_escrow = 0 }
+		eon_support_queue_refund = yes
+	}
+}
+
+# Donor amount-selection modal. Caller initializes eon_aid_proposed_amount.
+eon_aid_send_offer = {
+	if = {
+		limit = { eon_aid_draft_send_ready = yes }
+		set_variable = { eon_aid_amount = eon_aid_proposed_amount }
+		set_variable = { eon_aid_escrow = eon_aid_proposed_amount }
+		set_temp_variable = { treasury_change = eon_aid_proposed_amount }
+		multiply_temp_variable = { treasury_change = -1 }
+		modify_treasury_effect = yes
+		ingame_update_setup = yes
+		clr_country_flag = eon_aid_draft_owner
+		set_country_flag = eon_aid_outgoing
+		var:eon_aid_partner = {
+			set_variable = { eon_aid_amount = PREV.eon_aid_amount }
+			clr_country_flag = eon_aid_draft_recipient
+			set_country_flag = eon_aid_incoming
+			PREV = { set_country_flag = { flag = recently_sent_aid@PREV value = 1 days = 30 } }
+			country_event = { id = News_influence.0 days = 1 }
+		}
+		update_dirty_influence_var = yes
+	}
+	# A rendered option can become invalid before it is clicked. Resolve that
+	# consumed donor modal without debit, rewards, or a permanently held draft.
+	else = { eon_aid_cancel_draft = yes }
+}
+
+# Incoming recipient scope. Role/pointer validation protects an unrelated offer.
+eon_aid_finish_response = {
+	if = {
+		limit = { eon_aid_response_pair_pending = yes }
+		var:eon_aid_partner = { eon_aid_clear_pending = yes }
+		eon_aid_clear_pending = yes
+		update_dirty_influence_var = yes
+	}
+}
+
+eon_aid_accept_current_offer = {
+	if = {
+		limit = { eon_aid_response_ready = yes }
+		# Mark donor escrow spent before applying one credit and its consequences.
+		var:eon_aid_partner = { set_variable = { eon_aid_escrow = 0 } }
+		set_temp_variable = { treasury_change = eon_aid_amount }
+		modify_treasury_effect = yes
+		custom_effect_tooltip = accept_money
+		if = {
+			limit = { check_variable = { eon_aid_amount = 5 } }
+			set_temp_variable = { percent_change = 3 }
+			add_opinion_modifier = { target = FROM modifier = given_gift_small }
+		}
+		else_if = {
+			limit = { check_variable = { eon_aid_amount = 15 } }
+			set_temp_variable = { percent_change = 5 }
+			add_opinion_modifier = { target = FROM modifier = given_gift_medium }
+		}
+		else = {
+			set_temp_variable = { percent_change = 7 }
+			add_opinion_modifier = { target = FROM modifier = given_gift_high }
+		}
+		set_temp_variable = { tag_index = FROM.id }
+		set_temp_variable = { influence_target = THIS.id }
+		change_influence_percentage = yes
+		FROM = { country_event = { id = eon_support.10 } }
+		eon_aid_finish_response = yes
+		ingame_update_setup = yes
+		FROM = { ingame_update_setup = yes }
+	}
+	else = { eon_aid_resolve_invalid_offer = yes }
+}
+
+eon_aid_resolve_invalid_offer = {
+	if = {
+		limit = { eon_aid_response_pair_pending = yes }
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = eon_aid_cancelled
+					FROM = { has_country_flag = eon_aid_cancelled }
+				}
+			}
+			FROM = { country_event = { id = eon_support.13 } }
+		}
+		else = { FROM = { country_event = { id = eon_support.12 } } }
+		FROM = { eon_aid_refund_escrow = yes }
+		eon_aid_finish_response = yes
+	}
+}
+
+eon_aid_refuse_current_offer = {
+	if = {
+		limit = { eon_aid_response_ready = yes }
+		if = {
+			limit = { NOT = { has_country_flag = recently_refused_aid } }
+			add_political_power = 50
+			set_country_flag = { flag = recently_refused_aid value = 1 days = 180 }
+		}
+		else = { custom_effect_tooltip = recently_refused_economic_aid_tt }
+		set_temp_variable = { arg_popularity = 0.02 }
+		add_ruling_outlook_popularity = yes
+		FROM = {
+			eon_aid_refund_escrow = yes
+			country_event = { id = eon_support.11 }
+		}
+		eon_aid_finish_response = yes
+	}
+	else = { eon_aid_resolve_invalid_offer = yes }
+}
+
+# Older saves used one flag per tier, without a transaction record or modal
+# count. Cancel only the identifiable debit tiers and never accept those gifts.
+# Recipient event scope, FROM original donor. No new pending state is altered.
+eon_aid_cancel_legacy_offer = {
+	set_temp_variable = { eon_aid_legacy_resolved = 0 }
+	if = {
+		limit = { has_country_flag = eon_aid_legacy_quarantined@FROM }
+		set_temp_variable = { eon_aid_legacy_resolved = 1 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_country_flag = sending_small_billion_@FROM
+				has_country_flag = sending_medium_billion_@FROM
+				has_country_flag = sending_high_billion_@FROM
+			}
+		}
+		set_temp_variable = { eon_aid_legacy_resolved = 1 }
+		set_temp_variable = { eon_support_refund_amount = 0 }
+		if = {
+			limit = { has_country_flag = sending_small_billion_@FROM }
+			add_to_temp_variable = { eon_support_refund_amount = 5 }
+		}
+		if = {
+			limit = { has_country_flag = sending_medium_billion_@FROM }
+			add_to_temp_variable = { eon_support_refund_amount = 15 }
+		}
+		if = {
+			limit = { has_country_flag = sending_high_billion_@FROM }
+			add_to_temp_variable = { eon_support_refund_amount = 35 }
+		}
+		# Clear before queuing a refund, preventing duplicate credits. A pair
+		# quarantine protects against further old popups with unknown counts.
+		clr_country_flag = sending_small_billion_@FROM
+		clr_country_flag = sending_medium_billion_@FROM
+		clr_country_flag = sending_high_billion_@FROM
+		set_country_flag = eon_aid_legacy_quarantined@FROM
+		FROM = {
+			eon_support_queue_refund = yes
+			if = { limit = { exists = yes } country_event = { id = eon_support.12 } }
+		}
+	}
+}
+
+eon_aid_accept_offer = {
+	eon_aid_cancel_legacy_offer = yes
+	if = {
+		limit = { check_variable = { eon_aid_legacy_resolved = 0 } }
+		eon_aid_accept_current_offer = yes
+	}
+}
+
+eon_aid_refuse_offer = {
+	eon_aid_cancel_legacy_offer = yes
+	if = {
+		limit = { check_variable = { eon_aid_legacy_resolved = 0 } }
+		eon_aid_refuse_current_offer = yes
+	}
+}

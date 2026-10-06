@@ -64,13 +64,16 @@ class Country:
     projects: list = field(default_factory=list)
 
 class Interpreter:
-    def __init__(self, donor, recipient, remove_all=False):
+    def __init__(self, donor, recipient, remove_all=False, debt_policy_fixture=True):
         self.donor, self.recipient = donor, recipient
         self.countries = {donor.ident: donor, recipient.ident: recipient}
         self.temp = {}
         donor.temp = recipient.temp = self.temp
         self.freed = []
         self.remove_all = remove_all
+        # Historical contract fixtures assume the existing selectable national gates pass.
+        # Package 06 overrides this explicit fixture to evaluate the actual policy AST.
+        self.debt_policy_fixture = debt_policy_fixture
     def country(self, token, stack):
         if token == 'ROOT': return self.donor
         if token == 'THIS': return stack[-1]
@@ -124,7 +127,10 @@ class Interpreter:
         for n in nodes:
             c, k, v = stack[-1], n.key, n.value
             if k == 'tooltip': continue
-            if k in TREATY_TRIGGERS:
+            if k == 'eon_debt_offer_existing_policy':
+                assert self.debt_policy_fixture is not None, 'Missing explicit debt policy fixture'
+                ok = self.debt_policy_fixture == (v == 'yes')
+            elif k in TREATY_TRIGGERS:
                 ok = self.trigger(TREATY_TRIGGERS[k], stack) == (v == 'yes')
             elif k in ('ROOT', 'THIS', 'PREV') or k.startswith('var:'):
                 ok = self.trigger(v, stack + [self.country(k, stack)])
@@ -235,6 +241,9 @@ assert all(n.key in ('custom_effect_tooltip', 'add_to_variable', 'clamp_variable
 # Preserve all original cancellation scenarios instead of testing stale inline code.
 TREATY_HELPERS = {n.key: n.value for n in parse((ROOT / 'common/scripted_effects/eon_investment_treaty_effects.txt').read_text(encoding='utf-8-sig'))}
 TREATY_TRIGGERS = {n.key: n.value for n in parse((ROOT / 'common/scripted_triggers/eon_investment_treaty_triggers.txt').read_text(encoding='utf-8-sig'))}
+# Package 06 evaluates the actual pair-retirement guard, rather than assuming it.
+TREATY_TRIGGERS.update({n.key: n.value for n in parse((ROOT / 'common/scripted_triggers/eon_debt_support_triggers.txt').read_text(encoding='utf-8-sig'))
+                       if n.key == 'eon_debt_offer_pair_available'})
 
 raw = SOURCE.read_bytes()
 source = raw.decode('utf-8-sig')

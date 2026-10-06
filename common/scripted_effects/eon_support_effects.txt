@@ -1,0 +1,147 @@
+# Refunded aid remains the donor's asset even when the inherited treasury cap
+# prevents immediate credit. Release only available headroom; never drop money.
+eon_support_queue_refund = {
+	if = {
+		# An absent donor keeps its claim until an annex hook transfers it.
+		limit = { check_variable = { eon_support_refund_amount > 0 } }
+		add_to_variable = { eon_support_refund_due = eon_support_refund_amount }
+		eon_support_release_refund = yes
+	}
+}
+
+eon_support_release_refund = {
+	if = {
+		limit = { exists = yes check_variable = { eon_support_refund_due > 0 } }
+		set_temp_variable = { eon_support_refund_credit = 1000000 }
+		subtract_from_temp_variable = { eon_support_refund_credit = treasury }
+		clamp_temp_variable = { var = eon_support_refund_credit min = 0 max = eon_support_refund_due }
+		if = {
+			limit = { check_variable = { eon_support_refund_credit > 0 } }
+			add_to_variable = { treasury = eon_support_refund_credit }
+			subtract_from_variable = { eon_support_refund_due = eon_support_refund_credit }
+			ingame_update_setup = yes
+		}
+		if = {
+			limit = { NOT = { check_variable = { eon_support_refund_due > 0 } } }
+			clear_variable = eon_support_refund_due
+		}
+	}
+}
+
+eon_support_clear_debt_pending = {
+	clear_variable = pending_assume_debt_offer
+	clear_variable = assuming_debt_value
+	clear_variable = assuming_debt_repayment_value
+}
+
+eon_support_daily_cleanup = {
+	eon_support_release_refund = yes
+	if = {
+		limit = {
+			check_variable = { pending_assume_debt_offer > 0 }
+			var:pending_assume_debt_offer = { exists = no }
+		}
+		# The old native reply has not necessarily been consumed. Retire only
+		# this partner, so a revived country cannot answer a newer request.
+		var:pending_assume_debt_offer = {
+			PREV = { set_country_flag = eon_debt_retired_pair@PREV }
+		}
+		eon_support_clear_debt_pending = yes
+	}
+	if = {
+		limit = {
+			has_country_flag = eon_aid_reserved
+			var:eon_aid_partner = { exists = no }
+		}
+		var:eon_aid_partner = {
+			PREV = { set_country_flag = eon_aid_retired_pair@PREV }
+		}
+		if = {
+			limit = { has_country_flag = eon_aid_outgoing }
+			eon_aid_refund_escrow = yes
+		}
+		eon_aid_clear_pending = yes
+	}
+}
+
+# A surviving country owns only its own escrow. Do not credit the beneficiary
+# with a deceased donor's assets: those are transferred by the annex hook below.
+eon_support_cleanup_annexed_pair = {
+	if = {
+		limit = { check_variable = { pending_assume_debt_offer = eon_support_annexed_partner } }
+		var:eon_support_annexed_partner = {
+			PREV = { set_country_flag = eon_debt_retired_pair@PREV }
+		}
+		eon_support_clear_debt_pending = yes
+	}
+	if = {
+		limit = {
+			has_country_flag = eon_aid_reserved
+			check_variable = { eon_aid_partner = eon_support_annexed_partner }
+		}
+		var:eon_support_annexed_partner = {
+			PREV = { set_country_flag = eon_aid_retired_pair@PREV }
+		}
+		if = {
+			limit = { has_country_flag = eon_aid_outgoing }
+			eon_aid_refund_escrow = yes
+		}
+		eon_aid_clear_pending = yes
+	}
+}
+
+# Caller is the annexed country. Only these support assets move; ordinary
+# treasury/debt inheritance remains under the existing game systems.
+eon_support_transfer_annexed_assets = {
+	set_temp_variable = { eon_support_annexed_assets = eon_support_refund_due }
+	if = {
+		limit = { check_variable = { pending_assume_debt_offer > 0 } }
+		var:pending_assume_debt_offer = {
+			PREV = { set_country_flag = eon_debt_retired_pair@PREV }
+		}
+	}
+	if = {
+		limit = { has_country_flag = eon_aid_reserved }
+		var:eon_aid_partner = {
+			PREV = { set_country_flag = eon_aid_retired_pair@PREV }
+		}
+	}
+	if = {
+		limit = { has_country_flag = eon_aid_outgoing check_variable = { eon_aid_escrow > 0 } }
+		add_to_temp_variable = { eon_support_annexed_assets = eon_aid_escrow }
+	}
+	# Clear ownership first: multiple native annex callbacks cannot transfer twice.
+	clear_variable = eon_support_refund_due
+	clear_variable = eon_aid_escrow
+	eon_aid_clear_pending = yes
+	eon_support_clear_debt_pending = yes
+	if = {
+		limit = { check_variable = { eon_support_annexed_assets > 0 } }
+		var:eon_support_successor = {
+			set_temp_variable = { eon_support_refund_amount = eon_support_annexed_assets }
+			eon_support_queue_refund = yes
+		}
+	}
+}
+
+# Native diplomatic actor scope; the original recipient modal remains reserved.
+eon_aid_withdraw_offer = {
+	if = {
+		limit = {
+			has_country_flag = eon_aid_reserved
+			has_country_flag = eon_aid_outgoing
+			NOT = { has_country_flag = eon_aid_cancelled }
+			var:eon_aid_partner = {
+				has_country_flag = eon_aid_incoming
+				has_country_flag = eon_aid_reserved
+				check_variable = { eon_aid_partner = PREV }
+			}
+		}
+		eon_aid_refund_escrow = yes
+		set_country_flag = eon_aid_cancelled
+		var:eon_aid_partner = {
+			set_country_flag = eon_aid_cancelled
+			country_event = eon_support.13
+		}
+	}
+}

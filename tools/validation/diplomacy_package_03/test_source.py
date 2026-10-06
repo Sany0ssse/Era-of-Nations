@@ -135,11 +135,32 @@ later_negotiation_paths = {
     'localisation/russian/eon_energy_negotiation_l_russian.yml',
 }
 later_energy_paths |= later_negotiation_paths
+# Package06 validates these exact aid/debt paths against published551d source;
+# every ordinary-alliance/national policy byte assertion above remains exact.
+later_support_new_paths = {
+    'common/scripted_effects/eon_aid_effects.txt',
+    'common/scripted_effects/eon_support_effects.txt',
+    'common/scripted_triggers/eon_aid_triggers.txt',
+    'common/scripted_triggers/eon_debt_support_triggers.txt',
+    'common/on_actions/eon_support_on_actions.txt',
+    'common/scripted_diplomatic_actions/eon_support_actions.txt',
+    'events/eon_support_events.txt',
+    'localisation/english/eon_support_l_english.yml',
+    'localisation/russian/eon_support_l_russian.yml',
+}
+later_support_existing_paths = {
+    'common/scripted_diplomatic_actions/00_scripted_diplomatic_actions.txt',
+    'common/scripted_guis/influence_scripted_gui.txt',
+    'events/00_Influence_events.txt',
+    'localisation/english/MDC_scripted_diplomatic_actions_l_english.yml',
+    'localisation/russian/MDDC_scripted_diplomatic_actions_l_russian.yml',
+}
+later_support_paths = later_support_new_paths | later_support_existing_paths
 tracked_changes = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 owned_paths = {item['path'] for item in receipt}
-assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths, ('Unowned gameplay changes', tracked_changes)
+assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths | later_support_paths, ('Unowned gameplay changes', tracked_changes)
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-assert set(untracked) <= new_paths | later_negotiation_paths | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
+assert set(untracked) <= new_paths | later_negotiation_paths | later_support_new_paths | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 assert not set(new_paths).intersection(baseline_paths), 'New files overwrite existing baseline sources'
 passed('unchanged_tracked_gameplay_path_boundary')
@@ -201,12 +222,17 @@ assert one(action, 'complete_effect') == ast('if = { limit = { eon_defensive_all
 assert one(action, 'reject_effect') == ast('eon_defensive_alliance_offer_finish_response = yes')
 actions = [b['key'] for file in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
            for b in blocks(file.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1]
-assert len(actions) == len(set(actions)) == 57
-assert set(actions) - {'eon_withdraw_energy_offer', 'eon_resume_energy_counter_offer'} == {
-    b['key'] for file in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
-    if file.name != 'eon_energy_negotiation_actions.txt'
-    for b in blocks(file.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1
-}
+assert len(actions) == len(set(actions)) == 58
+later_action_ids = {'eon_withdraw_energy_offer', 'eon_resume_energy_counter_offer', 'eon_withdraw_economic_aid'}
+# Compare the retained 54 native actions and package03 alliance action against
+# immutable original IDs, rather than against a filtered copy of current files.
+original_action_ids = {
+    b['key'] for p in baseline_paths
+    if p.startswith('common/scripted_diplomatic_actions/') and p.endswith('.txt')
+    for b in blocks(baseline(p)) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1
+} | {'eon_propose_defensive_alliance'}
+assert len(original_action_ids) == 55
+assert set(actions) - later_action_ids == original_action_ids
 passed('accepted_only_action_structure_and_unique_diplomatic_ids', len(actions))
 
 locale = {}

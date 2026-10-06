@@ -1,0 +1,30 @@
+on_actions = {
+	# Native daily scope is the current country, as in the existing country GUI tick.
+	on_daily = { effect = { eon_support_daily_cleanup = yes } }
+
+	# ROOT annexer, FROM annexed country.
+	on_annex = {
+		effect = {
+			every_country = {
+				limit = { exists = yes NOT = { tag = FROM } }
+				set_temp_variable = { eon_support_annexed_partner = FROM }
+				eon_support_cleanup_annexed_pair = yes
+			}
+			set_temp_variable = { eon_support_successor = ROOT }
+			FROM = { eon_support_transfer_annexed_assets = yes }
+		}
+	}
+
+	# Native subject integration: ROOT annexed subject, FROM its overlord.
+	on_subject_annexed = {
+		effect = {
+			every_country = {
+				limit = { exists = yes NOT = { tag = ROOT } }
+				set_temp_variable = { eon_support_annexed_partner = ROOT }
+				eon_support_cleanup_annexed_pair = yes
+			}
+			set_temp_variable = { eon_support_successor = FROM }
+			ROOT = { eon_support_transfer_annexed_assets = yes }
+		}
+	}
+}

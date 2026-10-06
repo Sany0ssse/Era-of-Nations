@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and five implementation packages are complete at
+The existing diplomacy audit and six implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -58,8 +58,23 @@ independent review passed 4620 cumulative scenarios (110 new) and 86 new source
 checks. Two invalidated-response P2 findings were repaired and reproduced;
 no unresolved P1/P2 findings remain. See [DIPLOMACY_PACKAGE_05_UK.md](DIPLOMACY_PACKAGE_05_UK.md).
 Native GUI/callbacks, real AI choice, accounting and save/load still require
-new-campaign acceptance. Next implementation scope is existing economic aid
-and debt support, followed by consultations and consensual mediation.
+new-campaign acceptance.
+
+The sixth package completes the existing one-time economic aid flow: frozen
+5/15/35-billion tiers, paired draft/response reservations, donor-owned escrow,
+explicit recipient consent, withdrawal, fresh cash/policy checks and refund
+claims retained above the treasury cap. It repairs AI weights, restores only
+identifiable older prepaid tiers, and keeps ambiguous legacy or disappeared
+pairs retired while other partners remain available. Debt support preserves
+its existing consent, national policies, 75PP cost and cash-funded settlement;
+fresh sending guards, dead-partner cleanup, AI cooldown/affordability and
+truthful frozen-ceiling descriptions are repaired. Aid and debt remain separate
+consent flows. Cumulative source checks passed 4786 scenarios (166 new);
+exact-byte boundaries cover five existing and nine new game files.
+See [DIPLOMACY_PACKAGE_06_UK.md](DIPLOMACY_PACKAGE_06_UK.md) for limitations
+and new-campaign acceptance. No diplomatic package has been run in HOI4.
+Next implementation scope is consultations, then consensual mediation
+with defined participants and a selected conflict.
 
 ## Completed setup
 

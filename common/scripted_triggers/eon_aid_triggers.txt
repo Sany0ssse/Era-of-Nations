@@ -1,0 +1,166 @@
+# Original economic-aid policy, evaluated against the frozen donor rather than
+# event ROOT (which becomes the recipient during its response).
+# Input: temporary country value eon_aid_policy_donor; caller is the recipient.
+eon_aid_national_policy_allowed = {
+	exists = yes
+	NOT = { tag = eon_aid_policy_donor }
+	NOT = { has_war_with = eon_aid_policy_donor }
+	OR = {
+		check_variable = { influence_array^0 = eon_aid_policy_donor }
+		check_variable = { influence_array^1 = eon_aid_policy_donor }
+		check_variable = { influence_array^2 = eon_aid_policy_donor }
+		check_variable = { influence_array^3 = eon_aid_policy_donor }
+		check_variable = { influence_array^4 = eon_aid_policy_donor }
+		check_variable = { influence_array^5 = eon_aid_policy_donor }
+		check_variable = { influence_array^6 = eon_aid_policy_donor }
+	}
+	var:eon_aid_policy_donor = {
+		exists = yes
+		NOT = { has_war_with = PREV }
+		set_temp_variable = { eon_aid_policy_gdp_limit = gdp_total }
+		multiply_temp_variable = { eon_aid_policy_gdp_limit = 2 }
+		set_temp_variable = { eon_aid_policy_donor_civs = num_of_civilian_factories }
+		if = {
+			limit = {
+				original_tag = ERI
+				has_country_flag = ETH_transitional_government_FLAG
+			}
+			NOT = { has_country_leader = { name = "Eritrean Transitional Government" } }
+		}
+	}
+	check_variable = { eon_aid_policy_gdp_limit > gdp_total }
+	check_variable = { num_of_civilian_factories < eon_aid_policy_donor_civs }
+}
+
+# GUI: ROOT donor, THIS recipient. Lock both countries before queuing selection.
+eon_aid_legacy_pair_available = {
+	custom_trigger_tooltip = {
+		tooltip = eon_aid_legacy_pair_available_tt
+		NOT = {
+			OR = {
+				has_country_flag = sending_small_billion_@eon_aid_policy_donor
+				has_country_flag = sending_medium_billion_@eon_aid_policy_donor
+				has_country_flag = sending_high_billion_@eon_aid_policy_donor
+				has_country_flag = eon_aid_legacy_quarantined@eon_aid_policy_donor
+			}
+		}
+	}
+}
+
+# Cleared reservations for vanished parties cannot identify an old native modal.
+# Pair tombstones remain country flags, even if a historical tag is restored.
+eon_aid_retired_pair_available = {
+	custom_trigger_tooltip = {
+		tooltip = eon_aid_retired_pair_available_tt
+		NOT = { has_country_flag = eon_aid_retired_pair@eon_aid_policy_donor }
+		var:eon_aid_policy_donor = { NOT = { has_country_flag = eon_aid_retired_pair@PREV } }
+	}
+}
+
+eon_aid_gui_ready = {
+	set_temp_variable = { eon_aid_policy_donor = ROOT }
+	eon_aid_national_policy_allowed = yes
+	eon_aid_legacy_pair_available = yes
+	eon_aid_retired_pair_available = yes
+	NOT = { has_country_flag = eon_aid_reserved }
+	ROOT = {
+		NOT = { has_country_flag = eon_aid_reserved }
+		NOT = { has_country_flag = recently_sent_aid@PREV }
+		check_variable = { treasury >= 5 }
+	}
+}
+
+# Donor amount-selection modal: FROM is the intended recipient.
+eon_aid_draft_identity_current = {
+	exists = yes
+	has_country_flag = eon_aid_reserved
+	has_country_flag = eon_aid_draft_owner
+	check_variable = { eon_aid_partner = FROM }
+	check_variable = { eon_aid_amount = 0 }
+	check_variable = { eon_aid_escrow = 0 }
+	NOT = { has_country_flag = eon_aid_cancelled }
+	var:eon_aid_partner = {
+		exists = yes
+		has_country_flag = eon_aid_reserved
+		has_country_flag = eon_aid_draft_recipient
+		check_variable = { eon_aid_partner = PREV }
+		check_variable = { eon_aid_amount = 0 }
+		NOT = { has_country_flag = eon_aid_cancelled }
+	}
+}
+
+# Input tier is temporary and initialized by each event option's trigger/effect.
+eon_aid_draft_send_ready = {
+	eon_aid_draft_identity_current = yes
+	OR = {
+		check_variable = { eon_aid_proposed_amount = 5 }
+		check_variable = { eon_aid_proposed_amount = 15 }
+		check_variable = { eon_aid_proposed_amount = 35 }
+	}
+	check_variable = { treasury >= eon_aid_proposed_amount }
+	NOT = { has_country_flag = recently_sent_aid@FROM }
+	set_temp_variable = { eon_aid_policy_donor = THIS }
+	var:eon_aid_partner = {
+		eon_aid_national_policy_allowed = yes
+		eon_aid_legacy_pair_available = yes
+		eon_aid_retired_pair_available = yes
+	}
+}
+
+# Recipient response gate for cleanup. Invalidated amount/war/capacity may still
+# require the original donor's escrow to be returned; unrelated pairs stay inert.
+eon_aid_response_pair_pending = {
+	has_country_flag = eon_aid_reserved
+	has_country_flag = eon_aid_incoming
+	check_variable = { eon_aid_partner = FROM }
+	var:eon_aid_partner = {
+		has_country_flag = eon_aid_reserved
+		has_country_flag = eon_aid_outgoing
+		check_variable = { eon_aid_partner = PREV }
+	}
+}
+
+eon_aid_response_identity_current = {
+	eon_aid_response_pair_pending = yes
+	exists = yes
+	NOT = { has_country_flag = eon_aid_cancelled }
+	OR = {
+		check_variable = { eon_aid_amount = 5 }
+		check_variable = { eon_aid_amount = 15 }
+		check_variable = { eon_aid_amount = 35 }
+	}
+	var:eon_aid_partner = {
+		exists = yes
+		NOT = { has_country_flag = eon_aid_cancelled }
+		check_variable = { eon_aid_amount = PREV.eon_aid_amount }
+		check_variable = { eon_aid_escrow = eon_aid_amount }
+	}
+	set_temp_variable = { eon_aid_policy_donor = eon_aid_partner }
+	eon_aid_national_policy_allowed = yes
+}
+
+# Existing treasury cap must not silently destroy any accepted part of the gift.
+eon_aid_recipient_capacity_available = {
+	set_temp_variable = { eon_aid_recipient_projected_treasury = treasury }
+	add_to_temp_variable = { eon_aid_recipient_projected_treasury = eon_aid_amount }
+	check_variable = { eon_aid_recipient_projected_treasury <= 1000000 }
+}
+
+eon_aid_response_ready = {
+	eon_aid_response_identity_current = yes
+	eon_aid_recipient_capacity_available = yes
+}
+
+# Native diplomatic action: ROOT sender, THIS original recipient.
+eon_aid_offer_withdraw_available = {
+	has_country_flag = eon_aid_reserved
+	has_country_flag = eon_aid_incoming
+	NOT = { has_country_flag = eon_aid_cancelled }
+	check_variable = { eon_aid_partner = ROOT }
+	ROOT = {
+		has_country_flag = eon_aid_reserved
+		has_country_flag = eon_aid_outgoing
+		NOT = { has_country_flag = eon_aid_cancelled }
+		check_variable = { eon_aid_partner = PREV }
+	}
+}

@@ -2,6 +2,7 @@
 import hashlib
 import json
 import re
+import subprocess
 
 from _support import ROOT, baseline
 
@@ -79,13 +80,20 @@ def event_selector(data, block):
 
 
 owned['events/00_AC_events.txt'] = event_selector
+# Package 06 independently protects its debt block against the exact published
+# package05 source. Restore only that later block before applying package02 bounds.
+PACKAGE06_BASELINE = '551d7100f6c35cd062a36520f6a7eed199b13a2e'
 receipt = []
 for path, selector in owned.items():
-    before, after = baseline(path), (ROOT / path).read_bytes()
-    check_format(before, after)
+    before, actual = baseline(path), (ROOT / path).read_bytes()
+    check_format(before, actual)
+    after = actual
+    if path == 'common/scripted_diplomatic_actions/00_scripted_diplomatic_actions.txt':
+        later = subprocess.check_output(['git', 'show', PACKAGE06_BASELINE + ':' + path], cwd=ROOT)
+        after = restore_blocks(after, later, named({'diplo_action_assume_debt'}, 'scripted_diplomatic_actions', 1))
     assert restore_blocks(after, before, selector) == before, 'Unrelated bytes changed: ' + path
     receipt.append({'path': path, 'unrelated_bytes_exact': True,
-                    'sha256': hashlib.sha256(after).hexdigest()})
+                    'sha256': hashlib.sha256(actual).hexdigest()})
 
 path = 'common/on_actions/00_costili.txt'
 before, after = baseline(path), (ROOT / path).read_bytes()
@@ -159,7 +167,8 @@ actions = [b['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').gl
 # original count and uniqueness checks when running an older package checkout.
 assert len(actions) == len(set(actions)) == (54 + actions.count('eon_propose_defensive_alliance')
                                            + actions.count('eon_withdraw_energy_offer')
-                                           + actions.count('eon_resume_energy_counter_offer'))
+                                           + actions.count('eon_resume_energy_counter_offer')
+                                           + actions.count('eon_withdraw_economic_aid'))
 print(json.dumps({'all_passed': True, 'method': 'exact reversible source boundaries and format/locale/ID checks',
                   'owned_existing_files': receipt, 'new_locale_keys_per_language': len(new_keys),
                   'unique_action_ids': len(actions), 'not_proven': 'HOI4 engine parsing, UI or campaign'}, indent=2))
