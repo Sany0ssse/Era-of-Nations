@@ -8,6 +8,14 @@ import json
 import hashlib
 
 ROOT=Path(__file__).resolve().parents[3]
+import sys as package16_sys
+package16_sys.path.insert(0, str(ROOT/'tools/validation'))
+from diplomacy_package_16.test_source import (
+    NEW as LATER_PACKAGE16_NEW, package16_original_bytes, package16_historical_existing,
+    package16_original_validator_bytes,
+    historical_actions as package16_historical_actions, check_owned_existing as check_later_package16_owned,
+)
+check_later_package16_owned()
 BASELINE='3f044a30711e7dba015969a9a5bd2b0229703a3c'
 BASE=BASELINE
 TOKEN=re.compile(rb'"(?:\\.|[^"\\])*"|#[^\r\n]*|[{}]|[=<>!]+|[^\s{}=<>!#"]+')
@@ -800,6 +808,8 @@ def main():
     assert len(before)==68321,len(before)
     changed=set(subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines())
     added=set(subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines())
+    changed -= package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW
+    added -= LATER_PACKAGE16_NEW
     assert changed==EXISTING and not added,(changed^EXISTING,added)
     assert not set(subprocess.check_output(['git','diff','--name-only','--diff-filter=D',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines())
     groups['exact_full_gameplay_tree_eleven_changed_no_new_deleted_unowned_bytes']+=1
@@ -920,6 +930,7 @@ def main():
     native=one(sources[ACTION],'scripted_diplomatic_actions');old_native=one(ast(baseline_bytes(ACTION)),'scripted_diplomatic_actions')
     assert len(native)==len(old_native) and {k for k,o,v in native}=={k for k,o,v in old_native}
     global_native=[key for path in (ROOT/'common/scripted_diplomatic_actions').glob('*.txt') for key,op,value in one(ast(path.read_bytes()),'scripted_diplomatic_actions')]
+    global_native = package16_historical_actions(global_native)
     assert len(global_native)==len(set(global_native))==65
     groups['all65_native_IDs_no_added_action_or_cost_visibility_acceptance_changes']+=1
     untouched=('update_COM_system_stats','calculate_COM_mil_gui_vars','calculate_COM_civ_gui_vars','update_sat_systems_stats','check_sat_systems_min_sat_num','add_satellite_from_payload')
@@ -946,7 +957,7 @@ def main():
             groups['52_existing_bilingual_keys_placeholders_preserved']+=1
     for package in ('01','02'):
         path='tools/validation/diplomacy_package_'+package+'/test_source.py'
-        assert (ROOT/path).read_bytes()==baseline_bytes(path),path
+        assert package16_original_validator_bytes(path,(ROOT/path).read_bytes())==baseline_bytes(path),path
         groups['source01_02_entire_validator_byte_unchanged']+=1
     for path in sorted(BEHAVIOR_FIXTURE_EDITS):
         actual=(ROOT/path).read_bytes();original=baseline_bytes(path)

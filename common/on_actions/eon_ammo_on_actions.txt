@@ -1,0 +1,29 @@
+on_actions = {
+	on_daily = { effect = { eon_ammo_daily_cleanup = yes } }
+
+	# ROOT annexer, FROM annexed country, per the native on_annex declaration.
+	on_annex = {
+		effect = {
+			every_country = {
+				limit = { exists = yes NOT = { tag = FROM } }
+				set_temp_variable = { eon_ammo_annexed_partner = FROM }
+				eon_ammo_cleanup_annexed_pair = yes
+			}
+			set_temp_variable = { eon_ammo_successor = ROOT }
+			FROM = { eon_ammo_transfer_annexed_assets = yes }
+		}
+	}
+
+	# Native integration: ROOT annexed subject, FROM overlord.
+	on_subject_annexed = {
+		effect = {
+			every_country = {
+				limit = { exists = yes NOT = { tag = ROOT } }
+				set_temp_variable = { eon_ammo_annexed_partner = ROOT }
+				eon_ammo_cleanup_annexed_pair = yes
+			}
+			set_temp_variable = { eon_ammo_successor = FROM }
+			ROOT = { eon_ammo_transfer_annexed_assets = yes }
+		}
+	}
+}

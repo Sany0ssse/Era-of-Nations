@@ -23,6 +23,11 @@ from diplomacy_package_15.test_source import (
     package15_original_bytes, package15_historical_existing,
 )
 check_later_package15_owned()
+from diplomacy_package_16.test_source import (
+    NEW as LATER_PACKAGE16_NEW, package16_original_bytes, package16_historical_existing,
+    historical_actions as package16_historical_actions, check_owned_existing as check_later_package16_owned,
+)
+check_later_package16_owned()
 BASELINE = '150cb6f114f7f8896495f57206a1a854af06e056'
 EXISTING = {
     'common/scripted_diplomatic_actions/MD_missile_scripted_diplomatic_actions.txt',
@@ -102,6 +107,7 @@ def rows(nodes):
 
 def package13_original_bytes(path, actual):
     """Restore only twelve enumerated native actions or ten satellite effect blocks."""
+    actual = package16_original_bytes(path, actual)
     actual=package14_original_bytes(path,actual)
     if path not in EXISTING:
         return actual
@@ -182,8 +188,9 @@ def main():
            'portraits','tutorial','descriptions','scenario_tests','descriptor.mod','era_of_nations.mod','thumbnail.png')
     baseline_paths=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
-    changed=[path for path in changed if path not in (package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE))-EXISTING]
+    changed=[path for path in changed if path not in (package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE))-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW]
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
+    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW]
     assert set(changed)|set(untracked)==EXISTING|NEW,('Unowned gameplay edits',changed,untracked)
     assert set(changed).intersection(baseline_paths)==EXISTING
     assert not NEW.intersection(baseline_paths) and set(untracked)<=NEW
@@ -225,6 +232,7 @@ def main():
             baseline_ids.extend(b['key'] for b in boundary_blocks(before) if b['depth']==1 and b['parent']=='scripted_diplomatic_actions')
     for path in (ROOT/'common/scripted_diplomatic_actions').glob('*.txt'):
         native_ids.extend(b['key'] for b in boundary_blocks(path.read_bytes()) if b['depth']==1 and b['parent']=='scripted_diplomatic_actions')
+    native_ids = package16_historical_actions(native_ids)
     assert len(native_ids)==len(set(native_ids))==len(baseline_ids)==len(set(baseline_ids))==65
     assert set(native_ids)==set(baseline_ids)
     groups['all_65_native_action_IDs_preserved_all_unowned_native_bytes_exact']+=1

@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and fifteen implementation packages are complete at
+The existing diplomacy audit and sixteen implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -264,6 +264,35 @@ offer cooldown ownership asymmetry remains; it is soft AI scoring, not a human
 termination ban. No game, saves, launcher, ZIP, Workshop, DLC, playsets or attribution
 changes were made. Next: accept existing service cycles in game and extend the
 verified lifecycle to other existing diplomatic agreements/support.
+
+The sixteenth package develops the existing 100,000-unit `Send_ammo` offer:
+donor-owned reservation, explicit recipient consent, fresh supply-node storage,
+withdrawal, exact-once credit/refund and unpaid refund claims. One outgoing offer
+per donor does not lock other incoming donors. Known forced cleanup retires only
+the unresolved directed pair; unknown or incomplete records conservatively close
+the donor's ammunition channel. Annexation queues held ownership for the successor
+without changing ordinary ammunition inheritance or paying before its native hook.
+The inherited political AI weights remain, with one technical readiness gate.
+Official ATT and ICRC sources inform the procedural design; export licences,
+embargoes, humanitarian-risk assessment and historical treaty participation are
+not implemented. The ATT's 2014 entry into force is not backdated to the 2000 start.
+See [DIPLOMACY_PACKAGE_16_UK.md](DIPLOMACY_PACKAGE_16_UK.md).
+Fresh cumulative checks pass 6240 source-model scenarios (6148 prior plus 92
+new in 32 groups), with one separately counted adapter case and 142 new
+source/boundary checks (125 source/API plus 17 memory-only boundaries).
+Three existing and seven new game paths are bound by matching source/behavior
+hashes and independent review. All 65 existing action IDs and 41 prior
+behavior/helper/runner files remain unchanged; one withdrawal action and 14
+bilingual keys are added. Fourteen strict historical source adapters use narrow
+prior-byte views and account for the exact new ID; current behavior proofs are
+not bypassed.
+Native UI, country-ID resolution, callback order, AI, timers, annexation and
+save/load need new-campaign acceptance. Complete pre-upgrade ammunition offers
+before upgrading an existing campaign; their unrecorded ownership cannot be
+reconstructed. No game, save, launcher, Workshop, DLC, playset or attribution
+change is part of this package. Next: existing logistics/reconnaissance aid and
+foreign support, then permanent diplomatic relations; the current broad peace
+helper needs a separate war/authority audit before executing mediation outcomes.
 
 ## Completed setup
 

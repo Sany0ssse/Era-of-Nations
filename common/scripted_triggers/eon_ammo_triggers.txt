@@ -1,0 +1,100 @@
+# Native diplomatic context: ROOT donor, THIS recipient. Keep inherited
+# ally/world-tension rights; current stocks are checked only before reservation.
+eon_ammo_existing_policy = {
+	exists = yes
+	NOT = { tag = ROOT }
+	ROOT = { exists = yes }
+	has_war = yes
+	NOT = { has_war_with = ROOT }
+	if = {
+		limit = { NOT = { is_ally_with = ROOT } }
+		set_temp_variable = { lend_lease_limit = ROOT.modifier@lend_lease_tension }
+		clamp_temp_variable = { var = lend_lease_limit min = 0 max = 1 }
+		threat > lend_lease_limit
+	}
+}
+
+# The native cache is monthly. Derive capacity from current supply nodes rather
+# than accepting stock into storage that has disappeared since the last update.
+eon_ammo_recipient_capacity = {
+	set_temp_variable = { eon_ammo_capacity = num_of_supply_nodes }
+	multiply_temp_variable = { eon_ammo_capacity = 100000 }
+	add_to_temp_variable = { eon_ammo_capacity = 10000 }
+	round_temp_variable = eon_ammo_capacity
+	clamp_temp_variable = { var = eon_ammo_capacity min = 10000 max = 1000000000 }
+	set_temp_variable = { eon_ammo_projected_stock = ammo_stock }
+	add_to_temp_variable = { eon_ammo_projected_stock = 100000 }
+	check_variable = { eon_ammo_projected_stock <= eon_ammo_capacity }
+}
+
+# Donor scope. Variable scopes are always syntactically valid in the native
+# engine; use country-only existence tests and exact country ID, not scope_exists.
+# A known annexed country remains identifiable, while a malformed pointer cannot
+# select a country or identify a safe pair to retire.
+eon_ammo_partner_identified = {
+	check_variable = { eon_ammo_partner > 0 }
+	var:eon_ammo_partner = {
+		OR = { exists = yes exists = no }
+		NOT = { tag = PREV }
+		check_variable = { THIS.id = PREV.eon_ammo_partner }
+	}
+}
+
+eon_ammo_gui_ready = {
+	eon_ammo_existing_policy = yes
+	custom_trigger_tooltip = {
+		tooltip = eon_ammo_storage_available_tt
+		eon_ammo_recipient_capacity = yes
+	}
+	ROOT = {
+		custom_trigger_tooltip = {
+			tooltip = eon_ammo_quarantined_tt
+			NOT = { has_country_flag = eon_ammo_quarantined }
+		}
+		custom_trigger_tooltip = {
+			tooltip = Sda_send_ammo_tt_has_enough
+			check_variable = { ammo_stock >= 100000 }
+		}
+		custom_trigger_tooltip = {
+			tooltip = eon_ammo_donor_available_tt
+			NOT = { has_country_flag = eon_ammo_pending }
+			NOT = { has_country_flag = eon_ammo_live }
+			NOT = { has_country_flag = eon_ammo_cancelled }
+			NOT = { has_country_flag = Ammo_diplo_AI_debounce }
+			check_variable = { eon_ammo_partner = 0 }
+			check_variable = { eon_ammo_escrow = 0 }
+			NOT = { has_country_flag = eon_ammo_retired_pair@PREV }
+		}
+	}
+}
+
+# A pending native modal must stay resolvable even after debit, cancellation,
+# lost capacity or changed eligibility. Identity alone authorizes its cleanup.
+eon_ammo_response_pending = {
+	ROOT = {
+		has_country_flag = eon_ammo_pending
+		eon_ammo_partner_identified = yes
+		check_variable = { eon_ammo_partner = PREV }
+	}
+}
+
+eon_ammo_response_ready = {
+	eon_ammo_response_pending = yes
+	ROOT = {
+		exists = yes
+		has_country_flag = eon_ammo_live
+		NOT = { has_country_flag = eon_ammo_cancelled }
+		check_variable = { eon_ammo_escrow = 100000 }
+	}
+	eon_ammo_existing_policy = yes
+	eon_ammo_recipient_capacity = yes
+}
+
+eon_ammo_withdraw_available = {
+	eon_ammo_response_pending = yes
+	ROOT = {
+		exists = yes
+		NOT = { has_country_flag = eon_ammo_cancelled }
+		check_variable = { eon_ammo_escrow > 0 }
+	}
+}

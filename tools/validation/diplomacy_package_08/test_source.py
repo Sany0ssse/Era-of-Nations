@@ -64,6 +64,11 @@ from diplomacy_package_15.test_source import (
     package15_original_bytes, package15_historical_existing,
 )
 check_later_package15_owned()
+from diplomacy_package_16.test_source import (
+    NEW as LATER_PACKAGE16_NEW, package16_original_bytes, package16_historical_existing,
+    historical_actions as package16_historical_actions, check_owned_existing as check_later_package16_owned,
+)
+check_later_package16_owned()
 BASELINE = 'b86a187f8ff3dfc88a577db4b2c52525fd5cf2fd'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, one
@@ -123,8 +128,9 @@ assert 'eon_mediation_prepare_draft' in helpers
 # gameplay source may change, including all earlier package implementations.
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
-changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE)]
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
+untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW]
 assert set(changed) | set(untracked) == NEW | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unexpected package 08 gameplay source boundary', changed, untracked)
 assert not set(changed).intersection(baseline_paths), 'Existing gameplay bytes changed'
 assert not NEW.intersection(baseline_paths), 'New mediation source overwrites old game files'
@@ -138,7 +144,7 @@ old_actions = {b['key'] for path in baseline_paths
 actions = [b['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
            for b in blocks(path.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1]
 package10_all_actions = actions
-actions = historical_actions(actions)
+actions = package16_historical_actions(historical_actions(actions))
 assert len(old_actions) == 62
 assert len(actions) == len(set(actions)) == 64
 assert set(actions) == old_actions | NEW_ACTIONS

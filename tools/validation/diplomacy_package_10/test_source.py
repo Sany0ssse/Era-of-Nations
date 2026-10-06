@@ -44,6 +44,11 @@ from diplomacy_package_15.test_source import (
     package15_original_bytes, package15_historical_existing,
 )
 check_later_package15_owned()
+from diplomacy_package_16.test_source import (
+    NEW as LATER_PACKAGE16_NEW, package16_original_bytes, package16_historical_existing,
+    historical_actions as package16_historical_actions, check_owned_existing as check_later_package16_owned,
+)
+check_later_package16_owned()
 BASELINE = '45dedfc85e7aece235f8fa1ab536326e6dce6923'
 EXISTING = {
     'common/scripted_diplomatic_actions/MDC_terrorism.txt',
@@ -186,8 +191,9 @@ def main():
              'portraits', 'tutorial', 'descriptions', 'scenario_tests', 'descriptor.mod', 'era_of_nations.mod', 'thumbnail.png')
     baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
-    changed = [path for path in changed if path not in LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE)]
+    changed = [path for path in changed if path not in LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW]
     untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
+    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW]
     assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned gameplay changes', changed, untracked)
     assert set(changed).intersection(baseline_paths) == EXISTING
     assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW
@@ -198,6 +204,7 @@ def main():
                if block['parent'] == 'scripted_diplomatic_actions' and block['depth'] == 1}
     actual_ids = [block['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
                   for block in boundary_blocks(path.read_bytes()) if block['parent'] == 'scripted_diplomatic_actions' and block['depth'] == 1]
+    actual_ids = package16_historical_actions(actual_ids)
     assert len(old_ids) == 64 and len(actual_ids) == len(set(actual_ids)) == 65
     assert set(actual_ids) == old_ids | NEW_ACTIONS
     groups['all_64_old_native_action_IDs_preserved_and_one_explicit_unique_addition'] += 1

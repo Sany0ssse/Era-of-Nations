@@ -13,43 +13,11 @@ scripted_diplomatic_actions = {
 		visible = {
 			always = yes
 		}
-        
-		selectable = { #if action is selectable on gui
-            if = {
-                limit = {
-                    NOT = {
-                        is_ally_with = ROOT
-                    }
-                }
-                set_temp_variable = { lend_lease_limit = ROOT.modifier@lend_lease_tension }
-                clamp_temp_variable = { var = lend_lease_limit min = 0 max = 1 }
-                threat > lend_lease_limit
-            }
-            THIS = {
-                has_war = yes
-                NOT = { # Apparently lend lease only checks if they're directly at war? lmao wtf
-                    has_war_with = ROOT
-                }
-            }
-            ROOT = {
-                custom_trigger_tooltip = {
-                    tooltip = Sda_send_ammo_tt_has_enough
-                    check_variable = {
-                        var     = ammo_stock
-                        value   = @Ammo_send_qty
-                        compare = greater_than_or_equals
-                    }
-                }
-            }
+		selectable = {
+			OR = { eon_ammo_response_pending = yes eon_ammo_gui_ready = yes }
 		}
-        
-        can_be_accepted = {
-            always = yes
-        }
-        
-        can_be_sent = {  # send button will be disabled if no
-			always = yes # or so the comment claims because I can't get it to influence anything
-		}
+		can_be_accepted = { eon_ammo_response_ready = yes }
+		can_be_sent = { eon_ammo_gui_ready = yes }
         
         # where_can_i_put_this? = {
             # allowed     -> Confirmation window vanishes if the recipient tries to interact
@@ -74,90 +42,13 @@ scripted_diplomatic_actions = {
         # ROOT - Sender
         # THIS - Receiver
         # runs when the action is sent
-        on_sent_effect = {
-            ROOT = {
-                subtract_from_variable = { ammo_stock = @Ammo_send_qty }
-            }
-            
-            if = {
-                limit = {
-                    is_ai = no
-                    ROOT  = {
-                        is_ai = yes
-                    }
-                }
-                ROOT = {
-                    set_country_flag = Ammo_diplo_AI_debounce
-                }
-            }
-        }
+		on_sent_effect = { eon_ammo_send_offer = yes }
         
         # runs when the action is properly sent and rejected
-        reject_effect = {
-            ROOT = {
-                add_to_variable = { ammo_stock = @Ammo_send_qty }
-                
-                if = {
-                    limit = {
-                        has_country_flag = Ammo_diplo_AI_debounce
-                    }
-                    clr_country_flag = Ammo_diplo_AI_debounce
-                }
-            }
-            THIS = {
-                if = {
-                    limit = {
-                        is_ai = no
-                    }
-                    if = {
-                        limit = {
-                            has_country_flag = Ammo_diplo_rejections
-                        }
-                        modify_country_flag = {
-                            flag  = Ammo_diplo_rejections
-                            value = 1
-                            days  = 90
-                        }
-                    }
-                    else = {
-                        set_country_flag = {
-                            flag  = Ammo_diplo_rejections
-                            days  = 90
-                            value = 1
-                        }
-                    }
-                }
-            }
-		}
+		reject_effect = { eon_ammo_reject_offer = yes }
         
 		# runs when the action is properly sent and accepted
-		complete_effect = {
-            ROOT = {
-                if = {
-                    limit = {
-                        has_country_flag = Ammo_diplo_AI_debounce
-                    }
-                    clr_country_flag = Ammo_diplo_AI_debounce
-                }
-            }
-            THIS = {
-                add_to_variable = { ammo_stock = @Ammo_send_qty }
-                
-                if = {
-                    limit = {
-                        has_opinion_modifier = Sent_ammo
-                    }
-                    remove_opinion_modifier = {
-                        target   = ROOT
-                        modifier = Sent_ammo
-                    }
-                }
-                add_opinion_modifier = {
-                    target   = ROOT
-                    modifier = Sent_ammo
-                }
-            }
-		}
+		complete_effect = { eon_ammo_accept_offer = yes }
         
 		send_description = Sda_send_ammo_send_desc # if there is no scripted gui, this desc will be used in send yes/no pop up
 
@@ -201,6 +92,11 @@ scripted_diplomatic_actions = {
 		# ai_will_do to decide if AI should send this action or not
 		ai_desire = {
 			base = -1
+			# Lifecycle safety only: retain every inherited political preference.
+			modifier = {
+				add = -20000
+				NOT = { eon_ammo_gui_ready = yes }
+			}
             
             # Don't bother players if they rejected multiple requests recently unless if they're in the crisis zone
             modifier = {

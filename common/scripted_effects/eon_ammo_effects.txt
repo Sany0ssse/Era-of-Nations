@@ -1,0 +1,236 @@
+# Ammunition held for an unanswered offer belongs to the donor. Refund claims
+# survive full or reduced storage; ordinary stock is never trimmed by this code.
+eon_ammo_queue_refund = {
+	if = {
+		limit = { check_variable = { eon_ammo_refund_amount > 0 } }
+		add_to_variable = { eon_ammo_refund_claim = eon_ammo_refund_amount }
+	}
+}
+
+eon_ammo_release_refund = {
+	if = {
+		limit = { exists = yes check_variable = { eon_ammo_refund_claim > 0 } }
+		set_temp_variable = { eon_ammo_capacity = num_of_supply_nodes }
+		multiply_temp_variable = { eon_ammo_capacity = 100000 }
+		add_to_temp_variable = { eon_ammo_capacity = 10000 }
+		round_temp_variable = eon_ammo_capacity
+		clamp_temp_variable = { var = eon_ammo_capacity min = 10000 max = 1000000000 }
+		set_temp_variable = { eon_ammo_refund_credit = eon_ammo_capacity }
+		subtract_from_temp_variable = { eon_ammo_refund_credit = ammo_stock }
+		clamp_temp_variable = { var = eon_ammo_refund_credit min = 0 max = eon_ammo_refund_claim }
+		if = {
+			limit = { check_variable = { eon_ammo_refund_credit > 0 } }
+			set_variable = { max_ammo_limit = eon_ammo_capacity }
+			add_to_variable = { ammo_stock = eon_ammo_refund_credit }
+			subtract_from_variable = { eon_ammo_refund_claim = eon_ammo_refund_credit }
+		}
+		if = {
+			limit = { NOT = { check_variable = { eon_ammo_refund_claim > 0 } } }
+			clear_variable = eon_ammo_refund_claim
+		}
+	}
+}
+
+eon_ammo_refund_escrow = {
+	if = {
+		limit = { check_variable = { eon_ammo_escrow > 0 } }
+		set_temp_variable = { eon_ammo_refund_amount = eon_ammo_escrow }
+		clear_variable = eon_ammo_escrow
+		eon_ammo_queue_refund = yes
+	}
+}
+
+eon_ammo_clear_pending = {
+	# A legacy AI flag alone does not prove ownership of a pre-upgrade shipment.
+	if = {
+		limit = { has_country_flag = eon_ammo_pending }
+		clr_country_flag = Ammo_diplo_AI_debounce
+	}
+	clr_country_flag = eon_ammo_pending
+	clr_country_flag = eon_ammo_live
+	clr_country_flag = eon_ammo_cancelled
+	clear_variable = eon_ammo_partner
+	clear_variable = eon_ammo_escrow
+}
+
+eon_ammo_retire_pending_pair = {
+	if = {
+		limit = { has_country_flag = eon_ammo_pending }
+		if = {
+			limit = { eon_ammo_partner_identified = yes }
+			var:eon_ammo_partner = {
+				PREV = { set_country_flag = eon_ammo_retired_pair@PREV }
+			}
+		}
+		else = {
+			# Without the original partner there is no safe pair to retire.
+			set_country_flag = eon_ammo_quarantined
+		}
+	}
+}
+
+# Native receiver context. Guard the actual debit as well as the rendered UI.
+eon_ammo_send_offer = {
+	if = {
+		limit = { eon_ammo_gui_ready = yes }
+		ROOT = {
+			subtract_from_variable = { ammo_stock = 100000 }
+			set_variable = { eon_ammo_escrow = 100000 }
+			set_variable = { eon_ammo_partner = PREV }
+			set_country_flag = eon_ammo_pending
+			set_country_flag = { flag = eon_ammo_live days = 30 value = 1 }
+			clr_country_flag = eon_ammo_cancelled
+		}
+		if = {
+			limit = { is_ai = no ROOT = { is_ai = yes } }
+			ROOT = { set_country_flag = Ammo_diplo_AI_debounce }
+		}
+	}
+}
+
+eon_ammo_accept_offer = {
+	if = {
+		limit = { eon_ammo_response_pending = yes }
+		if = {
+			limit = { eon_ammo_response_ready = yes }
+			# Clear held ownership before any delivery; replay cannot create ammo.
+			ROOT = { clear_variable = eon_ammo_escrow }
+			set_variable = { max_ammo_limit = eon_ammo_capacity }
+			add_to_variable = { ammo_stock = 100000 }
+			remove_opinion_modifier = { target = ROOT modifier = Sent_ammo }
+			add_opinion_modifier = { target = ROOT modifier = Sent_ammo }
+			ROOT = { eon_ammo_clear_pending = yes }
+		}
+		else = {
+			ROOT = {
+				eon_ammo_refund_escrow = yes
+				eon_ammo_clear_pending = yes
+				eon_ammo_release_refund = yes
+				country_event = { id = eon_ammo.1 }
+			}
+		}
+	}
+}
+
+eon_ammo_reject_offer = {
+	if = {
+		limit = { eon_ammo_response_pending = yes }
+		# Count a current human refusal, not a replay, expiry or cancelled offer.
+		if = {
+			limit = { is_ai = no eon_ammo_response_ready = yes }
+			if = {
+				limit = { has_country_flag = Ammo_diplo_rejections }
+				modify_country_flag = { flag = Ammo_diplo_rejections value = 1 days = 90 }
+			}
+			else = { set_country_flag = { flag = Ammo_diplo_rejections days = 90 value = 1 } }
+		}
+		ROOT = {
+			eon_ammo_refund_escrow = yes
+			eon_ammo_clear_pending = yes
+			eon_ammo_release_refund = yes
+		}
+	}
+}
+
+eon_ammo_withdraw_offer = {
+	if = {
+		limit = { eon_ammo_withdraw_available = yes }
+		ROOT = {
+			eon_ammo_refund_escrow = yes
+			eon_ammo_release_refund = yes
+			set_country_flag = eon_ammo_cancelled
+		}
+		# The original reply still owns the donor reservation until consumed.
+		country_event = { id = eon_ammo.2 }
+	}
+}
+
+eon_ammo_daily_cleanup = {
+	eon_ammo_release_refund = yes
+	if = {
+		limit = {
+			NOT = { has_country_flag = eon_ammo_pending }
+			OR = {
+				has_country_flag = eon_ammo_live
+				has_country_flag = eon_ammo_cancelled
+				NOT = { check_variable = { eon_ammo_partner = 0 } }
+				NOT = { check_variable = { eon_ammo_escrow = 0 } }
+			}
+		}
+		# A partial record cannot identify which native reply is still outstanding.
+		# Preserve its known held asset, but do not reuse this donor channel.
+		set_country_flag = eon_ammo_quarantined
+		eon_ammo_refund_escrow = yes
+		eon_ammo_clear_pending = yes
+		eon_ammo_release_refund = yes
+		country_event = { id = eon_ammo.4 }
+	}
+	if = {
+		limit = {
+			has_country_flag = eon_ammo_pending
+			OR = {
+				NOT = { eon_ammo_partner_identified = yes }
+				NOT = { has_country_flag = eon_ammo_live }
+				var:eon_ammo_partner = { exists = no }
+			}
+		}
+		# No native request token is exposed. Retire only this unresolved pair.
+		eon_ammo_retire_pending_pair = yes
+		eon_ammo_refund_escrow = yes
+		eon_ammo_clear_pending = yes
+		eon_ammo_release_refund = yes
+		if = {
+			limit = { has_country_flag = eon_ammo_quarantined }
+			country_event = { id = eon_ammo.4 }
+		}
+		else = { country_event = { id = eon_ammo.3 } }
+	}
+}
+
+# Surviving donor: an annexed recipient cannot consume the original response.
+# Queue only during annexation, so ordinary native ammo inheritance runs first.
+eon_ammo_cleanup_annexed_pair = {
+	if = {
+		limit = { has_country_flag = eon_ammo_pending check_variable = { eon_ammo_partner = eon_ammo_annexed_partner } }
+		eon_ammo_retire_pending_pair = yes
+		eon_ammo_refund_escrow = yes
+		eon_ammo_clear_pending = yes
+	}
+}
+
+# Annexed donor: move only held ownership and unpaid claims. Never refund into
+# its ordinary stock or alter the existing native transfer of ordinary stock.
+eon_ammo_transfer_annexed_assets = {
+	set_temp_variable = { eon_ammo_annexed_assets = eon_ammo_refund_claim }
+	if = {
+		limit = { has_country_flag = eon_ammo_pending }
+		eon_ammo_retire_pending_pair = yes
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_country_flag = eon_ammo_live
+				has_country_flag = eon_ammo_cancelled
+				NOT = { check_variable = { eon_ammo_partner = 0 } }
+				NOT = { check_variable = { eon_ammo_escrow = 0 } }
+			}
+		}
+		set_country_flag = eon_ammo_quarantined
+	}
+	# The escrow variable is already donor ownership proof even when a malformed
+	# record lost its pending flag; never silently destroy that known held asset.
+	if = {
+		limit = { check_variable = { eon_ammo_escrow > 0 } }
+		add_to_temp_variable = { eon_ammo_annexed_assets = eon_ammo_escrow }
+	}
+	clear_variable = eon_ammo_refund_claim
+	clear_variable = eon_ammo_escrow
+	eon_ammo_clear_pending = yes
+	if = {
+		limit = { check_variable = { eon_ammo_annexed_assets > 0 } }
+		var:eon_ammo_successor = {
+			set_temp_variable = { eon_ammo_refund_amount = eon_ammo_annexed_assets }
+			eon_ammo_queue_refund = yes
+		}
+	}
+}

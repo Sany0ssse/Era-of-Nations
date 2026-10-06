@@ -18,6 +18,12 @@ from diplomacy_package_15.test_source import (
     package15_historical_existing, check_owned_existing as check_later_package15_owned,
 )
 check_later_package15_owned()
+from diplomacy_package_16.test_source import (
+    NEW as LATER_PACKAGE16_NEW, package16_original_bytes, package16_historical_existing,
+    package16_original_validator_bytes,
+    historical_actions as package16_historical_actions, check_owned_existing as check_later_package16_owned,
+)
+check_later_package16_owned()
 BASELINE = 'f25dcfa040df4de947fe87e7a70f8f5fdd9ed659'
 OWNED = {
  'common/scripted_triggers/eon_satellite_triggers.txt': {'eon_sat_gnss_request_terms','eon_sat_gnss_offer_terms','eon_sat_com_request_terms','eon_sat_com_offer_terms'},
@@ -198,14 +204,15 @@ def main():
     trees=('common','history','events','interface','gfx','localisation','music','map','sound','portraits','tutorial','descriptions','scenario_tests','descriptor.mod','era_of_nations.mod','thumbnail.png')
     before=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
-    changed=[path for path in changed if path not in package15_historical_existing(BASELINE)-EXISTING]
+    changed=[path for path in changed if path not in package15_historical_existing(BASELINE)-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW]
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
+    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW]
     assert len(before)==68321 and set(changed)==EXISTING and not untracked and not NEW
     groups['all_68315_unrelated_gameplay_files_byte_preserved_no_gameplay_additions']+=1
     native=[]
     for path in before:
         if path.startswith('common/scripted_diplomatic_actions/') and path.endswith('.txt'):
-            data=package15_original_bytes(path,(ROOT/path).read_bytes());assert data==baseline_bytes(path),('Native visibility_cost_consent_AI_weights_or_scope_modified',path)
+            data=package15_original_bytes(path,package16_original_bytes(path,(ROOT/path).read_bytes()));assert data==baseline_bytes(path),('Native visibility_cost_consent_AI_weights_or_scope_modified',path)
             native.extend(b['key'] for b in boundary_blocks(data) if b['depth']==1 and b['parent']=='scripted_diplomatic_actions')
     assert len(native)==len(set(native))==65
     groups['all_65_native_IDs_and_all_native_action_bytes_weights_and_lifecycle_preserved']+=1
@@ -306,7 +313,7 @@ def main():
     groups['all_original_285_package13_behavior_cases_executor_and_assertions_byte_unchanged']+=1
     for package in ('01','02'):
         path='tools/validation/diplomacy_package_'+package+'/test_source.py'
-        assert (ROOT/path).read_bytes()==baseline_bytes(path),path
+        assert package16_original_validator_bytes(path,(ROOT/path).read_bytes())==baseline_bytes(path),path
         groups['source01_02_entire_public_validator_bytes_unchanged']+=1
     installed=Path('D:/SteamLibrary/steamapps/common/Hearts of Iron IV')
     effects=(installed/'documentation/effects_documentation.md').read_text(encoding='utf-8-sig')
