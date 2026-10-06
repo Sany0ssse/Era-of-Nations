@@ -1,0 +1,24 @@
+# Annex hooks must remain safe before or after the existing terrorism hook.
+on_actions = {
+	on_daily = { effect = { eon_ct_daily_cleanup = yes } }
+	on_annex = {
+		effect = {
+			every_country = {
+				limit = { exists = yes NOT = { tag = FROM } }
+				set_temp_variable = { eon_ct_annexed_partner = FROM }
+				eon_ct_cleanup_annexed_pair = yes
+			}
+			FROM = { eon_ct_cleanup_annexed_owner = yes }
+		}
+	}
+	on_subject_annexed = {
+		effect = {
+			every_country = {
+				limit = { exists = yes NOT = { tag = ROOT } }
+				set_temp_variable = { eon_ct_annexed_partner = ROOT }
+				eon_ct_cleanup_annexed_pair = yes
+			}
+			ROOT = { eon_ct_cleanup_annexed_owner = yes }
+		}
+	}
+}

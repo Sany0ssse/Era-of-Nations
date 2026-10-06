@@ -20,6 +20,15 @@ LATER_PACKAGE09_NEW = {
 }
 
 ROOT = Path(__file__).resolve().parents[3]
+
+# Package10 restores only its two treaty/two annex ranges before old byte assertions.
+import sys as package10_sys
+package10_sys.path.insert(0, str(ROOT / 'tools/validation'))
+from diplomacy_package_10.test_source import (
+    NEW as LATER_PACKAGE10_NEW, EXISTING as LATER_PACKAGE10_EXISTING,
+    check_owned_existing, package10_original_bytes, historical_actions,
+)
+check_owned_existing()
 BASELINE = 'b86a187f8ff3dfc88a577db4b2c52525fd5cf2fd'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, one
@@ -79,11 +88,12 @@ assert 'eon_mediation_prepare_draft' in helpers
 # gameplay source may change, including all earlier package implementations.
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == NEW | LATER_PACKAGE09_NEW, ('Unexpected package 08 gameplay source boundary', changed, untracked)
+assert set(changed) | set(untracked) == NEW | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW, ('Unexpected package 08 gameplay source boundary', changed, untracked)
 assert not set(changed).intersection(baseline_paths), 'Existing gameplay bytes changed'
 assert not NEW.intersection(baseline_paths), 'New mediation source overwrites old game files'
-assert set(untracked) <= NEW | LATER_PACKAGE09_NEW
+assert set(untracked) <= NEW | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW
 groups['all_existing_gameplay_bytes_preserved_and_exact_nine_additions'] += 1
 
 old_actions = {b['key'] for path in baseline_paths
@@ -92,9 +102,12 @@ old_actions = {b['key'] for path in baseline_paths
                if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1}
 actions = [b['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
            for b in blocks(path.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1]
+package10_all_actions = actions
+actions = historical_actions(actions)
 assert len(old_actions) == 62
 assert len(actions) == len(set(actions)) == 64
 assert set(actions) == old_actions | NEW_ACTIONS
+actions = package10_all_actions
 groups['all_62_existing_native_action_IDs_and_two_additions'] += 1
 
 native_actions = one(sources['common/scripted_diplomatic_actions/eon_mediation_actions.txt'], 'scripted_diplomatic_actions')

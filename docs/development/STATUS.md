@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and nine implementation packages are complete at
+The existing diplomacy audit and ten implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -118,6 +118,28 @@ These terms govern talks only. Binding peace, humanitarian access and delivery
 monitoring require separate mechanisms and native acceptance. Native scopes,
 timers, AI, GUI, save/load and campaign remain unverified. See
 [DIPLOMACY_PACKAGE_09_UK.md](DIPLOMACY_PACKAGE_09_UK.md).
+
+The tenth package repairs the existing native antiterror agreement. A paired
+30-day proposal and fresh consent apply exactly one .05/-5/+5 contribution per
+participant and partner. Native proposal/active termination costs remain 75PP;
+the new free withdrawal belongs only to the original human sender. Existing
+political AI weights remain weighted rather than becoming universal bans;
+the original 120-day send cooldowns are now enforced for human sends too.
+Termination and both old/new annex hooks reverse only identifiable pair
+components, preserving other CT and AI command-power sources. Legacy active
+flags are adopted without adding a second contribution; ambiguous old pending
+pointers and unidentified historical bonus residues are not reconstructed.
+Forced unanswered cleanup permanently retires only the known CT pair.
+Six game files and one action are added; only two treaty actions and two annex
+branch bodies change inside two existing files. The 31 existing paid delayed
+operations remain byte-identical and are the next execution-lifecycle task.
+Source checks passed 5401 cumulative scenarios (5289 previous plus 112 new)
+and 178 separate new source/API checks; 68292 existing gameplay files and all
+unowned bytes inside the two changed files remain exact. Independent review
+closed duplicate completion/termination, annex residue, incoming withdrawal
+and orphan cancellation findings.
+See [DIPLOMACY_PACKAGE_10_UK.md](DIPLOMACY_PACKAGE_10_UK.md). Native GUI,
+cost timing, scopes, timers, AI, save/load and campaign acceptance remain pending.
 
 ## Completed setup
 

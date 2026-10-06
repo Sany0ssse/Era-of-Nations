@@ -22,6 +22,15 @@ LATER_PACKAGE09_NEW = {
 }
 
 ROOT = Path(__file__).resolve().parents[3]
+
+# Package10 restores only its two treaty/two annex ranges before old byte assertions.
+import sys as package10_sys
+package10_sys.path.insert(0, str(ROOT / 'tools/validation'))
+from diplomacy_package_10.test_source import (
+    NEW as LATER_PACKAGE10_NEW, EXISTING as LATER_PACKAGE10_EXISTING,
+    check_owned_existing, package10_original_bytes, historical_actions,
+)
+check_owned_existing()
 BASELINE = '551d7100f6c35cd062a36520f6a7eed199b13a2e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, format_preserved, one
@@ -318,8 +327,11 @@ old_action_ids = {b['key'] for path in baseline_paths if path.startswith('common
                   for b in blocks(before(path)) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1}
 action_ids = [b['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
               for b in blocks(path.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1]
+package10_all_actions = action_ids
+action_ids = historical_actions(action_ids)
 assert len(old_action_ids) == 57 and len(action_ids) == len(set(action_ids)) == 64
 assert set(action_ids) == old_action_ids | {'eon_withdraw_economic_aid'} | LATER_PACKAGE07_ACTIONS | LATER_PACKAGE08_ACTIONS
+action_ids = package10_all_actions
 groups['all57_previous_action_IDs_and_one_addition'] += 1
 
 locale = {}
@@ -400,9 +412,10 @@ if docs.exists():
 
 TREES = ('common', 'history', 'events', 'interface', 'gfx', 'localisation', 'music', 'map', 'sound')
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW, ('Unexpected package06 gameplay scope', changed, untracked)
-assert set(untracked) <= NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW, ('Unowned new source', untracked)
+assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW, ('Unexpected package06 gameplay scope', changed, untracked)
+assert set(untracked) <= NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW, ('Unowned new source', untracked)
 assert not set(NEW).intersection(baseline_paths), 'New support file overwrites original source'
 groups['exact14_file_whole_gameplay_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,

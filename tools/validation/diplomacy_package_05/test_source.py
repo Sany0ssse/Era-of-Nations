@@ -20,6 +20,15 @@ LATER_PACKAGE09_NEW = {
 }
 
 ROOT = Path(__file__).resolve().parents[3]
+
+# Package10 restores only its two treaty/two annex ranges before old byte assertions.
+import sys as package10_sys
+package10_sys.path.insert(0, str(ROOT / 'tools/validation'))
+from diplomacy_package_10.test_source import (
+    NEW as LATER_PACKAGE10_NEW, EXISTING as LATER_PACKAGE10_EXISTING,
+    check_owned_existing, package10_original_bytes, historical_actions,
+)
+check_owned_existing()
 BASELINE = '688f1116fbcb377215181edca6af50f36538532e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, format_preserved, one
@@ -229,8 +238,9 @@ later_package08_new = {
     'localisation/russian/eon_mediation_l_russian.yml',
 }
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new | later_package06_paths | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW, ('Unexpected gameplay changes', changed, untracked)
+assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new | later_package06_paths | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW, ('Unexpected gameplay changes', changed, untracked)
 groups['whole_gameplay_git_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,
                   'baseline': BASELINE, 'owned_existing_files': receipts, 'native_primary_documentation': native,

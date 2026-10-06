@@ -1,0 +1,22 @@
+# Withdrawal consumes only the original pending native proposal.
+scripted_diplomatic_actions = {
+	eon_withdraw_antiterror_proposal = {
+		allowed = { ROOT = { is_ai = no } }
+		visible = { eon_ct_withdraw_ready = yes }
+		selectable = { eon_ct_withdraw_ready = yes }
+		can_be_sent = { eon_ct_withdraw_ready = yes }
+		cost = 0
+		requires_acceptance = no
+		show_acceptance_on_action_button = no
+		icon = 17
+		send_description = eon_withdraw_antiterror_proposal_send_desc
+		complete_effect = {
+			if = {
+				limit = { eon_ct_withdraw_ready = yes }
+				eon_ct_withdraw_request = yes
+				custom_effect_tooltip = eon_ct_withdraw_tt
+			}
+		}
+		ai_desire = { factor = 0 }
+	}
+}

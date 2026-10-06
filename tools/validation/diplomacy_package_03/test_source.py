@@ -10,6 +10,15 @@ import subprocess
 
 from _support import ROOT, BASELINE, ast, baseline, blocks, format_preserved, maybe, one, prime_baselines, source
 
+# Package10 restores only its two treaty/two annex ranges before old byte assertions.
+import sys as package10_sys
+package10_sys.path.insert(0, str(ROOT / 'tools/validation'))
+from diplomacy_package_10.test_source import (
+    NEW as LATER_PACKAGE10_NEW, EXISTING as LATER_PACKAGE10_EXISTING,
+    check_owned_existing, package10_original_bytes, historical_actions,
+)
+check_owned_existing()
+
 # Package09 independently owns exactly these eight additions and one pre-clear hook.
 LATER_PACKAGE09_NEW = {
     'common/scripted_effects/eon_mediation_terms_effects.txt',
@@ -191,10 +200,11 @@ later_mediation_paths = {
     'localisation/russian/eon_mediation_l_russian.yml',
 }
 tracked_changes = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
+tracked_changes = [path for path in tracked_changes if path not in LATER_PACKAGE10_EXISTING]
 owned_paths = {item['path'] for item in receipt}
-assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths | later_support_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW, ('Unowned gameplay changes', tracked_changes)
+assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths | later_support_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW, ('Unowned gameplay changes', tracked_changes)
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-assert set(untracked) <= new_paths | later_negotiation_paths | later_support_new_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
+assert set(untracked) <= new_paths | later_negotiation_paths | later_support_new_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 assert not set(new_paths).intersection(baseline_paths), 'New files overwrite existing baseline sources'
 passed('unchanged_tracked_gameplay_path_boundary')
@@ -207,7 +217,7 @@ exact_paths = [p for p in baseline_paths if p.startswith(('common/ideas/', 'comm
 exact_paths += [p for p in baseline_paths if p.startswith('common/factions/templates/') and p != 'common/factions/templates/00_multiplayer.txt']
 prime_baselines(exact_paths)
 for unchanged in exact_paths:
-    assert (ROOT / unchanged).read_bytes() == baseline(unchanged), 'Preserved policy bytes changed: ' + unchanged
+    assert package10_original_bytes(unchanged, (ROOT / unchanged).read_bytes()) == baseline(unchanged), 'Preserved policy bytes changed: ' + unchanged
 passed('national_story_rules_thresholds_and_old_templates_exact_bytes', len(exact_paths))
 
 helpers, helper_paths = {}, {}
@@ -256,6 +266,8 @@ assert one(action, 'complete_effect') == ast('if = { limit = { eon_defensive_all
 assert one(action, 'reject_effect') == ast('eon_defensive_alliance_offer_finish_response = yes')
 actions = [b['key'] for file in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
            for b in blocks(file.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1]
+package10_all_actions = actions
+actions = historical_actions(actions)
 assert len(actions) == len(set(actions)) == 64
 later_action_ids = {'eon_withdraw_energy_offer', 'eon_resume_energy_counter_offer', 'eon_withdraw_economic_aid',
                     'eon_open_economic_consultations', 'eon_withdraw_consultation_request',
@@ -270,6 +282,7 @@ original_action_ids = {
 } | {'eon_propose_defensive_alliance'}
 assert len(original_action_ids) == 55
 assert set(actions) - later_action_ids == original_action_ids
+actions = package10_all_actions
 passed('accepted_only_action_structure_and_unique_diplomatic_ids', len(actions))
 
 locale = {}

@@ -1,0 +1,171 @@
+# Keep a pair contribution separate from other CT / AI command-power sources.
+eon_ct_clear_record = {
+ if = {
+  limit = { has_country_flag = eon_ct_outgoing check_variable = { pending_antiterror_country = eon_ct_partner } }
+  clear_variable = pending_antiterror_country
+ }
+ clr_country_flag = eon_ct_outgoing
+ clr_country_flag = eon_ct_incoming
+ clr_country_flag = eon_ct_pending_window
+ clr_country_flag = eon_ct_cancelled
+ clear_variable = eon_ct_partner
+}
+eon_ct_release_record = {
+ if = { limit = { OR = { has_country_flag = eon_ct_outgoing has_country_flag = eon_ct_incoming } }
+  if = { limit = { eon_ct_record_owned = yes }
+   var:eon_ct_partner = { if = { limit = { eon_ct_peer_linked = yes } eon_ct_clear_record = yes } }
+  }
+  eon_ct_clear_record = yes
+ }
+}
+eon_ct_force_cleanup = {
+ if = { limit = { eon_ct_record_owned = yes }
+  var:eon_ct_partner = {
+   set_country_flag = eon_ct_retired_pair@PREV
+   PREV = { set_country_flag = eon_ct_retired_pair@PREV }
+  }
+ }
+ eon_ct_release_record = yes
+}
+eon_ct_reserve_request = {
+ # The engine has already charged the native 75 PP cost at on_sent.
+ if = { limit = { eon_ct_proposal_ready = yes }
+  # Admission proves neither country owns a reservation or legacy pointer.
+  eon_ct_clear_record = yes
+  ROOT = { eon_ct_clear_record = yes }
+  set_variable = { eon_ct_partner = ROOT }
+  set_country_flag = eon_ct_incoming
+  set_country_flag = { flag = eon_ct_pending_window days = 30 value = 1 }
+  set_country_flag = { flag = anti_terror_agreement_cooldown@ROOT days = 120 value = 1 }
+  ROOT = {
+   set_variable = { eon_ct_partner = PREV }
+   set_variable = { pending_antiterror_country = PREV.id }
+   set_country_flag = eon_ct_outgoing
+   set_country_flag = { flag = eon_ct_pending_window days = 30 value = 1 }
+   set_country_flag = { flag = anti_terror_agreement_cooldown@PREV days = 120 value = 1 }
+   set_country_flag = { flag = anti_terror_agreement_cooldown_global days = 120 value = 1 }
+  }
+ }
+}
+# Current country contributes to the country in PREV. Called only after pair consent.
+eon_ct_apply_contribution = {
+ if = { limit = { NOT = { has_country_flag = eon_ct_contribution@PREV } }
+  set_country_flag = anti_terror_agreement@PREV
+  set_country_flag = eon_ct_contribution@PREV
+  add_to_variable = { ct_effectiveness_add = 0.05 }
+  add_to_variable = { ct_command_debuff = -5 }
+  add_to_variable = { costil_command_buff = 5 }
+  add_opinion_modifier = { target = PREV modifier = counter_terror_cooperation_opinion }
+  if = { limit = { is_ai = yes NOT = { has_dynamic_modifier = costilb_modifier } } add_dynamic_modifier = { modifier = costilb_modifier } }
+  if = { limit = { NOT = { has_dynamic_modifier = { modifier = ct_effectiveness } } } add_dynamic_modifier = { modifier = ct_effectiveness } }
+ }
+}
+eon_ct_complete_request = {
+ if = { limit = { eon_ct_response_current = yes }
+  if = { limit = { eon_ct_response_valid = yes }
+   ROOT = { eon_ct_apply_contribution = yes }
+   ROOT = { PREV = { eon_ct_apply_contribution = yes } }
+  }
+  eon_ct_release_record = yes
+ }
+}
+eon_ct_reject_request = {
+ if = { limit = { eon_ct_response_current = yes }
+  if = { limit = { eon_ct_response_valid = yes }
+   add_opinion_modifier = { target = ROOT modifier = counter_terror_cooperation_reject }
+   reverse_add_opinion_modifier = { target = ROOT modifier = counter_terror_cooperation_reject }
+  }
+  eon_ct_release_record = yes
+ }
+}
+eon_ct_withdraw_request = {
+ if = { limit = { eon_ct_withdraw_ready = yes }
+  set_country_flag = eon_ct_cancelled
+  ROOT = { set_country_flag = eon_ct_cancelled }
+ }
+}
+# Reverse exactly one identifiable contribution; do not reset shared totals.
+eon_ct_remove_own_contribution = {
+ if = { limit = { OR = { has_country_flag = anti_terror_agreement@PREV has_country_flag = eon_ct_contribution@PREV } }
+  clr_country_flag = anti_terror_agreement@PREV
+  clr_country_flag = eon_ct_contribution@PREV
+  add_to_variable = { ct_effectiveness_add = -0.05 }
+  add_to_variable = { ct_command_debuff = 5 }
+  add_to_variable = { costil_command_buff = -5 }
+  remove_opinion_modifier = { target = PREV modifier = counter_terror_cooperation_opinion }
+  set_country_flag = { flag = anti_terror_agreement_cooldown@PREV days = 120 value = 1 }
+ }
+}
+# Captured partner works from owner scope, including old annex loops.
+eon_ct_cleanup_active_pair = {
+ if = { limit = { check_variable = { eon_ct_cleanup_partner > 0 } NOT = { check_variable = { eon_ct_cleanup_partner = THIS } } }
+  var:eon_ct_cleanup_partner = {
+   PREV = { eon_ct_remove_own_contribution = yes }
+   eon_ct_remove_own_contribution = yes
+  }
+ }
+}
+eon_ct_end_pair = {
+ if = { limit = { eon_ct_end_ready = yes }
+  ROOT = {
+   set_temp_variable = { eon_ct_cleanup_partner = PREV }
+   eon_ct_cleanup_active_pair = yes
+   set_country_flag = { flag = anti_terror_agreement_cooldown_global days = 120 value = 1 }
+  }
+ }
+}
+eon_ct_daily_cleanup = {
+ if = { limit = { OR = { has_country_flag = eon_ct_outgoing has_country_flag = eon_ct_incoming } }
+  if = { limit = { NOT = { eon_ct_pending_pair_current = yes } } eon_ct_force_cleanup = yes }
+  else_if = { limit = { OR = {
+   NOT = { has_country_flag = eon_ct_pending_window }
+   NOT = { exists = yes }
+   var:eon_ct_partner = { NOT = { has_country_flag = eon_ct_pending_window } }
+   var:eon_ct_partner = { NOT = { exists = yes } }
+   var:eon_ct_partner = { has_war_with = PREV }
+  } } eon_ct_force_cleanup = yes }
+ }
+ for_each_loop = {
+  array = global.countries
+  value = eon_ct_scan_country
+  if = { limit = { NOT = { check_variable = { eon_ct_scan_country = THIS } } }
+   var:eon_ct_scan_country = {
+    if = { limit = { OR = {
+     has_country_flag = anti_terror_agreement@PREV
+     has_country_flag = eon_ct_contribution@PREV
+     PREV = { has_country_flag = anti_terror_agreement@PREV }
+     PREV = { has_country_flag = eon_ct_contribution@PREV }
+    } }
+     if = { limit = { OR = {
+      NOT = { exists = yes }
+      PREV = { NOT = { exists = yes } }
+      has_war_with = PREV
+      NOT = { has_country_flag = anti_terror_agreement@PREV }
+      PREV = { NOT = { has_country_flag = anti_terror_agreement@PREV } }
+     } }
+      PREV = { set_temp_variable = { eon_ct_cleanup_partner = eon_ct_scan_country } eon_ct_cleanup_active_pair = yes }
+     }
+     else = {
+      # Legacy flags already carried their contribution; adopt markers without adding.
+      set_country_flag = eon_ct_contribution@PREV
+      PREV = { set_country_flag = eon_ct_contribution@PREV }
+     }
+    }
+   }
+  }
+ }
+}
+eon_ct_cleanup_annexed_pair = {
+ if = { limit = { eon_ct_record_owned = yes check_variable = { eon_ct_partner = eon_ct_annexed_partner } } eon_ct_force_cleanup = yes }
+ set_temp_variable = { eon_ct_cleanup_partner = eon_ct_annexed_partner }
+ eon_ct_cleanup_active_pair = yes
+}
+eon_ct_cleanup_annexed_owner = {
+ if = { limit = { OR = { has_country_flag = eon_ct_outgoing has_country_flag = eon_ct_incoming } } eon_ct_force_cleanup = yes }
+ for_each_loop = {
+  array = global.countries
+  value = eon_ct_scan_country
+  set_temp_variable = { eon_ct_cleanup_partner = eon_ct_scan_country }
+  eon_ct_cleanup_active_pair = yes
+ }
+}

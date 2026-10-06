@@ -1,0 +1,117 @@
+# Native targeted actions: ROOT is sender and THIS is recipient.
+# Political AI weights remain in the original action; these are hard pair gates.
+eon_ct_hard_pair_valid = {
+ exists = yes
+ NOT = { tag = ROOT }
+ ROOT = { exists = yes }
+ NOT = { has_war_with = ROOT }
+ has_opinion = { target = ROOT value > 9 }
+ if = {
+  limit = { is_in_faction = yes any_allied_country = { exists = yes } }
+  NOT = { any_allied_country = { has_war_with = ROOT } }
+ }
+}
+eon_ct_proposal_ready = {
+ eon_ct_hard_pair_valid = yes
+ NOT = { has_country_flag = eon_ct_outgoing }
+ NOT = { has_country_flag = eon_ct_incoming }
+ check_variable = { pending_antiterror_country = 0 }
+ NOT = { has_country_flag = anti_terror_agreement@ROOT }
+ NOT = { has_country_flag = eon_ct_contribution@ROOT }
+ NOT = { has_country_flag = eon_ct_retired_pair@ROOT }
+ NOT = { has_country_flag = anti_terror_agreement_cooldown@ROOT }
+ ROOT = {
+  NOT = { has_country_flag = eon_ct_outgoing }
+  NOT = { has_country_flag = eon_ct_incoming }
+  check_variable = { pending_antiterror_country = 0 }
+  NOT = { has_country_flag = anti_terror_agreement@PREV }
+  NOT = { has_country_flag = eon_ct_contribution@PREV }
+  NOT = { has_country_flag = eon_ct_retired_pair@PREV }
+  NOT = { has_country_flag = anti_terror_agreement_cooldown@PREV }
+  NOT = { has_country_flag = anti_terror_agreement_cooldown_global }
+ }
+}
+eon_ct_send_ready = {
+ eon_ct_proposal_ready = yes
+ ROOT = { NOT = { has_political_power < 75 } }
+}
+# These helpers run in the country owning a record, independent of native ROOT.
+eon_ct_record_owned = {
+ OR = { has_country_flag = eon_ct_outgoing has_country_flag = eon_ct_incoming }
+ check_variable = { eon_ct_partner > 0 }
+ NOT = { check_variable = { eon_ct_partner = THIS } }
+}
+eon_ct_peer_linked = {
+ OR = { has_country_flag = eon_ct_outgoing has_country_flag = eon_ct_incoming }
+ check_variable = { eon_ct_partner = PREV }
+ NOT = { tag = PREV }
+}
+eon_ct_pending_pair_current = {
+ eon_ct_record_owned = yes
+ OR = {
+  AND = {
+   has_country_flag = eon_ct_outgoing
+   NOT = { has_country_flag = eon_ct_incoming }
+   check_variable = { pending_antiterror_country = eon_ct_partner }
+   var:eon_ct_partner = {
+    eon_ct_peer_linked = yes
+    has_country_flag = eon_ct_incoming
+    NOT = { has_country_flag = eon_ct_outgoing }
+    check_variable = { pending_antiterror_country = 0 }
+   }
+  }
+  AND = {
+   has_country_flag = eon_ct_incoming
+   NOT = { has_country_flag = eon_ct_outgoing }
+   check_variable = { pending_antiterror_country = 0 }
+   var:eon_ct_partner = {
+    eon_ct_peer_linked = yes
+    has_country_flag = eon_ct_outgoing
+    NOT = { has_country_flag = eon_ct_incoming }
+    check_variable = { pending_antiterror_country = eon_ct_partner }
+   }
+  }
+ }
+}
+eon_ct_response_current = {
+ eon_ct_pending_pair_current = yes
+ has_country_flag = eon_ct_incoming
+ check_variable = { eon_ct_partner = ROOT }
+ ROOT = { has_country_flag = eon_ct_outgoing check_variable = { eon_ct_partner = PREV } }
+}
+eon_ct_response_valid = {
+ eon_ct_response_current = yes
+ eon_ct_hard_pair_valid = yes
+ has_country_flag = eon_ct_pending_window
+ NOT = { has_country_flag = eon_ct_cancelled }
+ NOT = { has_country_flag = anti_terror_agreement@ROOT }
+ NOT = { has_country_flag = eon_ct_contribution@ROOT }
+ NOT = { has_country_flag = eon_ct_retired_pair@ROOT }
+ ROOT = {
+  has_country_flag = eon_ct_pending_window
+  NOT = { has_country_flag = eon_ct_cancelled }
+  NOT = { has_country_flag = anti_terror_agreement@PREV }
+  NOT = { has_country_flag = eon_ct_contribution@PREV }
+  NOT = { has_country_flag = eon_ct_retired_pair@PREV }
+ }
+}
+eon_ct_withdraw_ready = {
+ ROOT = {
+  is_ai = no
+  has_country_flag = eon_ct_outgoing
+  eon_ct_pending_pair_current = yes
+  check_variable = { eon_ct_partner = PREV }
+  NOT = { has_country_flag = eon_ct_cancelled }
+ }
+}
+eon_ct_end_ready = {
+ exists = yes
+ ROOT = { exists = yes }
+ NOT = { tag = ROOT }
+ OR = {
+  has_country_flag = anti_terror_agreement@ROOT
+  has_country_flag = eon_ct_contribution@ROOT
+  ROOT = { has_country_flag = anti_terror_agreement@PREV }
+  ROOT = { has_country_flag = eon_ct_contribution@PREV }
+ }
+}
