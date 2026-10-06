@@ -1,0 +1,469 @@
+add_namespace = eon_mediation_terms
+
+country_event = {
+	id = eon_mediation_terms.10
+	title = eon_mediation_terms_mediator_deescalation_30_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_mediator_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_mediator_deescalation_30_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } NOT = { eon_mediation_terms_mediator_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_mediator_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 }
+		eon_mediation_terms_accept_mediator = yes
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 1.5
+				has_opinion = { target = FROM value > 50 }
+				var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value > 50 } } }
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_opinion = { target = FROM value < -25 }
+					var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value < -25 } } }
+				}
+			}
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } NOT = { eon_mediation_terms_mediator_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 }
+		eon_mediation_terms_refuse_mediator = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.11
+	title = eon_mediation_terms_mediator_deescalation_60_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_mediator_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_mediator_deescalation_60_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } NOT = { eon_mediation_terms_mediator_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_mediator_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 }
+		eon_mediation_terms_accept_mediator = yes
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 1.5
+				has_opinion = { target = FROM value > 50 }
+				var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value > 50 } } }
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_opinion = { target = FROM value < -25 }
+					var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value < -25 } } }
+				}
+			}
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } NOT = { eon_mediation_terms_mediator_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 }
+		eon_mediation_terms_refuse_mediator = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.12
+	title = eon_mediation_terms_mediator_deescalation_90_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_mediator_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_mediator_deescalation_90_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } NOT = { eon_mediation_terms_mediator_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_mediator_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 }
+		eon_mediation_terms_accept_mediator = yes
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 1.5
+				has_opinion = { target = FROM value > 50 }
+				var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value > 50 } } }
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_opinion = { target = FROM value < -25 }
+					var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value < -25 } } }
+				}
+			}
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } NOT = { eon_mediation_terms_mediator_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 }
+		eon_mediation_terms_refuse_mediator = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.13
+	title = eon_mediation_terms_mediator_humanitarian_30_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_mediator_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_mediator_humanitarian_30_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } NOT = { eon_mediation_terms_mediator_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_mediator_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 }
+		eon_mediation_terms_accept_mediator = yes
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 1.5
+				has_opinion = { target = FROM value > 50 }
+				var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value > 50 } } }
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_opinion = { target = FROM value < -25 }
+					var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value < -25 } } }
+				}
+			}
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } NOT = { eon_mediation_terms_mediator_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 }
+		eon_mediation_terms_refuse_mediator = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.14
+	title = eon_mediation_terms_mediator_humanitarian_60_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_mediator_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_mediator_humanitarian_60_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } NOT = { eon_mediation_terms_mediator_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_mediator_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 }
+		eon_mediation_terms_accept_mediator = yes
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 1.5
+				has_opinion = { target = FROM value > 50 }
+				var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value > 50 } } }
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_opinion = { target = FROM value < -25 }
+					var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value < -25 } } }
+				}
+			}
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } NOT = { eon_mediation_terms_mediator_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 }
+		eon_mediation_terms_refuse_mediator = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.15
+	title = eon_mediation_terms_mediator_humanitarian_90_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_mediator_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_mediator_humanitarian_90_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } NOT = { eon_mediation_terms_mediator_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_mediator_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 }
+		eon_mediation_terms_accept_mediator = yes
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 1.5
+				has_opinion = { target = FROM value > 50 }
+				var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value > 50 } } }
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_opinion = { target = FROM value < -25 }
+					var:eon_mediation_terms_b = { ROOT = { has_opinion = { target = PREV value < -25 } } }
+				}
+			}
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } NOT = { eon_mediation_terms_mediator_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 }
+		eon_mediation_terms_refuse_mediator = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.20
+	title = eon_mediation_terms_opponent_deescalation_30_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_opponent_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_opponent_deescalation_30_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } NOT = { eon_mediation_terms_opponent_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_opponent_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 }
+		eon_mediation_terms_accept_opponent = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 0.5 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } NOT = { eon_mediation_terms_opponent_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 30 }
+		eon_mediation_terms_refuse_opponent = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.21
+	title = eon_mediation_terms_opponent_deescalation_60_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_opponent_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_opponent_deescalation_60_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } NOT = { eon_mediation_terms_opponent_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_opponent_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 }
+		eon_mediation_terms_accept_opponent = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 0.5 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } NOT = { eon_mediation_terms_opponent_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 60 }
+		eon_mediation_terms_refuse_opponent = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.22
+	title = eon_mediation_terms_opponent_deescalation_90_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_opponent_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_opponent_deescalation_90_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } NOT = { eon_mediation_terms_opponent_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_opponent_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 }
+		eon_mediation_terms_accept_opponent = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 0.5 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } NOT = { eon_mediation_terms_opponent_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 1 } set_temp_variable = { eon_mediation_terms_response_duration = 90 }
+		eon_mediation_terms_refuse_opponent = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.23
+	title = eon_mediation_terms_opponent_humanitarian_30_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_opponent_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_opponent_humanitarian_30_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } NOT = { eon_mediation_terms_opponent_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } eon_mediation_terms_opponent_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 }
+		eon_mediation_terms_accept_opponent = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 0.5 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } NOT = { eon_mediation_terms_opponent_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 30 }
+		eon_mediation_terms_refuse_opponent = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.24
+	title = eon_mediation_terms_opponent_humanitarian_60_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_opponent_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_opponent_humanitarian_60_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } NOT = { eon_mediation_terms_opponent_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } eon_mediation_terms_opponent_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 }
+		eon_mediation_terms_accept_opponent = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 0.5 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } NOT = { eon_mediation_terms_opponent_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 60 }
+		eon_mediation_terms_refuse_opponent = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation_terms.25
+	title = eon_mediation_terms_opponent_humanitarian_90_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_cancelled_current = yes } text = eon_mediation_terms_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_opponent_response_valid = yes NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_opponent_humanitarian_90_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } NOT = { eon_mediation_terms_opponent_response_valid = yes } NOT = { eon_mediation_terms_cancelled_current = yes } } text = eon_mediation_terms_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_terms_accept
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } eon_mediation_terms_opponent_response_valid = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 }
+		eon_mediation_terms_accept_opponent = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 0.5 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } NOT = { eon_mediation_terms_opponent_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_terms_decline
+		trigger = { set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 } always = yes }
+		set_temp_variable = { eon_mediation_terms_response_topic = 2 } set_temp_variable = { eon_mediation_terms_response_duration = 90 }
+		eon_mediation_terms_refuse_opponent = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+# Static result notice: acknowledgement cannot revise a later mandate.
+country_event = {
+	id = eon_mediation_terms.30
+	title = eon_mediation_terms.30.t
+	desc = eon_mediation_terms.30.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_terms_ack }
+}
+
+# Static result notice: acknowledgement cannot revise a later mandate.
+country_event = {
+	id = eon_mediation_terms.31
+	title = eon_mediation_terms.31.t
+	desc = eon_mediation_terms.31.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_terms_ack }
+}
+
+# Static result notice: acknowledgement cannot revise a later mandate.
+country_event = {
+	id = eon_mediation_terms.32
+	title = eon_mediation_terms.32.t
+	desc = eon_mediation_terms.32.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_terms_ack }
+}
+
+# Static result notice: acknowledgement cannot revise a later mandate.
+country_event = {
+	id = eon_mediation_terms.33
+	title = eon_mediation_terms.33.t
+	desc = eon_mediation_terms.33.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_terms_ack }
+}
+
+# Static result notice: acknowledgement cannot revise a later mandate.
+country_event = {
+	id = eon_mediation_terms.34
+	title = eon_mediation_terms.34.t
+	desc = eon_mediation_terms.34.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_terms_ack }
+}
+
+# Static result notice: acknowledgement cannot revise a later mandate.
+country_event = {
+	id = eon_mediation_terms.35
+	title = eon_mediation_terms.35.t
+	desc = eon_mediation_terms.35.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_terms_ack }
+}

@@ -7,6 +7,18 @@ import re
 import subprocess
 import sys
 
+# Package09 independently owns exactly these eight additions and one pre-clear hook.
+LATER_PACKAGE09_NEW = {
+    'common/scripted_effects/eon_mediation_terms_effects.txt',
+    'common/scripted_triggers/eon_mediation_terms_triggers.txt',
+    'common/decisions/eon_mediation_terms_decisions.txt',
+    'common/decisions/categories/eon_mediation_terms_categories.txt',
+    'common/on_actions/eon_mediation_terms_on_actions.txt',
+    'events/eon_mediation_terms_events.txt',
+    'localisation/english/eon_mediation_terms_l_english.yml',
+    'localisation/russian/eon_mediation_terms_l_russian.yml',
+}
+
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = '4406fc756cd91f6f2e7477d92fc87dac8c215572'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
@@ -71,10 +83,10 @@ assert structural_helpers <= helpers.keys(), ('Missing exclusive role and pair-b
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == NEW | LATER_PACKAGE08_NEW, ('Unexpected package 07 gameplay source boundary', changed, untracked)
+assert set(changed) | set(untracked) == NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW, ('Unexpected package 07 gameplay source boundary', changed, untracked)
 assert not set(changed).intersection(baseline_paths), 'Existing gameplay bytes changed'
 assert not NEW.intersection(baseline_paths), 'New consultation source overwrites old game files'
-assert set(untracked) <= NEW | LATER_PACKAGE08_NEW
+assert set(untracked) <= NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW
 groups['all_existing_gameplay_bytes_preserved_and_exact_seven_additions'] += 1
 
 old_actions = {b['key'] for path in baseline_paths

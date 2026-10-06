@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and eight implementation packages are complete at
+The existing diplomacy audit and nine implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -99,8 +99,25 @@ M/B channels; another eligible mediator remains possible. Source models passed
 68277 preserved old gameplay files. Native compilation, decision/GUI
 scopes, timers, AI, save/load and campaign acceptance remain unverified.
 See [DIPLOMACY_PACKAGE_08_UK.md](DIPLOMACY_PACKAGE_08_UK.md).
-Next scope is concrete consented terms and revision; actual peace execution
-requires separate native multiwar/subject/faction acceptance.
+Its procedural terms and revision are implemented in package09 below; actual
+peace execution requires separate native multiwar/subject/faction acceptance.
+
+The ninth package adds concrete procedural review of the mediation mandate:
+six literal agenda/duration offers, separate M then B consent, free proposals,
+unchanged accepted agenda/deadline while pending, and atomic 30/60/90-day renewal
+after final consent. Every human participant can cancel the pending revision.
+A single pre-clear hook in package08 protects outstanding original replies
+before any base identity is erased; forced cleanup quarantines terms-only A/M
+and M/B edges while package08 mandates retain their own independent rules.
+Normal consumed replies allow successive review rounds. Orphan cancellation
+and missing existing AI opinion weights were reproduced and repaired.
+Source models passed 5289 cumulative scenarios (5151 previous plus 138 new),
+with 292 new source/API checks. Exactly 68285 old gameplay files remain
+byte-identical, one has the sole pre-clear hook, and eight new files were added.
+These terms govern talks only. Binding peace, humanitarian access and delivery
+monitoring require separate mechanisms and native acceptance. Native scopes,
+timers, AI, GUI, save/load and campaign remain unverified. See
+[DIPLOMACY_PACKAGE_09_UK.md](DIPLOMACY_PACKAGE_09_UK.md).
 
 ## Completed setup
 

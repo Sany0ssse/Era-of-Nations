@@ -7,6 +7,18 @@ import re
 import subprocess
 import sys
 
+# Package09 independently owns exactly these eight additions and one pre-clear hook.
+LATER_PACKAGE09_NEW = {
+    'common/scripted_effects/eon_mediation_terms_effects.txt',
+    'common/scripted_triggers/eon_mediation_terms_triggers.txt',
+    'common/decisions/eon_mediation_terms_decisions.txt',
+    'common/decisions/categories/eon_mediation_terms_categories.txt',
+    'common/on_actions/eon_mediation_terms_on_actions.txt',
+    'events/eon_mediation_terms_events.txt',
+    'localisation/english/eon_mediation_terms_l_english.yml',
+    'localisation/russian/eon_mediation_terms_l_russian.yml',
+}
+
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = 'b86a187f8ff3dfc88a577db4b2c52525fd5cf2fd'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
@@ -42,8 +54,17 @@ for path in sorted(NEW):
     assert data.startswith(b'\xef\xbb\xbf') == path.endswith('.yml'), ('New source BOM convention', path)
     assert '\ufffd' not in data.decode('utf-8-sig'), path
     if path.endswith('.txt'):
-        blocks(data)
-        sources[path] = ast(data)
+        parse_data = data
+        if path == 'common/scripted_effects/eon_mediation_effects.txt':
+            before09 = subprocess.check_output(['git', 'show', '3b6efd83f9b1a62c7348f52d232ff0f08583a92c:' + path], cwd=ROOT)
+            marker = b'eon_mediation_clear_record = {\n'
+            hook = b' eon_mediation_terms_before_base_clear = yes\n'
+            assert before09.count(marker) == 1
+            assert data == before09.replace(marker, marker + hook, 1), 'Only package09 pre-clear hook may alter package08 source'
+            parse_data = before09
+            groups['package09_single_hook_exact_restore_before_original_assertions'] += 1
+        blocks(parse_data)
+        sources[path] = ast(parse_data)
     if '/scripted_effects/' in path or '/scripted_triggers/' in path:
         kind = 'scripted_triggers' if '/scripted_triggers/' in path else 'scripted_effects'
         for key, op, value in sources[path]:
@@ -59,10 +80,10 @@ assert 'eon_mediation_prepare_draft' in helpers
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == NEW, ('Unexpected package 08 gameplay source boundary', changed, untracked)
+assert set(changed) | set(untracked) == NEW | LATER_PACKAGE09_NEW, ('Unexpected package 08 gameplay source boundary', changed, untracked)
 assert not set(changed).intersection(baseline_paths), 'Existing gameplay bytes changed'
 assert not NEW.intersection(baseline_paths), 'New mediation source overwrites old game files'
-assert set(untracked) <= NEW
+assert set(untracked) <= NEW | LATER_PACKAGE09_NEW
 groups['all_existing_gameplay_bytes_preserved_and_exact_nine_additions'] += 1
 
 old_actions = {b['key'] for path in baseline_paths

@@ -57,6 +57,12 @@ def read(path): return (ROOT / path).read_text(encoding='utf-8-sig')
 
 model['effects'].update({key: body for key, operator, body in ast(read('common/scripted_effects/eon_mediation_effects.txt'))})
 model['capacity_triggers'].update({key: body for key, operator, body in ast(read('common/scripted_triggers/eon_mediation_triggers.txt'))})
+# Package09 dependency adapter: load only the new helpers needed by the single pre-clear hook.
+for registry, path in (('effects', 'common/scripted_effects/eon_mediation_terms_effects.txt'),
+                       ('capacity_triggers', 'common/scripted_triggers/eon_mediation_terms_triggers.txt')):
+    dependencies = {key: body for key, operator, body in ast(read(path))}
+    assert not dependencies.keys() & model[registry].keys(), 'New terms helpers overwrite an existing helper'
+    model[registry].update(dependencies)
 actions = one(ast(read('common/scripted_diplomatic_actions/eon_mediation_actions.txt')), 'scripted_diplomatic_actions')
 events = model['get_event_map'](read('events/eon_mediation_events.txt'))
 hooks = one(ast(read('common/on_actions/eon_mediation_on_actions.txt')), 'on_actions')

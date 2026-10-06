@@ -7,6 +7,18 @@ import re
 import subprocess
 import sys
 
+# Package09 independently owns exactly these eight additions and one pre-clear hook.
+LATER_PACKAGE09_NEW = {
+    'common/scripted_effects/eon_mediation_terms_effects.txt',
+    'common/scripted_triggers/eon_mediation_terms_triggers.txt',
+    'common/decisions/eon_mediation_terms_decisions.txt',
+    'common/decisions/categories/eon_mediation_terms_categories.txt',
+    'common/on_actions/eon_mediation_terms_on_actions.txt',
+    'events/eon_mediation_terms_events.txt',
+    'localisation/english/eon_mediation_terms_l_english.yml',
+    'localisation/russian/eon_mediation_terms_l_russian.yml',
+}
+
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = '688f1116fbcb377215181edca6af50f36538532e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
@@ -218,7 +230,7 @@ later_package08_new = {
 }
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new | later_package06_paths | later_package07_new | later_package08_new, ('Unexpected gameplay changes', changed, untracked)
+assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new | later_package06_paths | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW, ('Unexpected gameplay changes', changed, untracked)
 groups['whole_gameplay_git_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,
                   'baseline': BASELINE, 'owned_existing_files': receipts, 'native_primary_documentation': native,

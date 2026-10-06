@@ -1,0 +1,193 @@
+# Own terms only. Base clear invokes the pre-clear hook before erasing identities.
+eon_mediation_terms_clear_record = {
+ clr_country_flag = eon_mediation_terms_reserved
+ clr_country_flag = eon_mediation_terms_response_window
+ clr_country_flag = eon_mediation_terms_cancelled
+ clear_variable = eon_mediation_terms_a
+ clear_variable = eon_mediation_terms_b
+ clear_variable = eon_mediation_terms_m
+ clear_variable = eon_mediation_terms_topic
+ clear_variable = eon_mediation_terms_duration
+ clear_variable = eon_mediation_terms_stage
+}
+eon_mediation_terms_copy_record = {
+ eon_mediation_terms_clear_record = yes
+ set_variable = { eon_mediation_terms_a = PREV.eon_mediation_terms_a }
+ set_variable = { eon_mediation_terms_b = PREV.eon_mediation_terms_b }
+ set_variable = { eon_mediation_terms_m = PREV.eon_mediation_terms_m }
+ set_variable = { eon_mediation_terms_topic = PREV.eon_mediation_terms_topic }
+ set_variable = { eon_mediation_terms_duration = PREV.eon_mediation_terms_duration }
+ set_variable = { eon_mediation_terms_stage = PREV.eon_mediation_terms_stage }
+ set_country_flag = eon_mediation_terms_reserved
+ set_country_flag = { flag = eon_mediation_terms_response_window days = 30 value = 1 }
+}
+eon_mediation_terms_release_record = {
+ if = { limit = { has_country_flag = eon_mediation_terms_reserved }
+  if = { limit = { eon_mediation_terms_owner_known = yes }
+   var:eon_mediation_terms_a = { if = { limit = { NOT = { tag = PREV } eon_mediation_terms_origin_linked = yes } eon_mediation_terms_clear_record = yes } }
+   var:eon_mediation_terms_b = { if = { limit = { NOT = { tag = PREV } eon_mediation_terms_origin_linked = yes } eon_mediation_terms_clear_record = yes } }
+   var:eon_mediation_terms_m = { if = { limit = { NOT = { tag = PREV } eon_mediation_terms_origin_linked = yes } eon_mediation_terms_clear_record = yes } }
+  }
+  eon_mediation_terms_clear_record = yes
+ }
+}
+eon_mediation_terms_retire_response_edges = {
+ if = { limit = { eon_mediation_terms_owner_known = yes }
+  set_temp_variable = { eon_mediation_terms_actor_a = eon_mediation_terms_a }
+  set_temp_variable = { eon_mediation_terms_actor_b = eon_mediation_terms_b }
+  set_temp_variable = { eon_mediation_terms_actor_m = eon_mediation_terms_m }
+  if = { limit = { check_variable = { eon_mediation_terms_actor_a > 0 } check_variable = { eon_mediation_terms_actor_m > 0 } }
+   var:eon_mediation_terms_actor_m = { var:eon_mediation_terms_actor_a = { set_country_flag = eon_mediation_terms_retired_pair@PREV PREV = { set_country_flag = eon_mediation_terms_retired_pair@PREV } } }
+  }
+  if = { limit = { check_variable = { eon_mediation_terms_actor_b > 0 } check_variable = { eon_mediation_terms_actor_m > 0 } }
+   var:eon_mediation_terms_actor_m = { var:eon_mediation_terms_actor_b = { set_country_flag = eon_mediation_terms_retired_pair@PREV PREV = { set_country_flag = eon_mediation_terms_retired_pair@PREV } } }
+  }
+ }
+}
+eon_mediation_terms_force_cleanup = {
+ eon_mediation_terms_retire_response_edges = yes
+ eon_mediation_terms_release_record = yes
+}
+eon_mediation_terms_before_base_clear = {
+ if = { limit = { has_country_flag = eon_mediation_terms_reserved } eon_mediation_terms_force_cleanup = yes }
+}
+eon_mediation_terms_send_offer = {
+ if = { limit = { eon_mediation_terms_send_ready = yes }
+  eon_mediation_terms_clear_record = yes
+  set_variable = { eon_mediation_terms_a = eon_mediation_party_a }
+  set_variable = { eon_mediation_terms_b = eon_mediation_party_b }
+  set_variable = { eon_mediation_terms_m = eon_mediation_mediator }
+  set_variable = { eon_mediation_terms_topic = eon_mediation_terms_proposed_topic }
+  set_variable = { eon_mediation_terms_duration = eon_mediation_terms_proposed_duration }
+  set_variable = { eon_mediation_terms_stage = 1 }
+  set_country_flag = eon_mediation_terms_reserved
+  set_country_flag = { flag = eon_mediation_terms_response_window days = 30 value = 1 }
+  var:eon_mediation_terms_b = { eon_mediation_terms_copy_record = yes }
+  var:eon_mediation_terms_m = { eon_mediation_terms_copy_record = yes
+   if = { limit = { check_variable = { eon_mediation_terms_topic = 1 } check_variable = { eon_mediation_terms_duration = 30 } } country_event = { id = eon_mediation_terms.10 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 1 } check_variable = { eon_mediation_terms_duration = 60 } } country_event = { id = eon_mediation_terms.11 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 1 } check_variable = { eon_mediation_terms_duration = 90 } } country_event = { id = eon_mediation_terms.12 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 2 } check_variable = { eon_mediation_terms_duration = 30 } } country_event = { id = eon_mediation_terms.13 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 2 } check_variable = { eon_mediation_terms_duration = 60 } } country_event = { id = eon_mediation_terms.14 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 2 } check_variable = { eon_mediation_terms_duration = 90 } } country_event = { id = eon_mediation_terms.15 days = 1 } }
+  }
+ }
+}
+eon_mediation_terms_notice_30 = {
+ var:eon_mediation_terms_a = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.30 } } }
+ var:eon_mediation_terms_b = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.30 } } }
+ var:eon_mediation_terms_m = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.30 } } }
+}
+eon_mediation_terms_notice_31 = {
+ var:eon_mediation_terms_a = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.31 } } }
+ var:eon_mediation_terms_b = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.31 } } }
+ var:eon_mediation_terms_m = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.31 } } }
+}
+eon_mediation_terms_notice_32 = {
+ var:eon_mediation_terms_a = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.32 } } }
+ var:eon_mediation_terms_b = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.32 } } }
+ var:eon_mediation_terms_m = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.32 } } }
+}
+eon_mediation_terms_notice_33 = {
+ var:eon_mediation_terms_a = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.33 } } }
+ var:eon_mediation_terms_b = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.33 } } }
+ var:eon_mediation_terms_m = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.33 } } }
+}
+eon_mediation_terms_notice_34 = {
+ var:eon_mediation_terms_a = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.34 } } }
+ var:eon_mediation_terms_b = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.34 } } }
+ var:eon_mediation_terms_m = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.34 } } }
+}
+eon_mediation_terms_notice_35 = {
+ var:eon_mediation_terms_a = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.35 } } }
+ var:eon_mediation_terms_b = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.35 } } }
+ var:eon_mediation_terms_m = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.35 } } }
+}
+eon_mediation_terms_resolve_invalid_response = {
+ if = { limit = { eon_mediation_terms_cancelled_current = yes } eon_mediation_terms_notice_33 = yes }
+ else = { eon_mediation_terms_notice_32 = yes }
+ eon_mediation_terms_release_record = yes
+}
+eon_mediation_terms_copy_stage = {
+ if = { limit = { NOT = { tag = PREV } eon_mediation_terms_origin_linked = yes }
+  set_variable = { eon_mediation_terms_stage = PREV.eon_mediation_terms_stage }
+  set_country_flag = { flag = eon_mediation_terms_response_window days = 30 value = 1 }
+ }
+}
+eon_mediation_terms_accept_mediator = {
+ if = { limit = { eon_mediation_terms_mediator_pair_current = yes }
+  if = { limit = { eon_mediation_terms_mediator_response_valid = yes }
+   set_variable = { eon_mediation_terms_stage = 2 }
+   set_country_flag = { flag = eon_mediation_terms_response_window days = 30 value = 1 }
+   var:eon_mediation_terms_a = { eon_mediation_terms_copy_stage = yes }
+   var:eon_mediation_terms_b = { eon_mediation_terms_copy_stage = yes }
+   eon_mediation_terms_notice_30 = yes
+   var:eon_mediation_terms_b = {
+   if = { limit = { check_variable = { eon_mediation_terms_topic = 1 } check_variable = { eon_mediation_terms_duration = 30 } } country_event = { id = eon_mediation_terms.20 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 1 } check_variable = { eon_mediation_terms_duration = 60 } } country_event = { id = eon_mediation_terms.21 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 1 } check_variable = { eon_mediation_terms_duration = 90 } } country_event = { id = eon_mediation_terms.22 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 2 } check_variable = { eon_mediation_terms_duration = 30 } } country_event = { id = eon_mediation_terms.23 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 2 } check_variable = { eon_mediation_terms_duration = 60 } } country_event = { id = eon_mediation_terms.24 days = 1 } }
+   else_if = { limit = { check_variable = { eon_mediation_terms_topic = 2 } check_variable = { eon_mediation_terms_duration = 90 } } country_event = { id = eon_mediation_terms.25 days = 1 } }
+   }
+  }
+  else = { eon_mediation_terms_resolve_invalid_response = yes }
+ }
+}
+eon_mediation_terms_refuse_mediator = {
+ if = { limit = { eon_mediation_terms_mediator_pair_current = yes }
+  if = { limit = { eon_mediation_terms_mediator_response_valid = yes } eon_mediation_terms_notice_31 = yes eon_mediation_terms_release_record = yes }
+  else = { eon_mediation_terms_resolve_invalid_response = yes }
+ }
+}
+# Validate the whole triad before commitment. No peer guard during the atomic update:
+# changing the first topic necessarily makes the old mirrored topic transiently unequal.
+eon_mediation_terms_apply_accepted = {
+ set_variable = { eon_mediation_topic = eon_mediation_terms_topic }
+ clr_country_flag = eon_mediation_active_window
+ if = { limit = { check_variable = { eon_mediation_terms_duration = 30 } } set_country_flag = { flag = eon_mediation_active_window days = 30 value = 1 } }
+ else_if = { limit = { check_variable = { eon_mediation_terms_duration = 60 } } set_country_flag = { flag = eon_mediation_active_window days = 60 value = 1 } }
+ else_if = { limit = { check_variable = { eon_mediation_terms_duration = 90 } } set_country_flag = { flag = eon_mediation_active_window days = 90 value = 1 } }
+}
+eon_mediation_terms_accept_opponent = {
+ if = { limit = { eon_mediation_terms_opponent_pair_current = yes }
+  if = { limit = { eon_mediation_terms_opponent_response_valid = yes }
+   var:eon_mediation_terms_a = { eon_mediation_terms_apply_accepted = yes }
+   var:eon_mediation_terms_m = { eon_mediation_terms_apply_accepted = yes }
+   eon_mediation_terms_apply_accepted = yes
+   eon_mediation_terms_notice_34 = yes
+   eon_mediation_terms_release_record = yes
+  }
+  else = { eon_mediation_terms_resolve_invalid_response = yes }
+ }
+}
+eon_mediation_terms_refuse_opponent = {
+ if = { limit = { eon_mediation_terms_opponent_pair_current = yes }
+  if = { limit = { eon_mediation_terms_opponent_response_valid = yes } eon_mediation_terms_notice_31 = yes eon_mediation_terms_release_record = yes }
+  else = { eon_mediation_terms_resolve_invalid_response = yes }
+ }
+}
+eon_mediation_terms_cancel_offer = {
+ if = { limit = { eon_mediation_terms_cancel_ready = yes }
+  set_country_flag = eon_mediation_terms_cancelled
+  var:eon_mediation_terms_a = { set_country_flag = eon_mediation_terms_cancelled }
+  var:eon_mediation_terms_b = { set_country_flag = eon_mediation_terms_cancelled }
+  var:eon_mediation_terms_m = { set_country_flag = eon_mediation_terms_cancelled }
+  eon_mediation_terms_notice_33 = yes
+ }
+}
+eon_mediation_terms_daily_cleanup = {
+ if = { limit = { has_country_flag = eon_mediation_terms_reserved }
+  if = { limit = { NOT = { eon_mediation_terms_state_consistent = yes } } eon_mediation_terms_force_cleanup = yes }
+  else_if = { limit = { OR = {
+   NOT = { eon_mediation_terms_base_matches = yes }
+   NOT = { has_country_flag = eon_mediation_terms_response_window }
+   var:eon_mediation_terms_a = { NOT = { has_country_flag = eon_mediation_terms_response_window } }
+   var:eon_mediation_terms_b = { NOT = { has_country_flag = eon_mediation_terms_response_window } }
+   var:eon_mediation_terms_m = { NOT = { has_country_flag = eon_mediation_terms_response_window } }
+  } }
+   eon_mediation_terms_notice_35 = yes
+   eon_mediation_terms_force_cleanup = yes
+  }
+ }
+}

@@ -10,6 +10,18 @@ import subprocess
 
 from _support import ROOT, BASELINE, ast, baseline, blocks, format_preserved, maybe, one, prime_baselines, source
 
+# Package09 independently owns exactly these eight additions and one pre-clear hook.
+LATER_PACKAGE09_NEW = {
+    'common/scripted_effects/eon_mediation_terms_effects.txt',
+    'common/scripted_triggers/eon_mediation_terms_triggers.txt',
+    'common/decisions/eon_mediation_terms_decisions.txt',
+    'common/decisions/categories/eon_mediation_terms_categories.txt',
+    'common/on_actions/eon_mediation_terms_on_actions.txt',
+    'events/eon_mediation_terms_events.txt',
+    'localisation/english/eon_mediation_terms_l_english.yml',
+    'localisation/russian/eon_mediation_terms_l_russian.yml',
+}
+
 groups = Counter()
 receipt = []
 
@@ -180,9 +192,9 @@ later_mediation_paths = {
 }
 tracked_changes = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 owned_paths = {item['path'] for item in receipt}
-assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths | later_support_paths | later_consultation_paths | later_mediation_paths, ('Unowned gameplay changes', tracked_changes)
+assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths | later_support_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW, ('Unowned gameplay changes', tracked_changes)
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-assert set(untracked) <= new_paths | later_negotiation_paths | later_support_new_paths | later_consultation_paths | later_mediation_paths | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
+assert set(untracked) <= new_paths | later_negotiation_paths | later_support_new_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 assert not set(new_paths).intersection(baseline_paths), 'New files overwrite existing baseline sources'
 passed('unchanged_tracked_gameplay_path_boundary')

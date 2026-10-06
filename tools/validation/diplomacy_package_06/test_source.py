@@ -9,6 +9,18 @@ import re
 import subprocess
 import sys
 
+# Package09 independently owns exactly these eight additions and one pre-clear hook.
+LATER_PACKAGE09_NEW = {
+    'common/scripted_effects/eon_mediation_terms_effects.txt',
+    'common/scripted_triggers/eon_mediation_terms_triggers.txt',
+    'common/decisions/eon_mediation_terms_decisions.txt',
+    'common/decisions/categories/eon_mediation_terms_categories.txt',
+    'common/on_actions/eon_mediation_terms_on_actions.txt',
+    'events/eon_mediation_terms_events.txt',
+    'localisation/english/eon_mediation_terms_l_english.yml',
+    'localisation/russian/eon_mediation_terms_l_russian.yml',
+}
+
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = '551d7100f6c35cd062a36520f6a7eed199b13a2e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
@@ -389,8 +401,8 @@ if docs.exists():
 TREES = ('common', 'history', 'events', 'interface', 'gfx', 'localisation', 'music', 'map', 'sound')
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW, ('Unexpected package06 gameplay scope', changed, untracked)
-assert set(untracked) <= NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW, ('Unowned new source', untracked)
+assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW, ('Unexpected package06 gameplay scope', changed, untracked)
+assert set(untracked) <= NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW | LATER_PACKAGE09_NEW, ('Unowned new source', untracked)
 assert not set(NEW).intersection(baseline_paths), 'New support file overwrites original source'
 groups['exact14_file_whole_gameplay_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,

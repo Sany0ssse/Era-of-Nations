@@ -12,6 +12,18 @@ import re
 import subprocess
 import sys
 
+# Package09 independently owns exactly these eight additions and one pre-clear hook.
+LATER_PACKAGE09_NEW = {
+    'common/scripted_effects/eon_mediation_terms_effects.txt',
+    'common/scripted_triggers/eon_mediation_terms_triggers.txt',
+    'common/decisions/eon_mediation_terms_decisions.txt',
+    'common/decisions/categories/eon_mediation_terms_categories.txt',
+    'common/on_actions/eon_mediation_terms_on_actions.txt',
+    'events/eon_mediation_terms_events.txt',
+    'localisation/english/eon_mediation_terms_l_english.yml',
+    'localisation/russian/eon_mediation_terms_l_russian.yml',
+}
+
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = 'bb018ea1b6a083104b3fd797b83ad1127f77b1bf'
 PACKAGE05_BASELINE = '688f1116fbcb377215181edca6af50f36538532e'
@@ -277,8 +289,8 @@ later_package08_new = {
 }
 tracked = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-assert set(tracked) <= owned | new | later_package05_new | later_package06_paths | later_package07_new | later_package08_new, ('Unowned package04 gameplay edits', tracked)
-assert set(untracked) <= new | later_package05_new | later_package06_new | later_package07_new | later_package08_new, ('Unowned package04 gameplay additions', untracked)
+assert set(tracked) <= owned | new | later_package05_new | later_package06_paths | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW, ('Unowned package04 gameplay edits', tracked)
+assert set(untracked) <= new | later_package05_new | later_package06_new | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW, ('Unowned package04 gameplay additions', untracked)
 groups['whole_gameplay_git_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,
                   'baseline': BASELINE, 'owned_existing_files': receipts,
