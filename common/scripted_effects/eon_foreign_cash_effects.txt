@@ -1,0 +1,162 @@
+# One-off grant: fixed 7, no escrow, debt, recurring agreement or refund.
+eon_foreign_cash_clear_pending = {
+ clr_country_flag = eon_foreign_cash_pending
+ clr_country_flag = eon_foreign_cash_live
+ clr_country_flag = eon_foreign_cash_cancelled
+ clr_country_flag = eon_foreign_cash_consented
+ clear_variable = eon_foreign_cash_partner
+}
+eon_foreign_cash_retire_pending_pair = {
+ if = {
+  limit = { has_country_flag = eon_foreign_cash_pending }
+  if = {
+   limit = { eon_foreign_cash_partner_identified = yes }
+   var:eon_foreign_cash_partner = {
+    PREV = { set_country_flag = eon_foreign_cash_retired_pair@PREV }
+   }
+  }
+  else = { set_country_flag = eon_foreign_cash_quarantined }
+ }
+}
+eon_foreign_cash_send_offer = {
+ if = {
+  limit = { eon_foreign_cash_offer_ready = yes }
+  set_variable = { eon_foreign_cash_partner = FROM }
+  set_country_flag = eon_foreign_cash_pending
+  set_country_flag = { flag = eon_foreign_cash_live days = 30 value = 1 }
+  clr_country_flag = eon_foreign_cash_cancelled
+  clr_country_flag = eon_foreign_cash_consented
+  FROM = { country_event = { id = eon_foreign_cash.1 } }
+ }
+}
+
+# Recipient assent is separate from execution. No assets move until a hidden
+# event restores native provider ROOT and freshly verifies current conditions.
+eon_foreign_cash_accept_offer = {
+ if = {
+  limit = { eon_foreign_cash_response_open = yes }
+  if = {
+   limit = { eon_foreign_cash_response_ready = yes }
+   FROM = {
+    set_country_flag = eon_foreign_cash_consented
+    country_event = { id = eon_foreign_cash.2 }
+   }
+  }
+  else = {
+   FROM = {
+    eon_foreign_cash_clear_pending = yes
+    country_event = { id = eon_foreign_cash.6 }
+   }
+   country_event = { id = eon_foreign_cash.6 }
+  }
+ }
+}
+eon_foreign_cash_commit_offer = {
+ if = {
+  limit = { eon_foreign_cash_commit_pending = yes }
+  if = {
+   limit = { eon_foreign_cash_commit_ready = yes }
+   # Consume before the original debit/credit/influence effects so a repeated
+   # callback cannot repeat execution against this consumed provider record.
+   eon_foreign_cash_clear_pending = yes
+   set_temp_variable = { treasury_change = -7.00 }
+   modify_treasury_effect = yes
+   set_temp_variable = { percent_change = 3 }
+   set_temp_variable = { tag_index = ROOT }
+   set_temp_variable = { influence_target = FROM }
+   change_influence_percentage = yes
+   FROM = {
+    set_temp_variable = { treasury_change = 7.00 }
+    modify_treasury_effect = yes
+    country_event = AB_mobilization.7
+   }
+   country_event = { id = eon_foreign_cash.7 }
+  }
+  else = {
+   eon_foreign_cash_clear_pending = yes
+   country_event = { id = eon_foreign_cash.6 }
+   FROM = { country_event = { id = eon_foreign_cash.6 } }
+  }
+ }
+}
+eon_foreign_cash_reject_offer = {
+ if = {
+  limit = { eon_foreign_cash_response_open = yes }
+  FROM = {
+   eon_foreign_cash_clear_pending = yes
+   country_event = { id = eon_foreign_cash.6 }
+  }
+ }
+}
+eon_foreign_cash_withdraw_offer = {
+ if = {
+  limit = { eon_foreign_cash_withdraw_available = yes }
+  ROOT = { set_country_flag = eon_foreign_cash_cancelled }
+  country_event = { id = eon_foreign_cash.3 }
+ }
+}
+
+eon_foreign_cash_daily_update = {
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_foreign_cash_pending }
+   OR = {
+    has_country_flag = eon_foreign_cash_live
+    has_country_flag = eon_foreign_cash_cancelled
+    has_country_flag = eon_foreign_cash_consented
+    NOT = { check_variable = { eon_foreign_cash_partner = 0 } }
+   }
+  }
+  set_country_flag = eon_foreign_cash_quarantined
+  eon_foreign_cash_clear_pending = yes
+  country_event = { id = eon_foreign_cash.5 }
+ }
+ if = {
+  limit = {
+   has_country_flag = eon_foreign_cash_pending
+   OR = {
+    exists = no
+    NOT = { eon_foreign_cash_partner_identified = yes }
+    NOT = { has_country_flag = eon_foreign_cash_live }
+    var:eon_foreign_cash_partner = { exists = no }
+   }
+  }
+  eon_foreign_cash_retire_pending_pair = yes
+  eon_foreign_cash_clear_pending = yes
+  if = {
+   limit = { has_country_flag = eon_foreign_cash_quarantined }
+   country_event = { id = eon_foreign_cash.5 }
+  }
+  else = { country_event = { id = eon_foreign_cash.4 } }
+ }
+}
+
+# Hook supplies the annexed country even before the engine marks it extinct.
+eon_foreign_cash_annex_update = {
+ if = {
+  limit = {
+   has_country_flag = eon_foreign_cash_pending
+   check_variable = { eon_foreign_cash_partner = eon_foreign_cash_annexed_partner }
+  }
+  eon_foreign_cash_retire_pending_pair = yes
+  eon_foreign_cash_clear_pending = yes
+ }
+}
+eon_foreign_cash_clear_annexed_country = {
+ if = {
+  limit = { has_country_flag = eon_foreign_cash_pending }
+  eon_foreign_cash_retire_pending_pair = yes
+ }
+ else_if = {
+  limit = {
+   OR = {
+    has_country_flag = eon_foreign_cash_live
+    has_country_flag = eon_foreign_cash_cancelled
+    has_country_flag = eon_foreign_cash_consented
+    NOT = { check_variable = { eon_foreign_cash_partner = 0 } }
+   }
+  }
+  set_country_flag = eon_foreign_cash_quarantined
+ }
+ eon_foreign_cash_clear_pending = yes
+}

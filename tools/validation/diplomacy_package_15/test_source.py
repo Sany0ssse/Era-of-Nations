@@ -21,6 +21,12 @@ from diplomacy_package_17.test_source import (
     historical_actions as package17_historical_actions, check_owned_existing as check_later_package17_owned,
 )
 check_later_package17_owned()
+from diplomacy_package_18.test_source import (
+    NEW as LATER_PACKAGE18_NEW, package18_original_bytes, package18_historical_existing,
+    package18_original_validator_bytes, historical_actions as package18_historical_actions,
+    check_owned_existing as check_later_package18_owned,
+)
+check_later_package18_owned()
 BASELINE='3f044a30711e7dba015969a9a5bd2b0229703a3c'
 BASE=BASELINE
 TOKEN=re.compile(rb'"(?:\\.|[^"\\])*"|#[^\r\n]*|[{}]|[=<>!]+|[^\s{}=<>!#"]+')
@@ -813,8 +819,8 @@ def main():
     assert len(before)==68321,len(before)
     changed=set(subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines())
     added=set(subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines())
-    changed -= package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW
-    added -= LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW
+    changed -= package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW
+    added -= LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW
     assert changed==EXISTING and not added,(changed^EXISTING,added)
     assert not set(subprocess.check_output(['git','diff','--name-only','--diff-filter=D',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines())
     groups['exact_full_gameplay_tree_eleven_changed_no_new_deleted_unowned_bytes']+=1

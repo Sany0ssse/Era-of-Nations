@@ -13,6 +13,14 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = 'b1568ffc7ae3d0809be0912be68bb76ab4fb0e28'
+import sys as package18_sys
+package18_sys.path.insert(0, str(ROOT / 'tools/validation'))
+from diplomacy_package_18.test_source import (
+    NEW as LATER_PACKAGE18_NEW, package18_original_bytes, package18_historical_existing,
+    package18_original_validator_bytes, historical_actions as package18_historical_actions,
+    check_owned_existing as check_later_package18_owned,
+)
+check_later_package18_owned()
 EXISTING = {'events/00_Influence_events.txt'}
 FX = 'common/scripted_effects/eon_services_effects.txt'
 TR = 'common/scripted_triggers/eon_services_triggers.txt'
@@ -121,6 +129,7 @@ def check_owned_existing():
 
 
 def historical_actions(actions):
+    actions = package18_historical_actions(actions)
     """Only older source preservation proofs omit the three separately checked IDs."""
     return [identity for identity in actions if identity not in NEW_ACTION_IDS]
 
@@ -703,6 +712,7 @@ HISTORICAL_SOURCE_EDITS = {'tools/validation/diplomacy_package_02/test_source.py
 
 
 def package17_original_validator_bytes(path, actual):
+    actual = package18_original_validator_bytes(path, actual)
     if path not in HISTORICAL_SOURCE_EDITS: return actual
     original = baseline_bytes(path)
     lines = original.decode('utf-8').splitlines(keepends=True)
@@ -731,6 +741,8 @@ def main():
              'portraits', 'tutorial', 'descriptions', 'scenario_tests', 'descriptor.mod', 'era_of_nations.mod', 'thumbnail.png')
     changed = set(subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines())
     untracked = set(subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines())
+    changed -= package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW
+    untracked -= LATER_PACKAGE18_NEW
     assert changed - NEW == EXISTING and (changed | untracked) - EXISTING == NEW, (changed, untracked)
     assert not subprocess.check_output(['git', 'diff', '--name-only', '--diff-filter=D', BASELINE, '--', *trees], cwd=ROOT).strip()
     passed('exact_full_gameplay_tree_one_existing_seven_new_without_unowned_deletions')
@@ -805,6 +817,7 @@ def main():
         passed('three_free_human_native_actions_with_fresh_guards')
     native_ids = [key for path in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt') for key, op, body in one(ast(path.read_bytes()), 'scripted_diplomatic_actions')]
     old_ids = [key for path in subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', 'common/scripted_diplomatic_actions'], cwd=ROOT).decode().splitlines() if path.endswith('.txt') for key, op, body in one(ast(baseline_bytes(path)), 'scripted_diplomatic_actions')]
+    native_ids = package18_historical_actions(native_ids)
     assert len(old_ids) == len(set(old_ids)) == 66 and len(native_ids) == len(set(native_ids)) == 69
     assert set(native_ids) == set(old_ids) | NEW_ACTION_IDS
     passed('66_original_native_action_IDs_plus_three_unique_additions')
@@ -903,7 +916,7 @@ def main():
     paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', 'tools/validation'], cwd=ROOT).decode().splitlines()
     unchanged = [path for path in paths if path not in HISTORICAL_SOURCE_EDITS]
     for path in unchanged:
-        assert (ROOT / path).read_bytes() == baseline_bytes(path), ('Earlier behavior/helper/runner or unrelated public source changed', path)
+        assert package18_original_validator_bytes(path, (ROOT / path).read_bytes()) == baseline_bytes(path), ('Earlier behavior/helper/runner or unrelated public source changed', path)
     passed('all_other_prior_public_validation_files_whole_raw_bytes_unchanged')
     behavior = [path for path in unchanged if path.endswith('.py') and Path(path).name != 'test_source.py']
     assert len(behavior) == 43

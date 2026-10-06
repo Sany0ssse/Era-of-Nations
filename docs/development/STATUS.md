@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and seventeen implementation packages are complete at
+The existing diplomacy audit and eighteen implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -322,6 +322,36 @@ pair; arbitrary consumed same-pair/same-type replay lacks a native generation
 token and remains outside the proof. Native engine acceptance remains
 outstanding. No game launch or changes to saves, launcher configuration,
 Workshop files or playsets are made here.
+
+## Diplomacy package 18
+
+The eighteenth package develops only the existing cash choice AB_mobilization.4.c.
+The initial 50-PP/360-day request and troop/equipment/refusal choices are
+byte-unchanged and remain separate unfinished work. A donor now offers a
+specific 7-unit grant; the recipient explicitly approves it before a guarded
+provider-side commit preserves the original ROOT-sensitive influence context.
+Fresh funds, complete recipient credit, original political eligibility and
+pair identity are checked before one transfer. Withdrawal before consent,
+decline, timeout, malformed-record cleanup and annex hooks do not pay money.
+
+Official historical cash-assistance and diplomatic-request documents inform
+the procedure. UN Charter Article 51 is defensive-war context, not authority
+for an automatic worldwide grant. There is no purpose-use audit, escrow,
+guaranteed future payment or debt. The initial request flag does not prove
+its generation; expired unresolved cash pairs are permanently retired and
+unknown records quarantine that donor cash channel only. Native acceptance
+and arbitrary consumed same-pair replay across a later identical offer remain
+outside proof. See [DIPLOMACY_PACKAGE_18_UK.md](DIPLOMACY_PACKAGE_18_UK.md).
+
+The cumulative runner passed 6539 source-model scenarios (6413 retained,
+126 new in 25 groups), 4 separate defensive-war fixture adapter checks,
+and 147 new source checks (130 API/structure + 17 memory-only byte-boundary
+mutations). All 45 older behavior/helper/runner Python files remain raw-byte
+unchanged; 16 historical source validators retain assertions and counters
+through exact byte journals. Gameplay, validation, source-run and independent
+review receipts are bound by hashes. Native engine acceptance remains pending.
+No game launch or changes to saves, launcher configuration, Workshop files
+or playsets are made here.
 
 ## Completed setup
 

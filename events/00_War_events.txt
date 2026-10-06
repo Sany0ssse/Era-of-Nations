@@ -249,18 +249,15 @@ country_event = {
 
 	option = {
 		name = AB_mobilization.4.c
-		log = "[GetDateText]: [This.GetName]: AB_mobilization.4.c executed"
-		set_temp_variable = { treasury_change = -7.00 }
-		modify_treasury_effect = yes
-		set_temp_variable = { percent_change = 3 }
-		set_temp_variable = { tag_index = ROOT }
-		set_temp_variable = { influence_target = FROM }
-		change_influence_percentage = yes
-		FROM = {
-			set_temp_variable = { treasury_change = 7.00 }
-			modify_treasury_effect = yes
-			country_event = AB_mobilization.7
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = eon_foreign_cash_offer_available_tt
+				eon_foreign_cash_offer_ready = yes
+			}
 		}
+		log = "[GetDateText]: [This.GetName]: AB_mobilization.4.c executed"
+		custom_effect_tooltip = eon_foreign_cash_offer_tt
+		eon_foreign_cash_send_offer = yes
 		ai_chance = {
 			base = 1
 			modifier = {

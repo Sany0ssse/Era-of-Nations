@@ -1,0 +1,127 @@
+# Receiver country scope, explicitly named provider. The inherited request
+# marker is nominal eligibility, not a unique request-generation receipt.
+eon_foreign_cash_policy_allowed = {
+ exists = yes
+ NOT = { tag = eon_foreign_cash_policy_provider }
+ has_defensive_war = yes
+ NOT = { has_war_with = eon_foreign_cash_policy_provider }
+ OR = { has_idea = non_power has_idea = minor_power has_idea = regional_power }
+ var:eon_foreign_cash_policy_provider = {
+  exists = yes
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_foreign_cash_policy_provider }
+  OR = { has_idea = large_power has_idea = great_power has_idea = superpower }
+  has_opinion = { target = PREV value > 49 }
+  has_country_flag = aid_request_cd_@PREV
+ }
+}
+
+# Provider country scope; country-only existence and exact positive ID also
+# recognize an extinct partner safely for retirement without moving assets.
+eon_foreign_cash_partner_identified = {
+ check_variable = { eon_foreign_cash_partner > 0 }
+ var:eon_foreign_cash_partner = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_foreign_cash_partner }
+ }
+}
+
+# Receiver scope. Prevent the inherited treasury clamp from destroying part
+# of the gift or trimming an unrelated out-of-range balance on either side.
+eon_foreign_cash_cash_available = {
+ check_variable = { treasury >= -1000000 }
+ set_temp_variable = { eon_foreign_cash_projected_treasury = treasury }
+ add_to_temp_variable = { eon_foreign_cash_projected_treasury = 7 }
+ check_variable = { eon_foreign_cash_projected_treasury <= 1000000 }
+ var:eon_foreign_cash_policy_provider = {
+  check_variable = { treasury >= 7 }
+  check_variable = { treasury <= 1000000 }
+ }
+}
+
+# Existing AB_mobilization.4.c: ROOT/THIS provider, FROM receiver.
+eon_foreign_cash_offer_ready = {
+ exists = yes
+ NOT = { has_country_flag = eon_foreign_cash_quarantined }
+ NOT = { has_country_flag = eon_foreign_cash_pending }
+ NOT = { has_country_flag = eon_foreign_cash_live }
+ NOT = { has_country_flag = eon_foreign_cash_cancelled }
+ NOT = { has_country_flag = eon_foreign_cash_consented }
+ check_variable = { eon_foreign_cash_partner = 0 }
+ set_temp_variable = { eon_foreign_cash_selection_provider = THIS }
+ FROM = {
+  set_temp_variable = { eon_foreign_cash_policy_provider = PREV.eon_foreign_cash_selection_provider }
+  eon_foreign_cash_policy_allowed = yes
+  eon_foreign_cash_cash_available = yes
+  var:eon_foreign_cash_policy_provider = {
+   NOT = { has_country_flag = eon_foreign_cash_retired_pair@PREV }
+  }
+ }
+}
+
+# New proposal: ROOT/THIS receiver, FROM provider. Identity permits cleanup
+# of cancelled or otherwise invalid proposals; consent closes the reply UI.
+eon_foreign_cash_response_pending = {
+ FROM = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  has_country_flag = eon_foreign_cash_pending
+  eon_foreign_cash_partner_identified = yes
+  check_variable = { eon_foreign_cash_partner = PREV }
+ }
+}
+eon_foreign_cash_response_open = {
+ eon_foreign_cash_response_pending = yes
+ FROM = { NOT = { has_country_flag = eon_foreign_cash_consented } }
+}
+eon_foreign_cash_response_ready = {
+ eon_foreign_cash_response_open = yes
+ FROM = {
+  exists = yes
+  has_country_flag = eon_foreign_cash_live
+  NOT = { has_country_flag = eon_foreign_cash_cancelled }
+ }
+ set_temp_variable = { eon_foreign_cash_policy_provider = FROM }
+ eon_foreign_cash_policy_allowed = yes
+ eon_foreign_cash_cash_available = yes
+}
+
+# Hidden execution: native ROOT/THIS provider, FROM consenting receiver.
+# Keeping that event frame preserves ROOT-dependent original influence logic.
+eon_foreign_cash_commit_pending = {
+ has_country_flag = eon_foreign_cash_pending
+ has_country_flag = eon_foreign_cash_consented
+ eon_foreign_cash_partner_identified = yes
+ check_variable = { eon_foreign_cash_partner = FROM }
+ FROM = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+ }
+}
+eon_foreign_cash_commit_ready = {
+ eon_foreign_cash_commit_pending = yes
+ exists = yes
+ has_country_flag = eon_foreign_cash_live
+ NOT = { has_country_flag = eon_foreign_cash_cancelled }
+ set_temp_variable = { eon_foreign_cash_selection_provider = THIS }
+ FROM = {
+  set_temp_variable = { eon_foreign_cash_policy_provider = PREV.eon_foreign_cash_selection_provider }
+  eon_foreign_cash_policy_allowed = yes
+  eon_foreign_cash_cash_available = yes
+ }
+}
+
+# Native action ROOT provider, THIS receiver; no withdrawal after assent.
+eon_foreign_cash_withdraw_available = {
+ exists = yes
+ NOT = { tag = ROOT }
+ ROOT = {
+  exists = yes
+  has_country_flag = eon_foreign_cash_pending
+  eon_foreign_cash_partner_identified = yes
+  check_variable = { eon_foreign_cash_partner = PREV }
+  NOT = { has_country_flag = eon_foreign_cash_cancelled }
+  NOT = { has_country_flag = eon_foreign_cash_consented }
+ }
+}

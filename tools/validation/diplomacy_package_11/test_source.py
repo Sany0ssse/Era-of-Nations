@@ -47,6 +47,12 @@ from diplomacy_package_17.test_source import (
     historical_actions as package17_historical_actions, check_owned_existing as check_later_package17_owned,
 )
 check_later_package17_owned()
+from diplomacy_package_18.test_source import (
+    NEW as LATER_PACKAGE18_NEW, package18_original_bytes, package18_historical_existing,
+    package18_original_validator_bytes, historical_actions as package18_historical_actions,
+    check_owned_existing as check_later_package18_owned,
+)
+check_later_package18_owned()
 BASELINE = '77faaeb976af35b1185979ee85eabe7a6efc454a'
 EXISTING = {'common/decisions/MDDC_Terrorist_again.txt'}
 NEW = {
@@ -210,8 +216,8 @@ def main():
     baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW]
-    changed = [path for path in changed if path not in LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW]
+    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW]
+    changed = [path for path in changed if path not in LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW]
     assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned gameplay changes', changed, untracked)
     assert set(changed).intersection(baseline_paths) == EXISTING
     assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW
