@@ -1,0 +1,270 @@
+# Paid advisory support, with no simulated personnel, unit or equipment
+# transfer. Fixed donor expense is nonrefundable after a valid paid start.
+eon_advisers_clear_pending = {
+ clr_country_flag = eon_advisers_pending
+ clr_country_flag = eon_advisers_live
+ clr_country_flag = eon_advisers_cancelled
+ clear_variable = eon_advisers_partner
+}
+eon_advisers_retire_pending_pair = {
+ if = {
+  limit = { has_country_flag = eon_advisers_pending }
+  if = {
+   limit = { eon_advisers_partner_identified = yes }
+   var:eon_advisers_partner = {
+    PREV = { set_country_flag = eon_advisers_retired_pair@PREV }
+   }
+  }
+  else = { set_country_flag = eon_advisers_quarantined }
+ }
+}
+eon_advisers_send_offer = {
+ if = {
+  limit = { eon_advisers_selection_ready = yes }
+  set_variable = { eon_advisers_partner = FROM.FROM }
+  set_country_flag = eon_advisers_pending
+  set_country_flag = { flag = eon_advisers_live days = 30 value = 1 }
+  clr_country_flag = eon_advisers_cancelled
+  FROM.FROM = { country_event = { id = eon_advisers.1 } }
+ }
+}
+# ROOT recipient / FROM provider matches the original influence.502.a frame.
+# Consume the proposal before the expense, modifier or political calls.
+eon_advisers_accept_offer = {
+ if = {
+  limit = { eon_advisers_response_pending = yes }
+  if = {
+   limit = { eon_advisers_response_ready = yes }
+   FROM = {
+    eon_advisers_clear_pending = yes
+    set_temp_variable = { treasury_change = -1.5 }
+    modify_treasury_effect = yes
+    set_variable = { eon_advisers_outgoing_partner = ROOT }
+    set_country_flag = eon_advisers_outgoing_owned
+    set_country_flag = { flag = eon_advisers_outgoing_live days = 60 value = 1 }
+   }
+   set_variable = { eon_advisers_incoming_partner = FROM }
+   set_country_flag = eon_advisers_incoming_owned
+   set_country_flag = { flag = eon_advisers_incoming_live days = 60 value = 1 }
+   add_timed_idea = { idea = eon_advisers_mission_idea days = 60 }
+   set_temp_variable = { percent_change = 4 }
+   set_temp_variable = { tag_index = FROM }
+   set_temp_variable = { influence_target = ROOT }
+   change_influence_percentage = yes
+   FROM = {
+    set_country_flag = sent_grey_men_epochs
+    set_temp_variable = { temp_opinion = 4 }
+    change_the_military_opinion = yes
+    country_event = { id = eon_advisers.2 }
+   }
+   country_event = { id = eon_advisers.2 }
+  }
+  else = {
+   FROM = { eon_advisers_clear_pending = yes country_event = { id = eon_advisers.6 } }
+   country_event = { id = eon_advisers.6 }
+  }
+ }
+}
+eon_advisers_reject_offer = {
+ if = {
+  limit = { eon_advisers_response_pending = yes }
+  # Keep the existing domestic-independence response only for a current,
+  # eligible and fully funded offer, never for stale or cancelled proposals.
+  if = {
+   limit = { eon_advisers_response_ready = yes }
+   if = {
+    limit = { NOT = { has_country_flag = refused_military_aid } }
+    set_temp_variable = { percent_change = 2 }
+    change_domestic_influence_percentage = yes
+    set_country_flag = { flag = refused_military_aid value = 1 days = 180 }
+   }
+  }
+  FROM = { eon_advisers_clear_pending = yes country_event = { id = eon_advisers.6 } }
+ }
+}
+eon_advisers_withdraw_offer = {
+ if = {
+  limit = { eon_advisers_withdraw_available = yes }
+  ROOT = { set_country_flag = eon_advisers_cancelled }
+  country_event = { id = eon_advisers.3 }
+ }
+}
+# Local records do not grant authority over an unowned native modifier.
+eon_advisers_clear_incoming_record = {
+ if = {
+  limit = { has_country_flag = eon_advisers_incoming_owned }
+  remove_ideas = eon_advisers_mission_idea
+ }
+ clr_country_flag = eon_advisers_incoming_owned
+ clr_country_flag = eon_advisers_incoming_live
+ clear_variable = eon_advisers_incoming_partner
+}
+eon_advisers_clear_outgoing_record = {
+ clr_country_flag = eon_advisers_outgoing_owned
+ clr_country_flag = eon_advisers_outgoing_live
+ clear_variable = eon_advisers_outgoing_partner
+}
+# Clear the other party only when its owned reciprocal record names THIS.
+eon_advisers_clear_incoming = {
+ if = {
+  limit = { has_country_flag = eon_advisers_incoming_owned eon_advisers_incoming_partner_identified = yes }
+  set_temp_variable = { eon_advisers_cleanup_recipient = THIS }
+  var:eon_advisers_incoming_partner = {
+   if = {
+    limit = {
+     has_country_flag = eon_advisers_outgoing_owned
+     eon_advisers_outgoing_partner_identified = yes
+     check_variable = { eon_advisers_outgoing_partner = PREV.eon_advisers_cleanup_recipient }
+    }
+    eon_advisers_clear_outgoing_record = yes
+   }
+  }
+ }
+ eon_advisers_clear_incoming_record = yes
+}
+eon_advisers_clear_outgoing = {
+ if = {
+  limit = { has_country_flag = eon_advisers_outgoing_owned eon_advisers_outgoing_partner_identified = yes }
+  set_temp_variable = { eon_advisers_cleanup_provider = THIS }
+  var:eon_advisers_outgoing_partner = {
+   if = {
+    limit = {
+     has_country_flag = eon_advisers_incoming_owned
+     eon_advisers_incoming_partner_identified = yes
+     check_variable = { eon_advisers_incoming_partner = PREV.eon_advisers_cleanup_provider }
+    }
+    eon_advisers_clear_incoming_record = yes
+   }
+  }
+ }
+ eon_advisers_clear_outgoing_record = yes
+}
+eon_advisers_end_cooperation = {
+ if = {
+  limit = { eon_advisers_end_cooperation_available = yes }
+  if = {
+   limit = { eon_advisers_incoming_pair_matches = yes check_variable = { eon_advisers_incoming_partner = ROOT } }
+   eon_advisers_clear_incoming = yes
+  }
+  ROOT = {
+   if = {
+    limit = { eon_advisers_incoming_pair_matches = yes check_variable = { eon_advisers_incoming_partner = PREV } }
+    eon_advisers_clear_incoming = yes
+   }
+   country_event = { id = eon_advisers.7 }
+  }
+  country_event = { id = eon_advisers.7 }
+ }
+}
+eon_advisers_cleanup_active = {
+ if = {
+  limit = {
+   has_country_flag = eon_advisers_incoming_owned
+   OR = {
+    exists = no
+    NOT = { has_country_flag = eon_advisers_incoming_live }
+    NOT = { has_idea = eon_advisers_mission_idea }
+    AND = { has_civil_war = no has_war = no }
+    NOT = { eon_advisers_incoming_pair_matches = yes }
+    var:eon_advisers_incoming_partner = { exists = no }
+    has_war_with = eon_advisers_incoming_partner
+   }
+  }
+  eon_advisers_clear_incoming = yes
+ }
+ if = {
+  limit = {
+   has_country_flag = eon_advisers_outgoing_owned
+   OR = {
+    exists = no
+    NOT = { has_country_flag = eon_advisers_outgoing_live }
+    NOT = { eon_advisers_outgoing_pair_matches = yes }
+    var:eon_advisers_outgoing_partner = {
+     OR = {
+      exists = no
+      NOT = { has_country_flag = eon_advisers_incoming_live }
+      NOT = { has_idea = eon_advisers_mission_idea }
+      AND = { has_civil_war = no has_war = no }
+     }
+    }
+    has_war_with = eon_advisers_outgoing_partner
+   }
+  }
+  eon_advisers_clear_outgoing = yes
+ }
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_advisers_incoming_owned }
+   OR = { has_country_flag = eon_advisers_incoming_live NOT = { check_variable = { eon_advisers_incoming_partner = 0 } } }
+  }
+  eon_advisers_clear_incoming_record = yes
+ }
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_advisers_outgoing_owned }
+   OR = { has_country_flag = eon_advisers_outgoing_live NOT = { check_variable = { eon_advisers_outgoing_partner = 0 } } }
+  }
+  eon_advisers_clear_outgoing_record = yes
+ }
+}
+eon_advisers_daily_update = {
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_advisers_pending }
+   OR = {
+    has_country_flag = eon_advisers_live
+    has_country_flag = eon_advisers_cancelled
+    NOT = { check_variable = { eon_advisers_partner = 0 } }
+   }
+  }
+  set_country_flag = eon_advisers_quarantined
+  eon_advisers_clear_pending = yes
+  country_event = { id = eon_advisers.5 }
+ }
+ if = {
+  limit = {
+   has_country_flag = eon_advisers_pending
+   OR = {
+    exists = no
+    NOT = { eon_advisers_partner_identified = yes }
+    NOT = { has_country_flag = eon_advisers_live }
+    var:eon_advisers_partner = { exists = no }
+   }
+  }
+  eon_advisers_retire_pending_pair = yes
+  eon_advisers_clear_pending = yes
+  if = {
+   limit = { has_country_flag = eon_advisers_quarantined }
+   country_event = { id = eon_advisers.5 }
+  }
+  else = { country_event = { id = eon_advisers.4 } }
+ }
+ eon_advisers_cleanup_active = yes
+}
+eon_advisers_annex_update = {
+ if = {
+  limit = { has_country_flag = eon_advisers_pending check_variable = { eon_advisers_partner = eon_advisers_annexed_partner } }
+  eon_advisers_retire_pending_pair = yes
+  eon_advisers_clear_pending = yes
+ }
+ if = {
+  limit = { has_country_flag = eon_advisers_incoming_owned check_variable = { eon_advisers_incoming_partner = eon_advisers_annexed_partner } }
+  eon_advisers_clear_incoming = yes
+ }
+ if = {
+  limit = { has_country_flag = eon_advisers_outgoing_owned check_variable = { eon_advisers_outgoing_partner = eon_advisers_annexed_partner } }
+  eon_advisers_clear_outgoing = yes
+ }
+}
+eon_advisers_clear_annexed_country = {
+ if = { limit = { has_country_flag = eon_advisers_pending } eon_advisers_retire_pending_pair = yes }
+ else_if = {
+  limit = {
+   OR = { has_country_flag = eon_advisers_live has_country_flag = eon_advisers_cancelled NOT = { check_variable = { eon_advisers_partner = 0 } } }
+  }
+  set_country_flag = eon_advisers_quarantined
+ }
+ eon_advisers_clear_pending = yes
+ eon_advisers_clear_incoming = yes
+ eon_advisers_clear_outgoing = yes
+}

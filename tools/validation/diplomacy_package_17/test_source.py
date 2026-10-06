@@ -33,6 +33,12 @@ from diplomacy_package_20.test_source import (
     check_owned_existing as check_later_package20_owned,
 )
 check_later_package20_owned()
+from diplomacy_package_21.test_source import (
+    NEW as LATER_PACKAGE21_NEW, package21_original_bytes, package21_historical_existing,
+    package21_original_validator_bytes, historical_actions as package21_historical_actions,
+    check_owned_existing as check_later_package21_owned,
+)
+check_later_package21_owned()
 EXISTING = {'events/00_Influence_events.txt'}
 FX = 'common/scripted_effects/eon_services_effects.txt'
 TR = 'common/scripted_triggers/eon_services_triggers.txt'
@@ -120,6 +126,8 @@ def event_blocks(data):
 def package17_original_bytes(path, actual):
     """Restore exactly two declared existing country-event bodies; no other bytes."""
     if path not in EXISTING: return actual
+    if actual == baseline_bytes(path): return actual
+    actual = package21_original_bytes(path,actual)
     original = baseline_bytes(path); format_preserved(original, actual, path)
     before, after = event_blocks(original), event_blocks(actual)
     assert before.keys() == after.keys(), ('Existing event IDs changed', path)
@@ -753,12 +761,12 @@ def main():
              'portraits', 'tutorial', 'descriptions', 'scenario_tests', 'descriptor.mod', 'era_of_nations.mod', 'thumbnail.png')
     changed = set(subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines())
     untracked = set(subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines())
-    changed -= package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW
-    untracked -= LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW
+    changed -= package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | (package21_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE21_NEW
+    untracked -= LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW
     assert changed - NEW == EXISTING and (changed | untracked) - EXISTING == NEW, (changed, untracked)
     assert not subprocess.check_output(['git', 'diff', '--name-only', '--diff-filter=D', BASELINE, '--', *trees], cwd=ROOT).strip()
     passed('exact_full_gameplay_tree_one_existing_seven_new_without_unowned_deletions')
-    raw = (ROOT / next(iter(EXISTING))).read_bytes(); old_raw = baseline_bytes(next(iter(EXISTING)))
+    raw = package21_original_bytes(next(iter(EXISTING)),(ROOT / next(iter(EXISTING))).read_bytes()); old_raw = baseline_bytes(next(iter(EXISTING)))
     existing = {one(body, 'id'): body for key, op, body in ast(raw) if key == 'country_event'}
     original = {one(body, 'id'): body for key, op, body in ast(old_raw) if key == 'country_event'}
     assert existing.keys() == original.keys()
@@ -906,7 +914,7 @@ def main():
         passed('six_service_status_notifications_have_static_ACK_only_options')
     for path in ('common/scripted_guis/influence_scripted_gui.txt', 'common/scripted_triggers/99_ERI_scripted_triggers.txt',
                  'common/scripted_triggers/00_influence_scripted_triggers.txt'):
-        assert (ROOT / path).read_bytes() == baseline_bytes(path)
+        assert package21_original_bytes(path,(ROOT / path).read_bytes()) == baseline_bytes(path)
         passed('original_entry_GUI_national_policy_and_influence_trigger_whole_bytes_unchanged')
     for path in sorted(EXISTING):
         try: package17_original_bytes(path, (ROOT / path).read_bytes() + b'\n# memory-only outside-range probe\n')

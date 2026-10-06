@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and twenty implementation packages are complete at
+The existing diplomacy audit and twenty-one implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -435,6 +435,67 @@ Native resource debits, stock aggregation, create_unit filling, possible extra
 engine charges, placement, AI, timing and save/load still need in-game acceptance.
 Observers record actual commands only. No game launch or changes to saves,
 launcher configuration, Workshop or playsets are made here.
+
+## Diplomacy package 21
+
+The twenty-first package replaces only influence.501.c's broken Grey Men route
+with a donor-funded military advisory and training agreement. The donor spends
+the existing 1.5 treasury amount once after recipient consent and a current
+budget/political/ownership check. There is no recipient cash credit or separate
+contractor bank model. The retained 60-day service uses an isolated idea with
+the same training-time, planning and special-force-cap bonuses. No new unit,
+template, stock or manpower commands represent this abstract service.
+
+Paired incoming/outgoing records identify the provider and client. One provider
+can sponsor one programme; one recipient can receive one such programme.
+The original influence macro retains recipient ROOT/provider FROM; the 4-point
+military-faction reaction remains internal provider politics. Current entry
+policy, GUI cooldown, national restrictions and valid refusal reaction are
+retained. Proposal withdrawal is free before assent. Either party can end
+matched cooperation; if both sponsor each other, both matched directions end.
+Other partners and pending proposals stay separate. Paid services end at 60 days,
+peace, direct war, withdrawal or disappearance, not merely changed entry rank
+or government. The fee is a nonrefundable start expense under declared game rules.
+
+Old 502a/b, 503a and 505a become inert acknowledgements. The old grey_men idea
+loses only its global 505 broadcast; its shared-template deletion stays exact.
+Legacy costs, units and flags have no automatic migration or survivor refunds;
+unidentified legacy missions may block this new service. Unresolved expired
+proposal pairs remain retired and unknown records quarantine this channel;
+later identical same-pair callback generations remain outside the proof.
+
+Exactly 16 game paths change: five named influence options, one old idea-hook
+fragment, six existing English/Russian display files and eight new adviser files.
+Other existing bytes, IDs, BOM/EOL, logistics/recon services, state cash/equipment
+support, the national formation and domestic mobilisation remain preserved.
+The dated GAO 1997 private training contract informs this category; Protocol I
+Article 47 informs its distinction from combat mercenaries. This does not certify
+legal authority, procurement, contractor status or real training outcomes.
+See [DIPLOMACY_PACKAGE_21_UK.md](DIPLOMACY_PACKAGE_21_UK.md).
+
+The new reply uses game-design AI weights 100/10 for acceptance/refusal;
+an invalid pending proposal retains a positive-weight closing choice.
+Legacy 502 retains its raw 100/0 metadata inside inert acknowledgements.
+Entry policy and GUI are preserved; native AI behavior remains unverified.
+
+The cumulative runner passed 7414 source-model scenarios (7293 retained,
+121 new in 33 groups), 18 separate adapter semantics checks,
+and 190 new source checks (163 API/structure + 27 memory-only
+byte-boundary mutations). All 71 prior public validation files outside the
+journals remain raw-byte unchanged, including 51 older behavior/helper/runner
+Python files; 19 historical
+source validators retain assertions and counters through exact byte journals.
+Three effective military-aid menu tooltip rows now describe equipment,
+logistics, intelligence and advisory support without promising a mercenary
+brigade, an ideological exception or automatic bilateral opinion changes.
+The unused Russian base tooltip is retained beneath the corrected replace
+locale; the native merged locale still requires in-game acceptance.
+Five firsthand RED regressions now pass GREEN. Gameplay, validation,
+source-run and independent review receipts are hash-bound.
+Native treasury, idea bonuses, event/action scopes, AI, timers, annexation and
+save/load require HOI4 acceptance. No game launch, save, launcher or Workshop
+changes are performed. The existing initial aid request remains the next
+consistency step before new permanent diplomatic relations and representations.
 
 ## Completed setup
 

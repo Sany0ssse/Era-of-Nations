@@ -65,6 +65,12 @@ from diplomacy_package_20.test_source import (
     check_owned_existing as check_later_package20_owned,
 )
 check_later_package20_owned()
+from diplomacy_package_21.test_source import (
+    NEW as LATER_PACKAGE21_NEW, package21_original_bytes, package21_historical_existing,
+    package21_original_validator_bytes, historical_actions as package21_historical_actions,
+    check_owned_existing as check_later_package21_owned,
+)
+check_later_package21_owned()
 BASELINE = '77faaeb976af35b1185979ee85eabe7a6efc454a'
 EXISTING = {'common/decisions/MDDC_Terrorist_again.txt'}
 NEW = {
@@ -228,8 +234,8 @@ def main():
     baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW]
-    changed = [path for path in changed if path not in LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW]
+    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW]
+    changed = [path for path in changed if path not in LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | package21_historical_existing(BASELINE) | LATER_PACKAGE21_NEW]
     assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned gameplay changes', changed, untracked)
     assert set(changed).intersection(baseline_paths) == EXISTING
     assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW
