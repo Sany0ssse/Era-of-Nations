@@ -1,0 +1,208 @@
+add_namespace = eon_consultation
+
+country_event = {
+	id = eon_consultation.0
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { eon_consultation_dispatch_draft = yes }
+}
+
+country_event = {
+	id = eon_consultation.1
+	title = eon_consultation_agenda_title
+	desc = eon_consultation_agenda_desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_consultation_topic_trade
+		trigger = { set_temp_variable = { eon_consultation_proposed_topic = 1 } eon_consultation_draft_send_ready = yes }
+		set_temp_variable = { eon_consultation_proposed_topic = 1 }
+		eon_consultation_send_request = yes
+		ai_chance = { factor = 0 }
+	}
+	option = {
+		name = eon_consultation_topic_energy
+		trigger = { set_temp_variable = { eon_consultation_proposed_topic = 2 } eon_consultation_draft_send_ready = yes }
+		set_temp_variable = { eon_consultation_proposed_topic = 2 }
+		eon_consultation_send_request = yes
+		ai_chance = { factor = 0 }
+	}
+	option = {
+		name = eon_consultation_topic_support
+		trigger = { set_temp_variable = { eon_consultation_proposed_topic = 3 } eon_consultation_draft_send_ready = yes }
+		set_temp_variable = { eon_consultation_proposed_topic = 3 }
+		eon_consultation_send_request = yes
+		ai_chance = { factor = 0 }
+	}
+	option = { name = eon_consultation_cancel_agenda eon_consultation_cancel_draft = yes ai_chance = { factor = 1 } }
+}
+
+country_event = {
+	id = eon_consultation.10
+	title = eon_consultation_trade_invite_title
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } eon_consultation_cancelled_response_current = yes } text = eon_consultation_cancelled_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } eon_consultation_response_valid = yes } text = eon_consultation_trade_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } NOT = { eon_consultation_response_valid = yes } NOT = { eon_consultation_cancelled_response_current = yes } } text = eon_consultation_stale_invite_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_consultation_accept_talks
+		trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } eon_consultation_response_valid = yes }
+		set_temp_variable = { eon_consultation_response_topic = 1 }
+		eon_consultation_accept_request = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 1.5 is_in_faction_with = FROM }
+			modifier = { factor = 2 has_country_flag = trade_agreement@FROM }
+			modifier = { factor = 0 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_consultation_response_topic = 1 } NOT = { eon_consultation_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_consultation_decline_talks
+		set_temp_variable = { eon_consultation_response_topic = 1 }
+		eon_consultation_refuse_request = yes
+		ai_chance = { factor = 1 modifier = { factor = 2 has_opinion = { target = FROM value < 0 } } }
+	}
+}
+
+country_event = {
+	id = eon_consultation.11
+	title = eon_consultation_energy_invite_title
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } eon_consultation_cancelled_response_current = yes } text = eon_consultation_cancelled_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } eon_consultation_response_valid = yes } text = eon_consultation_energy_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } NOT = { eon_consultation_response_valid = yes } NOT = { eon_consultation_cancelled_response_current = yes } } text = eon_consultation_stale_invite_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_consultation_accept_talks
+		trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } eon_consultation_response_valid = yes }
+		set_temp_variable = { eon_consultation_response_topic = 2 }
+		eon_consultation_accept_request = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 1.5 is_in_faction_with = FROM }
+			modifier = { factor = 2 has_country_flag = energy_agreement@FROM }
+			modifier = { factor = 0 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_consultation_response_topic = 2 } NOT = { eon_consultation_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_consultation_decline_talks
+		set_temp_variable = { eon_consultation_response_topic = 2 }
+		eon_consultation_refuse_request = yes
+		ai_chance = { factor = 1 modifier = { factor = 2 has_opinion = { target = FROM value < 0 } } }
+	}
+}
+
+country_event = {
+	id = eon_consultation.12
+	title = eon_consultation_support_invite_title
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } eon_consultation_cancelled_response_current = yes } text = eon_consultation_cancelled_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } eon_consultation_response_valid = yes } text = eon_consultation_support_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } NOT = { eon_consultation_response_valid = yes } NOT = { eon_consultation_cancelled_response_current = yes } } text = eon_consultation_stale_invite_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_consultation_accept_talks
+		trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } eon_consultation_response_valid = yes }
+		set_temp_variable = { eon_consultation_response_topic = 3 }
+		eon_consultation_accept_request = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 1.5 is_in_faction_with = FROM }
+			modifier = { factor = 2 OR = { check_variable = { interest_rate > 8 } check_variable = { debt_ratio > 0.75 } } }
+			modifier = { factor = 0 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_consultation_response_topic = 3 } NOT = { eon_consultation_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_consultation_decline_talks
+		set_temp_variable = { eon_consultation_response_topic = 3 }
+		eon_consultation_refuse_request = yes
+		ai_chance = { factor = 1 modifier = { factor = 2 has_opinion = { target = FROM value < 0 } } }
+	}
+}
+
+# Static result notice: acknowledgement cannot alter any current session.
+country_event = {
+	id = eon_consultation.20
+	title = eon_consultation.20.t
+	desc = eon_consultation.20.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_consultation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter any current session.
+country_event = {
+	id = eon_consultation.21
+	title = eon_consultation.21.t
+	desc = eon_consultation.21.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_consultation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter any current session.
+country_event = {
+	id = eon_consultation.22
+	title = eon_consultation.22.t
+	desc = eon_consultation.22.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_consultation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter any current session.
+country_event = {
+	id = eon_consultation.23
+	title = eon_consultation.23.t
+	desc = eon_consultation.23.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_consultation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter any current session.
+country_event = {
+	id = eon_consultation.24
+	title = eon_consultation.24.t
+	desc = eon_consultation.24.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_consultation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter any current session.
+country_event = {
+	id = eon_consultation.25
+	title = eon_consultation.25.t
+	desc = eon_consultation.25.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_consultation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter any current session.
+country_event = {
+	id = eon_consultation.26
+	title = eon_consultation.26.t
+	desc = eon_consultation.26.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_consultation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter any current session.
+country_event = {
+	id = eon_consultation.27
+	title = eon_consultation.27.t
+	desc = eon_consultation.27.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_consultation_ack }
+}

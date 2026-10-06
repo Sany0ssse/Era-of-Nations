@@ -1,0 +1,28 @@
+on_actions = {
+	# Native daily scope is the current country.
+	on_daily = { effect = { eon_consultation_daily_cleanup = yes } }
+
+	# ROOT annexer, FROM annexed country.
+	on_annex = {
+		effect = {
+			every_country = {
+				limit = { exists = yes NOT = { tag = FROM } }
+				set_temp_variable = { eon_consultation_annexed_partner = FROM }
+				eon_consultation_cleanup_annexed_pair = yes
+			}
+			FROM = { eon_consultation_cleanup_annexed_owner = yes }
+		}
+	}
+
+	# Native subject integration: ROOT annexed subject, FROM its overlord.
+	on_subject_annexed = {
+		effect = {
+			every_country = {
+				limit = { exists = yes NOT = { tag = ROOT } }
+				set_temp_variable = { eon_consultation_annexed_partner = ROOT }
+				eon_consultation_cleanup_annexed_pair = yes
+			}
+			ROOT = { eon_consultation_cleanup_annexed_owner = yes }
+		}
+	}
+}

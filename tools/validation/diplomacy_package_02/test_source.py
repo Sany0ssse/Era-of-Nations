@@ -168,7 +168,12 @@ actions = [b['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').gl
 assert len(actions) == len(set(actions)) == (54 + actions.count('eon_propose_defensive_alliance')
                                            + actions.count('eon_withdraw_energy_offer')
                                            + actions.count('eon_resume_energy_counter_offer')
-                                           + actions.count('eon_withdraw_economic_aid'))
+                                           + actions.count('eon_withdraw_economic_aid')
+                                           + sum(actions.count(key) for key in (
+                                               'eon_open_economic_consultations',
+                                               'eon_withdraw_consultation_request',
+                                               'eon_end_economic_consultations',
+                                               'eon_consultation_offer_economic_aid')))
 print(json.dumps({'all_passed': True, 'method': 'exact reversible source boundaries and format/locale/ID checks',
                   'owned_existing_files': receipt, 'new_locale_keys_per_language': len(new_keys),
                   'unique_action_ids': len(actions), 'not_proven': 'HOI4 engine parsing, UI or campaign'}, indent=2))

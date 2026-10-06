@@ -1,0 +1,190 @@
+# Country-event adapter: caller is the partner, actor is a temporary country.
+# Talks grant no treaty rights or resources. Concrete actions retain their policy.
+eon_consultation_base_pair_available = {
+	exists = yes
+	NOT = { tag = eon_consultation_actor }
+	NOT = { has_war_with = eon_consultation_actor }
+	NOT = { has_country_flag = eon_consultation_retired_pair@eon_consultation_actor }
+	var:eon_consultation_actor = {
+		exists = yes
+		NOT = { has_war_with = PREV }
+		NOT = { has_country_flag = eon_consultation_retired_pair@PREV }
+	}
+}
+
+# Native action: ROOT initiator, THIS partner.
+eon_consultation_open_ready = {
+	set_temp_variable = { eon_consultation_actor = ROOT }
+	eon_consultation_base_pair_available = yes
+	NOT = { has_country_flag = eon_consultation_reserved }
+	NOT = { has_country_flag = eon_consultation_recent_contact@ROOT }
+	ROOT = {
+		is_ai = no
+		NOT = { has_country_flag = eon_consultation_reserved }
+		NOT = { has_country_flag = eon_consultation_recent_contact@PREV }
+	}
+}
+
+# A record has exactly one role; pending and agreed roles cannot coexist.
+# Structural checks deliberately ignore liveness and timer expiry.
+eon_consultation_record_role_current = {
+	has_country_flag = eon_consultation_reserved
+	check_variable = { eon_consultation_partner > 0 }
+	set_temp_variable = { eon_consultation_role_count = 0 }
+	if = { limit = { has_country_flag = eon_consultation_draft_owner } add_to_temp_variable = { eon_consultation_role_count = 1 } }
+	if = { limit = { has_country_flag = eon_consultation_draft_recipient } add_to_temp_variable = { eon_consultation_role_count = 1 } }
+	if = { limit = { has_country_flag = eon_consultation_outgoing } add_to_temp_variable = { eon_consultation_role_count = 1 } }
+	if = { limit = { has_country_flag = eon_consultation_incoming } add_to_temp_variable = { eon_consultation_role_count = 1 } }
+	if = { limit = { has_country_flag = eon_consultation_active } add_to_temp_variable = { eon_consultation_role_count = 1 } }
+	check_variable = { eon_consultation_role_count = 1 }
+	OR = {
+		AND = { OR = { has_country_flag = eon_consultation_draft_owner has_country_flag = eon_consultation_draft_recipient } check_variable = { eon_consultation_topic = 0 } }
+		AND = {
+			NOT = { OR = { has_country_flag = eon_consultation_draft_owner has_country_flag = eon_consultation_draft_recipient } }
+			OR = { check_variable = { eon_consultation_topic = 1 } check_variable = { eon_consultation_topic = 2 } check_variable = { eon_consultation_topic = 3 } }
+		}
+	}
+}
+
+eon_consultation_state_pair_consistent = {
+	eon_consultation_record_role_current = yes
+	var:eon_consultation_partner = {
+		eon_consultation_record_role_current = yes
+		check_variable = { eon_consultation_partner = PREV }
+		check_variable = { eon_consultation_topic = PREV.eon_consultation_topic }
+	}
+	OR = {
+		AND = { has_country_flag = eon_consultation_draft_owner var:eon_consultation_partner = { has_country_flag = eon_consultation_draft_recipient } }
+		AND = { has_country_flag = eon_consultation_draft_recipient var:eon_consultation_partner = { has_country_flag = eon_consultation_draft_owner } }
+		AND = { has_country_flag = eon_consultation_outgoing var:eon_consultation_partner = { has_country_flag = eon_consultation_incoming } }
+		AND = { has_country_flag = eon_consultation_incoming var:eon_consultation_partner = { has_country_flag = eon_consultation_outgoing } }
+		AND = { has_country_flag = eon_consultation_active var:eon_consultation_partner = { has_country_flag = eon_consultation_active } }
+	}
+}
+
+# Role/link check is intentionally usable after liveness or funds change.
+eon_consultation_draft_current = {
+	eon_consultation_state_pair_consistent = yes
+	has_country_flag = eon_consultation_reserved
+	has_country_flag = eon_consultation_draft_owner
+	check_variable = { eon_consultation_partner = FROM }
+	check_variable = { eon_consultation_topic = 0 }
+	var:eon_consultation_partner = {
+		has_country_flag = eon_consultation_reserved
+		has_country_flag = eon_consultation_draft_recipient
+		check_variable = { eon_consultation_partner = PREV }
+		check_variable = { eon_consultation_topic = 0 }
+	}
+}
+
+# Donor agenda option initializes proposed_topic in both trigger and effect.
+eon_consultation_draft_send_ready = {
+	eon_consultation_draft_current = yes
+	is_ai = no
+	has_country_flag = eon_consultation_draft_window
+	NOT = { has_political_power < 10 }
+	OR = {
+		check_variable = { eon_consultation_proposed_topic = 1 }
+		check_variable = { eon_consultation_proposed_topic = 2 }
+		check_variable = { eon_consultation_proposed_topic = 3 }
+	}
+	NOT = { has_country_flag = eon_consultation_recent_contact@FROM }
+	set_temp_variable = { eon_consultation_actor = THIS }
+	var:eon_consultation_partner = {
+		has_country_flag = eon_consultation_draft_window
+		NOT = { has_country_flag = eon_consultation_recent_contact@PREV }
+		eon_consultation_base_pair_available = yes
+	}
+}
+
+# Each invite event supplies its immutable topic through a literal option input.
+eon_consultation_response_pair_current = {
+	eon_consultation_state_pair_consistent = yes
+	has_country_flag = eon_consultation_reserved
+	has_country_flag = eon_consultation_incoming
+	check_variable = { eon_consultation_partner = FROM }
+	check_variable = { eon_consultation_topic = eon_consultation_response_topic }
+	OR = {
+		check_variable = { eon_consultation_response_topic = 1 }
+		check_variable = { eon_consultation_response_topic = 2 }
+		check_variable = { eon_consultation_response_topic = 3 }
+	}
+	var:eon_consultation_partner = {
+		has_country_flag = eon_consultation_reserved
+		has_country_flag = eon_consultation_outgoing
+		check_variable = { eon_consultation_partner = PREV }
+		check_variable = { eon_consultation_topic = eon_consultation_response_topic }
+	}
+}
+
+eon_consultation_response_valid = {
+	eon_consultation_response_pair_current = yes
+	has_country_flag = eon_consultation_response_window
+	NOT = { has_country_flag = eon_consultation_cancelled }
+	var:eon_consultation_partner = {
+		has_country_flag = eon_consultation_response_window
+		NOT = { has_country_flag = eon_consultation_cancelled }
+	}
+	set_temp_variable = { eon_consultation_actor = FROM }
+	eon_consultation_base_pair_available = yes
+}
+
+eon_consultation_cancelled_response_current = {
+	eon_consultation_response_pair_current = yes
+	OR = { has_country_flag = eon_consultation_cancelled FROM = { has_country_flag = eon_consultation_cancelled } }
+}
+
+eon_consultation_withdraw_available = {
+	eon_consultation_state_pair_consistent = yes
+	has_country_flag = eon_consultation_reserved
+	has_country_flag = eon_consultation_incoming
+	NOT = { has_country_flag = eon_consultation_cancelled }
+	check_variable = { eon_consultation_partner = ROOT }
+	ROOT = {
+		has_country_flag = eon_consultation_reserved
+		has_country_flag = eon_consultation_outgoing
+		NOT = { has_country_flag = eon_consultation_cancelled }
+		check_variable = { eon_consultation_partner = PREV }
+		check_variable = { eon_consultation_topic = PREV.eon_consultation_topic }
+	}
+}
+
+eon_consultation_active_pair_current = {
+	eon_consultation_state_pair_consistent = yes
+	has_country_flag = eon_consultation_reserved
+	has_country_flag = eon_consultation_active
+	has_country_flag = eon_consultation_active_window
+	check_variable = { eon_consultation_partner = ROOT }
+	OR = {
+		check_variable = { eon_consultation_topic = 1 }
+		check_variable = { eon_consultation_topic = 2 }
+		check_variable = { eon_consultation_topic = 3 }
+	}
+	ROOT = {
+		has_country_flag = eon_consultation_reserved
+		has_country_flag = eon_consultation_active
+		has_country_flag = eon_consultation_active_window
+		check_variable = { eon_consultation_partner = PREV }
+		check_variable = { eon_consultation_topic = PREV.eon_consultation_topic }
+	}
+}
+
+# Ending remains possible when peace or the time window no longer holds.
+eon_consultation_end_available = {
+	eon_consultation_state_pair_consistent = yes
+	has_country_flag = eon_consultation_reserved
+	has_country_flag = eon_consultation_active
+	check_variable = { eon_consultation_partner = ROOT }
+	ROOT = {
+		has_country_flag = eon_consultation_reserved
+		has_country_flag = eon_consultation_active
+		check_variable = { eon_consultation_partner = PREV }
+	}
+}
+
+# This is a separate ordinary grant draft, with its original frozen-actor policy.
+eon_consultation_aid_followup_ready = {
+	eon_consultation_active_pair_current = yes
+	check_variable = { eon_consultation_topic = 3 }
+	eon_aid_gui_ready = yes
+}

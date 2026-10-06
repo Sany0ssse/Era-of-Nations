@@ -253,10 +253,20 @@ later_package06_existing = {
     'localisation/russian/MDDC_scripted_diplomatic_actions_l_russian.yml',
 }
 later_package06_paths = later_package06_new | later_package06_existing
+# Package 07 separately proves only these additions against 4406; no old range is relaxed.
+later_package07_new = {
+    'common/scripted_effects/eon_consultation_effects.txt',
+    'common/scripted_triggers/eon_consultation_triggers.txt',
+    'common/scripted_diplomatic_actions/eon_consultation_actions.txt',
+    'common/on_actions/eon_consultation_on_actions.txt',
+    'events/eon_consultation_events.txt',
+    'localisation/english/eon_consultation_l_english.yml',
+    'localisation/russian/eon_consultation_l_russian.yml',
+}
 tracked = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-assert set(tracked) <= owned | new | later_package05_new | later_package06_paths, ('Unowned package04 gameplay edits', tracked)
-assert set(untracked) <= new | later_package05_new | later_package06_new, ('Unowned package04 gameplay additions', untracked)
+assert set(tracked) <= owned | new | later_package05_new | later_package06_paths | later_package07_new, ('Unowned package04 gameplay edits', tracked)
+assert set(untracked) <= new | later_package05_new | later_package06_new | later_package07_new, ('Unowned package04 gameplay additions', untracked)
 groups['whole_gameplay_git_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,
                   'baseline': BASELINE, 'owned_existing_files': receipts,

@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and six implementation packages are complete at
+The existing diplomacy audit and seven implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -73,8 +73,22 @@ consent flows. Cumulative source checks passed 4786 scenarios (166 new);
 exact-byte boundaries cover five existing and nine new game files.
 See [DIPLOMACY_PACKAGE_06_UK.md](DIPLOMACY_PACKAGE_06_UK.md) for limitations
 and new-campaign acceptance. No diplomatic package has been run in HOI4.
-Next implementation scope is consultations, then consensual mediation
-with defined participants and a selected conflict.
+The seventh package adds human-initiated bilateral economic consultations:
+literal trade, electricity or support topics; free draft/cancellation, a single
+10PP send cost, recipient consent/refusal, withdrawal and a 30-day active channel.
+Its financial follow-up opens the existing separate grant draft under the
+actual aid policy and funding checks. Forced pending expiry or structurally
+invalid/missing-partner cleanup retires only the affected pair permanently;
+other partners stay usable. Normal consistent channel
+closure preserves independent contracts and pending support. Source models
+passed 4942 cumulative scenarios (4786 previous plus 156 new), with 208
+new source checks; 68,270 existing gameplay files remain byte-identical and
+exactly seven new game files were added. Independent source review and native
+documentation checks passed; native compilation, GUI, timers, scopes, AI,
+save/load and campaign acceptance remain pending. See
+[DIPLOMACY_PACKAGE_07_UK.md](DIPLOMACY_PACKAGE_07_UK.md).
+Next implementation scope is consensual mediation with defined participants
+and a selected subject; execution of peace needs separate multiwar acceptance.
 
 ## Completed setup
 

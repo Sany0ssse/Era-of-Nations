@@ -1,0 +1,62 @@
+scripted_diplomatic_actions = {
+	eon_open_economic_consultations = {
+		allowed = { ROOT = { is_ai = no } }
+		visible = { exists = yes ROOT = { exists = yes } NOT = { tag = ROOT } }
+		selectable = { custom_trigger_tooltip = { tooltip = eon_consultation_open_ready_tt eon_consultation_open_ready = yes } }
+		can_be_sent = { eon_consultation_open_ready = yes }
+		cost = 0
+		requires_acceptance = no
+		show_acceptance_on_action_button = no
+		icon = 17
+		send_description = eon_open_economic_consultations_send_desc
+		complete_effect = {
+			if = { limit = { eon_consultation_open_ready = yes } eon_consultation_prepare_draft = yes }
+		}
+		ai_desire = { factor = 0 }
+	}
+	eon_withdraw_consultation_request = {
+		allowed = { ROOT = { is_ai = no } }
+		visible = { eon_consultation_withdraw_available = yes }
+		selectable = { custom_trigger_tooltip = { tooltip = eon_consultation_withdraw_tt eon_consultation_withdraw_available = yes } }
+		can_be_sent = { eon_consultation_withdraw_available = yes }
+		cost = 0
+		requires_acceptance = no
+		show_acceptance_on_action_button = no
+		icon = 17
+		send_description = eon_withdraw_consultation_request_send_desc
+		complete_effect = {
+			if = { limit = { eon_consultation_withdraw_available = yes } ROOT = { eon_consultation_withdraw_request = yes } }
+		}
+		ai_desire = { factor = 0 }
+	}
+	eon_end_economic_consultations = {
+		allowed = { ROOT = { is_ai = no } }
+		visible = { eon_consultation_end_available = yes }
+		selectable = { custom_trigger_tooltip = { tooltip = eon_consultation_end_tt eon_consultation_end_available = yes } }
+		can_be_sent = { eon_consultation_end_available = yes }
+		cost = 0
+		requires_acceptance = no
+		show_acceptance_on_action_button = no
+		icon = 17
+		send_description = eon_end_economic_consultations_send_desc
+		complete_effect = {
+			if = { limit = { eon_consultation_end_available = yes } ROOT = { eon_consultation_end_active = yes } }
+		}
+		ai_desire = { factor = 0 }
+	}
+	eon_consultation_offer_economic_aid = {
+		allowed = { ROOT = { is_ai = no } }
+		visible = { eon_consultation_active_pair_current = yes check_variable = { eon_consultation_topic = 3 } }
+		selectable = { custom_trigger_tooltip = { tooltip = eon_consultation_aid_followup_tt eon_consultation_aid_followup_ready = yes } }
+		can_be_sent = { eon_consultation_aid_followup_ready = yes }
+		cost = 0
+		requires_acceptance = no
+		show_acceptance_on_action_button = no
+		icon = 17
+		send_description = eon_consultation_offer_economic_aid_send_desc
+		complete_effect = {
+			if = { limit = { eon_consultation_aid_followup_ready = yes } eon_aid_prepare_draft = yes }
+		}
+		ai_desire = { factor = 0 }
+	}
+}

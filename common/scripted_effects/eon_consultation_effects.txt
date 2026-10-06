@@ -1,0 +1,278 @@
+# Only consultation state is owned here. Existing agreements remain independent.
+eon_consultation_clear_pending = {
+	clr_country_flag = eon_consultation_reserved
+	clr_country_flag = eon_consultation_draft_owner
+	clr_country_flag = eon_consultation_draft_recipient
+	clr_country_flag = eon_consultation_draft_window
+	clr_country_flag = eon_consultation_outgoing
+	clr_country_flag = eon_consultation_incoming
+	clr_country_flag = eon_consultation_response_window
+	clr_country_flag = eon_consultation_cancelled
+	clr_country_flag = eon_consultation_active
+	clr_country_flag = eon_consultation_active_window
+	clear_variable = eon_consultation_partner
+	clear_variable = eon_consultation_topic
+}
+
+# Match the reverse pointer before clearing another country's consultation.
+eon_consultation_release_pair = {
+	if = {
+		limit = { has_country_flag = eon_consultation_reserved }
+		if = {
+			limit = { check_variable = { eon_consultation_partner > 0 } }
+			var:eon_consultation_partner = {
+				if = {
+					limit = {
+						has_country_flag = eon_consultation_reserved
+						check_variable = { eon_consultation_partner = PREV }
+					}
+					eon_consultation_clear_pending = yes
+				}
+			}
+		}
+		eon_consultation_clear_pending = yes
+	}
+}
+
+# Unconsumed agenda/reply identity cannot be reused after forced cleanup.
+eon_consultation_retire_pair = {
+	if = {
+		limit = { check_variable = { eon_consultation_partner > 0 } }
+		var:eon_consultation_partner = {
+			set_country_flag = eon_consultation_retired_pair@PREV
+			PREV = { set_country_flag = eon_consultation_retired_pair@PREV }
+		}
+	}
+}
+
+# Native action recipient scope, ROOT initiator. Selection itself costs nothing.
+eon_consultation_prepare_draft = {
+	if = {
+		limit = { eon_consultation_open_ready = yes }
+		set_variable = { eon_consultation_partner = ROOT }
+		set_variable = { eon_consultation_topic = 0 }
+		set_country_flag = eon_consultation_reserved
+		set_country_flag = eon_consultation_draft_recipient
+		set_country_flag = { flag = eon_consultation_draft_window days = 7 value = 1 }
+		ROOT = {
+			set_variable = { eon_consultation_partner = PREV }
+			set_variable = { eon_consultation_topic = 0 }
+			set_country_flag = eon_consultation_reserved
+			set_country_flag = eon_consultation_draft_owner
+			set_country_flag = { flag = eon_consultation_draft_window days = 7 value = 1 }
+		}
+		country_event = { id = eon_consultation.0 }
+	}
+}
+
+eon_consultation_dispatch_draft = {
+	if = {
+		limit = {
+			eon_consultation_state_pair_consistent = yes
+			has_country_flag = eon_consultation_reserved
+			has_country_flag = eon_consultation_draft_recipient
+			check_variable = { eon_consultation_partner = FROM }
+			check_variable = { eon_consultation_topic = 0 }
+			var:eon_consultation_partner = {
+				has_country_flag = eon_consultation_reserved
+				has_country_flag = eon_consultation_draft_owner
+				check_variable = { eon_consultation_partner = PREV }
+				check_variable = { eon_consultation_topic = 0 }
+			}
+		}
+		var:eon_consultation_partner = { country_event = { id = eon_consultation.1 } }
+	}
+}
+
+eon_consultation_cancel_draft = {
+	if = {
+		limit = { eon_consultation_draft_current = yes }
+		if = {
+			limit = { var:eon_consultation_partner = { exists = no } }
+			eon_consultation_retire_pair = yes
+		}
+		eon_consultation_release_pair = yes
+	}
+}
+
+# Literal agenda input is checked again at click execution. Preparation PP is
+# spent once here, never when the agenda is opened or the recipient answers.
+eon_consultation_send_request = {
+	if = {
+		limit = { eon_consultation_draft_send_ready = yes }
+		add_political_power = -10
+		set_variable = { eon_consultation_topic = eon_consultation_proposed_topic }
+		clr_country_flag = eon_consultation_draft_owner
+		clr_country_flag = eon_consultation_draft_window
+		set_country_flag = eon_consultation_outgoing
+		set_country_flag = { flag = eon_consultation_response_window days = 30 value = 1 }
+		set_country_flag = { flag = eon_consultation_recent_contact@FROM days = 90 value = 1 }
+		var:eon_consultation_partner = {
+			set_variable = { eon_consultation_topic = PREV.eon_consultation_topic }
+			clr_country_flag = eon_consultation_draft_recipient
+			clr_country_flag = eon_consultation_draft_window
+			set_country_flag = eon_consultation_incoming
+			set_country_flag = { flag = eon_consultation_response_window days = 30 value = 1 }
+			set_country_flag = { flag = eon_consultation_recent_contact@PREV days = 90 value = 1 }
+			if = {
+				limit = { check_variable = { eon_consultation_topic = 1 } }
+				country_event = { id = eon_consultation.10 days = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { eon_consultation_topic = 2 } }
+				country_event = { id = eon_consultation.11 days = 1 }
+			}
+			else = { country_event = { id = eon_consultation.12 days = 1 } }
+		}
+	}
+	# Resolve a rendered agenda choice that became invalid before its click.
+	else = { eon_consultation_cancel_draft = yes }
+}
+
+eon_consultation_accept_request = {
+	if = {
+		limit = { eon_consultation_response_pair_current = yes }
+		if = {
+			limit = { eon_consultation_response_valid = yes }
+			clr_country_flag = eon_consultation_incoming
+			clr_country_flag = eon_consultation_response_window
+			set_country_flag = eon_consultation_active
+			set_country_flag = { flag = eon_consultation_active_window days = 30 value = 1 }
+			var:eon_consultation_partner = {
+				clr_country_flag = eon_consultation_outgoing
+				clr_country_flag = eon_consultation_response_window
+				set_country_flag = eon_consultation_active
+				set_country_flag = { flag = eon_consultation_active_window days = 30 value = 1 }
+			}
+			if = {
+				limit = { check_variable = { eon_consultation_topic = 1 } }
+				FROM = { country_event = eon_consultation.20 }
+			}
+			else_if = {
+				limit = { check_variable = { eon_consultation_topic = 2 } }
+				FROM = { country_event = eon_consultation.21 }
+			}
+			else = { FROM = { country_event = eon_consultation.22 } }
+		}
+		else = { eon_consultation_resolve_invalid_request = yes }
+	}
+}
+
+eon_consultation_refuse_request = {
+	if = {
+		limit = { eon_consultation_response_pair_current = yes }
+		if = {
+			limit = { eon_consultation_response_valid = yes }
+			FROM = { country_event = eon_consultation.23 }
+			eon_consultation_release_pair = yes
+		}
+		else = { eon_consultation_resolve_invalid_request = yes }
+	}
+}
+
+eon_consultation_resolve_invalid_request = {
+	if = {
+		limit = { eon_consultation_response_pair_current = yes }
+		if = {
+			limit = { OR = { has_country_flag = eon_consultation_cancelled FROM = { has_country_flag = eon_consultation_cancelled } } }
+			FROM = { country_event = eon_consultation.24 }
+		}
+		else = { FROM = { country_event = eon_consultation.25 } }
+		eon_consultation_release_pair = yes
+	}
+}
+
+# Actor scope after the guarded native withdrawal action. Keep the old reply.
+eon_consultation_withdraw_request = {
+	if = {
+		limit = {
+			eon_consultation_state_pair_consistent = yes
+			has_country_flag = eon_consultation_reserved
+			has_country_flag = eon_consultation_outgoing
+			NOT = { has_country_flag = eon_consultation_cancelled }
+			var:eon_consultation_partner = {
+				has_country_flag = eon_consultation_reserved
+				has_country_flag = eon_consultation_incoming
+				check_variable = { eon_consultation_partner = PREV }
+				check_variable = { eon_consultation_topic = PREV.eon_consultation_topic }
+			}
+		}
+		set_country_flag = eon_consultation_cancelled
+		var:eon_consultation_partner = {
+			set_country_flag = eon_consultation_cancelled
+			country_event = eon_consultation.24
+		}
+	}
+}
+
+# No recipient reply is pending in an active channel. Closing does not terminate
+# any separate aid, energy, trade or debt transaction started during these talks.
+eon_consultation_end_active = {
+	if = {
+		limit = { eon_consultation_state_pair_consistent = yes has_country_flag = eon_consultation_active }
+		var:eon_consultation_partner = {
+			if = {
+				limit = { exists = yes has_country_flag = eon_consultation_reserved check_variable = { eon_consultation_partner = PREV } }
+				country_event = eon_consultation.27
+			}
+		}
+		eon_consultation_release_pair = yes
+	}
+}
+
+eon_consultation_daily_cleanup = {
+	if = {
+		limit = { has_country_flag = eon_consultation_reserved }
+		if = {
+			limit = {
+				OR = {
+					var:eon_consultation_partner = { exists = no }
+					NOT = { eon_consultation_state_pair_consistent = yes }
+				}
+			}
+			eon_consultation_retire_pair = yes
+			eon_consultation_release_pair = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { has_country_flag = eon_consultation_active }
+				OR = {
+					AND = { OR = { has_country_flag = eon_consultation_draft_owner has_country_flag = eon_consultation_draft_recipient } NOT = { has_country_flag = eon_consultation_draft_window } }
+					AND = { OR = { has_country_flag = eon_consultation_outgoing has_country_flag = eon_consultation_incoming } NOT = { has_country_flag = eon_consultation_response_window } }
+				}
+			}
+			eon_consultation_retire_pair = yes
+			var:eon_consultation_partner = { if = { limit = { exists = yes } country_event = eon_consultation.26 } }
+			country_event = eon_consultation.26
+			eon_consultation_release_pair = yes
+		}
+		else_if = {
+			limit = {
+				has_country_flag = eon_consultation_active
+				OR = {
+					NOT = { has_country_flag = eon_consultation_active_window }
+					var:eon_consultation_partner = { NOT = { has_country_flag = eon_consultation_active_window } }
+					has_war_with = eon_consultation_partner
+					var:eon_consultation_partner = { has_war_with = PREV }
+				}
+			}
+			eon_consultation_end_active = yes
+		}
+	}
+}
+
+eon_consultation_cleanup_annexed_pair = {
+	if = {
+		limit = { has_country_flag = eon_consultation_reserved check_variable = { eon_consultation_partner = eon_consultation_annexed_partner } }
+		if = { limit = { NOT = { AND = { has_country_flag = eon_consultation_active eon_consultation_state_pair_consistent = yes } } } eon_consultation_retire_pair = yes }
+		eon_consultation_release_pair = yes
+	}
+}
+
+eon_consultation_cleanup_annexed_owner = {
+	if = {
+		limit = { has_country_flag = eon_consultation_reserved }
+		if = { limit = { NOT = { AND = { has_country_flag = eon_consultation_active eon_consultation_state_pair_consistent = yes } } } eon_consultation_retire_pair = yes }
+		eon_consultation_release_pair = yes
+	}
+}
