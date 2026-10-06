@@ -1,0 +1,401 @@
+# Existing civilian agreements; actor-owned pending records and canonical live service.
+eon_sat_gnss_begin_request = {
+ if = { limit = { eon_sat_gnss_request_ready = yes }
+  eon_sat_gnss_clear = yes
+  set_variable = { eon_sat_gnss_partner = PREV.id }
+  set_variable = { eon_sat_gnss_kind = 1 }
+  set_variable = { eon_sat_gnss_level = PREV.var_GNSS_civ_system_idx }
+  set_variable = { pending_civ_access_country = PREV.id }
+  set_country_flag = eon_sat_gnss_pending
+  set_country_flag = { flag = eon_sat_gnss_window days = 30 value = 1 }
+  custom_effect_tooltip = eon_sat_gnss_proposal_tt
+ }
+}
+eon_sat_gnss_accept_request = {
+ if = { limit = { eon_sat_gnss_record_matches = yes check_variable = { eon_sat_gnss_kind = 1 } }
+  if = { limit = { eon_sat_gnss_request_authorized = yes }
+   eon_sat_gnss_clear = yes
+   PREV = { add_to_array = { array = GNSS_civ_treaty_array value = PREV.id } }
+   add_to_array = { array = GNSS_civ_access_array value = PREV.id }
+   set_country_flag = { flag = recently_accepted_civ_gnss_@PREV days = 180 value = 1 }
+   eon_sat_refresh_gnss = yes
+   PREV = { eon_sat_refresh_gnss = yes }
+   custom_effect_tooltip = eon_sat_gnss_granted_tt
+  }
+  else = { eon_sat_gnss_clear = yes custom_effect_tooltip = eon_sat_gnss_closed_tt }
+ }
+}
+eon_sat_gnss_reject_request = {
+ if = { limit = { eon_sat_gnss_record_matches = yes check_variable = { eon_sat_gnss_kind = 1 } } eon_sat_gnss_clear = yes }
+}
+
+eon_sat_gnss_begin_offer = {
+ if = { limit = { eon_sat_gnss_offer_ready = yes }
+  eon_sat_gnss_clear = yes
+  set_variable = { eon_sat_gnss_partner = PREV.id }
+  set_variable = { eon_sat_gnss_kind = 2 }
+  set_variable = { eon_sat_gnss_level = var_GNSS_civ_system_idx }
+  set_variable = { pending_civ_access_country = PREV.id }
+  set_country_flag = eon_sat_gnss_pending
+  set_country_flag = { flag = eon_sat_gnss_window days = 30 value = 1 }
+  custom_effect_tooltip = eon_sat_gnss_proposal_tt
+ }
+}
+eon_sat_gnss_accept_offer = {
+ if = { limit = { eon_sat_gnss_record_matches = yes check_variable = { eon_sat_gnss_kind = 2 } }
+  if = { limit = { eon_sat_gnss_offer_authorized = yes }
+   eon_sat_gnss_clear = yes
+   add_to_array = { array = GNSS_civ_treaty_array value = PREV.id }
+   PREV = { add_to_array = { array = GNSS_civ_access_array value = PREV.id } }
+   set_country_flag = { flag = recently_accepted_civ_gnss_@PREV days = 180 value = 1 }
+   eon_sat_refresh_gnss = yes
+   PREV = { eon_sat_refresh_gnss = yes }
+   custom_effect_tooltip = eon_sat_gnss_granted_tt
+  }
+  else = { eon_sat_gnss_clear = yes custom_effect_tooltip = eon_sat_gnss_closed_tt }
+ }
+}
+eon_sat_gnss_reject_offer = {
+ if = { limit = { eon_sat_gnss_record_matches = yes check_variable = { eon_sat_gnss_kind = 2 } } eon_sat_gnss_clear = yes }
+}
+
+eon_sat_gnss_clear = {
+ if = { limit = { has_country_flag = eon_sat_gnss_pending check_variable = { pending_civ_access_country = eon_sat_gnss_partner } } clear_variable = pending_civ_access_country }
+ clr_country_flag = eon_sat_gnss_pending
+ clr_country_flag = eon_sat_gnss_window
+ clr_country_flag = eon_sat_gnss_cancelled
+ clear_variable = eon_sat_gnss_partner
+ clear_variable = eon_sat_gnss_kind
+ clear_variable = eon_sat_gnss_level
+}
+eon_sat_gnss_force_close = {
+ if = { limit = { has_country_flag = eon_sat_gnss_pending }
+  if = { limit = { check_variable = { eon_sat_gnss_partner > 0 } }
+   set_temp_variable = { eon_sat_gnss_closing_partner = eon_sat_gnss_partner }
+   var:eon_sat_gnss_closing_partner = { PREV = { set_country_flag = eon_sat_gnss_quarantine@PREV } }
+  }
+  eon_sat_gnss_clear = yes
+ }
+}
+eon_sat_gnss_withdraw = { if = { limit = { eon_sat_gnss_withdraw_ready = yes } set_country_flag = eon_sat_gnss_cancelled custom_effect_tooltip = eon_sat_gnss_withdraw_tt } }
+eon_sat_gnss_cleanup = {
+ if = { limit = { has_country_flag = eon_sat_gnss_pending }
+  if = { limit = { OR = {
+   NOT = { has_country_flag = eon_sat_gnss_window }
+   NOT = { check_variable = { eon_sat_gnss_partner > 0 } }
+   AND = { check_variable = { eon_sat_removed_country > 0 } check_variable = { eon_sat_gnss_partner = eon_sat_removed_country } }
+  } } eon_sat_gnss_force_close = yes }
+  else = {
+   set_temp_variable = { eon_sat_gnss_cleanup_partner = eon_sat_gnss_partner }
+   var:eon_sat_gnss_cleanup_partner = {
+    if = { limit = { NOT = { exists = yes } } PREV = { eon_sat_gnss_force_close = yes } }
+    else = { PREV = {
+     if = { limit = { NOT = { OR = { eon_sat_gnss_request_authorized = yes eon_sat_gnss_offer_authorized = yes } } } set_country_flag = eon_sat_gnss_cancelled }
+    } }
+   }
+  }
+ }
+}
+
+eon_sat_gnss_canonical_access = {
+ clear_array = eon_sat_gnss_access_work
+ clear_array = GNSS_civ_access_system_idx_array
+ for_each_scope_loop = { array = GNSS_civ_access_array
+  if = { limit = {
+   exists = yes NOT = { tag = PREV }
+   is_in_array = { array = GNSS_civ_treaty_array value = PREV.id }
+   NOT = { is_in_array = { array = PREV.eon_sat_gnss_access_work value = THIS.id } }
+  }
+   add_to_array = { array = PREV.eon_sat_gnss_access_work value = THIS.id }
+   if = { limit = { eon_sat_gnss_valid_level = yes } add_to_array = { array = PREV.GNSS_civ_access_system_idx_array value = THIS.var_GNSS_civ_system_idx } }
+   else = { add_to_array = { array = PREV.GNSS_civ_access_system_idx_array value = 0 } }
+  }
+ }
+ clear_array = GNSS_civ_access_array
+ for_each_loop = { array = eon_sat_gnss_access_work value = eon_sat_gnss_access_value index = eon_sat_gnss_access_index
+  add_to_array = { array = GNSS_civ_access_array value = eon_sat_gnss_access_value }
+ }
+ clear_array = eon_sat_gnss_access_work
+}
+eon_sat_gnss_canonical_treaties = {
+ clear_array = eon_sat_gnss_treaty_work
+ for_each_scope_loop = { array = GNSS_civ_treaty_array
+  if = { limit = {
+   exists = yes NOT = { tag = PREV }
+   is_in_array = { array = GNSS_civ_access_array value = PREV.id }
+   NOT = { is_in_array = { array = PREV.eon_sat_gnss_treaty_work value = THIS.id } }
+  } add_to_array = { array = PREV.eon_sat_gnss_treaty_work value = THIS.id } }
+ }
+ clear_array = GNSS_civ_treaty_array
+ for_each_loop = { array = eon_sat_gnss_treaty_work value = eon_sat_gnss_treaty_value index = eon_sat_gnss_treaty_index
+  add_to_array = { array = GNSS_civ_treaty_array value = eon_sat_gnss_treaty_value }
+ }
+ clear_array = eon_sat_gnss_treaty_work
+}
+eon_sat_gnss_remove_access_peer = {
+ clear_array = eon_sat_gnss_remove_work
+ for_each_scope_loop = { array = GNSS_civ_access_array
+  if = { limit = { NOT = { check_variable = { THIS.id = eon_sat_revoke_provider } } } add_to_array = { array = PREV.eon_sat_gnss_remove_work value = THIS.id } }
+ }
+ clear_array = GNSS_civ_access_array
+ for_each_loop = { array = eon_sat_gnss_remove_work value = eon_sat_gnss_remove_value index = eon_sat_gnss_remove_index add_to_array = { array = GNSS_civ_access_array value = eon_sat_gnss_remove_value } }
+ clear_array = eon_sat_gnss_remove_work
+}
+eon_sat_gnss_remove_treaty_peer = {
+ clear_array = eon_sat_gnss_remove_work
+ for_each_scope_loop = { array = GNSS_civ_treaty_array
+  if = { limit = { NOT = { check_variable = { THIS.id = eon_sat_revoke_recipient } } } add_to_array = { array = PREV.eon_sat_gnss_remove_work value = THIS.id } }
+ }
+ clear_array = GNSS_civ_treaty_array
+ for_each_loop = { array = eon_sat_gnss_remove_work value = eon_sat_gnss_remove_value index = eon_sat_gnss_remove_index add_to_array = { array = GNSS_civ_treaty_array value = eon_sat_gnss_remove_value } }
+ clear_array = eon_sat_gnss_remove_work
+}
+eon_sat_gnss_revoke = {
+ if = { limit = { eon_sat_gnss_revoke_ready = yes }
+  set_temp_variable = { eon_sat_revoke_provider = THIS.id }
+  set_temp_variable = { eon_sat_revoke_recipient = PREV.id }
+  eon_sat_gnss_remove_treaty_peer = yes
+  PREV = { eon_sat_gnss_remove_access_peer = yes }
+  set_country_flag = { flag = recently_revoke_civ_gnss_access_@PREV days = 180 value = 1 }
+  eon_sat_refresh_gnss = yes
+  PREV = { eon_sat_refresh_gnss = yes }
+ }
+}
+
+eon_sat_refresh_gnss = {
+ eon_sat_gnss_canonical_access = yes
+ eon_sat_gnss_canonical_treaties = yes
+ set_variable = { var_GNSS_civ_production_speed_buildings_factor = var_GNSS_civ_production_speed_buildings_factor_base }
+ set_variable = { var_GNSS_civ_production_speed_infrastructure_factor = var_GNSS_civ_production_speed_infrastructure_factor_base }
+ set_variable = { var_GNSS_civ_local_resources_factor = var_GNSS_civ_local_resources_factor_base }
+ set_temp_variable = { eon_sat_gnss_highest = 0 }
+ for_each_scope_loop = { array = GNSS_civ_access_array
+  if = { limit = { exists = yes eon_sat_gnss_valid_level = yes check_variable = { var_GNSS_civ_system_idx > 0 }
+ NOT = { has_war_with = PREV }
+ PREV = { eon_sat_gnss_valid_level = yes }
+ OR = { check_variable = { THIS.var_GNSS_civ_system_idx = PREV.var_GNSS_civ_system_idx } check_variable = { THIS.var_GNSS_civ_system_idx > PREV.var_GNSS_civ_system_idx } } }
+   add_to_variable = { PREV.var_GNSS_civ_production_speed_buildings_factor = THIS.var_GNSS_civ_production_speed_buildings_factor_base }
+   add_to_variable = { PREV.var_GNSS_civ_production_speed_infrastructure_factor = THIS.var_GNSS_civ_production_speed_infrastructure_factor_base }
+   add_to_variable = { PREV.var_GNSS_civ_local_resources_factor = THIS.var_GNSS_civ_local_resources_factor_base }
+   if = { limit = { check_variable = { THIS.var_GNSS_civ_system_idx > eon_sat_gnss_highest } } set_temp_variable = { eon_sat_gnss_highest = THIS.var_GNSS_civ_system_idx } }
+  }
+ }
+ if = { limit = { check_variable = { eon_sat_gnss_highest > 0 } }
+  clamp_variable = { var = var_GNSS_civ_production_speed_buildings_factor max = global.GNSS_civ_production_speed_buildings_factor_max_array^eon_sat_gnss_highest }
+  clamp_variable = { var = var_GNSS_civ_production_speed_infrastructure_factor max = global.GNSS_civ_production_speed_infrastructure_factor_max_array^eon_sat_gnss_highest }
+  clamp_variable = { var = var_GNSS_civ_local_resources_factor max = global.GNSS_civ_local_resources_factor_max_array^eon_sat_gnss_highest }
+ }
+ if = { limit = { exists = yes } force_update_dynamic_modifier = yes }
+}
+
+eon_sat_com_begin_request = {
+ if = { limit = { eon_sat_com_request_ready = yes }
+  eon_sat_com_clear = yes
+  set_variable = { eon_sat_com_partner = PREV.id }
+  set_variable = { eon_sat_com_kind = 1 }
+  set_variable = { eon_sat_com_level = PREV.var_COM_civ_system_idx }
+  set_variable = { pending_civ_com_access_country = PREV.id }
+  set_country_flag = eon_sat_com_pending
+  set_country_flag = { flag = eon_sat_com_window days = 30 value = 1 }
+  custom_effect_tooltip = eon_sat_com_proposal_tt
+ }
+}
+eon_sat_com_accept_request = {
+ if = { limit = { eon_sat_com_record_matches = yes check_variable = { eon_sat_com_kind = 1 } }
+  if = { limit = { eon_sat_com_request_authorized = yes }
+   eon_sat_com_clear = yes
+   PREV = { add_to_array = { array = COM_civ_treaty_array value = PREV.id } }
+   add_to_array = { array = COM_civ_access_array value = PREV.id }
+   set_country_flag = { flag = recently_accepted_mil_com_@PREV days = 180 value = 1 }
+   eon_sat_refresh_com = yes
+   PREV = { eon_sat_refresh_com = yes }
+   custom_effect_tooltip = eon_sat_com_granted_tt
+  }
+  else = { eon_sat_com_clear = yes custom_effect_tooltip = eon_sat_com_closed_tt }
+ }
+}
+eon_sat_com_reject_request = {
+ if = { limit = { eon_sat_com_record_matches = yes check_variable = { eon_sat_com_kind = 1 } } eon_sat_com_clear = yes }
+}
+
+eon_sat_com_begin_offer = {
+ if = { limit = { eon_sat_com_offer_ready = yes }
+  eon_sat_com_clear = yes
+  set_variable = { eon_sat_com_partner = PREV.id }
+  set_variable = { eon_sat_com_kind = 2 }
+  set_variable = { eon_sat_com_level = var_COM_civ_system_idx }
+  set_variable = { pending_civ_com_access_country = PREV.id }
+  set_country_flag = eon_sat_com_pending
+  set_country_flag = { flag = eon_sat_com_window days = 30 value = 1 }
+  custom_effect_tooltip = eon_sat_com_proposal_tt
+ }
+}
+eon_sat_com_accept_offer = {
+ if = { limit = { eon_sat_com_record_matches = yes check_variable = { eon_sat_com_kind = 2 } }
+  if = { limit = { eon_sat_com_offer_authorized = yes }
+   eon_sat_com_clear = yes
+   add_to_array = { array = COM_civ_treaty_array value = PREV.id }
+   PREV = { add_to_array = { array = COM_civ_access_array value = PREV.id } }
+   set_country_flag = { flag = recently_accepted_mil_com_@PREV days = 180 value = 1 }
+   eon_sat_refresh_com = yes
+   PREV = { eon_sat_refresh_com = yes }
+   custom_effect_tooltip = eon_sat_com_granted_tt
+  }
+  else = { eon_sat_com_clear = yes custom_effect_tooltip = eon_sat_com_closed_tt }
+ }
+}
+eon_sat_com_reject_offer = {
+ if = { limit = { eon_sat_com_record_matches = yes check_variable = { eon_sat_com_kind = 2 } } eon_sat_com_clear = yes }
+}
+
+eon_sat_com_clear = {
+ if = { limit = { has_country_flag = eon_sat_com_pending check_variable = { pending_civ_com_access_country = eon_sat_com_partner } } clear_variable = pending_civ_com_access_country }
+ clr_country_flag = eon_sat_com_pending
+ clr_country_flag = eon_sat_com_window
+ clr_country_flag = eon_sat_com_cancelled
+ clear_variable = eon_sat_com_partner
+ clear_variable = eon_sat_com_kind
+ clear_variable = eon_sat_com_level
+}
+eon_sat_com_force_close = {
+ if = { limit = { has_country_flag = eon_sat_com_pending }
+  if = { limit = { check_variable = { eon_sat_com_partner > 0 } }
+   set_temp_variable = { eon_sat_com_closing_partner = eon_sat_com_partner }
+   var:eon_sat_com_closing_partner = { PREV = { set_country_flag = eon_sat_com_quarantine@PREV } }
+  }
+  eon_sat_com_clear = yes
+ }
+}
+eon_sat_com_withdraw = { if = { limit = { eon_sat_com_withdraw_ready = yes } set_country_flag = eon_sat_com_cancelled custom_effect_tooltip = eon_sat_com_withdraw_tt } }
+eon_sat_com_cleanup = {
+ if = { limit = { has_country_flag = eon_sat_com_pending }
+  if = { limit = { OR = {
+   NOT = { has_country_flag = eon_sat_com_window }
+   NOT = { check_variable = { eon_sat_com_partner > 0 } }
+   AND = { check_variable = { eon_sat_removed_country > 0 } check_variable = { eon_sat_com_partner = eon_sat_removed_country } }
+  } } eon_sat_com_force_close = yes }
+  else = {
+   set_temp_variable = { eon_sat_com_cleanup_partner = eon_sat_com_partner }
+   var:eon_sat_com_cleanup_partner = {
+    if = { limit = { NOT = { exists = yes } } PREV = { eon_sat_com_force_close = yes } }
+    else = { PREV = {
+     if = { limit = { NOT = { OR = { eon_sat_com_request_authorized = yes eon_sat_com_offer_authorized = yes } } } set_country_flag = eon_sat_com_cancelled }
+    } }
+   }
+  }
+ }
+}
+
+eon_sat_com_canonical_access = {
+ clear_array = eon_sat_com_access_work
+ clear_array = COM_civ_access_system_idx_array
+ for_each_scope_loop = { array = COM_civ_access_array
+  if = { limit = {
+   exists = yes NOT = { tag = PREV }
+   is_in_array = { array = COM_civ_treaty_array value = PREV.id }
+   NOT = { is_in_array = { array = PREV.eon_sat_com_access_work value = THIS.id } }
+  }
+   add_to_array = { array = PREV.eon_sat_com_access_work value = THIS.id }
+   if = { limit = { eon_sat_com_valid_level = yes } add_to_array = { array = PREV.COM_civ_access_system_idx_array value = THIS.var_COM_civ_system_idx } }
+   else = { add_to_array = { array = PREV.COM_civ_access_system_idx_array value = 0 } }
+  }
+ }
+ clear_array = COM_civ_access_array
+ for_each_loop = { array = eon_sat_com_access_work value = eon_sat_com_access_value index = eon_sat_com_access_index
+  add_to_array = { array = COM_civ_access_array value = eon_sat_com_access_value }
+ }
+ clear_array = eon_sat_com_access_work
+}
+eon_sat_com_canonical_treaties = {
+ clear_array = eon_sat_com_treaty_work
+ for_each_scope_loop = { array = COM_civ_treaty_array
+  if = { limit = {
+   exists = yes NOT = { tag = PREV }
+   is_in_array = { array = COM_civ_access_array value = PREV.id }
+   NOT = { is_in_array = { array = PREV.eon_sat_com_treaty_work value = THIS.id } }
+  } add_to_array = { array = PREV.eon_sat_com_treaty_work value = THIS.id } }
+ }
+ clear_array = COM_civ_treaty_array
+ for_each_loop = { array = eon_sat_com_treaty_work value = eon_sat_com_treaty_value index = eon_sat_com_treaty_index
+  add_to_array = { array = COM_civ_treaty_array value = eon_sat_com_treaty_value }
+ }
+ clear_array = eon_sat_com_treaty_work
+}
+eon_sat_com_remove_access_peer = {
+ clear_array = eon_sat_com_remove_work
+ for_each_scope_loop = { array = COM_civ_access_array
+  if = { limit = { NOT = { check_variable = { THIS.id = eon_sat_revoke_provider } } } add_to_array = { array = PREV.eon_sat_com_remove_work value = THIS.id } }
+ }
+ clear_array = COM_civ_access_array
+ for_each_loop = { array = eon_sat_com_remove_work value = eon_sat_com_remove_value index = eon_sat_com_remove_index add_to_array = { array = COM_civ_access_array value = eon_sat_com_remove_value } }
+ clear_array = eon_sat_com_remove_work
+}
+eon_sat_com_remove_treaty_peer = {
+ clear_array = eon_sat_com_remove_work
+ for_each_scope_loop = { array = COM_civ_treaty_array
+  if = { limit = { NOT = { check_variable = { THIS.id = eon_sat_revoke_recipient } } } add_to_array = { array = PREV.eon_sat_com_remove_work value = THIS.id } }
+ }
+ clear_array = COM_civ_treaty_array
+ for_each_loop = { array = eon_sat_com_remove_work value = eon_sat_com_remove_value index = eon_sat_com_remove_index add_to_array = { array = COM_civ_treaty_array value = eon_sat_com_remove_value } }
+ clear_array = eon_sat_com_remove_work
+}
+eon_sat_com_revoke = {
+ if = { limit = { eon_sat_com_revoke_ready = yes }
+  set_temp_variable = { eon_sat_revoke_provider = THIS.id }
+  set_temp_variable = { eon_sat_revoke_recipient = PREV.id }
+  eon_sat_com_remove_treaty_peer = yes
+  PREV = { eon_sat_com_remove_access_peer = yes }
+  set_country_flag = { flag = recently_revoke_civ_com_access_@PREV days = 180 value = 1 }
+  eon_sat_refresh_com = yes
+  PREV = { eon_sat_refresh_com = yes }
+ }
+}
+
+eon_sat_refresh_com = {
+ eon_sat_com_canonical_access = yes
+ eon_sat_com_canonical_treaties = yes
+ set_variable = { var_COM_civ_political_power_factor = var_COM_civ_political_power_factor_base }
+ set_variable = { var_COM_civ_decryption_factor = var_COM_civ_decryption_factor_base }
+ set_variable = { var_COM_civ_encryption_factor = var_COM_civ_encryption_factor_base }
+ set_variable = { var_COM_civ_intel_network_gain_factor = var_COM_civ_intel_network_gain_factor_base }
+ set_variable = { var_COM_civ_operation_outcome = var_COM_civ_operation_outcome_base }
+ set_temp_variable = { eon_sat_com_highest = 0 }
+ for_each_scope_loop = { array = COM_civ_access_array
+  if = { limit = { exists = yes eon_sat_com_valid_level = yes check_variable = { var_COM_civ_system_idx > 0 }
+ NOT = { has_war_with = PREV }
+ PREV = { eon_sat_com_valid_level = yes }
+ OR = { check_variable = { THIS.var_COM_civ_system_idx = PREV.var_COM_civ_system_idx } check_variable = { THIS.var_COM_civ_system_idx > PREV.var_COM_civ_system_idx } } }
+   add_to_variable = { PREV.var_COM_civ_political_power_factor = THIS.var_COM_civ_political_power_factor_base }
+   add_to_variable = { PREV.var_COM_civ_decryption_factor = THIS.var_COM_civ_decryption_factor_base }
+   add_to_variable = { PREV.var_COM_civ_encryption_factor = THIS.var_COM_civ_encryption_factor_base }
+   add_to_variable = { PREV.var_COM_civ_intel_network_gain_factor = THIS.var_COM_civ_intel_network_gain_factor_base }
+   add_to_variable = { PREV.var_COM_civ_operation_outcome = THIS.var_COM_civ_operation_outcome_base }
+   if = { limit = { check_variable = { THIS.var_COM_civ_system_idx > eon_sat_com_highest } } set_temp_variable = { eon_sat_com_highest = THIS.var_COM_civ_system_idx } }
+  }
+ }
+ if = { limit = { check_variable = { eon_sat_com_highest > 0 } }
+  clamp_variable = { var = var_COM_civ_political_power_factor max = global.COM_civ_political_power_factor_max_array^eon_sat_com_highest }
+  clamp_variable = { var = var_COM_civ_decryption_factor max = global.COM_civ_decryption_factor_max_array^eon_sat_com_highest }
+  clamp_variable = { var = var_COM_civ_encryption_factor max = global.COM_civ_encryption_factor_max_array^eon_sat_com_highest }
+  clamp_variable = { var = var_COM_civ_intel_network_gain_factor max = global.COM_civ_intel_network_gain_factor_max_array^eon_sat_com_highest }
+  clamp_variable = { var = var_COM_civ_operation_outcome max = global.COM_civ_operation_outcome_max_array^eon_sat_com_highest }
+ }
+ if = { limit = { exists = yes } force_update_dynamic_modifier = yes }
+}
+
+eon_sat_daily_cleanup = {
+ eon_sat_gnss_cleanup = yes
+ eon_sat_com_cleanup = yes
+ eon_sat_refresh_gnss = yes
+ eon_sat_refresh_com = yes
+}
+eon_sat_cleanup_annexed_owner = {
+ eon_sat_gnss_force_close = yes
+ eon_sat_com_force_close = yes
+ clear_array = GNSS_civ_access_array
+ clear_array = GNSS_civ_access_system_idx_array
+ clear_array = GNSS_civ_treaty_array
+ clear_array = COM_civ_access_array
+ clear_array = COM_civ_access_system_idx_array
+ clear_array = COM_civ_treaty_array
+}

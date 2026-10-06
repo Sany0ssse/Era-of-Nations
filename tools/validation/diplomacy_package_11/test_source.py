@@ -7,6 +7,15 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
+import sys as package12_sys
+package12_sys.path.insert(0, str(ROOT / 'tools/validation'))
+
+# Package12 restores only six civilian satellite actions/five effects before old proofs.
+from diplomacy_package_12.test_source import (
+    NEW as LATER_PACKAGE12_NEW, EXISTING as LATER_PACKAGE12_EXISTING,
+    check_owned_existing as check_later_package12_owned, package12_original_bytes,
+)
+check_later_package12_owned()
 BASELINE = '77faaeb976af35b1185979ee85eabe7a6efc454a'
 EXISTING = {'common/decisions/MDDC_Terrorist_again.txt'}
 NEW = {
@@ -170,16 +179,17 @@ def main():
     baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-    assert set(changed) | set(untracked) == EXISTING | NEW, ('Unowned gameplay changes', changed, untracked)
+    changed = [path for path in changed if path not in LATER_PACKAGE12_EXISTING]
+    assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE12_NEW, ('Unowned gameplay changes', changed, untracked)
     assert set(changed).intersection(baseline_paths) == EXISTING
-    assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW
+    assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW | LATER_PACKAGE12_NEW
     assert len(baseline_paths) == 68300
     groups['all_68299_unrelated_existing_gameplay_files_byte_preserved_exact_seven_additions'] += 1
     native_ids = []
     for path in baseline_paths:
         if path.startswith('common/scripted_diplomatic_actions/') and path.endswith('.txt'):
             old = subprocess.check_output(['git', 'show', BASELINE + ':' + path], cwd=ROOT)
-            assert (ROOT / path).read_bytes() == old, ('Old native action bytes changed', path)
+            assert package12_original_bytes(path, (ROOT / path).read_bytes()) == old, ('Old native action bytes changed', path)
             native_ids.extend(block['key'] for block in boundary_blocks(old)
                               if block['parent'] == 'scripted_diplomatic_actions' and block['depth'] == 1)
     actual_native_ids = [block['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')

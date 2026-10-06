@@ -36,6 +36,13 @@ from diplomacy_package_11.test_source import (
     check_owned_existing as check_later_package11_owned, package11_original_bytes,
 )
 check_later_package11_owned()
+
+# Package12 restores only six civilian satellite actions/five effects before old proofs.
+from diplomacy_package_12.test_source import (
+    NEW as LATER_PACKAGE12_NEW, EXISTING as LATER_PACKAGE12_EXISTING,
+    check_owned_existing as check_later_package12_owned, package12_original_bytes,
+)
+check_later_package12_owned()
 BASELINE = '688f1116fbcb377215181edca6af50f36538532e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, format_preserved, one
@@ -245,9 +252,9 @@ later_package08_new = {
     'localisation/russian/eon_mediation_l_russian.yml',
 }
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
-changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING]
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new | later_package06_paths | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW, ('Unexpected gameplay changes', changed, untracked)
+assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new | later_package06_paths | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW, ('Unexpected gameplay changes', changed, untracked)
 groups['whole_gameplay_git_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,
                   'baseline': BASELINE, 'owned_existing_files': receipts, 'native_primary_documentation': native,

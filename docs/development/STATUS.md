@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and eleven implementation packages are complete at
+The existing diplomacy audit and twelve implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -161,7 +161,30 @@ All eight owned game-file hashes agree; 68299 unrelated existing gameplay
 files remain byte-exact. See
 [DIPLOMACY_PACKAGE_11_UK.md](DIPLOMACY_PACKAGE_11_UK.md). Native scopes, timers,
 CP limits, GUI, AI, extinct-country variable persistence and save/load remain
-unverified. The next source audit concerns existing civilian satellite access.
+unverified. Civilian satellite access is addressed by package 12 below.
+
+The twelfth package develops the existing six civilian GNSS/COM actions:
+actor-owned outgoing partner/kind/frozen-level records, fresh acceptance,
+free withdrawal, a 30-day response window and a separate native revocation
+reason. Pending records stay reserved until their response is consumed;
+forced cleanup quarantines only that sender/partner/family route. Live
+reciprocal provider IDs are canonical, cached tiers rebuild from those IDs,
+and current-country bonuses use the original native cap tables. Zero,
+invalid or weaker systems and direct war leave dormant consent without
+foreign bonuses; service recovery cannot recreate a revoked agreement.
+Existing COM demand now sums all recipients' 100 receivers per controlled
+state. Two files change only inside six civilian action and five civilian
+effect blocks; seven game files are added. All 65 native action IDs and
+military/SPY behavior remain unchanged. Full source checks passed 5647 cumulative
+scenarios (5541 previous plus 106 new in 23 groups), with 347 separate new
+source/API checks and no new adapter cases. All nine game-file hashes agree;
+68305 unrelated existing gameplay files remain byte-exact. The existing full
+COM traffic-stat calculation retains its weekly schedule. See
+[DIPLOMACY_PACKAGE_12_UK.md](DIPLOMACY_PACKAGE_12_UK.md). Unknown old outgoing
+pointers remain conservatively locked; native scopes, timers, arrays,
+modifiers, GUI/AI/save-load and campaign acceptance are unverified. Existing
+constellation capacity calculations and shared COM cooldown are separate
+follow-up work; next audit covers remaining satellite access agreements.
 
 ## Completed setup
 

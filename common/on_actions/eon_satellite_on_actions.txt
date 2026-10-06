@@ -1,0 +1,29 @@
+# Native callbacks keep ROOT fixed; each surviving country's cleanup uses THIS.
+on_actions = {
+ on_daily = {
+  effect = {
+   set_temp_variable = { eon_sat_removed_country = 0 }
+   eon_sat_daily_cleanup = yes
+  }
+ }
+ on_annex = {
+  effect = {
+   set_temp_variable = { eon_sat_removed_country = FROM }
+   FROM = { eon_sat_cleanup_annexed_owner = yes }
+   every_country = {
+    limit = { exists = yes NOT = { tag = FROM } }
+    eon_sat_daily_cleanup = yes
+   }
+  }
+ }
+ on_subject_annexed = {
+  effect = {
+   set_temp_variable = { eon_sat_removed_country = ROOT }
+   ROOT = { eon_sat_cleanup_annexed_owner = yes }
+   every_country = {
+    limit = { exists = yes NOT = { tag = ROOT } }
+    eon_sat_daily_cleanup = yes
+   }
+  }
+ }
+}

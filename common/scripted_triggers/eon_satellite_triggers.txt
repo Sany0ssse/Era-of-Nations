@@ -1,0 +1,120 @@
+# ROOT-independent current country and peer checks.
+eon_sat_gnss_valid_level = { OR = { check_variable = { var_GNSS_civ_system_idx = 0 } check_variable = { var_GNSS_civ_system_idx = 1 } check_variable = { var_GNSS_civ_system_idx = 2 } check_variable = { var_GNSS_civ_system_idx = 3 } check_variable = { var_GNSS_civ_system_idx = 4 } check_variable = { var_GNSS_civ_system_idx = 5 } check_variable = { var_GNSS_civ_system_idx = 6 } check_variable = { var_GNSS_civ_system_idx = 7 } } }
+eon_sat_gnss_pair_live = {
+ exists = yes
+ PREV = { exists = yes }
+ NOT = { tag = PREV }
+ NOT = { has_war_with = PREV }
+}
+eon_sat_gnss_record_matches = {
+ has_country_flag = eon_sat_gnss_pending
+ check_variable = { eon_sat_gnss_partner = PREV.id }
+}
+eon_sat_gnss_new_ready = {
+ eon_sat_gnss_pair_live = yes
+ NOT = { has_country_flag = eon_sat_gnss_pending }
+ NOT = { has_country_flag = eon_sat_gnss_quarantine@PREV }
+ check_variable = { pending_civ_access_country = 0 }
+}
+eon_sat_gnss_withdraw_ready = { exists = yes is_ai = no has_country_flag = eon_sat_gnss_pending NOT = { has_country_flag = eon_sat_gnss_cancelled } }
+
+eon_sat_gnss_request_terms = {
+ eon_sat_gnss_pair_live = yes
+ PREV = { eon_sat_gnss_valid_level = yes check_variable = { var_GNSS_civ_system_idx > 0 } }
+ eon_sat_gnss_valid_level = yes
+ OR = { check_variable = { PREV.var_GNSS_civ_system_idx = var_GNSS_civ_system_idx } check_variable = { PREV.var_GNSS_civ_system_idx > var_GNSS_civ_system_idx } }
+ NOT = { is_in_array = { array = GNSS_civ_access_array value = PREV.id } }
+ NOT = { is_in_array = { array = PREV.GNSS_civ_treaty_array value = THIS.id } }
+}
+eon_sat_gnss_request_ready = { eon_sat_gnss_new_ready = yes eon_sat_gnss_request_terms = yes }
+eon_sat_gnss_request_authorized = {
+ eon_sat_gnss_record_matches = yes
+ check_variable = { eon_sat_gnss_kind = 1 }
+ has_country_flag = eon_sat_gnss_window
+ NOT = { has_country_flag = eon_sat_gnss_cancelled }
+ eon_sat_gnss_request_terms = yes
+ check_variable = { eon_sat_gnss_level = PREV.var_GNSS_civ_system_idx }
+}
+
+eon_sat_gnss_offer_terms = {
+ eon_sat_gnss_pair_live = yes
+ eon_sat_gnss_valid_level = yes check_variable = { var_GNSS_civ_system_idx > 0 }
+ PREV = { eon_sat_gnss_valid_level = yes }
+ OR = { check_variable = { var_GNSS_civ_system_idx = PREV.var_GNSS_civ_system_idx } check_variable = { var_GNSS_civ_system_idx > PREV.var_GNSS_civ_system_idx } }
+ NOT = { is_in_array = { array = PREV.GNSS_civ_access_array value = THIS.id } }
+ NOT = { is_in_array = { array = GNSS_civ_treaty_array value = PREV.id } }
+}
+eon_sat_gnss_offer_ready = { eon_sat_gnss_new_ready = yes eon_sat_gnss_offer_terms = yes }
+eon_sat_gnss_offer_authorized = {
+ eon_sat_gnss_record_matches = yes
+ check_variable = { eon_sat_gnss_kind = 2 }
+ has_country_flag = eon_sat_gnss_window
+ NOT = { has_country_flag = eon_sat_gnss_cancelled }
+ eon_sat_gnss_offer_terms = yes
+ check_variable = { eon_sat_gnss_level = var_GNSS_civ_system_idx }
+}
+
+eon_sat_gnss_revoke_ready = {
+ exists = yes PREV = { exists = yes } NOT = { tag = PREV }
+ OR = { is_in_array = { array = GNSS_civ_treaty_array value = PREV.id } is_in_array = { array = PREV.GNSS_civ_access_array value = THIS.id } }
+}
+
+eon_sat_com_valid_level = { OR = { check_variable = { var_COM_civ_system_idx = 0 } check_variable = { var_COM_civ_system_idx = 1 } check_variable = { var_COM_civ_system_idx = 2 } check_variable = { var_COM_civ_system_idx = 3 } check_variable = { var_COM_civ_system_idx = 4 } check_variable = { var_COM_civ_system_idx = 5 } check_variable = { var_COM_civ_system_idx = 6 } check_variable = { var_COM_civ_system_idx = 7 } } }
+eon_sat_com_pair_live = {
+ exists = yes
+ PREV = { exists = yes }
+ NOT = { tag = PREV }
+ NOT = { has_war_with = PREV }
+}
+eon_sat_com_record_matches = {
+ has_country_flag = eon_sat_com_pending
+ check_variable = { eon_sat_com_partner = PREV.id }
+}
+eon_sat_com_new_ready = {
+ eon_sat_com_pair_live = yes
+ NOT = { has_country_flag = eon_sat_com_pending }
+ NOT = { has_country_flag = eon_sat_com_quarantine@PREV }
+ check_variable = { pending_civ_com_access_country = 0 }
+}
+eon_sat_com_withdraw_ready = { exists = yes is_ai = no has_country_flag = eon_sat_com_pending NOT = { has_country_flag = eon_sat_com_cancelled } }
+
+eon_sat_com_request_terms = {
+ eon_sat_com_pair_live = yes
+ PREV = { eon_sat_com_valid_level = yes check_variable = { var_COM_civ_system_idx > 0 } }
+ eon_sat_com_valid_level = yes
+ OR = { check_variable = { PREV.var_COM_civ_system_idx = var_COM_civ_system_idx } check_variable = { PREV.var_COM_civ_system_idx > var_COM_civ_system_idx } }
+ NOT = { is_in_array = { array = COM_civ_access_array value = PREV.id } }
+ NOT = { is_in_array = { array = PREV.COM_civ_treaty_array value = THIS.id } }
+}
+eon_sat_com_request_ready = { eon_sat_com_new_ready = yes eon_sat_com_request_terms = yes }
+eon_sat_com_request_authorized = {
+ eon_sat_com_record_matches = yes
+ check_variable = { eon_sat_com_kind = 1 }
+ has_country_flag = eon_sat_com_window
+ NOT = { has_country_flag = eon_sat_com_cancelled }
+ eon_sat_com_request_terms = yes
+ check_variable = { eon_sat_com_level = PREV.var_COM_civ_system_idx }
+}
+
+eon_sat_com_offer_terms = {
+ eon_sat_com_pair_live = yes
+ eon_sat_com_valid_level = yes check_variable = { var_COM_civ_system_idx > 0 }
+ PREV = { eon_sat_com_valid_level = yes }
+ OR = { check_variable = { var_COM_civ_system_idx = PREV.var_COM_civ_system_idx } check_variable = { var_COM_civ_system_idx > PREV.var_COM_civ_system_idx } }
+ NOT = { is_in_array = { array = PREV.COM_civ_access_array value = THIS.id } }
+ NOT = { is_in_array = { array = COM_civ_treaty_array value = PREV.id } }
+}
+eon_sat_com_offer_ready = { eon_sat_com_new_ready = yes eon_sat_com_offer_terms = yes }
+eon_sat_com_offer_authorized = {
+ eon_sat_com_record_matches = yes
+ check_variable = { eon_sat_com_kind = 2 }
+ has_country_flag = eon_sat_com_window
+ NOT = { has_country_flag = eon_sat_com_cancelled }
+ eon_sat_com_offer_terms = yes
+ check_variable = { eon_sat_com_level = var_COM_civ_system_idx }
+}
+
+eon_sat_com_revoke_ready = {
+ exists = yes PREV = { exists = yes } NOT = { tag = PREV }
+ OR = { is_in_array = { array = COM_civ_treaty_array value = PREV.id } is_in_array = { array = PREV.COM_civ_access_array value = THIS.id } }
+}
