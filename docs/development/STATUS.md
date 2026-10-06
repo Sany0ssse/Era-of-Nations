@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and twelve implementation packages are complete at
+The existing diplomacy audit and thirteen implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -183,8 +183,36 @@ COM traffic-stat calculation retains its weekly schedule. See
 [DIPLOMACY_PACKAGE_12_UK.md](DIPLOMACY_PACKAGE_12_UK.md). Unknown old outgoing
 pointers remain conservatively locked; native scopes, timers, arrays,
 modifiers, GUI/AI/save-load and campaign acceptance are unverified. Existing
-constellation capacity calculations and shared COM cooldown are separate
-follow-up work; next audit covers remaining satellite access agreements.
+COM traffic/base guards and shared cooldown need separate follow-up.
+Correction after package 13 audit: capacity already summed qualifying tiers;
+the earlier overwrite claim was incorrect. Its capacity arithmetic is preserved.
+
+## Diplomacy package 13
+
+The remaining twelve native military GNSS/COM/SPY and civilian SPY access
+actions now use separate actor-owned proposals, frozen provider levels,
+fresh acceptance, withdrawal, reciprocal canonical IDs and current bonuses.
+Revocation removes the exact provider; dormant consent gives no foreign benefit.
+Existing native IDs, costs, AI policy and historical cooldown flags remain.
+The original positive-tier rule is extended only for a working tier0 provider
+with a positive native satellite count; its benefit uses the native tier0 cap.
+The original provider>=recipient comparison and rules for tiers1–7 are retained.
+Military COM demand counts each consenting recipient once, checks military
+overload and clears stale service at zero capacity. Both zero coverage maxima
+use explicit guarded zero coverage. Negative SPY weather benefits use the
+native lower cap. Capacity sums and the weekly COM stats schedule are retained.
+
+The cumulative source run passes 5932 scenarios (5647 previous plus 285
+new actual-source traces) and 656 new source/API checks; no new adapter cases.
+Nine gameplay file hashes agree and 68312 unrelated old gameplay files are
+byte-exact. The previous capacity-overwrite description has been corrected;
+the append-only archive of prior evidence is preserved. See
+[DIPLOMACY_PACKAGE_13_UK.md](DIPLOMACY_PACKAGE_13_UK.md).
+Native scopes/timers/arrays/modifiers/UI/AI/save-load and campaign acceptance
+remain unverified. Civilian GNSS/COM's original tier0 ban is still deferred.
+Old unknown callbacks, SPY weather base calculation,
+COM soft AI zero-divide guards, shared cooldown and immediate traffic/base
+freshness need follow-up. No game, saves, launcher or Workshop changes were made.
 
 ## Completed setup
 

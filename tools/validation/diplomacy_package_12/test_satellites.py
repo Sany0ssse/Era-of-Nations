@@ -149,7 +149,12 @@ for name in ('add_access_GNSS_civ_vars', 'add_offer_access_GNSS_civ_vars', 'add_
              'add_treaty_COM_civ_receiver_num', 'update_COM_system_stats', 'add_treaty_COM_mil_receiver_num'):
     model['effects'][name] = one(missile_effects, name)
 for registry, path in (('effects', 'common/scripted_effects/eon_satellite_effects.txt'),
-                       ('capacity_triggers', 'common/scripted_triggers/eon_satellite_triggers.txt')):
+                       ('capacity_triggers', 'common/scripted_triggers/eon_satellite_triggers.txt'),
+                       # The shared current COM reducer calls the extended
+                       # canonical treaty helper. Load its real definitions;
+                       # these do not execute or recount package13 scenarios.
+                       ('effects', 'common/scripted_effects/eon_satellite_extended_effects.txt'),
+                       ('capacity_triggers', 'common/scripted_triggers/eon_satellite_extended_triggers.txt')):
     if (ROOT / path).exists():
         additions = {key: body for key, operator, body in ast(read(path))}
         assert not additions.keys() & model[registry].keys(), 'Satellite helpers overwrite a prior helper'

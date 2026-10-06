@@ -33,6 +33,13 @@ from diplomacy_package_12.test_source import (
 )
 check_later_package12_owned()
 
+# Package13 restores only twelve native/ten extended satellite effect ranges before old proofs.
+from diplomacy_package_13.test_source import (
+    NEW as LATER_PACKAGE13_NEW, EXISTING as LATER_PACKAGE13_EXISTING,
+    check_owned_existing as check_later_package13_owned, package13_original_bytes,
+)
+check_later_package13_owned()
+
 # Package09 independently owns exactly these eight additions and one pre-clear hook.
 LATER_PACKAGE09_NEW = {
     'common/scripted_effects/eon_mediation_terms_effects.txt',
@@ -214,11 +221,11 @@ later_mediation_paths = {
     'localisation/russian/eon_mediation_l_russian.yml',
 }
 tracked_changes = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
-tracked_changes = [path for path in tracked_changes if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING]
+tracked_changes = [path for path in tracked_changes if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING]
 owned_paths = {item['path'] for item in receipt}
-assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths | later_support_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW, ('Unowned gameplay changes', tracked_changes)
+assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths | later_support_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned gameplay changes', tracked_changes)
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-assert set(untracked) <= new_paths | later_negotiation_paths | later_support_new_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
+assert set(untracked) <= new_paths | later_negotiation_paths | later_support_new_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 assert not set(new_paths).intersection(baseline_paths), 'New files overwrite existing baseline sources'
 passed('unchanged_tracked_gameplay_path_boundary')

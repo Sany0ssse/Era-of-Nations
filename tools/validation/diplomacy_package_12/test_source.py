@@ -7,6 +7,15 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
+import sys as package13_sys
+package13_sys.path.insert(0, str(ROOT / 'tools/validation'))
+
+# Package13 restores only twelve native/ten extended satellite effect ranges before old proofs.
+from diplomacy_package_13.test_source import (
+    NEW as LATER_PACKAGE13_NEW, EXISTING as LATER_PACKAGE13_EXISTING,
+    check_owned_existing as check_later_package13_owned, package13_original_bytes,
+)
+check_later_package13_owned()
 BASELINE = '347cfd22e65a812ae609264ff1a043cbdc87145d'
 EXISTING = {
     'common/scripted_diplomatic_actions/MD_missile_scripted_diplomatic_actions.txt',
@@ -84,6 +93,7 @@ def rows(nodes):
 
 def package12_original_bytes(path, actual):
     """Restore only six enumerated native actions or five civilian effect blocks."""
+    actual = package13_original_bytes(path, actual)
     if path not in EXISTING:
         return actual
     old = subprocess.check_output(['git','show',BASELINE + ':' + path],cwd=ROOT)
@@ -143,9 +153,9 @@ def main():
     baseline_paths=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
-    assert set(changed)|set(untracked)==EXISTING|NEW,('Unowned gameplay edits',changed,untracked)
+    assert set(changed)|set(untracked)==EXISTING|NEW|LATER_PACKAGE13_NEW,('Unowned gameplay edits',changed,untracked)
     assert set(changed).intersection(baseline_paths)==EXISTING
-    assert not NEW.intersection(baseline_paths) and set(untracked)<=NEW
+    assert not NEW.intersection(baseline_paths) and set(untracked)<=NEW|LATER_PACKAGE13_NEW
     assert len(baseline_paths)==68307
     groups['all_68305_unrelated_existing_gameplay_files_byte_preserved_and_exact_seven_additions']+=1
     action_path='common/scripted_diplomatic_actions/MD_missile_scripted_diplomatic_actions.txt'

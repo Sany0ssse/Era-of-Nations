@@ -1,0 +1,240 @@
+# Current country and peer checks, independent of inherited ROOT.
+eon_sat_gnss_mil_valid_level = { OR = { check_variable = { var_GNSS_mil_system_idx = 0 } check_variable = { var_GNSS_mil_system_idx = 1 } check_variable = { var_GNSS_mil_system_idx = 2 } check_variable = { var_GNSS_mil_system_idx = 3 } check_variable = { var_GNSS_mil_system_idx = 4 } check_variable = { var_GNSS_mil_system_idx = 5 } check_variable = { var_GNSS_mil_system_idx = 6 } check_variable = { var_GNSS_mil_system_idx = 7 } } }
+eon_sat_gnss_mil_pair_live = {
+ exists = yes
+ PREV = { exists = yes }
+ NOT = { tag = PREV }
+ NOT = { has_war_with = PREV }
+}
+eon_sat_gnss_mil_record_matches = {
+ has_country_flag = eon_sat_gnss_mil_pending
+ check_variable = { eon_sat_gnss_mil_partner = PREV.id }
+}
+eon_sat_gnss_mil_new_ready = {
+ eon_sat_gnss_mil_pair_live = yes
+ NOT = { has_country_flag = eon_sat_gnss_mil_pending }
+ NOT = { has_country_flag = eon_sat_gnss_mil_quarantine@PREV }
+ check_variable = { pending_mil_access_country = 0 }
+}
+eon_sat_gnss_mil_withdraw_ready = { exists = yes is_ai = no has_country_flag = eon_sat_gnss_mil_pending NOT = { has_country_flag = eon_sat_gnss_mil_cancelled } }
+
+eon_sat_gnss_mil_request_terms = {
+ eon_sat_gnss_mil_pair_live = yes
+ PREV = { eon_sat_gnss_mil_valid_level = yes OR = { check_variable = { var_GNSS_mil_system_idx > 0 } AND = { check_variable = { var_GNSS_mil_system_idx = 0 } check_variable = { var_GNSS_mil_sat_system_num > 0 } } } }
+ eon_sat_gnss_mil_valid_level = yes
+ OR = { check_variable = { PREV.var_GNSS_mil_system_idx = var_GNSS_mil_system_idx } check_variable = { PREV.var_GNSS_mil_system_idx > var_GNSS_mil_system_idx } }
+ NOT = { is_in_array = { array = GNSS_mil_access_array value = PREV.id } }
+ NOT = { is_in_array = { array = PREV.GNSS_mil_treaty_array value = THIS.id } }
+}
+eon_sat_gnss_mil_request_ready = { eon_sat_gnss_mil_new_ready = yes eon_sat_gnss_mil_request_terms = yes }
+eon_sat_gnss_mil_request_authorized = {
+ eon_sat_gnss_mil_record_matches = yes
+ check_variable = { eon_sat_gnss_mil_kind = 1 }
+ has_country_flag = eon_sat_gnss_mil_window
+ NOT = { has_country_flag = eon_sat_gnss_mil_cancelled }
+ eon_sat_gnss_mil_request_terms = yes
+ check_variable = { eon_sat_gnss_mil_level = PREV.var_GNSS_mil_system_idx }
+}
+
+eon_sat_gnss_mil_offer_terms = {
+ eon_sat_gnss_mil_pair_live = yes
+ eon_sat_gnss_mil_valid_level = yes OR = { check_variable = { var_GNSS_mil_system_idx > 0 } AND = { check_variable = { var_GNSS_mil_system_idx = 0 } check_variable = { var_GNSS_mil_sat_system_num > 0 } } }
+ PREV = { eon_sat_gnss_mil_valid_level = yes }
+ OR = { check_variable = { var_GNSS_mil_system_idx = PREV.var_GNSS_mil_system_idx } check_variable = { var_GNSS_mil_system_idx > PREV.var_GNSS_mil_system_idx } }
+ NOT = { is_in_array = { array = PREV.GNSS_mil_access_array value = THIS.id } }
+ NOT = { is_in_array = { array = GNSS_mil_treaty_array value = PREV.id } }
+}
+eon_sat_gnss_mil_offer_ready = { eon_sat_gnss_mil_new_ready = yes eon_sat_gnss_mil_offer_terms = yes }
+eon_sat_gnss_mil_offer_authorized = {
+ eon_sat_gnss_mil_record_matches = yes
+ check_variable = { eon_sat_gnss_mil_kind = 2 }
+ has_country_flag = eon_sat_gnss_mil_window
+ NOT = { has_country_flag = eon_sat_gnss_mil_cancelled }
+ eon_sat_gnss_mil_offer_terms = yes
+ check_variable = { eon_sat_gnss_mil_level = var_GNSS_mil_system_idx }
+}
+
+eon_sat_gnss_mil_revoke_ready = {
+ exists = yes PREV = { exists = yes } NOT = { tag = PREV }
+ OR = { is_in_array = { array = GNSS_mil_treaty_array value = PREV.id } is_in_array = { array = PREV.GNSS_mil_access_array value = THIS.id } }
+}
+
+eon_sat_com_mil_valid_level = { OR = { check_variable = { var_COM_mil_system_idx = 0 } check_variable = { var_COM_mil_system_idx = 1 } check_variable = { var_COM_mil_system_idx = 2 } check_variable = { var_COM_mil_system_idx = 3 } check_variable = { var_COM_mil_system_idx = 4 } check_variable = { var_COM_mil_system_idx = 5 } check_variable = { var_COM_mil_system_idx = 6 } check_variable = { var_COM_mil_system_idx = 7 } } }
+eon_sat_com_mil_pair_live = {
+ exists = yes
+ PREV = { exists = yes }
+ NOT = { tag = PREV }
+ NOT = { has_war_with = PREV }
+}
+eon_sat_com_mil_record_matches = {
+ has_country_flag = eon_sat_com_mil_pending
+ check_variable = { eon_sat_com_mil_partner = PREV.id }
+}
+eon_sat_com_mil_new_ready = {
+ eon_sat_com_mil_pair_live = yes
+ NOT = { has_country_flag = eon_sat_com_mil_pending }
+ NOT = { has_country_flag = eon_sat_com_mil_quarantine@PREV }
+ check_variable = { pending_mil_com_access_country = 0 }
+}
+eon_sat_com_mil_withdraw_ready = { exists = yes is_ai = no has_country_flag = eon_sat_com_mil_pending NOT = { has_country_flag = eon_sat_com_mil_cancelled } }
+
+eon_sat_com_mil_request_terms = {
+ eon_sat_com_mil_pair_live = yes
+ PREV = { eon_sat_com_mil_valid_level = yes OR = { check_variable = { var_COM_mil_system_idx > 0 } AND = { check_variable = { var_COM_mil_system_idx = 0 } check_variable = { var_COM_mil_sat_system_num > 0 } } } }
+ eon_sat_com_mil_valid_level = yes
+ OR = { check_variable = { PREV.var_COM_mil_system_idx = var_COM_mil_system_idx } check_variable = { PREV.var_COM_mil_system_idx > var_COM_mil_system_idx } }
+ NOT = { is_in_array = { array = COM_mil_access_array value = PREV.id } }
+ NOT = { is_in_array = { array = PREV.COM_mil_treaty_array value = THIS.id } }
+}
+eon_sat_com_mil_request_ready = { eon_sat_com_mil_new_ready = yes eon_sat_com_mil_request_terms = yes }
+eon_sat_com_mil_request_authorized = {
+ eon_sat_com_mil_record_matches = yes
+ check_variable = { eon_sat_com_mil_kind = 1 }
+ has_country_flag = eon_sat_com_mil_window
+ NOT = { has_country_flag = eon_sat_com_mil_cancelled }
+ eon_sat_com_mil_request_terms = yes
+ check_variable = { eon_sat_com_mil_level = PREV.var_COM_mil_system_idx }
+}
+
+eon_sat_com_mil_offer_terms = {
+ eon_sat_com_mil_pair_live = yes
+ eon_sat_com_mil_valid_level = yes OR = { check_variable = { var_COM_mil_system_idx > 0 } AND = { check_variable = { var_COM_mil_system_idx = 0 } check_variable = { var_COM_mil_sat_system_num > 0 } } }
+ PREV = { eon_sat_com_mil_valid_level = yes }
+ OR = { check_variable = { var_COM_mil_system_idx = PREV.var_COM_mil_system_idx } check_variable = { var_COM_mil_system_idx > PREV.var_COM_mil_system_idx } }
+ NOT = { is_in_array = { array = PREV.COM_mil_access_array value = THIS.id } }
+ NOT = { is_in_array = { array = COM_mil_treaty_array value = PREV.id } }
+}
+eon_sat_com_mil_offer_ready = { eon_sat_com_mil_new_ready = yes eon_sat_com_mil_offer_terms = yes }
+eon_sat_com_mil_offer_authorized = {
+ eon_sat_com_mil_record_matches = yes
+ check_variable = { eon_sat_com_mil_kind = 2 }
+ has_country_flag = eon_sat_com_mil_window
+ NOT = { has_country_flag = eon_sat_com_mil_cancelled }
+ eon_sat_com_mil_offer_terms = yes
+ check_variable = { eon_sat_com_mil_level = var_COM_mil_system_idx }
+}
+
+eon_sat_com_mil_revoke_ready = {
+ exists = yes PREV = { exists = yes } NOT = { tag = PREV }
+ OR = { is_in_array = { array = COM_mil_treaty_array value = PREV.id } is_in_array = { array = PREV.COM_mil_access_array value = THIS.id } }
+}
+
+eon_sat_spy_mil_valid_level = { OR = { check_variable = { var_SPY_mil_system_idx = 0 } check_variable = { var_SPY_mil_system_idx = 1 } check_variable = { var_SPY_mil_system_idx = 2 } check_variable = { var_SPY_mil_system_idx = 3 } check_variable = { var_SPY_mil_system_idx = 4 } check_variable = { var_SPY_mil_system_idx = 5 } check_variable = { var_SPY_mil_system_idx = 6 } check_variable = { var_SPY_mil_system_idx = 7 } } }
+eon_sat_spy_mil_pair_live = {
+ exists = yes
+ PREV = { exists = yes }
+ NOT = { tag = PREV }
+ NOT = { has_war_with = PREV }
+}
+eon_sat_spy_mil_record_matches = {
+ has_country_flag = eon_sat_spy_mil_pending
+ check_variable = { eon_sat_spy_mil_partner = PREV.id }
+}
+eon_sat_spy_mil_new_ready = {
+ eon_sat_spy_mil_pair_live = yes
+ NOT = { has_country_flag = eon_sat_spy_mil_pending }
+ NOT = { has_country_flag = eon_sat_spy_mil_quarantine@PREV }
+ check_variable = { pending_mil_spy_access_country = 0 }
+}
+eon_sat_spy_mil_withdraw_ready = { exists = yes is_ai = no has_country_flag = eon_sat_spy_mil_pending NOT = { has_country_flag = eon_sat_spy_mil_cancelled } }
+
+eon_sat_spy_mil_request_terms = {
+ eon_sat_spy_mil_pair_live = yes
+ PREV = { eon_sat_spy_mil_valid_level = yes OR = { check_variable = { var_SPY_mil_system_idx > 0 } AND = { check_variable = { var_SPY_mil_system_idx = 0 } check_variable = { var_SPY_mil_sat_system_num > 0 } } } }
+ eon_sat_spy_mil_valid_level = yes
+ OR = { check_variable = { PREV.var_SPY_mil_system_idx = var_SPY_mil_system_idx } check_variable = { PREV.var_SPY_mil_system_idx > var_SPY_mil_system_idx } }
+ NOT = { is_in_array = { array = SPY_mil_access_array value = PREV.id } }
+ NOT = { is_in_array = { array = PREV.SPY_mil_treaty_array value = THIS.id } }
+}
+eon_sat_spy_mil_request_ready = { eon_sat_spy_mil_new_ready = yes eon_sat_spy_mil_request_terms = yes }
+eon_sat_spy_mil_request_authorized = {
+ eon_sat_spy_mil_record_matches = yes
+ check_variable = { eon_sat_spy_mil_kind = 1 }
+ has_country_flag = eon_sat_spy_mil_window
+ NOT = { has_country_flag = eon_sat_spy_mil_cancelled }
+ eon_sat_spy_mil_request_terms = yes
+ check_variable = { eon_sat_spy_mil_level = PREV.var_SPY_mil_system_idx }
+}
+
+eon_sat_spy_mil_offer_terms = {
+ eon_sat_spy_mil_pair_live = yes
+ eon_sat_spy_mil_valid_level = yes OR = { check_variable = { var_SPY_mil_system_idx > 0 } AND = { check_variable = { var_SPY_mil_system_idx = 0 } check_variable = { var_SPY_mil_sat_system_num > 0 } } }
+ PREV = { eon_sat_spy_mil_valid_level = yes }
+ OR = { check_variable = { var_SPY_mil_system_idx = PREV.var_SPY_mil_system_idx } check_variable = { var_SPY_mil_system_idx > PREV.var_SPY_mil_system_idx } }
+ NOT = { is_in_array = { array = PREV.SPY_mil_access_array value = THIS.id } }
+ NOT = { is_in_array = { array = SPY_mil_treaty_array value = PREV.id } }
+}
+eon_sat_spy_mil_offer_ready = { eon_sat_spy_mil_new_ready = yes eon_sat_spy_mil_offer_terms = yes }
+eon_sat_spy_mil_offer_authorized = {
+ eon_sat_spy_mil_record_matches = yes
+ check_variable = { eon_sat_spy_mil_kind = 2 }
+ has_country_flag = eon_sat_spy_mil_window
+ NOT = { has_country_flag = eon_sat_spy_mil_cancelled }
+ eon_sat_spy_mil_offer_terms = yes
+ check_variable = { eon_sat_spy_mil_level = var_SPY_mil_system_idx }
+}
+
+eon_sat_spy_mil_revoke_ready = {
+ exists = yes PREV = { exists = yes } NOT = { tag = PREV }
+ OR = { is_in_array = { array = SPY_mil_treaty_array value = PREV.id } is_in_array = { array = PREV.SPY_mil_access_array value = THIS.id } }
+}
+
+eon_sat_spy_civ_valid_level = { OR = { check_variable = { var_SPY_civ_system_idx = 0 } check_variable = { var_SPY_civ_system_idx = 1 } check_variable = { var_SPY_civ_system_idx = 2 } check_variable = { var_SPY_civ_system_idx = 3 } check_variable = { var_SPY_civ_system_idx = 4 } check_variable = { var_SPY_civ_system_idx = 5 } check_variable = { var_SPY_civ_system_idx = 6 } check_variable = { var_SPY_civ_system_idx = 7 } } }
+eon_sat_spy_civ_pair_live = {
+ exists = yes
+ PREV = { exists = yes }
+ NOT = { tag = PREV }
+ NOT = { has_war_with = PREV }
+}
+eon_sat_spy_civ_record_matches = {
+ has_country_flag = eon_sat_spy_civ_pending
+ check_variable = { eon_sat_spy_civ_partner = PREV.id }
+}
+eon_sat_spy_civ_new_ready = {
+ eon_sat_spy_civ_pair_live = yes
+ NOT = { has_country_flag = eon_sat_spy_civ_pending }
+ NOT = { has_country_flag = eon_sat_spy_civ_quarantine@PREV }
+ check_variable = { pending_civ_spy_access_country = 0 }
+}
+eon_sat_spy_civ_withdraw_ready = { exists = yes is_ai = no has_country_flag = eon_sat_spy_civ_pending NOT = { has_country_flag = eon_sat_spy_civ_cancelled } }
+
+eon_sat_spy_civ_request_terms = {
+ eon_sat_spy_civ_pair_live = yes
+ PREV = { eon_sat_spy_civ_valid_level = yes OR = { check_variable = { var_SPY_civ_system_idx > 0 } AND = { check_variable = { var_SPY_civ_system_idx = 0 } check_variable = { var_SPY_civ_sat_system_num > 0 } } } }
+ eon_sat_spy_civ_valid_level = yes
+ OR = { check_variable = { PREV.var_SPY_civ_system_idx = var_SPY_civ_system_idx } check_variable = { PREV.var_SPY_civ_system_idx > var_SPY_civ_system_idx } }
+ NOT = { is_in_array = { array = SPY_civ_access_array value = PREV.id } }
+ NOT = { is_in_array = { array = PREV.SPY_civ_treaty_array value = THIS.id } }
+}
+eon_sat_spy_civ_request_ready = { eon_sat_spy_civ_new_ready = yes eon_sat_spy_civ_request_terms = yes }
+eon_sat_spy_civ_request_authorized = {
+ eon_sat_spy_civ_record_matches = yes
+ check_variable = { eon_sat_spy_civ_kind = 1 }
+ has_country_flag = eon_sat_spy_civ_window
+ NOT = { has_country_flag = eon_sat_spy_civ_cancelled }
+ eon_sat_spy_civ_request_terms = yes
+ check_variable = { eon_sat_spy_civ_level = PREV.var_SPY_civ_system_idx }
+}
+
+eon_sat_spy_civ_offer_terms = {
+ eon_sat_spy_civ_pair_live = yes
+ eon_sat_spy_civ_valid_level = yes OR = { check_variable = { var_SPY_civ_system_idx > 0 } AND = { check_variable = { var_SPY_civ_system_idx = 0 } check_variable = { var_SPY_civ_sat_system_num > 0 } } }
+ PREV = { eon_sat_spy_civ_valid_level = yes }
+ OR = { check_variable = { var_SPY_civ_system_idx = PREV.var_SPY_civ_system_idx } check_variable = { var_SPY_civ_system_idx > PREV.var_SPY_civ_system_idx } }
+ NOT = { is_in_array = { array = PREV.SPY_civ_access_array value = THIS.id } }
+ NOT = { is_in_array = { array = SPY_civ_treaty_array value = PREV.id } }
+}
+eon_sat_spy_civ_offer_ready = { eon_sat_spy_civ_new_ready = yes eon_sat_spy_civ_offer_terms = yes }
+eon_sat_spy_civ_offer_authorized = {
+ eon_sat_spy_civ_record_matches = yes
+ check_variable = { eon_sat_spy_civ_kind = 2 }
+ has_country_flag = eon_sat_spy_civ_window
+ NOT = { has_country_flag = eon_sat_spy_civ_cancelled }
+ eon_sat_spy_civ_offer_terms = yes
+ check_variable = { eon_sat_spy_civ_level = var_SPY_civ_system_idx }
+}
+
+eon_sat_spy_civ_revoke_ready = {
+ exists = yes PREV = { exists = yes } NOT = { tag = PREV }
+ OR = { is_in_array = { array = SPY_civ_treaty_array value = PREV.id } is_in_array = { array = PREV.SPY_civ_access_array value = THIS.id } }
+}
