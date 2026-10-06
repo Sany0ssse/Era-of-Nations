@@ -1,0 +1,25 @@
+on_actions = {
+ on_daily = { effect = { eon_support_request_daily_update = yes } }
+ # Native ROOT annexer, FROM annexed country.
+ on_annex = {
+  effect = {
+   every_country = {
+    limit = { exists = yes NOT = { tag = FROM } }
+    set_temp_variable = { eon_support_request_annexed_partner = FROM }
+    eon_support_request_annex_update = yes
+   }
+   FROM = { eon_support_request_clear_annexed_country = yes }
+  }
+ }
+ # Native ROOT annexed subject, FROM overlord.
+ on_subject_annexed = {
+  effect = {
+   every_country = {
+    limit = { exists = yes NOT = { tag = ROOT } }
+    set_temp_variable = { eon_support_request_annexed_partner = ROOT }
+    eon_support_request_annex_update = yes
+   }
+   ROOT = { eon_support_request_clear_annexed_country = yes }
+  }
+ }
+}

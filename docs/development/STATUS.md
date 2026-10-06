@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and twenty-one implementation packages are complete at
+The existing diplomacy audit and twenty-two implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -496,6 +496,61 @@ Native treasury, idea bonuses, event/action scopes, AI, timers, annexation and
 save/load require HOI4 acceptance. No game launch, save, launcher or Workshop
 changes are performed. The existing initial aid request remains the next
 consistency step before new permanent diplomatic relations and representations.
+
+## Diplomacy package 22
+
+The twenty-second package gives the existing AB_ask_foreign_support action
+an identified initial request, a 30-day review window and a guarded single
+handoff from AB_mobilization.4. The provider stores one requester's positive
+country ID and owns one pending review slot; a requester may approach several
+different providers. Formation, equipment and cash choices consume that initial
+record before opening one unchanged separate offer from packages18-20. Those
+offers retain their own recipient consent, current resource checks and execution.
+The initial request itself transfers no resources and grants no military rights.
+
+The native 50PP cost and directed 360-day cooldown remain declared once.
+There is no extra manual debit or invented PP refund. Fresh completion checks
+policy, identity, cooldown and slot state; repeated or stale callbacks cannot
+create an additional menu for the current record. Free requester withdrawal,
+matching guarded refusal, daily expiry and both annex hooks clear only the
+initial request. Active support, independent offers and other partners remain
+separate. Cancelled identity persists until matching closure or cleanup.
+
+Exactly11 game paths change: one native action, four named AB4 menu choices,
+six named rows in each English/Russian decision locale and seven new files.
+The three child trigger/effect sources retain their legacy internal API contracts
+byte-for-byte; owned22 checks belong to the actual user entry and menu router.
+Old unowned AB4 windows cannot initiate new offers, while existing child offers
+continue their own cycle. Old action/menu AI metadata and game IDs/BOM/EOL remain.
+
+Actual FRUS1947/1950 bodies inform the distinction between requests, programme
+assessment, bilateral terms and delivery. These are dated US examples, not a
+universal administrative law. UN Charter Article51 does not itself make every
+request an automatic grant or war-entry obligation. Rank restrictions, defensive
+war, opinion,50PP,360/30days and one review slot are game policy choices.
+No permanent pair ban is added; an ancient same-pair popup during a later renewed
+request cannot be distinguished by an immutable event token and remains outside
+the source proof. See [DIPLOMACY_PACKAGE_22_UK.md](DIPLOMACY_PACKAGE_22_UK.md).
+
+The frozen cumulative run passed 7508 scenarios:7414 historical-caller
+compatibility scenarios and 94 actual current22 scenarios in 28 groups.
+Separate checks passed 28 adapter semantics cases and 164 source
+checks (136 API/structure and 28 exact byte boundaries). Six original
+public regressions were captured RED and repeated GREEN. All74 prior public
+files outside the20 literal source journals remain raw-exact, including53
+behavior/helper/runner Python files. Source/review/documentation hashes are
+bound before publication.
+Native action cost timing, scopes, windows, AI, timers, annexation and save/load
+require HOI4 acceptance. The game was not launched; saves, launcher and Workshop
+were not changed.
+The next planned design is permanent diplomatic relations and representations.
+
+The7414 preceding scenarios are explicitly compatibility coverage. Only older
+package18-20 behavior callers receive exact baseline AB4.a/b/c byte views;
+unchanged child helpers and scenario assertions still execute. Current22 cases
+execute the new owned entry/router and all three child continuations separately.
+This historical caller adapter is not proof of the current22 initial entry.
+Historical source validators still inspect current bytes with exact journals.
 
 ## Completed setup
 

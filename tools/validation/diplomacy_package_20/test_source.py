@@ -17,6 +17,12 @@ from diplomacy_package_21.test_source import (
     check_owned_existing as check_later_package21_owned,
 )
 check_later_package21_owned()
+from diplomacy_package_22.test_source import (
+    NEW as LATER_PACKAGE22_NEW, package22_original_bytes, package22_historical_existing,
+    package22_original_validator_bytes, historical_actions as package22_historical_actions,
+    check_owned_existing as check_later_package22_owned,
+)
+check_later_package22_owned()
 EXISTING = {'events/00_War_events.txt'} | {f'localisation/{language}/MD_decisions_l_{language}.yml' for language in ('english', 'russian')}
 LEGACY_LOCALE_KEYS = {'AB_mobilization.4.a', 'AB_mobilization.5.t', 'AB_mobilization.5.desc'}
 FX = 'common/scripted_effects/eon_defence_formation_effects.txt'
@@ -110,6 +116,7 @@ def field_raw(data, name):
     block = found[0]; return data[block['start']:block['end']]
 
 def package20_original_bytes(path, actual):
+    if path in EXISTING and actual == baseline_bytes(path): return actual
     actual = package21_original_bytes(path,actual)
     """Restore exactly two named choices or three named locale lines, rejecting every other byte change."""
     if path not in EXISTING: return actual
@@ -141,7 +148,7 @@ def package20_historical_existing(baseline):
     return frozenset(subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', baseline, '--', *sorted(EXISTING)], cwd=ROOT).decode().splitlines())
 
 def check_owned_existing():
-    for path in sorted(EXISTING): package20_original_bytes(path, (ROOT / path).read_bytes())
+    for path in sorted(EXISTING): package20_original_bytes(path, package22_original_bytes(path,(ROOT / path).read_bytes()))
 
 def historical_actions(actions):
     actions = package21_historical_actions(actions)
@@ -976,19 +983,19 @@ def main():
     def passed(group): groups[group] += 1
     check_owned_existing()
     passed('two_named_war_options_and_three_named_lines_per_legacy_locale_are_the_only_inherited_changes')
-    raw = (ROOT / 'events/00_War_events.txt').read_bytes(); original = baseline_bytes('events/00_War_events.txt')
+    raw = package22_original_bytes('events/00_War_events.txt',(ROOT / 'events/00_War_events.txt').read_bytes()); original = baseline_bytes('events/00_War_events.txt')
     effects = {key: body for key, op, body in ast((ROOT / FX).read_bytes())}
     triggers = {key: body for key, op, body in ast((ROOT / TR).read_bytes())}
     events = {one(body,'id'):body for key,op,body in ast((ROOT / EVENTS).read_bytes()) if key == 'country_event'}
     trees = ('common/scripted_effects','common/scripted_triggers','common/scripted_diplomatic_actions','common/on_actions','events','localisation')
     changed = set(subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines())
     untracked = set(subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines())
-    changed -= (package21_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE21_NEW
-    untracked -= LATER_PACKAGE21_NEW
+    changed -= (package21_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE21_NEW | (package22_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE22_NEW
+    untracked -= LATER_PACKAGE21_NEW | LATER_PACKAGE22_NEW
     assert changed - NEW == EXISTING and (changed | untracked) - EXISTING == NEW, (changed,untracked)
     passed('exact_three_existing_and_seven_new_gameplay_paths')
     for path in NEW:
-        data = (ROOT / path).read_bytes()
+        data = package22_original_bytes(path,(ROOT / path).read_bytes())
         assert data.startswith(b'\xef\xbb\xbf') == path.endswith('.yml')
         assert b'\r' not in data.replace(b'\r\n',b'') and b'\n' not in data.replace(b'\r\n',b'')
         passed('seven_new_files_preserve_declared_CRLF_and_locale_BOM')
@@ -1018,7 +1025,7 @@ def main():
         assert definitions[key] == 1,key
         passed('twenty_four_owned_helper_IDs_globally_unique')
     for path in (FX,TR,NA,HOOKS,EVENTS):
-        for key,op,val in rows(ast((ROOT/path).read_bytes())):
+        for key,op,val in rows(ast(package22_original_bytes(path,(ROOT/path).read_bytes()))):
             if key in expected_effects | expected_triggers:
                 if not isinstance(val,list): assert val in ('yes','no')
             elif key.startswith('eon_defence_formation_') and not isinstance(val,list) and val in ('yes','no'):
@@ -1081,7 +1088,7 @@ def main():
         assert not any(key in ('add_manpower','add_equipment_to_stockpile','division_template','create_unit','change_influence_percentage') for key,op,val in rows(effects[prefix+name]))
         passed('proposal_and_assent_have_no_resource_template_create_or_influence_calls')
     for path in (FX,TR,NA,HOOKS,EVENTS):
-        nodes = ast((ROOT/path).read_bytes())
+        nodes = ast(package22_original_bytes(path,(ROOT/path).read_bytes()))
         assert not any(key in ('modify_treasury_effect','add_political_power','add_command_power','add_fuel','send_equipment','add_ideas','add_timed_idea','delete_unit','delete_units','delete_unit_template_and_units','transfer_units_fraction','add_to_faction','declare_war_on','white_peace') for key,op,val in rows(nodes))
         assert not any(key == 'country_event' and (val == 'AB_mobilization.5' or isinstance(val,list) and any(name == 'id' and value == 'AB_mobilization.5' for name,op,value in val)) for key,op,val in rows(nodes))
         passed('five_sources_have_no_cash_donor_personnel_mission_idea_foreign_command_deletion_refund_or_AB5_queue')
@@ -1137,9 +1144,9 @@ def main():
     old_game = subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--','common/on_actions','common/scripted_diplomatic_actions','common/scripted_effects','common/scripted_triggers','events','localisation'],cwd=ROOT).decode().splitlines()
     preserved += tuple(sorted(path for path in old_game if 'eon_foreign_cash_' in path or 'eon_foreign_equipment_' in path))
     for path in preserved:
-        assert package21_original_bytes(path,(ROOT/path).read_bytes()) == baseline_bytes(path),path
+        assert package21_original_bytes(path,package22_original_bytes(path,(ROOT/path).read_bytes())) == baseline_bytes(path),path
         passed('prior_cash_equipment_entry_legacy_mission_unit_and_policy_sources_whole_raw_unchanged')
-    entry = ast((ROOT/'common/scripted_diplomatic_actions/MDDC_AB_ask_foreign_support.txt').read_bytes())
+    entry = ast(package22_original_bytes('common/scripted_diplomatic_actions/MDDC_AB_ask_foreign_support.txt',(ROOT/'common/scripted_diplomatic_actions/MDDC_AB_ask_foreign_support.txt').read_bytes()))
     entry_body = one(one(entry,'scripted_diplomatic_actions'),'AB_ask_foreign_support')
     assert one(entry_body,'cost') == '50' and any(key == 'set_country_flag' and isinstance(val,list) and one(val,'days') == '360' for key,op,val in rows(entry_body))
     passed('inherited_50_PP_and_360_day_request_marker_are_nominal_declarations_not_cost_receipt_proof')
@@ -1150,19 +1157,19 @@ def main():
     assert locales['english'].keys() == locales['russian'].keys()
     passed('bilingual_localisation_key_sets_exactly_match')
     for path in (FX,NA,EVENTS):
-        for key,op,val in rows(ast((ROOT/path).read_bytes())):
+        for key,op,val in rows(ast(package22_original_bytes(path,(ROOT/path).read_bytes()))):
             if key in ('custom_effect_tooltip','tooltip','send_description','title','desc','name') and isinstance(val,str) and (val.startswith('eon_defence_formation.') or val.startswith(prefix)):
                 assert val in locales['english'],val
         passed('three_current_tooltip_action_event_locale_reference_sets_resolve')
     for path in EXISTING:
-        data = (ROOT/path).read_bytes()
+        data = package22_original_bytes(path,(ROOT/path).read_bytes())
         try: package20_original_bytes(path,data+b'# unowned memory mutation\n')
         except AssertionError: pass
         else: raise AssertionError(('Undeclared source mutation accepted',path))
         passed('memory_only_game_source_outside_two_options_or_three_locale_lines_rejected'); boundary_groups.add('memory_only_game_source_outside_two_options_or_three_locale_lines_rejected')
     assert set(HISTORICAL_SOURCE_EDITS) == {f'tools/validation/diplomacy_package_{i:02}/test_source.py' for i in range(2,20)}
     for path in sorted(HISTORICAL_SOURCE_EDITS):
-        actual = (ROOT/path).read_bytes(); original = baseline_bytes(path)
+        actual = package22_original_bytes(path,(ROOT/path).read_bytes()); original = baseline_bytes(path)
         assert package20_original_validator_bytes(path,actual) == original
         counters = lambda data:[line for line in data.splitlines() if b'groups[' in line and b'+=' in line or b'passed(' in line]
         assert counters(actual) == counters(original)
@@ -1173,7 +1180,7 @@ def main():
         passed('memory_only_whole_historical_source_mutation_rejected'); boundary_groups.add('memory_only_whole_historical_source_mutation_rejected')
     public_paths = subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--','tools/validation'],cwd=ROOT).decode().splitlines()
     untouched = [path for path in public_paths if path not in HISTORICAL_SOURCE_EDITS]
-    for path in untouched: assert package21_original_validator_bytes(path,(ROOT/path).read_bytes()) == baseline_bytes(path),path
+    for path in untouched: assert package21_original_validator_bytes(path,package22_original_bytes(path,(ROOT/path).read_bytes())) == baseline_bytes(path),path
     behavior = [path for path in untouched if path.endswith('.py') and Path(path).name != 'test_source.py']
     assert len(untouched) == 68 and len(behavior) == 49
     passed('49_prior_behavior_helper_runners_and68_other_public_files_are_whole_raw_byte_exact')

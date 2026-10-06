@@ -87,6 +87,12 @@ from diplomacy_package_21.test_source import (
     check_owned_existing as check_later_package21_owned,
 )
 check_later_package21_owned()
+from diplomacy_package_22.test_source import (
+    NEW as LATER_PACKAGE22_NEW, package22_original_bytes, package22_historical_existing,
+    package22_original_validator_bytes, historical_actions as package22_historical_actions,
+    check_owned_existing as check_later_package22_owned,
+)
+check_later_package22_owned()
 
 # Package09 independently owns exactly these eight additions and one pre-clear hook.
 LATER_PACKAGE09_NEW = {
@@ -269,11 +275,11 @@ later_mediation_paths = {
     'localisation/russian/eon_mediation_l_russian.yml',
 }
 tracked_changes = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
-tracked_changes = [path for path in tracked_changes if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | package21_historical_existing(BASELINE) | LATER_PACKAGE21_NEW]
+tracked_changes = [path for path in tracked_changes if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | package21_historical_existing(BASELINE) | LATER_PACKAGE21_NEW | package22_historical_existing(BASELINE) | LATER_PACKAGE22_NEW]
 owned_paths = {item['path'] for item in receipt}
 assert set(tracked_changes) <= owned_paths | new_paths | later_energy_paths | later_support_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unowned gameplay changes', tracked_changes)
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *game_trees], cwd=ROOT).decode().splitlines()
-untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW]
+untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW | LATER_PACKAGE22_NEW]
 assert set(untracked) <= new_paths | later_negotiation_paths | later_support_new_paths | later_consultation_paths | later_mediation_paths | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW | {'common/scripted_triggers/eon_energy_capacity_triggers.txt'}, ('Unowned new gameplay files', untracked)
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *game_trees], cwd=ROOT).decode().splitlines()
 assert not set(new_paths).intersection(baseline_paths), 'New files overwrite existing baseline sources'

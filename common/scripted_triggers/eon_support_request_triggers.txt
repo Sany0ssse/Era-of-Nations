@@ -1,0 +1,65 @@
+# Native action ROOT requester / THIS provider. Menu ROOT provider / FROM
+# requester. The requester is explicit so provider ROOT cannot reverse policy.
+eon_support_request_policy_allowed = {
+ exists = yes
+ OR = { has_idea = large_power has_idea = great_power has_idea = superpower }
+ check_variable = { eon_support_request_policy_requester > 0 }
+ var:eon_support_request_policy_requester = {
+  exists = yes
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_support_request_policy_requester }
+  has_defensive_war = yes
+  OR = { has_idea = non_power has_idea = minor_power has_idea = regional_power }
+  NOT = { has_war_with = PREV }
+  PREV = { has_opinion = { target = PREV value > 49 } }
+ }
+}
+
+# A known extinct country still identifies its own request for local cleanup.
+eon_support_request_partner_identified = {
+ check_variable = { eon_support_request_partner > 0 }
+ var:eon_support_request_partner = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_support_request_partner }
+ }
+}
+eon_support_request_slot_ready = {
+ NOT = { has_country_flag = eon_support_request_pending }
+ NOT = { has_country_flag = eon_support_request_live }
+ NOT = { has_country_flag = eon_support_request_cancelled }
+ check_variable = { eon_support_request_partner = 0 }
+}
+eon_support_request_action_ready = {
+ eon_support_request_slot_ready = yes
+ set_temp_variable = { eon_support_request_policy_requester = ROOT }
+ eon_support_request_policy_allowed = yes
+ NOT = { has_country_flag = aid_request_cd_@ROOT }
+}
+
+# Pair ownership permits safe closure; eligibility is checked separately.
+eon_support_request_menu_pending = {
+ OR = { exists = yes exists = no }
+ has_country_flag = eon_support_request_pending
+ eon_support_request_partner_identified = yes
+ check_variable = { eon_support_request_partner = FROM }
+ FROM = { OR = { exists = yes exists = no } NOT = { tag = PREV } }
+}
+eon_support_request_menu_ready = {
+ eon_support_request_menu_pending = yes
+ has_country_flag = eon_support_request_live
+ NOT = { has_country_flag = eon_support_request_cancelled }
+ set_temp_variable = { eon_support_request_policy_requester = FROM }
+ eon_support_request_policy_allowed = yes
+}
+
+# Native withdrawal ROOT requester / THIS provider; never a child agreement.
+eon_support_request_withdraw_available = {
+ exists = yes
+ has_country_flag = eon_support_request_pending
+ has_country_flag = eon_support_request_live
+ eon_support_request_partner_identified = yes
+ check_variable = { eon_support_request_partner = ROOT }
+ NOT = { has_country_flag = eon_support_request_cancelled }
+ ROOT = { exists = yes NOT = { tag = PREV } }
+}

@@ -28,9 +28,12 @@ scripted_diplomatic_actions = {
 			tooltip = AB_ASK_FOREIGN_SUPPORT_TOOLTIP
 			THIS = {
 				NOT = { has_country_flag = aid_request_cd_@ROOT }
+				eon_support_request_action_ready = yes
 			}
 		}
 	}
+
+	can_be_sent = { eon_support_request_action_ready = yes }
 
 	cost = 50
 	requires_acceptance = no
@@ -45,10 +48,7 @@ scripted_diplomatic_actions = {
 	
 	complete_effect = {
 		log = "[GetDateText]: [Root.GetName]: diplomatic action complete_effect AB_ask_foreign_support"
-		FROM = {
-			country_event = { id = AB_mobilization.4 days = 1 }
-			set_country_flag = { flag = aid_request_cd_@ROOT days = 360 value = 1 }
-		}
+		eon_support_request_send_request = yes
 	}
 	
 	reject_effect = {

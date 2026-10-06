@@ -1,0 +1,106 @@
+# Only the initial request is owned here. Child support retains its own API,
+# assent, resources and lifecycle. Native political-power charging is not scripted.
+eon_support_request_clear_pending = {
+ clr_country_flag = eon_support_request_pending
+ clr_country_flag = eon_support_request_live
+ clr_country_flag = eon_support_request_cancelled
+ clear_variable = eon_support_request_partner
+}
+eon_support_request_send_request = {
+ if = {
+  limit = { eon_support_request_action_ready = yes }
+  set_variable = { eon_support_request_partner = ROOT }
+  set_country_flag = eon_support_request_pending
+  set_country_flag = { flag = eon_support_request_live days = 30 value = 1 }
+  clr_country_flag = eon_support_request_cancelled
+  set_country_flag = { flag = aid_request_cd_@ROOT days = 360 value = 1 }
+  country_event = { id = AB_mobilization.4 days = 1 }
+ }
+}
+eon_support_request_handoff_formation = {
+ if = {
+  limit = { eon_support_request_menu_ready = yes eon_defence_formation_offer_ready = yes }
+  # Consume before the unchanged child helper sees the provider ROOT frame.
+  eon_support_request_clear_pending = yes
+  eon_defence_formation_send_offer = yes
+ }
+}
+eon_support_request_handoff_equipment = {
+ if = {
+  limit = { eon_support_request_menu_ready = yes eon_foreign_equipment_offer_ready = yes }
+  # Consume before the unchanged child helper sees the provider ROOT frame.
+  eon_support_request_clear_pending = yes
+  eon_foreign_equipment_send_offer = yes
+ }
+}
+eon_support_request_handoff_cash = {
+ if = {
+  limit = { eon_support_request_menu_ready = yes eon_foreign_cash_offer_ready = yes }
+  # Consume before the unchanged child helper sees the provider ROOT frame.
+  eon_support_request_clear_pending = yes
+  eon_foreign_cash_send_offer = yes
+ }
+}
+eon_support_request_decline_request = {
+ if = {
+  limit = { eon_support_request_menu_pending = yes }
+  if = {
+   limit = { eon_support_request_menu_ready = yes }
+   eon_support_request_clear_pending = yes
+   FROM = { country_event = AB_mobilization.8 }
+  }
+  else = { eon_support_request_clear_pending = yes }
+ }
+}
+eon_support_request_withdraw_request = {
+ if = {
+  limit = { eon_support_request_withdraw_available = yes }
+  # Keep pair identity until the matching menu closes or its deadline passes.
+  set_country_flag = eon_support_request_cancelled
+  country_event = { id = eon_support_request.1 }
+ }
+}
+eon_support_request_daily_update = {
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_support_request_pending }
+   OR = {
+    has_country_flag = eon_support_request_live
+    has_country_flag = eon_support_request_cancelled
+    NOT = { check_variable = { eon_support_request_partner = 0 } }
+   }
+  }
+  eon_support_request_clear_pending = yes
+ }
+ if = {
+  limit = {
+   has_country_flag = eon_support_request_pending
+   OR = {
+    exists = no
+    NOT = { eon_support_request_partner_identified = yes }
+    NOT = { has_country_flag = eon_support_request_live }
+    var:eon_support_request_partner = {
+     OR = {
+      exists = no
+      NOT = { has_defensive_war = yes }
+      has_war_with = PREV
+     }
+    }
+   }
+  }
+  eon_support_request_clear_pending = yes
+  country_event = { id = eon_support_request.2 }
+ }
+}
+eon_support_request_annex_update = {
+ if = {
+  limit = {
+   has_country_flag = eon_support_request_pending
+   check_variable = { eon_support_request_partner = eon_support_request_annexed_partner }
+  }
+  eon_support_request_clear_pending = yes
+ }
+}
+eon_support_request_clear_annexed_country = {
+ eon_support_request_clear_pending = yes
+}

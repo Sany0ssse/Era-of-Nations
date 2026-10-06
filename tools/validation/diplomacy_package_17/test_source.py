@@ -39,6 +39,12 @@ from diplomacy_package_21.test_source import (
     check_owned_existing as check_later_package21_owned,
 )
 check_later_package21_owned()
+from diplomacy_package_22.test_source import (
+    NEW as LATER_PACKAGE22_NEW, package22_original_bytes, package22_historical_existing,
+    package22_original_validator_bytes, historical_actions as package22_historical_actions,
+    check_owned_existing as check_later_package22_owned,
+)
+check_later_package22_owned()
 EXISTING = {'events/00_Influence_events.txt'}
 FX = 'common/scripted_effects/eon_services_effects.txt'
 TR = 'common/scripted_triggers/eon_services_triggers.txt'
@@ -761,8 +767,8 @@ def main():
              'portraits', 'tutorial', 'descriptions', 'scenario_tests', 'descriptor.mod', 'era_of_nations.mod', 'thumbnail.png')
     changed = set(subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines())
     untracked = set(subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines())
-    changed -= package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | (package21_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE21_NEW
-    untracked -= LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW
+    changed -= package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | (package21_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE21_NEW | (package22_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE22_NEW
+    untracked -= LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW | LATER_PACKAGE22_NEW
     assert changed - NEW == EXISTING and (changed | untracked) - EXISTING == NEW, (changed, untracked)
     assert not subprocess.check_output(['git', 'diff', '--name-only', '--diff-filter=D', BASELINE, '--', *trees], cwd=ROOT).strip()
     passed('exact_full_gameplay_tree_one_existing_seven_new_without_unowned_deletions')

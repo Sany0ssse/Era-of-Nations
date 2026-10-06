@@ -53,6 +53,12 @@ from diplomacy_package_21.test_source import (
     check_owned_existing as check_later_package21_owned,
 )
 check_later_package21_owned()
+from diplomacy_package_22.test_source import (
+    NEW as LATER_PACKAGE22_NEW, package22_original_bytes, package22_historical_existing,
+    package22_original_validator_bytes, historical_actions as package22_historical_actions,
+    check_owned_existing as check_later_package22_owned,
+)
+check_later_package22_owned()
 BASELINE = 'f25dcfa040df4de947fe87e7a70f8f5fdd9ed659'
 OWNED = {
  'common/scripted_triggers/eon_satellite_triggers.txt': {'eon_sat_gnss_request_terms','eon_sat_gnss_offer_terms','eon_sat_com_request_terms','eon_sat_com_offer_terms'},
@@ -233,15 +239,15 @@ def main():
     trees=('common','history','events','interface','gfx','localisation','music','map','sound','portraits','tutorial','descriptions','scenario_tests','descriptor.mod','era_of_nations.mod','thumbnail.png')
     before=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
-    changed=[path for path in changed if path not in package15_historical_existing(BASELINE)-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | package21_historical_existing(BASELINE) | LATER_PACKAGE21_NEW]
+    changed=[path for path in changed if path not in package15_historical_existing(BASELINE)-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | package21_historical_existing(BASELINE) | LATER_PACKAGE21_NEW | package22_historical_existing(BASELINE) | LATER_PACKAGE22_NEW]
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
-    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW]
+    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW | LATER_PACKAGE22_NEW]
     assert len(before)==68321 and set(changed)==EXISTING and not untracked and not NEW
     groups['all_68315_unrelated_gameplay_files_byte_preserved_no_gameplay_additions']+=1
     native=[]
     for path in before:
         if path.startswith('common/scripted_diplomatic_actions/') and path.endswith('.txt'):
-            data=package15_original_bytes(path,package16_original_bytes(path,(ROOT/path).read_bytes()));assert data==baseline_bytes(path),('Native visibility_cost_consent_AI_weights_or_scope_modified',path)
+            data=package15_original_bytes(path,package16_original_bytes(path,package22_original_bytes(path,(ROOT/path).read_bytes())));assert data==baseline_bytes(path),('Native visibility_cost_consent_AI_weights_or_scope_modified',path)
             native.extend(b['key'] for b in boundary_blocks(data) if b['depth']==1 and b['parent']=='scripted_diplomatic_actions')
     assert len(native)==len(set(native))==65
     groups['all_65_native_IDs_and_all_native_action_bytes_weights_and_lifecycle_preserved']+=1
