@@ -1,0 +1,217 @@
+add_namespace = eon_mediation
+
+country_event = {
+	id = eon_mediation.10
+	title = eon_mediation_mediator_deescalation_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } eon_mediation_cancelled_current = yes } text = eon_mediation_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } eon_mediation_mediator_response_valid = yes NOT = { eon_mediation_cancelled_current = yes } } text = eon_mediation_mediator_deescalation_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } NOT = { eon_mediation_mediator_response_valid = yes } NOT = { eon_mediation_cancelled_current = yes } } text = eon_mediation_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_accept
+		trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } eon_mediation_mediator_response_valid = yes }
+		set_temp_variable = { eon_mediation_response_topic = 1 }
+		eon_mediation_accept_mediator = yes
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 1.5
+				has_opinion = { target = FROM value > 50 }
+				var:eon_mediation_party_b = { ROOT = { has_opinion = { target = PREV value > 50 } } }
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_opinion = { target = FROM value < -25 }
+					var:eon_mediation_party_b = { ROOT = { has_opinion = { target = PREV value < -25 } } }
+				}
+			}
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_response_topic = 1 } NOT = { eon_mediation_mediator_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_decline
+		trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } always = yes }
+		set_temp_variable = { eon_mediation_response_topic = 1 }
+		eon_mediation_refuse_mediator = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation.11
+	title = eon_mediation_mediator_humanitarian_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } eon_mediation_cancelled_current = yes } text = eon_mediation_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } eon_mediation_mediator_response_valid = yes NOT = { eon_mediation_cancelled_current = yes } } text = eon_mediation_mediator_humanitarian_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } NOT = { eon_mediation_mediator_response_valid = yes } NOT = { eon_mediation_cancelled_current = yes } } text = eon_mediation_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_accept
+		trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } eon_mediation_mediator_response_valid = yes }
+		set_temp_variable = { eon_mediation_response_topic = 2 }
+		eon_mediation_accept_mediator = yes
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 1.5
+				has_opinion = { target = FROM value > 50 }
+				var:eon_mediation_party_b = { ROOT = { has_opinion = { target = PREV value > 50 } } }
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_opinion = { target = FROM value < -25 }
+					var:eon_mediation_party_b = { ROOT = { has_opinion = { target = PREV value < -25 } } }
+				}
+			}
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_response_topic = 2 } NOT = { eon_mediation_mediator_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_decline
+		trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } always = yes }
+		set_temp_variable = { eon_mediation_response_topic = 2 }
+		eon_mediation_refuse_mediator = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation.20
+	title = eon_mediation_opponent_deescalation_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } eon_mediation_cancelled_current = yes } text = eon_mediation_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } eon_mediation_opponent_response_valid = yes NOT = { eon_mediation_cancelled_current = yes } } text = eon_mediation_opponent_deescalation_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } NOT = { eon_mediation_opponent_response_valid = yes } NOT = { eon_mediation_cancelled_current = yes } } text = eon_mediation_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_accept
+		trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } eon_mediation_opponent_response_valid = yes }
+		set_temp_variable = { eon_mediation_response_topic = 1 }
+		eon_mediation_accept_opponent = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 0.5 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_response_topic = 1 } NOT = { eon_mediation_opponent_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_decline
+		trigger = { set_temp_variable = { eon_mediation_response_topic = 1 } always = yes }
+		set_temp_variable = { eon_mediation_response_topic = 1 }
+		eon_mediation_refuse_opponent = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = {
+	id = eon_mediation.21
+	title = eon_mediation_opponent_humanitarian_title
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } eon_mediation_cancelled_current = yes } text = eon_mediation_cancelled_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } eon_mediation_opponent_response_valid = yes NOT = { eon_mediation_cancelled_current = yes } } text = eon_mediation_opponent_humanitarian_desc }
+	desc = { trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } NOT = { eon_mediation_opponent_response_valid = yes } NOT = { eon_mediation_cancelled_current = yes } } text = eon_mediation_stale_desc }
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = {
+		name = eon_mediation_accept
+		trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } eon_mediation_opponent_response_valid = yes }
+		set_temp_variable = { eon_mediation_response_topic = 2 }
+		eon_mediation_accept_opponent = yes
+		ai_chance = {
+			factor = 2
+			modifier = { factor = 2 has_opinion = { target = FROM value > 50 } }
+			modifier = { factor = 0.5 has_opinion = { target = FROM value < -25 } }
+			modifier = { factor = 0 set_temp_variable = { eon_mediation_response_topic = 2 } NOT = { eon_mediation_opponent_response_valid = yes } }
+		}
+	}
+	option = {
+		name = eon_mediation_decline
+		trigger = { set_temp_variable = { eon_mediation_response_topic = 2 } always = yes }
+		set_temp_variable = { eon_mediation_response_topic = 2 }
+		eon_mediation_refuse_opponent = yes
+		ai_chance = { factor = 1 }
+	}
+}
+
+# Static result notice: acknowledgement cannot alter a current mediation.
+country_event = {
+	id = eon_mediation.30
+	title = eon_mediation.30.t
+	desc = eon_mediation.30.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter a current mediation.
+country_event = {
+	id = eon_mediation.31
+	title = eon_mediation.31.t
+	desc = eon_mediation.31.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter a current mediation.
+country_event = {
+	id = eon_mediation.32
+	title = eon_mediation.32.t
+	desc = eon_mediation.32.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter a current mediation.
+country_event = {
+	id = eon_mediation.33
+	title = eon_mediation.33.t
+	desc = eon_mediation.33.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter a current mediation.
+country_event = {
+	id = eon_mediation.34
+	title = eon_mediation.34.t
+	desc = eon_mediation.34.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter a current mediation.
+country_event = {
+	id = eon_mediation.35
+	title = eon_mediation.35.t
+	desc = eon_mediation.35.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter a current mediation.
+country_event = {
+	id = eon_mediation.36
+	title = eon_mediation.36.t
+	desc = eon_mediation.36.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_ack }
+}
+
+# Static result notice: acknowledgement cannot alter a current mediation.
+country_event = {
+	id = eon_mediation.37
+	title = eon_mediation.37.t
+	desc = eon_mediation.37.desc
+	picture = GFX_handshake_black
+	is_triggered_only = yes
+	option = { name = eon_mediation_ack }
+}

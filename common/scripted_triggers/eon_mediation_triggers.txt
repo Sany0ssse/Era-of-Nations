@@ -1,0 +1,149 @@
+# Native action ROOT = initiator, THIS = mediator. Decision THIS = A, FROM = B.
+# These records authorize only nonbinding talks between the three named actors.
+eon_mediation_origin_linked = {
+ has_country_flag = eon_mediation_reserved
+ check_variable = { eon_mediation_party_a = PREV.eon_mediation_party_a }
+ check_variable = { eon_mediation_party_b = PREV.eon_mediation_party_b }
+ check_variable = { eon_mediation_mediator = PREV.eon_mediation_mediator }
+}
+eon_mediation_origin_matches = {
+ eon_mediation_origin_linked = yes
+ check_variable = { eon_mediation_phase = PREV.eon_mediation_phase }
+ check_variable = { eon_mediation_topic = PREV.eon_mediation_topic }
+}
+eon_mediation_owner_known = {
+ has_country_flag = eon_mediation_reserved
+ OR = {
+  check_variable = { eon_mediation_party_a = THIS }
+  check_variable = { eon_mediation_mediator = THIS }
+  check_variable = { eon_mediation_party_b = THIS }
+ }
+}
+eon_mediation_record_current = {
+ eon_mediation_owner_known = yes
+ check_variable = { eon_mediation_party_a > 0 }
+ check_variable = { eon_mediation_mediator > 0 }
+ NOT = { check_variable = { eon_mediation_party_a = eon_mediation_mediator } }
+ OR = {
+  AND = { check_variable = { eon_mediation_phase = 0 } check_variable = { eon_mediation_topic = 0 } check_variable = { eon_mediation_party_b = 0 } }
+  AND = {
+   OR = { check_variable = { eon_mediation_phase = 1 } check_variable = { eon_mediation_phase = 2 } check_variable = { eon_mediation_phase = 3 } }
+   OR = { check_variable = { eon_mediation_topic = 1 } check_variable = { eon_mediation_topic = 2 } }
+   check_variable = { eon_mediation_party_b > 0 }
+   NOT = { check_variable = { eon_mediation_party_b = eon_mediation_party_a } }
+   NOT = { check_variable = { eon_mediation_party_b = eon_mediation_mediator } }
+  }
+ }
+}
+eon_mediation_state_consistent = {
+ eon_mediation_record_current = yes
+ var:eon_mediation_party_a = { eon_mediation_origin_matches = yes eon_mediation_record_current = yes }
+ var:eon_mediation_mediator = { eon_mediation_origin_matches = yes eon_mediation_record_current = yes }
+ if = { limit = { check_variable = { eon_mediation_party_b > 0 } } var:eon_mediation_party_b = { eon_mediation_origin_matches = yes eon_mediation_record_current = yes } }
+}
+# Neutrality is a conservative game filter, not a complete international-law test.
+eon_mediation_neutral_to_actor = {
+ exists = yes
+ is_subject = no
+ NOT = { tag = var:eon_mediation_actor_a }
+ NOT = { has_war_with = var:eon_mediation_actor_a }
+ NOT = { has_war_together_with = var:eon_mediation_actor_a }
+ NOT = { is_in_faction_with = var:eon_mediation_actor_a }
+}
+eon_mediation_pair_available = {
+ var:eon_mediation_actor_a = {
+  NOT = { has_country_flag = eon_mediation_retired_pair@PREV }
+  NOT = { has_country_flag = eon_mediation_recent_contact@PREV }
+  PREV = {
+   NOT = { has_country_flag = eon_mediation_retired_pair@PREV }
+   NOT = { has_country_flag = eon_mediation_recent_contact@PREV }
+  }
+ }
+}
+eon_mediation_open_ready = {
+ set_temp_variable = { eon_mediation_actor_a = ROOT }
+ eon_mediation_neutral_to_actor = yes
+ eon_mediation_pair_available = yes
+ NOT = { has_country_flag = eon_mediation_reserved }
+ ROOT = { exists = yes is_ai = no has_war = yes NOT = { has_country_flag = eon_mediation_reserved } }
+}
+eon_mediation_draft_current = {
+ eon_mediation_state_consistent = yes
+ check_variable = { eon_mediation_party_a = THIS }
+ check_variable = { eon_mediation_phase = 0 }
+}
+eon_mediation_conflict_current = {
+ var:eon_mediation_party_a = { exists = yes has_war_with = var:eon_mediation_party_b }
+ var:eon_mediation_party_b = { exists = yes has_war_with = var:eon_mediation_party_a }
+ set_temp_variable = { eon_mediation_actor_a = eon_mediation_party_a }
+ var:eon_mediation_mediator = { eon_mediation_neutral_to_actor = yes }
+ set_temp_variable = { eon_mediation_actor_a = eon_mediation_party_b }
+ var:eon_mediation_mediator = { eon_mediation_neutral_to_actor = yes }
+}
+# Decision caller = acting A, FROM = selected B; never use native-action THIS=B.
+eon_mediation_selection_ready = {
+ eon_mediation_draft_current = yes
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_mediation_draft_window
+ NOT = { has_political_power < 20 }
+ has_war_with = FROM
+ OR = { check_variable = { eon_mediation_proposed_topic = 1 } check_variable = { eon_mediation_proposed_topic = 2 } }
+ set_temp_variable = { eon_mediation_actor_a = THIS }
+ var:eon_mediation_mediator = {
+  has_country_flag = eon_mediation_draft_window
+  eon_mediation_neutral_to_actor = yes
+  eon_mediation_pair_available = yes
+ }
+ FROM = {
+  exists = yes
+  NOT = { tag = PREV }
+  has_war_with = PREV
+  NOT = { has_country_flag = eon_mediation_reserved }
+  NOT = { tag = var:PREV.eon_mediation_mediator }
+ }
+ set_temp_variable = { eon_mediation_actor_a = FROM }
+ var:eon_mediation_mediator = { eon_mediation_neutral_to_actor = yes eon_mediation_pair_available = yes }
+}
+eon_mediation_mediator_pair_current = {
+ eon_mediation_state_consistent = yes
+ check_variable = { eon_mediation_mediator = THIS }
+ check_variable = { eon_mediation_party_a = FROM }
+ check_variable = { eon_mediation_phase = 1 }
+ check_variable = { eon_mediation_topic = eon_mediation_response_topic }
+ OR = { check_variable = { eon_mediation_response_topic = 1 } check_variable = { eon_mediation_response_topic = 2 } }
+}
+eon_mediation_opponent_pair_current = {
+ eon_mediation_state_consistent = yes
+ check_variable = { eon_mediation_party_b = THIS }
+ check_variable = { eon_mediation_mediator = FROM }
+ check_variable = { eon_mediation_phase = 2 }
+ check_variable = { eon_mediation_topic = eon_mediation_response_topic }
+ OR = { check_variable = { eon_mediation_response_topic = 1 } check_variable = { eon_mediation_response_topic = 2 } }
+}
+eon_mediation_request_valid = {
+ eon_mediation_conflict_current = yes
+ has_country_flag = eon_mediation_response_window
+ NOT = { has_country_flag = eon_mediation_cancelled }
+ var:eon_mediation_party_a = { has_country_flag = eon_mediation_response_window NOT = { has_country_flag = eon_mediation_cancelled } }
+ var:eon_mediation_party_b = { has_country_flag = eon_mediation_response_window NOT = { has_country_flag = eon_mediation_cancelled } }
+ var:eon_mediation_mediator = { has_country_flag = eon_mediation_response_window NOT = { has_country_flag = eon_mediation_cancelled } }
+}
+eon_mediation_mediator_response_valid = { eon_mediation_mediator_pair_current = yes eon_mediation_request_valid = yes }
+eon_mediation_opponent_response_valid = { eon_mediation_opponent_pair_current = yes eon_mediation_request_valid = yes }
+eon_mediation_cancelled_current = {
+ OR = { eon_mediation_mediator_pair_current = yes eon_mediation_opponent_pair_current = yes }
+ OR = {
+  has_country_flag = eon_mediation_cancelled
+  var:eon_mediation_party_a = { has_country_flag = eon_mediation_cancelled }
+  var:eon_mediation_party_b = { has_country_flag = eon_mediation_cancelled }
+  var:eon_mediation_mediator = { has_country_flag = eon_mediation_cancelled }
+ }
+}
+# Action THIS = another participant, ROOT = withdrawing participant.
+eon_mediation_withdraw_ready = {
+ eon_mediation_state_consistent = yes
+ NOT = { tag = ROOT }
+ NOT = { has_country_flag = eon_mediation_cancelled }
+ ROOT = { is_ai = no eon_mediation_origin_matches = yes eon_mediation_record_current = yes }
+}

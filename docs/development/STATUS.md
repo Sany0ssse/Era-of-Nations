@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and seven implementation packages are complete at
+The existing diplomacy audit and eight implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -87,8 +87,20 @@ exactly seven new game files were added. Independent source review and native
 documentation checks passed; native compilation, GUI, timers, scopes, AI,
 save/load and campaign acceptance remain pending. See
 [DIPLOMACY_PACKAGE_07_UK.md](DIPLOMACY_PACKAGE_07_UK.md).
-Next implementation scope is consensual mediation with defined participants
-and a selected subject; execution of peace needs separate multiwar acceptance.
+The eighth package adds a bounded three-country mediation mandate. A human
+initiator selects a specific opponent and a deescalation or humanitarian agenda
+through targeted decisions. A 20PP send, explicit mediator consent and separate
+opponent consent precede the 30-day mandate. Each participant can withdraw;
+current war/neutrality, reciprocal identities, callbacks, expiry and annex
+cleanup are guarded. No peace, access, territory or treasury effect follows
+from the mandate. Forced unresolved cleanup permanently retires the A/M and
+M/B channels; another eligible mediator remains possible. Source models passed
+5151 cumulative scenarios (209 new), with 301 new source checks and
+68277 preserved old gameplay files. Native compilation, decision/GUI
+scopes, timers, AI, save/load and campaign acceptance remain unverified.
+See [DIPLOMACY_PACKAGE_08_UK.md](DIPLOMACY_PACKAGE_08_UK.md).
+Next scope is concrete consented terms and revision; actual peace execution
+requires separate native multiwar/subject/faction acceptance.
 
 ## Completed setup
 

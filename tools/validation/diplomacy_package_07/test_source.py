@@ -27,6 +27,19 @@ NEW_ACTIONS = {
     'eon_end_economic_consultations',
     'eon_consultation_offer_economic_aid',
 }
+# Package 08 independently protects the exact nine additions and every old game byte.
+LATER_PACKAGE08_NEW = {
+    'common/scripted_effects/eon_mediation_effects.txt',
+    'common/scripted_triggers/eon_mediation_triggers.txt',
+    'common/scripted_diplomatic_actions/eon_mediation_actions.txt',
+    'common/decisions/eon_mediation_decisions.txt',
+    'common/decisions/categories/eon_mediation_categories.txt',
+    'common/on_actions/eon_mediation_on_actions.txt',
+    'events/eon_mediation_events.txt',
+    'localisation/english/eon_mediation_l_english.yml',
+    'localisation/russian/eon_mediation_l_russian.yml',
+}
+LATER_PACKAGE08_ACTIONS = {'eon_request_war_mediation', 'eon_withdraw_mediation'}
 TREES = ('common', 'history', 'events', 'interface', 'gfx', 'localisation', 'music', 'map', 'sound',
          'portraits', 'tutorial', 'descriptions', 'scenario_tests', 'descriptor.mod', 'era_of_nations.mod', 'thumbnail.png')
 groups, receipts, sources, helpers, helper_kinds = Counter(), [], {}, {}, {}
@@ -58,10 +71,10 @@ assert structural_helpers <= helpers.keys(), ('Missing exclusive role and pair-b
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == NEW, ('Unexpected package 07 gameplay source boundary', changed, untracked)
+assert set(changed) | set(untracked) == NEW | LATER_PACKAGE08_NEW, ('Unexpected package 07 gameplay source boundary', changed, untracked)
 assert not set(changed).intersection(baseline_paths), 'Existing gameplay bytes changed'
 assert not NEW.intersection(baseline_paths), 'New consultation source overwrites old game files'
-assert set(untracked) <= NEW
+assert set(untracked) <= NEW | LATER_PACKAGE08_NEW
 groups['all_existing_gameplay_bytes_preserved_and_exact_seven_additions'] += 1
 
 old_actions = {b['key'] for path in baseline_paths
@@ -71,8 +84,8 @@ old_actions = {b['key'] for path in baseline_paths
 actions = [b['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
            for b in blocks(path.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1]
 assert len(old_actions) == 58
-assert len(actions) == len(set(actions)) == 62
-assert set(actions) == old_actions | NEW_ACTIONS
+assert len(actions) == len(set(actions)) == 64
+assert set(actions) == old_actions | NEW_ACTIONS | LATER_PACKAGE08_ACTIONS
 groups['all_58_existing_native_action_IDs_and_four_additions'] += 1
 
 native_actions = one(sources['common/scripted_diplomatic_actions/eon_consultation_actions.txt'], 'scripted_diplomatic_actions')

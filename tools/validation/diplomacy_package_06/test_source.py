@@ -50,6 +50,20 @@ LATER_PACKAGE07_ACTIONS = {
     'eon_end_economic_consultations', 'eon_consultation_offer_economic_aid',
 }
 
+# Package 08 independently protects the exact nine-file addition and old game bytes.
+LATER_PACKAGE08_NEW = {
+    'common/scripted_effects/eon_mediation_effects.txt',
+    'common/scripted_triggers/eon_mediation_triggers.txt',
+    'common/scripted_diplomatic_actions/eon_mediation_actions.txt',
+    'common/decisions/eon_mediation_decisions.txt',
+    'common/decisions/categories/eon_mediation_categories.txt',
+    'common/on_actions/eon_mediation_on_actions.txt',
+    'events/eon_mediation_events.txt',
+    'localisation/english/eon_mediation_l_english.yml',
+    'localisation/russian/eon_mediation_l_russian.yml',
+}
+LATER_PACKAGE08_ACTIONS = {'eon_request_war_mediation', 'eon_withdraw_mediation'}
+
 @lru_cache(maxsize=None)
 def before(path):
     return subprocess.check_output(['git', 'show', BASELINE + ':' + path], cwd=ROOT)
@@ -292,8 +306,8 @@ old_action_ids = {b['key'] for path in baseline_paths if path.startswith('common
                   for b in blocks(before(path)) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1}
 action_ids = [b['key'] for path in (ROOT / 'common/scripted_diplomatic_actions').glob('*.txt')
               for b in blocks(path.read_bytes()) if b['parent'] == 'scripted_diplomatic_actions' and b['depth'] == 1]
-assert len(old_action_ids) == 57 and len(action_ids) == len(set(action_ids)) == 62
-assert set(action_ids) == old_action_ids | {'eon_withdraw_economic_aid'} | LATER_PACKAGE07_ACTIONS
+assert len(old_action_ids) == 57 and len(action_ids) == len(set(action_ids)) == 64
+assert set(action_ids) == old_action_ids | {'eon_withdraw_economic_aid'} | LATER_PACKAGE07_ACTIONS | LATER_PACKAGE08_ACTIONS
 groups['all57_previous_action_IDs_and_one_addition'] += 1
 
 locale = {}
@@ -375,8 +389,8 @@ if docs.exists():
 TREES = ('common', 'history', 'events', 'interface', 'gfx', 'localisation', 'music', 'map', 'sound')
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE07_NEW, ('Unexpected package06 gameplay scope', changed, untracked)
-assert set(untracked) <= NEW | LATER_PACKAGE07_NEW, ('Unowned new source', untracked)
+assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW, ('Unexpected package06 gameplay scope', changed, untracked)
+assert set(untracked) <= NEW | LATER_PACKAGE07_NEW | LATER_PACKAGE08_NEW, ('Unowned new source', untracked)
 assert not set(NEW).intersection(baseline_paths), 'New support file overwrites original source'
 groups['exact14_file_whole_gameplay_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,
