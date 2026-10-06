@@ -592,6 +592,21 @@ Native scopes, response timers, windows, AI, actual influence, annexation and
 save/load require new-campaign acceptance. The game was not launched; saves,
 launcher and Workshop were not changed.
 
+The separate Shift+R feature enables existing mod cheat decisions for the
+player's country even with both global cheat rules disabled. A second press
+disables the personal override and restores normal rule-based access; it does
+not change global rules or another player's access. The native console is not
+unlocked. All multiplayer participants need the same mod version. See
+[CHEAT_HOTKEY_UK.md](CHEAT_HOTKEY_UK.md) for usage and acceptance steps.
+Current source/model checks passed 28568 assertions (including 28160 visibility
+truth-table rows) and 179 byte checks. All 102 previous validation files remain
+raw-exact. Current scoped package 22/23 behavior models also passed 94/147
+scenarios. The earlier cumulative 7655 result belongs to diplomacy commit
+79c35a0673186223256a5146e7e2bb6809f5fe5f; it was not rerun against this new
+feature. The dated whole-game source inventories retain their original closed
+scope. Native Shift+R routing, button layout, multiplayer synchronization,
+cheat execution and save/load remain unverified; the game was not launched.
+
 ## Completed setup
 
 - Imported all 74,465 source files directly into `E:\Era of Nations`; the archive

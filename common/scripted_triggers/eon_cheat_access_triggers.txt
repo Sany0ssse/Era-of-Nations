@@ -1,0 +1,17 @@
+# The Shift+R override belongs to the human-controlled country only.
+# Existing game-rule behavior remains the fallback when the override is off.
+eon_cheat_access = {
+	OR = {
+		AND = {
+			is_ai = no
+			has_country_flag = eon_cheat_override
+		}
+		AND = {
+			has_global_flag = game_rule_allow_cheat_decisions
+			OR = {
+				NOT = { has_global_flag = game_rule_allow_toggling_cheat_decisions }
+				has_country_flag = enable_all_decisions
+			}
+		}
+	}
+}
