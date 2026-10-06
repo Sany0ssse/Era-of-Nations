@@ -17,6 +17,13 @@ from diplomacy_package_10.test_source import (
     check_owned_existing, package10_original_bytes, historical_actions,
 )
 check_owned_existing()
+
+# Package11 restores only its 31 enumerated raid decision ranges before old proofs.
+from diplomacy_package_11.test_source import (
+    NEW as LATER_PACKAGE11_NEW, EXISTING as LATER_PACKAGE11_EXISTING,
+    check_owned_existing as check_later_package11_owned, package11_original_bytes,
+)
+check_later_package11_owned()
 BASELINE = '3b6efd83f9b1a62c7348f52d232ff0f08583a92c'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, one
@@ -71,11 +78,11 @@ receipts.append({'path': EXISTING, 'sha256': hashlib.sha256(actual).hexdigest(),
 groups['existing_package08_exact_single_insertion_before_any_identity_erase'] += 1
 baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *TREES], cwd=ROOT).decode().splitlines()
-changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING]
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *TREES], cwd=ROOT).decode().splitlines()
-assert set(changed) | set(untracked) == NEW | {EXISTING} | LATER_PACKAGE10_NEW, ('Unowned gameplay changes', changed, untracked)
+assert set(changed) | set(untracked) == NEW | {EXISTING} | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW, ('Unowned gameplay changes', changed, untracked)
 assert set(changed).intersection(baseline_paths) == {EXISTING}
-assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW | LATER_PACKAGE10_NEW
+assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW
 assert len(baseline_paths) == 68286
 groups['all_68285_unrelated_gameplay_files_byte_preserved_and_exact_eight_additions'] += 1
 

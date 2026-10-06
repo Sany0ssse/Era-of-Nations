@@ -7,6 +7,15 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
+import sys as package11_sys
+package11_sys.path.insert(0, str(ROOT / 'tools/validation'))
+
+# Package11 restores only its 31 enumerated raid decision ranges before old proofs.
+from diplomacy_package_11.test_source import (
+    NEW as LATER_PACKAGE11_NEW, EXISTING as LATER_PACKAGE11_EXISTING,
+    check_owned_existing as check_later_package11_owned, package11_original_bytes,
+)
+check_later_package11_owned()
 BASELINE = '45dedfc85e7aece235f8fa1ab536326e6dce6923'
 EXISTING = {
     'common/scripted_diplomatic_actions/MDC_terrorism.txt',
@@ -149,10 +158,11 @@ def main():
              'portraits', 'tutorial', 'descriptions', 'scenario_tests', 'descriptor.mod', 'era_of_nations.mod', 'thumbnail.png')
     baseline_paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
     changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
+    changed = [path for path in changed if path not in LATER_PACKAGE11_EXISTING]
     untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-    assert set(changed) | set(untracked) == EXISTING | NEW, ('Unowned gameplay changes', changed, untracked)
+    assert set(changed) | set(untracked) == EXISTING | NEW | LATER_PACKAGE11_NEW, ('Unowned gameplay changes', changed, untracked)
     assert set(changed).intersection(baseline_paths) == EXISTING
-    assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW
+    assert not NEW.intersection(baseline_paths) and set(untracked) <= NEW | LATER_PACKAGE11_NEW
     assert len(baseline_paths) == 68294
     groups['all_68292_unrelated_existing_gameplay_files_byte_preserved_and_exact_six_additions'] += 1
     old_ids = {block['key'] for path in baseline_paths if path.startswith('common/scripted_diplomatic_actions/') and path.endswith('.txt')
@@ -317,7 +327,7 @@ def main():
         assert ast(annex[branch['start']:branch['end']]) == ast('if = { limit = { has_country_flag = anti_terror_agreement@v } set_temp_variable = { eon_ct_cleanup_partner = v } eon_ct_cleanup_active_pair = yes }')
         groups['old_active_annex_branches_cleanup_components_before_old_flags_are_lost'] += 1
     raid_path = 'common/decisions/MDDC_Terrorist_again.txt'
-    raid_data = (ROOT / raid_path).read_bytes()
+    raid_data = package11_original_bytes(raid_path, (ROOT / raid_path).read_bytes())
     assert raid_data == subprocess.check_output(['git', 'show', BASELINE + ':' + raid_path], cwd=ROOT)
     raid_count = sum('anti_terror_agreement' in str(body) for category, operator, decisions in ast(raid_data)
                      for key, operator, body in decisions if isinstance(body, list))
@@ -351,7 +361,7 @@ def main():
                       'new_files': [item for item in receipts if item['path'] in NEW], 'owned_existing_files': [item for item in receipts if item['path'] in EXISTING],
                       'final_gameplay_sha256': {item['path']: item['sha256'] for item in receipts},
                       'existing_gameplay_files_byte_preserved': len(baseline_paths) - len(EXISTING), 'unique_native_action_IDs': len(actual_ids),
-                      'new_helper_IDs': len(helpers), 'new_locale_keys_per_language': len(expected_locale), 'unchanged_raid_decisions': raid_count,
+                      'new_helper_IDs': len(helpers), 'new_locale_keys_per_language': len(expected_locale), 'unchanged_raid_decisions': raid_count, 'later_package11_raid_boundary_checked_before_historical_byte_view': True,
                       'native_primary_documentation': native,
                       'not_proven': 'HOI4 compilation, native callback/cost timing, GUI/AI/save-load/campaign; unidentified legacy bonuses without flags and paid delayed raid cancellation are not repaired; arbitrary duplicate consumed popups not covered'}, indent=2))
 

@@ -1,0 +1,1789 @@
+# An unused paid operation owns 25 CP, independent of all other game budgets.
+eon_ct_raid_try_refund = {
+ if = { limit = { exists = yes check_variable = { eon_ct_raid_refund_due > 0 } }
+  set_temp_variable = { eon_ct_raid_refund_attempt = eon_ct_raid_refund_due }
+  set_temp_variable = { eon_ct_raid_cp_before = command_power }
+  add_command_power = eon_ct_raid_refund_attempt
+  set_temp_variable = { eon_ct_raid_refund_received = command_power }
+  subtract_from_temp_variable = { eon_ct_raid_refund_received = eon_ct_raid_cp_before }
+  if = { limit = { check_variable = { eon_ct_raid_refund_received > eon_ct_raid_refund_attempt } }
+   set_temp_variable = { eon_ct_raid_refund_received = eon_ct_raid_refund_attempt }
+  }
+  # Negative observed credit moves clipped over-cap CP into the owned claim.
+  subtract_from_variable = { eon_ct_raid_refund_due = eon_ct_raid_refund_received }
+ }
+}
+
+eon_ct_raid_clear_1 = {
+ clr_country_flag = eon_ct_raid_pending_1
+ clr_country_flag = eon_ct_raid_paid_1
+ clr_country_flag = eon_ct_raid_cancelled_1
+ clr_country_flag = eon_ct_raid_window_1
+ clear_variable = eon_ct_raid_owner_1
+}
+eon_ct_raid_start_1 = {
+ if = { limit = { eon_ct_raid_start_ready_1 = yes }
+  eon_ct_raid_clear_1 = yes
+  191 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_1 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_1
+  set_country_flag = eon_ct_raid_paid_1
+  set_country_flag = { flag = eon_ct_raid_window_1 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_1 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_1 }
+  set_country_flag = eon_ct_raid_cancelled_1
+  if = { limit = { has_country_flag = eon_ct_raid_paid_1 }
+   clr_country_flag = eon_ct_raid_paid_1
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_1 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_1 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_1
+   has_country_flag = eon_ct_raid_window_1
+   NOT = { has_country_flag = eon_ct_raid_cancelled_1 }
+   eon_ct_raid_authorization_1 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_1 = yes
+   SYR = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_1 = yes eon_ct_raid_clear_1 = yes }
+ }
+}
+eon_ct_raid_cleanup_1 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_1 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_1 } }
+   eon_ct_raid_cancel_1 = yes
+   set_country_flag = eon_ct_raid_retired_1
+   eon_ct_raid_clear_1 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_1 = yes } } eon_ct_raid_cancel_1 = yes }
+ }
+}
+
+eon_ct_raid_clear_2 = {
+ clr_country_flag = eon_ct_raid_pending_2
+ clr_country_flag = eon_ct_raid_paid_2
+ clr_country_flag = eon_ct_raid_cancelled_2
+ clr_country_flag = eon_ct_raid_window_2
+ clear_variable = eon_ct_raid_owner_2
+}
+eon_ct_raid_start_2 = {
+ if = { limit = { eon_ct_raid_start_ready_2 = yes }
+  eon_ct_raid_clear_2 = yes
+  193 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_2 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_2
+  set_country_flag = eon_ct_raid_paid_2
+  set_country_flag = { flag = eon_ct_raid_window_2 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_2 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_2 }
+  set_country_flag = eon_ct_raid_cancelled_2
+  if = { limit = { has_country_flag = eon_ct_raid_paid_2 }
+   clr_country_flag = eon_ct_raid_paid_2
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_2 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_2 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_2
+   has_country_flag = eon_ct_raid_window_2
+   NOT = { has_country_flag = eon_ct_raid_cancelled_2 }
+   eon_ct_raid_authorization_2 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_2 = yes
+   SYR = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_2 = yes eon_ct_raid_clear_2 = yes }
+ }
+}
+eon_ct_raid_cleanup_2 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_2 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_2 } }
+   eon_ct_raid_cancel_2 = yes
+   set_country_flag = eon_ct_raid_retired_2
+   eon_ct_raid_clear_2 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_2 = yes } } eon_ct_raid_cancel_2 = yes }
+ }
+}
+
+eon_ct_raid_clear_3 = {
+ clr_country_flag = eon_ct_raid_pending_3
+ clr_country_flag = eon_ct_raid_paid_3
+ clr_country_flag = eon_ct_raid_cancelled_3
+ clr_country_flag = eon_ct_raid_window_3
+ clear_variable = eon_ct_raid_owner_3
+}
+eon_ct_raid_start_3 = {
+ if = { limit = { eon_ct_raid_start_ready_3 = yes }
+  eon_ct_raid_clear_3 = yes
+  995 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_3 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_3
+  set_country_flag = eon_ct_raid_paid_3
+  set_country_flag = { flag = eon_ct_raid_window_3 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_3 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_3 }
+  set_country_flag = eon_ct_raid_cancelled_3
+  if = { limit = { has_country_flag = eon_ct_raid_paid_3 }
+   clr_country_flag = eon_ct_raid_paid_3
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_3 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_3 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_3
+   has_country_flag = eon_ct_raid_window_3
+   NOT = { has_country_flag = eon_ct_raid_cancelled_3 }
+   eon_ct_raid_authorization_3 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_3 = yes
+   SYR = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_3 = yes eon_ct_raid_clear_3 = yes }
+ }
+}
+eon_ct_raid_cleanup_3 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_3 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_3 } }
+   eon_ct_raid_cancel_3 = yes
+   set_country_flag = eon_ct_raid_retired_3
+   eon_ct_raid_clear_3 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_3 = yes } } eon_ct_raid_cancel_3 = yes }
+ }
+}
+
+eon_ct_raid_clear_4 = {
+ clr_country_flag = eon_ct_raid_pending_4
+ clr_country_flag = eon_ct_raid_paid_4
+ clr_country_flag = eon_ct_raid_cancelled_4
+ clr_country_flag = eon_ct_raid_window_4
+ clear_variable = eon_ct_raid_owner_4
+}
+eon_ct_raid_start_4 = {
+ if = { limit = { eon_ct_raid_start_ready_4 = yes }
+  eon_ct_raid_clear_4 = yes
+  166 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_4 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_4
+  set_country_flag = eon_ct_raid_paid_4
+  set_country_flag = { flag = eon_ct_raid_window_4 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_4 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_4 }
+  set_country_flag = eon_ct_raid_cancelled_4
+  if = { limit = { has_country_flag = eon_ct_raid_paid_4 }
+   clr_country_flag = eon_ct_raid_paid_4
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_4 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_4 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_4
+   has_country_flag = eon_ct_raid_window_4
+   NOT = { has_country_flag = eon_ct_raid_cancelled_4 }
+   eon_ct_raid_authorization_4 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_4 = yes
+   IRQ = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_4 = yes eon_ct_raid_clear_4 = yes }
+ }
+}
+eon_ct_raid_cleanup_4 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_4 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_4 } }
+   eon_ct_raid_cancel_4 = yes
+   set_country_flag = eon_ct_raid_retired_4
+   eon_ct_raid_clear_4 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_4 = yes } } eon_ct_raid_cancel_4 = yes }
+ }
+}
+
+eon_ct_raid_clear_5 = {
+ clr_country_flag = eon_ct_raid_pending_5
+ clr_country_flag = eon_ct_raid_paid_5
+ clr_country_flag = eon_ct_raid_cancelled_5
+ clr_country_flag = eon_ct_raid_window_5
+ clear_variable = eon_ct_raid_owner_5
+}
+eon_ct_raid_start_5 = {
+ if = { limit = { eon_ct_raid_start_ready_5 = yes }
+  eon_ct_raid_clear_5 = yes
+  167 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_5 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_5
+  set_country_flag = eon_ct_raid_paid_5
+  set_country_flag = { flag = eon_ct_raid_window_5 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_5 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_5 }
+  set_country_flag = eon_ct_raid_cancelled_5
+  if = { limit = { has_country_flag = eon_ct_raid_paid_5 }
+   clr_country_flag = eon_ct_raid_paid_5
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_5 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_5 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_5
+   has_country_flag = eon_ct_raid_window_5
+   NOT = { has_country_flag = eon_ct_raid_cancelled_5 }
+   eon_ct_raid_authorization_5 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_5 = yes
+   IRQ = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_5 = yes eon_ct_raid_clear_5 = yes }
+ }
+}
+eon_ct_raid_cleanup_5 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_5 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_5 } }
+   eon_ct_raid_cancel_5 = yes
+   set_country_flag = eon_ct_raid_retired_5
+   eon_ct_raid_clear_5 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_5 = yes } } eon_ct_raid_cancel_5 = yes }
+ }
+}
+
+eon_ct_raid_clear_6 = {
+ clr_country_flag = eon_ct_raid_pending_6
+ clr_country_flag = eon_ct_raid_paid_6
+ clr_country_flag = eon_ct_raid_cancelled_6
+ clr_country_flag = eon_ct_raid_window_6
+ clear_variable = eon_ct_raid_owner_6
+}
+eon_ct_raid_start_6 = {
+ if = { limit = { eon_ct_raid_start_ready_6 = yes }
+  eon_ct_raid_clear_6 = yes
+  168 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_6 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_6
+  set_country_flag = eon_ct_raid_paid_6
+  set_country_flag = { flag = eon_ct_raid_window_6 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_6 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_6 }
+  set_country_flag = eon_ct_raid_cancelled_6
+  if = { limit = { has_country_flag = eon_ct_raid_paid_6 }
+   clr_country_flag = eon_ct_raid_paid_6
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_6 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_6 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_6
+   has_country_flag = eon_ct_raid_window_6
+   NOT = { has_country_flag = eon_ct_raid_cancelled_6 }
+   eon_ct_raid_authorization_6 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_6 = yes
+   IRQ = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_6 = yes eon_ct_raid_clear_6 = yes }
+ }
+}
+eon_ct_raid_cleanup_6 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_6 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_6 } }
+   eon_ct_raid_cancel_6 = yes
+   set_country_flag = eon_ct_raid_retired_6
+   eon_ct_raid_clear_6 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_6 = yes } } eon_ct_raid_cancel_6 = yes }
+ }
+}
+
+eon_ct_raid_clear_7 = {
+ clr_country_flag = eon_ct_raid_pending_7
+ clr_country_flag = eon_ct_raid_paid_7
+ clr_country_flag = eon_ct_raid_cancelled_7
+ clr_country_flag = eon_ct_raid_window_7
+ clear_variable = eon_ct_raid_owner_7
+}
+eon_ct_raid_start_7 = {
+ if = { limit = { eon_ct_raid_start_ready_7 = yes }
+  eon_ct_raid_clear_7 = yes
+  641 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_7 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_7
+  set_country_flag = eon_ct_raid_paid_7
+  set_country_flag = { flag = eon_ct_raid_window_7 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_7 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_7 }
+  set_country_flag = eon_ct_raid_cancelled_7
+  if = { limit = { has_country_flag = eon_ct_raid_paid_7 }
+   clr_country_flag = eon_ct_raid_paid_7
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_7 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_7 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_7
+   has_country_flag = eon_ct_raid_window_7
+   NOT = { has_country_flag = eon_ct_raid_cancelled_7 }
+   eon_ct_raid_authorization_7 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_7 = yes
+   IRQ = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_7 = yes eon_ct_raid_clear_7 = yes }
+ }
+}
+eon_ct_raid_cleanup_7 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_7 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_7 } }
+   eon_ct_raid_cancel_7 = yes
+   set_country_flag = eon_ct_raid_retired_7
+   eon_ct_raid_clear_7 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_7 = yes } } eon_ct_raid_cancel_7 = yes }
+ }
+}
+
+eon_ct_raid_clear_8 = {
+ clr_country_flag = eon_ct_raid_pending_8
+ clr_country_flag = eon_ct_raid_paid_8
+ clr_country_flag = eon_ct_raid_cancelled_8
+ clr_country_flag = eon_ct_raid_window_8
+ clear_variable = eon_ct_raid_owner_8
+}
+eon_ct_raid_start_8 = {
+ if = { limit = { eon_ct_raid_start_ready_8 = yes }
+  eon_ct_raid_clear_8 = yes
+  935 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_8 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_8
+  set_country_flag = eon_ct_raid_paid_8
+  set_country_flag = { flag = eon_ct_raid_window_8 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_8 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_8 }
+  set_country_flag = eon_ct_raid_cancelled_8
+  if = { limit = { has_country_flag = eon_ct_raid_paid_8 }
+   clr_country_flag = eon_ct_raid_paid_8
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_8 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_8 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_8
+   has_country_flag = eon_ct_raid_window_8
+   NOT = { has_country_flag = eon_ct_raid_cancelled_8 }
+   eon_ct_raid_authorization_8 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_8 = yes
+   ARW = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_8 = yes eon_ct_raid_clear_8 = yes }
+ }
+}
+eon_ct_raid_cleanup_8 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_8 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_8 } }
+   eon_ct_raid_cancel_8 = yes
+   set_country_flag = eon_ct_raid_retired_8
+   eon_ct_raid_clear_8 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_8 = yes } } eon_ct_raid_cancel_8 = yes }
+ }
+}
+
+eon_ct_raid_clear_9 = {
+ clr_country_flag = eon_ct_raid_pending_9
+ clr_country_flag = eon_ct_raid_paid_9
+ clr_country_flag = eon_ct_raid_cancelled_9
+ clr_country_flag = eon_ct_raid_window_9
+ clear_variable = eon_ct_raid_owner_9
+}
+eon_ct_raid_start_9 = {
+ if = { limit = { eon_ct_raid_start_ready_9 = yes }
+  eon_ct_raid_clear_9 = yes
+  163 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_9 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_9
+  set_country_flag = eon_ct_raid_paid_9
+  set_country_flag = { flag = eon_ct_raid_window_9 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_9 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_9 }
+  set_country_flag = eon_ct_raid_cancelled_9
+  if = { limit = { has_country_flag = eon_ct_raid_paid_9 }
+   clr_country_flag = eon_ct_raid_paid_9
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_9 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_9 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_9
+   has_country_flag = eon_ct_raid_window_9
+   NOT = { has_country_flag = eon_ct_raid_cancelled_9 }
+   eon_ct_raid_authorization_9 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_9 = yes
+   ARW = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_9 = yes eon_ct_raid_clear_9 = yes }
+ }
+}
+eon_ct_raid_cleanup_9 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_9 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_9 } }
+   eon_ct_raid_cancel_9 = yes
+   set_country_flag = eon_ct_raid_retired_9
+   eon_ct_raid_clear_9 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_9 = yes } } eon_ct_raid_cancel_9 = yes }
+ }
+}
+
+eon_ct_raid_clear_10 = {
+ clr_country_flag = eon_ct_raid_pending_10
+ clr_country_flag = eon_ct_raid_paid_10
+ clr_country_flag = eon_ct_raid_cancelled_10
+ clr_country_flag = eon_ct_raid_window_10
+ clear_variable = eon_ct_raid_owner_10
+}
+eon_ct_raid_start_10 = {
+ if = { limit = { eon_ct_raid_start_ready_10 = yes }
+  eon_ct_raid_clear_10 = yes
+  81 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_10 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_10
+  set_country_flag = eon_ct_raid_paid_10
+  set_country_flag = { flag = eon_ct_raid_window_10 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_10 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_10 }
+  set_country_flag = eon_ct_raid_cancelled_10
+  if = { limit = { has_country_flag = eon_ct_raid_paid_10 }
+   clr_country_flag = eon_ct_raid_paid_10
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_10 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_10 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_10
+   has_country_flag = eon_ct_raid_window_10
+   NOT = { has_country_flag = eon_ct_raid_cancelled_10 }
+   eon_ct_raid_authorization_10 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_10 = yes
+   ITA = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_10 = yes eon_ct_raid_clear_10 = yes }
+ }
+}
+eon_ct_raid_cleanup_10 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_10 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_10 } }
+   eon_ct_raid_cancel_10 = yes
+   set_country_flag = eon_ct_raid_retired_10
+   eon_ct_raid_clear_10 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_10 = yes } } eon_ct_raid_cancel_10 = yes }
+ }
+}
+
+eon_ct_raid_clear_11 = {
+ clr_country_flag = eon_ct_raid_pending_11
+ clr_country_flag = eon_ct_raid_paid_11
+ clr_country_flag = eon_ct_raid_cancelled_11
+ clr_country_flag = eon_ct_raid_window_11
+ clear_variable = eon_ct_raid_owner_11
+}
+eon_ct_raid_start_11 = {
+ if = { limit = { eon_ct_raid_start_ready_11 = yes }
+  eon_ct_raid_clear_11 = yes
+  78 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_11 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_11
+  set_country_flag = eon_ct_raid_paid_11
+  set_country_flag = { flag = eon_ct_raid_window_11 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_11 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_11 }
+  set_country_flag = eon_ct_raid_cancelled_11
+  if = { limit = { has_country_flag = eon_ct_raid_paid_11 }
+   clr_country_flag = eon_ct_raid_paid_11
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_11 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_11 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_11
+   has_country_flag = eon_ct_raid_window_11
+   NOT = { has_country_flag = eon_ct_raid_cancelled_11 }
+   eon_ct_raid_authorization_11 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_11 = yes
+   ITA = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_11 = yes eon_ct_raid_clear_11 = yes }
+ }
+}
+eon_ct_raid_cleanup_11 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_11 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_11 } }
+   eon_ct_raid_cancel_11 = yes
+   set_country_flag = eon_ct_raid_retired_11
+   eon_ct_raid_clear_11 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_11 = yes } } eon_ct_raid_cancel_11 = yes }
+ }
+}
+
+eon_ct_raid_clear_12 = {
+ clr_country_flag = eon_ct_raid_pending_12
+ clr_country_flag = eon_ct_raid_paid_12
+ clr_country_flag = eon_ct_raid_cancelled_12
+ clr_country_flag = eon_ct_raid_window_12
+ clear_variable = eon_ct_raid_owner_12
+}
+eon_ct_raid_start_12 = {
+ if = { limit = { eon_ct_raid_start_ready_12 = yes }
+  eon_ct_raid_clear_12 = yes
+  1060 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_12 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_12
+  set_country_flag = eon_ct_raid_paid_12
+  set_country_flag = { flag = eon_ct_raid_window_12 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_12 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_12 }
+  set_country_flag = eon_ct_raid_cancelled_12
+  if = { limit = { has_country_flag = eon_ct_raid_paid_12 }
+   clr_country_flag = eon_ct_raid_paid_12
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_12 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_12 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_12
+   has_country_flag = eon_ct_raid_window_12
+   NOT = { has_country_flag = eon_ct_raid_cancelled_12 }
+   eon_ct_raid_authorization_12 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_12 = yes
+   ITA = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_12 = yes eon_ct_raid_clear_12 = yes }
+ }
+}
+eon_ct_raid_cleanup_12 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_12 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_12 } }
+   eon_ct_raid_cancel_12 = yes
+   set_country_flag = eon_ct_raid_retired_12
+   eon_ct_raid_clear_12 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_12 = yes } } eon_ct_raid_cancel_12 = yes }
+ }
+}
+
+eon_ct_raid_clear_13 = {
+ clr_country_flag = eon_ct_raid_pending_13
+ clr_country_flag = eon_ct_raid_paid_13
+ clr_country_flag = eon_ct_raid_cancelled_13
+ clr_country_flag = eon_ct_raid_window_13
+ clear_variable = eon_ct_raid_owner_13
+}
+eon_ct_raid_start_13 = {
+ if = { limit = { eon_ct_raid_start_ready_13 = yes }
+  eon_ct_raid_clear_13 = yes
+  44 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_13 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_13
+  set_country_flag = eon_ct_raid_paid_13
+  set_country_flag = { flag = eon_ct_raid_window_13 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_13 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_13 }
+  set_country_flag = eon_ct_raid_cancelled_13
+  if = { limit = { has_country_flag = eon_ct_raid_paid_13 }
+   clr_country_flag = eon_ct_raid_paid_13
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_13 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_13 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_13
+   has_country_flag = eon_ct_raid_window_13
+   NOT = { has_country_flag = eon_ct_raid_cancelled_13 }
+   eon_ct_raid_authorization_13 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_13 = yes
+   GER = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_13 = yes eon_ct_raid_clear_13 = yes }
+ }
+}
+eon_ct_raid_cleanup_13 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_13 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_13 } }
+   eon_ct_raid_cancel_13 = yes
+   set_country_flag = eon_ct_raid_retired_13
+   eon_ct_raid_clear_13 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_13 = yes } } eon_ct_raid_cancel_13 = yes }
+ }
+}
+
+eon_ct_raid_clear_14 = {
+ clr_country_flag = eon_ct_raid_pending_14
+ clr_country_flag = eon_ct_raid_paid_14
+ clr_country_flag = eon_ct_raid_cancelled_14
+ clr_country_flag = eon_ct_raid_window_14
+ clear_variable = eon_ct_raid_owner_14
+}
+eon_ct_raid_start_14 = {
+ if = { limit = { eon_ct_raid_start_ready_14 = yes }
+  eon_ct_raid_clear_14 = yes
+  30 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_14 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_14
+  set_country_flag = eon_ct_raid_paid_14
+  set_country_flag = { flag = eon_ct_raid_window_14 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_14 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_14 }
+  set_country_flag = eon_ct_raid_cancelled_14
+  if = { limit = { has_country_flag = eon_ct_raid_paid_14 }
+   clr_country_flag = eon_ct_raid_paid_14
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_14 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_14 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_14
+   has_country_flag = eon_ct_raid_window_14
+   NOT = { has_country_flag = eon_ct_raid_cancelled_14 }
+   eon_ct_raid_authorization_14 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_14 = yes
+   NOR = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_14 = yes eon_ct_raid_clear_14 = yes }
+ }
+}
+eon_ct_raid_cleanup_14 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_14 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_14 } }
+   eon_ct_raid_cancel_14 = yes
+   set_country_flag = eon_ct_raid_retired_14
+   eon_ct_raid_clear_14 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_14 = yes } } eon_ct_raid_cancel_14 = yes }
+ }
+}
+
+eon_ct_raid_clear_15 = {
+ clr_country_flag = eon_ct_raid_pending_15
+ clr_country_flag = eon_ct_raid_paid_15
+ clr_country_flag = eon_ct_raid_cancelled_15
+ clr_country_flag = eon_ct_raid_window_15
+ clear_variable = eon_ct_raid_owner_15
+}
+eon_ct_raid_start_15 = {
+ if = { limit = { eon_ct_raid_start_ready_15 = yes }
+  eon_ct_raid_clear_15 = yes
+  1018 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_15 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_15
+  set_country_flag = eon_ct_raid_paid_15
+  set_country_flag = { flag = eon_ct_raid_window_15 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_15 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_15 }
+  set_country_flag = eon_ct_raid_cancelled_15
+  if = { limit = { has_country_flag = eon_ct_raid_paid_15 }
+   clr_country_flag = eon_ct_raid_paid_15
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_15 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_15 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_15
+   has_country_flag = eon_ct_raid_window_15
+   NOT = { has_country_flag = eon_ct_raid_cancelled_15 }
+   eon_ct_raid_authorization_15 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_15 = yes
+   CZE = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_15 = yes eon_ct_raid_clear_15 = yes }
+ }
+}
+eon_ct_raid_cleanup_15 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_15 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_15 } }
+   eon_ct_raid_cancel_15 = yes
+   set_country_flag = eon_ct_raid_retired_15
+   eon_ct_raid_clear_15 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_15 = yes } } eon_ct_raid_cancel_15 = yes }
+ }
+}
+
+eon_ct_raid_clear_16 = {
+ clr_country_flag = eon_ct_raid_pending_16
+ clr_country_flag = eon_ct_raid_paid_16
+ clr_country_flag = eon_ct_raid_cancelled_16
+ clr_country_flag = eon_ct_raid_window_16
+ clear_variable = eon_ct_raid_owner_16
+}
+eon_ct_raid_start_16 = {
+ if = { limit = { eon_ct_raid_start_ready_16 = yes }
+  eon_ct_raid_clear_16 = yes
+  122 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_16 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_16
+  set_country_flag = eon_ct_raid_paid_16
+  set_country_flag = { flag = eon_ct_raid_window_16 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_16 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_16 }
+  set_country_flag = eon_ct_raid_cancelled_16
+  if = { limit = { has_country_flag = eon_ct_raid_paid_16 }
+   clr_country_flag = eon_ct_raid_paid_16
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_16 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_16 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_16
+   has_country_flag = eon_ct_raid_window_16
+   NOT = { has_country_flag = eon_ct_raid_cancelled_16 }
+   eon_ct_raid_authorization_16 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_16 = yes
+   HUN = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_16 = yes eon_ct_raid_clear_16 = yes }
+ }
+}
+eon_ct_raid_cleanup_16 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_16 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_16 } }
+   eon_ct_raid_cancel_16 = yes
+   set_country_flag = eon_ct_raid_retired_16
+   eon_ct_raid_clear_16 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_16 = yes } } eon_ct_raid_cancel_16 = yes }
+ }
+}
+
+eon_ct_raid_clear_17 = {
+ clr_country_flag = eon_ct_raid_pending_17
+ clr_country_flag = eon_ct_raid_paid_17
+ clr_country_flag = eon_ct_raid_cancelled_17
+ clr_country_flag = eon_ct_raid_window_17
+ clear_variable = eon_ct_raid_owner_17
+}
+eon_ct_raid_start_17 = {
+ if = { limit = { eon_ct_raid_start_ready_17 = yes }
+  eon_ct_raid_clear_17 = yes
+  286 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_17 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_17
+  set_country_flag = eon_ct_raid_paid_17
+  set_country_flag = { flag = eon_ct_raid_window_17 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_17 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_17 }
+  set_country_flag = eon_ct_raid_cancelled_17
+  if = { limit = { has_country_flag = eon_ct_raid_paid_17 }
+   clr_country_flag = eon_ct_raid_paid_17
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_17 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_17 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_17
+   has_country_flag = eon_ct_raid_window_17
+   NOT = { has_country_flag = eon_ct_raid_cancelled_17 }
+   eon_ct_raid_authorization_17 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_17 = yes
+   AUS = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_17 = yes eon_ct_raid_clear_17 = yes }
+ }
+}
+eon_ct_raid_cleanup_17 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_17 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_17 } }
+   eon_ct_raid_cancel_17 = yes
+   set_country_flag = eon_ct_raid_retired_17
+   eon_ct_raid_clear_17 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_17 = yes } } eon_ct_raid_cancel_17 = yes }
+ }
+}
+
+eon_ct_raid_clear_18 = {
+ clr_country_flag = eon_ct_raid_pending_18
+ clr_country_flag = eon_ct_raid_paid_18
+ clr_country_flag = eon_ct_raid_cancelled_18
+ clr_country_flag = eon_ct_raid_window_18
+ clear_variable = eon_ct_raid_owner_18
+}
+eon_ct_raid_start_18 = {
+ if = { limit = { eon_ct_raid_start_ready_18 = yes }
+  eon_ct_raid_clear_18 = yes
+  216 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_18 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_18
+  set_country_flag = eon_ct_raid_paid_18
+  set_country_flag = { flag = eon_ct_raid_window_18 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_18 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_18 }
+  set_country_flag = eon_ct_raid_cancelled_18
+  if = { limit = { has_country_flag = eon_ct_raid_paid_18 }
+   clr_country_flag = eon_ct_raid_paid_18
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_18 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_18 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_18
+   has_country_flag = eon_ct_raid_window_18
+   NOT = { has_country_flag = eon_ct_raid_cancelled_18 }
+   eon_ct_raid_authorization_18 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_18 = yes
+   EGY = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_18 = yes eon_ct_raid_clear_18 = yes }
+ }
+}
+eon_ct_raid_cleanup_18 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_18 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_18 } }
+   eon_ct_raid_cancel_18 = yes
+   set_country_flag = eon_ct_raid_retired_18
+   eon_ct_raid_clear_18 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_18 = yes } } eon_ct_raid_cancel_18 = yes }
+ }
+}
+
+eon_ct_raid_clear_19 = {
+ clr_country_flag = eon_ct_raid_pending_19
+ clr_country_flag = eon_ct_raid_paid_19
+ clr_country_flag = eon_ct_raid_cancelled_19
+ clr_country_flag = eon_ct_raid_window_19
+ clear_variable = eon_ct_raid_owner_19
+}
+eon_ct_raid_start_19 = {
+ if = { limit = { eon_ct_raid_start_ready_19 = yes }
+  eon_ct_raid_clear_19 = yes
+  338 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_19 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_19
+  set_country_flag = eon_ct_raid_paid_19
+  set_country_flag = { flag = eon_ct_raid_window_19 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_19 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_19 }
+  set_country_flag = eon_ct_raid_cancelled_19
+  if = { limit = { has_country_flag = eon_ct_raid_paid_19 }
+   clr_country_flag = eon_ct_raid_paid_19
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_19 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_19 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_19
+   has_country_flag = eon_ct_raid_window_19
+   NOT = { has_country_flag = eon_ct_raid_cancelled_19 }
+   eon_ct_raid_authorization_19 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_19 = yes
+   NIG = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_19 = yes eon_ct_raid_clear_19 = yes }
+ }
+}
+eon_ct_raid_cleanup_19 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_19 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_19 } }
+   eon_ct_raid_cancel_19 = yes
+   set_country_flag = eon_ct_raid_retired_19
+   eon_ct_raid_clear_19 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_19 = yes } } eon_ct_raid_cancel_19 = yes }
+ }
+}
+
+eon_ct_raid_clear_20 = {
+ clr_country_flag = eon_ct_raid_pending_20
+ clr_country_flag = eon_ct_raid_paid_20
+ clr_country_flag = eon_ct_raid_cancelled_20
+ clr_country_flag = eon_ct_raid_window_20
+ clear_variable = eon_ct_raid_owner_20
+}
+eon_ct_raid_start_20 = {
+ if = { limit = { eon_ct_raid_start_ready_20 = yes }
+  eon_ct_raid_clear_20 = yes
+  339 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_20 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_20
+  set_country_flag = eon_ct_raid_paid_20
+  set_country_flag = { flag = eon_ct_raid_window_20 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_20 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_20 }
+  set_country_flag = eon_ct_raid_cancelled_20
+  if = { limit = { has_country_flag = eon_ct_raid_paid_20 }
+   clr_country_flag = eon_ct_raid_paid_20
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_20 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_20 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_20
+   has_country_flag = eon_ct_raid_window_20
+   NOT = { has_country_flag = eon_ct_raid_cancelled_20 }
+   eon_ct_raid_authorization_20 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_20 = yes
+   NIG = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_20 = yes eon_ct_raid_clear_20 = yes }
+ }
+}
+eon_ct_raid_cleanup_20 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_20 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_20 } }
+   eon_ct_raid_cancel_20 = yes
+   set_country_flag = eon_ct_raid_retired_20
+   eon_ct_raid_clear_20 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_20 = yes } } eon_ct_raid_cancel_20 = yes }
+ }
+}
+
+eon_ct_raid_clear_21 = {
+ clr_country_flag = eon_ct_raid_pending_21
+ clr_country_flag = eon_ct_raid_paid_21
+ clr_country_flag = eon_ct_raid_cancelled_21
+ clr_country_flag = eon_ct_raid_window_21
+ clear_variable = eon_ct_raid_owner_21
+}
+eon_ct_raid_start_21 = {
+ if = { limit = { eon_ct_raid_start_ready_21 = yes }
+  eon_ct_raid_clear_21 = yes
+  340 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_21 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_21
+  set_country_flag = eon_ct_raid_paid_21
+  set_country_flag = { flag = eon_ct_raid_window_21 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_21 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_21 }
+  set_country_flag = eon_ct_raid_cancelled_21
+  if = { limit = { has_country_flag = eon_ct_raid_paid_21 }
+   clr_country_flag = eon_ct_raid_paid_21
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_21 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_21 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_21
+   has_country_flag = eon_ct_raid_window_21
+   NOT = { has_country_flag = eon_ct_raid_cancelled_21 }
+   eon_ct_raid_authorization_21 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_21 = yes
+   NIG = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_21 = yes eon_ct_raid_clear_21 = yes }
+ }
+}
+eon_ct_raid_cleanup_21 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_21 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_21 } }
+   eon_ct_raid_cancel_21 = yes
+   set_country_flag = eon_ct_raid_retired_21
+   eon_ct_raid_clear_21 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_21 = yes } } eon_ct_raid_cancel_21 = yes }
+ }
+}
+
+eon_ct_raid_clear_22 = {
+ clr_country_flag = eon_ct_raid_pending_22
+ clr_country_flag = eon_ct_raid_paid_22
+ clr_country_flag = eon_ct_raid_cancelled_22
+ clr_country_flag = eon_ct_raid_window_22
+ clear_variable = eon_ct_raid_owner_22
+}
+eon_ct_raid_start_22 = {
+ if = { limit = { eon_ct_raid_start_ready_22 = yes }
+  eon_ct_raid_clear_22 = yes
+  381 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_22 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_22
+  set_country_flag = eon_ct_raid_paid_22
+  set_country_flag = { flag = eon_ct_raid_window_22 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_22 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_22 }
+  set_country_flag = eon_ct_raid_cancelled_22
+  if = { limit = { has_country_flag = eon_ct_raid_paid_22 }
+   clr_country_flag = eon_ct_raid_paid_22
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_22 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_22 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_22
+   has_country_flag = eon_ct_raid_window_22
+   NOT = { has_country_flag = eon_ct_raid_cancelled_22 }
+   eon_ct_raid_authorization_22 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_22 = yes
+   ALG = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_22 = yes eon_ct_raid_clear_22 = yes }
+ }
+}
+eon_ct_raid_cleanup_22 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_22 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_22 } }
+   eon_ct_raid_cancel_22 = yes
+   set_country_flag = eon_ct_raid_retired_22
+   eon_ct_raid_clear_22 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_22 = yes } } eon_ct_raid_cancel_22 = yes }
+ }
+}
+
+eon_ct_raid_clear_23 = {
+ clr_country_flag = eon_ct_raid_pending_23
+ clr_country_flag = eon_ct_raid_paid_23
+ clr_country_flag = eon_ct_raid_cancelled_23
+ clr_country_flag = eon_ct_raid_window_23
+ clear_variable = eon_ct_raid_owner_23
+}
+eon_ct_raid_start_23 = {
+ if = { limit = { eon_ct_raid_start_ready_23 = yes }
+  eon_ct_raid_clear_23 = yes
+  390 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_23 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_23
+  set_country_flag = eon_ct_raid_paid_23
+  set_country_flag = { flag = eon_ct_raid_window_23 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_23 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_23 }
+  set_country_flag = eon_ct_raid_cancelled_23
+  if = { limit = { has_country_flag = eon_ct_raid_paid_23 }
+   clr_country_flag = eon_ct_raid_paid_23
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_23 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_23 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_23
+   has_country_flag = eon_ct_raid_window_23
+   NOT = { has_country_flag = eon_ct_raid_cancelled_23 }
+   eon_ct_raid_authorization_23 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_23 = yes
+   TUN = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_23 = yes eon_ct_raid_clear_23 = yes }
+ }
+}
+eon_ct_raid_cleanup_23 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_23 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_23 } }
+   eon_ct_raid_cancel_23 = yes
+   set_country_flag = eon_ct_raid_retired_23
+   eon_ct_raid_clear_23 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_23 = yes } } eon_ct_raid_cancel_23 = yes }
+ }
+}
+
+eon_ct_raid_clear_24 = {
+ clr_country_flag = eon_ct_raid_pending_24
+ clr_country_flag = eon_ct_raid_paid_24
+ clr_country_flag = eon_ct_raid_cancelled_24
+ clr_country_flag = eon_ct_raid_window_24
+ clear_variable = eon_ct_raid_owner_24
+}
+eon_ct_raid_start_24 = {
+ if = { limit = { eon_ct_raid_start_ready_24 = yes }
+  eon_ct_raid_clear_24 = yes
+  723 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_24 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_24
+  set_country_flag = eon_ct_raid_paid_24
+  set_country_flag = { flag = eon_ct_raid_window_24 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_24 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_24 }
+  set_country_flag = eon_ct_raid_cancelled_24
+  if = { limit = { has_country_flag = eon_ct_raid_paid_24 }
+   clr_country_flag = eon_ct_raid_paid_24
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_24 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_24 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_24
+   has_country_flag = eon_ct_raid_window_24
+   NOT = { has_country_flag = eon_ct_raid_cancelled_24 }
+   eon_ct_raid_authorization_24 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_24 = yes
+   TAJ = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_24 = yes eon_ct_raid_clear_24 = yes }
+ }
+}
+eon_ct_raid_cleanup_24 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_24 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_24 } }
+   eon_ct_raid_cancel_24 = yes
+   set_country_flag = eon_ct_raid_retired_24
+   eon_ct_raid_clear_24 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_24 = yes } } eon_ct_raid_cancel_24 = yes }
+ }
+}
+
+eon_ct_raid_clear_25 = {
+ clr_country_flag = eon_ct_raid_pending_25
+ clr_country_flag = eon_ct_raid_paid_25
+ clr_country_flag = eon_ct_raid_cancelled_25
+ clr_country_flag = eon_ct_raid_window_25
+ clear_variable = eon_ct_raid_owner_25
+}
+eon_ct_raid_start_25 = {
+ if = { limit = { eon_ct_raid_start_ready_25 = yes }
+  eon_ct_raid_clear_25 = yes
+  177 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_25 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_25
+  set_country_flag = eon_ct_raid_paid_25
+  set_country_flag = { flag = eon_ct_raid_window_25 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_25 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_25 }
+  set_country_flag = eon_ct_raid_cancelled_25
+  if = { limit = { has_country_flag = eon_ct_raid_paid_25 }
+   clr_country_flag = eon_ct_raid_paid_25
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_25 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_25 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_25
+   has_country_flag = eon_ct_raid_window_25
+   NOT = { has_country_flag = eon_ct_raid_cancelled_25 }
+   eon_ct_raid_authorization_25 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_25 = yes
+   SAU = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_25 = yes eon_ct_raid_clear_25 = yes }
+ }
+}
+eon_ct_raid_cleanup_25 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_25 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_25 } }
+   eon_ct_raid_cancel_25 = yes
+   set_country_flag = eon_ct_raid_retired_25
+   eon_ct_raid_clear_25 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_25 = yes } } eon_ct_raid_cancel_25 = yes }
+ }
+}
+
+eon_ct_raid_clear_26 = {
+ clr_country_flag = eon_ct_raid_pending_26
+ clr_country_flag = eon_ct_raid_paid_26
+ clr_country_flag = eon_ct_raid_cancelled_26
+ clr_country_flag = eon_ct_raid_window_26
+ clear_variable = eon_ct_raid_owner_26
+}
+eon_ct_raid_start_26 = {
+ if = { limit = { eon_ct_raid_start_ready_26 = yes }
+  eon_ct_raid_clear_26 = yes
+  180 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_26 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_26
+  set_country_flag = eon_ct_raid_paid_26
+  set_country_flag = { flag = eon_ct_raid_window_26 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_26 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_26 }
+  set_country_flag = eon_ct_raid_cancelled_26
+  if = { limit = { has_country_flag = eon_ct_raid_paid_26 }
+   clr_country_flag = eon_ct_raid_paid_26
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_26 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_26 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_26
+   has_country_flag = eon_ct_raid_window_26
+   NOT = { has_country_flag = eon_ct_raid_cancelled_26 }
+   eon_ct_raid_authorization_26 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_26 = yes
+   UAE = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_26 = yes eon_ct_raid_clear_26 = yes }
+ }
+}
+eon_ct_raid_cleanup_26 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_26 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_26 } }
+   eon_ct_raid_cancel_26 = yes
+   set_country_flag = eon_ct_raid_retired_26
+   eon_ct_raid_clear_26 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_26 = yes } } eon_ct_raid_cancel_26 = yes }
+ }
+}
+
+eon_ct_raid_clear_27 = {
+ clr_country_flag = eon_ct_raid_pending_27
+ clr_country_flag = eon_ct_raid_paid_27
+ clr_country_flag = eon_ct_raid_cancelled_27
+ clr_country_flag = eon_ct_raid_window_27
+ clear_variable = eon_ct_raid_owner_27
+}
+eon_ct_raid_start_27 = {
+ if = { limit = { eon_ct_raid_start_ready_27 = yes }
+  eon_ct_raid_clear_27 = yes
+  1126 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_27 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_27
+  set_country_flag = eon_ct_raid_paid_27
+  set_country_flag = { flag = eon_ct_raid_window_27 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_27 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_27 }
+  set_country_flag = eon_ct_raid_cancelled_27
+  if = { limit = { has_country_flag = eon_ct_raid_paid_27 }
+   clr_country_flag = eon_ct_raid_paid_27
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_27 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_27 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_27
+   has_country_flag = eon_ct_raid_window_27
+   NOT = { has_country_flag = eon_ct_raid_cancelled_27 }
+   eon_ct_raid_authorization_27 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_27 = yes
+   ING = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_27 = yes eon_ct_raid_clear_27 = yes }
+ }
+}
+eon_ct_raid_cleanup_27 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_27 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_27 } }
+   eon_ct_raid_cancel_27 = yes
+   set_country_flag = eon_ct_raid_retired_27
+   eon_ct_raid_clear_27 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_27 = yes } } eon_ct_raid_cancel_27 = yes }
+ }
+}
+
+eon_ct_raid_clear_28 = {
+ clr_country_flag = eon_ct_raid_pending_28
+ clr_country_flag = eon_ct_raid_paid_28
+ clr_country_flag = eon_ct_raid_cancelled_28
+ clr_country_flag = eon_ct_raid_window_28
+ clear_variable = eon_ct_raid_owner_28
+}
+eon_ct_raid_start_28 = {
+ if = { limit = { eon_ct_raid_start_ready_28 = yes }
+  eon_ct_raid_clear_28 = yes
+  674 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_28 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_28
+  set_country_flag = eon_ct_raid_paid_28
+  set_country_flag = { flag = eon_ct_raid_window_28 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_28 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_28 }
+  set_country_flag = eon_ct_raid_cancelled_28
+  if = { limit = { has_country_flag = eon_ct_raid_paid_28 }
+   clr_country_flag = eon_ct_raid_paid_28
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_28 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_28 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_28
+   has_country_flag = eon_ct_raid_window_28
+   NOT = { has_country_flag = eon_ct_raid_cancelled_28 }
+   eon_ct_raid_authorization_28 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_28 = yes
+   KBK = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_28 = yes eon_ct_raid_clear_28 = yes }
+ }
+}
+eon_ct_raid_cleanup_28 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_28 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_28 } }
+   eon_ct_raid_cancel_28 = yes
+   set_country_flag = eon_ct_raid_retired_28
+   eon_ct_raid_clear_28 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_28 = yes } } eon_ct_raid_cancel_28 = yes }
+ }
+}
+
+eon_ct_raid_clear_29 = {
+ clr_country_flag = eon_ct_raid_pending_29
+ clr_country_flag = eon_ct_raid_paid_29
+ clr_country_flag = eon_ct_raid_cancelled_29
+ clr_country_flag = eon_ct_raid_window_29
+ clear_variable = eon_ct_raid_owner_29
+}
+eon_ct_raid_start_29 = {
+ if = { limit = { eon_ct_raid_start_ready_29 = yes }
+  eon_ct_raid_clear_29 = yes
+  1125 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_29 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_29
+  set_country_flag = eon_ct_raid_paid_29
+  set_country_flag = { flag = eon_ct_raid_window_29 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_29 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_29 }
+  set_country_flag = eon_ct_raid_cancelled_29
+  if = { limit = { has_country_flag = eon_ct_raid_paid_29 }
+   clr_country_flag = eon_ct_raid_paid_29
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_29 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_29 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_29
+   has_country_flag = eon_ct_raid_window_29
+   NOT = { has_country_flag = eon_ct_raid_cancelled_29 }
+   eon_ct_raid_authorization_29 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_29 = yes
+   KCC = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_29 = yes eon_ct_raid_clear_29 = yes }
+ }
+}
+eon_ct_raid_cleanup_29 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_29 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_29 } }
+   eon_ct_raid_cancel_29 = yes
+   set_country_flag = eon_ct_raid_retired_29
+   eon_ct_raid_clear_29 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_29 = yes } } eon_ct_raid_cancel_29 = yes }
+ }
+}
+
+eon_ct_raid_clear_30 = {
+ clr_country_flag = eon_ct_raid_pending_30
+ clr_country_flag = eon_ct_raid_paid_30
+ clr_country_flag = eon_ct_raid_cancelled_30
+ clr_country_flag = eon_ct_raid_window_30
+ clear_variable = eon_ct_raid_owner_30
+}
+eon_ct_raid_start_30 = {
+ if = { limit = { eon_ct_raid_start_ready_30 = yes }
+  eon_ct_raid_clear_30 = yes
+  671 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_30 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_30
+  set_country_flag = eon_ct_raid_paid_30
+  set_country_flag = { flag = eon_ct_raid_window_30 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_30 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_30 }
+  set_country_flag = eon_ct_raid_cancelled_30
+  if = { limit = { has_country_flag = eon_ct_raid_paid_30 }
+   clr_country_flag = eon_ct_raid_paid_30
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_30 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_30 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_30
+   has_country_flag = eon_ct_raid_window_30
+   NOT = { has_country_flag = eon_ct_raid_cancelled_30 }
+   eon_ct_raid_authorization_30 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_30 = yes
+   DAG = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_30 = yes eon_ct_raid_clear_30 = yes }
+ }
+}
+eon_ct_raid_cleanup_30 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_30 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_30 } }
+   eon_ct_raid_cancel_30 = yes
+   set_country_flag = eon_ct_raid_retired_30
+   eon_ct_raid_clear_30 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_30 = yes } } eon_ct_raid_cancel_30 = yes }
+ }
+}
+
+eon_ct_raid_clear_31 = {
+ clr_country_flag = eon_ct_raid_pending_31
+ clr_country_flag = eon_ct_raid_paid_31
+ clr_country_flag = eon_ct_raid_cancelled_31
+ clr_country_flag = eon_ct_raid_window_31
+ clear_variable = eon_ct_raid_owner_31
+}
+eon_ct_raid_start_31 = {
+ if = { limit = { eon_ct_raid_start_ready_31 = yes }
+  eon_ct_raid_clear_31 = yes
+  672 = { owner = { set_temp_variable = { eon_ct_raid_captured_owner = THIS } } }
+  set_variable = { eon_ct_raid_owner_31 = eon_ct_raid_captured_owner }
+  set_country_flag = eon_ct_raid_pending_31
+  set_country_flag = eon_ct_raid_paid_31
+  set_country_flag = { flag = eon_ct_raid_window_31 days = 7 value = 1 }
+  add_command_power = -25
+  custom_effect_tooltip = eon_ct_raid_start_tt
+ }
+}
+eon_ct_raid_cancel_31 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_31 }
+  set_country_flag = eon_ct_raid_cancelled_31
+  if = { limit = { has_country_flag = eon_ct_raid_paid_31 }
+   clr_country_flag = eon_ct_raid_paid_31
+   add_to_variable = { eon_ct_raid_refund_due = 25 }
+  }
+  eon_ct_raid_try_refund = yes
+ }
+}
+eon_ct_raid_finish_31 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_31 }
+  if = { limit = {
+   has_country_flag = eon_ct_raid_paid_31
+   has_country_flag = eon_ct_raid_window_31
+   NOT = { has_country_flag = eon_ct_raid_cancelled_31 }
+   eon_ct_raid_authorization_31 = yes
+  }
+   # Consume ownership before entering the inherited random outcome.
+   eon_ct_raid_clear_31 = yes
+   CHE = { complete_ct_raid = yes }
+  }
+  else = { eon_ct_raid_cancel_31 = yes eon_ct_raid_clear_31 = yes }
+ }
+}
+eon_ct_raid_cleanup_31 = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_31 }
+  if = { limit = { NOT = { has_country_flag = eon_ct_raid_window_31 } }
+   eon_ct_raid_cancel_31 = yes
+   set_country_flag = eon_ct_raid_retired_31
+   eon_ct_raid_clear_31 = yes
+  }
+  else_if = { limit = { NOT = { eon_ct_raid_authorization_31 = yes } } eon_ct_raid_cancel_31 = yes }
+ }
+}
+
+eon_ct_raid_daily_cleanup = {
+ eon_ct_raid_cleanup_1 = yes
+ eon_ct_raid_cleanup_2 = yes
+ eon_ct_raid_cleanup_3 = yes
+ eon_ct_raid_cleanup_4 = yes
+ eon_ct_raid_cleanup_5 = yes
+ eon_ct_raid_cleanup_6 = yes
+ eon_ct_raid_cleanup_7 = yes
+ eon_ct_raid_cleanup_8 = yes
+ eon_ct_raid_cleanup_9 = yes
+ eon_ct_raid_cleanup_10 = yes
+ eon_ct_raid_cleanup_11 = yes
+ eon_ct_raid_cleanup_12 = yes
+ eon_ct_raid_cleanup_13 = yes
+ eon_ct_raid_cleanup_14 = yes
+ eon_ct_raid_cleanup_15 = yes
+ eon_ct_raid_cleanup_16 = yes
+ eon_ct_raid_cleanup_17 = yes
+ eon_ct_raid_cleanup_18 = yes
+ eon_ct_raid_cleanup_19 = yes
+ eon_ct_raid_cleanup_20 = yes
+ eon_ct_raid_cleanup_21 = yes
+ eon_ct_raid_cleanup_22 = yes
+ eon_ct_raid_cleanup_23 = yes
+ eon_ct_raid_cleanup_24 = yes
+ eon_ct_raid_cleanup_25 = yes
+ eon_ct_raid_cleanup_26 = yes
+ eon_ct_raid_cleanup_27 = yes
+ eon_ct_raid_cleanup_28 = yes
+ eon_ct_raid_cleanup_29 = yes
+ eon_ct_raid_cleanup_30 = yes
+ eon_ct_raid_cleanup_31 = yes
+ eon_ct_raid_try_refund = yes
+}
+
+eon_ct_raid_cleanup_annexed_owner = {
+ if = { limit = { has_country_flag = eon_ct_raid_pending_1 } eon_ct_raid_cancel_1 = yes set_country_flag = eon_ct_raid_retired_1 eon_ct_raid_clear_1 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_2 } eon_ct_raid_cancel_2 = yes set_country_flag = eon_ct_raid_retired_2 eon_ct_raid_clear_2 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_3 } eon_ct_raid_cancel_3 = yes set_country_flag = eon_ct_raid_retired_3 eon_ct_raid_clear_3 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_4 } eon_ct_raid_cancel_4 = yes set_country_flag = eon_ct_raid_retired_4 eon_ct_raid_clear_4 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_5 } eon_ct_raid_cancel_5 = yes set_country_flag = eon_ct_raid_retired_5 eon_ct_raid_clear_5 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_6 } eon_ct_raid_cancel_6 = yes set_country_flag = eon_ct_raid_retired_6 eon_ct_raid_clear_6 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_7 } eon_ct_raid_cancel_7 = yes set_country_flag = eon_ct_raid_retired_7 eon_ct_raid_clear_7 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_8 } eon_ct_raid_cancel_8 = yes set_country_flag = eon_ct_raid_retired_8 eon_ct_raid_clear_8 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_9 } eon_ct_raid_cancel_9 = yes set_country_flag = eon_ct_raid_retired_9 eon_ct_raid_clear_9 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_10 } eon_ct_raid_cancel_10 = yes set_country_flag = eon_ct_raid_retired_10 eon_ct_raid_clear_10 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_11 } eon_ct_raid_cancel_11 = yes set_country_flag = eon_ct_raid_retired_11 eon_ct_raid_clear_11 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_12 } eon_ct_raid_cancel_12 = yes set_country_flag = eon_ct_raid_retired_12 eon_ct_raid_clear_12 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_13 } eon_ct_raid_cancel_13 = yes set_country_flag = eon_ct_raid_retired_13 eon_ct_raid_clear_13 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_14 } eon_ct_raid_cancel_14 = yes set_country_flag = eon_ct_raid_retired_14 eon_ct_raid_clear_14 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_15 } eon_ct_raid_cancel_15 = yes set_country_flag = eon_ct_raid_retired_15 eon_ct_raid_clear_15 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_16 } eon_ct_raid_cancel_16 = yes set_country_flag = eon_ct_raid_retired_16 eon_ct_raid_clear_16 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_17 } eon_ct_raid_cancel_17 = yes set_country_flag = eon_ct_raid_retired_17 eon_ct_raid_clear_17 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_18 } eon_ct_raid_cancel_18 = yes set_country_flag = eon_ct_raid_retired_18 eon_ct_raid_clear_18 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_19 } eon_ct_raid_cancel_19 = yes set_country_flag = eon_ct_raid_retired_19 eon_ct_raid_clear_19 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_20 } eon_ct_raid_cancel_20 = yes set_country_flag = eon_ct_raid_retired_20 eon_ct_raid_clear_20 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_21 } eon_ct_raid_cancel_21 = yes set_country_flag = eon_ct_raid_retired_21 eon_ct_raid_clear_21 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_22 } eon_ct_raid_cancel_22 = yes set_country_flag = eon_ct_raid_retired_22 eon_ct_raid_clear_22 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_23 } eon_ct_raid_cancel_23 = yes set_country_flag = eon_ct_raid_retired_23 eon_ct_raid_clear_23 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_24 } eon_ct_raid_cancel_24 = yes set_country_flag = eon_ct_raid_retired_24 eon_ct_raid_clear_24 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_25 } eon_ct_raid_cancel_25 = yes set_country_flag = eon_ct_raid_retired_25 eon_ct_raid_clear_25 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_26 } eon_ct_raid_cancel_26 = yes set_country_flag = eon_ct_raid_retired_26 eon_ct_raid_clear_26 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_27 } eon_ct_raid_cancel_27 = yes set_country_flag = eon_ct_raid_retired_27 eon_ct_raid_clear_27 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_28 } eon_ct_raid_cancel_28 = yes set_country_flag = eon_ct_raid_retired_28 eon_ct_raid_clear_28 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_29 } eon_ct_raid_cancel_29 = yes set_country_flag = eon_ct_raid_retired_29 eon_ct_raid_clear_29 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_30 } eon_ct_raid_cancel_30 = yes set_country_flag = eon_ct_raid_retired_30 eon_ct_raid_clear_30 = yes }
+ if = { limit = { has_country_flag = eon_ct_raid_pending_31 } eon_ct_raid_cancel_31 = yes set_country_flag = eon_ct_raid_retired_31 eon_ct_raid_clear_31 = yes }
+}

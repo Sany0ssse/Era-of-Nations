@@ -1,0 +1,1382 @@
+# Decision callbacks own their literal slot; territory owner and terrorism account differ.
+eon_ct_raid_owner_authorizes = {
+ exists = yes
+ var:eon_ct_raid_actor = {
+  exists = yes
+  OR = {
+   tag = PREV
+   AND = {
+    NOT = { tag = PREV }
+    NOT = { has_war_with = PREV }
+    has_country_flag = anti_terror_agreement@PREV
+    PREV = { has_country_flag = anti_terror_agreement@PREV }
+   }
+  }
+ }
+}
+
+eon_ct_raid_policy_1 = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 191
+				any_other_country = {
+					owns_state = 191
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { SYR.terrorism > 0 }
+			SYR = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_1 = {
+ exists = yes
+ eon_ct_raid_policy_1 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_1 }
+ NOT = { has_country_flag = eon_ct_raid_paid_1 }
+ NOT = { has_country_flag = eon_ct_raid_retired_1 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 191 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_1 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_1
+ check_variable = { eon_ct_raid_owner_1 > 0 }
+ eon_ct_raid_policy_1 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_1 }
+ 191 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_1 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_1
+ has_country_flag = eon_ct_raid_paid_1
+}
+
+eon_ct_raid_policy_2 = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 193
+				any_other_country = {
+					owns_state = 193
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { SYR.terrorism > 0 }
+			SYR = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_2 = {
+ exists = yes
+ eon_ct_raid_policy_2 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_2 }
+ NOT = { has_country_flag = eon_ct_raid_paid_2 }
+ NOT = { has_country_flag = eon_ct_raid_retired_2 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 193 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_2 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_2
+ check_variable = { eon_ct_raid_owner_2 > 0 }
+ eon_ct_raid_policy_2 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_2 }
+ 193 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_2 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_2
+ has_country_flag = eon_ct_raid_paid_2
+}
+
+eon_ct_raid_policy_3 = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 995
+				any_other_country = {
+					owns_state = 995
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { SYR.terrorism > 0 }
+			SYR = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_3 = {
+ exists = yes
+ eon_ct_raid_policy_3 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_3 }
+ NOT = { has_country_flag = eon_ct_raid_paid_3 }
+ NOT = { has_country_flag = eon_ct_raid_retired_3 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 995 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_3 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_3
+ check_variable = { eon_ct_raid_owner_3 > 0 }
+ eon_ct_raid_policy_3 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_3 }
+ 995 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_3 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_3
+ has_country_flag = eon_ct_raid_paid_3
+}
+
+eon_ct_raid_policy_4 = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 166
+				any_other_country = {
+					owns_state = 166
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { IRQ.terrorism > 0 }
+			IRQ = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_4 = {
+ exists = yes
+ eon_ct_raid_policy_4 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_4 }
+ NOT = { has_country_flag = eon_ct_raid_paid_4 }
+ NOT = { has_country_flag = eon_ct_raid_retired_4 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 166 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_4 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_4
+ check_variable = { eon_ct_raid_owner_4 > 0 }
+ eon_ct_raid_policy_4 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_4 }
+ 166 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_4 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_4
+ has_country_flag = eon_ct_raid_paid_4
+}
+
+eon_ct_raid_policy_5 = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 167
+				any_other_country = {
+					owns_state = 167
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { IRQ.terrorism > 0 }
+			IRQ = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_5 = {
+ exists = yes
+ eon_ct_raid_policy_5 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_5 }
+ NOT = { has_country_flag = eon_ct_raid_paid_5 }
+ NOT = { has_country_flag = eon_ct_raid_retired_5 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 167 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_5 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_5
+ check_variable = { eon_ct_raid_owner_5 > 0 }
+ eon_ct_raid_policy_5 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_5 }
+ 167 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_5 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_5
+ has_country_flag = eon_ct_raid_paid_5
+}
+
+eon_ct_raid_policy_6 = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 168
+				any_other_country = {
+					owns_state = 168
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { IRQ.terrorism > 0 }
+			IRQ = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_6 = {
+ exists = yes
+ eon_ct_raid_policy_6 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_6 }
+ NOT = { has_country_flag = eon_ct_raid_paid_6 }
+ NOT = { has_country_flag = eon_ct_raid_retired_6 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 168 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_6 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_6
+ check_variable = { eon_ct_raid_owner_6 > 0 }
+ eon_ct_raid_policy_6 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_6 }
+ 168 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_6 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_6
+ has_country_flag = eon_ct_raid_paid_6
+}
+
+eon_ct_raid_policy_7 = {
+			NOT = {
+				tag = ISI
+			}
+			OR = {
+				owns_state = 641
+				any_other_country = {
+					owns_state = 641
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { IRQ.terrorism > 0 }
+			IRQ = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_7 = {
+ exists = yes
+ eon_ct_raid_policy_7 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_7 }
+ NOT = { has_country_flag = eon_ct_raid_paid_7 }
+ NOT = { has_country_flag = eon_ct_raid_retired_7 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 641 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_7 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_7
+ check_variable = { eon_ct_raid_owner_7 > 0 }
+ eon_ct_raid_policy_7 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_7 }
+ 641 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_7 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_7
+ has_country_flag = eon_ct_raid_paid_7
+}
+
+eon_ct_raid_policy_8 = {
+			NOT = {
+				country_exists = ARW
+				original_tag = ARM
+			}
+			OR = {
+				owns_state = 935
+				any_other_country = {
+					owns_state = 935
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ARW.terrorism > 0 }
+			ARW = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			ARM = {
+				has_completed_focus = ARM_invite_asala
+			}
+		}
+eon_ct_raid_start_ready_8 = {
+ exists = yes
+ eon_ct_raid_policy_8 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_8 }
+ NOT = { has_country_flag = eon_ct_raid_paid_8 }
+ NOT = { has_country_flag = eon_ct_raid_retired_8 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 935 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_8 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_8
+ check_variable = { eon_ct_raid_owner_8 > 0 }
+ eon_ct_raid_policy_8 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_8 }
+ 935 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_8 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_8
+ has_country_flag = eon_ct_raid_paid_8
+}
+
+eon_ct_raid_policy_9 = {
+			NOT = {
+				country_exists = ARW
+				original_tag = ARM
+			}
+			OR = {
+				owns_state = 163
+				any_other_country = {
+					owns_state = 163
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ARW.terrorism > 0 }
+			ARW = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+			ARM = {
+				has_completed_focus = ARM_invite_asala
+			}
+		}
+eon_ct_raid_start_ready_9 = {
+ exists = yes
+ eon_ct_raid_policy_9 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_9 }
+ NOT = { has_country_flag = eon_ct_raid_paid_9 }
+ NOT = { has_country_flag = eon_ct_raid_retired_9 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 163 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_9 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_9
+ check_variable = { eon_ct_raid_owner_9 > 0 }
+ eon_ct_raid_policy_9 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_9 }
+ 163 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_9 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_9
+ has_country_flag = eon_ct_raid_paid_9
+}
+
+eon_ct_raid_policy_10 = {
+			OR = {
+				AND = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+				}
+				any_other_country = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ITA.terrorism > 0 }
+			ITA = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_10 = {
+ exists = yes
+ eon_ct_raid_policy_10 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_10 }
+ NOT = { has_country_flag = eon_ct_raid_paid_10 }
+ NOT = { has_country_flag = eon_ct_raid_retired_10 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 81 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_10 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_10
+ check_variable = { eon_ct_raid_owner_10 > 0 }
+ eon_ct_raid_policy_10 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_10 }
+ 81 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_10 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_10
+ has_country_flag = eon_ct_raid_paid_10
+}
+
+eon_ct_raid_policy_11 = {
+			OR = {
+				AND = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+				}
+				any_other_country = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ITA.terrorism > 0 }
+			ITA = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_11 = {
+ exists = yes
+ eon_ct_raid_policy_11 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_11 }
+ NOT = { has_country_flag = eon_ct_raid_paid_11 }
+ NOT = { has_country_flag = eon_ct_raid_retired_11 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 78 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_11 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_11
+ check_variable = { eon_ct_raid_owner_11 > 0 }
+ eon_ct_raid_policy_11 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_11 }
+ 78 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_11 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_11
+ has_country_flag = eon_ct_raid_paid_11
+}
+
+eon_ct_raid_policy_12 = {
+			OR = {
+				AND = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+				}
+				any_other_country = {
+					original_tag = ITA
+					owns_state = 81
+					owns_state = 78
+					owns_state = 1060
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ITA.terrorism > 0 }
+			ITA = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_12 = {
+ exists = yes
+ eon_ct_raid_policy_12 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_12 }
+ NOT = { has_country_flag = eon_ct_raid_paid_12 }
+ NOT = { has_country_flag = eon_ct_raid_retired_12 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 1060 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_12 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_12
+ check_variable = { eon_ct_raid_owner_12 > 0 }
+ eon_ct_raid_policy_12 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_12 }
+ 1060 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_12 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_12
+ has_country_flag = eon_ct_raid_paid_12
+}
+
+eon_ct_raid_policy_13 = {
+			OR = {
+				AND = {
+					original_tag = GER
+					owns_state = 44
+				}
+				any_other_country = {
+					original_tag = GER
+					owns_state = 44
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { GER.terrorism > 0 }
+			GER = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_13 = {
+ exists = yes
+ eon_ct_raid_policy_13 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_13 }
+ NOT = { has_country_flag = eon_ct_raid_paid_13 }
+ NOT = { has_country_flag = eon_ct_raid_retired_13 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 44 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_13 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_13
+ check_variable = { eon_ct_raid_owner_13 > 0 }
+ eon_ct_raid_policy_13 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_13 }
+ 44 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_13 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_13
+ has_country_flag = eon_ct_raid_paid_13
+}
+
+eon_ct_raid_policy_14 = {
+			OR = {
+				AND = {
+					original_tag = NOR
+					owns_state = 30
+				}
+				any_other_country = {
+					original_tag = NOR
+					owns_state = 30
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { NOR.terrorism > 0 }
+			NOR = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_14 = {
+ exists = yes
+ eon_ct_raid_policy_14 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_14 }
+ NOT = { has_country_flag = eon_ct_raid_paid_14 }
+ NOT = { has_country_flag = eon_ct_raid_retired_14 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 30 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_14 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_14
+ check_variable = { eon_ct_raid_owner_14 > 0 }
+ eon_ct_raid_policy_14 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_14 }
+ 30 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_14 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_14
+ has_country_flag = eon_ct_raid_paid_14
+}
+
+eon_ct_raid_policy_15 = {
+			OR = {
+				AND = {
+					original_tag = CZE
+					owns_state = 1018
+				}
+				any_other_country = {
+					original_tag = CZE
+					owns_state = 1018
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { CZE.terrorism > 0 }
+			CZE = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_15 = {
+ exists = yes
+ eon_ct_raid_policy_15 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_15 }
+ NOT = { has_country_flag = eon_ct_raid_paid_15 }
+ NOT = { has_country_flag = eon_ct_raid_retired_15 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 1018 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_15 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_15
+ check_variable = { eon_ct_raid_owner_15 > 0 }
+ eon_ct_raid_policy_15 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_15 }
+ 1018 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_15 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_15
+ has_country_flag = eon_ct_raid_paid_15
+}
+
+eon_ct_raid_policy_16 = {
+			OR = {
+				AND = {
+					original_tag = HUN
+					owns_state = 122
+				}
+				any_other_country = {
+					original_tag = HUN
+					owns_state = 122
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { HUN.terrorism > 0 }
+			HUN = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_16 = {
+ exists = yes
+ eon_ct_raid_policy_16 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_16 }
+ NOT = { has_country_flag = eon_ct_raid_paid_16 }
+ NOT = { has_country_flag = eon_ct_raid_retired_16 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 122 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_16 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_16
+ check_variable = { eon_ct_raid_owner_16 > 0 }
+ eon_ct_raid_policy_16 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_16 }
+ 122 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_16 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_16
+ has_country_flag = eon_ct_raid_paid_16
+}
+
+eon_ct_raid_policy_17 = {
+			OR = {
+				AND = {
+					original_tag = AUS
+					owns_state = 286
+				}
+				any_other_country = {
+					original_tag = AUS
+					owns_state = 286
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { AUS.terrorism > 0 }
+			AUS = {
+				NOT = {
+					has_government = communism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_17 = {
+ exists = yes
+ eon_ct_raid_policy_17 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_17 }
+ NOT = { has_country_flag = eon_ct_raid_paid_17 }
+ NOT = { has_country_flag = eon_ct_raid_retired_17 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 286 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_17 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_17
+ check_variable = { eon_ct_raid_owner_17 > 0 }
+ eon_ct_raid_policy_17 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_17 }
+ 286 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_17 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_17
+ has_country_flag = eon_ct_raid_paid_17
+}
+
+eon_ct_raid_policy_18 = {
+			OR = {
+				owns_state = 216
+				any_other_country = {
+					owns_state = 216
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { EGY.terrorism > 0 }
+			EGY = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_18 = {
+ exists = yes
+ eon_ct_raid_policy_18 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_18 }
+ NOT = { has_country_flag = eon_ct_raid_paid_18 }
+ NOT = { has_country_flag = eon_ct_raid_retired_18 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 216 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_18 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_18
+ check_variable = { eon_ct_raid_owner_18 > 0 }
+ eon_ct_raid_policy_18 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_18 }
+ 216 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_18 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_18
+ has_country_flag = eon_ct_raid_paid_18
+}
+
+eon_ct_raid_policy_19 = {
+			OR = {
+				owns_state = 338
+				any_other_country = {
+					owns_state = 338
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { NIG.terrorism > 0 }
+			NIG = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_19 = {
+ exists = yes
+ eon_ct_raid_policy_19 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_19 }
+ NOT = { has_country_flag = eon_ct_raid_paid_19 }
+ NOT = { has_country_flag = eon_ct_raid_retired_19 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 338 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_19 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_19
+ check_variable = { eon_ct_raid_owner_19 > 0 }
+ eon_ct_raid_policy_19 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_19 }
+ 338 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_19 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_19
+ has_country_flag = eon_ct_raid_paid_19
+}
+
+eon_ct_raid_policy_20 = {
+			OR = {
+				owns_state = 339
+				any_other_country = {
+					owns_state = 339
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { NIG.terrorism > 0 }
+			NIG = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_20 = {
+ exists = yes
+ eon_ct_raid_policy_20 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_20 }
+ NOT = { has_country_flag = eon_ct_raid_paid_20 }
+ NOT = { has_country_flag = eon_ct_raid_retired_20 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 339 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_20 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_20
+ check_variable = { eon_ct_raid_owner_20 > 0 }
+ eon_ct_raid_policy_20 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_20 }
+ 339 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_20 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_20
+ has_country_flag = eon_ct_raid_paid_20
+}
+
+eon_ct_raid_policy_21 = {
+			OR = {
+				owns_state = 340
+				any_other_country = {
+					owns_state = 340
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { NIG.terrorism > 0 }
+			NIG = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_21 = {
+ exists = yes
+ eon_ct_raid_policy_21 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_21 }
+ NOT = { has_country_flag = eon_ct_raid_paid_21 }
+ NOT = { has_country_flag = eon_ct_raid_retired_21 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 340 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_21 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_21
+ check_variable = { eon_ct_raid_owner_21 > 0 }
+ eon_ct_raid_policy_21 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_21 }
+ 340 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_21 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_21
+ has_country_flag = eon_ct_raid_paid_21
+}
+
+eon_ct_raid_policy_22 = {
+			OR = {
+				owns_state = 381
+				any_other_country = {
+					owns_state = 381
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ALG.terrorism > 0 }
+			ALG = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_22 = {
+ exists = yes
+ eon_ct_raid_policy_22 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_22 }
+ NOT = { has_country_flag = eon_ct_raid_paid_22 }
+ NOT = { has_country_flag = eon_ct_raid_retired_22 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 381 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_22 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_22
+ check_variable = { eon_ct_raid_owner_22 > 0 }
+ eon_ct_raid_policy_22 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_22 }
+ 381 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_22 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_22
+ has_country_flag = eon_ct_raid_paid_22
+}
+
+eon_ct_raid_policy_23 = {
+			OR = {
+				owns_state = 390
+				any_other_country = {
+					owns_state = 390
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { TUN.terrorism > 0 }
+			TUN = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_23 = {
+ exists = yes
+ eon_ct_raid_policy_23 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_23 }
+ NOT = { has_country_flag = eon_ct_raid_paid_23 }
+ NOT = { has_country_flag = eon_ct_raid_retired_23 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 390 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_23 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_23
+ check_variable = { eon_ct_raid_owner_23 > 0 }
+ eon_ct_raid_policy_23 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_23 }
+ 390 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_23 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_23
+ has_country_flag = eon_ct_raid_paid_23
+}
+
+eon_ct_raid_policy_24 = {
+			OR = {
+				owns_state = 723
+				any_other_country = {
+					owns_state = 723
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { TAJ.terrorism > 0 }
+			TAJ = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_24 = {
+ exists = yes
+ eon_ct_raid_policy_24 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_24 }
+ NOT = { has_country_flag = eon_ct_raid_paid_24 }
+ NOT = { has_country_flag = eon_ct_raid_retired_24 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 723 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_24 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_24
+ check_variable = { eon_ct_raid_owner_24 > 0 }
+ eon_ct_raid_policy_24 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_24 }
+ 723 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_24 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_24
+ has_country_flag = eon_ct_raid_paid_24
+}
+
+eon_ct_raid_policy_25 = {
+			OR = {
+				owns_state = 177
+				any_other_country = {
+					owns_state = 177
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { SAU.terrorism > 0 }
+			SAU = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_25 = {
+ exists = yes
+ eon_ct_raid_policy_25 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_25 }
+ NOT = { has_country_flag = eon_ct_raid_paid_25 }
+ NOT = { has_country_flag = eon_ct_raid_retired_25 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 177 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_25 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_25
+ check_variable = { eon_ct_raid_owner_25 > 0 }
+ eon_ct_raid_policy_25 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_25 }
+ 177 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_25 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_25
+ has_country_flag = eon_ct_raid_paid_25
+}
+
+eon_ct_raid_policy_26 = {
+			OR = {
+				owns_state = 180
+				any_other_country = {
+					owns_state = 180
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { UAE.terrorism > 0 }
+			UAE = {
+				NOT = {
+					has_government = fascism
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_26 = {
+ exists = yes
+ eon_ct_raid_policy_26 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_26 }
+ NOT = { has_country_flag = eon_ct_raid_paid_26 }
+ NOT = { has_country_flag = eon_ct_raid_retired_26 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 180 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_26 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_26
+ check_variable = { eon_ct_raid_owner_26 > 0 }
+ eon_ct_raid_policy_26 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_26 }
+ 180 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_26 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_26
+ has_country_flag = eon_ct_raid_paid_26
+}
+
+eon_ct_raid_policy_27 = {
+			OR = {
+				owns_state = 1126
+				any_other_country = {
+					owns_state = 1126
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { ING.terrorism > 0 }
+			ING = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_27 = {
+ exists = yes
+ eon_ct_raid_policy_27 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_27 }
+ NOT = { has_country_flag = eon_ct_raid_paid_27 }
+ NOT = { has_country_flag = eon_ct_raid_retired_27 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 1126 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_27 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_27
+ check_variable = { eon_ct_raid_owner_27 > 0 }
+ eon_ct_raid_policy_27 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_27 }
+ 1126 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_27 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_27
+ has_country_flag = eon_ct_raid_paid_27
+}
+
+eon_ct_raid_policy_28 = {
+			OR = {
+				owns_state = 674
+				any_other_country = {
+					owns_state = 674
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { KBK.terrorism > 0 }
+			KBK = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_28 = {
+ exists = yes
+ eon_ct_raid_policy_28 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_28 }
+ NOT = { has_country_flag = eon_ct_raid_paid_28 }
+ NOT = { has_country_flag = eon_ct_raid_retired_28 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 674 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_28 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_28
+ check_variable = { eon_ct_raid_owner_28 > 0 }
+ eon_ct_raid_policy_28 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_28 }
+ 674 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_28 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_28
+ has_country_flag = eon_ct_raid_paid_28
+}
+
+eon_ct_raid_policy_29 = {
+			OR = {
+				owns_state = 1125
+				any_other_country = {
+					owns_state = 1125
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { KCC.terrorism > 0 }
+			KCC = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_29 = {
+ exists = yes
+ eon_ct_raid_policy_29 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_29 }
+ NOT = { has_country_flag = eon_ct_raid_paid_29 }
+ NOT = { has_country_flag = eon_ct_raid_retired_29 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 1125 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_29 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_29
+ check_variable = { eon_ct_raid_owner_29 > 0 }
+ eon_ct_raid_policy_29 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_29 }
+ 1125 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_29 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_29
+ has_country_flag = eon_ct_raid_paid_29
+}
+
+eon_ct_raid_policy_30 = {
+			OR = {
+				owns_state = 671
+				any_other_country = {
+					owns_state = 671
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { DAG.terrorism > 0 }
+			DAG = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_30 = {
+ exists = yes
+ eon_ct_raid_policy_30 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_30 }
+ NOT = { has_country_flag = eon_ct_raid_paid_30 }
+ NOT = { has_country_flag = eon_ct_raid_retired_30 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 671 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_30 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_30
+ check_variable = { eon_ct_raid_owner_30 > 0 }
+ eon_ct_raid_policy_30 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_30 }
+ 671 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_30 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_30
+ has_country_flag = eon_ct_raid_paid_30
+}
+
+eon_ct_raid_policy_31 = {
+			OR = {
+				owns_state = 672
+				any_other_country = {
+					owns_state = 672
+					has_country_flag = anti_terror_agreement@PREV
+				}
+			}
+			check_variable = { CHE.terrorism > 0 }
+			CHE = {
+				NOT = {
+					has_country_flag = GENERIC_terrorism_rebeliion_flag
+				}
+			}
+		}
+eon_ct_raid_start_ready_31 = {
+ exists = yes
+ eon_ct_raid_policy_31 = yes
+ command_power > 25
+ NOT = { has_country_flag = eon_ct_raid_pending_31 }
+ NOT = { has_country_flag = eon_ct_raid_paid_31 }
+ NOT = { has_country_flag = eon_ct_raid_retired_31 }
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ 672 = { owner = { eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_authorization_31 = {
+ exists = yes
+ has_country_flag = eon_ct_raid_pending_31
+ check_variable = { eon_ct_raid_owner_31 > 0 }
+ eon_ct_raid_policy_31 = yes
+ set_temp_variable = { eon_ct_raid_actor = THIS }
+ set_temp_variable = { eon_ct_raid_original_owner = eon_ct_raid_owner_31 }
+ 672 = { owner = { check_variable = { eon_ct_raid_original_owner = THIS } eon_ct_raid_owner_authorizes = yes } }
+}
+eon_ct_raid_cancel_ready_31 = {
+ exists = yes
+ is_ai = no
+ has_country_flag = eon_ct_raid_pending_31
+ has_country_flag = eon_ct_raid_paid_31
+}

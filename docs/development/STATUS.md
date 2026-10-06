@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and ten implementation packages are complete at
+The existing diplomacy audit and eleven implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -140,6 +140,28 @@ closed duplicate completion/termination, annex residue, incoming withdrawal
 and orphan cancellation findings.
 See [DIPLOMACY_PACKAGE_10_UK.md](DIPLOMACY_PACKAGE_10_UK.md). Native GUI,
 cost timing, scopes, timers, AI, save/load and campaign acceptance remain pending.
+
+The eleventh package completes the existing 31 paid CT decision lifecycles:
+25CP charged once, immutable territory owner, the original five-day delay,
+fresh bilateral cooperation and national checks, one inherited random outcome,
+individual free cancellation and measured CP refund claims. Existing >25CP
+admission, 35-day native re-enable, all original visibility/AI/NOR rules and
+virtual terrorism accounting tags remain unchanged. Cancelled records retain
+the original timer lock; a seven-day unresolved watchdog or operator annex
+retires only the affected per-country decision. Refund claims survive capacity
+limits and stay owned by the payer after annexation. Negative observed native
+credit moves clipped over-cap CP into the claim; native cap behavior is not yet
+accepted. Old untracked paid decisions are not inferred or refunded. Exactly
+31 blocks in one existing file change, 23 unrelated decisions and all unowned
+bytes are preserved, and seven game files add 31 cancellation decisions.
+Native diplomatic action IDs remain 65. Full source checks and independent
+review passed 5541 cumulative scenarios (5401 previous plus 140 new in 23
+groups), with 1381 separate new source/API checks and no new adapter cases.
+All eight owned game-file hashes agree; 68299 unrelated existing gameplay
+files remain byte-exact. See
+[DIPLOMACY_PACKAGE_11_UK.md](DIPLOMACY_PACKAGE_11_UK.md). Native scopes, timers,
+CP limits, GUI, AI, extinct-country variable persistence and save/load remain
+unverified. The next source audit concerns existing civilian satellite access.
 
 ## Completed setup
 

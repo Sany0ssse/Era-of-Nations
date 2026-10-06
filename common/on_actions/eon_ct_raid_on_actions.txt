@@ -1,0 +1,22 @@
+# Refund claims remain owned by the original country after annexation.
+on_actions = {
+ on_daily = { effect = { eon_ct_raid_daily_cleanup = yes } }
+ on_annex = {
+  effect = {
+   FROM = { eon_ct_raid_cleanup_annexed_owner = yes }
+   every_country = {
+    limit = { exists = yes NOT = { tag = FROM } }
+    eon_ct_raid_daily_cleanup = yes
+   }
+  }
+ }
+ on_subject_annexed = {
+  effect = {
+   ROOT = { eon_ct_raid_cleanup_annexed_owner = yes }
+   every_country = {
+    limit = { exists = yes NOT = { tag = ROOT } }
+    eon_ct_raid_daily_cleanup = yes
+   }
+  }
+ }
+}
