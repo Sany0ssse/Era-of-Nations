@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and eighteen implementation packages are complete at
+The existing diplomacy audit and nineteen implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -352,6 +352,44 @@ through exact byte journals. Gameplay, validation, source-run and independent
 review receipts are bound by hashes. Native engine acceptance remains pending.
 No game launch or changes to saves, launcher configuration, Workshop files
 or playsets are made here.
+
+## Diplomacy package 19
+
+The nineteenth package develops only the existing equipment choice AB_mobilization.4.b.
+A donor freezes a nonempty subset of the nine original full-size equipment
+packets actually available in stored-count guards. The recipient approves that
+specific list; all selected packets must still be fully stocked and politically
+eligible before any provider-side native dispatch call. Quantities cannot shrink
+silently, and newly available unselected types cannot be added after consent.
+The original provider ROOT/recipient FROM influence call remains +3 after dispatch.
+
+The initial 50-PP/360-day request, troop/cash/refusal choices, all mercenary paths,
+the old AB6 event and its localization remain byte-unchanged. Own notices describe
+a dispatch order rather than claiming delivery. Withdrawal before assent, decline,
+expiry, malformed-record cleanup and both annex hooks cannot send equipment.
+Known unresolved pairs retire only their directed equipment channel; unidentified
+partners or unowned partial fields quarantine only the donor equipment channel.
+The cash channel and other agreements remain separate. Consumed same-pair callbacks
+across a later identical record still lack a native generation-token proof.
+
+Official dated GAO and FRUS material informs stock availability, precise agreed
+items and the distinction between authorization, shipment and delivery. Historical
+draft notes are not treated as executed universal agreements. The frozen subset,
+packet sizes, ranks and 30-day window remain game choices, without a full export
+control, end-use monitoring, parliament or legal-conflict assessment system.
+See [DIPLOMACY_PACKAGE_19_UK.md](DIPLOMACY_PACKAGE_19_UK.md).
+
+The cumulative runner passed 7171 source-model scenarios (6539 retained,
+632 new in 23 groups), 37 separate stock-query and dispatch-observer checks,
+and 202 new source checks (184 API/structure + 18 memory-only byte-boundary
+mutations). All 511 nonempty manifests are covered. All 47 older behavior/
+helper/runner Python files remain raw-byte unchanged; 17 historical source
+validators retain assertions and counters through exact byte journals.
+Gameplay, validation, source-run and independent review receipts are hash-bound.
+The ordered observer records native send calls without inventing stock debits,
+recipient credit, variant selection, transit or delivery completion. Native
+inventory conservation and in-game acceptance remain pending. No game launch or
+changes to saves, launcher configuration, Workshop or playsets are made here.
 
 ## Completed setup
 

@@ -1,0 +1,361 @@
+eon_foreign_equipment_freeze_manifest = {
+ clr_country_flag = eon_foreign_equipment_packet_apc
+ if = {
+  limit = { has_equipment = { medium_tank_amphibious_chassis > 249 } }
+  set_country_flag = eon_foreign_equipment_packet_apc
+ }
+ clr_country_flag = eon_foreign_equipment_packet_ifv
+ if = {
+  limit = { has_equipment = { medium_tank_flame_chassis > 249 } }
+  set_country_flag = eon_foreign_equipment_packet_ifv
+ }
+ clr_country_flag = eon_foreign_equipment_packet_utility
+ if = {
+  limit = { has_equipment = { util_vehicle_equipment > 249 } }
+  set_country_flag = eon_foreign_equipment_packet_utility
+ }
+ clr_country_flag = eon_foreign_equipment_packet_manpads
+ if = {
+  limit = { has_equipment = { AA_Equipment > 249 } }
+  set_country_flag = eon_foreign_equipment_packet_manpads
+ }
+ clr_country_flag = eon_foreign_equipment_packet_atgm
+ if = {
+  limit = { has_equipment = { L_AT_Equipment > 249 } }
+  set_country_flag = eon_foreign_equipment_packet_atgm
+ }
+ clr_country_flag = eon_foreign_equipment_packet_small_arms
+ if = {
+  limit = { has_equipment = { Inf_equipment > 999 } }
+  set_country_flag = eon_foreign_equipment_packet_small_arms
+ }
+ clr_country_flag = eon_foreign_equipment_packet_drone
+ if = {
+  limit = { has_equipment = { small_plane_suicide_airframe > 99 } }
+  set_country_flag = eon_foreign_equipment_packet_drone
+ }
+ clr_country_flag = eon_foreign_equipment_packet_cruise
+ if = {
+  limit = { has_equipment = { guided_missile_equipment > 99 } }
+  set_country_flag = eon_foreign_equipment_packet_cruise
+ }
+ clr_country_flag = eon_foreign_equipment_packet_ballistic
+ if = {
+  limit = { has_equipment = { ballistic_missile_equipment > 99 } }
+  set_country_flag = eon_foreign_equipment_packet_ballistic
+ }
+}
+
+eon_foreign_equipment_show_manifest = {
+ if = {
+  limit = { eon_foreign_equipment_response_pending = yes }
+  custom_effect_tooltip = eon_foreign_equipment_manifest_header_tt
+  FROM = {
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_apc }
+    custom_effect_tooltip = eon_foreign_equipment_manifest_apc_tt
+   }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_ifv }
+    custom_effect_tooltip = eon_foreign_equipment_manifest_ifv_tt
+   }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_utility }
+    custom_effect_tooltip = eon_foreign_equipment_manifest_utility_tt
+   }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_manpads }
+    custom_effect_tooltip = eon_foreign_equipment_manifest_manpads_tt
+   }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_atgm }
+    custom_effect_tooltip = eon_foreign_equipment_manifest_atgm_tt
+   }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_small_arms }
+    custom_effect_tooltip = eon_foreign_equipment_manifest_small_arms_tt
+   }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_drone }
+    custom_effect_tooltip = eon_foreign_equipment_manifest_drone_tt
+   }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_cruise }
+    custom_effect_tooltip = eon_foreign_equipment_manifest_cruise_tt
+   }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_ballistic }
+    custom_effect_tooltip = eon_foreign_equipment_manifest_ballistic_tt
+   }
+  }
+ }
+}
+
+# Frozen full-size equipment packets. No stock reservation, asset creation,
+# escrow, refund or invented native receipt/transport callback.
+eon_foreign_equipment_clear_pending = {
+ clr_country_flag = eon_foreign_equipment_pending
+ clr_country_flag = eon_foreign_equipment_live
+ clr_country_flag = eon_foreign_equipment_cancelled
+ clr_country_flag = eon_foreign_equipment_consented
+ clear_variable = eon_foreign_equipment_partner
+ clr_country_flag = eon_foreign_equipment_packet_apc
+ clr_country_flag = eon_foreign_equipment_packet_ifv
+ clr_country_flag = eon_foreign_equipment_packet_utility
+ clr_country_flag = eon_foreign_equipment_packet_manpads
+ clr_country_flag = eon_foreign_equipment_packet_atgm
+ clr_country_flag = eon_foreign_equipment_packet_small_arms
+ clr_country_flag = eon_foreign_equipment_packet_drone
+ clr_country_flag = eon_foreign_equipment_packet_cruise
+ clr_country_flag = eon_foreign_equipment_packet_ballistic
+}
+eon_foreign_equipment_retire_pending_pair = {
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_pending }
+  if = {
+   limit = { eon_foreign_equipment_partner_identified = yes }
+   var:eon_foreign_equipment_partner = {
+    PREV = { set_country_flag = eon_foreign_equipment_retired_pair@PREV }
+   }
+  }
+  else = { set_country_flag = eon_foreign_equipment_quarantined }
+ }
+}
+eon_foreign_equipment_send_offer = {
+ if = {
+  limit = { eon_foreign_equipment_offer_ready = yes }
+  eon_foreign_equipment_freeze_manifest = yes
+  set_variable = { eon_foreign_equipment_partner = FROM }
+  set_country_flag = eon_foreign_equipment_pending
+  set_country_flag = { flag = eon_foreign_equipment_live days = 30 value = 1 }
+  clr_country_flag = eon_foreign_equipment_cancelled
+  clr_country_flag = eon_foreign_equipment_consented
+  FROM = { country_event = { id = eon_foreign_equipment.1 } }
+ }
+}
+
+# Recipient assent is separate from dispatch. No equipment is sent until a hidden
+# event restores native provider ROOT and freshly verifies current conditions.
+eon_foreign_equipment_accept_offer = {
+ if = {
+  limit = { eon_foreign_equipment_response_open = yes }
+  if = {
+   limit = { eon_foreign_equipment_response_ready = yes }
+   FROM = {
+    set_country_flag = eon_foreign_equipment_consented
+    country_event = { id = eon_foreign_equipment.2 }
+   }
+  }
+  else = {
+   FROM = {
+    eon_foreign_equipment_clear_pending = yes
+    country_event = { id = eon_foreign_equipment.6 }
+   }
+   country_event = { id = eon_foreign_equipment.6 }
+  }
+ }
+}
+eon_foreign_equipment_commit_offer = {
+ if = {
+  limit = { eon_foreign_equipment_commit_pending = yes }
+  if = {
+   limit = { eon_foreign_equipment_commit_ready = yes }
+   # Snapshot the frozen selection in provider-scoped temporaries, then consume
+   # every persistent packet flag BEFORE dispatching any native equipment call.
+   set_temp_variable = { eon_foreign_equipment_dispatch_apc = 0 }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_apc }
+    set_temp_variable = { eon_foreign_equipment_dispatch_apc = 1 }
+   }
+   set_temp_variable = { eon_foreign_equipment_dispatch_ifv = 0 }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_ifv }
+    set_temp_variable = { eon_foreign_equipment_dispatch_ifv = 1 }
+   }
+   set_temp_variable = { eon_foreign_equipment_dispatch_utility = 0 }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_utility }
+    set_temp_variable = { eon_foreign_equipment_dispatch_utility = 1 }
+   }
+   set_temp_variable = { eon_foreign_equipment_dispatch_manpads = 0 }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_manpads }
+    set_temp_variable = { eon_foreign_equipment_dispatch_manpads = 1 }
+   }
+   set_temp_variable = { eon_foreign_equipment_dispatch_atgm = 0 }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_atgm }
+    set_temp_variable = { eon_foreign_equipment_dispatch_atgm = 1 }
+   }
+   set_temp_variable = { eon_foreign_equipment_dispatch_small_arms = 0 }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_small_arms }
+    set_temp_variable = { eon_foreign_equipment_dispatch_small_arms = 1 }
+   }
+   set_temp_variable = { eon_foreign_equipment_dispatch_drone = 0 }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_drone }
+    set_temp_variable = { eon_foreign_equipment_dispatch_drone = 1 }
+   }
+   set_temp_variable = { eon_foreign_equipment_dispatch_cruise = 0 }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_cruise }
+    set_temp_variable = { eon_foreign_equipment_dispatch_cruise = 1 }
+   }
+   set_temp_variable = { eon_foreign_equipment_dispatch_ballistic = 0 }
+   if = {
+    limit = { has_country_flag = eon_foreign_equipment_packet_ballistic }
+    set_temp_variable = { eon_foreign_equipment_dispatch_ballistic = 1 }
+   }
+   eon_foreign_equipment_clear_pending = yes
+   if = {
+    limit = { check_variable = { eon_foreign_equipment_dispatch_apc = 1 } }
+    send_equipment = { equipment = medium_tank_amphibious_chassis amount = 250 target = FROM }
+   }
+   if = {
+    limit = { check_variable = { eon_foreign_equipment_dispatch_ifv = 1 } }
+    send_equipment = { equipment = medium_tank_flame_chassis amount = 250 target = FROM }
+   }
+   if = {
+    limit = { check_variable = { eon_foreign_equipment_dispatch_utility = 1 } }
+    send_equipment = { equipment = util_vehicle_equipment amount = 250 target = FROM }
+   }
+   if = {
+    limit = { check_variable = { eon_foreign_equipment_dispatch_manpads = 1 } }
+    send_equipment = { equipment = AA_Equipment amount = 250 target = FROM }
+   }
+   if = {
+    limit = { check_variable = { eon_foreign_equipment_dispatch_atgm = 1 } }
+    send_equipment = { equipment = L_AT_Equipment amount = 250 target = FROM }
+   }
+   if = {
+    limit = { check_variable = { eon_foreign_equipment_dispatch_small_arms = 1 } }
+    send_equipment = { equipment = Inf_equipment amount = 1000 target = FROM }
+   }
+   if = {
+    limit = { check_variable = { eon_foreign_equipment_dispatch_drone = 1 } }
+    send_equipment = { equipment = small_plane_suicide_airframe amount = 100 target = FROM }
+   }
+   if = {
+    limit = { check_variable = { eon_foreign_equipment_dispatch_cruise = 1 } }
+    send_equipment = { equipment = guided_missile_equipment amount = 100 target = FROM }
+   }
+   if = {
+    limit = { check_variable = { eon_foreign_equipment_dispatch_ballistic = 1 } }
+    send_equipment = { equipment = ballistic_missile_equipment amount = 100 target = FROM }
+   }
+   set_temp_variable = { percent_change = 3 }
+   set_temp_variable = { tag_index = ROOT }
+   set_temp_variable = { influence_target = FROM }
+   change_influence_percentage = yes
+   FROM = { country_event = { id = eon_foreign_equipment.7 } }
+   country_event = { id = eon_foreign_equipment.7 }
+  }
+  else = {
+   eon_foreign_equipment_clear_pending = yes
+   country_event = { id = eon_foreign_equipment.6 }
+   FROM = { country_event = { id = eon_foreign_equipment.6 } }
+  }
+ }
+}
+
+eon_foreign_equipment_reject_offer = {
+ if = {
+  limit = { eon_foreign_equipment_response_open = yes }
+  FROM = {
+   eon_foreign_equipment_clear_pending = yes
+   country_event = { id = eon_foreign_equipment.6 }
+  }
+ }
+}
+eon_foreign_equipment_withdraw_offer = {
+ if = {
+  limit = { eon_foreign_equipment_withdraw_available = yes }
+  ROOT = { set_country_flag = eon_foreign_equipment_cancelled }
+  country_event = { id = eon_foreign_equipment.3 }
+ }
+}
+
+eon_foreign_equipment_daily_update = {
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_foreign_equipment_pending }
+   OR = {
+    has_country_flag = eon_foreign_equipment_live
+    has_country_flag = eon_foreign_equipment_cancelled
+    has_country_flag = eon_foreign_equipment_consented
+    NOT = { check_variable = { eon_foreign_equipment_partner = 0 } }
+    has_country_flag = eon_foreign_equipment_packet_apc
+    has_country_flag = eon_foreign_equipment_packet_ifv
+    has_country_flag = eon_foreign_equipment_packet_utility
+    has_country_flag = eon_foreign_equipment_packet_manpads
+    has_country_flag = eon_foreign_equipment_packet_atgm
+    has_country_flag = eon_foreign_equipment_packet_small_arms
+    has_country_flag = eon_foreign_equipment_packet_drone
+    has_country_flag = eon_foreign_equipment_packet_cruise
+    has_country_flag = eon_foreign_equipment_packet_ballistic
+   }
+  }
+  set_country_flag = eon_foreign_equipment_quarantined
+  eon_foreign_equipment_clear_pending = yes
+  country_event = { id = eon_foreign_equipment.5 }
+ }
+ if = {
+  limit = {
+   has_country_flag = eon_foreign_equipment_pending
+   OR = {
+    exists = no
+    NOT = { eon_foreign_equipment_partner_identified = yes }
+    NOT = { eon_foreign_equipment_manifest_valid = yes }
+    NOT = { has_country_flag = eon_foreign_equipment_live }
+    var:eon_foreign_equipment_partner = { exists = no }
+   }
+  }
+  eon_foreign_equipment_retire_pending_pair = yes
+  eon_foreign_equipment_clear_pending = yes
+  if = {
+   limit = { has_country_flag = eon_foreign_equipment_quarantined }
+   country_event = { id = eon_foreign_equipment.5 }
+  }
+  else = { country_event = { id = eon_foreign_equipment.4 } }
+ }
+}
+
+# Hook supplies the annexed country even before the engine marks it extinct.
+eon_foreign_equipment_annex_update = {
+ if = {
+  limit = {
+   has_country_flag = eon_foreign_equipment_pending
+   check_variable = { eon_foreign_equipment_partner = eon_foreign_equipment_annexed_partner }
+  }
+  eon_foreign_equipment_retire_pending_pair = yes
+  eon_foreign_equipment_clear_pending = yes
+ }
+}
+eon_foreign_equipment_clear_annexed_country = {
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_pending }
+  eon_foreign_equipment_retire_pending_pair = yes
+ }
+ else_if = {
+  limit = {
+   OR = {
+    has_country_flag = eon_foreign_equipment_live
+    has_country_flag = eon_foreign_equipment_cancelled
+    has_country_flag = eon_foreign_equipment_consented
+    NOT = { check_variable = { eon_foreign_equipment_partner = 0 } }
+    has_country_flag = eon_foreign_equipment_packet_apc
+    has_country_flag = eon_foreign_equipment_packet_ifv
+    has_country_flag = eon_foreign_equipment_packet_utility
+    has_country_flag = eon_foreign_equipment_packet_manpads
+    has_country_flag = eon_foreign_equipment_packet_atgm
+    has_country_flag = eon_foreign_equipment_packet_small_arms
+    has_country_flag = eon_foreign_equipment_packet_drone
+    has_country_flag = eon_foreign_equipment_packet_cruise
+    has_country_flag = eon_foreign_equipment_packet_ballistic
+   }
+  }
+  set_country_flag = eon_foreign_equipment_quarantined
+ }
+ eon_foreign_equipment_clear_pending = yes
+}

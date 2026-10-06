@@ -80,6 +80,12 @@ from diplomacy_package_18.test_source import (
     check_owned_existing as check_later_package18_owned,
 )
 check_later_package18_owned()
+from diplomacy_package_19.test_source import (
+    NEW as LATER_PACKAGE19_NEW, package19_original_bytes, package19_historical_existing,
+    package19_original_validator_bytes, historical_actions as package19_historical_actions,
+    check_owned_existing as check_later_package19_owned,
+)
+check_later_package19_owned()
 BASELINE = '688f1116fbcb377215181edca6af50f36538532e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, format_preserved, one
@@ -289,9 +295,9 @@ later_package08_new = {
     'localisation/russian/eon_mediation_l_russian.yml',
 }
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
-changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW]
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE) | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
-untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW]
+untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW]
 assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new | later_package06_paths | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unexpected gameplay changes', changed, untracked)
 groups['whole_gameplay_git_boundary'] += 1
 print(json.dumps({'all_passed': True, 'total_cases': sum(groups.values()), 'groups': groups,

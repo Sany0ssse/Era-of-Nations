@@ -21,6 +21,12 @@ from diplomacy_package_18.test_source import (
     check_owned_existing as check_later_package18_owned,
 )
 check_later_package18_owned()
+from diplomacy_package_19.test_source import (
+    NEW as LATER_PACKAGE19_NEW, package19_original_bytes, package19_historical_existing,
+    package19_original_validator_bytes, historical_actions as package19_historical_actions,
+    check_owned_existing as check_later_package19_owned,
+)
+check_later_package19_owned()
 EXISTING = {'events/00_Influence_events.txt'}
 FX = 'common/scripted_effects/eon_services_effects.txt'
 TR = 'common/scripted_triggers/eon_services_triggers.txt'
@@ -741,8 +747,8 @@ def main():
              'portraits', 'tutorial', 'descriptions', 'scenario_tests', 'descriptor.mod', 'era_of_nations.mod', 'thumbnail.png')
     changed = set(subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines())
     untracked = set(subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines())
-    changed -= package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW
-    untracked -= LATER_PACKAGE18_NEW
+    changed -= package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW
+    untracked -= LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW
     assert changed - NEW == EXISTING and (changed | untracked) - EXISTING == NEW, (changed, untracked)
     assert not subprocess.check_output(['git', 'diff', '--name-only', '--diff-filter=D', BASELINE, '--', *trees], cwd=ROOT).strip()
     passed('exact_full_gameplay_tree_one_existing_seven_new_without_unowned_deletions')

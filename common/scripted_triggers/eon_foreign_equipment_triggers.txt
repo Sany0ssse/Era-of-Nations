@@ -1,0 +1,195 @@
+# Existing full-size packets: partial availability selects packet TYPES,
+# never shrinks a selected quantity or creates missing equipment.
+eon_foreign_equipment_bundle_available = {
+ OR = {
+  has_equipment = { medium_tank_amphibious_chassis > 249 }
+  has_equipment = { medium_tank_flame_chassis > 249 }
+  has_equipment = { util_vehicle_equipment > 249 }
+  has_equipment = { AA_Equipment > 249 }
+  has_equipment = { L_AT_Equipment > 249 }
+  has_equipment = { Inf_equipment > 999 }
+  has_equipment = { small_plane_suicide_airframe > 99 }
+  has_equipment = { guided_missile_equipment > 99 }
+  has_equipment = { ballistic_missile_equipment > 99 }
+ }
+}
+
+eon_foreign_equipment_manifest_valid = {
+ OR = {
+  has_country_flag = eon_foreign_equipment_packet_apc
+  has_country_flag = eon_foreign_equipment_packet_ifv
+  has_country_flag = eon_foreign_equipment_packet_utility
+  has_country_flag = eon_foreign_equipment_packet_manpads
+  has_country_flag = eon_foreign_equipment_packet_atgm
+  has_country_flag = eon_foreign_equipment_packet_small_arms
+  has_country_flag = eon_foreign_equipment_packet_drone
+  has_country_flag = eon_foreign_equipment_packet_cruise
+  has_country_flag = eon_foreign_equipment_packet_ballistic
+ }
+}
+
+eon_foreign_equipment_manifest_stocked = {
+ eon_foreign_equipment_manifest_valid = yes
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_packet_apc }
+  has_equipment = { medium_tank_amphibious_chassis > 249 }
+ }
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_packet_ifv }
+  has_equipment = { medium_tank_flame_chassis > 249 }
+ }
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_packet_utility }
+  has_equipment = { util_vehicle_equipment > 249 }
+ }
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_packet_manpads }
+  has_equipment = { AA_Equipment > 249 }
+ }
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_packet_atgm }
+  has_equipment = { L_AT_Equipment > 249 }
+ }
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_packet_small_arms }
+  has_equipment = { Inf_equipment > 999 }
+ }
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_packet_drone }
+  has_equipment = { small_plane_suicide_airframe > 99 }
+ }
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_packet_cruise }
+  has_equipment = { guided_missile_equipment > 99 }
+ }
+ if = {
+  limit = { has_country_flag = eon_foreign_equipment_packet_ballistic }
+  has_equipment = { ballistic_missile_equipment > 99 }
+ }
+}
+
+# Receiver country scope, explicitly named provider. The inherited request
+# marker is nominal eligibility, not a unique request-generation receipt.
+eon_foreign_equipment_policy_allowed = {
+ exists = yes
+ NOT = { tag = eon_foreign_equipment_policy_provider }
+ has_defensive_war = yes
+ NOT = { has_war_with = eon_foreign_equipment_policy_provider }
+ OR = { has_idea = non_power has_idea = minor_power has_idea = regional_power }
+ var:eon_foreign_equipment_policy_provider = {
+  exists = yes
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_foreign_equipment_policy_provider }
+  OR = { has_idea = large_power has_idea = great_power has_idea = superpower }
+  has_opinion = { target = PREV value > 49 }
+  has_country_flag = aid_request_cd_@PREV
+ }
+}
+
+# Provider country scope; country-only existence and exact positive ID also
+# recognize an extinct partner safely for retirement without moving assets.
+eon_foreign_equipment_partner_identified = {
+ check_variable = { eon_foreign_equipment_partner > 0 }
+ var:eon_foreign_equipment_partner = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_foreign_equipment_partner }
+ }
+}
+
+
+
+# Existing AB_mobilization.4.b: ROOT/THIS provider, FROM receiver.
+eon_foreign_equipment_offer_ready = {
+ exists = yes
+ NOT = { has_country_flag = eon_foreign_equipment_quarantined }
+ NOT = { has_country_flag = eon_foreign_equipment_pending }
+ NOT = { has_country_flag = eon_foreign_equipment_live }
+ NOT = { has_country_flag = eon_foreign_equipment_cancelled }
+ NOT = { has_country_flag = eon_foreign_equipment_consented }
+ NOT = { has_country_flag = eon_foreign_equipment_packet_apc }
+ NOT = { has_country_flag = eon_foreign_equipment_packet_ifv }
+ NOT = { has_country_flag = eon_foreign_equipment_packet_utility }
+ NOT = { has_country_flag = eon_foreign_equipment_packet_manpads }
+ NOT = { has_country_flag = eon_foreign_equipment_packet_atgm }
+ NOT = { has_country_flag = eon_foreign_equipment_packet_small_arms }
+ NOT = { has_country_flag = eon_foreign_equipment_packet_drone }
+ NOT = { has_country_flag = eon_foreign_equipment_packet_cruise }
+ NOT = { has_country_flag = eon_foreign_equipment_packet_ballistic }
+ check_variable = { eon_foreign_equipment_partner = 0 }
+ set_temp_variable = { eon_foreign_equipment_selection_provider = THIS }
+ FROM = {
+  set_temp_variable = { eon_foreign_equipment_policy_provider = PREV.eon_foreign_equipment_selection_provider }
+  eon_foreign_equipment_policy_allowed = yes
+  var:eon_foreign_equipment_policy_provider = { eon_foreign_equipment_bundle_available = yes }
+  var:eon_foreign_equipment_policy_provider = {
+   NOT = { has_country_flag = eon_foreign_equipment_retired_pair@PREV }
+  }
+ }
+}
+
+# New proposal: ROOT/THIS receiver, FROM provider. Identity permits cleanup
+# of cancelled or otherwise invalid proposals; consent closes the reply UI.
+eon_foreign_equipment_response_pending = {
+ FROM = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  has_country_flag = eon_foreign_equipment_pending
+  eon_foreign_equipment_partner_identified = yes
+  check_variable = { eon_foreign_equipment_partner = PREV }
+ }
+}
+eon_foreign_equipment_response_open = {
+ eon_foreign_equipment_response_pending = yes
+ FROM = { NOT = { has_country_flag = eon_foreign_equipment_consented } }
+}
+eon_foreign_equipment_response_ready = {
+ eon_foreign_equipment_response_open = yes
+ FROM = {
+  exists = yes
+  has_country_flag = eon_foreign_equipment_live
+  NOT = { has_country_flag = eon_foreign_equipment_cancelled }
+ }
+ set_temp_variable = { eon_foreign_equipment_policy_provider = FROM }
+ eon_foreign_equipment_policy_allowed = yes
+ var:eon_foreign_equipment_policy_provider = { eon_foreign_equipment_manifest_stocked = yes }
+}
+
+# Hidden execution: native ROOT/THIS provider, FROM consenting receiver.
+# Keeping that event frame preserves ROOT-dependent original influence logic.
+eon_foreign_equipment_commit_pending = {
+ has_country_flag = eon_foreign_equipment_pending
+ has_country_flag = eon_foreign_equipment_consented
+ eon_foreign_equipment_partner_identified = yes
+ check_variable = { eon_foreign_equipment_partner = FROM }
+ FROM = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+ }
+}
+eon_foreign_equipment_commit_ready = {
+ eon_foreign_equipment_commit_pending = yes
+ exists = yes
+ has_country_flag = eon_foreign_equipment_live
+ NOT = { has_country_flag = eon_foreign_equipment_cancelled }
+ set_temp_variable = { eon_foreign_equipment_selection_provider = THIS }
+ FROM = {
+  set_temp_variable = { eon_foreign_equipment_policy_provider = PREV.eon_foreign_equipment_selection_provider }
+  eon_foreign_equipment_policy_allowed = yes
+  var:eon_foreign_equipment_policy_provider = { eon_foreign_equipment_manifest_stocked = yes }
+ }
+}
+
+# Native action ROOT provider, THIS receiver; no withdrawal after assent.
+eon_foreign_equipment_withdraw_available = {
+ exists = yes
+ NOT = { tag = ROOT }
+ ROOT = {
+  exists = yes
+  has_country_flag = eon_foreign_equipment_pending
+  eon_foreign_equipment_partner_identified = yes
+  check_variable = { eon_foreign_equipment_partner = PREV }
+  NOT = { has_country_flag = eon_foreign_equipment_cancelled }
+  NOT = { has_country_flag = eon_foreign_equipment_consented }
+ }
+}

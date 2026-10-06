@@ -1,0 +1,82 @@
+add_namespace = eon_foreign_equipment
+
+# ROOT receiver, FROM provider; explicit assent authorizes conditional execution.
+country_event = {
+ id = eon_foreign_equipment.1
+ title = eon_foreign_equipment.1.t
+ desc = eon_foreign_equipment.1.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = {
+  name = eon_foreign_equipment.1.a
+  trigger = { eon_foreign_equipment_response_ready = yes }
+  eon_foreign_equipment_show_manifest = yes
+  custom_effect_tooltip = eon_foreign_equipment_accept_tt
+  eon_foreign_equipment_accept_offer = yes
+  ai_chance = { factor = 100 }
+ }
+ option = {
+  name = eon_foreign_equipment.1.b
+  trigger = { eon_foreign_equipment_response_open = yes }
+  eon_foreign_equipment_show_manifest = yes
+  custom_effect_tooltip = eon_foreign_equipment_decline_tt
+  eon_foreign_equipment_reject_offer = yes
+  ai_chance = { factor = 10 }
+ }
+ option = {
+  name = eon_foreign_equipment.ack
+  trigger = { NOT = { eon_foreign_equipment_response_open = yes } }
+  eon_foreign_equipment_show_manifest = yes
+  custom_effect_tooltip = eon_foreign_equipment_unmatched_tt
+  ai_chance = { factor = 100 }
+ }
+}
+
+# Native ROOT provider, FROM consenting receiver. This frame is necessary:
+# the original influence macro reads ROOT in its resource-rights calculation.
+country_event = {
+ id = eon_foreign_equipment.2
+ hidden = yes
+ is_triggered_only = yes
+ immediate = { eon_foreign_equipment_commit_offer = yes }
+}
+country_event = {
+ id = eon_foreign_equipment.3
+ title = eon_foreign_equipment.3.t
+ desc = eon_foreign_equipment.3.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_foreign_equipment.ack }
+}
+country_event = {
+ id = eon_foreign_equipment.4
+ title = eon_foreign_equipment.4.t
+ desc = eon_foreign_equipment.4.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_foreign_equipment.ack }
+}
+country_event = {
+ id = eon_foreign_equipment.5
+ title = eon_foreign_equipment.5.t
+ desc = eon_foreign_equipment.5.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_foreign_equipment.ack }
+}
+country_event = {
+ id = eon_foreign_equipment.6
+ title = eon_foreign_equipment.6.t
+ desc = eon_foreign_equipment.6.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_foreign_equipment.ack }
+}
+country_event = {
+ id = eon_foreign_equipment.7
+ title = eon_foreign_equipment.7.t
+ desc = eon_foreign_equipment.7.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_foreign_equipment.ack }
+}
