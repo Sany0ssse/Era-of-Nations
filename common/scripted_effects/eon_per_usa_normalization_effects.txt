@@ -1,0 +1,153 @@
+# Request fields are separate from the permanent historical agreement receipt.
+eon_per_usa_normalization_clear_local_request = {
+ if = {
+  limit = { OR = { tag = PER tag = USA } }
+  clr_country_flag = eon_per_usa_normalization_pending
+  clr_country_flag = eon_per_usa_normalization_live
+  clr_country_flag = eon_per_usa_normalization_cancelled
+  clear_variable = eon_per_usa_normalization_partner
+ }
+}
+eon_per_usa_normalization_close_request_pair = {
+ if = {
+  limit = { tag = PER }
+  if = {
+   limit = {
+    has_country_flag = eon_per_usa_normalization_pending
+    check_variable = { eon_per_usa_normalization_partner > 0 }
+    check_variable = { eon_per_usa_normalization_partner = USA }
+   }
+   USA = {
+    if = {
+     limit = {
+      has_country_flag = eon_per_usa_normalization_pending
+      check_variable = { eon_per_usa_normalization_partner > 0 }
+      check_variable = { eon_per_usa_normalization_partner = PER }
+     }
+     eon_per_usa_normalization_clear_local_request = yes
+    }
+   }
+  }
+  eon_per_usa_normalization_clear_local_request = yes
+ }
+ else_if = {
+  limit = { tag = USA }
+  if = {
+   limit = {
+    has_country_flag = eon_per_usa_normalization_pending
+    check_variable = { eon_per_usa_normalization_partner > 0 }
+    check_variable = { eon_per_usa_normalization_partner = PER }
+   }
+   PER = {
+    if = {
+     limit = {
+      has_country_flag = eon_per_usa_normalization_pending
+      check_variable = { eon_per_usa_normalization_partner > 0 }
+      check_variable = { eon_per_usa_normalization_partner = USA }
+     }
+     eon_per_usa_normalization_clear_local_request = yes
+    }
+   }
+  }
+  eon_per_usa_normalization_clear_local_request = yes
+ }
+}
+# Existing national focus ROOT PER. Its one-use issuance is never reset by cleanup.
+eon_per_usa_normalization_prepare_request = {
+ if = {
+  limit = { eon_per_usa_normalization_prepare_ready = yes }
+  set_variable = { eon_per_usa_normalization_partner = USA }
+  set_country_flag = eon_per_usa_normalization_pending
+  set_country_flag = eon_per_usa_normalization_request_issued
+  USA = {
+   set_variable = { eon_per_usa_normalization_partner = PER }
+   set_country_flag = eon_per_usa_normalization_pending
+   set_country_flag = eon_per_usa_normalization_request_issued
+   set_country_flag = { flag = eon_per_usa_normalization_live days = 30 value = 1 }
+   country_event = { id = iranian_focus.64 days = 1 }
+  }
+ }
+}
+# Existing response ROOT USA / FROM PER; consume before its national political package.
+eon_per_usa_normalization_accept_request = {
+ if = {
+  limit = { eon_per_usa_normalization_menu_ready = yes }
+  eon_per_usa_normalization_close_request_pair = yes
+  set_country_flag = eon_per_usa_relations_restored
+  set_variable = { eon_per_usa_relations_partner = PER }
+  PER = {
+   set_country_flag = eon_per_usa_relations_restored
+   set_variable = { eon_per_usa_relations_partner = USA }
+   remove_opinion_modifier = { target = USA modifier = no_diplomatic_ties }
+  }
+  remove_opinion_modifier = { target = PER modifier = no_diplomatic_ties }
+  set_country_flag = USA_iranian_friendship
+  set_temp_variable = { percent_change = 2.00 }
+  set_temp_variable = { tag_index = USA }
+  set_temp_variable = { influence_target = PER }
+  change_influence_percentage = yes
+  PER = { country_event = { id = iranian_focus.65 days = 1 } }
+ }
+}
+eon_per_usa_normalization_decline_request = {
+ if = {
+  limit = { eon_per_usa_normalization_menu_owned = yes }
+  if = {
+   limit = { eon_per_usa_normalization_menu_ready = yes }
+   eon_per_usa_normalization_close_request_pair = yes
+   PER = { country_event = { id = iranian_focus.66 days = 1 } }
+  }
+  else = { eon_per_usa_normalization_close_request_pair = yes }
+ }
+}
+eon_per_usa_normalization_withdraw_request = {
+ if = {
+  limit = { eon_per_usa_normalization_withdraw_available = yes }
+  # Identity remains until the matching menu closes or daily cleanup runs.
+  set_country_flag = eon_per_usa_normalization_cancelled
+  country_event = { id = eon_per_usa_normalization.1 }
+ }
+}
+eon_per_usa_normalization_daily_update = {
+ if = {
+  limit = {
+   OR = { tag = PER tag = USA }
+   OR = {
+    has_country_flag = eon_per_usa_normalization_pending
+    has_country_flag = eon_per_usa_normalization_live
+    has_country_flag = eon_per_usa_normalization_cancelled
+    NOT = { check_variable = { eon_per_usa_normalization_partner = 0 } }
+   }
+   OR = {
+    NOT = { eon_per_usa_normalization_request_pair_owned = yes }
+    USA = {
+     NOT = { has_country_flag = eon_per_usa_normalization_live }
+    }
+    USA = { has_country_flag = eon_per_usa_normalization_cancelled }
+    NOT = { eon_per_usa_normalization_policy_allowed = yes }
+    USA = { has_country_flag = eon_per_usa_relations_restored }
+    PER = { has_country_flag = eon_per_usa_relations_restored }
+   }
+  }
+  if = {
+   limit = { eon_per_usa_normalization_request_pair_owned = yes PER = { exists = yes } }
+   PER = { country_event = { id = eon_per_usa_normalization.2 } }
+  }
+  eon_per_usa_normalization_close_request_pair = yes
+ }
+}
+eon_per_usa_normalization_annex_update = {
+ if = {
+  limit = {
+   OR = { tag = PER tag = USA }
+   has_country_flag = eon_per_usa_normalization_pending
+   check_variable = { eon_per_usa_normalization_partner > 0 }
+   check_variable = { eon_per_usa_normalization_annexed_partner > 0 }
+   check_variable = { eon_per_usa_normalization_partner = eon_per_usa_normalization_annexed_partner }
+  }
+  eon_per_usa_normalization_close_request_pair = yes
+ }
+}
+eon_per_usa_normalization_clear_annexed_country = {
+ eon_per_usa_normalization_close_request_pair = yes
+}

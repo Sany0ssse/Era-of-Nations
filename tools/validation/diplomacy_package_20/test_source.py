@@ -23,6 +23,12 @@ from diplomacy_package_22.test_source import (
     check_owned_existing as check_later_package22_owned,
 )
 check_later_package22_owned()
+from diplomacy_package_23.test_source import (
+    NEW as LATER_PACKAGE23_NEW, package23_original_bytes, package23_historical_existing,
+    package23_original_validator_bytes, historical_actions as package23_historical_actions,
+    check_owned_existing as check_later_package23_owned,
+)
+check_later_package23_owned()
 EXISTING = {'events/00_War_events.txt'} | {f'localisation/{language}/MD_decisions_l_{language}.yml' for language in ('english', 'russian')}
 LEGACY_LOCALE_KEYS = {'AB_mobilization.4.a', 'AB_mobilization.5.t', 'AB_mobilization.5.desc'}
 FX = 'common/scripted_effects/eon_defence_formation_effects.txt'
@@ -990,8 +996,8 @@ def main():
     trees = ('common/scripted_effects','common/scripted_triggers','common/scripted_diplomatic_actions','common/on_actions','events','localisation')
     changed = set(subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines())
     untracked = set(subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines())
-    changed -= (package21_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE21_NEW | (package22_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE22_NEW
-    untracked -= LATER_PACKAGE21_NEW | LATER_PACKAGE22_NEW
+    changed -= (package21_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE21_NEW | (package22_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE22_NEW | (package23_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE23_NEW
+    untracked -= LATER_PACKAGE21_NEW | LATER_PACKAGE22_NEW | LATER_PACKAGE23_NEW
     assert changed - NEW == EXISTING and (changed | untracked) - EXISTING == NEW, (changed,untracked)
     passed('exact_three_existing_and_seven_new_gameplay_paths')
     for path in NEW:

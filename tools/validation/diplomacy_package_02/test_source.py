@@ -175,7 +175,7 @@ assert len(actions) == len(set(actions)) == (54 + actions.count('eon_propose_def
                                                'eon_end_economic_consultations',
                                                'eon_consultation_offer_economic_aid',
                                                'eon_request_war_mediation', 'eon_withdraw_mediation',
-                                               'eon_withdraw_antiterror_proposal', 'eon_ammo_withdraw_offer', 'eon_services_withdraw_offer', 'eon_services_end_logistics', 'eon_services_end_recon', 'eon_foreign_cash_withdraw_offer', 'eon_foreign_equipment_withdraw_offer', 'eon_defence_formation_withdraw_offer', 'eon_advisers_withdraw_offer', 'eon_advisers_end_cooperation', 'eon_support_request_withdraw_request')))
+                                               'eon_withdraw_antiterror_proposal', 'eon_ammo_withdraw_offer', 'eon_services_withdraw_offer', 'eon_services_end_logistics', 'eon_services_end_recon', 'eon_foreign_cash_withdraw_offer', 'eon_foreign_equipment_withdraw_offer', 'eon_defence_formation_withdraw_offer', 'eon_advisers_withdraw_offer', 'eon_advisers_end_cooperation', 'eon_support_request_withdraw_request', 'eon_per_usa_normalization_withdraw_request')))
 print(json.dumps({'all_passed': True, 'method': 'exact reversible source boundaries and format/locale/ID checks',
                   'owned_existing_files': receipt, 'new_locale_keys_per_language': len(new_keys),
                   'unique_action_ids': len(actions), 'not_proven': 'HOI4 engine parsing, UI or campaign'}, indent=2))

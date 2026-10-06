@@ -63,6 +63,12 @@ from diplomacy_package_22.test_source import (
     check_owned_existing as check_later_package22_owned,
 )
 check_later_package22_owned()
+from diplomacy_package_23.test_source import (
+    NEW as LATER_PACKAGE23_NEW, package23_original_bytes, package23_historical_existing,
+    package23_original_validator_bytes, historical_actions as package23_historical_actions,
+    check_owned_existing as check_later_package23_owned,
+)
+check_later_package23_owned()
 import sys as package13_sys
 package13_sys.path.insert(0, str(ROOT / 'tools/validation'))
 
@@ -210,9 +216,9 @@ def main():
            'portraits','tutorial','descriptions','scenario_tests','descriptor.mod','era_of_nations.mod','thumbnail.png')
     baseline_paths=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
-    changed=[path for path in changed if path not in (package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE))-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | package21_historical_existing(BASELINE) | LATER_PACKAGE21_NEW | package22_historical_existing(BASELINE) | LATER_PACKAGE22_NEW]
+    changed=[path for path in changed if path not in (package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE))-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW | package21_historical_existing(BASELINE) | LATER_PACKAGE21_NEW | package22_historical_existing(BASELINE) | LATER_PACKAGE22_NEW | package23_historical_existing(BASELINE) | LATER_PACKAGE23_NEW]
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
-    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW | LATER_PACKAGE22_NEW]
+    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW | LATER_PACKAGE21_NEW | LATER_PACKAGE22_NEW | LATER_PACKAGE23_NEW]
     assert set(changed)|set(untracked)==EXISTING|NEW|LATER_PACKAGE13_NEW,('Unowned gameplay edits',changed,untracked)
     assert set(changed).intersection(baseline_paths)==EXISTING
     assert not NEW.intersection(baseline_paths) and set(untracked)<=NEW|LATER_PACKAGE13_NEW

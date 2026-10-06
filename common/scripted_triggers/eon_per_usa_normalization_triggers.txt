@@ -1,0 +1,89 @@
+# National PER -> USA route only. A missing receipt is not a global relations state.
+eon_per_usa_normalization_policy_allowed = {
+ country_exists = PER
+ country_exists = USA
+ PER = {
+  exists = yes
+  emerging_hardline_shiite_are_in_power = no
+  emerging_moderate_shiite_are_in_power = no
+  NOT = { has_war_with = USA }
+  has_opinion_modifier = { target = USA modifier = no_diplomatic_ties }
+ }
+ USA = {
+  exists = yes
+  NOT = { has_war_with = PER }
+  has_opinion_modifier = { target = PER modifier = no_diplomatic_ties }
+ }
+}
+eon_per_usa_normalization_slot_ready = {
+ NOT = { has_country_flag = eon_per_usa_normalization_pending }
+ NOT = { has_country_flag = eon_per_usa_normalization_live }
+ NOT = { has_country_flag = eon_per_usa_normalization_cancelled }
+ check_variable = { eon_per_usa_normalization_partner = 0 }
+}
+eon_per_usa_normalization_prepare_ready = {
+ tag = PER
+ ROOT = { tag = PER }
+ check_variable = { THIS.id > 0 }
+ eon_per_usa_normalization_policy_allowed = yes
+ eon_per_usa_normalization_slot_ready = yes
+ NOT = { has_country_flag = eon_per_usa_normalization_request_issued }
+ NOT = { has_country_flag = eon_per_usa_relations_restored }
+ USA = {
+  check_variable = { THIS.id > 0 }
+  eon_per_usa_normalization_slot_ready = yes
+  NOT = { has_country_flag = eon_per_usa_normalization_request_issued }
+  NOT = { has_country_flag = eon_per_usa_relations_restored }
+ }
+}
+# Fixed scopes and both pending copies identify this pair; never chase arbitrary IDs.
+eon_per_usa_normalization_request_pair_owned = {
+ PER = {
+  OR = { exists = yes exists = no }
+  check_variable = { THIS.id > 0 }
+  has_country_flag = eon_per_usa_normalization_pending
+  check_variable = { eon_per_usa_normalization_partner > 0 }
+  check_variable = { eon_per_usa_normalization_partner = USA }
+ }
+ USA = {
+  OR = { exists = yes exists = no }
+  check_variable = { THIS.id > 0 }
+  has_country_flag = eon_per_usa_normalization_pending
+  check_variable = { eon_per_usa_normalization_partner > 0 }
+  check_variable = { eon_per_usa_normalization_partner = PER }
+ }
+}
+# Existing reply is ROOT USA / FROM PER, including a safely closeable stale reply.
+eon_per_usa_normalization_menu_owned = {
+ tag = USA
+ ROOT = { tag = USA }
+ FROM = { OR = { exists = yes exists = no } tag = PER }
+ eon_per_usa_normalization_request_pair_owned = yes
+}
+eon_per_usa_normalization_menu_ready = {
+ eon_per_usa_normalization_menu_owned = yes
+ has_country_flag = eon_per_usa_normalization_live
+ NOT = { has_country_flag = eon_per_usa_normalization_cancelled }
+ has_country_flag = eon_per_usa_normalization_request_issued
+ NOT = { has_country_flag = eon_per_usa_relations_restored }
+ PER = {
+  has_country_flag = eon_per_usa_normalization_request_issued
+  NOT = { has_country_flag = eon_per_usa_relations_restored }
+ }
+ eon_per_usa_normalization_policy_allowed = yes
+}
+# Native withdrawal ROOT PER / THIS USA; current exact live request only.
+eon_per_usa_normalization_withdraw_available = {
+ tag = USA
+ exists = yes
+ ROOT = { tag = PER exists = yes is_ai = no }
+ eon_per_usa_normalization_request_pair_owned = yes
+ has_country_flag = eon_per_usa_normalization_request_issued
+ NOT = { has_country_flag = eon_per_usa_relations_restored }
+ PER = {
+  has_country_flag = eon_per_usa_normalization_request_issued
+  NOT = { has_country_flag = eon_per_usa_relations_restored }
+ }
+ has_country_flag = eon_per_usa_normalization_live
+ NOT = { has_country_flag = eon_per_usa_normalization_cancelled }
+}

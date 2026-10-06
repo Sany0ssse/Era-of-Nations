@@ -9,6 +9,14 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = '0747ce626b79bc7796d6fbb61be9cbf8a6076de0'
+import sys as package23_sys
+package23_sys.path.insert(0,str(ROOT/'tools/validation'))
+from diplomacy_package_23.test_source import (
+    NEW as LATER_PACKAGE23_NEW, package23_original_bytes, package23_historical_existing,
+    package23_original_validator_bytes, historical_actions as package23_historical_actions,
+    check_owned_existing as check_later_package23_owned,
+)
+check_later_package23_owned()
 EXISTING = {'events/00_War_events.txt','common/scripted_diplomatic_actions/MDDC_AB_ask_foreign_support.txt',
     'localisation/english/MD_decisions_l_english.yml','localisation/russian/MD_decisions_l_russian.yml'}
 CHOICES = tuple(('AB_mobilization.4','AB_mobilization.4.'+suffix) for suffix in ('a','b','c','d'))
@@ -115,6 +123,7 @@ def named_block(data,key):
 
 def package22_original_bytes(path,actual):
     """Exact inverse of four owned menu choices, two action fields/new guard and twelve locale rows."""
+    actual = package23_original_bytes(path,actual)
     if path not in EXISTING:return actual
     original=baseline_bytes(path);format_preserved(original,actual,path)
     if actual==original:return original
@@ -172,6 +181,7 @@ def check_owned_existing():
     for path in sorted(EXISTING): package22_original_bytes(path, (ROOT / path).read_bytes())
 
 def historical_actions(actions):
+    actions = package23_historical_actions(actions)
     return [identity for identity in actions if identity not in NEW_ACTION_IDS]
 
 HISTORICAL_SOURCE_EDITS = {'tools/validation/diplomacy_package_02/test_source.py': [(177,
@@ -1502,6 +1512,7 @@ HISTORICAL_SOURCE_EDITS = {'tools/validation/diplomacy_package_02/test_source.py
 
 
 def package22_original_validator_bytes(path, actual):
+    actual = package23_original_validator_bytes(path,actual)
     if path not in HISTORICAL_SOURCE_EDITS: return actual
     original = baseline_bytes(path)
     lines = original.decode('utf-8').splitlines(keepends=True)
@@ -1518,6 +1529,8 @@ def main():
     trees=('common/scripted_effects','common/scripted_triggers','common/scripted_diplomatic_actions','common/on_actions','events','localisation')
     changed=set(subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines())
     untracked=set(subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines())
+    changed -= (package23_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE23_NEW
+    untracked -= LATER_PACKAGE23_NEW
     assert changed-NEW==EXISTING and (changed|untracked)-EXISTING==NEW,(changed,untracked)
     passed('exact_four_existing_and_seven_new_gameplay_paths')
     for path in sorted(NEW):
@@ -1635,6 +1648,7 @@ def main():
     for path in (ROOT/'common/scripted_diplomatic_actions').glob('*.txt'):
         for key,op,val in ast(path.read_bytes()):
             if key=='scripted_diplomatic_actions':current_actions.extend(name for name,op,body in val)
+    current_actions = package23_historical_actions(current_actions)
     assert len(old_actions)==len(set(old_actions))==74 and len(current_actions)==len(set(current_actions))==75
     passed('74_existing_native_action_IDs_and_one_new_unique_withdrawal')
     old_game=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--','common','events','localisation'],cwd=ROOT).decode().splitlines()

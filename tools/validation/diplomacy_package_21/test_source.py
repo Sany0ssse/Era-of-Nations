@@ -17,6 +17,12 @@ from diplomacy_package_22.test_source import (
     check_owned_existing as check_later_package22_owned,
 )
 check_later_package22_owned()
+from diplomacy_package_23.test_source import (
+    NEW as LATER_PACKAGE23_NEW, package23_original_bytes, package23_historical_existing,
+    package23_original_validator_bytes, historical_actions as package23_historical_actions,
+    check_owned_existing as check_later_package23_owned,
+)
+check_later_package23_owned()
 EXISTING = {
     'events/00_Influence_events.txt','common/ideas/Generic Tree_ideas.txt',
     'localisation/english/events_l_english.yml','localisation/english/MD_influence_l_english.yml',
@@ -1162,8 +1168,8 @@ def main():
     trees=('common/scripted_effects','common/scripted_triggers','common/scripted_diplomatic_actions','common/on_actions','common/ideas','events','localisation')
     changed=set(subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines())
     untracked=set(subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines())
-    changed -= (package22_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE22_NEW
-    untracked -= LATER_PACKAGE22_NEW
+    changed -= (package22_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE22_NEW | (package23_historical_existing(BASELINE) - EXISTING) | LATER_PACKAGE23_NEW
+    untracked -= LATER_PACKAGE22_NEW | LATER_PACKAGE23_NEW
     assert changed-NEW==EXISTING and (changed|untracked)-EXISTING==NEW,(changed,untracked)
     passed('exact_eight_existing_and_eight_new_gameplay_paths')
     for path in NEW:

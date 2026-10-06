@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and twenty-two implementation packages are complete at
+The existing diplomacy audit and twenty-three implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -551,6 +551,46 @@ unchanged child helpers and scenario assertions still execute. Current22 cases
 execute the new owned entry/router and all three child continuations separately.
 This historical caller adapter is not proof of the current22 initial entry.
 Historical source validators still inspect current bytes with exact journals.
+
+The twenty-third package repairs the existing PER_talks_with_the_americans
+to USA iranian_focus.64 national restoration route. A reciprocal positive-ID
+request, fresh national policy and directed no_ties markers, one-use issuance,
+30-day review, guarded acceptance/refusal, free withdrawal and initial-only
+daily/annex cleanup replace the former unowned response. Agreement is recorded
+on both sides once; only reciprocal no_diplomatic_ties is removed. All historical
+grievances remain. Existing friendship and +2 influence macro parameters remain
+explicit national political terms, not generic effects of diplomatic relations.
+The inaccurate AI tooltip no longer guarantees sanctions reconsideration at 20
+or a 20 percent improvement; sanctions and USA AI sources remain unchanged.
+
+Official 1999/2000 State bodies establish the Iran/U.S. historical discontinuity,
+while Vienna Article 2 supplies mutual-consent context. Articles 4/13 staff/head
+steps remain separate future work. Historical main-convention ratifications
+predate 2000; no optional-protocol or full legal-compliance claim follows.
+This is a counterfactual result of an existing national story, not a claim that
+embassies actually reopened in 2000. Missing new receipt never means absence of
+worldwide relations, and other existing national normalization routes remain.
+The receipt records this agreement once, not comprehensive current live state.
+No buildings, staff, credentials, protecting-power transfer or worldwide mission
+system is implemented. 30 days/one-use issuance are mod choices. Old same-pair
+pre-upgrade or forged callback aliasing remains outside the native proof.
+
+The frozen cumulative run passed 7655 scenarios: 7508 prior and 147
+actual current package 23 scenarios in 30 groups. Separate checks passed
+12 adapter cases and 152 source checks (127 API/structure,
+25 exact byte boundaries). Root captured five original assertions
+RED and repeated the same entries GREEN on frozen game sources. A separate
+candidate withdrawal-provenance finding was reproduced RED and repaired
+GREEN; the five baseline and one candidate defect receipts remain distinct. All 77
+prior public files outside 21 literal source journals remain raw-exact,
+including 55 behavior/helper/runner Python files. No new historical behavior
+projection was added; prior package 22 retains its explicitly scoped 7414 historical
+caller compatibility and 94 current-entry cases. Exact game/source/doc
+hashes and independent reviews are bound before publication.
+See [DIPLOMACY_PACKAGE_23_UK.md](DIPLOMACY_PACKAGE_23_UK.md).
+Native scopes, response timers, windows, AI, actual influence, annexation and
+save/load require new-campaign acceptance. The game was not launched; saves,
+launcher and Workshop were not changed.
 
 ## Completed setup
 
