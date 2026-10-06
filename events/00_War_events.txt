@@ -124,37 +124,15 @@ country_event = {
 
 	option = {
 		name = AB_mobilization.4.a
-		log = "[GetDateText]: [This.GetName]: AB_mobilization.4.a executed"
-		add_manpower = -4500
-		add_equipment_to_stockpile = {
-			type = Inf_equipment
-			amount = -1500
-			producer = ROOT
-		}
-		add_equipment_to_stockpile = {
-			type = command_control_equipment
-			amount = -100
-			producer = ROOT
-		}
-		add_equipment_to_stockpile = {
-			type = artillery_equipment
-			amount = -30
-			producer = ROOT
-		}
-		custom_effect_tooltip = foreign_peacekeepers_tt
-		set_temp_variable = { percent_change = 3 }
-		set_temp_variable = { tag_index = ROOT }
-		set_temp_variable = { influence_target = FROM }
-		change_influence_percentage = yes
-		FROM = {
-			if = {
-				limit = {
-					NOT = { has_idea = AB_foreign_peacekeepers }
-				}
-				add_ideas = AB_foreign_peacekeepers
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = eon_defence_formation_offer_available_tt
+				eon_defence_formation_offer_ready = yes
 			}
-			country_event = AB_mobilization.5
 		}
+		log = "[GetDateText]: [This.GetName]: AB_mobilization.4.a executed"
+		custom_effect_tooltip = eon_defence_formation_offer_tt
+		eon_defence_formation_send_offer = yes
 		ai_chance = {
 			base = 1
 			modifier = {
@@ -268,36 +246,6 @@ country_event = {
 	option = {
 		name = AB_mobilization.5.a
 		log = "[GetDateText]: [This.GetName]: AB_mobilization.5.a executed"
-		division_template = {
-			name = "Foreign Peacekeepers"
-			is_locked = yes
-			regiments = {
-				L_Inf_Bat = { x = 0 y = 0 }
-				L_Inf_Bat = { x = 0 y = 1 }
-				L_Inf_Bat = { x = 0 y = 2 }
-				L_Inf_Bat = { x = 1 y = 0 }
-				L_Inf_Bat = { x = 1 y = 1 }
-				L_Inf_Bat = { x = 1 y = 2 }
-				Arty_Bat = { x = 2 y = 0 }
-				Arty_Bat = { x = 2 y = 1 }
-			}
-			support = {
-				L_Recce_Comp = { x = 0 y = 0}
-				L_Engi_Comp = { x = 0 y = 1 }
-			}
-			priority = 2
-		}
-		random_owned_controlled_state = {
-			create_unit = {
-				division = "name = \"Peacekeepers Battalion\" division_template = \"Foreign Peacekeepers\" start_experience_factor = 0.4"
-				owner = ROOT
-			}
-		}
-		if = {
-			limit = { NOT = { has_idea = AB_foreign_peacekeepers } }
-			add_ideas = AB_foreign_peacekeepers
-		}
-
 	}
 }
 

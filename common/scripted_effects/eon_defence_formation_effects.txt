@@ -1,0 +1,202 @@
+eon_defence_formation_ensure_template = {
+ if = {
+  limit = { NOT = { has_template = "EON Local Defence Formation" } }
+  division_template = {
+   name = "EON Local Defence Formation"
+   is_locked = yes
+   regiments = {
+    L_Inf_Bat = { x = 0 y = 0 }
+    L_Inf_Bat = { x = 0 y = 1 }
+    L_Inf_Bat = { x = 0 y = 2 }
+    L_Inf_Bat = { x = 1 y = 0 }
+    L_Inf_Bat = { x = 1 y = 1 }
+    L_Inf_Bat = { x = 1 y = 2 }
+    Arty_Bat = { x = 2 y = 0 }
+    Arty_Bat = { x = 2 y = 1 }
+   }
+   support = {
+    L_Recce_Comp = { x = 0 y = 0 }
+    L_Engi_Comp = { x = 0 y = 1 }
+   }
+   priority = 2
+  }
+  set_country_flag = eon_defence_formation_template_owned
+ }
+}
+
+# A one-off sponsored recipient national formation. The resource, template
+# and unit effects are native commands, not proof of physical conservation.
+# No sending-State contingent, UN mandate, active service or return is inferred.
+eon_defence_formation_clear_pending = {
+ clr_country_flag = eon_defence_formation_pending
+ clr_country_flag = eon_defence_formation_live
+ clr_country_flag = eon_defence_formation_cancelled
+ clr_country_flag = eon_defence_formation_consented
+ clear_variable = eon_defence_formation_partner
+}
+eon_defence_formation_retire_pending_pair = {
+ if = {
+  limit = { has_country_flag = eon_defence_formation_pending }
+  if = {
+   limit = { eon_defence_formation_partner_identified = yes }
+   var:eon_defence_formation_partner = {
+    PREV = { set_country_flag = eon_defence_formation_retired_pair@PREV }
+   }
+  }
+  else = { set_country_flag = eon_defence_formation_quarantined }
+ }
+}
+eon_defence_formation_send_offer = {
+ if = {
+  limit = { eon_defence_formation_offer_ready = yes }
+  set_variable = { eon_defence_formation_partner = FROM }
+  set_country_flag = eon_defence_formation_pending
+  set_country_flag = { flag = eon_defence_formation_live days = 30 value = 1 }
+  clr_country_flag = eon_defence_formation_cancelled
+  clr_country_flag = eon_defence_formation_consented
+  FROM = { country_event = { id = eon_defence_formation.1 } }
+ }
+}
+
+# Recipient assent is separate from execution. No assets move until a hidden
+# event restores native provider ROOT and freshly verifies current conditions.
+eon_defence_formation_accept_offer = {
+ if = {
+  limit = { eon_defence_formation_response_open = yes }
+  if = {
+   limit = { eon_defence_formation_response_ready = yes }
+   FROM = {
+    set_country_flag = eon_defence_formation_consented
+    country_event = { id = eon_defence_formation.2 }
+   }
+  }
+  else = {
+   FROM = {
+    eon_defence_formation_clear_pending = yes
+    country_event = { id = eon_defence_formation.6 }
+   }
+   country_event = { id = eon_defence_formation.6 }
+  }
+ }
+}
+eon_defence_formation_commit_offer = {
+ if = {
+  limit = { eon_defence_formation_commit_pending = yes }
+  if = {
+   limit = { eon_defence_formation_commit_ready = yes }
+   # Consume before any resource/template/unit command. Aggregate stock guards
+   # match removals without a producer filter, including imported equipment.
+   eon_defence_formation_clear_pending = yes
+   add_equipment_to_stockpile = { type = Inf_equipment amount = -1623 }
+   add_equipment_to_stockpile = { type = command_control_equipment amount = -150 }
+   add_equipment_to_stockpile = { type = artillery_equipment amount = -36 }
+   add_equipment_to_stockpile = { type = L_AT_Equipment amount = -76 }
+   add_equipment_to_stockpile = { type = AA_Equipment amount = -50 }
+
+   FROM = {
+    add_manpower = -5480
+    eon_defence_formation_ensure_template = yes
+    random_owned_controlled_state = {
+     create_unit = {
+      division = "name = \"Local Defence Battalion\" division_template = \"EON Local Defence Formation\" start_experience_factor = 0.4"
+      owner = PREV
+      count = 1
+     }
+    }
+   }
+   set_temp_variable = { percent_change = 3 }
+   set_temp_variable = { tag_index = ROOT }
+   set_temp_variable = { influence_target = FROM }
+   change_influence_percentage = yes
+   FROM = { country_event = { id = eon_defence_formation.7 } }
+   country_event = { id = eon_defence_formation.7 }
+  }
+  else = {
+   eon_defence_formation_clear_pending = yes
+   country_event = { id = eon_defence_formation.6 }
+   FROM = { country_event = { id = eon_defence_formation.6 } }
+  }
+ }
+}
+
+eon_defence_formation_reject_offer = {
+ if = {
+  limit = { eon_defence_formation_response_open = yes }
+  FROM = {
+   eon_defence_formation_clear_pending = yes
+   country_event = { id = eon_defence_formation.6 }
+  }
+ }
+}
+eon_defence_formation_withdraw_offer = {
+ if = {
+  limit = { eon_defence_formation_withdraw_available = yes }
+  ROOT = { set_country_flag = eon_defence_formation_cancelled }
+  country_event = { id = eon_defence_formation.3 }
+ }
+}
+
+eon_defence_formation_daily_update = {
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_defence_formation_pending }
+   OR = {
+    has_country_flag = eon_defence_formation_live
+    has_country_flag = eon_defence_formation_cancelled
+    has_country_flag = eon_defence_formation_consented
+    NOT = { check_variable = { eon_defence_formation_partner = 0 } }
+   }
+  }
+  set_country_flag = eon_defence_formation_quarantined
+  eon_defence_formation_clear_pending = yes
+  country_event = { id = eon_defence_formation.5 }
+ }
+ if = {
+  limit = {
+   has_country_flag = eon_defence_formation_pending
+   OR = {
+    exists = no
+    NOT = { eon_defence_formation_partner_identified = yes }
+    NOT = { has_country_flag = eon_defence_formation_live }
+    var:eon_defence_formation_partner = { exists = no }
+   }
+  }
+  eon_defence_formation_retire_pending_pair = yes
+  eon_defence_formation_clear_pending = yes
+  if = {
+   limit = { has_country_flag = eon_defence_formation_quarantined }
+   country_event = { id = eon_defence_formation.5 }
+  }
+  else = { country_event = { id = eon_defence_formation.4 } }
+ }
+}
+
+# Hook supplies the annexed country even before the engine marks it extinct.
+eon_defence_formation_annex_update = {
+ if = {
+  limit = {
+   has_country_flag = eon_defence_formation_pending
+   check_variable = { eon_defence_formation_partner = eon_defence_formation_annexed_partner }
+  }
+  eon_defence_formation_retire_pending_pair = yes
+  eon_defence_formation_clear_pending = yes
+ }
+}
+eon_defence_formation_clear_annexed_country = {
+ if = {
+  limit = { has_country_flag = eon_defence_formation_pending }
+  eon_defence_formation_retire_pending_pair = yes
+ }
+ else_if = {
+  limit = {
+   OR = {
+    has_country_flag = eon_defence_formation_live
+    has_country_flag = eon_defence_formation_cancelled
+    has_country_flag = eon_defence_formation_consented
+    NOT = { check_variable = { eon_defence_formation_partner = 0 } }
+   }
+  }
+  set_country_flag = eon_defence_formation_quarantined
+ }
+ eon_defence_formation_clear_pending = yes
+}

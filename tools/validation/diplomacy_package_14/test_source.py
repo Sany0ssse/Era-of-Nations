@@ -41,6 +41,12 @@ from diplomacy_package_19.test_source import (
     check_owned_existing as check_later_package19_owned,
 )
 check_later_package19_owned()
+from diplomacy_package_20.test_source import (
+    NEW as LATER_PACKAGE20_NEW, package20_original_bytes, package20_historical_existing,
+    package20_original_validator_bytes, historical_actions as package20_historical_actions,
+    check_owned_existing as check_later_package20_owned,
+)
+check_later_package20_owned()
 BASELINE = 'f25dcfa040df4de947fe87e7a70f8f5fdd9ed659'
 OWNED = {
  'common/scripted_triggers/eon_satellite_triggers.txt': {'eon_sat_gnss_request_terms','eon_sat_gnss_offer_terms','eon_sat_com_request_terms','eon_sat_com_offer_terms'},
@@ -221,9 +227,9 @@ def main():
     trees=('common','history','events','interface','gfx','localisation','music','map','sound','portraits','tutorial','descriptions','scenario_tests','descriptor.mod','era_of_nations.mod','thumbnail.png')
     before=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
-    changed=[path for path in changed if path not in package15_historical_existing(BASELINE)-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW]
+    changed=[path for path in changed if path not in package15_historical_existing(BASELINE)-EXISTING | package16_historical_existing(BASELINE) | LATER_PACKAGE16_NEW | package17_historical_existing(BASELINE) | LATER_PACKAGE17_NEW | package18_historical_existing(BASELINE) | LATER_PACKAGE18_NEW | package19_historical_existing(BASELINE) | LATER_PACKAGE19_NEW | package20_historical_existing(BASELINE) | LATER_PACKAGE20_NEW]
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
-    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW]
+    untracked = [path for path in untracked if path not in LATER_PACKAGE16_NEW | LATER_PACKAGE17_NEW | LATER_PACKAGE18_NEW | LATER_PACKAGE19_NEW | LATER_PACKAGE20_NEW]
     assert len(before)==68321 and set(changed)==EXISTING and not untracked and not NEW
     groups['all_68315_unrelated_gameplay_files_byte_preserved_no_gameplay_additions']+=1
     native=[]

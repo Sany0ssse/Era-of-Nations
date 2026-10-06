@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and nineteen implementation packages are complete at
+The existing diplomacy audit and twenty implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -390,6 +390,51 @@ The ordered observer records native send calls without inventing stock debits,
 recipient credit, variant selection, transit or delivery completion. Native
 inventory conservation and in-game acceptance remain pending. No game launch or
 changes to saves, launcher configuration, Workshop or playsets are made here.
+
+## Diplomacy package 20
+
+The twentieth package repairs AB_mobilization.4.a as an offer to equip one
+recipient-national defence formation. The recipient supplies its own 5480
+personnel; the donor supplies 1623 infantry equipment, 150 command equipment,
+36 artillery, 76 ATGM and 50 MANPADS. These nominal full-template amounts are
+recomputed from the retained six infantry/two artillery/recon/engineer composition.
+Donor manpower is no longer charged. Recipient assent precedes all resource calls;
+hidden provider ROOT execution rechecks both countries, all inputs, recipient
+controlled-owned states and reserved-template ownership before consuming the record.
+
+The formation order assigns the recipient as owner and uses an isolated locked template.
+Only an owned existing reserved template can be reused, without editing it.
+This is irrevocable national formation support, not a sending-state contingent
+or UN peacekeeping mission. There is no new automatic war entry, unit transfer,
+peace-time deletion, survivor return or foreign military access. The old AB5
+acknowledgement is inert and can no longer create free units. Existing legacy
+units and costs are not automatically migrated or refunded.
+
+The original request, equipment19, cash18, refusal, mercenaries and legacy
+peacekeeper idea remain unchanged. Only AB4.a and AB5.a are edited in the war
+file, with AB4.a and AB5 title/description display strings in English/Russian;
+existing IDs, AI, influence invocation, BOM and line endings are retained.
+Pending reply/withdrawal/expiry/annex cleanup belongs only to this proposal channel.
+Same-pair identical later-record callback generations remain outside the proof.
+
+GAO's dated 1997 Bosnia Train and Equip report supports recipient national-force
+assistance as a distinct category. NATO SOFA informs why recipient-owned units
+must not be described as a foreign sending-state contingent. The quantities,
+30-day reply period, ranks, defensive-war access and initial experience remain
+game choices; transport, delivery, training and full readiness are not simulated.
+See [DIPLOMACY_PACKAGE_20_UK.md](DIPLOMACY_PACKAGE_20_UK.md).
+
+The cumulative runner passed 7293 source-model scenarios (7171 retained,
+122 new in 25 groups), 29 separate adapter semantics checks,
+and 155 new source checks (134 API/structure + 21 memory-only
+byte-boundary mutations). All 49 older behavior/helper/runner Python files
+remain raw-byte unchanged; 18 historical source validators retain assertions
+and counters through exact byte journals. Gameplay, validation, source-run
+and independent review receipts are hash-bound.
+Native resource debits, stock aggregation, create_unit filling, possible extra
+engine charges, placement, AI, timing and save/load still need in-game acceptance.
+Observers record actual commands only. No game launch or changes to saves,
+launcher configuration, Workshop or playsets are made here.
 
 ## Completed setup
 

@@ -1,0 +1,79 @@
+add_namespace = eon_defence_formation
+
+# ROOT receiver, FROM provider; explicit assent authorizes conditional execution.
+country_event = {
+ id = eon_defence_formation.1
+ title = eon_defence_formation.1.t
+ desc = eon_defence_formation.1.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = {
+  name = eon_defence_formation.1.a
+  trigger = { eon_defence_formation_response_ready = yes }
+  custom_effect_tooltip = eon_defence_formation_accept_tt
+  eon_defence_formation_accept_offer = yes
+  ai_chance = { factor = 100 }
+ }
+ option = {
+  name = eon_defence_formation.1.b
+  trigger = { eon_defence_formation_response_open = yes }
+  custom_effect_tooltip = eon_defence_formation_decline_tt
+  eon_defence_formation_reject_offer = yes
+  ai_chance = { factor = 10 }
+ }
+ option = {
+  name = eon_defence_formation.ack
+  trigger = { NOT = { eon_defence_formation_response_open = yes } }
+  custom_effect_tooltip = eon_defence_formation_unmatched_tt
+  ai_chance = { factor = 100 }
+ }
+}
+
+# Native ROOT provider, FROM consenting receiver. This frame is necessary:
+# the original influence macro reads ROOT in its resource-rights calculation.
+country_event = {
+ id = eon_defence_formation.2
+ hidden = yes
+ is_triggered_only = yes
+ immediate = { eon_defence_formation_commit_offer = yes }
+}
+country_event = {
+ id = eon_defence_formation.3
+ title = eon_defence_formation.3.t
+ desc = eon_defence_formation.3.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_defence_formation.ack }
+}
+country_event = {
+ id = eon_defence_formation.4
+ title = eon_defence_formation.4.t
+ desc = eon_defence_formation.4.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_defence_formation.ack }
+}
+country_event = {
+ id = eon_defence_formation.5
+ title = eon_defence_formation.5.t
+ desc = eon_defence_formation.5.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_defence_formation.ack }
+}
+country_event = {
+ id = eon_defence_formation.6
+ title = eon_defence_formation.6.t
+ desc = eon_defence_formation.6.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_defence_formation.ack }
+}
+country_event = {
+ id = eon_defence_formation.7
+ title = eon_defence_formation.7.t
+ desc = eon_defence_formation.7.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_defence_formation.ack }
+}

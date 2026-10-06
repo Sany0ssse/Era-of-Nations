@@ -1,0 +1,146 @@
+# Recipient supplies its own personnel. An existing reserved-name template
+# is reusable only with this system's marker; never edit or adopt an unowned
+# template. A missing template can be created once as a locked national unit.
+eon_defence_formation_template_usable = {
+ OR = {
+  NOT = { has_template = "EON Local Defence Formation" }
+  has_country_flag = eon_defence_formation_template_owned
+ }
+}
+eon_defence_formation_recipient_ready = {
+ has_manpower > 5479
+ any_owned_state = { is_owned_and_controlled_by = PREV }
+ eon_defence_formation_template_usable = yes
+}
+eon_defence_formation_equipment_available = {
+ has_equipment = { Inf_equipment > 1622 }
+ has_equipment = { command_control_equipment > 149 }
+ has_equipment = { artillery_equipment > 35 }
+ has_equipment = { L_AT_Equipment > 75 }
+ has_equipment = { AA_Equipment > 49 }
+}
+# Receiver scope with explicitly named provider; no stock or manpower is
+# reserved. All prerequisites are repeated before the native command batch.
+eon_defence_formation_requirements_ready = {
+ eon_defence_formation_recipient_ready = yes
+ var:eon_defence_formation_policy_provider = {
+  eon_defence_formation_equipment_available = yes
+ }
+}
+
+# Receiver country scope, explicitly named provider. The inherited request
+# marker is nominal eligibility, not a unique request-generation receipt.
+eon_defence_formation_policy_allowed = {
+ exists = yes
+ NOT = { tag = eon_defence_formation_policy_provider }
+ has_defensive_war = yes
+ NOT = { has_war_with = eon_defence_formation_policy_provider }
+ OR = { has_idea = non_power has_idea = minor_power has_idea = regional_power }
+ var:eon_defence_formation_policy_provider = {
+  exists = yes
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_defence_formation_policy_provider }
+  OR = { has_idea = large_power has_idea = great_power has_idea = superpower }
+  has_opinion = { target = PREV value > 49 }
+  has_country_flag = aid_request_cd_@PREV
+ }
+}
+
+# Provider country scope; country-only existence and exact positive ID also
+# recognize an extinct partner safely for retirement without moving assets.
+eon_defence_formation_partner_identified = {
+ check_variable = { eon_defence_formation_partner > 0 }
+ var:eon_defence_formation_partner = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_defence_formation_partner }
+ }
+}
+
+
+
+# Existing AB_mobilization.4.a: ROOT/THIS provider, FROM receiver.
+eon_defence_formation_offer_ready = {
+ exists = yes
+ NOT = { has_country_flag = eon_defence_formation_quarantined }
+ NOT = { has_country_flag = eon_defence_formation_pending }
+ NOT = { has_country_flag = eon_defence_formation_live }
+ NOT = { has_country_flag = eon_defence_formation_cancelled }
+ NOT = { has_country_flag = eon_defence_formation_consented }
+ check_variable = { eon_defence_formation_partner = 0 }
+ set_temp_variable = { eon_defence_formation_selection_provider = THIS }
+ FROM = {
+  set_temp_variable = { eon_defence_formation_policy_provider = PREV.eon_defence_formation_selection_provider }
+  eon_defence_formation_policy_allowed = yes
+  eon_defence_formation_requirements_ready = yes
+  var:eon_defence_formation_policy_provider = {
+   NOT = { has_country_flag = eon_defence_formation_retired_pair@PREV }
+  }
+ }
+}
+
+# New proposal: ROOT/THIS receiver, FROM provider. Identity permits cleanup
+# of cancelled or otherwise invalid proposals; consent closes the reply UI.
+eon_defence_formation_response_pending = {
+ FROM = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  has_country_flag = eon_defence_formation_pending
+  eon_defence_formation_partner_identified = yes
+  check_variable = { eon_defence_formation_partner = PREV }
+ }
+}
+eon_defence_formation_response_open = {
+ eon_defence_formation_response_pending = yes
+ FROM = { NOT = { has_country_flag = eon_defence_formation_consented } }
+}
+eon_defence_formation_response_ready = {
+ eon_defence_formation_response_open = yes
+ FROM = {
+  exists = yes
+  has_country_flag = eon_defence_formation_live
+  NOT = { has_country_flag = eon_defence_formation_cancelled }
+ }
+ set_temp_variable = { eon_defence_formation_policy_provider = FROM }
+ eon_defence_formation_policy_allowed = yes
+ eon_defence_formation_requirements_ready = yes
+}
+
+# Hidden execution: native ROOT/THIS provider, FROM consenting receiver.
+# Keeping that event frame preserves ROOT-dependent original influence logic.
+eon_defence_formation_commit_pending = {
+ has_country_flag = eon_defence_formation_pending
+ has_country_flag = eon_defence_formation_consented
+ eon_defence_formation_partner_identified = yes
+ check_variable = { eon_defence_formation_partner = FROM }
+ FROM = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+ }
+}
+eon_defence_formation_commit_ready = {
+ eon_defence_formation_commit_pending = yes
+ exists = yes
+ has_country_flag = eon_defence_formation_live
+ NOT = { has_country_flag = eon_defence_formation_cancelled }
+ set_temp_variable = { eon_defence_formation_selection_provider = THIS }
+ FROM = {
+  set_temp_variable = { eon_defence_formation_policy_provider = PREV.eon_defence_formation_selection_provider }
+  eon_defence_formation_policy_allowed = yes
+  eon_defence_formation_requirements_ready = yes
+ }
+}
+
+# Native action ROOT provider, THIS receiver; no withdrawal after assent.
+eon_defence_formation_withdraw_available = {
+ exists = yes
+ NOT = { tag = ROOT }
+ ROOT = {
+  exists = yes
+  has_country_flag = eon_defence_formation_pending
+  eon_defence_formation_partner_identified = yes
+  check_variable = { eon_defence_formation_partner = PREV }
+  NOT = { has_country_flag = eon_defence_formation_cancelled }
+  NOT = { has_country_flag = eon_defence_formation_consented }
+ }
+}
