@@ -6,7 +6,7 @@ The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and fourteen implementation packages are complete at
+The existing diplomacy audit and fifteen implementation packages are complete at
 source level. The earlier SCO rejection and Arctic observer repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
@@ -230,10 +230,40 @@ remain byte-exact. Historical assertions remain enabled through narrow byte
 restoration, with two old absent-system fixtures made explicit about zero inventory.
 Independent review binds the current six game hashes. See
 [DIPLOMACY_PACKAGE_14_UK.md](DIPLOMACY_PACKAGE_14_UK.md).
-Game acceptance remains pending. Shared COM accepted cooldown migration and
-immediate provider/recipient traffic/base freshness are the next bounded stage;
+Game acceptance remains pending. The shared COM cooldown and event-driven
+traffic/base freshness deferred here are addressed at source level by package15;
 unknown legacy callbacks retain their prior limitations. No game, saves,
 launcher, Workshop, DLC, source ZIP or attribution changes were made.
+
+The fifteenth package separates new civilian/military COM actor-owned 180-day
+AI cooldowns while retaining old shared flags until natural expiry. It updates
+own native COM data before known proposal/response checks and refreshes a bounded
+provider/client neighborhood on consent, revocation, daily and level-selection
+hooks. All own bases precede aggregate bonuses; foreign aggregates are not lent
+again. Active service, client load and AI current-client detection share reciprocal
+consent, live/level/peace and positive physical-capacity checks. Signed unavailable
+service is dormant; positive-capacity overloaded service still counts client load.
+Native own weak floors, higher-tier sending rights, unit/state weights and full
+weekly update/news/downgrade remain unchanged. AI prospective traffic now covers
+the current 1–1.249 gap and does not double-count active existing clients, retaining
+the >1.249 threshold and native scoring weights. Four EN/RU granted rows reflect
+active recipients. Fresh checks passed 6148 cumulative source-model
+scenarios (6026 prior plus 122 new actual-source scenarios), separately
+2 adapter semantics cases and 155 new source/boundary checks.
+Eleven existing game paths contain
+20 changed blocks within 22 allowed boundaries/six helpers/four locale rows;
+68,310 other game files are exact. The two original revoke bodies are preserved.
+All 106/285/94 previous satellite scenarios remain enabled with physically coherent
+fixtures executing current game code; narrow historical byte views affect source
+assertions only. Independent review binds all eleven gameplay hashes. See
+[DIPLOMACY_PACKAGE_15_UK.md](DIPLOMACY_PACKAGE_15_UK.md).
+Native execution, performance, AI choice, timers, arrays, modifiers, GUI, annex and
+save/load still need new-campaign acceptance. Unhooked raw orbital/unit/control
+changes update daily; no instantaneous global atomicity is claimed. Old request/
+offer cooldown ownership asymmetry remains; it is soft AI scoring, not a human
+termination ban. No game, saves, launcher, ZIP, Workshop, DLC, playsets or attribution
+changes were made. Next: accept existing service cycles in game and extend the
+verified lifecycle to other existing diplomatic agreements/support.
 
 ## Completed setup
 

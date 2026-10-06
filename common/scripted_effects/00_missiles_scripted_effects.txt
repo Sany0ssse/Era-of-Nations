@@ -846,9 +846,11 @@ add_treaty_COM_mil_receiver_num = {
  eon_sat_com_mil_canonical_treaties = yes
  set_variable = { var_treaty_COM_mil_receiver_num = 0 }
  for_each_scope_loop = { array = COM_mil_treaty_array
+  if = { limit = { PREV = { eon_sat_com_mil_service_to_prev = yes } }
   add_to_variable = { PREV.var_treaty_COM_mil_receiver_num = THIS.num_battalions }
   add_to_variable = { PREV.var_treaty_COM_mil_receiver_num = THIS.num_ships }
   add_to_variable = { PREV.var_treaty_COM_mil_receiver_num = THIS.num_deployed_planes }
+  }
  }
  add_to_variable = { var_COM_mil_receiver_num = var_treaty_COM_mil_receiver_num }
 }
@@ -856,9 +858,11 @@ add_treaty_COM_civ_receiver_num = {
  eon_sat_com_canonical_treaties = yes
  set_variable = { var_treaty_COM_civ_receiver_num = 0 }
  for_each_scope_loop = { array = COM_civ_treaty_array
+  if = { limit = { PREV = { eon_sat_com_service_to_prev = yes } }
   set_temp_variable = { eon_sat_com_partner_receivers = THIS.num_controlled_states }
   multiply_temp_variable = { eon_sat_com_partner_receivers = 100 }
   add_to_variable = { PREV.var_treaty_COM_civ_receiver_num = eon_sat_com_partner_receivers }
+  }
  }
  add_to_variable = { var_COM_civ_receiver_num = var_treaty_COM_civ_receiver_num }
 }
@@ -2699,6 +2703,7 @@ COM_mil_button_update = {
 	update_COM_system_stats = yes
 	calculate_COM_mil_gui_vars = yes
 	clear_array = COM_mil_systems_array
+ eon_sat_com_network_refresh = yes
 }
 
 COM_civ_button_update = {
@@ -2712,6 +2717,7 @@ COM_civ_button_update = {
 	update_COM_system_stats = yes
 	calculate_COM_civ_gui_vars = yes
 	clear_array = COM_civ_systems_array
+ eon_sat_com_network_refresh = yes
 }
 
 SPY_mil_button_update = {

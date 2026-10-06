@@ -11,6 +11,13 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
+import sys as package15_sys
+package15_sys.path.insert(0, str(ROOT/'tools/validation'))
+from diplomacy_package_15.test_source import (
+    package15_original_bytes, package15_original_behavior_bytes,
+    package15_historical_existing, check_owned_existing as check_later_package15_owned,
+)
+check_later_package15_owned()
 BASELINE = 'f25dcfa040df4de947fe87e7a70f8f5fdd9ed659'
 OWNED = {
  'common/scripted_triggers/eon_satellite_triggers.txt': {'eon_sat_gnss_request_terms','eon_sat_gnss_offer_terms','eon_sat_com_request_terms','eon_sat_com_offer_terms'},
@@ -136,6 +143,7 @@ def expected_locale(path, original):
 
 def package14_original_bytes(path, actual):
     """Restore exactly nine named bodies and four named locale lines per language."""
+    actual=package15_original_bytes(path,actual)
     if path not in EXISTING:return actual
     old=baseline_bytes(path)
     assert actual.startswith(b'\xef\xbb\xbf')==old.startswith(b'\xef\xbb\xbf'),path
@@ -178,7 +186,7 @@ def main():
         hashes[path]=hashlib.sha256(data).hexdigest()
         groups['all_six_existing_encoding_and_exact_literal_inside_outside_boundaries']+=1
         if path in OWNED:
-            sources[path]=ast(data);old_sources[path]=ast(old)
+            sources[path]=ast(package15_original_bytes(path,data));old_sources[path]=ast(old)
             assert [key for key,op,value in sources[path]]==[key for key,op,value in old_sources[path]]
             for key in sorted(OWNED[path]):
                 assert one(sources[path],key)==ast(expected_block(path,key,old[owned_blocks(old,path)[key]['start']:owned_blocks(old,path)[key]['end']]))[0][2]
@@ -190,18 +198,19 @@ def main():
     trees=('common','history','events','interface','gfx','localisation','music','map','sound','portraits','tutorial','descriptions','scenario_tests','descriptor.mod','era_of_nations.mod','thumbnail.png')
     before=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
     changed=subprocess.check_output(['git','diff','--name-only',BASELINE,'--',*trees],cwd=ROOT).decode().splitlines()
+    changed=[path for path in changed if path not in package15_historical_existing(BASELINE)-EXISTING]
     untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--',*trees],cwd=ROOT).decode().splitlines()
     assert len(before)==68321 and set(changed)==EXISTING and not untracked and not NEW
     groups['all_68315_unrelated_gameplay_files_byte_preserved_no_gameplay_additions']+=1
     native=[]
     for path in before:
         if path.startswith('common/scripted_diplomatic_actions/') and path.endswith('.txt'):
-            data=(ROOT/path).read_bytes();assert data==baseline_bytes(path),('Native visibility_cost_consent_AI_weights_or_scope_modified',path)
+            data=package15_original_bytes(path,(ROOT/path).read_bytes());assert data==baseline_bytes(path),('Native visibility_cost_consent_AI_weights_or_scope_modified',path)
             native.extend(b['key'] for b in boundary_blocks(data) if b['depth']==1 and b['parent']=='scripted_diplomatic_actions')
     assert len(native)==len(set(native))==65
     groups['all_65_native_IDs_and_all_native_action_bytes_weights_and_lifecycle_preserved']+=1
     tr=sources['common/scripted_triggers/eon_satellite_triggers.txt'];fx=sources['common/scripted_effects/eon_satellite_effects.txt']
-    original_fx=ast((ROOT/'common/scripted_effects/00_missiles_scripted_effects.txt').read_bytes())
+    original_fx=ast(package15_original_bytes('common/scripted_effects/00_missiles_scripted_effects.txt',(ROOT/'common/scripted_effects/00_missiles_scripted_effects.txt').read_bytes()))
     labels=(ROOT/'localisation/english/MD_missiles_l_english.yml').read_text(encoding='utf-8-sig')
     models=ast((ROOT/'common/scripted_effects/00_missiles_models.txt').read_bytes())
     bonus={'gnss':('production_speed_buildings_factor','production_speed_infrastructure_factor','local_resources_factor'),
@@ -252,7 +261,7 @@ def main():
         groups['two_original_soft_AI_offer_and_revoke_desire_callers_not_human_hard_bans']+=1
     locales={}
     for language in ('english','russian'):
-        path=f'localisation/{language}/eon_satellite_l_{language}.yml';data=(ROOT/path).read_text(encoding='utf-8-sig')
+        path=f'localisation/{language}/eon_satellite_l_{language}.yml';data=package15_original_bytes(path,(ROOT/path).read_bytes()).decode('utf-8-sig')
         pairs=re.findall(r'^ ([\w.]+):0 "(.*)"$',data,re.M);assert len(pairs)==len(dict(pairs))==18
         locales[language]=dict(pairs)
         for key in LOCALE_KEYS:
@@ -271,7 +280,7 @@ def main():
                'common/decisions/eon_satellite_extended_decisions.txt','common/decisions/categories/eon_satellite_extended_categories.txt',
                'common/on_actions/eon_satellite_extended_on_actions.txt','localisation/english/eon_satellite_extended_l_english.yml','localisation/russian/eon_satellite_extended_l_russian.yml')
     for path in protected:
-        assert (ROOT/path).read_bytes()==baseline_bytes(path),path
+        assert package15_original_bytes(path,(ROOT/path).read_bytes())==baseline_bytes(path),path
         groups['nine_protected_original_cap_tables_GUI_and_all_previous_extended13_files_byte_exact']+=1
     before_shared=one(old_sources['common/scripted_effects/00_missiles_scripted_effects.txt'],'update_COM_system_stats')
     assert one(original_fx,'update_COM_system_stats')==before_shared
@@ -290,10 +299,10 @@ def main():
         assert expected12.count(before_patch)==1,('Original old12 fixture seam changed',before_patch)
         expected12=expected12.replace(before_patch,after_patch,1)
         groups['two_exact_old12_unavailable_first_tier_fixture_locations_three_statements_only']+=1
-    assert (ROOT/old12_path).read_bytes()==expected12.encode('utf-8'),'Other old12 behavior fixtures/assertions/scenarios changed'
+    assert package15_original_behavior_bytes(old12_path,(ROOT/old12_path).read_bytes())==expected12.encode('utf-8'),'Other old12 behavior fixtures/assertions/scenarios changed'
     groups['old12_whole_public_behavior_file_exact_after_only_two_literal_fixture_patches']+=1
     old13_path='tools/validation/diplomacy_package_13/test_satellites.py'
-    assert (ROOT/old13_path).read_bytes()==baseline_bytes(old13_path),'Old13 actual behavior proof modified'
+    assert package15_original_behavior_bytes(old13_path,(ROOT/old13_path).read_bytes())==baseline_bytes(old13_path),'Old13 actual behavior proof modified'
     groups['all_original_285_package13_behavior_cases_executor_and_assertions_byte_unchanged']+=1
     for package in ('01','02'):
         path='tools/validation/diplomacy_package_'+package+'/test_source.py'

@@ -87,6 +87,7 @@ def state():
     for actor, country in result['countries'].items():
         for upper in FACTORS:
             country['variables']['var_' + upper + '_civ_sat_system_num'] = 0
+        civilian['set_com_count_fixture'](result, actor, 0)
     return result
 
 def grant_values(result, upper, actor='A', base=False):
@@ -103,6 +104,9 @@ def zero_setup(result, family, kind='request', count=2):
     for actor in (provider, recipient):
         result['countries'][actor]['variables']['var_' + upper + '_civ_system_idx'] = 0
     result['countries'][provider]['variables']['var_' + upper + '_civ_sat_system_num'] = count
+    if upper == 'COM':
+        civilian['set_com_count_fixture'](result, provider, count)
+        civilian['helper'](result, 'eon_sat_com_sync_own', recipient)
     return provider, recipient
 
 def projected(result, service, actor='A', target='B'):
@@ -146,7 +150,7 @@ for family in ('gnss', 'com'):
         result = state(); zero_setup(result, family)
         civilian['seed_consent'](result, upper)
         for factor in FACTORS[upper]: result['countries']['B']['variables']['var_' + upper + '_civ_' + factor + '_base'] = 100
-        civilian['helper'](result, 'eon_sat_refresh_' + family)
+        civilian['helper'](result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss')
         expected = {factor: result['global']['arrays'][upper + '_civ_' + factor + '_max_array'][0] for factor in FACTORS[upper]}
         assert_values(result, upper, expected)
         assert civilian['grants'](result, 'A', upper) == ['B'] and civilian['indices'](result, 'A', upper) == [0]
@@ -162,7 +166,7 @@ for family in ('gnss', 'com'):
             groups['civilian_first_tier_with_no_native_satellites_stays_unavailable_and_cached_click_inert'] += 1
         result = state(); zero_setup(result, family, count=0)
         civilian['seed_consent'](result, upper)
-        civilian['helper'](result, 'eon_sat_refresh_' + family)
+        civilian['helper'](result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss')
         assert civilian['grants'](result, 'A', upper) == ['B'] and civilian['indices'](result, 'A', upper) == [0]
         assert_values(result, upper, grant_values(result, upper, base=True))
         groups['civilian_first_tier_without_satellites_keeps_dormant_consent_without_benefit'] += 1
@@ -175,9 +179,11 @@ for family in ('gnss', 'com'):
             civilian['response'](result, family, kind, partner='C')
             assert civilian['snapshot'](result) == before
             result['countries'][provider]['variables']['var_' + upper + '_civ_sat_system_num'] = 0
+            if upper == 'COM': civilian['set_com_count_fixture'](result, provider, 0)
             assert not civilian['response'](result, family, kind)
             assert not civilian['grants'](result, recipient, upper)
             result['countries'][provider]['variables']['var_' + upper + '_civ_sat_system_num'] = 2
+            if upper == 'COM': civilian['set_com_count_fixture'](result, provider, 2)
             assert civilian['send'](result, family, kind) and civilian['response'](result, family, kind)
             assert_values(result, upper, civilian_expected(result, family, provider, recipient), recipient)
             groups['four_civilian_first_tier_replies_preserve_wrong_peer_kind_and_recheck_lost_native_counts'] += 1
@@ -185,10 +191,12 @@ for family in ('gnss', 'com'):
         result = state(); zero_setup(result, family)
         assert civilian['send'](result, family)
         result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 0
+        if upper == 'COM': civilian['set_com_count_fixture'](result, 'B', 0)
         source['hook'](result)
         assert 'eon_sat_' + family + '_pending' in result['countries']['A']['flags']
         assert 'eon_sat_' + family + '_cancelled' in result['countries']['A']['flags']
         result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 2
+        if upper == 'COM': civilian['set_com_count_fixture'](result, 'B', 2)
         assert not civilian['response'](result, family)
         assert not civilian['grants'](result, 'A', upper)
         assert civilian['send'](result, family) and civilian['response'](result, family)
@@ -199,14 +207,17 @@ for family in ('gnss', 'com'):
         source['hook'](result)
         assert_values(result, upper, civilian_expected(result, family))
         result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 0
+        if upper == 'COM': civilian['set_com_count_fixture'](result, 'B', 0)
         source['hook'](result)
         assert civilian['grants'](result, 'A', upper) == ['B'] and civilian['indices'](result, 'A', upper) == [0]
         assert_values(result, upper, grant_values(result, upper, base=True))
         result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 2
+        if upper == 'COM': civilian['set_com_count_fixture'](result, 'B', 2)
         source['hook'](result)
         assert_values(result, upper, civilian_expected(result, family))
         civilian['effect'](result, 'revoke_civ_' + family + '_access', actor='B', partner='A')
         result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 4
+        if upper == 'COM': civilian['set_com_count_fixture'](result, 'B', 4)
         source['hook'](result)
         assert civilian['grants'](result, 'A', upper) == [] and civilian['indices'](result, 'A', upper) == []
         assert_values(result, upper, grant_values(result, upper, base=True))
@@ -224,40 +235,47 @@ for family in ('gnss', 'com'):
             groups['unknown_civilian_legacy_pointer_ownership_blocks_first_tier_without_synthetic_migration'] += 1
     if focus in (None, 'zero_providers'):
         result = state(); zero_setup(result, family)
+        if family == 'com':
+            for factor in FACTORS[upper]: result['countries']['A']['variables']['var_COM_civ_' + factor + '_base'] = .01
         result['countries']['C']['variables'].update({'var_' + upper + '_civ_system_idx': 0,
                                                     'var_' + upper + '_civ_sat_system_num': 2})
+        if upper == 'COM': civilian['set_com_count_fixture'](result, 'C', 2)
         civilian['seed_consent'](result, upper, provider='B', duplicates=3)
         civilian['seed_consent'](result, upper, provider='C', duplicates=2)
         for provider in ('B', 'C'):
             for factor in FACTORS[upper]: result['countries'][provider]['variables']['var_' + upper + '_civ_' + factor + '_base'] = .005
-        civilian['helper'](result, 'eon_sat_refresh_' + family)
+        civilian['helper'](result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss')
         assert civilian['grants'](result, 'A', upper) == ['B', 'C'] and civilian['indices'](result, 'A', upper) == [0, 0]
         assert_values(result, upper, {factor: .02 for factor in FACTORS[upper]})
         for provider in ('B', 'C'):
             for factor in FACTORS[upper]: result['countries'][provider]['variables']['var_' + upper + '_civ_' + factor + '_base'] = 100
-        civilian['helper'](result, 'eon_sat_refresh_' + family)
+        civilian['helper'](result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss')
         bounds = {factor: result['global']['arrays'][upper + '_civ_' + factor + '_max_array'][0] for factor in FACTORS[upper]}
         assert_values(result, upper, bounds)
         civilian['effect'](result, 'revoke_civ_' + family + '_access', actor='B', partner='A')
         assert civilian['grants'](result, 'A', upper) == ['C'] and civilian['indices'](result, 'A', upper) == [0]
-        assert_values(result, upper, bounds)
+        assert_values(result, upper, civilian_expected(result, family, 'C') if family == 'com' else bounds)
         groups['two_working_civilian_tier_zero_providers_sum_once_clamp_index_zero_and_same_tier_revoke_preserves_peer'] += 1
 
         result = state(); zero_setup(result, family)
         result['countries']['C']['variables'].update({'var_' + upper + '_civ_system_idx': 3,
                                                     'var_' + upper + '_civ_sat_system_num': 2})
+        if upper == 'COM': civilian['set_com_count_fixture'](result, 'C', 2)
         civilian['seed_consent'](result, upper, provider='B')
         civilian['seed_consent'](result, upper, provider='C')
-        civilian['helper'](result, 'eon_sat_refresh_' + family)
+        if family == 'com':
+            for actor, base in (('A', .01), ('B', .03), ('C', .03)):
+                for factor in FACTORS[upper]: result['countries'][actor]['variables']['var_COM_civ_' + factor + '_base'] = base
+        civilian['helper'](result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss')
         assert civilian['indices'](result, 'A', upper) == [0, 3]
         assert_values(result, upper, {factor: .07 for factor in FACTORS[upper]})
         for provider in ('B', 'C'):
             for factor in FACTORS[upper]: result['countries'][provider]['variables']['var_' + upper + '_civ_' + factor + '_base'] = 100
-        civilian['helper'](result, 'eon_sat_refresh_' + family)
+        civilian['helper'](result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss')
         assert_values(result, upper, {factor: result['global']['arrays'][upper + '_civ_' + factor + '_max_array'][3] for factor in FACTORS[upper]})
         civilian['effect'](result, 'revoke_civ_' + family + '_access', actor='C', partner='A')
         assert civilian['grants'](result, 'A', upper) == ['B'] and civilian['indices'](result, 'A', upper) == [0]
-        assert_values(result, upper, {factor: result['global']['arrays'][upper + '_civ_' + factor + '_max_array'][0] for factor in FACTORS[upper]})
+        assert_values(result, upper, civilian_expected(result, family) if family == 'com' else {factor: result['global']['arrays'][upper + '_civ_' + factor + '_max_array'][0] for factor in FACTORS[upper]})
         groups['mixed_civilian_zero_and_higher_providers_both_contribute_with_strongest_native_cap_then_fall_back_after_revoke'] += 1
     if focus in (None, 'zero_annex'):
         for subject in (False, True):
@@ -280,6 +298,7 @@ for family in ('gnss', 'com'):
             assert not civilian['send'](result, family)
             result['countries']['C']['variables'].update({'var_' + upper + '_civ_system_idx': 0,
                                                         'var_' + upper + '_civ_sat_system_num': 2})
+            if upper == 'COM': civilian['set_com_count_fixture'](result, 'C', 2)
             assert civilian['send'](result, family, partner='C')
             fresh = civilian['snapshot'](result)
             civilian['response'](result, family)
@@ -330,14 +349,14 @@ if focus in (None, 'projected_zero'):
 if focus in (None, 'projected_positive'):
     for service in ('mil', 'civ'):
         if family_filter and family_filter != service: continue
-        for current, cap, existing, demand, expected in ((1.25, 1000, 1000, 100, True),
+        for current, cap, existing, demand, expected in ((1.25, 1000, 1250, 100, True),
                                                         (.9, 1000, 900, 300, False),
                                                         (.9, 1000, 900, 400, True),
-                                                        (1, 1000, 1000, 1000, False),
-                                                        (1.249, 1000, 1000, 1000, False),
-                                                        (1.24901, 1000, 1000, 1000, True),
-                                                        (.999, 1000, 1000, 249, False),
-                                                        (.999, 1000, 1000, 249.1, True)):
+                                                        (1, 1000, 1000, 1000, True),
+                                                        (1.249, 1000, 1249, 1000, True),
+                                                        (1.24901, 1000, 1249.01, 1000, True),
+                                                        (1, 1000, 1000, 249, False),
+                                                        (1, 1000, 1000, 249.1, True)):
             result = state()
             result['countries']['A']['variables'].update({'var_sat_network_traffic_' + service: current,
                                                          'var_COM_' + service + '_receiver_cap': cap,
@@ -345,10 +364,8 @@ if focus in (None, 'projected_positive'):
             result['countries']['B']['variables'].update(num_battalions=demand, num_ships=0, num_deployed_planes=0,
                                                         num_controlled_states=demand / 100)
             assert projected(result, service) == expected, (service, current, cap, existing, demand, expected)
-            if current < 1:
-                assert result['native_temp_divisions'] == [('B', 'temp1', cap)]
-            else: assert not result.get('native_temp_divisions')
-            groups['positive_COM_capacities_preserve_original_native_current_and_projected_traffic_thresholds'] += 1
+            assert result['native_temp_divisions'] == [('B', 'temp1', cap)]
+            groups['positive_COM_capacities_use_current_native_demand_and_literal_projected_threshold'] += 1
 
 if focus is None:
     for service in ('mil', 'civ'):
@@ -380,7 +397,7 @@ if focus is None:
     result = state()
     def economic_values(state):
         return {actor: {key: value for key, value in country['variables'].items()
-                        if not key.startswith(('var_GNSS_', 'var_COM_', 'var_SPY_', 'eon_sat_', 'pending_'))}
+                        if not key.startswith(('var_GNSS_', 'var_COM_', 'var_SPY_', 'var_treaty_COM_', 'var_sat_network_traffic_', 'eon_sat_', 'pending_'))}
                 for actor, country in state['countries'].items()}
     before_economy = economic_values(result)
     for family in source['FAMILIES']: source['prepare'](result, family)

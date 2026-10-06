@@ -189,6 +189,9 @@ eon_sat_refresh_gnss = {
 }
 
 eon_sat_com_begin_request = {
+ if = { limit = { eon_sat_com_new_ready = yes }
+  eon_sat_com_sync_own = yes
+  PREV = { eon_sat_com_sync_own = yes }
  if = { limit = { eon_sat_com_request_ready = yes }
   eon_sat_com_clear = yes
   set_variable = { eon_sat_com_partner = PREV.id }
@@ -199,14 +202,17 @@ eon_sat_com_begin_request = {
   set_country_flag = { flag = eon_sat_com_window days = 30 value = 1 }
   custom_effect_tooltip = eon_sat_com_proposal_tt
  }
+ }
 }
 eon_sat_com_accept_request = {
  if = { limit = { eon_sat_com_record_matches = yes check_variable = { eon_sat_com_kind = 1 } }
+  eon_sat_com_sync_own = yes
+  PREV = { eon_sat_com_sync_own = yes }
   if = { limit = { eon_sat_com_request_authorized = yes }
    eon_sat_com_clear = yes
    PREV = { add_to_array = { array = COM_civ_treaty_array value = PREV.id } }
    add_to_array = { array = COM_civ_access_array value = PREV.id }
-   set_country_flag = { flag = recently_accepted_mil_com_@PREV days = 180 value = 1 }
+   set_country_flag = { flag = eon_sat_com_civ_accepted@PREV days = 180 value = 1 }
    eon_sat_refresh_com = yes
    PREV = { eon_sat_refresh_com = yes }
    custom_effect_tooltip = eon_sat_com_granted_tt
@@ -219,6 +225,9 @@ eon_sat_com_reject_request = {
 }
 
 eon_sat_com_begin_offer = {
+ if = { limit = { eon_sat_com_new_ready = yes }
+  eon_sat_com_sync_own = yes
+  PREV = { eon_sat_com_sync_own = yes }
  if = { limit = { eon_sat_com_offer_ready = yes }
   eon_sat_com_clear = yes
   set_variable = { eon_sat_com_partner = PREV.id }
@@ -229,14 +238,17 @@ eon_sat_com_begin_offer = {
   set_country_flag = { flag = eon_sat_com_window days = 30 value = 1 }
   custom_effect_tooltip = eon_sat_com_proposal_tt
  }
+ }
 }
 eon_sat_com_accept_offer = {
  if = { limit = { eon_sat_com_record_matches = yes check_variable = { eon_sat_com_kind = 2 } }
+  eon_sat_com_sync_own = yes
+  PREV = { eon_sat_com_sync_own = yes }
   if = { limit = { eon_sat_com_offer_authorized = yes }
    eon_sat_com_clear = yes
    add_to_array = { array = COM_civ_treaty_array value = PREV.id }
    PREV = { add_to_array = { array = COM_civ_access_array value = PREV.id } }
-   set_country_flag = { flag = recently_accepted_mil_com_@PREV days = 180 value = 1 }
+   set_country_flag = { flag = eon_sat_com_civ_accepted@PREV days = 180 value = 1 }
    eon_sat_refresh_com = yes
    PREV = { eon_sat_refresh_com = yes }
    custom_effect_tooltip = eon_sat_com_granted_tt
@@ -351,7 +363,42 @@ eon_sat_com_revoke = {
  }
 }
 
-eon_sat_refresh_com = {
+eon_sat_refresh_com = { eon_sat_com_network_refresh = yes }
+
+eon_sat_daily_cleanup = {
+ eon_sat_gnss_cleanup = yes
+ if = { limit = { has_country_flag = eon_sat_com_pending check_variable = { eon_sat_com_partner > 0 } }
+  var:eon_sat_com_partner = { eon_sat_com_network_refresh = yes }
+ }
+ eon_sat_com_network_refresh = yes
+ eon_sat_com_cleanup = yes
+ eon_sat_refresh_gnss = yes
+ eon_sat_refresh_com = yes
+}
+eon_sat_cleanup_annexed_owner = {
+ eon_sat_gnss_force_close = yes
+ eon_sat_com_force_close = yes
+ clear_array = GNSS_civ_access_array
+ clear_array = GNSS_civ_access_system_idx_array
+ clear_array = GNSS_civ_treaty_array
+ clear_array = COM_civ_access_array
+ clear_array = COM_civ_access_system_idx_array
+ clear_array = COM_civ_treaty_array
+}
+
+eon_sat_com_sync_own = {
+ if = { limit = { exists = yes NOT = { check_variable = { THIS.id = eon_sat_removed_country } } }
+  eon_sat_com_canonical_access = yes
+  eon_sat_com_canonical_treaties = yes
+  eon_sat_com_mil_canonical_access = yes
+  eon_sat_com_mil_canonical_treaties = yes
+  update_COM_system_stats = yes
+  if = { limit = { eon_sat_com_valid_level = yes } calculate_COM_civ_gui_vars = yes }
+  if = { limit = { eon_sat_com_mil_valid_level = yes } calculate_COM_mil_gui_vars = yes }
+ }
+}
+
+eon_sat_com_apply_civ = {
  eon_sat_com_canonical_access = yes
  eon_sat_com_canonical_treaties = yes
  set_variable = { var_COM_civ_political_power_factor = var_COM_civ_political_power_factor_base }
@@ -361,10 +408,7 @@ eon_sat_refresh_com = {
  set_variable = { var_COM_civ_operation_outcome = var_COM_civ_operation_outcome_base }
  set_temp_variable = { eon_sat_com_highest = -1 }
  for_each_scope_loop = { array = COM_civ_access_array
-  if = { limit = { exists = yes eon_sat_com_valid_level = yes OR = { check_variable = { var_COM_civ_system_idx > 0 } AND = { check_variable = { var_COM_civ_system_idx = 0 } check_variable = { var_COM_civ_sat_system_num > 0 } } }
- NOT = { has_war_with = PREV }
- PREV = { eon_sat_com_valid_level = yes }
- OR = { check_variable = { THIS.var_COM_civ_system_idx = PREV.var_COM_civ_system_idx } check_variable = { THIS.var_COM_civ_system_idx > PREV.var_COM_civ_system_idx } } }
+  if = { limit = { eon_sat_com_service_to_prev = yes }
    add_to_variable = { PREV.var_COM_civ_political_power_factor = THIS.var_COM_civ_political_power_factor_base }
    add_to_variable = { PREV.var_COM_civ_decryption_factor = THIS.var_COM_civ_decryption_factor_base }
    add_to_variable = { PREV.var_COM_civ_encryption_factor = THIS.var_COM_civ_encryption_factor_base }
@@ -383,19 +427,64 @@ eon_sat_refresh_com = {
  if = { limit = { exists = yes } force_update_dynamic_modifier = yes }
 }
 
-eon_sat_daily_cleanup = {
- eon_sat_gnss_cleanup = yes
- eon_sat_com_cleanup = yes
- eon_sat_refresh_gnss = yes
- eon_sat_refresh_com = yes
-}
-eon_sat_cleanup_annexed_owner = {
- eon_sat_gnss_force_close = yes
- eon_sat_com_force_close = yes
- clear_array = GNSS_civ_access_array
- clear_array = GNSS_civ_access_system_idx_array
- clear_array = GNSS_civ_treaty_array
- clear_array = COM_civ_access_array
- clear_array = COM_civ_access_system_idx_array
- clear_array = COM_civ_treaty_array
+eon_sat_com_network_refresh = {
+ if = { limit = { exists = yes NOT = { check_variable = { THIS.id = eon_sat_removed_country } } }
+  clear_array = eon_sat_com_network_providers
+  clear_array = eon_sat_com_network_actors
+  clear_array = eon_sat_com_network_bases
+  add_to_array = { array = eon_sat_com_network_providers value = THIS.id }
+  eon_sat_com_canonical_access = yes
+  eon_sat_com_mil_canonical_access = yes
+  for_each_scope_loop = { array = COM_civ_access_array
+   if = { limit = { exists = yes NOT = { tag = PREV }
+     NOT = { check_variable = { THIS.id = eon_sat_removed_country } }
+     is_in_array = { array = COM_civ_treaty_array value = PREV.id }
+     NOT = { is_in_array = { array = PREV.eon_sat_com_network_providers value = THIS.id } } } add_to_array = { array = PREV.eon_sat_com_network_providers value = THIS.id } }
+  }
+  for_each_scope_loop = { array = COM_mil_access_array
+   if = { limit = { exists = yes NOT = { tag = PREV }
+     NOT = { check_variable = { THIS.id = eon_sat_removed_country } }
+     is_in_array = { array = COM_mil_treaty_array value = PREV.id }
+     NOT = { is_in_array = { array = PREV.eon_sat_com_network_providers value = THIS.id } } } add_to_array = { array = PREV.eon_sat_com_network_providers value = THIS.id } }
+  }
+  for_each_scope_loop = { array = eon_sat_com_network_providers
+   eon_sat_com_canonical_treaties = yes
+   eon_sat_com_mil_canonical_treaties = yes
+   if = { limit = { NOT = { is_in_array = { array = PREV.eon_sat_com_network_actors value = THIS.id } } } add_to_array = { array = PREV.eon_sat_com_network_actors value = THIS.id } }
+   for_each_scope_loop = { array = COM_civ_treaty_array
+    if = { limit = { exists = yes NOT = { tag = PREV }
+     NOT = { check_variable = { THIS.id = eon_sat_removed_country } }
+     is_in_array = { array = COM_civ_access_array value = PREV.id }
+     NOT = { is_in_array = { array = PREV.PREV.eon_sat_com_network_actors value = THIS.id } }
+    } add_to_array = { array = PREV.PREV.eon_sat_com_network_actors value = THIS.id } }
+   }
+   for_each_scope_loop = { array = COM_mil_treaty_array
+    if = { limit = { exists = yes NOT = { tag = PREV }
+     NOT = { check_variable = { THIS.id = eon_sat_removed_country } }
+     is_in_array = { array = COM_mil_access_array value = PREV.id }
+     NOT = { is_in_array = { array = PREV.PREV.eon_sat_com_network_actors value = THIS.id } }
+    } add_to_array = { array = PREV.PREV.eon_sat_com_network_actors value = THIS.id } }
+   }
+  }
+  for_each_scope_loop = { array = eon_sat_com_network_actors
+   if = { limit = { NOT = { is_in_array = { array = PREV.eon_sat_com_network_bases value = THIS.id } } } add_to_array = { array = PREV.eon_sat_com_network_bases value = THIS.id } }
+   for_each_scope_loop = { array = COM_civ_access_array
+    if = { limit = { exists = yes NOT = { tag = PREV }
+     NOT = { check_variable = { THIS.id = eon_sat_removed_country } }
+     is_in_array = { array = COM_civ_treaty_array value = PREV.id }
+     NOT = { is_in_array = { array = PREV.PREV.eon_sat_com_network_bases value = THIS.id } } } add_to_array = { array = PREV.PREV.eon_sat_com_network_bases value = THIS.id } }
+   }
+   for_each_scope_loop = { array = COM_mil_access_array
+    if = { limit = { exists = yes NOT = { tag = PREV }
+     NOT = { check_variable = { THIS.id = eon_sat_removed_country } }
+     is_in_array = { array = COM_mil_treaty_array value = PREV.id }
+     NOT = { is_in_array = { array = PREV.PREV.eon_sat_com_network_bases value = THIS.id } } } add_to_array = { array = PREV.PREV.eon_sat_com_network_bases value = THIS.id } }
+   }
+  }
+  for_each_scope_loop = { array = eon_sat_com_network_bases eon_sat_com_sync_own = yes }
+  for_each_scope_loop = { array = eon_sat_com_network_actors eon_sat_com_apply_civ = yes eon_sat_com_apply_mil = yes }
+  clear_array = eon_sat_com_network_providers
+  clear_array = eon_sat_com_network_actors
+  clear_array = eon_sat_com_network_bases
+ }
 }

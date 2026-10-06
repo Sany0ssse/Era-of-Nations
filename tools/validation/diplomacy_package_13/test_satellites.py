@@ -83,6 +83,9 @@ def state():
         country['variables'].update(num_battalions=0, num_ships=0, num_deployed_planes=0, var_COM_mil_sat_system_max=10)
         country['arrays']['COM_satellite_array'] = [0, 0, 0, 10, 0, 0, 0, 0]
         country['arrays']['COM_sat_receiver_tech_array'] = [100] * 8
+    for actor in result['countries']:
+        result['temp'] = {}
+        execute([('eon_sat_com_sync_own', '=', 'yes'), ('eon_sat_com_apply_civ', '=', 'yes'), ('eon_sat_com_apply_mil', '=', 'yes')], result, context(actor))
     return result
 
 def effect(result, family, kind='request', entry='complete_effect', actor='A', peer='B'):
@@ -123,7 +126,10 @@ def response(result, family, kind='request', accepted=True, actor='A', peer='B')
                                         result, switch(context(actor, scope=peer), actor))
     # Deliver the actual native callback. The script independently closes a
     # consumed invalid answer; no synthetic can_be_accepted guard is invented.
+    declarations = len(result.get('timer_declarations', []))
     effect(result, family, kind, 'complete_effect' if accepted else 'reject_effect', actor, peer)
+    if accepted and family == 'com_mil':
+        return (actor, 'eon_sat_com_mil_accepted@' + peer, 180) in result.get('timer_declarations', [])[declarations:]
     return authorized
 
 def prepare(result, family, kind='request', actor='A', peer='B'):
@@ -228,6 +234,7 @@ for family in FAMILIES:
             for country in (provider, recipient):
                 result['countries'][country]['variables']['var_' + prefix + '_system_idx'] = 0
             result['countries'][provider]['variables']['var_' + prefix + '_sat_system_num'] = 2
+            if family == 'com_mil': source['set_com_count_fixture'](result, provider, 2)
             assert send(result, family, kind), ('Working first-tier provider was blocked by numeric level zero', family, kind)
             assert pending(result, family) == ('B', 1 if kind == 'request' else 2, 0)
             assert response(result, family, kind)
@@ -239,10 +246,11 @@ for family in FAMILIES:
         for country in ('A', 'B'):
             result['countries'][country]['variables']['var_' + prefix + '_system_idx'] = 0
         result['countries']['B']['variables']['var_' + prefix + '_sat_system_num'] = 2
+        if family == 'com_mil': source['set_com_count_fixture'](result, 'B', 2)
         for factor in factors:
             result['countries']['B']['variables']['var_' + prefix + '_' + factor + '_base'] = -100 if factor == 'air_weather_penalty' else 100
         seed_consent(result, family)
-        helper(result, 'eon_sat_refresh_' + family)
+        helper(result, 'eon_sat_com_apply_mil' if family == 'com_mil' else 'eon_sat_refresh_' + family)
         expected = {factor: result['global']['arrays'][prefix + '_' + factor + '_max_array'][0] for factor in factors}
         assert_values(result, family, expected)
         assert arrays(result, family) == (['B'], [0])
@@ -255,6 +263,7 @@ for family in FAMILIES:
             for country in (provider, recipient):
                 result['countries'][country]['variables']['var_' + prefix + '_system_idx'] = 0
                 result['countries'][country]['variables']['var_' + prefix + '_sat_system_num'] = 0
+                if family == 'com_mil': source['set_com_count_fixture'](result, country, 0)
             before = snapshot(result)
             assert not send(result, family, kind)
             send(result, family, kind, force=True)
@@ -265,8 +274,9 @@ for family in FAMILIES:
         for country in ('A', 'B'):
             result['countries'][country]['variables']['var_' + prefix + '_system_idx'] = 0
             result['countries'][country]['variables']['var_' + prefix + '_sat_system_num'] = 0
+            if family == 'com_mil': source['set_com_count_fixture'](result, country, 0)
         seed_consent(result, family)
-        helper(result, 'eon_sat_refresh_' + family)
+        helper(result, 'eon_sat_com_apply_mil' if family == 'com_mil' else 'eon_sat_refresh_' + family)
         assert arrays(result, family) == (['B'], [0])
         assert_values(result, family, values(result, family, base=True))
         groups['first_tier_without_satellites_retains_dormant_reciprocal_consent_without_service_gain'] += 1
@@ -278,11 +288,14 @@ for family in FAMILIES:
             for country in (provider, recipient):
                 result['countries'][country]['variables']['var_' + prefix + '_system_idx'] = 0
             result['countries'][provider]['variables']['var_' + prefix + '_sat_system_num'] = 2
+            if family == 'com_mil': source['set_com_count_fixture'](result, provider, 2)
             assert send(result, family, kind)
             result['countries'][provider]['variables']['var_' + prefix + '_sat_system_num'] = 0
+            if family == 'com_mil': source['set_com_count_fixture'](result, provider, 0)
             assert not response(result, family, kind)
             assert pending(result, family) == (0, 0, 0) and not arrays(result, family, recipient)[0]
             result['countries'][provider]['variables']['var_' + prefix + '_sat_system_num'] = 2
+            if family == 'com_mil': source['set_com_count_fixture'](result, provider, 2)
             assert send(result, family, kind) and response(result, family, kind)
             assert_values(result, family, expected_gain(result, family, recipient, (provider,)), recipient)
             groups['eight_first_tier_native_callbacks_recheck_satellite_count_loss_before_response_and_allow_consumed_new_round'] += 1
@@ -291,12 +304,15 @@ for family in FAMILIES:
         for country in ('A', 'B'):
             result['countries'][country]['variables']['var_' + prefix + '_system_idx'] = 0
         result['countries']['B']['variables']['var_' + prefix + '_sat_system_num'] = 2
+        if family == 'com_mil': source['set_com_count_fixture'](result, 'B', 2)
         assert send(result, family)
         result['countries']['B']['variables']['var_' + prefix + '_sat_system_num'] = 0
+        if family == 'com_mil': source['set_com_count_fixture'](result, 'B', 0)
         hook(result)
         assert pending(result, family) == ('B', 1, 0)
         assert 'eon_sat_' + family + '_cancelled' in result['countries']['A']['flags']
         result['countries']['B']['variables']['var_' + prefix + '_sat_system_num'] = 2
+        if family == 'com_mil': source['set_com_count_fixture'](result, 'B', 2)
         assert not response(result, family)
         assert not arrays(result, family)[0] and pending(result, family) == (0, 0, 0)
         assert send(result, family) and response(result, family)
@@ -306,19 +322,23 @@ for family in FAMILIES:
         for country in ('A', 'B'):
             result['countries'][country]['variables']['var_' + prefix + '_system_idx'] = 0
         result['countries']['B']['variables']['var_' + prefix + '_sat_system_num'] = 2
+        if family == 'com_mil': source['set_com_count_fixture'](result, 'B', 2)
         seed_consent(result, family)
-        helper(result, 'eon_sat_refresh_' + family)
+        helper(result, 'eon_sat_com_apply_mil' if family == 'com_mil' else 'eon_sat_refresh_' + family)
         assert_values(result, family, expected_gain(result, family))
         result['countries']['B']['variables']['var_' + prefix + '_sat_system_num'] = 0
+        if family == 'com_mil': source['set_com_count_fixture'](result, 'B', 0)
         hook(result)
         assert arrays(result, family) == (['B'], [0])
         assert_values(result, family, values(result, family, base=True))
         result['countries']['B']['variables']['var_' + prefix + '_sat_system_num'] = 2
+        if family == 'com_mil': source['set_com_count_fixture'](result, 'B', 2)
         hook(result)
         assert arrays(result, family) == (['B'], [0])
         assert_values(result, family, expected_gain(result, family))
         effect(result, family, 'revoke', actor='B', peer='A')
         result['countries']['B']['variables']['var_' + prefix + '_sat_system_num'] = 4
+        if family == 'com_mil': source['set_com_count_fixture'](result, 'B', 4)
         hook(result)
         assert arrays(result, family) == ([], [])
         assert_values(result, family, values(result, family, base=True))
@@ -424,7 +444,7 @@ if focus is None:
             result = state(); prepare(result, family, kind)
             provider, recipient = ('B', 'A') if kind == 'request' else ('A', 'B')
             pp = {actor: data['variables']['political_power'] for actor, data in result['countries'].items()}
-            provider_before = values(result, family, provider)
+            provider_before = values(result, family, provider, base=family == 'com_mil')
             assert pending(result, family) == ('B', 1 if kind == 'request' else 2, 3)
             assert ('A', 'eon_sat_' + family + '_window', 30.0) in result['timer_declarations']
             assert response(result, family, kind)
@@ -433,7 +453,7 @@ if focus is None:
             assert_values(result, family, expected_gain(result, family, recipient, (provider,)), recipient)
             assert_values(result, family, provider_before, provider)
             assert pending(result, family) == (0, 0, 0)
-            accepted_flag = 'recently_accepted_' + service + '_' + upper.lower() + '_@B'
+            accepted_flag = ('eon_sat_com_mil_accepted@B' if family == 'com_mil' else 'recently_accepted_' + service + '_' + upper.lower() + '_@B')
             # Preserve the actual original spellings, including the absent
             # GNSS military request cooldown and GNSS/SPY names without access.
             if family == 'gnss_mil' and kind == 'request':
@@ -475,6 +495,7 @@ if focus is None:
 
         for level in (0, 1, 7, 8, -1, 3.5):
             result = state(); result['countries']['B']['variables']['var_' + prefix + '_system_idx'] = level
+            if family == 'com_mil': source['set_com_count_fixture'](result, 'B', 0 if level == 0 else 10)
             ready = send(result, family)
             assert ready == (level in (1, 7))
             if ready: assert response(result, family) and arrays(result, family)[1] == [level]
@@ -509,7 +530,7 @@ if focus is None:
             elif mutation == 'direct war': result['countries']['A']['wars'].add('B'); result['countries']['B']['wars'].add('A')
             elif mutation == 'unilateral access': result['countries']['B']['arrays'][prefix + '_treaty_array'] = []
             elif mutation == 'self entry': seed_consent(result, family, provider='A')
-            helper(result, 'eon_sat_refresh_' + family)
+            helper(result, 'eon_sat_com_apply_mil' if family == 'com_mil' else 'eon_sat_refresh_' + family)
             providers = ['C'] if mutation in ('dead provider', 'unilateral access') else ['B', 'C']
             indices = [3] if len(providers) == 1 else [5 if mutation == 'changed tier' else 0 if mutation in ('dormant zero', 'fractional provider', 'out of range provider') else 3, 3]
             assert arrays(result, family) == (providers, indices), (family, mutation, arrays(result, family))
@@ -523,7 +544,7 @@ if focus is None:
                 cap = result['global']['arrays'][prefix + '_' + factor + '_max_array'][3]
                 result['countries'][provider]['variables'][field] = cap
             helper(result, 'eon_sat_refresh_' + family, provider)
-        helper(result, 'eon_sat_refresh_' + family)
+        helper(result, 'eon_sat_com_apply_mil' if family == 'com_mil' else 'eon_sat_refresh_' + family)
         assert arrays(result, family) == (['B', 'C'], [3, 3])
         assert_values(result, family, expected_gain(result, family, providers=('B', 'C')))
         effect(result, family, 'revoke', actor='B', peer='A')

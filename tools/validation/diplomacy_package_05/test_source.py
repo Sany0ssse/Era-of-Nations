@@ -57,6 +57,13 @@ from diplomacy_package_14.test_source import (
     package14_original_bytes, package14_historical_existing,
 )
 check_later_package14_owned()
+
+# Package15 strictly restores eleven current COM network files before older proofs.
+from diplomacy_package_15.test_source import (
+    check_owned_existing as check_later_package15_owned,
+    package15_original_bytes, package15_historical_existing,
+)
+check_later_package15_owned()
 BASELINE = '688f1116fbcb377215181edca6af50f36538532e'
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'diplomacy_package_03'))
 from _support import ast, blocks, format_preserved, one
@@ -266,7 +273,7 @@ later_package08_new = {
     'localisation/russian/eon_mediation_l_russian.yml',
 }
 changed = subprocess.check_output(['git', 'diff', '--name-only', BASELINE, '--', *trees], cwd=ROOT).decode().splitlines()
-changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE)]
+changed = [path for path in changed if path not in LATER_PACKAGE10_EXISTING | LATER_PACKAGE11_EXISTING | LATER_PACKAGE12_EXISTING | LATER_PACKAGE13_EXISTING | package14_historical_existing(BASELINE) | package15_historical_existing(BASELINE)]
 untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', *trees], cwd=ROOT).decode().splitlines()
 assert set(changed) | set(untracked) == {r['path'] for r in receipts} | new | later_package06_paths | later_package07_new | later_package08_new | LATER_PACKAGE09_NEW | LATER_PACKAGE10_NEW | LATER_PACKAGE11_NEW | LATER_PACKAGE12_NEW | LATER_PACKAGE13_NEW, ('Unexpected gameplay changes', changed, untracked)
 groups['whole_gameplay_git_boundary'] += 1

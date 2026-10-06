@@ -25,6 +25,14 @@ def read(path): return (ROOT / path).read_text(encoding='utf-8-sig')
 
 def reference(result, ctx, expression):
     """Native scoped variable/array destination; global is a separate fixture."""
+    if expression.startswith('PREV.PREV.'):
+        parts = expression.split('.')
+        depth = 0
+        while depth < len(parts) and parts[depth] == 'PREV': depth += 1
+        assert depth < len(parts) and depth <= len(ctx['previous']), ('Missing native previous-scope frame', expression, ctx)
+        actor = ctx['previous'][depth - 1]
+        assert actor in result['countries'], ('Missing native previous country', expression, ctx)
+        return result['countries'][actor], '.'.join(parts[depth:])
     if '.' in expression:
         head, tail = expression.split('.', 1)
         if head == 'global': return result['global'], tail
@@ -35,8 +43,10 @@ def reference(result, ctx, expression):
     return result['countries'][ctx['scope']], expression
 
 def value(result, ctx, expression):
-    if isinstance(expression, str) and expression.startswith('global.'):
+    if isinstance(expression, str) and expression.startswith(('global.', 'PREV.PREV.')):
         data, field = reference(result, ctx, expression)
+        if field == 'id':
+            return next(actor for actor, country in result['countries'].items() if country is data)
         if '^' in field:
             name, index = field.split('^', 1)
             array = data['arrays'].get(name, [])
@@ -146,7 +156,8 @@ for namespace in (source, source['source'], source['source']['loader'], model):
 
 missile_effects = ast(read('common/scripted_effects/00_missiles_scripted_effects.txt'))
 for name in ('add_access_GNSS_civ_vars', 'add_offer_access_GNSS_civ_vars', 'add_access_COM_civ_vars', 'add_offer_access_COM_civ_vars',
-             'add_treaty_COM_civ_receiver_num', 'update_COM_system_stats', 'add_treaty_COM_mil_receiver_num'):
+             'add_treaty_COM_civ_receiver_num', 'update_COM_system_stats', 'add_treaty_COM_mil_receiver_num',
+             'calculate_COM_mil_gui_vars', 'calculate_COM_civ_gui_vars'):
     model['effects'][name] = one(missile_effects, name)
 for registry, path in (('effects', 'common/scripted_effects/eon_satellite_effects.txt'),
                        ('capacity_triggers', 'common/scripted_triggers/eon_satellite_triggers.txt'),
@@ -172,6 +183,32 @@ if extra_actions.exists():
 FACTORS = {'GNSS': ('production_speed_buildings_factor', 'production_speed_infrastructure_factor', 'local_resources_factor'),
            'COM': ('political_power_factor', 'decryption_factor', 'encryption_factor', 'intel_network_gain_factor', 'operation_outcome')}
 
+def com_physical_fixture(result):
+    # Native table declarations and explicit shared constellation/getter facts.
+    for key, op, nodes in one(ast(read('common/scripted_effects/00_missiles_models.txt')), 'set_all_sat_system_tech'):
+        if key == 'add_to_array' and len(nodes) == 1:
+            field, assignment, literal = nodes[0]
+            if field.startswith('global.COM_') and field.endswith(('_min_array', '_max_array')):
+                result['global']['arrays'].setdefault(field.removeprefix('global.'), []).append(float(literal))
+    for actor, country in result['countries'].items():
+        country['variables'].update(var_COM_mil_system_idx=0 if actor == 'A' else 3,
+            var_COM_mil_sat_system_max=10, num_battalions=0, num_ships=0, num_deployed_planes=0)
+        for suffix in ('access_array', 'treaty_array', 'access_system_idx_array'):
+            country['arrays']['COM_mil_' + suffix] = []
+        country['arrays']['COM_satellite_array'] = [0, 0, 0, 10, 0, 0, 0, 0]
+        country['arrays']['COM_sat_receiver_tech_array'] = [100] * 8
+    for actor in result['countries']:
+        result['temp'] = {}
+        execute([('eon_sat_com_sync_own', '=', 'yes'), ('eon_sat_com_apply_civ', '=', 'yes'), ('eon_sat_com_apply_mil', '=', 'yes')], result, context(actor))
+
+def set_com_count_fixture(result, actor, count):
+    # A changed cached count fixture must agree with physical native inventory.
+    result['countries'][actor]['arrays']['COM_satellite_array'] = [0, 0, 0, count, 0, 0, 0, 0]
+    for role in ('mil', 'civ'):
+        result['countries'][actor]['variables']['var_COM_' + role + '_sat_system_num'] = count
+    result['temp'] = {}
+    execute([('eon_sat_com_sync_own', '=', 'yes'), ('eon_sat_com_apply_civ', '=', 'yes'), ('eon_sat_com_apply_mil', '=', 'yes')], result, context(actor))
+
 def state():
     result = source['state']()
     result['global'] = {'variables': {}, 'arrays': {}}
@@ -184,10 +221,11 @@ def state():
                 name = family + '_civ_' + factor
                 country['variables']['var_' + name + '_base'] = .01 if actor == 'A' else .03
                 country['variables']['var_' + name] = country['variables']['var_' + name + '_base']
-                result['global']['arrays'][name + '_max_array'] = [0, .1, .2, .3, .4, .5, .6, .7]
+                if family != 'COM': result['global']['arrays'][name + '_max_array'] = [0, .1, .2, .3, .4, .5, .6, .7]
         country['variables'].update(num_controlled_states=1, var_COM_civ_receiver_num=100,
                                     var_COM_civ_receiver_cap=1000, var_COM_civ_sat_system_num=10,
                                     var_COM_civ_sat_system_max=10)
+    com_physical_fixture(result)
     return result
 
 def effect(result, identity, entry='complete_effect', actor='A', partner='B'):
@@ -225,7 +263,12 @@ def response(result, family='gnss', kind='request', accepted=True, actor='A', pa
     # an invalid consumed answer clears its owned record without a grant.
     authorized = not accepted or trigger([('eon_sat_' + family + '_' + kind + '_authorized', '=', 'yes')],
                                          result, switch(context(actor, scope=partner), actor))
+    declarations = len(result.get('timer_declarations', []))
     if native_ready or force: effect(result, identity, 'complete_effect' if accepted else 'reject_effect', actor, partner)
+    if accepted and family == 'com':
+        # Report actual fresh installation, not a cached gate sampled before
+        # the callback's own physical synchronization.
+        return native_ready and (actor, 'eon_sat_com_civ_accepted@' + partner, 180) in result.get('timer_declarations', [])[declarations:]
     return native_ready and authorized
 
 def helper(result, name, actor='A', partner=None, temporary=None):
@@ -271,8 +314,8 @@ def seed_consent(result, family='GNSS', recipient='A', provider='B', duplicates=
 def unchanged_non_civilian(result):
     return {actor: {key: deepcopy(value) for key, value in data.items() if key not in ('variables', 'arrays', 'flags')}
             | {'variables': {key: deepcopy(value) for key, value in data['variables'].items()
-                             if not key.startswith(('eon_sat_', 'var_GNSS_civ_', 'var_COM_civ_', 'temp_GNSS_civ_', 'temp_COM_civ_'))
-                             and key not in ('pending_civ_access_country', 'pending_civ_com_access_country', 'var_treaty_COM_civ_receiver_num', 'var_sat_network_traffic_civ')},
+                             if not key.startswith(('eon_sat_', 'var_GNSS_civ_', 'var_COM_civ_', 'var_COM_mil_', 'temp_GNSS_civ_', 'temp_COM_civ_'))
+                             and key not in ('pending_civ_access_country', 'pending_civ_com_access_country', 'var_treaty_COM_civ_receiver_num', 'var_sat_network_traffic_civ', 'var_treaty_COM_mil_receiver_num', 'var_sat_network_traffic_mil')},
                'arrays': {key: deepcopy(value) for key, value in data['arrays'].items()
                           if not key.startswith(('GNSS_civ_', 'COM_civ_', 'eon_sat_'))},
                'flags': {flag for flag in data['flags'] if not flag.startswith(('eon_sat_', 'recently_accepted_civ_gnss', 'recently_revoke_civ_', 'recently_accepted_mil_com'))}}
@@ -315,6 +358,7 @@ if focus in (None, 'pending'):
     groups['civilian_response_preserves_different_partner_pending_owner'] += 1
 if focus in (None, 'receivers'):
     result = state()
+    result['countries']['A']['variables']['var_COM_civ_system_idx'] = 3
     result['countries']['A']['arrays']['COM_civ_treaty_array'] = ['B', 'C']
     result['countries']['B']['arrays']['COM_civ_access_array'] = ['A']
     result['countries']['C']['arrays']['COM_civ_access_array'] = ['A']
@@ -337,7 +381,8 @@ if focus is None:
                 result['countries'][provider]['variables']['var_' + upper + '_civ_system_idx'] = 3
                 result['countries'][recipient]['variables']['var_' + upper + '_civ_system_idx'] = 0
             original_pp = {key: data['variables']['political_power'] for key, data in result['countries'].items()}
-            provider_base = {factor: result['countries'][provider]['variables']['var_' + upper + '_civ_' + factor]
+            provider_base = {factor: (result['global']['arrays']['COM_civ_' + factor + '_max_array'][result['countries'][provider]['variables']['var_COM_civ_system_idx']]
+                                      if family == 'com' else result['countries'][provider]['variables']['var_' + upper + '_civ_' + factor])
                              for factor in FACTORS[upper]}
             assert send(result, family, kind)
             assert pending(result, family)[:3] == (peer, 1 if kind == 'request' else 2, 3), (family, kind, pending(result, family))
@@ -350,6 +395,7 @@ if focus is None:
             for factor in FACTORS[upper]:
                 name = 'var_' + upper + '_civ_' + factor
                 expected = result['countries'][recipient]['variables'][name + '_base'] + result['countries'][provider]['variables'][name + '_base']
+                if family == 'com': expected = min(expected, result['global']['arrays']['COM_civ_' + factor + '_max_array'][result['countries'][provider]['variables']['var_COM_civ_system_idx']])
                 assert model['compare'](result['countries'][recipient]['variables'][name], '=', expected)
                 assert model['compare'](result['countries'][provider]['variables'][name], '=', provider_base[factor])
             response(result, family, kind, force=True)
@@ -512,6 +558,7 @@ if focus is None:
             elif mutation == 'provider dormant zero':
                 result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = 0
                 result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 0
+                if family == 'com': set_com_count_fixture(result, 'B', 0)
             elif mutation == 'provider below own tier': result['countries']['A']['variables']['var_' + upper + '_civ_system_idx'] = 4
             elif mutation == 'provider invalid fractional tier': result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = 3.5
             elif mutation == 'provider beyond supported tier': result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = 8
@@ -521,7 +568,7 @@ if focus is None:
             elif mutation == 'self entry':
                 result['countries']['A']['arrays'][upper + '_civ_access_array'].append('A')
                 result['countries']['A']['arrays'][upper + '_civ_treaty_array'].append('A')
-            helper(result, 'eon_sat_refresh_' + family)
+            helper(result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss')
             expected_providers = ['C'] if mutation in ('dead provider', 'unilateral access') else ['B', 'C']
             expected_indices = [3] if len(expected_providers) == 1 else [5 if mutation == 'provider changed tier' else 0 if mutation in ('provider dormant zero', 'provider invalid fractional tier', 'provider beyond supported tier') else 3, 3]
             assert grants(result, 'A', upper) == expected_providers and indices(result, 'A', upper) == expected_indices, (family, mutation, grants(result, 'A', upper), indices(result, 'A', upper))
@@ -530,14 +577,15 @@ if focus is None:
             for factor in FACTORS[upper]:
                 name = 'var_' + upper + '_civ_' + factor
                 expected = result['countries']['A']['variables'][name + '_base'] + sum(result['countries'][provider]['variables'][name + '_base'] for provider in eligible)
+                if family == 'com' and eligible: expected = min(expected, result['global']['arrays']['COM_civ_' + factor + '_max_array'][max(result['countries'][provider]['variables']['var_COM_civ_system_idx'] for provider in eligible)])
                 assert model['compare'](result['countries']['A']['variables'][name], '=', expected), (family, mutation, name, result['countries']['A']['variables'][name], expected)
             groups['canonical_live_provider_IDs_dedup_cache_current_tier_retain_dormant_consent_and_filter_invalid_bonus'] += 1
 
         result = state()
         seed_consent(result, upper, duplicates=3); seed_consent(result, upper, provider='C', duplicates=2)
-        helper(result, 'eon_sat_refresh_' + family, 'B'); helper(result, 'eon_sat_refresh_' + family, 'C')
+        helper(result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss', 'B'); helper(result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss', 'C')
         for factor in FACTORS[upper]: result['global']['arrays'][upper + '_civ_' + factor + '_max_array'][3] = .035
-        helper(result, 'eon_sat_refresh_' + family)
+        helper(result, 'eon_sat_com_apply_civ' if family == 'com' else 'eon_sat_refresh_gnss')
         assert grants(result, 'A', upper) == ['B', 'C'] and indices(result, 'A', upper) == [3, 3]
         assert result['countries']['B']['arrays'][upper + '_civ_treaty_array'] == ['A']
         effect(result, 'revoke_civ_' + family + '_access', actor='B', partner='A')
@@ -555,7 +603,10 @@ if focus is None:
 
         for level in (0, 1, 7, 8, -1, 3.5):
             result = state(); result['countries']['B']['variables']['var_' + upper + '_civ_system_idx'] = level
-            if level == 0: result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 0
+            if level == 0:
+                result['countries']['B']['variables']['var_' + upper + '_civ_sat_system_num'] = 0
+                if family == 'com': set_com_count_fixture(result, 'B', 0)
+            if family == 'com': helper(result, 'eon_sat_com_sync_own', 'B')
             ready = send(result, family)
             assert ready == (level in (1, 7)), (family, level, ready)
             if ready: assert response(result, family) and indices(result, 'A', upper) == [level]
@@ -583,8 +634,8 @@ if focus is None:
         assert model['compare'](variables['var_COM_civ_sat_system_bonus'], '=', expected_bonus)
         groups['actual_unchanged_COM_traffic_and_coverage_formula_uses_all_deduplicated_recipient_load_and_clamps_bonus'] += 1
 
-    for traffic, capacity, existing_load, target_states, expected in ((1.25, 1000, 1000, 1, True), (.9, 1000, 900, 3, False),
-                                                                  (.9, 1000, 900, 4, True), (1, 1000, 1000, 10, False)):
+    for traffic, capacity, existing_load, target_states, expected in ((1.25, 1000, 1250, 1, True), (.9, 1000, 900, 3, False),
+                                                                  (.9, 1000, 900, 4, True), (1, 1000, 1000, 10, True)):
         result = state()
         result['countries']['A']['variables'].update(var_sat_network_traffic_civ=traffic, var_COM_civ_receiver_cap=capacity,
                                                      var_COM_civ_receiver_num=existing_load)
@@ -592,12 +643,14 @@ if focus is None:
         result['temp'] = {}
         passed = trigger([('NOT_share_COM_civ_satellites_above_network_traffic_limit', '=', 'yes')], result, context('A', scope='B'))
         assert passed == expected, (traffic, existing_load, target_states, passed)
-        groups['unchanged_COM_AI_load_policy_native_current_and_projected_thresholds_are_soft_facts'] += 1
+        groups['COM_AI_load_policy_native_projected_thresholds_remain_soft_facts'] += 1
 
     result = state()
-    for country in result['countries'].values():
+    for actor, country in result['countries'].items():
         country['arrays']['GNSS_mil_access_array'] = ['D']
-        country['arrays']['COM_mil_access_array'] = ['C']
+        country['arrays']['COM_mil_access_array'] = [{'A': 'B', 'B': 'C', 'C': 'D', 'D': 'A'}[actor]]
+        country['arrays']['COM_mil_access_system_idx_array'] = [6]
+        country['arrays']['COM_mil_treaty_array'] = [{'A': 'D', 'B': 'A', 'C': 'B', 'D': 'C'}[actor]]
         country['arrays']['SPY_civ_access_array'] = ['B']
         country['variables'].update(var_GNSS_mil_system_idx=7, var_COM_mil_system_idx=6, var_SPY_civ_system_idx=5,
                                     pending_mil_access_country='D', pending_mil_com_access_country='C', pending_civ_spy_access_country='B')

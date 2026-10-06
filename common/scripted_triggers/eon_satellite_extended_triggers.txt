@@ -238,3 +238,16 @@ eon_sat_spy_civ_revoke_ready = {
  exists = yes PREV = { exists = yes } NOT = { tag = PREV }
  OR = { is_in_array = { array = SPY_civ_treaty_array value = PREV.id } is_in_array = { array = PREV.SPY_civ_access_array value = THIS.id } }
 }
+
+eon_sat_com_mil_service_to_prev = {
+ exists = yes PREV = { exists = yes } NOT = { tag = PREV }
+ NOT = { check_variable = { THIS.id = eon_sat_removed_country } }
+ PREV = { NOT = { check_variable = { THIS.id = eon_sat_removed_country } } }
+ NOT = { has_war_with = PREV }
+ eon_sat_com_mil_valid_level = yes PREV = { eon_sat_com_mil_valid_level = yes }
+ OR = { check_variable = { var_COM_mil_system_idx > 0 } AND = { check_variable = { var_COM_mil_system_idx = 0 } check_variable = { var_COM_mil_sat_system_num > 0 } } }
+ check_variable = { var_COM_mil_receiver_cap > 0 }
+ OR = { check_variable = { THIS.var_COM_mil_system_idx = PREV.var_COM_mil_system_idx } check_variable = { THIS.var_COM_mil_system_idx > PREV.var_COM_mil_system_idx } }
+ is_in_array = { array = COM_mil_treaty_array value = PREV.id }
+ is_in_array = { array = PREV.COM_mil_access_array value = THIS.id }
+}
