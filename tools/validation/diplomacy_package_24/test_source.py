@@ -147,7 +147,7 @@ assert native_comparison_count > 0
 assert [node[2] for node in nested(native_build) if node[0]=='set_temp_variable' and 'eon_project_build_result' in node[2][0][0]] == [[('PREV.eon_project_build_result','=','1')]]*15
 assert [node[2] for node in nested(try_build) if node[0]=='set_temp_variable'] == [[('PREV.eon_project_build_result','=','-1')]]
 cofund_ops=[node for node in nested(complete) if node[0] in ('add_to_variable','subtract_from_variable') and isinstance(node[2],list) and node[2][0][0] in ('eon_construction_contributions','eon_investment_contribution_spent','eon_investment_contribution_losses')]
-assert len(cofund_ops)==3 and all(node[2][0][2]=='PREV.eon_project_spent_contribution' for node in cofund_ops)
+assert len(cofund_ops)==3 and all(node[2][0][2]=='eon_project_spent_contribution' for node in cofund_ops)
 release_state=one(one(project_ast,'eon_investment_lifecycle_release_project'),'var:project_array^project')
 loop_pos=next(i for i,node in enumerate(release_state) if node[0]=='for_each_loop')
 assert release_state[loop_pos-1] == ('set_temp_variable','=',[('eon_project_state_break','=','0')])
@@ -178,7 +178,7 @@ groups=['Existing game BOM/EOL/EOF preserved', 'Legacy bodies unchanged except d
         'Other inherited effect bytes unchanged', 'Proposal staging helpers unchanged',
         'Original building eligibility unchanged except documented comparison syntax', 'Other GUI controls byte-identical',
         'Current game AST parses', 'Event IDs unique and acknowledgements passive',
-        'EN/RU keys and UTF-8 BOMs agree', 'Scoped build/cofund outputs and state-loop reset',
+        'EN/RU keys and UTF-8 BOMs agree', '16 qualified build-result writes retained uncalibrated; shared cofund reads and loop reset',
         'Every current check_variable uses documented full or short native grammar']
 if api: groups.append('Installed primary native API supports building-level check and primitives')
 print(json.dumps({'all_passed':True, 'source_checks':len(groups), 'check_groups':groups,

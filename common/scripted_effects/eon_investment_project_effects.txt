@@ -364,9 +364,9 @@ eon_investment_lifecycle_complete_unit = {
 				subtract_from_variable = { eon_project_cofunding_remaining^project = eon_project_spent_contribution }
 				clamp_variable = { var = eon_project_cofunding_remaining^project min = 0 }
 				var:eon_project_cofinancer^project = {
-					subtract_from_variable = { eon_construction_contributions = PREV.eon_project_spent_contribution }
+					subtract_from_variable = { eon_construction_contributions = eon_project_spent_contribution }
 					clamp_variable = { var = eon_construction_contributions min = 0 }
-					add_to_variable = { eon_investment_contribution_spent = PREV.eon_project_spent_contribution }
+					add_to_variable = { eon_investment_contribution_spent = eon_project_spent_contribution }
 				}
 				if = { limit = { check_variable = { eon_project_build_result = 1 } }
 					add_to_variable = { int_investments = eon_project_spent_principal }
@@ -376,7 +376,7 @@ eon_investment_lifecycle_complete_unit = {
 				else = {
 					add_to_variable = { eon_project_lost^project = 1 }
 					add_to_variable = { eon_investment_construction_losses = eon_project_spent_principal }
-					var:eon_project_cofinancer^project = { add_to_variable = { eon_investment_contribution_losses = PREV.eon_project_spent_contribution } }
+					var:eon_project_cofinancer^project = { add_to_variable = { eon_investment_contribution_losses = eon_project_spent_contribution } }
 					country_event = { id = eon_investment_lifecycle.7 }
 					var:project_target_country^project = { country_event = { id = eon_investment_lifecycle.7 } }
 				}

@@ -890,8 +890,8 @@ def main():
     for kind, fee in (('1', '3'), ('2', '4')):
         assert ('set_temp_variable', '=', [('eon_services_fee', '=', fee)]) in list(rows(triggers['eon_services_response_ready']))
         passed('two_original_literal_upfront_prices_unchanged')
-    assert ('set_temp_variable', '=', [('eon_services_policy_provider', '=', 'PREV.eon_services_selection_provider')]) in list(rows(triggers['eon_services_selection_ready']))
-    passed('selection_provider_identity_uses_explicit_previous_country_temporary_scope')
+    assert ('set_temp_variable', '=', [('eon_services_policy_provider', '=', 'eon_services_selection_provider')]) in list(rows(triggers['eon_services_selection_ready']))
+    passed('selection_provider_identity_uses_native_shared_execution_temporary')
     for path in (FX, TR, EVENTS):
         assert not any(key == 'set_temp_variable' and any(name == 'eon_services_kind' for name, op, val in value) for key, op, value in rows(ast((ROOT / path).read_bytes())))
         passed('permanent_frozen_service_kind_not_shadowed_by_temporary_option_input')

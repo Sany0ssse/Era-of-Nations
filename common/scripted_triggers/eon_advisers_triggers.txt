@@ -18,7 +18,7 @@ eon_advisers_policy_allowed = {
  var:eon_advisers_policy_provider = {
   exists = yes
   NOT = { tag = PREV }
-  check_variable = { THIS.id = PREV.eon_advisers_policy_provider }
+  check_variable = { THIS.id = eon_advisers_policy_provider }
   OR = {
    has_idea = defense_industry
    num_of_military_factories > 10
@@ -100,7 +100,7 @@ eon_advisers_selection_ready = {
  eon_advisers_funds_available = yes
  set_temp_variable = { eon_advisers_selection_provider = THIS }
  FROM.FROM = {
-  set_temp_variable = { eon_advisers_policy_provider = PREV.eon_advisers_selection_provider }
+  set_temp_variable = { eon_advisers_policy_provider = eon_advisers_selection_provider }
   eon_advisers_policy_allowed = yes
   eon_advisers_requirements_ready = yes
   var:eon_advisers_policy_provider = {
@@ -137,7 +137,7 @@ eon_advisers_incoming_pair_matches = {
  var:eon_advisers_incoming_partner = {
   has_country_flag = eon_advisers_outgoing_owned
   eon_advisers_outgoing_partner_identified = yes
-  check_variable = { eon_advisers_outgoing_partner = PREV.eon_advisers_pair_recipient }
+  check_variable = { eon_advisers_outgoing_partner = eon_advisers_pair_recipient }
  }
 }
 eon_advisers_outgoing_pair_matches = {
@@ -147,7 +147,7 @@ eon_advisers_outgoing_pair_matches = {
  var:eon_advisers_outgoing_partner = {
   has_country_flag = eon_advisers_incoming_owned
   eon_advisers_incoming_partner_identified = yes
-  check_variable = { eon_advisers_incoming_partner = PREV.eon_advisers_pair_provider }
+  check_variable = { eon_advisers_incoming_partner = eon_advisers_pair_provider }
  }
 }
 # Native actions ROOT actor, THIS selected partner.

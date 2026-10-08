@@ -841,11 +841,11 @@ def main():
     for operation in ('offer_ready', 'commit_ready'):
         body = triggers['eon_foreign_cash_' + operation]
         receiver_scope = one(body, 'FROM')
-        assert receiver_scope == [('set_temp_variable', '=', [('eon_foreign_cash_policy_provider', '=', 'PREV.eon_foreign_cash_selection_provider')]),
+        assert receiver_scope == [('set_temp_variable', '=', [('eon_foreign_cash_policy_provider', '=', 'eon_foreign_cash_selection_provider')]),
             ('eon_foreign_cash_policy_allowed', '=', 'yes'), ('eon_foreign_cash_cash_available', '=', 'yes')] + (
             [('var:eon_foreign_cash_policy_provider', '=', [('NOT', '=', [('has_country_flag', '=', 'eon_foreign_cash_retired_pair@PREV')])])]
             if operation == 'offer_ready' else [])
-        passed('offer_and_provider_commit_use_explicit_previous_country_provider_identity_and_fresh_policy_cash')
+        passed('offer_and_commit_use_shared_provider_identity_and_fresh_policy_cash')
     response_ready = triggers['eon_foreign_cash_response_ready']
     assert ('set_temp_variable', '=', [('eon_foreign_cash_policy_provider', '=', 'FROM')]) in response_ready
     assert ('eon_foreign_cash_policy_allowed', '=', 'yes') in response_ready and ('eon_foreign_cash_cash_available', '=', 'yes') in response_ready

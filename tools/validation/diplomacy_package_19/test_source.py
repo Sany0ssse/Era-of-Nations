@@ -973,8 +973,9 @@ def main():
         original_call = original_calls[index]
         assert original_call == ('send_equipment', '=', [('equipment', '=', equipment), ('amount', '=', str(amount)), ('target', '=', 'FROM')])
         branch = commit[consume + 1 + index]
-        assert branch == ('if', '=', [('limit', '=', [('check_variable', '=', [('eon_foreign_equipment_dispatch_' + suffix, '=', '1')])]), original_call])
-        passed('nine_native_dispatch_calls_keep_original_equipment_full_amount_target_and_order_with_frozen_snapshot_guard')
+        corrected_call = ('send_equipment', '=', [('type', '=', equipment), ('amount', '=', str(amount)), ('target', '=', 'FROM')])
+        assert branch == ('if', '=', [('limit', '=', [('check_variable', '=', [('eon_foreign_equipment_dispatch_' + suffix, '=', '1')])]), corrected_call])
+        passed('nine_native_dispatch_calls_keep_original_archetype_amount_target_order_with_documented_type_field')
     original_macro = [row for row in old_choice_ast if row[0] in ('set_temp_variable', 'change_influence_percentage')]
     assert len(original_macro) == 4 and commit[consume + 10:consume + 14] == original_macro
     passed('original_plus_three_influence_macro_parameter_sequence_after_selected_dispatch_calls_in_provider_frame')
@@ -984,11 +985,11 @@ def main():
     for name in ('offer_ready', 'commit_ready'):
         body = triggers['eon_foreign_equipment_' + name]
         receiver = one(body, 'FROM')
-        assert receiver[0] == ('set_temp_variable', '=', [('eon_foreign_equipment_policy_provider', '=', 'PREV.eon_foreign_equipment_selection_provider')])
+        assert receiver[0] == ('set_temp_variable', '=', [('eon_foreign_equipment_policy_provider', '=', 'eon_foreign_equipment_selection_provider')])
         assert ('eon_foreign_equipment_policy_allowed', '=', 'yes') in receiver
         expected = 'bundle_available' if name == 'offer_ready' else 'manifest_stocked'
         assert ('var:eon_foreign_equipment_policy_provider', '=', [('eon_foreign_equipment_' + expected, '=', 'yes')]) in receiver
-        passed('offer_and_commit_recheck_current_provider_stock_in_explicit_previous_country_identity_scope')
+        passed('offer_and_commit_recheck_current_provider_stock_using_shared_provider_identity')
     ready = triggers['eon_foreign_equipment_response_ready']
     assert ('set_temp_variable', '=', [('eon_foreign_equipment_policy_provider', '=', 'FROM')]) in ready
     assert ('eon_foreign_equipment_policy_allowed', '=', 'yes') in ready

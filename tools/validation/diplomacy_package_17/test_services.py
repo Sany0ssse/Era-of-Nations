@@ -28,26 +28,58 @@ def read(path): return (ROOT / path).read_text(encoding='utf-8-sig')
 
 def country_ref(result, ctx, token):
     if token == 'FROM.FROM': return ctx.get('from_from')
+    if token.startswith('PREV.') and all(part == 'PREV' for part in token.split('.')):
+        depth = len(token.split('.'))
+        assert depth <= len(ctx['previous']), ('Missing previous country frame', token)
+        return ctx['previous'][depth-1]
     return source_country_ref(result, ctx, token)
 
 def value(result, ctx, token):
-    if token == 'FROM.FROM': return country_ref(result, ctx, token)
-    if isinstance(token, str) and token.startswith('FROM.FROM.'):
-        return value(result, switch(ctx, country_ref(result, ctx, 'FROM.FROM')), token[10:])
-    if isinstance(token, str) and token.startswith('PREV.PREV.'):
-        parts = token.split('.'); depth = 0
-        while parts[depth] == 'PREV': depth += 1
-        assert depth <= len(ctx['previous']), ('Missing previous-scope frame', token, ctx)
-        return value(result, switch(ctx, ctx['previous'][depth-1]), '.'.join(parts[depth:]))
-    previous_temp = result['temp']
-    result['temp'] = result.setdefault('scope_temps', {}).setdefault(ctx['scope'], {})
-    try: return source_value(result, ctx, token)
-    finally: result['temp'] = previous_temp
+    # Native10 proves shared bare temps and persistent explicitly scoped reads.
+    if token == 'FROM.FROM':return country_ref(result,ctx,token)
+    if isinstance(token,str) and '.' in token:
+        parts=token.split('.')
+        if token.startswith('FROM.FROM.'):
+            actor=country_ref(result,ctx,'FROM.FROM');tail=token[10:]
+        elif parts[0]=='PREV':
+            depth=0
+            while depth<len(parts) and parts[depth]=='PREV':depth+=1
+            assert depth<=len(ctx['previous']),('Missing previous frame',token)
+            actor=ctx['previous'][depth-1];tail='.'.join(parts[depth:])
+        elif parts[0] in ('ROOT','FROM','THIS') or parts[0] in result['countries']:
+            actor=country_ref(result,ctx,parts[0]);tail='.'.join(parts[1:])
+        else:return source_value(result,ctx,token)
+        if not tail:return actor
+        if tail=='id':return actor
+        nested=switch(ctx,actor);owner=result['countries'][actor]
+        if '^' in tail:
+            name,index=tail.split('^',1);rows=owner['arrays'].get(name,[])
+            if index=='num':return len(rows)
+            ordinal=int(value(result,nested,index));return rows[ordinal] if 0<=ordinal<len(rows) else 0
+        if tail.startswith('opinion@'):return owner['opinions'].get(country_ref(result,nested,tail.split('@',1)[1]),0)
+        if '@' in tail:
+            base, selector = tail.split('@', 1)
+            tail = base + '@' + str(country_ref(result, nested, selector))
+        return owner['variables'].get(tail,0)
+    if isinstance(token, str) and '@' in token and token not in result['temp']:
+        base, selector = token.split('@', 1)
+        return result['countries'][ctx['scope']]['variables'].get(base + '@' + str(country_ref(result, ctx, selector)), 0)
+    return source_value(result,ctx,token)
+
+def flag_name(result, ctx, name):
+    # Native24/29: country FLAG suffixes select actual scopes, not scalar aliases.
+    # This does not change dynamic VARIABLE address resolution.
+    if '@' not in name: return name
+    base, target = name.split('@', 1)
+    scopes = ('ROOT', 'FROM', 'THIS', 'PREV', 'FROM.FROM')
+    if target in scopes or (target.startswith('PREV.PREV') and all(part == 'PREV' for part in target.split('.'))):
+        return base + '@' + str(country_ref(result, ctx, target))
+    return base + '@literal:' + target
+
 
 def trigger(nodes, result, ctx):
     index = 0
     while index < len(nodes):
-        result['temp'] = result.setdefault('scope_temps', {}).setdefault(ctx['scope'], {})
         key, operator, val = nodes[index]; index += 1
         grouped = [(key, operator, val)]
         if key == 'if':
@@ -71,13 +103,14 @@ def trigger(nodes, result, ctx):
 def execute(nodes, result, ctx):
     index = 0
     while index < len(nodes):
-        result['temp'] = result.setdefault('scope_temps', {}).setdefault(ctx['scope'], {})
         key, operator, val = nodes[index]; index += 1
         grouped = [(key, operator, val)]
         if key == 'if':
             while index < len(nodes) and nodes[index][0] in ('else_if', 'else'):
                 grouped.append(nodes[index]); index += 1
         country = result['countries'][ctx['scope']]
+        if key == 'set_temp_variable' and any('.' in name for name, operator, rhs in val):
+            raise AssertionError(('Uncalibrated qualified temporary write', val))
         if key == 'FROM.FROM':
             actor = country_ref(result, ctx, key)
             if actor in result['countries']: execute(val, result, switch(ctx, actor))
@@ -91,7 +124,7 @@ def execute(nodes, result, ctx):
         else: source_execute(grouped, result, ctx)
 
 for namespace in (source, source['source'], source['source']['loader'], model):
-    namespace['execute'] = execute; namespace['trigger'] = trigger; namespace['value'] = value; namespace['country_ref'] = country_ref
+    namespace['execute'] = execute; namespace['trigger'] = trigger; namespace['value'] = value; namespace['country_ref'] = country_ref; namespace['flag_name'] = flag_name
 model['effects']['modify_treasury_effect'] = one(ast(read('common/scripted_effects/00_budget_effects.txt')), 'modify_treasury_effect')
 for registry, path in (('effects', 'common/scripted_effects/eon_services_effects.txt'),
                        ('capacity_triggers', 'common/scripted_triggers/eon_services_triggers.txt')):
@@ -120,13 +153,11 @@ def option(events, identity, name):
 def effect(result, nodes, actor='B', from_='A', from_from=None, scope=None, temporary=None):
     result['temp'] = dict(temporary or {})
     ctx = context(actor, from_, scope=scope); ctx['from_from'] = from_from
-    result['scope_temps'] = {ctx['scope']: result['temp']}
     execute(nodes, result, ctx)
 
 def check(result, nodes, actor='A', from_='B', from_from=None, scope=None, temporary=None):
     result['temp'] = dict(temporary or {})
     ctx = context(actor, from_, scope=scope); ctx['from_from'] = from_from
-    result['scope_temps'] = {ctx['scope']: result['temp']}
     return trigger(nodes, result, ctx)
 
 def send(result, kind=1, provider='A', receiver='B', force=False):
@@ -459,18 +490,35 @@ def scenarios():
         effect(result, choices[0]); assert snapshot(result) == before
         groups['all_static_and_unmatched_ACKs_have_no_mutable_contract_effect'] += 1
 
-    result = state(); ctx_a = context('A'); ctx_b = context('B'); result['scope_temps'] = {'A': {'fixture_temp': 7}, 'B': {'fixture_temp': 11}}
-    assert value(result, ctx_a, 'fixture_temp') == 7 and value(result, ctx_b, 'fixture_temp') == 11
-    assert value(result, switch(ctx_a, 'B'), 'PREV.fixture_temp') == 7
-    assert value(result, switch(ctx_b, 'A'), 'PREV.fixture_temp') == 11
-    adapter_cases['new_service_temporary_values_resolve_current_and_previous_country_scopes'] += 1
+    result = state(); ctx_a = context('A'); ctx_b = switch(ctx_a, 'B')
+    result['temp'] = {'fixture_temp': 7}
+    assert value(result, ctx_a, 'fixture_temp') == value(result, ctx_b, 'fixture_temp') == 7
+    assert value(result, ctx_b, 'PREV.fixture_temp') == 0
+    result['countries']['A']['variables']['fixture_temp'] = 11
+    assert value(result, ctx_b, 'PREV.fixture_temp') == 11
+    execute([('set_temp_variable', '=', [('fixture_temp', '=', '13')])], result, ctx_b)
+    assert value(result, ctx_a, 'fixture_temp') == 13
+    adapter_cases['native10_shared_execution_temporary_and_scoped_persistent_read'] += 1
+    assert flag_name(result, ctx_b, 'probe@PREV') == 'probe@A'
+    ctx_c = switch(ctx_b, 'C')
+    assert flag_name(result, ctx_c, 'probe@PREV.PREV') == 'probe@A'
+    result['temp']['partner_alias'] = 'A'
+    result['countries']['B']['variables']['stored_alias'] = 'A'
+    assert flag_name(result, ctx_b, 'probe@partner_alias') != 'probe@A'
+    assert flag_name(result, ctx_b, 'probe@stored_alias') != 'probe@A'
+    assert flag_name(result, ctx_b, 'probe@A') != 'probe@A'
+    assert country_ref(result, ctx_b, 'var:stored_alias') == 'A'
+    result['countries']['B']['variables']['variable_probe@A'] = 23
+    assert value(result, ctx_b, 'variable_probe@A') == value(result, ctx_b, 'variable_probe@stored_alias') == 23
+    assert value(result, ctx_b, 'variable_probe@PREV') == 23
+    adapter_cases['native29_flag_suffix_scalar_is_not_a_country_scope_variable_alias_still_selects_country'] += 1
     original_selection = model['capacity_triggers']['eon_services_selection_ready']
     mutated_selection = deepcopy(original_selection); replacements = 0
     def mutate_scope(nodes):
         nonlocal replacements
         for index, (key, op, val) in enumerate(nodes):
-            if key == 'set_temp_variable' and val == [('eon_services_policy_provider', '=', 'PREV.eon_services_selection_provider')]:
-                nodes[index] = (key, op, [('eon_services_policy_provider', '=', 'eon_services_selection_provider')]); replacements += 1
+            if key == 'set_temp_variable' and val == [('eon_services_policy_provider', '=', 'eon_services_selection_provider')]:
+                nodes[index] = (key, op, [('eon_services_policy_provider', '=', 'PREV.eon_services_selection_provider')]); replacements += 1
             elif isinstance(val, list): mutate_scope(val)
     mutate_scope(mutated_selection); assert replacements == 1
     model['capacity_triggers']['eon_services_selection_ready'] = mutated_selection
@@ -478,7 +526,7 @@ def scenarios():
         result = state(); assert not send(result) and not pending(result)
     finally: model['capacity_triggers']['eon_services_selection_ready'] = original_selection
     result = state(); assert send(result) and pending(result)
-    adapter_cases['memory_only_unqualified_cross_country_provider_temporary_regression_rejected'] += 1
+    adapter_cases['memory_only_old_scoped_temp_operand_regression_rejected'] += 1
 
 if __name__ == '__main__':
     if sys.argv[1:]:
@@ -492,4 +540,4 @@ if __name__ == '__main__':
     print(json.dumps({'all_passed': True, 'baseline': BASELINE, 'actual_source_scenarios': sum(groups.values()),
                       'adapter_semantics_cases': sum(adapter_cases.values()), 'groups': dict(groups),
                       'source_sha256': {path: hashlib.sha256((ROOT / path).read_bytes()).hexdigest() for path in source_paths},
-                      'proof_scope': 'bounded ordered current source service contracts and scoped temporary adapter; not native HOI4 runtime'}, indent=2))
+                      'proof_scope': 'bounded ordered current source service contracts and native10/29 calibrated scalar-read/flag adapter; not native HOI4 runtime'}, indent=2))

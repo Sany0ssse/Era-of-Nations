@@ -19,7 +19,7 @@ eon_services_policy_allowed = {
  var:eon_services_policy_provider = {
   exists = yes
   NOT = { tag = PREV }
-  check_variable = { THIS.id = PREV.eon_services_policy_provider }
+  check_variable = { THIS.id = eon_services_policy_provider }
   OR = {
    has_idea = defense_industry
    num_of_military_factories > 10
@@ -65,10 +65,10 @@ eon_services_selection_ready = {
  }
  set_temp_variable = { eon_services_selection_provider = THIS }
  FROM.FROM = {
-  set_temp_variable = { eon_services_policy_provider = PREV.eon_services_selection_provider }
+  set_temp_variable = { eon_services_policy_provider = eon_services_selection_provider }
   eon_services_policy_allowed = yes
   if = {
-   limit = { check_variable = { PREV.eon_services_requested_kind = 1 } }
+   limit = { check_variable = { eon_services_requested_kind = 1 } }
    NOT = { has_idea = military_services_logistics_idea }
    NOT = { has_country_flag = eon_services_logistics_owned }
   }
@@ -99,7 +99,7 @@ eon_services_response_kind_matches = {
   check_variable = { eon_services_requested_kind = 1 }
   check_variable = { eon_services_requested_kind = 2 }
  }
- FROM = { check_variable = { eon_services_kind = PREV.eon_services_requested_kind } }
+ FROM = { check_variable = { eon_services_kind = eon_services_requested_kind } }
 }
 
 eon_services_response_ready = {
@@ -128,7 +128,7 @@ eon_services_response_ready = {
  FROM = {
   check_variable = { var = treasury value = -1000000 compare = greater_than_or_equals }
   set_temp_variable = { eon_services_projected_treasury = treasury }
-  add_to_temp_variable = { eon_services_projected_treasury = PREV.eon_services_fee }
+  add_to_temp_variable = { eon_services_projected_treasury = eon_services_fee }
   check_variable = { var = eon_services_projected_treasury value = 1000000 compare = less_than_or_equals }
  }
 }

@@ -36,7 +36,7 @@ def execute(nodes,result,ctx):
         if key in ('change_influence_percentage','change_the_military_opinion','change_domestic_influence_percentage'):
             provider = result['countries'][ctx['from']] if ctx['from'] in result['countries'] else None
             result.setdefault('adviser_macro_contexts',[]).append({'effect':key,'root':ctx['root'],'from':ctx['from'],
-                'scope':ctx['scope'],'temporaries':deepcopy(result.setdefault('scope_temps',{}).get(ctx['scope'],{})),
+                'scope':ctx['scope'],'temporaries':deepcopy(result['temp']),
                 'provider_pending_at_call':provider is not None and PREFIX+'pending' in provider['flags']})
             source_execute(grouped,result,ctx)
         elif key == 'modify_treasury_effect':
@@ -410,8 +410,8 @@ def adapter_semantics():
     # Explicit primitive and frame probes; these do not recount old suites.
     for scope,from_ in (('B','A'),('C','D')):
         result=state();effect(result,[('set_temp_variable','=',[('probe','=','9')]),('FROM','=',[('set_temp_variable','=',[('probe','=','3')])])],actor=scope,from_=from_)
-        assert result['scope_temps'][scope]['probe']==9 and result['scope_temps'][from_]['probe']==3
-        adapter_cases['temporaries_are_per_country_and_FROM_switch_preserves_ROOT']+=1
+        assert result['temp']['probe']==3
+        adapter_cases['temporaries_are_shared_execution_values_and_FROM_switch_preserves_ROOT']+=1
     for amount,expected in ((-1.5,98.5),(-1000001,-999901),(1000001,1000000)):
         result=state();effect(result,[('set_temp_variable','=',[('treasury_change','=',str(amount))]),('modify_treasury_effect','=','yes')],actor='A',from_='B')
         assert vars_(result)['treasury']==expected and vars_(result,'B')['treasury']==100

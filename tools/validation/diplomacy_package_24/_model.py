@@ -1,8 +1,9 @@
 """Package 24 source interpreter adapted from the existing package 02 investment model.
 
 Country and state IDs share an entity map; state IDs are negative, as in project
-arrays. Temporary variables belong to their country/state scope; scoped writes
-and reads resolve explicitly, including PREV/ROOT. Event
+arrays. Bare temporary values share one execution environment (native10). Explicit
+scoped reads use persistent state. Qualified build-result temporary writes remain
+unverified and require a separately declared financial-model fixture assumption. Event
 delivery, AI selection and external influence/capitalization formulas are not
 emulated: their actual calls are witnessed, and require engine verification.
 """
@@ -108,7 +109,7 @@ def address(s, c, expression):
     if match:
         head, tail = match.groups(); target = ref(s, c, head)
         return address(s, {**c, 'scope': target}, tail)
-    return s['entities'][c['scope']]['variables'], flag(s, c, expression) if '@' in expression else expression
+    return s['entities'][c['scope']]['variables'], variable_key(s, c, expression) if '@' in expression else expression
 
 
 def value(s, c, expression):
@@ -121,8 +122,8 @@ def value(s, c, expression):
     if expression.startswith('building_level@'):
         return s['entities'][c['scope']].get('levels', {}).get(expression.split('@')[1], 0)
     dest, key = address(s, c, expression)
-    scope = next((ident for ident, ent in s['entities'].items() if ent['variables'] is dest), 'global')
-    if key in s['temp'].get(scope, {}): return s['temp'][scope][key]
+    scoped = bool(re.match(r'^(global|ROOT|FROM|THIS|CONTROLLER|OWNER|PREV)(?:\.|$)', expression))
+    if not scoped and key in s['temp']: return s['temp'][key]
     if '^' in key:
         name, index = key.split('^', 1)
         entity = next((ent for ent in s['entities'].values() if ent['variables'] is dest), None)
@@ -136,8 +137,10 @@ def value(s, c, expression):
 def temp_address(s, c, expression):
     dest, key = address(s, c, expression)
     assert '^' not in key, ('Temporary array write unsupported', expression)
-    scope = next((ident for ident, ent in s['entities'].items() if ent['variables'] is dest), 'global')
-    return s['temp'].setdefault(scope, {}), key
+    if '.' in expression:
+        assert expression == 'PREV.eon_project_build_result' and s.get('qualified_build_result_fixture') == 'shared_result_assumption', ('Uncalibrated qualified temporary write', expression)
+        s.setdefault('unverified_qualified_temp_write_calls', []).append((c['scope'], expression))
+    return s['temp'], key
 
 
 def cmp(left, op, right):
@@ -176,10 +179,20 @@ def variable_comparison(nodes):
     return fields['var'], CHECK_VARIABLE_COMPARISONS[fields['compare']], fields['value']
 
 
-def flag(s, c, name):
+def variable_key(s, c, name):
     if '@' not in name: return name
     base, target = name.split('@', 1)
     return base + '@' + str(int(ref(s, c, target)))
+
+
+def flag(s, c, name):
+    # Native29 scalar country aliases do not identify keyed country FLAGS.
+    # variable_key deliberately retains the old VARIABLE selector behavior.
+    if '@' not in name: return name
+    base, target = name.split('@', 1)
+    if target in ('ROOT', 'FROM', 'THIS', 'PREV', 'CONTROLLER', 'OWNER') or (target.startswith('PREV.PREV') and all(part == 'PREV' for part in target.split('.'))):
+        return base + '@' + str(int(ref(s, c, target)))
+    return base + '@literal:' + target
 
 
 def condition(nodes, s, c):
@@ -330,7 +343,7 @@ def execute(nodes, s, c):
         elif k in ('activate_decision', 'activate_targeted_decision', 'remove_targeted_decision',
                    'modify_capitalization_support', 'change_influence_percentage', 'add_opinion_modifier',
                    'update_gui', 'ingame_update_setup', 'save_event_target_as'):
-            s['external'].append((c['scope'], k, deepcopy(v), deepcopy(s['temp'].get(c['scope'], {}))))
+            s['external'].append((c['scope'], k, deepcopy(v), deepcopy(s['temp'])))
         elif k in ('name', 'ai_chance', 'log', 'custom_effect_tooltip', 'trigger'): pass
         else: raise AssertionError(('Unsupported investment effect', k, op, v))
 

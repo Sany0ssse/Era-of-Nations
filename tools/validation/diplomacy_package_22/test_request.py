@@ -34,13 +34,14 @@ def historical_caller_run(relative_path):
         relative_path=target.as_posix()
         sys.path.insert(0,str(ROOT/'tools/validation'))
         import diplomacy_package_22.test_source as byte_views
+        from diplomacy_package_17._scope_repair import test_before
         behavior_paths=historical_script_manifest()
         source_paths={f'tools/validation/diplomacy_package_{index:02}/test_source.py' for index in range(2,22)}
         pristine_source_paths={'tools/validation/diplomacy_package_01/test_source.py'}
         assert relative_path in behavior_paths|source_paths|pristine_source_paths,('Unapproved historical subprocess script',relative_path)
         original=subprocess.check_output(['git','show',BASELINE+':'+relative_path],cwd=ROOT)
         current=(ROOT/relative_path).read_bytes()
-        if relative_path in behavior_paths|pristine_source_paths:assert current==original,('Protected historical script bytes changed',relative_path)
+        if relative_path in behavior_paths|pristine_source_paths:assert test_before(relative_path,current)==original,('Protected historical script bytes changed outside declared scope repair',relative_path)
         else:assert byte_views.package22_original_validator_bytes(relative_path,current)==original
         projected_targets={f'tools/validation/diplomacy_package_{index:02}/'+name for index,name in ((18,'test_foreign_cash.py'),(19,'test_equipment.py'),(20,'test_formation.py'))}
         if relative_path in projected_targets:
@@ -83,7 +84,7 @@ def historical_caller_run(relative_path):
         result['historical_caller_projection']=projection|{'script':relative_path,'projected_read_count':read_count,
             'script_sha256':hashlib.sha256(current).hexdigest(),'source_sha256_scope':'actual_current_files; execution of only three AB4 callers uses the declared historical option view'}
     if Path(relative_path).name=='run_checks.py':
-        result['prior_scope']='unchanged_children_with_historical_AB4_caller_view'
+        result['prior_scope']='current_corrected_adapters_with_exact_declared_delta_and_historical_AB4_caller_view'
         result['historical_projection_baseline']=BASELINE
         result['prior_counters_prove_current_initial_request_ownership']=False
     return result

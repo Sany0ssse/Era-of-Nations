@@ -3,13 +3,21 @@
 This is API grammar evidence, not an HOI4 compiler or campaign execution.
 """
 import json
-from _model import ast, condition, context, state, switch, variable_comparison
+from _model import ast, condition, context, state, switch, variable_comparison, value, flag, ref
 
 cases=[]
 s=state()
 s['entities'][1]['variables']['balance']=30
 s['entities'][2]['variables']['price']=30
 c=switch(context(2),1)
+s['entities'][1]['variables'].update({'stored_partner':2, 'variable_probe_@2':7})
+assert value(s,c,'variable_probe_@PREV') == value(s,c,'variable_probe_@stored_partner') == 7
+assert value(s,c,'variable_probe_@2') == 7
+assert ref(s,c,'var:stored_partner') == 2
+assert flag(s,c,'flag_probe_@PREV') == 'flag_probe_@2'
+assert flag(s,c,'flag_probe_@stored_partner') != 'flag_probe_@2'
+assert flag(s,c,'flag_probe_@2') != 'flag_probe_@2'
+cases.append('native29 VARIABLE aliases retained while scalar FLAG suffixes cannot select peer')
 comparisons={
     'less_than': (False,False,True),
     'less_than_or_equals': (False,True,True),

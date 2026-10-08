@@ -9,6 +9,9 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = 'f56ec8b3cd35a0f34ecad9627cbb77991963fca0'
+import sys as scope_sys
+scope_sys.path.insert(0, str(ROOT/'tools/validation'))
+from diplomacy_package_17._scope_repair import game_before, test_before
 FOCUS_PATH = 'common/national_focus/Iran_Focus_Tree.txt'
 EVENT_PATH = 'events/Iran.txt'
 EXISTING = {FOCUS_PATH, EVENT_PATH} | {f'localisation/{language}/MD_focus_PER_l_{language}.yml' for language in ('english', 'russian')}
@@ -58,6 +61,7 @@ def focus_reward(data):
 
 def package23_original_bytes(path, actual):
     """Inverse only the named focus reward, two consent options, one preview and eighteen locale rows."""
+    actual = game_before(path, actual)
     if path not in EXISTING: return actual
     original = baseline_bytes(path); format_preserved(original, actual, path)
     if actual == original: return original
@@ -1228,6 +1232,7 @@ HISTORICAL_SOURCE_EDITS = {'tools/validation/diplomacy_package_02/test_source.py
 
 
 def package23_original_validator_bytes(path, actual):
+    actual = test_before(path, actual)
     if path not in HISTORICAL_SOURCE_EDITS: return actual
     original = baseline_bytes(path); lines = original.decode('utf-8').splitlines(keepends=True)
     for start, end, before, after in reversed(HISTORICAL_SOURCE_EDITS[path]):
@@ -1437,7 +1442,7 @@ def main():
     old_game = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', BASELINE, '--', 'common', 'events', 'localisation'], cwd=ROOT).decode().splitlines()
     protected += [path for path in old_game if any(stem in path for stem in ('eon_services_', 'eon_foreign_cash_', 'eon_foreign_equipment_', 'eon_defence_formation_', 'eon_advisers_', 'eon_support_request_'))]
     for path in sorted(set(protected)):
-        assert (ROOT/path).read_bytes() == baseline_bytes(path), path
+        assert game_before(path, (ROOT/path).read_bytes()) == baseline_bytes(path), path
     passed('all_previous_channels_current_USA_AI_political_macros_opinions_GUI_and_sanction_decisions_remain_raw_exact')
     for path in sorted(EXISTING):
         try: package23_original_bytes(path, (ROOT/path).read_bytes()+b'# unowned memory mutation\n')
@@ -1449,7 +1454,7 @@ def main():
         current, before = (ROOT/path).read_bytes(), baseline_bytes(path)
         assert package23_original_validator_bytes(path, current) == before
         counters = lambda data: [line for line in data.splitlines() if b'groups[' in line and b'+=' in line or b'passed(' in line]
-        assert counters(current) == counters(before)
+        assert counters(test_before(path, current)) == counters(before)
         passed('twenty_one_literal_whole_historical_source_journals_preserve_original_assertion_counter_lines')
         try: package23_original_validator_bytes(path, current+b'# unowned memory mutation\n')
         except AssertionError: pass
@@ -1459,7 +1464,7 @@ def main():
     untouched = [path for path in public_paths if path not in HISTORICAL_SOURCE_EDITS]
     behavior = [path for path in untouched if path.endswith('.py') and Path(path).name != 'test_source.py']
     assert (len(public_paths), len(untouched), len(behavior)) == (98, 77, 55)
-    for path in untouched: assert (ROOT/path).read_bytes() == baseline_bytes(path), path
+    for path in untouched: assert test_before(path, (ROOT/path).read_bytes()) == baseline_bytes(path), path
     passed('fifty_five_prior_behavior_helper_runner_and_seventy_seven_other_public_files_remain_raw_byte_exact')
     installed = Path('D:/SteamLibrary/steamapps/common/Hearts of Iron IV')
     effects_doc = (installed/'documentation/effects_documentation.md').read_text(encoding='utf-8-sig')

@@ -8,6 +8,8 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[3]
 BASELINE = 'c1420b108dee2d129018951c9ba73c1f6bfc4360'
+sys.path.insert(0, str(ROOT / 'tools/validation'))
+from diplomacy_package_17._scope_repair import JOURNAL, game_before
 spec = importlib.util.spec_from_file_location(
     'eon_compat_ast', ROOT / 'tools/validation/diplomacy_package_03/_support.py')
 parser = importlib.util.module_from_spec(spec)
@@ -53,7 +55,10 @@ def main():
         before = subprocess.check_output(['git', 'show', BASELINE + ':' + relative], cwd=ROOT)
         after = (ROOT / relative).read_bytes()
         old, current = parser.ast(before), parser.ast(after)
-        assert normalize(current) == normalize(old), ('Other behavior changed', relative)
+        # Only preservation comparison receives the digest-bound inverse of
+        # the accepted READ/type fields. Grammar below uses the actual AST.
+        preservation = parser.ast(game_before(relative, after))
+        assert normalize(preservation) == normalize(old), ('Other behavior changed', relative)
         assert before.startswith(b'\xef\xbb\xbf') == after.startswith(b'\xef\xbb\xbf')
         assert before.count(b'\r\n') == after.count(b'\r\n'), ('Changed existing CRLF', relative)
         assert before.count(b'\n') == after.count(b'\n'), ('Changed existing line count', relative)
@@ -76,6 +81,26 @@ def main():
                     assert parser.compare(left, operator, threshold) == expected
                     checks += 1
             conversions += 1
+    # Bind the complete exact25 READ + nine type-field repair, including source
+    # paths outside this earlier syntax inventory. Reject a changed predicate or
+    # suffix; no broad token removal or whole-file normalization is permitted.
+    repair_boundary_cases = 0
+    repair_hashes = {}
+    for group in ('support_reads', 'equipment_field'):
+        for relative, receipt in JOURNAL[group].items():
+            after = (ROOT / relative).read_bytes()
+            assert hashlib.sha256(after).hexdigest() == receipt['after_sha256']
+            preservation = game_before(relative, after)
+            assert hashlib.sha256(preservation).hexdigest() == receipt['before_sha256']
+            parser.ast(after)  # actual current source, not the inverse view
+            for mutated in (after + b'# memory-only unowned suffix\n', after.replace(b'= yes', b'= no', 1)):
+                assert mutated != after, ('Missing bounded predicate mutant', relative)
+                try: game_before(relative, mutated)
+                except AssertionError: pass
+                else: raise AssertionError(('Unowned repair mutation accepted', relative))
+                repair_boundary_cases += 1
+            repair_hashes[relative] = hashlib.sha256(after).hexdigest()
+    assert len(repair_hashes) == 10
     # Resolve a provider by identity, not by comparing an ideology to a variable name.
     advisers = parser.ast((ROOT / 'common/scripted_triggers/eon_advisers_triggers.txt').read_bytes())
     services = parser.ast((ROOT / 'common/scripted_triggers/eon_services_triggers.txt').read_bytes())
@@ -95,6 +120,9 @@ def main():
                       'boundary_and_identity_cases': checks,
                       'baseline_commit': BASELINE,
                       'source_sha256': hashes,
+                      'accepted_repair_source_sha256': repair_hashes,
+                      'exact_read_operand_repairs': 25, 'exact_equipment_field_repairs': 9,
+                      'repair_mutation_boundary_cases': repair_boundary_cases,
                       'native_runtime_proven': False,
                       'proof_scope': 'full parsed statement equivalence and exact comparison boundaries; native load still required'}, indent=2))
 

@@ -93,7 +93,7 @@ def execute(nodes, result, ctx):
         if key == 'change_influence_percentage':
             result.setdefault('relations_influence_calls', []).append({
                 'root': ctx['root'], 'from': ctx['from'], 'scope': ctx['scope'],
-                'temporaries': deepcopy(result.setdefault('scope_temps', {}).get(ctx['scope'], {})),
+                'temporaries': deepcopy(result['temp']),
                 'pending_at_call': {actor: PREFIX+'pending' in result['countries'][actor]['flags'] for actor in ('PER', 'USA')},
                 'partner_at_call': {actor: result['countries'][actor]['variables'].get(PREFIX+'partner', 0) for actor in ('PER', 'USA')}})
         source_execute(grouped, result, ctx)

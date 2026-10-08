@@ -35,6 +35,16 @@ def invariant(s, donor=1, recipient=2, original=1000):
     assert v(s, 'eon_construction_capital', donor) >= -1e-8
     assert v(s, 'eon_construction_contributions', recipient) >= -1e-8
 
+# Qualified state result writers have not been calibrated in native HOI4.
+# Financial lifecycle cases retain an explicit result-routing assumption;
+# the default adapter rejects those writers and never claims engine acceptance.
+unqualified_state = state
+def state():
+    result = unqualified_state()
+    result['qualified_build_result_fixture'] = 'shared_result_assumption'
+    return result
+
+
 def accepted(kind=1, amount=2, cost=30, duration=3, recipient=2, target=-101):
     s = state()
     stage(s, receiver=recipient, target=target, kind=kind, amount=amount,
@@ -50,39 +60,41 @@ def accepted(kind=1, amount=2, cost=30, duration=3, recipient=2, target=-101):
 def notifications(s, ident):
     return [event for event in s['events'] if event[0] == f'eon_investment_lifecycle.{ident}']
 
-# Explicit scoped temporary semantics: same-named country/state values are
-# independent; PREV reads/writes transfer a result rather than sharing storage.
-s = state()
+# Native10 read semantics: bare temps share the execution; explicit scope reads
+# persistent values. Qualified writes remain an uncalibrated model boundary.
+s = unqualified_state()
 for scope, probe in ((1, 11), (2, 33), (-101, 22)):
     execute(ast(f'set_temp_variable = {{ scoped_probe = {probe} }}'), s, context(1, scope=scope, previous=(1,)))
-execute(ast('set_temp_variable = { PREV.scoped_reply = scoped_probe }'), s, context(1, scope=-101, previous=(1,)))
-assert value(s, context(1), 'scoped_probe') == 11
-assert value(s, context(2), 'scoped_probe') == 33
-assert value(s, context(1, scope=-101), 'scoped_probe') == 22
-assert value(s, context(1), 'scoped_reply') == 22
-assert value(s, context(1, scope=-101), 'ROOT.scoped_probe') == 11
-cases.append('country/state temp namespaces and explicit PREV/ROOT transfer')
+assert all(value(s, context(1, scope=scope), 'scoped_probe') == 22 for scope in (1, 2, -101))
+assert value(s, context(1, scope=-101, previous=(1,)), 'PREV.scoped_probe') == 0
+s['entities'][1]['variables']['scoped_probe'] = 99
+assert value(s, context(1, scope=-101, previous=(1,)), 'PREV.scoped_probe') == 99
+try:
+    execute(ast('set_temp_variable = { PREV.eon_project_build_result = 1 }'), s, context(1, scope=-101, previous=(1,)))
+except AssertionError as exc:
+    assert 'Uncalibrated qualified temporary write' in str(exc)
+else: raise AssertionError('Default adapter silently assumed a qualified result writer')
+cases.append('native10 shared bare reads and persistent scoped reads; qualified writer rejected by default')
 
-# A same-named value in the state or recipient must not masquerade as donor
-# build result/contribution. These calls deliberately keep poisoned scope temps.
 for outcome in ('success', 'native_failure', 'corruption'):
     s = accepted(amount=1, cost=5.8, duration=1)
     s['entities'][1]['variables']['project'] = 0
     s['entities'][1]['variables']['eon_project_days_remaining^0'] = 0
-    s['temp'] = {-101: {'eon_project_build_result': 666},
-                 2: {'eon_project_spent_contribution': 999},
-                 1: {'eon_project_spent_contribution': 888}}
+    s['temp'] = {'eon_project_build_result': 666, 'eon_project_spent_contribution': 888}
+    # Poison permanent values to catch accidental PREV.temp reads; bare temps
+    # must be initialized from this exact project during execution.
+    for scope in (1, 2, -101): s['entities'][scope]['variables']['eon_project_spent_contribution'] = 999
     s['native_build_failure'] = outcome == 'native_failure'
     s['corruption'] = outcome == 'corruption'
     execute(effects['complete_project'], s, context(1))
     invariant(s)
-    assert s['temp'][-101]['eon_project_build_result'] == 666
-    assert s['temp'][1]['eon_project_build_result'] == {'success': 1, 'native_failure': 0, 'corruption': -1}[outcome]
+    assert s['temp']['eon_project_build_result'] == {'success': 1, 'native_failure': 0, 'corruption': -1}[outcome]
+    if outcome != 'native_failure': assert s.get('unverified_qualified_temp_write_calls')
     close(v(s, 'eon_investment_contribution_spent', 2), 0 if outcome == 'native_failure' else .58)
     close(v(s, 'eon_construction_contributions', 2), .58 if outcome == 'native_failure' else 0)
     close(v(s, 'int_investments'), 5.8 if outcome == 'success' else 0)
     if outcome == 'native_failure': assert v(s, 'active_projects') == 1 and not notifications(s, 4)
-    cases.append('poisoned other-scope temps '+outcome)
+    cases.append('shared cofunding arithmetic with explicit unverified writer assumption '+outcome)
 
 # All literal building types and supported quantities, exact fractional residual.
 limits = {4: 5, 5: 5, 6: 5, 7: 6, 9: 5, 10: 6, 15: 3}
@@ -282,8 +294,8 @@ assert v(s, 'active_projects') == 0
 cases.append('second-slot actual GUI selection and independent clocks')
 
 # Two live investors remain in one state after an earlier cleanup in the SAME
-# effect environment. Removing the later entry must reset the STATE break flag;
-# a donor reset cannot clear it. Foreign investor's first entry stays untouched.
+# effect environment. Removing the later entry must reset the shared break temp.
+# Foreign investor's first entry stays untouched.
 s = accepted(amount=1, duration=5)
 for donor in (3, 4):
     stage(s, donor=donor, amount=1, cost=20, duration=5)
@@ -296,7 +308,7 @@ for donor in (1, 4):
     execute(effects['end_project'], s, context(donor))
     if donor == 1:
         assert s['entities'][-101]['arrays']['projects_in_state'] == [3, 4]
-        assert s['temp'][-101]['eon_project_state_break'] == 1
+        assert s['temp']['eon_project_state_break'] == 1
 assert s['entities'][-101]['arrays']['projects_in_state'] == [3]
 assert s['entities'][-101]['arrays']['project_type_in_state'] == [1]
 assert s['entities'][3]['arrays']['project_array'][0] == -101 and v(s, 'active_projects', 3) == 1
@@ -377,6 +389,7 @@ print(json.dumps({'all_passed': True, 'cases_passed': len(cases), 'cases': cases
     'proof_scope': 'current-source bounded financial, state-control and callback execution',
     'limits': ['HOI4 engine and real multiplayer not executed',
                'Native building outcome and random outcome are explicit fixtures',
+               'Qualified state build-result writers are an explicit routing assumption, not native proof',
                'Daily native scheduling, UI rendering, save/load and annex hook ordering unverified',
                'Legacy source remains explicit and is not migrated',
                'Bankruptcy test executes only actual pre-debt sale branch, not debt settlement UI']}, indent=2))

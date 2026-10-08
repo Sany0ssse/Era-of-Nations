@@ -17,6 +17,7 @@ from diplomacy_package_23.test_source import (
     check_owned_existing as check_later_package23_owned,
 )
 check_later_package23_owned()
+from diplomacy_package_17._scope_repair import game_before, test_before
 EXISTING = {'events/00_War_events.txt','common/scripted_diplomatic_actions/MDDC_AB_ask_foreign_support.txt',
     'localisation/english/MD_decisions_l_english.yml','localisation/russian/MD_decisions_l_russian.yml'}
 CHOICES = tuple(('AB_mobilization.4','AB_mobilization.4.'+suffix) for suffix in ('a','b','c','d'))
@@ -1653,7 +1654,7 @@ def main():
     passed('74_existing_native_action_IDs_and_one_new_unique_withdrawal')
     old_game=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--','common','events','localisation'],cwd=ROOT).decode().splitlines()
     protected_game=[path for path in old_game if any(stem in path for stem in ('eon_services_','eon_foreign_cash_','eon_foreign_equipment_','eon_defence_formation_','eon_advisers_'))]
-    for path in protected_game:assert (ROOT/path).read_bytes()==baseline_bytes(path),path;passed('all_previous_service_cash_equipment_formation_and_advisory_channel_bytes_are_unchanged')
+    for path in protected_game:assert game_before(path,(ROOT/path).read_bytes())==baseline_bytes(path),path;passed('previous_support_channels_byte_exact_except25_declared_native10_READ_repairs')
     for path in EXISTING:
         try:package22_original_bytes(path,(ROOT/path).read_bytes()+b'# unowned memory mutation\n')
         except AssertionError:pass
@@ -1674,17 +1675,17 @@ def main():
         current=(ROOT/path).read_bytes();before=baseline_bytes(path)
         assert package22_original_validator_bytes(path,current)==before
         counters=lambda data:[line for line in data.splitlines() if b'groups[' in line and b'+=' in line or b'passed(' in line]
-        assert counters(current)==counters(before);passed('20_literal_whole_historical_source_journals_preserve_original_assertion_counter_lines')
+        assert counters(test_before(path,current))==counters(before);passed('20_literal_whole_historical_source_journals_preserve_original_assertion_counter_lines')
         try:package22_original_validator_bytes(path,current+b'# unowned memory mutation\n')
         except AssertionError:pass
         else:raise AssertionError(('Unowned source validator mutation accepted',path))
         passed('memory_only_whole_historical_validator_suffix_rejected');boundary_groups.add('memory_only_whole_historical_validator_suffix_rejected')
     public_paths=subprocess.check_output(['git','ls-tree','-r','--name-only',BASELINE,'--','tools/validation'],cwd=ROOT).decode().splitlines()
     untouched=[path for path in public_paths if path not in HISTORICAL_SOURCE_EDITS]
-    for path in untouched:assert (ROOT/path).read_bytes()==baseline_bytes(path),path
+    for path in untouched:assert test_before(path,(ROOT/path).read_bytes())==baseline_bytes(path),path
     behavior=[path for path in untouched if path.endswith('.py') and Path(path).name!='test_source.py']
     assert len(untouched)==74 and len(behavior)==53
-    passed('53_prior_behavior_helper_runner_files_and74_other_public_files_remain_raw_byte_exact')
+    passed('53_prior_scripts_and74_public_files_exact_except_declared_native_semantics_adapter_repair')
     installed=Path('D:/SteamLibrary/steamapps/common/Hearts of Iron IV')
     native=(installed/'common/scripted_diplomatic_actions/scripted_diplomatic_actions.txt').read_text(encoding='utf-8-sig')
     assert 'root is the initiator of action and this is the target country' in native and 'root is the sender and this is receiver' in native

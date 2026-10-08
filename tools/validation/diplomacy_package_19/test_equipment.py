@@ -57,8 +57,10 @@ def execute(nodes, result, ctx):
             while index < len(nodes) and nodes[index][0] in ('else_if', 'else'):
                 grouped.append(nodes[index]); index += 1
         if key == 'send_equipment':
-            assert {name for name, op, value in val} == {'equipment', 'amount', 'target'}, val
-            archetype, amount = one(val, 'equipment'), float(one(val, 'amount'))
+            # Current native effect uses type; equipment= is not converted by
+            # this observer. Native stock and delivery remain unmodeled.
+            assert {name for name, op, value in val} == {'type', 'amount', 'target'}, val
+            archetype, amount = one(val, 'type'), float(one(val, 'amount'))
             assert archetype in PACKETS and amount == PACKETS[archetype], ('Unexpected native equipment dispatch', archetype, amount)
             target = model['country_ref'](result, ctx, one(val, 'target'))
             result.setdefault('native_equipment_calls', []).append({
@@ -355,7 +357,7 @@ def scenarios():
             assert check(result, [('has_equipment', '=', [(kind, '>', str(count - 1))])], actor='A') == (stored >= count)
             adapter_cases['nine_archetype_count_fixture_boundaries_using_native_strict_comparison'] += 1
     result = state(); before = stocks(result)
-    effect(result, [('send_equipment', '=', [('equipment', '=', 'Inf_equipment'), ('amount', '=', '1000'), ('target', '=', 'FROM')])], actor='A', from_='B')
+    effect(result, [('send_equipment', '=', [('type', '=', 'Inf_equipment'), ('amount', '=', '1000'), ('target', '=', 'FROM')])], actor='A', from_='B')
     assert len(calls(result)) == 1 and stocks(result) == before
     adapter_cases['native_dispatch_observer_neither_debits_sender_nor_credits_receiver_fixture_stock'] += 1
 
