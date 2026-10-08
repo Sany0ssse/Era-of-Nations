@@ -1,13 +1,38 @@
 # Era of Nations 0.1.0 — initial development baseline
 
-Source status updated on 2026-10-06; earlier startup evidence remains dated 2026-10-05.
+Current verification updated on 2026-10-08. Earlier publication checks below
+remain historical and do not prove that the current diplomacy compiles.
+
+## Current diplomacy acceptance
+
+The isolated HOI4 1.19.3.0.c01a probe 05 on 2026-10-08 completed frontend
+loading with zero errors naming the 58 changed game files or the explicit
+legacy diplomacy dependencies. Tested source hashes remained exact.
+Probe 02 had recorded 201 matched error lines; a broader probe 03 check also
+identified 34 cascading lines in the legacy aid event file. These syntax roots,
+country-variable targets, opinion-query restrictions and faction-rule groups
+have now been repaired. See [NATIVE_DIPLOMACY_119_UK.md](NATIVE_DIPLOMACY_119_UK.md).
+Existing game settings and DLC selection were verified unchanged and the
+temporary launcher configuration was restored.
+
+Probe 05 also launched a fresh single-player campaign through the USA start
+parameter and completed the mod's on_startup initialization, remaining alive
+on pause. No contract execution, campaign accounting, save/load or multiplayer
+session has been accepted. Probe 04 had ended after frontend loading without
+an established exit cause; probe 05 has 33 inherited graphics, menu, music and
+equipment log lines. The
+complete objective and its remaining requirements are preserved in
+[DIPLOMACY_COMPLETION_UK.md](DIPLOMACY_COMPLETION_UK.md).
 
 The graphite/navy UI update is now installed. Its 109 sprite opt-ins and final
 DirectX 11 startup passed mapping and compilation checks; visual acceptance of
 the unobstructed menu and campaign controls remains pending. See
 [UI_THEME.md](UI_THEME.md) for scope, receipts and exact limitations.
-The existing diplomacy audit and twenty-three implementation packages are complete at
-source level. The earlier SCO rejection and Arctic observer repairs are retained.
+The existing diplomacy audit and twenty-three implementation packages have
+historical source checks. Initial native startup contradicted their earlier
+apparent parsing readiness; the current syntax corrections passed probes 04/05.
+The earlier SCO rejection and Arctic observer
+repairs are retained.
 The first package reconciles NATO/CSTO/SCO membership and native exits,
 repairs investment cancellation, debt assumption and operative ransom/exchange,
 and gives the existing energy agreement a guarded proposal/response/execution/
@@ -19,8 +44,9 @@ prices, political rules and separate storyline paths. The third package opens
 ordinary defensive alliances without a great-power rank: a consensual diplomatic
 proposal, a native template, current national rights, retained join thresholds,
 defensive call guards and lifecycle cleanup. AI national alliance-desire modifiers
-are retained. No diplomacy package has been launched in HOI4; new-campaign acceptance,
-native callback timing, actual accounting and save/load remain pending. See
+are retained. Current diplomacy source has now loaded in HOI4 after repairing
+the errors described above; new-campaign acceptance, native callback timing,
+actual accounting and save/load remain pending. See
 [DIPLOMACY_PACKAGE_03_UK.md](DIPLOMACY_PACKAGE_03_UK.md),
 [DIPLOMACY_PACKAGE_02_UK.md](DIPLOMACY_PACKAGE_02_UK.md) and
 [DIPLOMACY_PACKAGE_01_UK.md](DIPLOMACY_PACKAGE_01_UK.md) for changes, checks and

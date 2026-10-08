@@ -32,8 +32,8 @@ eon_energy_offer_identity_current = {
 	NOT = { has_country_flag = eon_energy_offer_cancelled }
 	check_variable = { eon_energy_offer_partner = eon_energy_response_partner }
 	has_country_flag = energy_agreement@eon_energy_response_partner
-	NOT = { has_war_with = eon_energy_response_partner }
-	check_variable = { eon_energy_offer_price >= 0 }
+	NOT = { has_war_with = var:eon_energy_response_partner }
+	check_variable = { var = eon_energy_offer_price value = 0 compare = greater_than_or_equals }
 	NOT = { check_variable = { eon_energy_offer_amount = 0 } }
 	set_temp_variable = { eon_energy_snapshot_partner = eon_energy_response_partner }
 	eon_energy_pair_snapshot_current = yes
@@ -48,7 +48,7 @@ eon_energy_offer_identity_current = {
 		check_variable = { eon_energy_offer_partner = PREV }
 		has_country_flag = energy_agreement@PREV
 		check_variable = { eon_energy_offer_price = PREV.eon_energy_offer_price }
-		check_variable = { eon_energy_offer_amount = eon_energy_response_mirror_amount }
+		check_variable = { eon_energy_offer_amount = PREV.eon_energy_response_mirror_amount }
 		set_temp_variable = { eon_energy_snapshot_partner = PREV }
 		eon_energy_pair_snapshot_current = yes
 	}
@@ -85,7 +85,7 @@ eon_energy_counter_draft_send_ready = {
 			check_variable = { temp_energy_ammount < 0 }
 		}
 	}
-	check_variable = { temp_energy_price >= 0 }
+	check_variable = { var = temp_energy_price value = 0 compare = greater_than_or_equals }
 	set_temp_variable = { eon_energy_capacity_partner = eon_energy_offer_partner }
 	set_temp_variable = { eon_energy_capacity_amount = temp_energy_ammount }
 	eon_energy_proposed_capacity_available = yes

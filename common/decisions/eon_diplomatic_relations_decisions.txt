@@ -1,0 +1,222 @@
+eon_diplomatic_relations_category = {
+ eon_diplomatic_relations_status = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_status_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_status_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_status_ready = yes } eon_diplomatic_relations_status_notice = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_propose = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_pair_peace = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_relations_proposal_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_relations_proposal_ready = yes } eon_diplomatic_relations_propose_relations = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_mission_charge = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_level = 1 }  eon_diplomatic_relations_pair_peace = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_level = 1 }  eon_diplomatic_relations_mission_proposal_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_level = 1 } if = { limit = {  eon_diplomatic_relations_mission_proposal_ready = yes } eon_diplomatic_relations_propose_mission = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_mission_ambassador = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_level = 2 }  eon_diplomatic_relations_pair_peace = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_level = 2 }  eon_diplomatic_relations_mission_proposal_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_level = 2 } if = { limit = {  eon_diplomatic_relations_mission_proposal_ready = yes } eon_diplomatic_relations_propose_mission = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_propose_head = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_pair_peace = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_head_proposal_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_head_proposal_ready = yes } eon_diplomatic_relations_propose_head = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_accept_relations = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 1 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 0 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_current = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 1 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 0 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 1 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 0 } if = { limit = { check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } eon_diplomatic_relations_accept_response = yes } } } }
+  ai_will_do = { factor = 8 modifier = { factor = 0 has_opinion = { target = FROM value < -49 } } }
+ }
+ eon_diplomatic_relations_accept_charge = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_current = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 1 } if = { limit = { check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } eon_diplomatic_relations_accept_response = yes } } } }
+  ai_will_do = { factor = 8 modifier = { factor = 0 has_opinion = { target = FROM value < -49 } } }
+ }
+ eon_diplomatic_relations_accept_ambassador = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 2 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_current = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 2 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 2 } if = { limit = { check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } eon_diplomatic_relations_accept_response = yes } } } }
+  ai_will_do = { factor = 8 modifier = { factor = 0 has_opinion = { target = FROM value < -49 } } }
+ }
+ eon_diplomatic_relations_accept_head = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 3 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = -1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_current = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 3 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = -1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 3 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = -1 } if = { limit = { check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } eon_diplomatic_relations_accept_response = yes } } } }
+  ai_will_do = { factor = 8 modifier = { factor = 0 has_opinion = { target = FROM value < -49 } } }
+ }
+ eon_diplomatic_relations_decline = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_response_current = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_response_current = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_response_current = yes } eon_diplomatic_relations_decline_response = yes } } } }
+  ai_will_do = { factor = 1 modifier = { factor = 20 has_opinion = { target = FROM value < -49 } } }
+ }
+ eon_diplomatic_relations_withdraw = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_outgoing_present = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_outgoing_present = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_outgoing_present = yes } eon_diplomatic_relations_withdraw_request = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_credentials = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_credentials_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_credentials_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_credentials_ready = yes } eon_diplomatic_relations_activate_credentials = yes } } } }
+  ai_will_do = { factor = 10 }
+ }
+ eon_diplomatic_relations_recall = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_recall_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_recall_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_recall_ready = yes } eon_diplomatic_relations_recall_head = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_persona_non_grata = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_png_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_png_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_png_ready = yes } eon_diplomatic_relations_persona_non_grata = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_persona_non_grata_approved = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_png_approved_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_png_approved_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_png_approved_ready = yes } eon_diplomatic_relations_persona_non_grata_approved = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_close = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_close_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_close_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_close_ready = yes } eon_diplomatic_relations_close_mission = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_close_host = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_close_host_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_close_host_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_close_host_ready = yes } eon_diplomatic_relations_close_host_mission = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_break = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_break_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_break_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_break_ready = yes } eon_diplomatic_relations_break_relations = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_diplomatic_relations_exit_facilities = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_exit_facilities_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_exit_facilities_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_exit_facilities_ready = yes } eon_diplomatic_relations_ack_exit_facilities = yes } } } }
+  ai_will_do = { factor = 10 }
+ }
+ eon_diplomatic_relations_report_departure = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = {   eon_diplomatic_relations_departure_report_ready = yes } } }
+  available = { FROM = { PREV = {   eon_diplomatic_relations_departure_report_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = {  if = { limit = {  eon_diplomatic_relations_departure_report_ready = yes } eon_diplomatic_relations_report_departure = yes } } } }
+  ai_will_do = { factor = 10 }
+ }
+}

@@ -1327,7 +1327,16 @@ start_project = {
 	refresh_gui = yes
 }
 
+# Protocol 24 has a separate construction ledger and daily clock. Older saves
+# retain their original implementation without guessed historical payments.
 complete_project = {
+	if = { limit = { check_variable = { eon_project_protocol^project = 24 } }
+		eon_investment_lifecycle_complete_unit = yes
+	}
+	else = { eon_investment_lifecycle_legacy_complete_project = yes }
+}
+
+eon_investment_lifecycle_legacy_complete_project = {
 	if = { limit = { check_variable = { project_array^project < 0 } }
 
 		set_variable = { project_type = project }
@@ -1370,7 +1379,16 @@ complete_project = {
 	refresh_gui = yes
 }
 
+# Protocol 24 has a separate construction ledger and daily clock. Older saves
+# retain their original implementation without guessed historical payments.
 end_project = {
+	if = { limit = { check_variable = { eon_project_protocol^project = 24 } }
+		eon_investment_lifecycle_cancel_project = yes
+	}
+	else = { eon_investment_lifecycle_legacy_end_project = yes }
+}
+
+eon_investment_lifecycle_legacy_end_project = {
 	if = { limit = { check_variable = { project_array^project < 0 } }
 
 		var:project_array^project = {
@@ -1392,7 +1410,7 @@ end_project = {
 		# Refund Remaining Cash if the project is unfinished
 		if = { limit = { check_variable = { project_monetary_cost^project > 0 } }
 			add_to_variable = { var = treasury value = project_monetary_cost^project }
-			if = { limit = { check_variable = { int_investments >= project_monetary_cost^project } }
+			if = { limit = { check_variable = { var = int_investments value = project_monetary_cost^project compare = greater_than_or_equals } }
 				subtract_from_variable = { var = int_investments value = project_monetary_cost^project }
 				clamp_variable = { var = int_investments min = 0 }
 			}

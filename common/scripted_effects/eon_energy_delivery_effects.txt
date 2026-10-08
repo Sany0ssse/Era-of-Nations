@@ -1,0 +1,349 @@
+# Actual GW are distinct from signed contractual GW. One synchronous world
+# snapshot starts at zero, so cycles cannot invent an initial energy source.
+# No network capacity, transport loss, collateral, arrears or cash receipt is
+# inferred. Prices retain the inherited billions/GW/week convention.
+eon_energy_delivery_read_totals = {
+ set_temp_variable = { all_sell_energy_use = 0 }
+ set_temp_variable = { all_buy_energy_generation = 0 }
+ if = {
+  limit = { NOT = { has_global_flag = eon_energy_delivery_collecting } }
+  for_each_loop = {
+   array = energy_contractors
+   value = eon_energy_delivery_partner
+   index = eon_energy_delivery_row
+   if = {
+    limit = { eon_energy_delivery_row_current = yes }
+    if = {
+     limit = { check_variable = { eon_energy_delivery_read_amount > 0 } }
+     add_to_temp_variable = { all_buy_energy_generation = eon_energy_delivery_read_amount }
+    }
+    else = {
+     subtract_from_temp_variable = { all_sell_energy_use = eon_energy_delivery_read_amount }
+    }
+   }
+  }
+ }
+}
+
+eon_energy_delivery_calculate_bill = {
+ set_variable = { energy_selling_income = 0 }
+ set_variable = { energy_buying_expenses = 0 }
+ for_each_loop = {
+  array = energy_contractors
+  value = eon_energy_delivery_partner
+  index = eon_energy_delivery_row
+  if = {
+   limit = { eon_energy_delivery_row_current = yes }
+   set_temp_variable = { eon_energy_delivery_bill = eon_energy_delivery_read_amount }
+   multiply_temp_variable = { eon_energy_delivery_bill = energy_contracts_price^eon_energy_delivery_row }
+   if = {
+    limit = { check_variable = { eon_energy_delivery_read_amount > 0 } }
+    add_to_variable = { energy_buying_expenses = eon_energy_delivery_bill }
+   }
+   else = {
+    multiply_temp_variable = { eon_energy_delivery_bill = -1 }
+    add_to_variable = { energy_selling_income = eon_energy_delivery_bill }
+   }
+  }
+ }
+}
+
+# Reapply only delivery/balance arithmetic, never multiply generation twice.
+eon_energy_delivery_apply_balance = {
+	eon_energy_delivery_read_totals = yes
+	set_variable = { fossil_pp_fuel_consumption = eon_energy_delivery_base_fossil_fuel }
+	set_variable = { energy_sum = eon_energy_delivery_generation }
+	set_variable = { energy_consumption = eon_energy_delivery_demand }
+	add_to_variable = { energy_consumption = all_sell_energy_use }
+	set_variable = { energy_balance = energy_sum }
+	subtract_from_variable = { energy_balance = energy_consumption }
+
+	set_temp_variable = { energy_fulfillment = energy_sum }
+	# Actual imports were read with the reciprocal delivery guards above.
+	# Apply them before storage/fuel calculations in the block below.
+	add_to_variable = { energy_sum = all_buy_energy_generation }
+	add_to_variable = { energy_balance = all_buy_energy_generation }
+	add_to_temp_variable = { energy_fulfillment = all_buy_energy_generation }
+	set_variable = { all_buy_energy_generation_display_var = all_buy_energy_generation }
+	set_variable = { energy_withdrawal_from_storage = 0 }
+	set_variable = { free_fossil_powerplants_power = 0 }
+	if = {
+		limit = {
+			check_variable = { stored_energy > 0 }
+			check_variable = { energy_balance < 0 }
+		}
+		set_variable = { energy_withdrawal_from_storage = energy_balance }
+		multiply_variable = { energy_withdrawal_from_storage = -1 }
+		set_temp_variable = { eon_energy_delivery_storage_power = stored_energy }
+		divide_temp_variable = { eon_energy_delivery_storage_power = 24 }
+		clamp_variable = { var = energy_withdrawal_from_storage min = 0 max = eon_energy_delivery_storage_power }
+		add_to_temp_variable = { energy_fulfillment = energy_withdrawal_from_storage }
+	}
+	if = {
+		limit = {
+			check_variable = { stored_energy = max_stored_energy }
+			check_variable = { energy_balance > 0 }
+			check_variable = { fossil_pp_fuel_consumption < 0 }
+			check_variable = { fossil_pp_energy_generation > 0 }
+		}
+		set_temp_variable = { saved_fuel = energy_balance }
+		clamp_temp_variable = {
+			var = saved_fuel
+			max = fossil_pp_energy_generation
+			min = 0
+		}
+		set_variable = { free_fossil_powerplants_power = saved_fuel }
+		# Curtail the same share of today's fresh fossil fuel use as generation.
+		divide_temp_variable = { saved_fuel = fossil_pp_energy_generation }
+		multiply_temp_variable = { saved_fuel = eon_energy_delivery_base_fossil_fuel }
+		multiply_temp_variable = { saved_fuel = -1 }
+		add_to_variable = { fossil_pp_fuel_consumption = saved_fuel }
+	}
+
+
+
+
+
+
+	divide_temp_variable = { energy_fulfillment = energy_consumption }
+	set_variable = { energy_balance_value_display = energy_fulfillment }
+	clamp_variable = { var = energy_balance_value_display min = 0 }
+	clamp_temp_variable = { var = energy_fulfillment min = 0 max = 1 }
+	set_variable = { unfulfilled_energy_demand_var = -1 }
+	add_to_variable = { unfulfilled_energy_demand_var = energy_fulfillment }
+	add_to_variable = { energy_sum = energy_withdrawal_from_storage } #for display purposes
+
+
+	# Caps penalty for unfulfilled at 50%, and multiples 100 to get a whole number to reduce to penalty scale
+	set_variable = { unfulfilled_energy_demand_dynmod_var = unfulfilled_energy_demand_var }
+	multiply_variable = { unfulfilled_energy_demand_dynmod_var = 0.5 }
+	clamp_variable = { var = unfulfilled_energy_demand_dynmod_var min = -0.50 max = 0 }
+	set_variable = { unfulfilled_energy_demand_dynmod_var_2 = unfulfilled_energy_demand_dynmod_var }
+	multiply_variable = { unfulfilled_energy_demand_dynmod_var_2 = gdp_per_capita }
+	multiply_variable = { unfulfilled_energy_demand_dynmod_var_2 = 0.025 } #penalties decrease below 40k gdp/c, increase above it
+	clamp_variable = { var = unfulfilled_energy_demand_dynmod_var_2 min = -0.50 max = 0 }
+	set_variable = { unfulfilled_energy_demand_dynmod_var_3 = unfulfilled_energy_demand_var }
+	multiply_variable = { unfulfilled_energy_demand_dynmod_var_3 = 0.3 }
+	clamp_variable = { var = unfulfilled_energy_demand_dynmod_var_3 min = -0.30 max = 0 }
+
+	set_variable = { powerplants_and_pop_fuel_consumption = non_electric_fuel_consumption }
+	add_to_variable = { powerplants_and_pop_fuel_consumption = fossil_pp_fuel_consumption }
+}
+
+eon_energy_delivery_snapshot_country = {
+ set_country_flag = eon_energy_delivery_participant
+ # Existing state/GDP aggregation refreshes generation, damage, population and
+ # domestic demand before ANY country receives the new round's imports.
+ # These two effects use THIS/PREV; no ROOT-dependent whole-budget call here.
+ set_variable = { num_of_synthetic_refinery = 0 }
+ calculate_damaged_buildings_count = yes
+ update_state_variables = yes
+ clear_array = eon_energy_delivered
+ clear_array = eon_energy_delivery_next
+ clear_array = eon_energy_delivery_partners
+ clear_array = eon_energy_delivery_terms
+ clear_array = eon_energy_delivery_prices
+ clear_array = eon_energy_delivery_valid
+ clear_array = eon_energy_delivery_mirror_rows
+ set_variable = { eon_energy_delivery_exports_capacity = 0 }
+ set_variable = { eon_energy_delivery_contract_imports = 0 }
+ set_variable = { eon_energy_delivery_contract_exports = 0 }
+ set_variable = { eon_energy_delivery_imports = 0 }
+ set_variable = { eon_energy_delivery_exports = 0 }
+ clr_country_flag = eon_energy_delivery_invalid_pair
+ for_each_loop = {
+  array = energy_contractors
+  value = eon_energy_delivery_partner
+  index = eon_energy_delivery_row
+  add_to_array = { array = eon_energy_delivered value = 0 }
+  add_to_array = { array = eon_energy_delivery_next value = 0 }
+  add_to_array = { array = eon_energy_delivery_partners value = eon_energy_delivery_partner }
+  add_to_array = { array = eon_energy_delivery_terms value = energy_contracts_ammount^eon_energy_delivery_row }
+  add_to_array = { array = eon_energy_delivery_prices value = energy_contracts_price^eon_energy_delivery_row }
+  if = {
+   limit = { check_variable = { energy_contracts_ammount^eon_energy_delivery_row > 0 } }
+   add_to_variable = { eon_energy_delivery_contract_imports = energy_contracts_ammount^eon_energy_delivery_row }
+  }
+  else = {
+   subtract_from_variable = { eon_energy_delivery_contract_exports = energy_contracts_ammount^eon_energy_delivery_row }
+  }
+  if = {
+   limit = { eon_energy_delivery_pair_current = yes }
+   add_to_array = { array = eon_energy_delivery_valid value = 1 }
+   add_to_array = { array = eon_energy_delivery_mirror_rows value = eon_energy_delivery_mirror_row }
+   if = {
+    limit = { check_variable = { energy_contracts_ammount^eon_energy_delivery_row < 0 } }
+    subtract_from_variable = { eon_energy_delivery_exports_capacity = energy_contracts_ammount^eon_energy_delivery_row }
+   }
+  }
+  else = {
+   add_to_array = { array = eon_energy_delivery_valid value = 0 }
+   add_to_array = { array = eon_energy_delivery_mirror_rows value = -1 }
+   set_country_flag = eon_energy_delivery_invalid_pair
+  }
+ }
+}
+
+eon_energy_delivery_prepare_round = {
+ set_variable = { eon_energy_delivery_available = eon_energy_delivery_generation }
+ subtract_from_variable = { eon_energy_delivery_available = eon_energy_delivery_demand }
+ add_to_variable = { eon_energy_delivery_available = eon_energy_delivery_imports }
+ clamp_variable = { var = eon_energy_delivery_available min = 0 }
+ set_variable = { eon_energy_delivery_ratio = 0 }
+ if = {
+  limit = { check_variable = { eon_energy_delivery_exports_capacity > 0 } }
+  set_variable = { eon_energy_delivery_ratio = eon_energy_delivery_available }
+  divide_variable = { eon_energy_delivery_ratio = eon_energy_delivery_exports_capacity }
+  clamp_variable = { var = eon_energy_delivery_ratio min = 0 max = 1 }
+ }
+ for_each_loop = {
+  array = eon_energy_delivery_next
+  value = eon_energy_delivery_zero
+  index = eon_energy_delivery_zero_row
+  set_variable = { eon_energy_delivery_next^eon_energy_delivery_zero_row = 0 }
+ }
+}
+
+eon_energy_delivery_dispatch_round = {
+ for_each_loop = {
+  array = eon_energy_delivery_partners
+  value = eon_energy_delivery_send_partner
+  index = eon_energy_delivery_send_row
+  if = {
+   limit = {
+    check_variable = { eon_energy_delivery_valid^eon_energy_delivery_send_row = 1 }
+    check_variable = { eon_energy_delivery_terms^eon_energy_delivery_send_row < 0 }
+   }
+   set_temp_variable = { eon_energy_delivery_send_signed = eon_energy_delivery_terms^eon_energy_delivery_send_row }
+   multiply_temp_variable = { eon_energy_delivery_send_signed = eon_energy_delivery_ratio }
+   set_variable = { eon_energy_delivery_next^eon_energy_delivery_send_row = eon_energy_delivery_send_signed }
+   set_temp_variable = { eon_energy_delivery_send_positive = eon_energy_delivery_send_signed }
+   multiply_temp_variable = { eon_energy_delivery_send_positive = -1 }
+   set_temp_variable = { eon_energy_delivery_send_mirror = eon_energy_delivery_mirror_rows^eon_energy_delivery_send_row }
+   var:eon_energy_delivery_send_partner = {
+    set_temp_variable = { eon_energy_delivery_receive_row = PREV.eon_energy_delivery_send_mirror }
+    set_variable = { eon_energy_delivery_next^eon_energy_delivery_receive_row = PREV.eon_energy_delivery_send_positive }
+   }
+  }
+ }
+}
+
+eon_energy_delivery_commit_round = {
+ set_variable = { eon_energy_delivery_imports = 0 }
+ set_variable = { eon_energy_delivery_exports = 0 }
+ for_each_loop = {
+  array = eon_energy_delivery_next
+  value = eon_energy_delivery_next_amount
+  index = eon_energy_delivery_commit_row
+  set_temp_variable = { eon_energy_delivery_change = eon_energy_delivery_next_amount }
+  subtract_from_temp_variable = { eon_energy_delivery_change = eon_energy_delivered^eon_energy_delivery_commit_row }
+  if = {
+   limit = { check_variable = { eon_energy_delivery_change < 0 } }
+   multiply_temp_variable = { eon_energy_delivery_change = -1 }
+  }
+  if = {
+   limit = { check_variable = { eon_energy_delivery_change > global.eon_energy_delivery_delta } }
+   set_variable = { global.eon_energy_delivery_delta = eon_energy_delivery_change }
+  }
+  set_variable = { eon_energy_delivered^eon_energy_delivery_commit_row = eon_energy_delivery_next_amount }
+  if = {
+   limit = { check_variable = { eon_energy_delivery_next_amount > 0 } }
+   add_to_variable = { eon_energy_delivery_imports = eon_energy_delivery_next_amount }
+  }
+  else = {
+   subtract_from_variable = { eon_energy_delivery_exports = eon_energy_delivery_next_amount }
+  }
+ }
+}
+
+eon_energy_delivery_apply_country = {
+ eon_energy_delivery_apply_balance = yes
+ # Replace the OLD energy component inside the current budget, never charge
+ # treasury here. The inherited weekly treasury_rate remains the sole debit.
+ set_temp_variable = { eon_energy_delivery_old_income = energy_selling_income }
+ set_temp_variable = { eon_energy_delivery_old_expense = energy_buying_expenses }
+ eon_energy_delivery_calculate_bill = yes
+ subtract_from_variable = { additional_income_rate = eon_energy_delivery_old_income }
+ add_to_variable = { additional_income_rate = energy_selling_income }
+ subtract_from_variable = { additional_expenses_rate = eon_energy_delivery_old_expense }
+ add_to_variable = { additional_expenses_rate = energy_buying_expenses }
+ update_display = yes
+ update_energy_dirty_variable = yes
+ set_temp_variable = { eon_energy_delivery_import_shortfall = eon_energy_delivery_contract_imports }
+ subtract_from_temp_variable = { eon_energy_delivery_import_shortfall = eon_energy_delivery_imports }
+ set_temp_variable = { eon_energy_delivery_export_shortfall = eon_energy_delivery_contract_exports }
+ subtract_from_temp_variable = { eon_energy_delivery_export_shortfall = eon_energy_delivery_exports }
+ if = {
+  limit = {
+   OR = {
+    check_variable = { eon_energy_delivery_import_shortfall > 0.001 }
+    check_variable = { eon_energy_delivery_export_shortfall > 0.001 }
+   }
+  }
+  if = {
+   limit = { NOT = { has_country_flag = eon_energy_delivery_shortage } is_ai = no }
+   country_event = { id = eon_energy_delivery.2 }
+  }
+  set_country_flag = eon_energy_delivery_shortage
+ }
+ else = {
+  if = {
+   limit = { has_country_flag = eon_energy_delivery_shortage is_ai = no check_variable = { energy_contractors^num > 0 } }
+   country_event = { id = eon_energy_delivery.3 }
+  }
+  clr_country_flag = eon_energy_delivery_shortage
+ }
+ if = {
+  limit = { check_variable = { energy_contractors^num = 0 } }
+  clr_country_flag = eon_energy_delivery_participant
+ }
+}
+
+# Native every_country only visits existing countries. No quadratic anchor
+# selection: the first country tick records global.num_days before work.
+eon_energy_delivery_reconcile_world = {
+ if = {
+  limit = { NOT = { has_global_flag = eon_energy_delivery_running } }
+  set_global_flag = eon_energy_delivery_running
+  set_global_flag = eon_energy_delivery_collecting
+  every_country = {
+   limit = { OR = { check_variable = { energy_contractors^num > 0 } has_country_flag = eon_energy_delivery_participant } }
+   eon_energy_delivery_snapshot_country = yes
+  }
+  clr_global_flag = eon_energy_delivery_collecting
+  set_variable = { global.eon_energy_delivery_round = 0 }
+  set_variable = { global.eon_energy_delivery_delta = 1000000 }
+  while_loop_effect = {
+   limit = {
+    check_variable = { global.eon_energy_delivery_round < 64 }
+    check_variable = { global.eon_energy_delivery_delta > 0.001 }
+   }
+   every_country = { limit = { has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_prepare_round = yes }
+   every_country = { limit = { has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_dispatch_round = yes }
+   set_variable = { global.eon_energy_delivery_delta = 0 }
+   every_country = { limit = { has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_commit_round = yes }
+   add_to_variable = { global.eon_energy_delivery_round = 1 }
+  }
+  if = {
+   limit = { check_variable = { global.eon_energy_delivery_delta > 0.001 } }
+   set_global_flag = eon_energy_delivery_conservative_incomplete
+  }
+  else = { clr_global_flag = eon_energy_delivery_conservative_incomplete }
+  every_country = { limit = { has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_apply_country = yes }
+  clr_global_flag = eon_energy_delivery_running
+ }
+}
+
+eon_energy_delivery_daily_tick = {
+ if = {
+  limit = {
+   OR = {
+    NOT = { has_global_flag = eon_energy_delivery_clock_owned }
+    NOT = { check_variable = { global.eon_energy_delivery_day = global.num_days } }
+   }
+  }
+  set_global_flag = eon_energy_delivery_clock_owned
+  set_variable = { global.eon_energy_delivery_day = global.num_days }
+  eon_energy_delivery_reconcile_world = yes
+ }
+}

@@ -1,0 +1,87 @@
+# A row is executable only while both countries retain matching signed terms.
+# Inputs: eon_energy_delivery_partner and eon_energy_delivery_row in THIS scope.
+# Output: eon_energy_delivery_mirror_row in THIS scope when the trigger succeeds.
+eon_energy_delivery_pair_current = {
+ exists = yes
+ check_variable = { energy_contractors^num = energy_contracts_ammount^num }
+ check_variable = { energy_contractors^num = energy_contracts_price^num }
+ check_variable = { eon_energy_delivery_partner > 0 }
+ check_variable = { energy_contractors^eon_energy_delivery_row = eon_energy_delivery_partner }
+ NOT = { check_variable = { energy_contracts_ammount^eon_energy_delivery_row = 0 } }
+ check_variable = { var = energy_contracts_price^eon_energy_delivery_row value = 0 compare = greater_than_or_equals }
+ has_country_flag = energy_agreement@eon_energy_delivery_partner
+ NOT = { has_war_with = var:eon_energy_delivery_partner }
+ set_temp_variable = { eon_energy_delivery_local_count = 0 }
+ all_of = {
+  array = energy_contractors
+  value = eon_energy_delivery_local_partner
+  if = {
+   limit = { check_variable = { eon_energy_delivery_local_partner = eon_energy_delivery_partner } }
+   add_to_temp_variable = { eon_energy_delivery_local_count = 1 }
+  }
+ }
+ check_variable = { eon_energy_delivery_local_count = 1 }
+ set_temp_variable = { eon_energy_delivery_local_amount = energy_contracts_ammount^eon_energy_delivery_row }
+ set_temp_variable = { eon_energy_delivery_local_price = energy_contracts_price^eon_energy_delivery_row }
+ var:eon_energy_delivery_partner = {
+  exists = yes
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_energy_delivery_partner }
+  check_variable = { energy_contractors^num = energy_contracts_ammount^num }
+  check_variable = { energy_contractors^num = energy_contracts_price^num }
+  has_country_flag = energy_agreement@PREV
+  NOT = { has_war_with = PREV }
+  set_temp_variable = { eon_energy_delivery_match_count = 0 }
+  set_temp_variable = { eon_energy_delivery_expected_amount = PREV.eon_energy_delivery_local_amount }
+  multiply_temp_variable = { eon_energy_delivery_expected_amount = -1 }
+  all_of = {
+   array = energy_contractors
+   value = eon_energy_delivery_match_partner
+   index = eon_energy_delivery_match_row
+   if = {
+    limit = { check_variable = { eon_energy_delivery_match_partner = PREV } }
+    add_to_temp_variable = { eon_energy_delivery_match_count = 1 }
+    set_temp_variable = { PREV.eon_energy_delivery_mirror_row = eon_energy_delivery_match_row }
+    check_variable = { energy_contracts_ammount^eon_energy_delivery_match_row = eon_energy_delivery_expected_amount }
+    check_variable = { energy_contracts_price^eon_energy_delivery_match_row = PREV.eon_energy_delivery_local_price }
+   }
+  }
+  check_variable = { eon_energy_delivery_match_count = 1 }
+ }
+}
+
+# Replacing a contract cannot reuse an old row's delivery, even at the same index.
+# This gate is used by both energy consumption and the existing weekly bill.
+eon_energy_delivery_row_current = {
+ eon_energy_delivery_pair_current = yes
+ check_variable = { eon_energy_delivery_partners^num = energy_contractors^num }
+ check_variable = { eon_energy_delivery_terms^num = energy_contractors^num }
+ check_variable = { eon_energy_delivery_prices^num = energy_contractors^num }
+ check_variable = { eon_energy_delivered^num = energy_contractors^num }
+ check_variable = { eon_energy_delivery_partners^eon_energy_delivery_row = eon_energy_delivery_partner }
+ check_variable = { eon_energy_delivery_terms^eon_energy_delivery_row = energy_contracts_ammount^eon_energy_delivery_row }
+ check_variable = { eon_energy_delivery_prices^eon_energy_delivery_row = energy_contracts_price^eon_energy_delivery_row }
+ set_temp_variable = { eon_energy_delivery_read_amount = eon_energy_delivered^eon_energy_delivery_row }
+ set_temp_variable = { eon_energy_delivery_read_mirror = eon_energy_delivery_read_amount }
+ multiply_temp_variable = { eon_energy_delivery_read_mirror = -1 }
+ if = {
+  limit = { check_variable = { energy_contracts_ammount^eon_energy_delivery_row > 0 } }
+  check_variable = { var = eon_energy_delivery_read_amount value = 0 compare = greater_than_or_equals }
+  check_variable = { var = eon_energy_delivery_read_amount value = energy_contracts_ammount^eon_energy_delivery_row compare = less_than_or_equals }
+ }
+ else = {
+  check_variable = { var = eon_energy_delivery_read_amount value = 0 compare = less_than_or_equals }
+  check_variable = { var = eon_energy_delivery_read_amount value = energy_contracts_ammount^eon_energy_delivery_row compare = greater_than_or_equals }
+ }
+ var:eon_energy_delivery_partner = {
+  check_variable = { eon_energy_delivered^num = energy_contractors^num }
+  check_variable = { eon_energy_delivery_partners^num = energy_contractors^num }
+  check_variable = { eon_energy_delivery_terms^num = energy_contractors^num }
+  check_variable = { eon_energy_delivery_prices^num = energy_contractors^num }
+  set_temp_variable = { eon_energy_delivery_verify_row = PREV.eon_energy_delivery_mirror_row }
+  check_variable = { eon_energy_delivery_partners^eon_energy_delivery_verify_row = PREV }
+  check_variable = { eon_energy_delivery_terms^eon_energy_delivery_verify_row = energy_contracts_ammount^eon_energy_delivery_verify_row }
+  check_variable = { eon_energy_delivery_prices^eon_energy_delivery_verify_row = energy_contracts_price^eon_energy_delivery_verify_row }
+  check_variable = { eon_energy_delivered^eon_energy_delivery_verify_row = PREV.eon_energy_delivery_read_mirror }
+ }
+}

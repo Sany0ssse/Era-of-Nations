@@ -11,7 +11,7 @@ eon_investment_offer_valid = {
 	check_variable = { eon_investment_offer_amount < 11 }
 	check_variable = { eon_investment_offer_cost > 0 }
 	check_variable = { eon_investment_offer_duration > 0 }
-	check_variable = { treasury >= eon_investment_offer_cost }
+	check_variable = { var = treasury value = eon_investment_offer_cost compare = greater_than_or_equals }
 	check_variable = { active_projects < 15 }
 	is_in_array = { array = project_array value = 0 }
 	NOT = { has_country_flag = disabled_foreign_investment }
@@ -20,12 +20,13 @@ eon_investment_offer_valid = {
 		exists = yes
 		NOT = { has_war_with = PREV }
 		NOT = { has_country_flag = int_auto_reject_investment_flag }
-		check_variable = { treasury >= PREV.eon_investment_offer_cofunding }
+		check_variable = { var = treasury value = PREV.eon_investment_offer_cofunding compare = greater_than_or_equals }
 		PREV = { NOT = { has_war_with = PREV } NOT = { is_justifying_wargoal_against = PREV } }
 	}
 	var:eon_investment_offer_state = {
 		NOT = { is_controlled_by = PREV }
 		CONTROLLER = { exists = yes check_variable = { id = PREV.PREV.eon_investment_offer_partner } }
+		OWNER = { exists = yes check_variable = { id = PREV.PREV.eon_investment_offer_partner } }
 		check_variable = { projects_in_state^num = project_type_in_state^num }
 		NOT = { is_in_array = { array = projects_in_state value = PREV.id } }
 		eon_investment_snapshot_building_available = yes
@@ -556,4 +557,82 @@ eon_investment_building_15 = {
 		}
 		else = { always = no }
 	}
+}
+
+# Country scope, project is the immutable index. Legal recipient must again own
+# and control its state. Never transfer consent to an occupying country.
+eon_investment_lifecycle_execution_allowed = {
+	exists = yes
+	check_variable = { eon_project_protocol^project = 24 }
+	check_variable = { project_array^project < 0 }
+	NOT = { has_country_flag = disabled_foreign_investment }
+	var:project_target_country^project = {
+		exists = yes
+		NOT = { has_war_with = PREV }
+		PREV = { NOT = { has_war_with = PREV } }
+	}
+	var:project_array^project = {
+		OWNER = { exists = yes check_variable = { id = PREV.PREV.project_target_country^PREV.PREV.project } }
+		CONTROLLER = { exists = yes check_variable = { id = PREV.PREV.project_target_country^PREV.PREV.project } }
+		eon_investment_lifecycle_unit_slot_available = yes
+	}
+}
+
+# Selected-state GUI scope, ROOT is the player/investor. A stale index or a
+# different investor's state entry cannot make cancellation available.
+eon_investment_lifecycle_own_state_project = {
+	is_in_array = { array = projects_in_state value = ROOT.id }
+	has_variable = project_target_state_@ROOT
+	check_variable = { ROOT.eon_project_protocol^THIS.project_target_state_@ROOT = 24 }
+	check_variable = { ROOT.project_array^THIS.project_target_state_@ROOT = id }
+}
+
+# State scope, PREV is investor. Check one unit, independent of mutable GUI.
+eon_investment_lifecycle_unit_slot_available = {
+	if = { limit = { PREV = { check_variable = { project_building_type^project = 1 } } }
+		free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 2 } } }
+		free_building_slots = { building = arms_factory size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 3 } } }
+		free_building_slots = { building = dockyard size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 4 } } }
+		free_building_slots = { building = infrastructure size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 5 } } }
+		free_building_slots = { building = offices size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 6 } } }
+		free_building_slots = { building = anti_air_building size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 7 } } }
+		free_building_slots = { building = radar_station size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 8 } } }
+		free_building_slots = { building = air_base size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 9 } } }
+		free_building_slots = { building = fuel_silo size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 10 } } }
+		free_building_slots = { building = internet_station size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 11 } } }
+		free_building_slots = { building = synthetic_refinery size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 12 } } }
+		free_building_slots = { building = fossil_powerplant size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 13 } } }
+		free_building_slots = { building = nuclear_reactor size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 14 } } }
+		free_building_slots = { building = agriculture_district size > 0 include_locked = no }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 15 } } }
+		free_building_slots = { building = rubber_refinery size > 0 include_locked = no }
+	}
+	else = { always = no }
 }

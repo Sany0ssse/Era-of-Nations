@@ -1,7 +1,9 @@
 # Capacity inputs are temporary: partner and candidate amount in caller's sign.
 # Current balance includes active contracts. Release only the pair being replaced.
 # These are native trigger calculations, not scripted effects in GUI conditions.
-eon_energy_supplier_capacity_available = {
+# Structural validation and projected balance are separate from the numeric
+# sufficiency result: a receiving AI needs that result even on a shortage.
+eon_energy_supplier_capacity_calculated = {
 	exists = yes
 	check_variable = { energy_contractors^num = energy_contracts_ammount^num }
 	check_variable = { energy_contractors^num = energy_contracts_price^num }
@@ -14,13 +16,24 @@ eon_energy_supplier_capacity_available = {
 		if = {
 			limit = { check_variable = { eon_energy_capacity_record_partner = eon_energy_capacity_counterparty } }
 			add_to_temp_variable = { eon_energy_capacity_count = 1 }
-			set_temp_variable = { eon_energy_capacity_old_amount = energy_contracts_ammount^eon_energy_capacity_record_index }
+			# Release delivered export, not the unfulfilled part of an old promise.
+			set_temp_variable = { eon_energy_delivery_partner = eon_energy_capacity_record_partner }
+			set_temp_variable = { eon_energy_delivery_row = eon_energy_capacity_record_index }
+			if = {
+				limit = { eon_energy_delivery_row_current = yes }
+				set_temp_variable = { eon_energy_capacity_old_amount = eon_energy_delivery_read_amount }
+			}
 		}
 	}
 	check_variable = { eon_energy_capacity_count < 2 }
 	set_temp_variable = { eon_energy_projected_balance = energy_balance }
 	subtract_from_temp_variable = { eon_energy_projected_balance = eon_energy_capacity_old_amount }
 	subtract_from_temp_variable = { eon_energy_projected_balance = eon_energy_capacity_quantity }
+	always = yes
+}
+
+eon_energy_supplier_capacity_available = {
+	eon_energy_supplier_capacity_calculated = yes
 	NOT = { check_variable = { eon_energy_projected_balance < 0 } }
 }
 
@@ -32,8 +45,13 @@ eon_energy_proposed_capacity_available = {
 	}
 	if = {
 		limit = { check_variable = { eon_energy_capacity_amount > 0 } }
-		set_temp_variable = { eon_energy_capacity_counterparty = THIS }
-		var:eon_energy_capacity_partner = { eon_energy_supplier_capacity_available = yes }
+		var:eon_energy_capacity_partner = {
+			set_temp_variable = { eon_energy_capacity_counterparty = PREV }
+			set_temp_variable = { eon_energy_capacity_quantity = PREV.eon_energy_capacity_quantity }
+			eon_energy_supplier_capacity_calculated = yes
+			set_temp_variable = { PREV.eon_energy_projected_balance = eon_energy_projected_balance }
+			NOT = { check_variable = { eon_energy_projected_balance < 0 } }
+		}
 	}
 	else_if = {
 		limit = { check_variable = { eon_energy_capacity_amount < 0 } }

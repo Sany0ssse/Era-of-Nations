@@ -16,6 +16,9 @@ POLICY_PATH = 'common/scripted_triggers/00_political_triggers.txt'
 FOCUS_ID = 'PER_talks_with_the_americans'
 PREFIX = 'eon_per_usa_normalization_'
 RECEIPT = 'eon_per_usa_relations_'
+PAIR_PREFIX = 'eon_diplomatic_relations_legacy_'
+PAIR_TRIGGER_PATH = 'common/scripted_triggers/eon_diplomatic_relations_triggers.txt'
+PAIR_HISTORY_PATH = 'history/general/eon_diplomatic_relations_history.txt'
 SOURCE_PATHS = sorted({FOCUS_PATH, EVENT_PATH} | {f'localisation/{language}/MD_focus_PER_l_{language}.yml' for language in ('english', 'russian')} |
     {'common/scripted_effects/eon_per_usa_normalization_effects.txt', 'common/scripted_triggers/eon_per_usa_normalization_triggers.txt',
      'common/scripted_diplomatic_actions/eon_per_usa_normalization_actions.txt', 'common/on_actions/eon_per_usa_normalization_on_actions.txt',
@@ -60,6 +63,8 @@ def trigger(nodes, result, ctx):
         if key == 'country_exists':
             target = model['country_ref'](result, ctx, val)
             ready = target in result['countries'] and result['countries'][target]['exists']
+        elif key == 'has_global_flag':
+            ready = val in result.get('global_flags', set())
         elif key == 'is_in_array' and isinstance(val, list) and len(val) == 1:
             array, comparison, wanted = val[0]
             assert array == 'ruling_party' and comparison == '=', ('Unsupported native array shorthand', val)
@@ -78,6 +83,12 @@ def execute(nodes, result, ctx):
                 grouped.append(nodes[index]); index += 1
         if key == 'newline':
             assert val == 'yes', ('Unsupported presentation command', val)
+            continue
+        if key == 'hidden_effect':
+            execute(val, result, ctx)
+            continue
+        if key == 'set_global_flag':
+            result.setdefault('global_flags', set()).add(val)
             continue
         if key == 'change_influence_percentage':
             result.setdefault('relations_influence_calls', []).append({
@@ -99,6 +110,11 @@ for registry, path in (('effects', 'common/scripted_effects/eon_per_usa_normaliz
         additions = {key: body for key, operator, body in model['ast'](read(path))}
         assert not additions.keys() & model[registry].keys(), 'Normalization helpers overwrite earlier IDs'
         model[registry].update(additions)
+pair_definitions = dict((key, body) for key, operator, body in model['ast'](read(PAIR_TRIGGER_PATH)))
+for name in ('pair_known', 'pair_active', 'pair_unknown_restricted', 'pair_restricted'):
+    key = PAIR_PREFIX+name
+    assert key not in model['capacity_triggers']
+    model['capacity_triggers'][key] = pair_definitions[key]
 
 def focus_field(name):
     data = (ROOT/FOCUS_PATH).read_bytes()
@@ -123,6 +139,9 @@ def state():
     result['countries']['USA']['opinion_modifiers'].update({('PER', 'no_diplomatic_ties'), ('PER', 'beirut_bombing'), ('PER', 'iran_hostage_crisis')})
     result['countries']['PER']['opinion_modifiers'].update({('USA', 'no_diplomatic_ties'), ('USA', 'cia_coup_mossadeq'),
         ('USA', 'operation_praying_mantis'), ('USA', 'helped_iraqi_chemical_weapons'), ('USA', 'uss_vincennes')})
+    effect(result, model['ast'](read(PAIR_HISTORY_PATH)), actor='PER', from_=None)
+    for actor, peer in (('USA', 'PER'), ('PER', 'USA')):
+        result['countries'][actor]['flags'].update({PAIR_PREFIX+'known@'+peer, PAIR_PREFIX+'no_ties@'+peer})
     return result
 
 def completion(result, actor='PER'):
@@ -163,13 +182,18 @@ def assert_restored(result):
         assert RECEIPT+'restored' in result['countries'][actor]['flags']
         assert result['countries'][actor]['variables'][RECEIPT+'partner'] == peer
         assert (peer, 'no_diplomatic_ties') not in result['countries'][actor]['opinion_modifiers']
+        assert PAIR_PREFIX+'known@'+peer in result['countries'][actor]['flags']
+        assert PAIR_PREFIX+'no_ties@'+peer not in result['countries'][actor]['flags']
 
 def resources(result):
     return {actor: {key: deepcopy(country[key]) for key in ('equipment_stock', 'available_manpower', 'templates', 'native_unit_inventory')} |
         {'cash': {key: country['variables'][key] for key in ('treasury', 'political_power')}} for actor, country in result['countries'].items()}
 
 def foreign_channels(result):
-    return {actor: {'flags': {flag for flag in country['flags'] if not flag.startswith((PREFIX, RECEIPT)) and flag != 'USA_iranian_friendship'},
+    pair_flags = lambda actor: {PAIR_PREFIX+kind+'@'+('PER' if actor == 'USA' else 'USA')
+        for kind in ('known', 'no_ties')} if actor in ('USA', 'PER') else set()
+    return {actor: {'flags': {flag for flag in country['flags'] if not flag.startswith((PREFIX, RECEIPT))
+        and flag not in pair_flags(actor) and flag != 'USA_iranian_friendship'},
         'variables': {key: deepcopy(value) for key, value in country['variables'].items() if not key.startswith((PREFIX, RECEIPT))},
         'arrays': deepcopy(country['arrays']), 'ideas': deepcopy(country['ideas'])} for actor, country in result['countries'].items()}
 
@@ -213,6 +237,7 @@ def mutate(result, name):
     elif name in ('usa_ties_restored_elsewhere', 'per_ties_restored_elsewhere'):
         actor, peer = ('USA', 'PER') if name.startswith('usa') else ('PER', 'USA')
         result['countries'][actor]['opinion_modifiers'].discard((peer, 'no_diplomatic_ties'))
+        result['countries'][actor]['flags'].discard(PAIR_PREFIX+'no_ties@'+peer)
     elif name == 'expired': result['countries']['USA']['flags'].discard(PREFIX+'live')
     elif name == 'cancelled': result['countries']['USA']['flags'].add(PREFIX+'cancelled')
     else: raise AssertionError(('Unknown fixture mutation', name))
@@ -460,7 +485,7 @@ def report():
     return {'all_passed': True, 'baseline': BASELINE, 'actual_source_scenarios': sum(groups.values()),
         'scenario_groups': dict(groups), 'adapter_semantics_cases': sum(adapter_cases.values()), 'adapter_groups': dict(adapter_cases),
         'source_sha256': {path: hashlib.sha256((ROOT/path).read_bytes()).hexdigest() for path in SOURCE_PATHS if (ROOT/path).exists()},
-        'protected_dependencies_sha256': {path: hashlib.sha256((ROOT/path).read_bytes()).hexdigest() for path in (POLICY_PATH, 'tools/validation/diplomacy_package_22/test_request.py')},
+        'protected_dependencies_sha256': {path: hashlib.sha256((ROOT/path).read_bytes()).hexdigest() for path in (POLICY_PATH, 'tools/validation/diplomacy_package_22/test_request.py', PAIR_TRIGGER_PATH, PAIR_HISTORY_PATH)},
         'prior_scope': 'unchanged_children_with_historical_AB4_caller_view', 'new_historical_caller_projection': False,
         'native_runtime': False, 'native_physical_mission_presence_proven': False, 'native_resource_mutation_simulated': False,
         'immutable_event_generation_proven': False,

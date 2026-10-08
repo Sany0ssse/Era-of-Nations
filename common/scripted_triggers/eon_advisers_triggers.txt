@@ -3,9 +3,9 @@
 # an existing paid agreement.
 eon_advisers_policy_allowed = {
  exists = yes
- NOT = { tag = eon_advisers_policy_provider }
+ NOT = { tag = var:eon_advisers_policy_provider }
  OR = { has_civil_war = yes has_war = yes }
- NOT = { has_war_with = eon_advisers_policy_provider }
+ NOT = { has_war_with = var:eon_advisers_policy_provider }
  OR = {
   check_variable = { influence_array^0 = eon_advisers_policy_provider }
   check_variable = { influence_array^1 = eon_advisers_policy_provider }
@@ -26,7 +26,7 @@ eon_advisers_policy_allowed = {
   }
   if = {
    limit = { is_ai = yes }
-   PREV = { has_government = eon_advisers_policy_provider }
+   PREV = { has_government = var:eon_advisers_policy_provider }
   }
   if = {
    limit = { original_tag = ERI has_country_flag = ETH_transitional_government_FLAG }
@@ -80,8 +80,8 @@ eon_advisers_incoming_slot_ready = {
  NOT = { has_idea = grey_men_foreign_idea }
 }
 eon_advisers_funds_available = {
- check_variable = { treasury >= 1.5 }
- check_variable = { treasury <= 1000000 }
+ check_variable = { var = treasury value = 1.5 compare = greater_than_or_equals }
+ check_variable = { var = treasury value = 1000000 compare = less_than_or_equals }
 }
 # Recipient scope with explicitly named provider. No treasury is reserved.
 eon_advisers_requirements_ready = {

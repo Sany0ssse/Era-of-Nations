@@ -2,9 +2,9 @@
 # marker is nominal eligibility, not a unique request-generation receipt.
 eon_foreign_cash_policy_allowed = {
  exists = yes
- NOT = { tag = eon_foreign_cash_policy_provider }
+ NOT = { tag = var:eon_foreign_cash_policy_provider }
  has_defensive_war = yes
- NOT = { has_war_with = eon_foreign_cash_policy_provider }
+ NOT = { has_war_with = var:eon_foreign_cash_policy_provider }
  OR = { has_idea = non_power has_idea = minor_power has_idea = regional_power }
  var:eon_foreign_cash_policy_provider = {
   exists = yes
@@ -30,13 +30,13 @@ eon_foreign_cash_partner_identified = {
 # Receiver scope. Prevent the inherited treasury clamp from destroying part
 # of the gift or trimming an unrelated out-of-range balance on either side.
 eon_foreign_cash_cash_available = {
- check_variable = { treasury >= -1000000 }
+ check_variable = { var = treasury value = -1000000 compare = greater_than_or_equals }
  set_temp_variable = { eon_foreign_cash_projected_treasury = treasury }
  add_to_temp_variable = { eon_foreign_cash_projected_treasury = 7 }
- check_variable = { eon_foreign_cash_projected_treasury <= 1000000 }
+ check_variable = { var = eon_foreign_cash_projected_treasury value = 1000000 compare = less_than_or_equals }
  var:eon_foreign_cash_policy_provider = {
-  check_variable = { treasury >= 7 }
-  check_variable = { treasury <= 1000000 }
+  check_variable = { var = treasury value = 7 compare = greater_than_or_equals }
+  check_variable = { var = treasury value = 1000000 compare = less_than_or_equals }
  }
 }
 

@@ -169,7 +169,7 @@ class Model:
             name = token.split('@', 1)[1]
             assert name in self.countries[stack[-1]].native_modifiers, ('Unknown native modifier', name)
             return self.countries[stack[-1]].native_modifiers[name]
-        if token == 'threat': return self.tension
+        if token in ('threat', 'global.threat'): return self.tension
         parts, owner, ancestor = token.split('.'), stack[-1], len(stack) - 1
         while len(parts) > 1:
             scope = parts.pop(0)
@@ -234,7 +234,7 @@ class Model:
             elif key == 'is_subject': passed = country.subject == (value == 'yes')
             elif key == 'is_ai': passed = country.ai == (value == 'yes')
             elif key == 'has_government':
-                expected = self.countries[self.ref(value, stack)].government if value in ('FROM', 'ROOT', 'PREV', 'THIS') else value
+                expected = self.countries[self.ref(value, stack)].government if value in ('FROM', 'ROOT', 'PREV', 'THIS') or value.startswith('var:') else value
                 passed = country.government == expected
             elif key == 'original_tag': passed = country.original_tag == value
             elif key == 'tag': passed = country.ident == self.ref(value, stack)

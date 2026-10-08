@@ -61,16 +61,8 @@ calculate_energy_use = {
 	# Add energy_use (static use from special decisions/events)
 	set_temp_variable = { other_energy_use = modifier@energy_use }
 
-	# Energy selling
-	for_each_loop = {
-		array = energy_contracts_ammount
-		value = v
-		if = {
-			limit = { check_variable = { v < 0 } }
-			add_to_temp_variable = { all_sell_energy_use = v }
-		}
-	}
-	multiply_temp_variable = { all_sell_energy_use = -1 }
+	# Contract terms and actual delivered GW are separate; stale rows give zero.
+	eon_energy_delivery_read_totals = yes
 
 	# Energy Use from Buildings
 	set_temp_variable = { energy_use_base_civs = 0.4 }
@@ -174,7 +166,11 @@ calculate_energy_use = {
 	# Net Energy Balance Calculations
 	# Add energy gain to sum, then factor it by corresponding multiplier to get final energy gain (through modifiers)
 	set_temp_variable = { damaged_renewable_percent = num_of_damaged_synthetic_refinery }
-	divide_temp_variable = { damaged_renewable_percent = num_of_synthetic_refinery }
+	if = {
+		limit = { check_variable = { num_of_synthetic_refinery > 0 } }
+		divide_temp_variable = { damaged_renewable_percent = num_of_synthetic_refinery }
+	}
+	else = { set_temp_variable = { damaged_renewable_percent = 0 } }
 	set_temp_variable = { damaged_renewable_energy_debuff = state_renewable_energy_var }
     multiply_temp_variable = { damaged_renewable_energy_debuff = damaged_renewable_percent }
     multiply_temp_variable = { damaged_renewable_energy_debuff = 0.6 }
@@ -214,7 +210,11 @@ calculate_energy_use = {
 	else = {
 		set_temp_variable = { damaged_fossil_pp_debuff = modifier@fossil_energy_gain }
 		set_temp_variable = { damaged_fossil_percent = num_of_damaged_fossil_powerplant }
-		divide_temp_variable = { damaged_fossil_percent = number_of_fossil_pps }
+		if = {
+			limit = { check_variable = { number_of_fossil_pps > 0 } }
+			divide_temp_variable = { damaged_fossil_percent = number_of_fossil_pps }
+		}
+		else = { set_temp_variable = { damaged_fossil_percent = 0 } }
 		multiply_temp_variable = { damaged_fossil_pp_debuff = damaged_fossil_percent }
 		multiply_temp_variable = { damaged_fossil_pp_debuff = 0.6 }
 		set_variable = { fossil_pp_energy_generation = modifier@fossil_energy_gain }
@@ -283,7 +283,11 @@ calculate_energy_use = {
 			}
 		}
 		set_temp_variable = { damaged_reactors_percent = num_of_damaged_nuclear_reactor }
-		divide_temp_variable = { damaged_reactors_percent = nuclear_reactors }
+		if = {
+			limit = { check_variable = { nuclear_reactors > 0 } }
+			divide_temp_variable = { damaged_reactors_percent = nuclear_reactors }
+		}
+		else = { set_temp_variable = { damaged_reactors_percent = 0 } }
 		set_temp_variable = { damaged_reactors_fuel_consuption_debuff = modifier@nuclear_fuel_consumption }
         multiply_temp_variable = { damaged_reactors_fuel_consuption_debuff = damaged_reactors_percent }
         multiply_temp_variable = { damaged_reactors_fuel_consuption_debuff = 0.6 }
@@ -334,79 +338,14 @@ calculate_energy_use = {
 	multiply_variable = { other_energy_generation = temp_energy_gain_m }
 	add_to_variable = { energy_sum = other_energy_generation }
 
-	set_variable = { energy_consumption = temp_total_energy_use }
-	set_variable = { energy_balance = energy_sum }
-	subtract_from_variable = { energy_balance = energy_consumption }
-
-	set_temp_variable = { energy_fulfillment = energy_sum }
-	#add_to_temp_variable = { energy_fulfillment = all_buy_energy_generation }
-	set_variable = { energy_withdrawal_from_storage = 0 }
-	set_variable = { free_fossil_powerplants_power = 0 }
-	if = {
-		limit = {
-			check_variable = { stored_energy > 0 }
-			check_variable = { energy_balance < 0 }
-		}
-		set_variable = { energy_withdrawal_from_storage = energy_balance }
-		multiply_variable = { energy_withdrawal_from_storage = -1 }
-		add_to_temp_variable = { energy_fulfillment = energy_withdrawal_from_storage }
-	}
-	if = {
-		limit = {
-			check_variable = { stored_energy = max_stored_energy }
-			check_variable = { energy_balance > 0 }
-			check_variable = { fossil_pp_fuel_consumption < 0 }
-		}
-		set_temp_variable = { saved_fuel = energy_balance }
-		clamp_temp_variable = {
-			var = saved_fuel
-			max = fossil_pp_energy_generation
-			min = 0
-		}
-		set_variable = { free_fossil_powerplants_power = saved_fuel }
-		multiply_temp_variable = { saved_fuel = 20 } #base fossil powerplant fuel consumption, found in buildings.txt, positive sicne its saved fuel instead of consumed
-		multiply_temp_variable = { saved_fuel = fossil_pp_fuel_consumption_multiplier }
-		divide_temp_variable = { saved_fuel = fossil_pp_energy_generation_multiplier }
-		add_to_variable = { fossil_pp_fuel_consumption = saved_fuel }
-	}
-
-	# Energy buy
-	for_each_loop = {
-		array = energy_contracts_ammount
-		value = v
-		if = {
-			limit = { check_variable = { v > 0 } }
-			add_to_temp_variable = { all_buy_energy_generation = v }
-		}
-	}
-	add_to_variable = { energy_sum = all_buy_energy_generation }
-	add_to_variable = { energy_balance = all_buy_energy_generation }
-	add_to_temp_variable = { energy_fulfillment = all_buy_energy_generation }
-	set_variable = { all_buy_energy_generation_display_var = all_buy_energy_generation }
-
-
-
-
-	divide_temp_variable = { energy_fulfillment = energy_consumption }
-	set_variable = { energy_balance_value_display = energy_fulfillment }
-	clamp_variable = { var = energy_balance_value_display min = 0 }
-	clamp_temp_variable = { var = energy_fulfillment min = 0 max = 1 }
-	set_variable = { unfulfilled_energy_demand_var = -1 }
-	add_to_variable = { unfulfilled_energy_demand_var = energy_fulfillment }
-	add_to_variable = { energy_sum = energy_withdrawal_from_storage } #for display purposes
-
-
-	# Caps penalty for unfulfilled at 50%, and multiples 100 to get a whole number to reduce to penalty scale
-	set_variable = { unfulfilled_energy_demand_dynmod_var = unfulfilled_energy_demand_var }
-	multiply_variable = { unfulfilled_energy_demand_dynmod_var = 0.5 }
-	clamp_variable = { var = unfulfilled_energy_demand_dynmod_var min = -0.50 max = 0 }
-	set_variable = { unfulfilled_energy_demand_dynmod_var_2 = unfulfilled_energy_demand_dynmod_var }
-	multiply_variable = { unfulfilled_energy_demand_dynmod_var_2 = gdp_per_capita }
-	multiply_variable = { unfulfilled_energy_demand_dynmod_var_2 = 0.025 } #penalties decrease below 40k gdp/c, increase above it
-	clamp_variable = { var = unfulfilled_energy_demand_dynmod_var_2 min = -0.50 max = 0 }
-	set_variable = { unfulfilled_energy_demand_dynmod_var_3 = unfulfilled_energy_demand_var }
-	multiply_variable = { unfulfilled_energy_demand_dynmod_var_3 = 0.3 }
-	clamp_variable = { var = unfulfilled_energy_demand_dynmod_var_3 min = -0.30 max = 0 }
+	# Capture the fresh domestic inputs before imports/storage or actual exports.
+	clamp_variable = { var = energy_sum min = 0 }
+	set_variable = { eon_energy_delivery_generation = energy_sum }
+	set_variable = { eon_energy_delivery_demand = temp_total_energy_use }
+	subtract_from_variable = { eon_energy_delivery_demand = all_sell_energy_use }
+	clamp_variable = { var = eon_energy_delivery_demand min = 0 }
+	set_variable = { eon_energy_delivery_base_fossil_fuel = fossil_pp_fuel_consumption }
+	eon_energy_delivery_apply_balance = yes
 
 	# Calculate the Non-Electric Fuel Consumption
 	set_variable = { non_electric_fuel_consumption = population_total_m }
@@ -434,6 +373,8 @@ calculate_energy_use = {
 # Effect: energy_on_daily
 # Purpose: applies the energy balance penalties
 energy_on_daily = {
+	# Reconcile the whole current network once BEFORE storage changes this day.
+	eon_energy_delivery_daily_tick = yes
 	set_variable = { no_fuel_penalties_var = 0 }
 	if = {
 		limit = {

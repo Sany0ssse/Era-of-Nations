@@ -24,7 +24,7 @@ eon_ammo_recipient_capacity = {
 	clamp_temp_variable = { var = eon_ammo_capacity min = 10000 max = 1000000000 }
 	set_temp_variable = { eon_ammo_projected_stock = ammo_stock }
 	add_to_temp_variable = { eon_ammo_projected_stock = 100000 }
-	check_variable = { eon_ammo_projected_stock <= eon_ammo_capacity }
+	check_variable = { var = eon_ammo_projected_stock value = eon_ammo_capacity compare = less_than_or_equals }
 }
 
 # Donor scope. Variable scopes are always syntactically valid in the native
@@ -53,7 +53,7 @@ eon_ammo_gui_ready = {
 		}
 		custom_trigger_tooltip = {
 			tooltip = Sda_send_ammo_tt_has_enough
-			check_variable = { ammo_stock >= 100000 }
+			check_variable = { var = ammo_stock value = 100000 compare = greater_than_or_equals }
 		}
 		custom_trigger_tooltip = {
 			tooltip = eon_ammo_donor_available_tt

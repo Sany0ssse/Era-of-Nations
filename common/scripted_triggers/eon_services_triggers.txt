@@ -4,9 +4,9 @@
 # service merely because influence rank or government later changes.
 eon_services_policy_allowed = {
  exists = yes
- NOT = { tag = eon_services_policy_provider }
+ NOT = { tag = var:eon_services_policy_provider }
  OR = { has_civil_war = yes has_war = yes }
- NOT = { has_war_with = eon_services_policy_provider }
+ NOT = { has_war_with = var:eon_services_policy_provider }
  OR = {
   check_variable = { influence_array^0 = eon_services_policy_provider }
   check_variable = { influence_array^1 = eon_services_policy_provider }
@@ -27,7 +27,7 @@ eon_services_policy_allowed = {
   }
   if = {
    limit = { is_ai = yes }
-   PREV = { has_government = eon_services_policy_provider }
+   PREV = { has_government = var:eon_services_policy_provider }
   }
   if = {
    limit = { original_tag = ERI has_country_flag = ETH_transitional_government_FLAG }
@@ -123,13 +123,13 @@ eon_services_response_ready = {
   NOT = { has_country_flag = eon_services_recon_owned }
   set_temp_variable = { eon_services_fee = 4 }
  }
- check_variable = { treasury >= eon_services_fee }
- check_variable = { treasury <= 1000000 }
+ check_variable = { var = treasury value = eon_services_fee compare = greater_than_or_equals }
+ check_variable = { var = treasury value = 1000000 compare = less_than_or_equals }
  FROM = {
-  check_variable = { treasury >= -1000000 }
+  check_variable = { var = treasury value = -1000000 compare = greater_than_or_equals }
   set_temp_variable = { eon_services_projected_treasury = treasury }
   add_to_temp_variable = { eon_services_projected_treasury = PREV.eon_services_fee }
-  check_variable = { eon_services_projected_treasury <= 1000000 }
+  check_variable = { var = eon_services_projected_treasury value = 1000000 compare = less_than_or_equals }
  }
 }
 

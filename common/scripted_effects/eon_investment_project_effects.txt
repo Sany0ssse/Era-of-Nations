@@ -67,6 +67,18 @@ eon_investment_execute_offer = {
 			set_variable = { project_total_construction_duration_display^project = eon_investment_offer_total_duration }
 			set_variable = { project_target_country^project = eon_investment_offer_partner }
 			set_variable = { eon_project_cofinancer^project = eon_investment_offer_partner }
+			set_variable = { eon_project_protocol^project = 24 }
+			set_variable = { eon_project_initial_amount^project = eon_investment_offer_amount }
+			set_variable = { eon_project_days_remaining^project = eon_investment_offer_duration }
+			set_variable = { eon_project_unit_cost^project = eon_investment_offer_cost }
+			divide_variable = { eon_project_unit_cost^project = eon_investment_offer_amount }
+			set_variable = { eon_project_cofunding_remaining^project = eon_investment_offer_cofunding }
+			set_variable = { eon_project_unit_cofunding^project = eon_investment_offer_cofunding }
+			divide_variable = { eon_project_unit_cofunding^project = eon_investment_offer_amount }
+			set_variable = { eon_project_built^project = 0 }
+			set_variable = { eon_project_lost^project = 0 }
+			set_variable = { eon_project_paused^project = 0 }
+			set_variable = { eon_project_retry_days^project = 0 }
 			var:eon_investment_offer_state = {
 				add_to_array = { projects_in_state = PREV.id }
 				add_to_array = { project_type_in_state = PREV.eon_investment_offer_type }
@@ -75,13 +87,13 @@ eon_investment_execute_offer = {
 			}
 			subtract_from_variable = { treasury = eon_investment_offer_cost }
 			clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-			add_to_variable = { int_investments = eon_investment_offer_cost }
-			clamp_variable = { var = int_investments min = 0 max = 1000000 }
+			add_to_variable = { eon_construction_capital = eon_investment_offer_cost }
 			add_to_variable = { active_projects = 1 }
 			var:eon_investment_offer_partner = {
 				set_temp_variable = { treasury_change = PREV.eon_investment_offer_cofunding }
 				multiply_temp_variable = { treasury_change = -1 }
 				modify_treasury_effect = yes
+				add_to_variable = { eon_construction_contributions = PREV.eon_investment_offer_cofunding }
 				set_temp_variable = { modify_capitalization = 0.025 }
 				modify_capitalization_support = yes
 				if = { limit = { NOT = { has_country_flag = influence_gained_@PREV } }
@@ -101,12 +113,17 @@ eon_investment_execute_offer = {
 					}
 				}
 			}
-			initialize_start_project_decisions = yes
+			# Daily protocol clock replaces the legacy hidden decision timers.
+			eon_investment_lifecycle_notify_started = yes
 			clear_variable = project
 			clear_variable = project_type
 			clear_variable = new_project
 			set_temp_variable = { eon_investment_project_started = 1 }
 		}
+	}
+	if = { limit = { check_variable = { eon_investment_project_started = 0 } has_variable = eon_investment_offer_partner }
+		country_event = { id = eon_investment_lifecycle.9 }
+		var:eon_investment_offer_partner = { if = { limit = { exists = yes } country_event = { id = eon_investment_lifecycle.9 } } }
 	}
 	eon_investment_clear_offer = yes
 	refresh_gui = yes
@@ -118,4 +135,328 @@ eon_investment_project_cleanup_annexed_pair = {
 	if = { limit = { check_variable = { eon_investment_offer_partner = eon_investment_annexed_partner } }
 		eon_investment_clear_offer = yes
 	}
+}
+
+# Protocol 24: investor country scope; project is an index from its project_array.
+# Principal under construction does not enter the ROI-producing portfolio.
+eon_investment_lifecycle_notify_started = {
+	country_event = { id = eon_investment_lifecycle.1 }
+	var:project_target_country^project = { if = { limit = { exists = yes } country_event = { id = eon_investment_lifecycle.1 } } }
+}
+eon_investment_lifecycle_notify_paused = {
+	country_event = { id = eon_investment_lifecycle.2 }
+	var:project_target_country^project = { if = { limit = { exists = yes } country_event = { id = eon_investment_lifecycle.2 } } }
+}
+eon_investment_lifecycle_notify_resumed = {
+	country_event = { id = eon_investment_lifecycle.3 }
+	var:project_target_country^project = { if = { limit = { exists = yes } country_event = { id = eon_investment_lifecycle.3 } } }
+}
+
+# A treasury ceiling delays a refund; it never destroys the payer's claim.
+eon_investment_lifecycle_settle_refund_claim = {
+	if = { limit = { exists = yes NOT = { has_country_flag = eon_investment_lifecycle_annexing } check_variable = { eon_investment_refund_claims > 0 } }
+		set_temp_variable = { eon_project_refund_capacity = 1000000 }
+		subtract_from_temp_variable = { eon_project_refund_capacity = treasury }
+		clamp_temp_variable = { var = eon_project_refund_capacity min = 0 }
+		set_temp_variable = { eon_project_refund_payment = eon_investment_refund_claims }
+		clamp_temp_variable = { var = eon_project_refund_payment min = 0 max = eon_project_refund_capacity }
+		add_to_variable = { treasury = eon_project_refund_payment }
+		subtract_from_variable = { eon_investment_refund_claims = eon_project_refund_payment }
+		if = { limit = { check_variable = { var = eon_investment_refund_claims value = 0 compare = less_than_or_equals } } clear_variable = eon_investment_refund_claims }
+	}
+}
+
+# Release exactly the original remaining principal and original payer's advance.
+# Completed units remain operating assets and are not refunded on cancellation.
+eon_investment_lifecycle_refund_remaining = {
+	if = { limit = { check_variable = { project_monetary_cost^project > 0 } }
+		add_to_variable = { eon_investment_refund_claims = project_monetary_cost^project }
+		eon_investment_lifecycle_settle_refund_claim = yes
+		subtract_from_variable = { eon_construction_capital = project_monetary_cost^project }
+		clamp_variable = { var = eon_construction_capital min = 0 }
+	}
+	if = { limit = { check_variable = { eon_project_cofunding_remaining^project > 0 } }
+		var:eon_project_cofinancer^project = {
+			add_to_variable = { eon_investment_refund_claims = PREV.eon_project_cofunding_remaining^PREV.project }
+			eon_investment_lifecycle_settle_refund_claim = yes
+			subtract_from_variable = { eon_construction_contributions = PREV.eon_project_cofunding_remaining^PREV.project }
+			clamp_variable = { var = eon_construction_contributions min = 0 }
+		}
+	}
+}
+
+# Synchronous cleanup avoids a delayed slot-reset event clearing a replacement.
+eon_investment_lifecycle_release_project = {
+	var:project_array^project = {
+		clear_variable = project_target_state_@PREV
+		set_temp_variable = { eon_project_state_break = 0 }
+		for_each_loop = {
+			array = projects_in_state value = eon_project_state_investor index = eon_project_state_index break = eon_project_state_break
+			if = { limit = { check_variable = { eon_project_state_investor = PREV.id } }
+				remove_from_array = { array = project_type_in_state index = eon_project_state_index }
+				remove_from_array = { array = projects_in_state value = PREV.id }
+				set_temp_variable = { eon_project_state_break = 1 }
+			}
+		}
+	}
+	set_variable = { project_array^project = 0 }
+	add_to_variable = { active_projects = -1 }
+	clamp_variable = { var = active_projects min = 0 }
+	clear_variable = project_build_amount^project
+	clear_variable = project_building_type^project
+	clear_variable = project_construction_duration^project
+	clear_variable = project_total_construction_duration_display^project
+	clear_variable = project_target_country^project
+	clear_variable = project_monetary_cost^project
+	clear_variable = eon_project_cofinancer^project
+	clear_variable = eon_project_protocol^project
+	clear_variable = eon_project_initial_amount^project
+	clear_variable = eon_project_days_remaining^project
+	clear_variable = eon_project_unit_cost^project
+	clear_variable = eon_project_cofunding_remaining^project
+	clear_variable = eon_project_unit_cofunding^project
+	clear_variable = eon_project_built^project
+	clear_variable = eon_project_lost^project
+	clear_variable = eon_project_paused^project
+	clear_variable = eon_project_retry_days^project
+	refresh_gui = yes
+}
+
+eon_investment_lifecycle_cancel_project = {
+	if = { limit = { check_variable = { eon_project_protocol^project = 24 } check_variable = { project_array^project < 0 } }
+		eon_investment_lifecycle_refund_remaining = yes
+		country_event = { id = eon_investment_lifecycle.5 }
+		var:project_target_country^project = { if = { limit = { exists = yes } country_event = { id = eon_investment_lifecycle.5 } } }
+		eon_investment_lifecycle_release_project = yes
+		clear_variable = project
+	}
+}
+
+# Apply the inherited political penalty only to voluntary cancellation under
+# conditions where the original contract can still be performed. Force majeure
+# and occupation never punish the unrelated controller or original victim.
+eon_investment_lifecycle_cancel_voluntary = {
+	if = { limit = { eon_investment_lifecycle_execution_allowed = yes }
+		if = { limit = { has_global_flag = GAME_RULE_gain_0_5_percent_invest } set_temp_variable = { percent_change = -1.0 } }
+		else_if = { limit = { has_global_flag = GAME_RULE_gain_2_percent_invest } set_temp_variable = { percent_change = -2.50 } }
+		else = { set_temp_variable = { percent_change = -1.50 } }
+		set_temp_variable = { tag_index = THIS.id }
+		set_temp_variable = { influence_target = project_target_country^project }
+		change_influence_percentage = yes
+	}
+	eon_investment_lifecycle_cancel_project = yes
+}
+
+# State scope, PREV investor. Verify the actual native building level delta.
+eon_investment_lifecycle_native_build = {
+	if = { limit = { PREV = { check_variable = { project_building_type^project = 1 } } }
+		set_temp_variable = { eon_project_build_before = building_level@industrial_complex }
+		add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@industrial_complex > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 2 } } }
+		set_temp_variable = { eon_project_build_before = building_level@arms_factory }
+		add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@arms_factory > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 3 } } }
+		set_temp_variable = { eon_project_build_before = building_level@dockyard }
+		add_building_construction = { type = dockyard level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@dockyard > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 4 } } }
+		set_temp_variable = { eon_project_build_before = building_level@infrastructure }
+		add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@infrastructure > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 5 } } }
+		set_temp_variable = { eon_project_build_before = building_level@offices }
+		add_building_construction = { type = offices level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@offices > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 6 } } }
+		set_temp_variable = { eon_project_build_before = building_level@anti_air_building }
+		add_building_construction = { type = anti_air_building level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@anti_air_building > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 7 } } }
+		set_temp_variable = { eon_project_build_before = building_level@radar_station }
+		add_building_construction = { type = radar_station level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@radar_station > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 8 } } }
+		set_temp_variable = { eon_project_build_before = building_level@air_base }
+		add_building_construction = { type = air_base level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@air_base > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 9 } } }
+		set_temp_variable = { eon_project_build_before = building_level@fuel_silo }
+		add_building_construction = { type = fuel_silo level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@fuel_silo > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 10 } } }
+		set_temp_variable = { eon_project_build_before = building_level@internet_station }
+		add_building_construction = { type = internet_station level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@internet_station > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 11 } } }
+		set_temp_variable = { eon_project_build_before = building_level@synthetic_refinery }
+		add_building_construction = { type = synthetic_refinery level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@synthetic_refinery > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 12 } } }
+		set_temp_variable = { eon_project_build_before = building_level@fossil_powerplant }
+		add_building_construction = { type = fossil_powerplant level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@fossil_powerplant > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 13 } } }
+		set_temp_variable = { eon_project_build_before = building_level@nuclear_reactor }
+		add_building_construction = { type = nuclear_reactor level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@nuclear_reactor > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 14 } } }
+		set_temp_variable = { eon_project_build_before = building_level@agriculture_district }
+		add_building_construction = { type = agriculture_district level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@agriculture_district > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+	else_if = { limit = { PREV = { check_variable = { project_building_type^project = 15 } } }
+		set_temp_variable = { eon_project_build_before = building_level@rubber_refinery }
+		add_building_construction = { type = rubber_refinery level = 1 instant_build = yes }
+		if = { limit = { check_variable = { building_level@rubber_refinery > eon_project_build_before } } set_temp_variable = { PREV.eon_project_build_result = 1 } }
+	}
+}
+
+# Keep the inherited 75:corruption weighting, but record loss once in this
+# project's own advance. Never debit an unrelated operating portfolio/event.
+eon_investment_lifecycle_try_build = {
+	random_list = {
+		75 = { eon_investment_lifecycle_native_build = yes }
+		0 = {
+			modifier = { add = 5 CONTROLLER = { has_idea = widespread_corruption } }
+			modifier = { add = 10 CONTROLLER = { has_idea = systematic_corruption } }
+			modifier = { add = 15 CONTROLLER = { has_idea = unrestrained_corruption } }
+			modifier = { add = 20 CONTROLLER = { has_idea = rampant_corruption } }
+			modifier = { add = 20 CONTROLLER = { has_idea = crippling_corruption } }
+			modifier = { add = 25 CONTROLLER = { has_idea = paralyzing_corruption } }
+			set_temp_variable = { PREV.eon_project_build_result = -1 }
+		}
+	}
+}
+
+eon_investment_lifecycle_complete_unit = {
+	# Clock guard stops early or duplicate completion callbacks.
+	if = { limit = { check_variable = { eon_project_protocol^project = 24 } check_variable = { project_array^project < 0 } check_variable = { var = eon_project_days_remaining^project value = 0 compare = less_than_or_equals } check_variable = { eon_project_paused^project = 0 } }
+		if = { limit = { eon_investment_lifecycle_execution_allowed = yes }
+			set_temp_variable = { eon_project_build_result = 0 }
+			var:project_array^project = { eon_investment_lifecycle_try_build = yes }
+			if = { limit = { NOT = { check_variable = { eon_project_build_result = 0 } } }
+				# Use the exact last residual to avoid rounding money into existence.
+				set_temp_variable = { eon_project_spent_principal = eon_project_unit_cost^project }
+				set_temp_variable = { eon_project_spent_contribution = eon_project_unit_cofunding^project }
+				if = { limit = { check_variable = { project_build_amount^project = 1 } }
+					set_temp_variable = { eon_project_spent_principal = project_monetary_cost^project }
+					set_temp_variable = { eon_project_spent_contribution = eon_project_cofunding_remaining^project }
+				}
+				subtract_from_variable = { project_monetary_cost^project = eon_project_spent_principal }
+				subtract_from_variable = { eon_construction_capital = eon_project_spent_principal }
+				clamp_variable = { var = project_monetary_cost^project min = 0 }
+				clamp_variable = { var = eon_construction_capital min = 0 }
+				subtract_from_variable = { eon_project_cofunding_remaining^project = eon_project_spent_contribution }
+				clamp_variable = { var = eon_project_cofunding_remaining^project min = 0 }
+				var:eon_project_cofinancer^project = {
+					subtract_from_variable = { eon_construction_contributions = PREV.eon_project_spent_contribution }
+					clamp_variable = { var = eon_construction_contributions min = 0 }
+					add_to_variable = { eon_investment_contribution_spent = PREV.eon_project_spent_contribution }
+				}
+				if = { limit = { check_variable = { eon_project_build_result = 1 } }
+					add_to_variable = { int_investments = eon_project_spent_principal }
+					add_to_variable = { eon_project_built^project = 1 }
+					var:project_target_country^project = { add_opinion_modifier = { target = PREV modifier = AC_construction_opinion4 } }
+				}
+				else = {
+					add_to_variable = { eon_project_lost^project = 1 }
+					add_to_variable = { eon_investment_construction_losses = eon_project_spent_principal }
+					var:eon_project_cofinancer^project = { add_to_variable = { eon_investment_contribution_losses = PREV.eon_project_spent_contribution } }
+					country_event = { id = eon_investment_lifecycle.7 }
+					var:project_target_country^project = { country_event = { id = eon_investment_lifecycle.7 } }
+				}
+				add_to_variable = { project_build_amount^project = -1 }
+				if = { limit = { check_variable = { project_build_amount^project > 0 } }
+					set_variable = { eon_project_days_remaining^project = project_construction_duration^project }
+				}
+				else = {
+					if = { limit = { check_variable = { eon_project_lost^project = 0 } }
+						country_event = { id = eon_investment_lifecycle.4 }
+						var:project_target_country^project = { country_event = { id = eon_investment_lifecycle.4 } }
+					}
+					else = {
+						country_event = { id = eon_investment_lifecycle.8 }
+						var:project_target_country^project = { country_event = { id = eon_investment_lifecycle.8 } }
+					}
+					eon_investment_lifecycle_release_project = yes
+				}
+			}
+			else = {
+				# Native build did not change a level: keep all money and retry later.
+				set_variable = { eon_project_paused^project = 2 }
+				set_variable = { eon_project_retry_days^project = 7 }
+				country_event = { id = eon_investment_lifecycle.6 }
+				var:project_target_country^project = { country_event = { id = eon_investment_lifecycle.6 } }
+			}
+		}
+		else = { set_variable = { eon_project_paused^project = 1 } eon_investment_lifecycle_notify_paused = yes }
+	}
+}
+
+# Preserve any UI/event project selection across a daily iterator. Named loop
+# temporaries cannot be clobbered by nested state cleanup loops.
+eon_investment_lifecycle_daily_update = {
+	eon_investment_lifecycle_settle_refund_claim = yes
+	set_temp_variable = { eon_project_had_selection = 0 }
+	if = { limit = { has_variable = project } set_temp_variable = { eon_project_had_selection = 1 } set_temp_variable = { eon_project_saved_selection = project } }
+	set_temp_variable = { eon_project_daily_break = 0 }
+	for_each_loop = {
+		array = project_array value = eon_project_daily_state index = eon_project_daily_index break = eon_project_daily_break
+		set_variable = { project = eon_project_daily_index }
+		if = { limit = { check_variable = { eon_project_protocol^project = 24 } check_variable = { project_array^project < 0 } }
+			if = { limit = { eon_investment_lifecycle_execution_allowed = yes }
+				if = { limit = { check_variable = { eon_project_paused^project = 1 } }
+					set_variable = { eon_project_paused^project = 0 }
+					eon_investment_lifecycle_notify_resumed = yes
+				}
+				if = { limit = { check_variable = { eon_project_paused^project = 2 } }
+					add_to_variable = { eon_project_retry_days^project = -1 }
+					if = { limit = { check_variable = { var = eon_project_retry_days^project value = 0 compare = less_than_or_equals } }
+						set_variable = { eon_project_paused^project = 0 }
+						eon_investment_lifecycle_notify_resumed = yes
+					}
+				}
+				if = { limit = { check_variable = { eon_project_paused^project = 0 } }
+					add_to_variable = { eon_project_days_remaining^project = -1 }
+					eon_investment_lifecycle_complete_unit = yes
+				}
+			}
+			else_if = { limit = { NOT = { check_variable = { eon_project_paused^project = 1 } } }
+				set_variable = { eon_project_paused^project = 1 }
+				eon_investment_lifecycle_notify_paused = yes
+			}
+		}
+	}
+	if = { limit = { check_variable = { eon_project_had_selection = 1 } } set_variable = { project = eon_project_saved_selection } }
+	else = { clear_variable = project }
+}
+
+# No asset is assigned to an annexer by inference. Remaining donor funds become
+# a recorded claim if its tag vanishes; the original cofinancer receives its own
+# residual only. Daily update settles a known claim when its same tag exists.
+eon_investment_lifecycle_cancel_annexed_donor = {
+	set_country_flag = eon_investment_lifecycle_annexing
+	set_temp_variable = { eon_project_annex_break = 0 }
+	for_each_loop = {
+		array = project_array value = eon_project_annex_state index = eon_project_annex_index break = eon_project_annex_break
+		set_variable = { project = eon_project_annex_index }
+		eon_investment_lifecycle_cancel_project = yes
+	}
+	clear_variable = project
+	clr_country_flag = eon_investment_lifecycle_annexing
 }

@@ -1173,28 +1173,8 @@ on_actions = {
 		}
 	}
 
-	on_monthly = {
-		effect = {
-			if = {
-				limit = { check_variable = { energy_balance < -1 } }
-				every_other_country = {
-					set_temp_variable = { eon_energy_pair_partner = ROOT }
-					eon_energy_read_pair_record = yes
-					if = {
-						limit = {
-							check_variable = { eon_energy_current_count > 0 }
-							check_variable = { eon_energy_current_amount > 0 }
-						}
-						# The deficient supplier ends both delivery and payment records.
-						ROOT = {
-							set_temp_variable = { eon_energy_pair_partner = PREV }
-							eon_energy_end_pair = yes
-						}
-					}
-				}
-			}
-		}
-	}
+	# Electricity shortages reduce daily actual deliveries proportionally.
+	# Contract terms survive and recover; no monthly blanket export cancellation.
 	on_daily = {
 		effect = {
 			if = {

@@ -33,7 +33,7 @@ scripted_gui = {
 		dirty = global.refresh_gui
 
 		visible = {
-			NOT = { is_controlled_by = ROOT }
+			OR = { NOT = { is_controlled_by = ROOT } eon_investment_lifecycle_own_state_project = yes }
 			ROOT = { has_country_flag = AC_hide_investment_window }
 		}
 
@@ -54,7 +54,7 @@ scripted_gui = {
 		dirty = global.refresh_gui
 
 		visible = {
-			NOT = { is_controlled_by = ROOT }
+			OR = { NOT = { is_controlled_by = ROOT } eon_investment_lifecycle_own_state_project = yes }
 			ROOT = { NOT = { has_country_flag = AC_hide_investment_window } }
 		}
 
@@ -102,27 +102,36 @@ scripted_gui = {
 						country_event = { id = AC_event.3 }
 					}
 				}
-				else_if = { limit = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } }
+				else_if = { limit = {
+					is_in_array = { array = THIS.projects_in_state value = ROOT.id }
+					has_variable = project_target_state_@ROOT
+					check_variable = { ROOT.project_array^THIS.project_target_state_@ROOT = id }
+				}
 					ROOT = {
 						set_variable = { project = PREV.project_target_state_@ROOT }
-						end_project = yes
-						refresh_gui = yes
-						if = { limit = { has_global_flag = GAME_RULE_gain_0_5_percent_invest }
-							set_temp_variable = { percent_change = -1.0 }
-						}
-						else_if = { limit = { has_global_flag = GAME_RULE_gain_2_percent_invest }
-							set_temp_variable = { percent_change = -2.50 }
+						if = { limit = { check_variable = { eon_project_protocol^project = 24 } }
+							eon_investment_lifecycle_cancel_voluntary = yes
 						}
 						else = {
-							set_temp_variable = { percent_change = -1.50 }
-						}
-						set_temp_variable = { tag_index = ROOT.id }
-						PREV = {
-							CONTROLLER = {
-								set_temp_variable = { influence_target = THIS.id }
+							end_project = yes
+							refresh_gui = yes
+							if = { limit = { has_global_flag = GAME_RULE_gain_0_5_percent_invest }
+								set_temp_variable = { percent_change = -1.0 }
 							}
+							else_if = { limit = { has_global_flag = GAME_RULE_gain_2_percent_invest }
+								set_temp_variable = { percent_change = -2.50 }
+							}
+							else = {
+								set_temp_variable = { percent_change = -1.50 }
+							}
+							set_temp_variable = { tag_index = ROOT.id }
+							PREV = {
+								CONTROLLER = {
+									set_temp_variable = { influence_target = THIS.id }
+								}
+							}
+							change_influence_percentage = yes
 						}
-						change_influence_percentage = yes
 					}
 				}
 			}
@@ -408,6 +417,8 @@ scripted_gui = {
 		triggers = {
 			# Build Button Click Enabled
 			AC_build_button_click_enabled = {
+				if = { limit = { eon_investment_lifecycle_own_state_project = yes } always = yes }
+				else = {
 				hidden_trigger = {
 					PREV = { CONTROLLER = { NOT = { tag = ROOT } } }
 				}
@@ -489,6 +500,7 @@ scripted_gui = {
 				custom_trigger_tooltip = {
 					tooltip = int_auto_reject_investment_flag_tt
 					PREV = { CONTROLLER = { NOT = { has_country_flag = int_auto_reject_investment_flag } } }
+				}
 				}
 			}
 

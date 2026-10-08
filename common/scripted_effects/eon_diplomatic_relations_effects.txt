@@ -1,0 +1,332 @@
+# Pair frame: THIS record owner / PREV partner, never native acceptance callbacks.
+eon_diplomatic_relations_status_notice = { custom_effect_tooltip = eon_diplomatic_relations_status_info_tt }
+eon_diplomatic_relations_track_pair = {
+ if = { limit = { NOT = { is_in_array = { array = eon_diplomatic_relations_partners value = PREV } } } add_to_array = { array = eon_diplomatic_relations_partners value = PREV } }
+ PREV = { if = { limit = { NOT = { is_in_array = { array = eon_diplomatic_relations_partners value = PREV } } } add_to_array = { array = eon_diplomatic_relations_partners value = PREV } } }
+}
+eon_diplomatic_relations_clear_out_local = {
+ clr_country_flag = eon_diplomatic_relations_out_pending@PREV
+ clr_country_flag = eon_diplomatic_relations_out_window@PREV
+ clear_variable = eon_diplomatic_relations_out_kind@PREV
+ clear_variable = eon_diplomatic_relations_out_level@PREV
+ clear_variable = eon_diplomatic_relations_out_head@PREV
+}
+eon_diplomatic_relations_clear_in_local = {
+ clr_country_flag = eon_diplomatic_relations_in_pending@PREV
+ clr_country_flag = eon_diplomatic_relations_in_window@PREV
+ clear_variable = eon_diplomatic_relations_in_kind@PREV
+ clear_variable = eon_diplomatic_relations_in_level@PREV
+ clear_variable = eon_diplomatic_relations_in_head@PREV
+}
+eon_diplomatic_relations_clear_out_pair = {
+ set_temp_variable = { eon_diplomatic_relations_copy_kind = eon_diplomatic_relations_out_kind@PREV }
+ set_temp_variable = { eon_diplomatic_relations_copy_level = eon_diplomatic_relations_out_level@PREV }
+ set_temp_variable = { eon_diplomatic_relations_copy_head = eon_diplomatic_relations_out_head@PREV }
+ PREV = {
+  if = {
+   limit = {
+    has_country_flag = eon_diplomatic_relations_in_pending@PREV
+    check_variable = { eon_diplomatic_relations_in_kind@PREV = PREV.eon_diplomatic_relations_copy_kind }
+    check_variable = { eon_diplomatic_relations_in_level@PREV = PREV.eon_diplomatic_relations_copy_level }
+    check_variable = { eon_diplomatic_relations_in_head@PREV = PREV.eon_diplomatic_relations_copy_head }
+   }
+   eon_diplomatic_relations_clear_in_local = yes
+  }
+ }
+ eon_diplomatic_relations_clear_out_local = yes
+}
+# Sender's literal decision selects kind/level. A monotonically increasing own
+# serial names an abstract appointment, never an invented named human character.
+eon_diplomatic_relations_dispatch = {
+ eon_diplomatic_relations_track_pair = yes
+ set_variable = { eon_diplomatic_relations_out_kind@PREV = eon_diplomatic_relations_selected_kind }
+ set_variable = { eon_diplomatic_relations_out_level@PREV = eon_diplomatic_relations_selected_level }
+ set_temp_variable = { eon_diplomatic_relations_selected_head = 0 }
+ if = {
+  limit = { check_variable = { eon_diplomatic_relations_selected_kind = 3 } }
+  add_to_variable = { eon_diplomatic_relations_head_counter = 1 }
+  set_temp_variable = { eon_diplomatic_relations_selected_head = eon_diplomatic_relations_head_counter }
+ }
+ set_variable = { eon_diplomatic_relations_out_head@PREV = eon_diplomatic_relations_selected_head }
+ set_country_flag = eon_diplomatic_relations_out_pending@PREV
+ set_country_flag = { flag = eon_diplomatic_relations_out_window@PREV days = 30 value = 1 }
+ PREV = {
+  set_variable = { eon_diplomatic_relations_in_kind@PREV = PREV.eon_diplomatic_relations_selected_kind }
+  set_variable = { eon_diplomatic_relations_in_level@PREV = PREV.eon_diplomatic_relations_selected_level }
+  set_variable = { eon_diplomatic_relations_in_head@PREV = PREV.eon_diplomatic_relations_selected_head }
+  set_country_flag = eon_diplomatic_relations_in_pending@PREV
+  set_country_flag = { flag = eon_diplomatic_relations_in_window@PREV days = 30 value = 1 }
+  country_event = { id = eon_diplomatic_relations_notice.1 }
+ }
+}
+eon_diplomatic_relations_propose_relations = {
+ if = { limit = { eon_diplomatic_relations_relations_proposal_ready = yes }
+  set_temp_variable = { eon_diplomatic_relations_selected_kind = 1 }
+  set_temp_variable = { eon_diplomatic_relations_selected_level = 0 }
+  eon_diplomatic_relations_dispatch = yes
+ }
+}
+eon_diplomatic_relations_propose_mission = {
+ if = { limit = { eon_diplomatic_relations_mission_proposal_ready = yes }
+  set_temp_variable = { eon_diplomatic_relations_selected_kind = 2 }
+  eon_diplomatic_relations_dispatch = yes
+ }
+}
+eon_diplomatic_relations_propose_head = {
+ if = { limit = { eon_diplomatic_relations_head_proposal_ready = yes }
+  set_temp_variable = { eon_diplomatic_relations_selected_kind = 3 }
+  set_temp_variable = { eon_diplomatic_relations_selected_level = eon_diplomatic_relations_mission_level@PREV }
+  eon_diplomatic_relations_dispatch = yes
+ }
+}
+eon_diplomatic_relations_mark_departure = {
+ # A recorded duty, not proof of transport, evacuation or physical departure.
+ add_to_variable = { eon_diplomatic_relations_departure_counter = 1 }
+ set_temp_variable = { eon_diplomatic_relations_departure_head = eon_diplomatic_relations_active_head@PREV }
+ if = { limit = { check_variable = { eon_diplomatic_relations_departure_head = 0 } } set_temp_variable = { eon_diplomatic_relations_departure_head = eon_diplomatic_relations_approved_head@PREV } }
+ add_to_array = { array = eon_diplomatic_relations_departure_partners value = PREV }
+ add_to_array = { array = eon_diplomatic_relations_departure_records value = eon_diplomatic_relations_departure_counter }
+ add_to_array = { array = eon_diplomatic_relations_departure_heads value = eon_diplomatic_relations_departure_head }
+ add_to_variable = { eon_diplomatic_relations_departure_count@PREV = 1 }
+ if = { limit = { NOT = { has_country_flag = eon_diplomatic_relations_departure_outstanding@PREV } }
+  set_variable = { eon_diplomatic_relations_current_departure@PREV = eon_diplomatic_relations_departure_counter }
+  set_variable = { eon_diplomatic_relations_current_departure_head@PREV = eon_diplomatic_relations_departure_head }
+  clr_country_flag = eon_diplomatic_relations_exit_facilities_ack@PREV
+  clear_variable = eon_diplomatic_relations_exit_ack_record@PREV
+  set_variable = { eon_diplomatic_relations_departure_record@PREV = 1 }
+ }
+ set_country_flag = eon_diplomatic_relations_departure_outstanding@PREV
+ clr_country_flag = eon_diplomatic_relations_departure_reported@PREV
+ PREV = { country_event = { id = eon_diplomatic_relations_notice.3 } }
+}
+eon_diplomatic_relations_refresh_departure = {
+ clear_variable = eon_diplomatic_relations_current_departure@PREV
+ clear_variable = eon_diplomatic_relations_current_departure_head@PREV
+ clear_variable = eon_diplomatic_relations_departure_count@PREV
+ set_temp_variable = { eon_diplomatic_relations_departure_peer = PREV }
+ for_each_loop = { array = eon_diplomatic_relations_departure_partners value = eon_diplomatic_relations_departure_partner index = eon_diplomatic_relations_departure_index
+  if = { limit = { check_variable = { eon_diplomatic_relations_departure_partner = eon_diplomatic_relations_departure_peer } }
+   add_to_variable = { eon_diplomatic_relations_departure_count@PREV = 1 }
+   if = { limit = { check_variable = { eon_diplomatic_relations_current_departure@PREV = 0 } }
+    set_variable = { eon_diplomatic_relations_current_departure@PREV = eon_diplomatic_relations_departure_records^eon_diplomatic_relations_departure_index }
+    set_variable = { eon_diplomatic_relations_current_departure_head@PREV = eon_diplomatic_relations_departure_heads^eon_diplomatic_relations_departure_index }
+   }
+  }
+ }
+ clr_country_flag = eon_diplomatic_relations_exit_facilities_ack@PREV
+ clear_variable = eon_diplomatic_relations_exit_ack_record@PREV
+ if = { limit = { check_variable = { eon_diplomatic_relations_current_departure@PREV > 0 } }
+  set_country_flag = eon_diplomatic_relations_departure_outstanding@PREV
+  set_variable = { eon_diplomatic_relations_departure_record@PREV = 1 }
+ }
+ else = {
+  clr_country_flag = eon_diplomatic_relations_departure_outstanding@PREV
+  set_country_flag = eon_diplomatic_relations_departure_reported@PREV
+  set_variable = { eon_diplomatic_relations_departure_record@PREV = 3 }
+ }
+}
+eon_diplomatic_relations_recall_head = {
+ if = { limit = { eon_diplomatic_relations_recall_ready = yes }
+  eon_diplomatic_relations_mark_departure = yes
+  clear_variable = eon_diplomatic_relations_active_head@PREV
+  set_country_flag = eon_diplomatic_relations_interim_charge@PREV
+  PREV = { country_event = { id = eon_diplomatic_relations_notice.2 } }
+ }
+}
+eon_diplomatic_relations_accept_response = {
+ if = { limit = { eon_diplomatic_relations_response_ready = yes }
+  # Preserve incoming immutable terms in scoped temporaries before consuming.
+  set_temp_variable = { eon_diplomatic_relations_commit_kind = eon_diplomatic_relations_in_kind@PREV }
+  set_temp_variable = { eon_diplomatic_relations_commit_level = eon_diplomatic_relations_in_level@PREV }
+  set_temp_variable = { eon_diplomatic_relations_commit_head = eon_diplomatic_relations_in_head@PREV }
+  PREV = { eon_diplomatic_relations_clear_out_pair = yes }
+  if = { limit = { check_variable = { eon_diplomatic_relations_commit_kind = 1 } }
+   clr_country_flag = eon_diplomatic_relations_broken@PREV
+   set_country_flag = eon_diplomatic_relations_established@PREV
+   set_variable = { eon_diplomatic_relations_relation_record@PREV = 1 }
+   remove_opinion_modifier = { target = PREV modifier = no_diplomatic_ties } set_country_flag = eon_diplomatic_relations_legacy_known@PREV clr_country_flag = eon_diplomatic_relations_legacy_no_ties@PREV
+   PREV = {
+    clr_country_flag = eon_diplomatic_relations_broken@PREV
+    set_country_flag = eon_diplomatic_relations_established@PREV
+    set_variable = { eon_diplomatic_relations_relation_record@PREV = 1 }
+    remove_opinion_modifier = { target = PREV modifier = no_diplomatic_ties } set_country_flag = eon_diplomatic_relations_legacy_known@PREV clr_country_flag = eon_diplomatic_relations_legacy_no_ties@PREV
+   }
+  }
+  else_if = { limit = { check_variable = { eon_diplomatic_relations_commit_kind = 2 } }
+   PREV = {
+    if = { limit = { check_variable = { eon_diplomatic_relations_mission_level@PREV = 0 } } add_to_variable = { eon_diplomatic_relations_mission_count = 1 } clr_country_flag = eon_diplomatic_relations_interim_charge@PREV }
+    else = { set_country_flag = eon_diplomatic_relations_interim_charge@PREV }
+    if = { limit = { check_variable = { eon_diplomatic_relations_active_head@PREV > 0 } } eon_diplomatic_relations_mark_departure = yes }
+    add_political_power = -10
+    if = { limit = { check_variable = { PREV.eon_diplomatic_relations_commit_level = 1 } } add_to_variable = { treasury = -0.01 } }
+    else = { add_to_variable = { treasury = -0.02 } }
+    set_variable = { eon_diplomatic_relations_mission_level@PREV = PREV.eon_diplomatic_relations_commit_level }
+    clear_variable = eon_diplomatic_relations_active_head@PREV
+    clear_variable = eon_diplomatic_relations_approved_head@PREV
+    clear_variable = eon_diplomatic_relations_approved_level@PREV
+    clr_country_flag = eon_diplomatic_relations_agrement@PREV
+    PREV = { clear_variable = eon_diplomatic_relations_host_approved_head@PREV clear_variable = eon_diplomatic_relations_host_approved_level@PREV }
+    clr_country_flag = eon_diplomatic_relations_protected_closed@PREV
+    clear_variable = eon_diplomatic_relations_protection_record@PREV
+   }
+  }
+  else_if = { limit = { check_variable = { eon_diplomatic_relations_commit_kind = 3 } }
+   set_variable = { eon_diplomatic_relations_host_approved_head@PREV = eon_diplomatic_relations_commit_head }
+   set_variable = { eon_diplomatic_relations_host_approved_level@PREV = eon_diplomatic_relations_commit_level }
+   PREV = { set_country_flag = eon_diplomatic_relations_agrement@PREV set_variable = { eon_diplomatic_relations_approved_head@PREV = PREV.eon_diplomatic_relations_commit_head } set_variable = { eon_diplomatic_relations_approved_level@PREV = PREV.eon_diplomatic_relations_commit_level } }
+  }
+  PREV = { country_event = { id = eon_diplomatic_relations_notice.2 } }
+ }
+}
+eon_diplomatic_relations_decline_response = {
+ if = { limit = { eon_diplomatic_relations_response_current = yes } PREV = { eon_diplomatic_relations_clear_out_pair = yes country_event = { id = eon_diplomatic_relations_notice.2 } } }
+}
+eon_diplomatic_relations_withdraw_request = {
+ if = { limit = { eon_diplomatic_relations_outgoing_present = yes } eon_diplomatic_relations_clear_out_pair = yes PREV = { country_event = { id = eon_diplomatic_relations_notice.2 } } }
+}
+eon_diplomatic_relations_activate_credentials = {
+ if = { limit = { eon_diplomatic_relations_credentials_ready = yes }
+  if = { limit = { check_variable = { eon_diplomatic_relations_active_head@PREV > 0 } } eon_diplomatic_relations_mark_departure = yes }
+  set_variable = { eon_diplomatic_relations_active_head@PREV = eon_diplomatic_relations_approved_head@PREV }
+  clear_variable = eon_diplomatic_relations_approved_head@PREV
+  clear_variable = eon_diplomatic_relations_approved_level@PREV
+  clr_country_flag = eon_diplomatic_relations_agrement@PREV
+  PREV = { clear_variable = eon_diplomatic_relations_host_approved_head@PREV clear_variable = eon_diplomatic_relations_host_approved_level@PREV }
+  clr_country_flag = eon_diplomatic_relations_interim_charge@PREV
+  # Uniform game practice: arrival notice and credential copy delivered to MFA.
+  set_country_flag = eon_diplomatic_relations_credentials_copy_notified@PREV
+  PREV = { country_event = { id = eon_diplomatic_relations_notice.2 } }
+ }
+}
+eon_diplomatic_relations_persona_non_grata = {
+ if = { limit = { eon_diplomatic_relations_png_ready = yes }
+  PREV = {
+   eon_diplomatic_relations_mark_departure = yes
+   clear_variable = eon_diplomatic_relations_active_head@PREV
+   set_country_flag = eon_diplomatic_relations_interim_charge@PREV
+   # Another person's pending or approved appointment remains independent.
+   country_event = { id = eon_diplomatic_relations_notice.2 }
+  }
+ }
+}
+eon_diplomatic_relations_persona_non_grata_approved = {
+ if = { limit = { eon_diplomatic_relations_png_approved_ready = yes }
+  PREV = {
+   # Agrément alone has not established arrival. No departure duty is invented.
+   clear_variable = eon_diplomatic_relations_approved_head@PREV
+   clear_variable = eon_diplomatic_relations_approved_level@PREV
+   clr_country_flag = eon_diplomatic_relations_agrement@PREV
+   country_event = { id = eon_diplomatic_relations_notice.2 }
+  }
+  clear_variable = eon_diplomatic_relations_host_approved_head@PREV
+  clear_variable = eon_diplomatic_relations_host_approved_level@PREV
+ }
+}
+# Internal close is also usable after war/legacy-policy changes or annexation.
+eon_diplomatic_relations_close_mission_local = {
+ if = { limit = { check_variable = { eon_diplomatic_relations_mission_level@PREV > 0 } }
+  eon_diplomatic_relations_mark_departure = yes
+  set_country_flag = eon_diplomatic_relations_protected_closed@PREV
+  set_variable = { eon_diplomatic_relations_protection_record@PREV = 1 }
+  clear_variable = eon_diplomatic_relations_mission_level@PREV
+  clear_variable = eon_diplomatic_relations_active_head@PREV
+  clear_variable = eon_diplomatic_relations_approved_head@PREV
+  clear_variable = eon_diplomatic_relations_approved_level@PREV
+  clr_country_flag = eon_diplomatic_relations_agrement@PREV
+  PREV = { clear_variable = eon_diplomatic_relations_host_approved_head@PREV clear_variable = eon_diplomatic_relations_host_approved_level@PREV }
+  clr_country_flag = eon_diplomatic_relations_interim_charge@PREV
+  clr_country_flag = eon_diplomatic_relations_credentials_copy_notified@PREV
+  subtract_from_variable = { eon_diplomatic_relations_mission_count = 1 }
+  clamp_variable = { var = eon_diplomatic_relations_mission_count min = 0 }
+ }
+ if = { limit = { OR = { check_variable = { eon_diplomatic_relations_out_kind@PREV = 2 } check_variable = { eon_diplomatic_relations_out_kind@PREV = 3 } } } eon_diplomatic_relations_clear_out_pair = yes }
+}
+eon_diplomatic_relations_close_mission = { if = { limit = { eon_diplomatic_relations_close_ready = yes } eon_diplomatic_relations_close_mission_local = yes } }
+eon_diplomatic_relations_close_host_mission = { if = { limit = { eon_diplomatic_relations_close_host_ready = yes } PREV = { eon_diplomatic_relations_close_mission_local = yes } } }
+eon_diplomatic_relations_break_relations = {
+ if = { limit = { eon_diplomatic_relations_break_ready = yes }
+  eon_diplomatic_relations_track_pair = yes
+  eon_diplomatic_relations_clear_out_pair = yes
+  eon_diplomatic_relations_close_mission_local = yes
+  clr_country_flag = eon_diplomatic_relations_established@PREV
+  set_country_flag = eon_diplomatic_relations_broken@PREV
+  set_variable = { eon_diplomatic_relations_relation_record@PREV = 2 }
+  if = { limit = { NOT = { eon_diplomatic_relations_legacy_pair_active = yes } } add_opinion_modifier = { target = PREV modifier = no_diplomatic_ties } set_country_flag = eon_diplomatic_relations_legacy_known@PREV set_country_flag = eon_diplomatic_relations_legacy_no_ties@PREV }
+  PREV = {
+   eon_diplomatic_relations_clear_out_pair = yes
+   eon_diplomatic_relations_close_mission_local = yes
+   clr_country_flag = eon_diplomatic_relations_established@PREV
+   set_country_flag = eon_diplomatic_relations_broken@PREV
+   set_variable = { eon_diplomatic_relations_relation_record@PREV = 2 }
+   if = { limit = { NOT = { eon_diplomatic_relations_legacy_pair_active = yes } } add_opinion_modifier = { target = PREV modifier = no_diplomatic_ties } set_country_flag = eon_diplomatic_relations_legacy_known@PREV set_country_flag = eon_diplomatic_relations_legacy_no_ties@PREV }
+   country_event = { id = eon_diplomatic_relations_notice.2 }
+  }
+ }
+}
+eon_diplomatic_relations_ack_exit_facilities = {
+ if = { limit = { eon_diplomatic_relations_exit_facilities_ready = yes } PREV = { set_country_flag = eon_diplomatic_relations_exit_facilities_ack@PREV set_variable = { eon_diplomatic_relations_departure_record@PREV = 2 } set_variable = { eon_diplomatic_relations_exit_ack_record@PREV = eon_diplomatic_relations_current_departure@PREV } country_event = { id = eon_diplomatic_relations_notice.3 } } }
+}
+eon_diplomatic_relations_report_departure = {
+ if = { limit = { eon_diplomatic_relations_departure_report_ready = yes }
+  set_temp_variable = { eon_diplomatic_relations_report_record = eon_diplomatic_relations_current_departure@PREV }
+  set_temp_variable = { eon_diplomatic_relations_report_index = -1 }
+  for_each_loop = { array = eon_diplomatic_relations_departure_records value = eon_diplomatic_relations_departure_value index = eon_diplomatic_relations_departure_index
+   if = { limit = { check_variable = { eon_diplomatic_relations_departure_value = eon_diplomatic_relations_report_record } } set_temp_variable = { eon_diplomatic_relations_report_index = eon_diplomatic_relations_departure_index } }
+  }
+  if = { limit = { check_variable = { var = eon_diplomatic_relations_report_index value = 0 compare = greater_than_or_equals } }
+   add_to_array = { array = eon_diplomatic_relations_reported_departures value = eon_diplomatic_relations_report_record }
+   remove_from_array = { array = eon_diplomatic_relations_departure_partners index = eon_diplomatic_relations_report_index }
+   remove_from_array = { array = eon_diplomatic_relations_departure_records index = eon_diplomatic_relations_report_index }
+   remove_from_array = { array = eon_diplomatic_relations_departure_heads index = eon_diplomatic_relations_report_index }
+   eon_diplomatic_relations_refresh_departure = yes
+  }
+  PREV = { country_event = { id = eon_diplomatic_relations_notice.3 } }
+ }
+}
+eon_diplomatic_relations_daily_pair = {
+ if = { limit = { has_country_flag = eon_diplomatic_relations_out_pending@PREV }
+  if = {
+   limit = { OR = { NOT = { has_country_flag = eon_diplomatic_relations_out_window@PREV } NOT = { eon_diplomatic_relations_pair_peace = yes } } }
+   eon_diplomatic_relations_clear_out_pair = yes
+  }
+ }
+ if = { limit = { has_country_flag = eon_diplomatic_relations_in_pending@PREV }
+  if = { limit = { OR = { NOT = { has_country_flag = eon_diplomatic_relations_in_window@PREV } NOT = { eon_diplomatic_relations_response_current = yes } NOT = { eon_diplomatic_relations_pair_peace = yes } } } eon_diplomatic_relations_clear_in_local = yes }
+ }
+ if = { limit = { NOT = { eon_diplomatic_relations_relations_available = yes } }
+  eon_diplomatic_relations_close_mission_local = yes
+  # Legacy national no_ties overrides the new receipt without rewriting national histories.
+  if = { limit = { NOT = { eon_diplomatic_relations_relations_state_available = yes } } clr_country_flag = eon_diplomatic_relations_established@PREV clear_variable = eon_diplomatic_relations_relation_record@PREV }
+ }
+}
+eon_diplomatic_relations_daily_update = {
+ # Iterate only tracked own pairs; no worldwide Cartesian scan.
+ for_each_scope_loop = { array = eon_diplomatic_relations_partners PREV = { eon_diplomatic_relations_daily_pair = yes } }
+}
+eon_diplomatic_relations_monthly_pair = {
+ if = { limit = { check_variable = { eon_diplomatic_relations_mission_level@PREV > 0 } }
+  if = { limit = { eon_diplomatic_relations_relations_available = yes }
+   if = { limit = { check_variable = { eon_diplomatic_relations_mission_level@PREV = 1 } check_variable = { var = treasury value = 0.001 compare = greater_than_or_equals } } add_to_variable = { treasury = -0.001 } }
+   else_if = { limit = { check_variable = { eon_diplomatic_relations_mission_level@PREV = 2 } check_variable = { var = treasury value = 0.002 compare = greater_than_or_equals } } add_to_variable = { treasury = -0.002 } }
+   else = { eon_diplomatic_relations_close_mission_local = yes }
+  }
+  else = { eon_diplomatic_relations_close_mission_local = yes }
+ }
+}
+eon_diplomatic_relations_monthly_update = { for_each_scope_loop = { array = eon_diplomatic_relations_partners PREV = { eon_diplomatic_relations_monthly_pair = yes } } }
+eon_diplomatic_relations_annexed_owner = {
+ # Entered on disappearing country before its identities/arrays are discarded.
+ for_each_scope_loop = { array = eon_diplomatic_relations_partners
+  PREV = {
+   eon_diplomatic_relations_clear_out_pair = yes
+   eon_diplomatic_relations_close_mission_local = yes
+   clr_country_flag = eon_diplomatic_relations_established@PREV
+   clr_country_flag = eon_diplomatic_relations_broken@PREV
+   clear_variable = eon_diplomatic_relations_relation_record@PREV
+  }
+  eon_diplomatic_relations_clear_out_pair = yes
+  eon_diplomatic_relations_close_mission_local = yes
+  clr_country_flag = eon_diplomatic_relations_established@PREV
+  clear_variable = eon_diplomatic_relations_relation_record@PREV
+ }
+}
