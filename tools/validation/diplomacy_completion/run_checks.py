@@ -29,6 +29,7 @@ def main():
     sys.stdout.reconfigure(encoding='utf-8')
     sys.stderr.reconfigure(encoding='utf-8')
     reports = {}
+    reports['localisation'] = run('tools/validation/diplomacy_completion/check_localisation.py')
     for number in (24, 25, 26):
         path = f'tools/validation/diplomacy_package_{number}/run_checks.py'
         if not (ROOT / path).is_file():
