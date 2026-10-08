@@ -1,7 +1,9 @@
 """Execute current package26 decision/trigger/effect AST; not an HOI4 campaign.
 
 The strict adapter models country scopes, scoped keys, flags/deadlines and arrays.
-Unknown commands fail. It does not simulate physical diplomats or native AI timing.
+Native10 temporaries are shared within one execution; scoped country reads resolve
+only persistent variables. Unknown commands fail. This does not simulate physical
+diplomats or native AI timing.
 """
 from pathlib import Path
 from copy import deepcopy
@@ -56,6 +58,8 @@ DECISIONS={k:v for k,o,v in definitions(FILES[2])[P+'category']}
 HOOKS={k:v for k,o,v in definitions(FILES[4])['on_actions']}
 EVENTS={dict((k,v) for k,o,v in body)['id']:body for key,op,body in parse((ROOT/FILES[5]).read_text(encoding='utf-8-sig')) if key=='country_event'}
 IDS={name:index+1 for index,name in enumerate(('A','B','C','D','PER','USA','F','G','H','I','J','K'))}
+# Explicit defined peer tags required by the bounded legacy compatibility branches.
+for name in ('GER', 'GRE', 'HEZ', 'IRQ', 'ISR', 'KUR', 'KUW', 'NKO', 'PER', 'SAU', 'TUR', 'USA'):IDS.setdefault(name,len(IDS)+1)
 checks=Counter()
 
 def one(nodes,key):
@@ -76,7 +80,7 @@ def state():
   c['arrays'].update({'energy_contractors':[peer],'energy_contracts_ammount':[32],
    'energy_contracts_price':[0.12],'project_array':[IDS[peer],2,1]})
   c['opinion_modifiers'].add((peer,'historic_friends'))
- result={'countries':countries,'day':0,'events':[],'global_flags':set()}
+ result={'countries':countries,'day':0,'events':[],'global_flags':set(),'execution_temps':{}}
  execute(parse((ROOT/FILES[-1]).read_text(encoding='utf-8-sig')),result,ctx())
  return result
 
@@ -96,6 +100,14 @@ def key(result,context,token):
  name,target=token.split('@',1)
  return name+'@'+str(country_ref(result,context,target))
 
+def flag_key(result,context,token):
+ # Native24: three-letter literal FLAG suffixes stay literal; variables use key().
+ # Single-letter synthetic fixture aliases retain their explicit country binding.
+ if '@' in token:
+  name,target=token.split('@',1)
+  if re.fullmatch(r'[A-Z]{3}',target):return name+'@literal:'+target
+ return key(result,context,token)
+
 def value(result,context,token):
  if token in ('yes','no'):return token=='yes'
  try:return float(token)
@@ -111,17 +123,19 @@ def value(result,context,token):
   scope,field=token.split('.',1)
   peer=country_ref(result,context,scope)
   if field=='id':return IDS[peer]
-  return value(result,switch(context,peer),field)
+  # A country prefix never resolves a shared execution temporary.
+  nested=switch(context,peer)
+  return result['countries'][peer]['variables'].get(key(result,nested,field),0)
  if token in ('THIS','PREV','ROOT','FROM') or token in result['countries']:return country_ref(result,context,token)
  c=result['countries'][context['scope']];name=key(result,context,token)
- return c['temps'].get(name,c['variables'].get(name,0))
+ return result.get('execution_temps',{}).get(name,c['variables'].get(name,0))
 
 def compare(left,operator,right):
  return {'=':lambda:left==right,'!=':lambda:left!=right,'>':lambda:left>right,
   '<':lambda:left<right,'>=':lambda:left>=right,'<=':lambda:left<=right}[operator]()
 
 def hasflag(result,context,name):
- c=result['countries'][context['scope']];name=key(result,context,name)
+ c=result['countries'][context['scope']];name=flag_key(result,context,name)
  return name in c['flags'] and (name not in c['expires'] or result['day']<c['expires'][name])
 
 def condition(nodes,result,context):
@@ -195,7 +209,7 @@ def execute(nodes,result,context):
    assert len(data)==1,('Unexpected variable command',data)
    variable,operator,wanted=data[0];assert operator=='='
    field=key(result,context,variable);amount=value(result,context,wanted)
-   if name=='set_temp_variable':c['temps'][field]=amount
+   if name=='set_temp_variable':result.setdefault('execution_temps',{})[field]=amount
    elif name=='set_variable':c['variables'][field]=amount
    else:c['variables'][field]=round(c['variables'].get(field,0)+amount*(1 if name=='add_to_variable' else -1),6)
   elif name=='clear_variable':c['variables'].pop(key(result,context,data),None)
@@ -205,11 +219,11 @@ def execute(nodes,result,context):
    if 'max' in fields:amount=min(value(result,context,fields['max']),amount)
    c['variables'][field]=amount
   elif name=='set_country_flag':
-   flag=one(data,'flag') if isinstance(data,list) else data;field=key(result,context,flag);c['flags'].add(field)
+   flag=one(data,'flag') if isinstance(data,list) else data;field=flag_key(result,context,flag);c['flags'].add(field)
    if isinstance(data,list):c['expires'][field]=result['day']+value(result,context,one(data,'days'));assert one(data,'value')=='1'
    else:c['expires'].pop(field,None)
   elif name=='set_global_flag':result['global_flags'].add(data)
-  elif name=='clr_country_flag':field=key(result,context,data);c['flags'].discard(field);c['expires'].pop(field,None)
+  elif name=='clr_country_flag':field=flag_key(result,context,data);c['flags'].discard(field);c['expires'].pop(field,None)
   elif name=='add_to_array':c['arrays'].setdefault(one(data,'array'),[]).append(value(result,context,one(data,'value')))
   elif name=='remove_from_array':
    fields={k:v for k,o,v in data};array=c['arrays'].get(fields['array'],[])
@@ -233,7 +247,8 @@ def execute(nodes,result,context):
   elif name=='for_each_loop':
    fields={k:v for k,o,v in data};array=fields['array']
    for ordinal,item in enumerate(list(c['arrays'].get(array,[]))):
-    c['temps'][fields.get('value','v')]=item;c['temps'][fields.get('index','i')]=ordinal
+    shared=result.setdefault('execution_temps',{})
+    shared[fields.get('value','v')]=item;shared[fields.get('index','i')]=ordinal
     execute([n for n in data if n[0] not in ('array','value','index','break')],result,context)
     if fields.get('break') and value(result,context,fields['break']):break
   elif name=='country_event':result['events'].append({'id':one(data,'id'),'scope':context['scope'],'root':context['root'],'from':context['from']})
@@ -246,14 +261,19 @@ def execute(nodes,result,context):
   else:raise AssertionError(('Unknown effect',name,op,data,context))
 
 def decision(result,name,actor='A',peer='B',force=False):
+ result['execution_temps']={}
  body=DECISIONS[P+name];context=ctx(actor,peer)
  ready=all(condition(one(body,field),result,context) for field in ('allowed','target_root_trigger','target_trigger','visible','available'))
- if ready or force:execute(one(body,'complete_effect'),result,context)
+ if ready or force:
+  result['execution_temps']={}
+  execute(one(body,'complete_effect'),result,context)
  return ready
 
-def hook(result,name,actor='A',peer='B'):execute(one(HOOKS[name],'effect'),result,ctx(actor,peer))
+def hook(result,name,actor='A',peer='B'):
+ result['execution_temps']={}
+ execute(one(HOOKS[name],'effect'),result,ctx(actor,peer))
 def var(result,field,actor='A',peer='B'):return result['countries'][actor]['variables'].get(P+field+'@'+peer,0)
-def flag(result,field,actor='A',peer='B'):return hasflag(result,ctx(actor,peer),P+field+'@'+peer)
+def flag(result,field,actor='A',peer='B'):return hasflag(result,ctx(actor,peer)|{'prev':[peer]},P+field+'@PREV')
 def unrelated(result):
  out=deepcopy(result['countries'])
  for c in out.values():
@@ -264,7 +284,7 @@ def unrelated(result):
   c['opinion_modifiers']={item for item in c['opinion_modifiers'] if item[1]!='no_diplomatic_ties'}
  return out
 def stable(result):
- out=deepcopy(result);out.pop('events')
+ out=deepcopy(result);out.pop('events');out['execution_temps']={}
  for c in out['countries'].values():c['temps']={}
  return out
 
@@ -284,7 +304,7 @@ def rehydrate(result):
    if set(obj)=={'__tuple__'}:return tuple(decode(v) for v in obj['__tuple__'])
    return {k:decode(v) for k,v in obj.items()}
   return obj
- durable=deepcopy(result)
+ durable=deepcopy(result);durable['execution_temps']={}
  for c in durable['countries'].values():c['temps']={}
  return decode(json.loads(json.dumps(encode(durable))))
 def assert_(test,group):assert test,group;checks[group]+=1
@@ -301,9 +321,16 @@ def legacy_no_ties(result,actor,peer):
  # Use the actual forward Iran history effect and its immediately following
  # metadata island to represent a late national-policy change in these fixtures.
  history=(ROOT/'history/countries/PER - Iran.txt').read_text(encoding='utf-8-sig')
- prototype=re.search(r'add_opinion_modifier\s*=\s*\{\s*target\s*=\s*USA\s+modifier\s*=\s*no_diplomatic_ties\s*\}\s*hidden_effect\s*=\s*\{[^{}]*\}',history)
- assert prototype,'Current national no-ties effect has no exact pair receipt'
- execute(parse(prototype[0].replace('@USA','@'+peer).replace('target = USA','target = '+peer)),result,ctx(actor,peer))
+ start=re.search(r'add_opinion_modifier\s*=\s*\{\s*target\s*=\s*USA\s+modifier\s*=\s*no_diplomatic_ties\s*\}\s*hidden_effect\s*=\s*\{',history)
+ assert start,'Current national no-ties effect has no exact pair receipt'
+ end=start.end();depth=1
+ while depth:
+  assert end<len(history),'Unclosed history metadata island'
+  depth+=(history[end]=='{')-(history[end]=='}');end+=1
+ prototype=parse(history[start.start():end])
+ def remap(nodes):
+  return [(peer if name=='USA' else name,op,remap(data) if isinstance(data,list) else peer if data=='USA' else data.replace('@USA','@'+peer)) for name,op,data in nodes]
+ execute(remap(prototype),result,ctx(actor,peer))
 
 def main():
  # Execute full current source paths rather than a parallel hand-written state machine.

@@ -42,7 +42,10 @@ def mirror_island(original,match):
    unit*2+b'set_country_flag = '+active+b'PREV',unit+b'}',b'}']
  else:
   command=b'clr_country_flag' if match['kind']==b'remove_opinion_modifier' else b'set_country_flag'
-  lines=[b'hidden_effect = {',unit+b'set_country_flag = '+known+target,unit+command+b' = '+active+target,b'}']
+  if re.fullmatch(rb'[A-Z]{3}',target):
+   lines=[b'hidden_effect = {',unit+target+b' = {',unit*2+b'PREV = {',unit*3+b'set_country_flag = '+known+b'PREV',unit*3+command+b' = '+active+b'PREV',unit*2+b'}',unit+b'}',b'}']
+  else:
+   lines=[b'hidden_effect = {',unit+b'set_country_flag = '+known+target,unit+command+b' = '+active+target,b'}']
  return newline+newline.join(indent+line for line in lines)
 
 def bind_target(nodes,target,peer):

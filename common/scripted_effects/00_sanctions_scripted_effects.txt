@@ -1983,6 +1983,7 @@ fighting_sanctions_help = {
 }
 
 revoke_sanctions = {
+	ROOT = { eon_maritime_sanctions_stop = yes }
 	set_variable = { i = 0 }
 	set_variable = { i1 = 0 }
 	while_loop_effect = {
@@ -2126,7 +2127,7 @@ revoke_sanctions_help = {
 		add_to_variable = { i = 1 }
 	}
 	clear_variable = i
-	ROOT = { clr_country_flag = shadow_fleet_hunt@PREV }
+	ROOT = { clr_country_flag = shadow_fleet_hunt@PREV clr_country_flag = eon_maritime_sanctions_operation@PREV }
 	calculate_sanctions_modifier = yes
 }
 
@@ -2231,10 +2232,8 @@ revoke_sanctions_non_exist_country = {
 				modifier = helps_evade_sanctions
 			}
 		}
-		if = {
-			limit = { has_country_flag = shadow_fleet_hunt@PREV }
-			clr_country_flag = shadow_fleet_hunt@PREV
-		}
+		# Exact obsolete pair; do not clear the 90-day interception cooldown.
+		eon_maritime_sanctions_stop = yes
 	}
 	clear_array = sanctioneers
 	clear_array = sanctions

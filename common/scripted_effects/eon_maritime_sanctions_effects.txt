@@ -1,0 +1,60 @@
+# Pair helpers: THIS is the actor, PREV is the exact target.
+# Every mutation rechecks current war, sanctions, capability and fresh authorization.
+eon_maritime_sanctions_start = {
+ if = {
+  limit = { eon_maritime_sanctions_start_ready = yes }
+  add_command_power = -25
+  set_country_flag = { flag = shadow_fleet_hunt@PREV value = 1 days = 90 }
+  set_country_flag = { flag = eon_maritime_sanctions_operation@PREV value = 1 days = 90 }
+ }
+}
+eon_maritime_sanctions_stop = {
+ clr_country_flag = shadow_fleet_hunt@PREV
+ clr_country_flag = eon_maritime_sanctions_operation@PREV
+ # A stopped/restarted operation never resets its interception cooldown.
+}
+eon_maritime_sanctions_intercept = {
+ if = {
+  limit = {
+   eon_maritime_sanctions_interception_ready = yes
+   PREV = { has_equipment = { convoy_1 > 0 } }
+  }
+  # Aggregate convoy inventory; individual producer identity is not retained.
+  PREV = { add_equipment_to_stockpile = { type = convoy_1 amount = -1 } }
+  add_equipment_to_stockpile = { type = convoy_1 amount = 1 }
+  set_country_flag = { flag = eon_maritime_sanctions_cooldown@PREV value = 1 days = 90 }
+  PREV = { country_event = { id = eon_maritime_sanctions.2 } }
+  country_event = { id = eon_maritime_sanctions.1 }
+ }
+}
+# Country-scoped monthly pulse; pair cooldown limits transfers to once per 90 days.
+# Cleanup also rejects old saves' unreceipted flags.
+# Resolution is immediate: no delayed event may confiscate after peace or expiry.
+eon_maritime_sanctions_tick = {
+ every_possible_country = {
+  limit = {
+   PREV = {
+    OR = {
+     has_country_flag = shadow_fleet_hunt@PREV
+     has_country_flag = eon_maritime_sanctions_operation@PREV
+    }
+   }
+  }
+  PREV = {
+   if = {
+    limit = { eon_maritime_sanctions_operation_active = no }
+    eon_maritime_sanctions_stop = yes
+   }
+   else_if = {
+    limit = { eon_maritime_sanctions_interception_ready = yes }
+    set_temp_variable = { eon_maritime_sanctions_chance = civilian_intel@PREV }
+    multiply_temp_variable = { eon_maritime_sanctions_chance = 100 }
+    clamp_temp_variable = { var = eon_maritime_sanctions_chance min = 0 max = 100 }
+    random = {
+     chance = eon_maritime_sanctions_chance
+     eon_maritime_sanctions_intercept = yes
+    }
+   }
+  }
+ }
+}

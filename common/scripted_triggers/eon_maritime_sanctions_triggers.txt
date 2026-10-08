@@ -1,0 +1,36 @@
+# Pair helpers: THIS is the actor, PREV is the exact sanctioned wartime target.
+# This does not authorize peacetime boarding, seizure or attacks under sanctions.
+eon_maritime_sanctions_actor_eligible = {
+ exists = yes
+ is_subject = no
+ any_owned_state = { is_coastal = yes is_controlled_by = PREV }
+ check_variable = { num_ships > 0 }
+}
+eon_maritime_sanctions_pair_eligible = {
+ eon_maritime_sanctions_actor_eligible = yes
+ PREV = {
+  exists = yes
+  NOT = { tag = PREV }
+  any_owned_state = { is_coastal = yes is_controlled_by = PREV }
+  has_equipment = { convoy > 0 }
+ }
+ is_in_array = { sanctions_targets = PREV }
+ has_war_with = PREV
+ NOT = { is_in_faction_with = PREV }
+ NOT = { has_non_aggression_pact_with = PREV }
+}
+eon_maritime_sanctions_start_ready = {
+ eon_maritime_sanctions_pair_eligible = yes
+ NOT = { command_power < 25 }
+ NOT = { has_country_flag = shadow_fleet_hunt@PREV }
+ NOT = { has_country_flag = eon_maritime_sanctions_operation@PREV }
+}
+eon_maritime_sanctions_operation_active = {
+ eon_maritime_sanctions_pair_eligible = yes
+ has_country_flag = shadow_fleet_hunt@PREV
+ has_country_flag = eon_maritime_sanctions_operation@PREV
+}
+eon_maritime_sanctions_interception_ready = {
+ eon_maritime_sanctions_operation_active = yes
+ NOT = { has_country_flag = eon_maritime_sanctions_cooldown@PREV }
+}

@@ -1237,70 +1237,39 @@ sanctions_decision_category = {
 		}
 	}
 	start_shadow_fleet_hunt = {
-
 		icon = generic_independence
-
 		target_array = sanctions_targets
-
-		target_root_trigger = {
-			has_idea = naval_power_of_the_continent
-		}
-
+		target_root_trigger = { eon_maritime_sanctions_actor_eligible = yes }
+		target_trigger = { FROM = { PREV = { eon_maritime_sanctions_pair_eligible = yes } } }
+		available = { FROM = { PREV = { eon_maritime_sanctions_start_ready = yes } } }
+		custom_cost_trigger = { NOT = { command_power < 25 } }
+		custom_cost_text = command_power_more_than_25
+		complete_effect = { FROM = { PREV = { eon_maritime_sanctions_start = yes } } }
+	}
+	eon_maritime_sanctions_stop_operation = {
+		icon = generic_independence
 		target_trigger = {
-			ROOT = { NOT = { has_country_flag = shadow_fleet_hunt@FROM } }
-			ROOT = { is_in_array = { sanctions_targets = FROM } }
-			FROM = {
-				any_owned_state = {
-					is_coastal = yes
-				}
-				has_equipment = {
-    				convoy > 0
+			ROOT = {
+				OR = {
+					has_country_flag = shadow_fleet_hunt@FROM
+					has_country_flag = eon_maritime_sanctions_operation@FROM
 				}
 			}
 		}
-
-		custom_cost_trigger = {
-			command_power > 24
-		}
-
-		custom_cost_text = command_power_more_than_25
-
-		complete_effect = {
-			add_command_power = -25
-			set_country_flag = shadow_fleet_hunt@FROM
-		}
+		complete_effect = { FROM = { PREV = { eon_maritime_sanctions_stop = yes } } }
 	}
+	# Legacy paid PMC protection did not model lawful sanction enforcement.
+	# Keep its IDs for saves; no new deployment, expenditure or automatic escalation.
 	shadow_fleet_PMC_deploy = {
-
 		icon = generic_independence
-
-		visible = {
-			NOT = { has_country_flag = PMC_shadow_fleet }
-			any_other_country = { has_country_flag = shadow_fleet_hunt@FROM }
-		}
-
-		custom_cost_trigger = {
-			check_variable = { treasury > 2.4 }
-		}
-		custom_cost_text = cost_2_5
-
-		complete_effect = {
-			set_temp_variable = { treasury_change = -2.5 }
-			modify_treasury_effect = yes
-			set_country_flag = PMC_shadow_fleet
-		}
+		visible = { always = no }
+		available = { always = no }
+		complete_effect = { custom_effect_tooltip = eon_maritime_sanctions_legacy_cancelled }
 	}
 	shadow_fleet_PMC_withdraw = {
-
 		icon = generic_independence
-
-		visible = {
-			has_country_flag = PMC_shadow_fleet
-		}
-
-		complete_effect = {
-			clr_country_flag = PMC_shadow_fleet
-		}
-
+		visible = { has_country_flag = PMC_shadow_fleet }
+		complete_effect = { clr_country_flag = PMC_shadow_fleet }
 	}
+
 }
