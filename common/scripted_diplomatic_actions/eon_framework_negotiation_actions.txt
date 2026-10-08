@@ -1,0 +1,336 @@
+scripted_diplomatic_actions = {
+ eon_propose_trade_framework = {
+  allowed = { always = yes }
+  visible = { ROOT = { NOT = { eon_framework_negotiation_trade_standing = yes } } }
+  selectable = { ROOT = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_send_ready = yes } }
+  can_be_sent = { ROOT = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_send_ready = yes } }
+  # The helper charges 75 PP after its final guard, exactly once; no native double charge.
+  cost = 0 requires_acceptance = no show_acceptance_on_action_button = no icon = 17
+  send_description = eon_framework_negotiation_trade_propose_desc
+  complete_effect = { ROOT = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_send = yes } }
+		ai_desire = {
+			base = 25
+			modifier = {
+				add = 2
+				ROOT = { has_opinion = { target = PREV value > 0 } }
+			}
+			modifier = {
+				add = 5
+				ROOT = { has_opinion = { target = PREV value > 25 } }
+			}
+			modifier = {
+				add = 5
+				ROOT = { has_opinion = { target = PREV value > 50 } }
+			}
+			modifier = {
+				ROOT = {
+					OR = {
+						is_european_nation = yes
+						original_tag = USA
+						original_tag = CAN
+					}
+				}
+				THIS = { original_tag = SOV }
+				date < 2009.01.01
+				add = 25
+			}
+			modifier = {
+				ROOT = { original_tag = CHI }
+				THIS = { original_tag = SOV }
+				add = 25
+			}
+			modifier = {
+				ROOT = { original_tag = SOV }
+				THIS = { has_idea = NATO_member }
+				add = -5
+			}
+			modifier = {
+				ROOT = { is_in_faction_with = PREV }
+				add = 2
+			}
+			modifier = {
+				ROOT = { has_idea = EU_member }
+				THIS = { has_idea = EU_member }
+				add = 2
+			}
+			modifier = {
+				ROOT = { has_idea = NATO_member }
+				THIS = { has_idea = NATO_member }
+				add = 2
+			}
+			modifier = {
+				ROOT = { is_guaranteed_by = PREV }
+				add = 1
+			}
+			modifier = {
+				add = 5
+				is_subject_of = ROOT
+			}
+			modifier = {
+				add = 5
+				is_influencer = yes
+			}
+			modifier = {
+				add = 5
+				is_top3_influencer = yes
+			}
+			modifier = {
+				factor = 1.10
+				ROOT = { has_political_power > 499 }
+			}
+			modifier = {
+				factor = 0.50
+				ROOT = { has_political_power < 450 }
+			}
+			modifier = {
+				add = -15
+				date < 2000.6.1
+			}
+			modifier = {
+				add = -25
+				ROOT = {
+						OR = {
+								has_idea = non_power
+								has_idea = minor_power
+						}
+				}
+		    }
+			modifier = {
+				add = -25
+				ROOT = {
+						PREV_is_not_on_same_continent = yes
+						OR = {
+								has_idea = non_power
+								has_idea = minor_power
+								has_idea = regional_power
+						}
+				}
+		    }
+		    modifier = {
+				add = 5
+				ROOT = {
+						PREV_is_on_same_continent = yes
+				}
+		    }
+			modifier = {
+				factor = 0
+				OR = {
+					ROOT = { NOT = { check_variable = { pending_trade_offer_country = 0 } } }
+					ROOT = { check_variable = { interest_rate > 8 } }
+					ROOT = { has_political_power < 250 }
+					ROOT = { has_active_mission = bankruptcy_incoming_collapse }
+					ROOT = {
+						OR = {
+							any_enemy_country = {
+								is_in_faction_with = PREV.PREV
+							}
+							any_allied_country = {
+								has_war_with = PREV.PREV
+							}
+						}
+					}
+					OR = {
+						AND = {
+							ROOT = { tag = CHI }
+							THIS = { tag = USA }
+						}
+						AND = {
+							ROOT = { tag = USA }
+							THIS = { tag = CHI }
+						}
+						AND = {
+							ROOT = { tag = NKO }
+							THIS = { tag = KOR }
+						}
+						AND = {
+							ROOT = { tag = KOR }
+							THIS = { tag = NKO }
+						}
+						AND = {
+							ROOT = { tag = JAP }
+							THIS = { tag = NKO }
+						}
+						AND = {
+							ROOT = { tag = NKO }
+							THIS = { tag = JAP }
+						}
+					}
+				}
+			}
+		}
+ }
+ eon_propose_investment_framework = {
+  allowed = { always = yes }
+  visible = { ROOT = { NOT = { eon_framework_negotiation_investment_standing = yes } } }
+  selectable = { ROOT = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_investment_send_ready = yes } }
+  can_be_sent = { ROOT = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_investment_send_ready = yes } }
+  # The helper charges 75 PP after its final guard, exactly once; no native double charge.
+  cost = 0 requires_acceptance = no show_acceptance_on_action_button = no icon = 21
+  send_description = eon_framework_negotiation_investment_propose_desc
+  complete_effect = { ROOT = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_investment_send = yes } }
+		ai_desire = {
+			base = 25
+			modifier = {
+				ROOT = {
+					OR = {
+						is_european_nation = yes
+						original_tag = USA
+						original_tag = CHI
+					}
+				}
+				THIS = { original_tag = SOV }
+				date < 2009.01.01
+				add = 25
+			}
+			modifier = {
+				ROOT = { original_tag = CHI }
+				THIS = { original_tag = SOV }
+				add = 25
+			}
+			modifier = {
+				ROOT = { has_opinion = { target = PREV value > 0 } }
+				add = 2
+			}
+			modifier = {
+				ROOT = { has_opinion = { target = PREV value > 25 } }
+				add = 5
+			}
+			modifier = {
+				ROOT = { has_opinion = { target = PREV value > 50 } }
+				add = 5
+			}
+			modifier = {
+				ROOT = { original_tag = SOV }
+				THIS = { has_idea = NATO_member }
+				add = -5
+			}
+			modifier = {
+				ROOT = { is_in_faction_with = PREV }
+				add = 2
+			}
+			modifier = {
+				ROOT = { has_idea = EU_member }
+				THIS = { has_idea = EU_member }
+				add = 2
+			}
+			modifier = {
+				ROOT = { has_idea = NATO_member }
+				THIS = { has_idea = NATO_member }
+				add = 2
+			}
+			modifier = {
+				ROOT = { is_guaranteed_by = PREV }
+				add = 1
+			}
+			modifier = {
+				add = 5
+				is_subject_of = ROOT
+			}
+			modifier = {
+				add = 5
+				is_influencer = yes
+			}
+			modifier = {
+				add = 5
+				is_top3_influencer = yes
+			}
+			modifier = {
+				add = -25
+				ROOT = {
+						OR = {
+								has_idea = non_power
+								has_idea = minor_power
+						}
+				}
+		    }
+			modifier = {
+				add = -25
+				ROOT = {
+						PREV_is_not_on_same_continent = yes
+						OR = {
+								has_idea = non_power
+								has_idea = minor_power
+								has_idea = regional_power
+						}
+				}
+		    }
+		    modifier = {
+				add = 5
+				ROOT = {
+						PREV_is_on_same_continent = yes
+				}
+		    }
+			modifier = {
+				OR = {
+					AND = {
+						ROOT = { tag = CHI }
+						THIS = { tag = USA }
+					}
+					AND = {
+						ROOT = { tag = USA }
+						THIS = { tag = CHI }
+					}
+					AND = {
+						ROOT = { tag = NKO }
+						THIS = { tag = KOR }
+					}
+					AND = {
+						ROOT = { tag = KOR }
+						THIS = { tag = NKO }
+					}
+					AND = {
+						ROOT = { tag = JAP }
+						THIS = { tag = NKO }
+					}
+					AND = {
+						ROOT = { tag = NKO }
+						THIS = { tag = JAP }
+					}
+				}
+				factor = 0
+			}
+			modifier = {
+				ROOT = {
+					OR = {
+						any_enemy_country = {
+							is_in_faction_with = PREV.PREV
+						}
+						any_allied_country = {
+							has_war_with = PREV.PREV
+						}
+					}
+				}
+				factor = 0
+			}
+			modifier = {
+				factor = 1.10
+				ROOT = { has_political_power > 499 }
+			}
+			modifier = {
+				factor = 0.50
+				ROOT = { has_political_power < 450 }
+			}
+			modifier = {
+				factor = 1.10
+				ROOT = { has_political_power > 499 }
+			}
+			modifier = {
+				factor = 0.50
+				ROOT = { has_political_power < 450 }
+			}
+			modifier = {
+				add = -5
+				date < 2000.6.1
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					ROOT = { NOT = { check_variable = { pending_mutual_investment_treaty_offer = 0 } } }
+					ROOT = { check_variable = { interest_rate > 8 } }
+					ROOT = { has_political_power < 250 }
+					ROOT = { has_active_mission = bankruptcy_incoming_collapse }
+				}
+			}
+		}
+ }
+}

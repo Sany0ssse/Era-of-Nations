@@ -1,0 +1,214 @@
+# Frame: THIS owner / PREV partner. Native action adapters enter the sender.
+eon_framework_negotiation_pair_exists = {
+ exists = yes
+ PREV = { exists = yes NOT = { tag = PREV } }
+}
+eon_framework_negotiation_sender_national_ready = {
+ # Preserve the inherited sender's Eritrean restriction without depending on ROOT.
+ if = { limit = { original_tag = ERI has_country_flag = ETH_transitional_government_FLAG }
+  NOT = { has_country_leader = { name = "Eritrean Transitional Government" } }
+ }
+}
+eon_framework_negotiation_trade_standing = {
+ OR = { has_country_flag = trade_agreement@PREV PREV = { has_country_flag = trade_agreement@PREV } }
+}
+eon_framework_negotiation_trade_terms_ready = {
+ eon_framework_negotiation_pair_exists = yes
+ eon_framework_negotiation_sender_national_ready = yes
+ NOT = { eon_framework_negotiation_trade_standing = yes }
+ NOT = { has_war_with = PREV }
+ set_temp_variable = { eon_framework_negotiation_sender_id = THIS.id }
+ PREV = {
+  set_temp_variable = { eon_framework_negotiation_sender_id = eon_framework_negotiation_sender_id }
+  NOT = { has_war_with = PREV }
+  if = { limit = { tag = SWI PREV = { NOT = { has_idea = EU_member } } }
+   has_opinion = { target = PREV value > 50 }
+  }
+  else = { has_opinion = { target = PREV value > 10 } }
+  # Preserve the inherited existential allied-country condition.
+  if = { limit = { is_in_faction = yes any_allied_country = { exists = yes } }
+   any_allied_country = { NOT = { has_war_with = var:eon_framework_negotiation_sender_id } }
+  }
+ }
+}
+eon_framework_negotiation_trade_send_ready = {
+ eon_framework_negotiation_trade_terms_ready = yes
+ check_variable = { eon_framework_negotiation_trade_status@PREV = 0 }
+ PREV = { check_variable = { eon_framework_negotiation_trade_status@PREV = 0 } }
+ NOT = { has_political_power < 75 }
+ OR = { check_variable = { eon_framework_negotiation_selected_terms = 90 } check_variable = { eon_framework_negotiation_selected_terms = 180 } }
+}
+eon_framework_negotiation_trade_pending_current = {
+ eon_framework_negotiation_pair_exists = yes
+ check_variable = { eon_framework_negotiation_trade_epoch@PREV > 0 }
+ check_variable = { eon_framework_negotiation_trade_round@PREV > 0 } check_variable = { eon_framework_negotiation_trade_round@PREV < 4 }
+ OR = {
+  AND = { check_variable = { eon_framework_negotiation_trade_kind@PREV = 1 } OR = { check_variable = { eon_framework_negotiation_trade_terms@PREV = 90 } check_variable = { eon_framework_negotiation_trade_terms@PREV = 180 } } }
+  AND = { check_variable = { eon_framework_negotiation_trade_kind@PREV = 2 } check_variable = { eon_framework_negotiation_trade_terms@PREV = 0 } check_variable = { eon_framework_negotiation_trade_round@PREV = 1 } }
+ }
+ OR = { check_variable = { eon_framework_negotiation_trade_status@PREV = 1 } check_variable = { eon_framework_negotiation_trade_status@PREV = 2 } }
+ has_country_flag = eon_framework_negotiation_trade_window@PREV
+ set_temp_variable = { eon_framework_negotiation_read_epoch = eon_framework_negotiation_trade_epoch@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_kind = eon_framework_negotiation_trade_kind@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_terms = eon_framework_negotiation_trade_terms@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_round = eon_framework_negotiation_trade_round@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_status = eon_framework_negotiation_trade_status@PREV }
+ PREV = {
+  has_country_flag = eon_framework_negotiation_trade_window@PREV
+  check_variable = { eon_framework_negotiation_trade_epoch@PREV > 0 }
+  check_variable = { eon_framework_negotiation_trade_epoch@PREV = eon_framework_negotiation_read_epoch }
+  check_variable = { eon_framework_negotiation_trade_kind@PREV = eon_framework_negotiation_read_kind }
+  check_variable = { eon_framework_negotiation_trade_terms@PREV = eon_framework_negotiation_read_terms }
+  check_variable = { eon_framework_negotiation_trade_round@PREV = eon_framework_negotiation_read_round }
+  OR = {
+   AND = { check_variable = { eon_framework_negotiation_read_status = 1 } check_variable = { eon_framework_negotiation_trade_status@PREV = 2 } }
+   AND = { check_variable = { eon_framework_negotiation_read_status = 2 } check_variable = { eon_framework_negotiation_trade_status@PREV = 1 } }
+  }
+ }
+}
+eon_framework_negotiation_trade_incoming = {
+ check_variable = { eon_framework_negotiation_trade_status@PREV = 2 } eon_framework_negotiation_trade_pending_current = yes
+}
+eon_framework_negotiation_trade_reviewed = {
+ eon_framework_negotiation_trade_incoming = yes
+ check_variable = { eon_framework_negotiation_trade_reviewed_epoch@PREV > 0 }
+ check_variable = { eon_framework_negotiation_trade_reviewed_epoch@PREV = eon_framework_negotiation_trade_epoch@PREV }
+}
+eon_framework_negotiation_trade_accept_ready = {
+ eon_framework_negotiation_trade_reviewed = yes check_variable = { eon_framework_negotiation_trade_kind@PREV = 1 }
+ check_variable = { eon_framework_negotiation_trade_terms@PREV = eon_framework_negotiation_selected_terms }
+ PREV = { eon_framework_negotiation_trade_terms_ready = yes }
+}
+eon_framework_negotiation_trade_counter_ready = {
+ eon_framework_negotiation_trade_reviewed = yes check_variable = { eon_framework_negotiation_trade_kind@PREV = 1 }
+ check_variable = { eon_framework_negotiation_trade_round@PREV < 3 }
+ NOT = { check_variable = { eon_framework_negotiation_trade_terms@PREV = eon_framework_negotiation_selected_terms } }
+ OR = { check_variable = { eon_framework_negotiation_selected_terms = 90 } check_variable = { eon_framework_negotiation_selected_terms = 180 } }
+ eon_framework_negotiation_trade_terms_ready = yes NOT = { has_political_power < 75 }
+}
+eon_framework_negotiation_trade_notice_ready = {
+ eon_framework_negotiation_pair_exists = yes eon_framework_negotiation_sender_national_ready = yes eon_framework_negotiation_trade_standing = yes
+ check_variable = { eon_framework_negotiation_trade_contract_epoch@PREV > 0 }
+ OR = { check_variable = { eon_framework_negotiation_trade_notice_days@PREV = 90 } check_variable = { eon_framework_negotiation_trade_notice_days@PREV = 180 } }
+ NOT = { has_country_flag = eon_framework_negotiation_trade_notice@PREV }
+ set_temp_variable = { eon_framework_negotiation_notice_read_epoch = eon_framework_negotiation_trade_contract_epoch@PREV }
+ set_temp_variable = { eon_framework_negotiation_notice_read_days = eon_framework_negotiation_trade_notice_days@PREV }
+ PREV = {
+  NOT = { has_country_flag = eon_framework_negotiation_trade_notice@PREV }
+  check_variable = { eon_framework_negotiation_trade_contract_epoch@PREV = eon_framework_negotiation_notice_read_epoch }
+  check_variable = { eon_framework_negotiation_trade_notice_days@PREV = eon_framework_negotiation_notice_read_days }
+ }
+ NOT = { has_political_power < 75 }
+}
+eon_framework_negotiation_trade_end_request_ready = {
+ eon_framework_negotiation_pair_exists = yes eon_framework_negotiation_sender_national_ready = yes eon_framework_negotiation_trade_standing = yes
+ check_variable = { eon_framework_negotiation_trade_status@PREV = 0 } PREV = { check_variable = { eon_framework_negotiation_trade_status@PREV = 0 } }
+ NOT = { has_political_power < 75 }
+}
+eon_framework_negotiation_trade_end_accept_ready = {
+ eon_framework_negotiation_trade_reviewed = yes check_variable = { eon_framework_negotiation_trade_kind@PREV = 2 } eon_framework_negotiation_trade_standing = yes
+ check_variable = { eon_framework_negotiation_trade_request_contract@PREV = eon_framework_negotiation_trade_contract_epoch@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_contract = eon_framework_negotiation_trade_request_contract@PREV }
+ PREV = { check_variable = { eon_framework_negotiation_trade_contract_epoch@PREV = eon_framework_negotiation_read_contract }
+  check_variable = { eon_framework_negotiation_trade_request_contract@PREV = eon_framework_negotiation_read_contract } }
+}
+eon_framework_negotiation_investment_standing = {
+ OR = { has_country_flag = mutual_investment_treaty_@PREV PREV = { has_country_flag = mutual_investment_treaty_@PREV } }
+}
+eon_framework_negotiation_investment_terms_ready = {
+ eon_framework_negotiation_pair_exists = yes
+ eon_framework_negotiation_sender_national_ready = yes
+ NOT = { eon_framework_negotiation_investment_standing = yes }
+ NOT = { has_war_with = PREV }
+ set_temp_variable = { eon_framework_negotiation_sender_id = THIS.id }
+ PREV = {
+  set_temp_variable = { eon_framework_negotiation_sender_id = eon_framework_negotiation_sender_id }
+  NOT = { has_war_with = PREV }
+  has_opinion = { target = PREV value > 25 }
+  # Preserve the inherited existential allied-country condition.
+  if = { limit = { is_in_faction = yes any_allied_country = { exists = yes } }
+   any_allied_country = { NOT = { has_war_with = var:eon_framework_negotiation_sender_id } }
+  }
+ }
+}
+eon_framework_negotiation_investment_send_ready = {
+ eon_framework_negotiation_investment_terms_ready = yes
+ check_variable = { eon_framework_negotiation_investment_status@PREV = 0 }
+ PREV = { check_variable = { eon_framework_negotiation_investment_status@PREV = 0 } }
+ NOT = { has_political_power < 75 }
+ OR = { check_variable = { eon_framework_negotiation_selected_terms = 90 } check_variable = { eon_framework_negotiation_selected_terms = 180 } }
+}
+eon_framework_negotiation_investment_pending_current = {
+ eon_framework_negotiation_pair_exists = yes
+ check_variable = { eon_framework_negotiation_investment_epoch@PREV > 0 }
+ check_variable = { eon_framework_negotiation_investment_round@PREV > 0 } check_variable = { eon_framework_negotiation_investment_round@PREV < 4 }
+ OR = {
+  AND = { check_variable = { eon_framework_negotiation_investment_kind@PREV = 1 } OR = { check_variable = { eon_framework_negotiation_investment_terms@PREV = 90 } check_variable = { eon_framework_negotiation_investment_terms@PREV = 180 } } }
+  AND = { check_variable = { eon_framework_negotiation_investment_kind@PREV = 2 } check_variable = { eon_framework_negotiation_investment_terms@PREV = 0 } check_variable = { eon_framework_negotiation_investment_round@PREV = 1 } }
+ }
+ OR = { check_variable = { eon_framework_negotiation_investment_status@PREV = 1 } check_variable = { eon_framework_negotiation_investment_status@PREV = 2 } }
+ has_country_flag = eon_framework_negotiation_investment_window@PREV
+ set_temp_variable = { eon_framework_negotiation_read_epoch = eon_framework_negotiation_investment_epoch@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_kind = eon_framework_negotiation_investment_kind@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_terms = eon_framework_negotiation_investment_terms@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_round = eon_framework_negotiation_investment_round@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_status = eon_framework_negotiation_investment_status@PREV }
+ PREV = {
+  has_country_flag = eon_framework_negotiation_investment_window@PREV
+  check_variable = { eon_framework_negotiation_investment_epoch@PREV > 0 }
+  check_variable = { eon_framework_negotiation_investment_epoch@PREV = eon_framework_negotiation_read_epoch }
+  check_variable = { eon_framework_negotiation_investment_kind@PREV = eon_framework_negotiation_read_kind }
+  check_variable = { eon_framework_negotiation_investment_terms@PREV = eon_framework_negotiation_read_terms }
+  check_variable = { eon_framework_negotiation_investment_round@PREV = eon_framework_negotiation_read_round }
+  OR = {
+   AND = { check_variable = { eon_framework_negotiation_read_status = 1 } check_variable = { eon_framework_negotiation_investment_status@PREV = 2 } }
+   AND = { check_variable = { eon_framework_negotiation_read_status = 2 } check_variable = { eon_framework_negotiation_investment_status@PREV = 1 } }
+  }
+ }
+}
+eon_framework_negotiation_investment_incoming = {
+ check_variable = { eon_framework_negotiation_investment_status@PREV = 2 } eon_framework_negotiation_investment_pending_current = yes
+}
+eon_framework_negotiation_investment_reviewed = {
+ eon_framework_negotiation_investment_incoming = yes
+ check_variable = { eon_framework_negotiation_investment_reviewed_epoch@PREV > 0 }
+ check_variable = { eon_framework_negotiation_investment_reviewed_epoch@PREV = eon_framework_negotiation_investment_epoch@PREV }
+}
+eon_framework_negotiation_investment_accept_ready = {
+ eon_framework_negotiation_investment_reviewed = yes check_variable = { eon_framework_negotiation_investment_kind@PREV = 1 }
+ check_variable = { eon_framework_negotiation_investment_terms@PREV = eon_framework_negotiation_selected_terms }
+ PREV = { eon_framework_negotiation_investment_terms_ready = yes }
+}
+eon_framework_negotiation_investment_counter_ready = {
+ eon_framework_negotiation_investment_reviewed = yes check_variable = { eon_framework_negotiation_investment_kind@PREV = 1 }
+ check_variable = { eon_framework_negotiation_investment_round@PREV < 3 }
+ NOT = { check_variable = { eon_framework_negotiation_investment_terms@PREV = eon_framework_negotiation_selected_terms } }
+ OR = { check_variable = { eon_framework_negotiation_selected_terms = 90 } check_variable = { eon_framework_negotiation_selected_terms = 180 } }
+ eon_framework_negotiation_investment_terms_ready = yes NOT = { has_political_power < 75 }
+}
+eon_framework_negotiation_investment_notice_ready = {
+ eon_framework_negotiation_pair_exists = yes eon_framework_negotiation_sender_national_ready = yes eon_framework_negotiation_investment_standing = yes
+ check_variable = { eon_framework_negotiation_investment_contract_epoch@PREV > 0 }
+ OR = { check_variable = { eon_framework_negotiation_investment_notice_days@PREV = 90 } check_variable = { eon_framework_negotiation_investment_notice_days@PREV = 180 } }
+ NOT = { has_country_flag = eon_framework_negotiation_investment_notice@PREV }
+ set_temp_variable = { eon_framework_negotiation_notice_read_epoch = eon_framework_negotiation_investment_contract_epoch@PREV }
+ set_temp_variable = { eon_framework_negotiation_notice_read_days = eon_framework_negotiation_investment_notice_days@PREV }
+ PREV = {
+  NOT = { has_country_flag = eon_framework_negotiation_investment_notice@PREV }
+  check_variable = { eon_framework_negotiation_investment_contract_epoch@PREV = eon_framework_negotiation_notice_read_epoch }
+  check_variable = { eon_framework_negotiation_investment_notice_days@PREV = eon_framework_negotiation_notice_read_days }
+ }
+ NOT = { has_political_power < 75 }
+}
+eon_framework_negotiation_investment_end_request_ready = {
+ eon_framework_negotiation_pair_exists = yes eon_framework_negotiation_sender_national_ready = yes eon_framework_negotiation_investment_standing = yes
+ check_variable = { eon_framework_negotiation_investment_status@PREV = 0 } PREV = { check_variable = { eon_framework_negotiation_investment_status@PREV = 0 } }
+ NOT = { has_political_power < 75 }
+}
+eon_framework_negotiation_investment_end_accept_ready = {
+ eon_framework_negotiation_investment_reviewed = yes check_variable = { eon_framework_negotiation_investment_kind@PREV = 2 } eon_framework_negotiation_investment_standing = yes
+ check_variable = { eon_framework_negotiation_investment_request_contract@PREV = eon_framework_negotiation_investment_contract_epoch@PREV }
+ set_temp_variable = { eon_framework_negotiation_read_contract = eon_framework_negotiation_investment_request_contract@PREV }
+ PREV = { check_variable = { eon_framework_negotiation_investment_contract_epoch@PREV = eon_framework_negotiation_read_contract }
+  check_variable = { eon_framework_negotiation_investment_request_contract@PREV = eon_framework_negotiation_read_contract } }
+}

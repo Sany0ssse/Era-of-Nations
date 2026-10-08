@@ -1,0 +1,26 @@
+# Open the existing player editor only; its own Confirm action sends a proposal.
+# ROOT owns the editor, THIS is the frozen live consultation partner.
+eon_consultation_energy_editor_open = {
+ if = {
+  limit = { eon_consultation_energy_editor_ready = yes }
+  ROOT = {
+   set_variable = { energy_selling_selected_TAG = PREV }
+   set_temp_variable = { eon_energy_pair_partner = PREV }
+   eon_energy_read_pair_record = yes
+   if = {
+    limit = { check_variable = { eon_energy_current_count = 1 } }
+    set_variable = { temp_energy_ammount = eon_energy_current_amount }
+    set_variable = { temp_energy_price = eon_energy_current_price }
+   }
+   else = {
+    set_variable = { temp_energy_ammount = 0 }
+    set_variable = { temp_energy_price = 0.05 }
+   }
+   set_country_flag = open_energy_screen
+   set_country_flag = energy_sell
+   clr_country_flag = energy_main
+   clr_country_flag = open_energy_sell_country_selection
+   update_energy_dirty_variable = yes
+  }
+ }
+}

@@ -1,0 +1,77 @@
+# Native action/targeted-decision frame: ROOT is the editor owner, THIS the partner.
+# This gate reads both signed contract records. It grants no agreement or assent.
+eon_consultation_energy_editor_country_idle = {
+ NOT = { has_country_flag = question_about_contract }
+ NOT = { has_country_flag = eon_energy_outgoing_offer }
+ NOT = { has_country_flag = eon_energy_incoming_offer }
+ NOT = { has_country_flag = eon_energy_offer_cancelled }
+ NOT = { has_country_flag = eon_energy_counter_draft_owner }
+ NOT = { has_country_flag = eon_energy_counter_awaiting }
+ check_variable = { eon_energy_offer_partner = 0 }
+ check_variable = { eon_energy_framework_pending_sender = 0 }
+ check_variable = { pending_energy_offer_country = 0 }
+ NOT = { has_country_flag = open_energy_sell_country_selection }
+ # An ordinary unsent editor also belongs to its current player, not this handoff.
+ NOT = {
+  AND = {
+   has_country_flag = open_energy_screen
+   has_country_flag = energy_sell
+   check_variable = { energy_selling_selected_TAG > 0 }
+  }
+ }
+}
+
+eon_consultation_energy_editor_ready = {
+ eon_consultation_ui_pair_ready = yes
+ check_variable = { eon_consultation_topic = 2 }
+ has_country_flag = energy_agreement@ROOT
+ eon_consultation_energy_editor_country_idle = yes
+ check_variable = { energy_contractors^num = energy_contracts_ammount^num }
+ check_variable = { energy_contractors^num = energy_contracts_price^num }
+ set_temp_variable = { eon_consultation_energy_partner_count = 0 }
+ set_temp_variable = { eon_consultation_energy_partner_amount = 0 }
+ set_temp_variable = { eon_consultation_energy_partner_price = 0 }
+ all_of = {
+  array = energy_contractors
+  value = eon_consultation_energy_record_partner
+  index = eon_consultation_energy_record_index
+  if = {
+   limit = { check_variable = { eon_consultation_energy_record_partner = ROOT } }
+   add_to_temp_variable = { eon_consultation_energy_partner_count = 1 }
+   set_temp_variable = { eon_consultation_energy_partner_amount = energy_contracts_ammount^eon_consultation_energy_record_index }
+   set_temp_variable = { eon_consultation_energy_partner_price = energy_contracts_price^eon_consultation_energy_record_index }
+  }
+ }
+ check_variable = { eon_consultation_energy_partner_count < 2 }
+ ROOT = {
+  has_country_flag = energy_agreement@PREV
+  eon_consultation_energy_editor_country_idle = yes
+  check_variable = { energy_contractors^num = energy_contracts_ammount^num }
+  check_variable = { energy_contractors^num = energy_contracts_price^num }
+  set_temp_variable = { eon_consultation_energy_owner_count = 0 }
+  set_temp_variable = { eon_consultation_energy_owner_amount = 0 }
+  set_temp_variable = { eon_consultation_energy_owner_price = 0 }
+  all_of = {
+   array = energy_contractors
+   value = eon_consultation_energy_record_partner
+   index = eon_consultation_energy_record_index
+   if = {
+    limit = { check_variable = { eon_consultation_energy_record_partner = PREV } }
+    add_to_temp_variable = { eon_consultation_energy_owner_count = 1 }
+    set_temp_variable = { eon_consultation_energy_owner_amount = energy_contracts_ammount^eon_consultation_energy_record_index }
+    set_temp_variable = { eon_consultation_energy_owner_price = energy_contracts_price^eon_consultation_energy_record_index }
+   }
+  }
+  # Native temporaries share the invocation; unique names retain the partner snapshot.
+  check_variable = { eon_consultation_energy_owner_count = eon_consultation_energy_partner_count }
+  if = {
+   limit = { check_variable = { eon_consultation_energy_owner_count = 1 } }
+   NOT = { check_variable = { eon_consultation_energy_owner_amount = 0 } }
+   check_variable = { var = eon_consultation_energy_owner_price value = 0 compare = greater_than_or_equals }
+   set_temp_variable = { eon_consultation_energy_expected_amount = eon_consultation_energy_partner_amount }
+   multiply_temp_variable = { eon_consultation_energy_expected_amount = -1 }
+   check_variable = { eon_consultation_energy_owner_amount = eon_consultation_energy_expected_amount }
+   check_variable = { eon_consultation_energy_owner_price = eon_consultation_energy_partner_price }
+  }
+ }
+}

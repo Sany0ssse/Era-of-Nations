@@ -1,0 +1,138 @@
+# Native frame: THIS partner / ROOT owner. A panel never grants treaty rights.
+eon_consultation_ui_pair_present = {
+ exists = yes ROOT = { exists = yes } NOT = { tag = ROOT }
+ eon_consultation_end_available = yes
+}
+eon_consultation_ui_pair_ready = {
+ eon_consultation_ui_pair_present = yes
+ eon_consultation_active_pair_current = yes
+ NOT = { has_war_with = ROOT } ROOT = { NOT = { has_war_with = PREV } }
+}
+# Targeted decision and informational event: THIS/ROOT owner, FROM partner.
+eon_consultation_ui_target_present = { FROM = { eon_consultation_ui_pair_present = yes } }
+eon_consultation_ui_target_ready = { FROM = { eon_consultation_ui_pair_ready = yes } }
+eon_consultation_ui_owner_has_channel = {
+ exists = yes has_country_flag = eon_consultation_active
+ eon_consultation_state_pair_consistent = yes
+}
+eon_consultation_ui_trade_visible = {
+ eon_consultation_ui_target_present = yes check_variable = { eon_consultation_topic = 1 }
+}
+eon_consultation_ui_trade_ready = {
+ eon_consultation_ui_target_ready = yes check_variable = { eon_consultation_topic = 1 }
+}
+eon_consultation_ui_energy_visible = {
+ eon_consultation_ui_target_present = yes check_variable = { eon_consultation_topic = 2 }
+}
+eon_consultation_ui_energy_ready = {
+ eon_consultation_ui_target_ready = yes check_variable = { eon_consultation_topic = 2 }
+}
+eon_consultation_ui_support_visible = {
+ eon_consultation_ui_target_present = yes check_variable = { eon_consultation_topic = 3 }
+}
+eon_consultation_ui_support_ready = {
+ eon_consultation_ui_target_ready = yes check_variable = { eon_consultation_topic = 3 }
+}
+eon_consultation_ui_trade_propose_90_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_send_ready = yes } }
+}
+eon_consultation_ui_trade_propose_180_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_trade_send_ready = yes } }
+}
+eon_consultation_ui_trade_accept_90_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_accept_ready = yes } }
+}
+eon_consultation_ui_trade_accept_180_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_trade_accept_ready = yes } }
+}
+eon_consultation_ui_trade_counter_90_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_counter_ready = yes } }
+}
+eon_consultation_ui_trade_counter_180_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_trade_counter_ready = yes } }
+}
+eon_consultation_ui_trade_review_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { eon_framework_negotiation_trade_incoming = yes NOT = { eon_framework_negotiation_trade_reviewed = yes } } }
+}
+eon_consultation_ui_trade_decline_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { eon_framework_negotiation_trade_reviewed = yes } }
+}
+eon_consultation_ui_trade_withdraw_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { eon_framework_negotiation_trade_pending_current = yes check_variable = { eon_framework_negotiation_trade_status@PREV = 1 } } }
+}
+eon_consultation_ui_energy_editor_ready = {
+ eon_consultation_ui_energy_ready = yes
+ FROM = { eon_consultation_energy_editor_ready = yes }
+}
+eon_consultation_ui_aid_draft_ready = {
+ eon_consultation_ui_support_ready = yes FROM = { eon_aid_gui_ready = yes }
+}
+eon_consultation_ui_trade_propose_90_visible = {
+ eon_consultation_ui_trade_visible = yes
+ FROM = { PREV = { NOT = { eon_framework_negotiation_trade_standing = yes } check_variable = { eon_framework_negotiation_trade_status@PREV = 0 } PREV = { check_variable = { eon_framework_negotiation_trade_status@PREV = 0 } } } }
+}
+eon_consultation_ui_trade_accept_90_visible = {
+ eon_consultation_ui_trade_visible = yes
+ check_variable = { eon_framework_negotiation_trade_status@FROM = 2 } check_variable = { eon_framework_negotiation_trade_kind@FROM = 1 } check_variable = { eon_framework_negotiation_trade_terms@FROM = 90 }
+}
+eon_consultation_ui_trade_counter_90_visible = {
+ eon_consultation_ui_trade_visible = yes
+ check_variable = { eon_framework_negotiation_trade_status@FROM = 2 } check_variable = { eon_framework_negotiation_trade_kind@FROM = 1 } NOT = { check_variable = { eon_framework_negotiation_trade_terms@FROM = 90 } }
+}
+eon_consultation_ui_trade_propose_180_visible = {
+ eon_consultation_ui_trade_visible = yes
+ FROM = { PREV = { NOT = { eon_framework_negotiation_trade_standing = yes } check_variable = { eon_framework_negotiation_trade_status@PREV = 0 } PREV = { check_variable = { eon_framework_negotiation_trade_status@PREV = 0 } } } }
+}
+eon_consultation_ui_trade_accept_180_visible = {
+ eon_consultation_ui_trade_visible = yes
+ check_variable = { eon_framework_negotiation_trade_status@FROM = 2 } check_variable = { eon_framework_negotiation_trade_kind@FROM = 1 } check_variable = { eon_framework_negotiation_trade_terms@FROM = 180 }
+}
+eon_consultation_ui_trade_counter_180_visible = {
+ eon_consultation_ui_trade_visible = yes
+ check_variable = { eon_framework_negotiation_trade_status@FROM = 2 } check_variable = { eon_framework_negotiation_trade_kind@FROM = 1 } NOT = { check_variable = { eon_framework_negotiation_trade_terms@FROM = 180 } }
+}
+eon_consultation_ui_trade_review_visible = {
+ eon_consultation_ui_trade_visible = yes
+ check_variable = { eon_framework_negotiation_trade_status@FROM = 2 } FROM = { PREV = { NOT = { eon_framework_negotiation_trade_reviewed = yes } } }
+}
+eon_consultation_ui_trade_decline_visible = {
+ eon_consultation_ui_trade_visible = yes
+ check_variable = { eon_framework_negotiation_trade_status@FROM = 2 }
+}
+eon_consultation_ui_trade_withdraw_visible = {
+ eon_consultation_ui_trade_visible = yes
+ check_variable = { eon_framework_negotiation_trade_status@FROM = 1 }
+}
+eon_consultation_ui_trade_notice_visible = {
+ eon_consultation_ui_trade_visible = yes
+ FROM = { PREV = { eon_framework_negotiation_trade_standing = yes check_variable = { eon_framework_negotiation_trade_contract_epoch@PREV > 0 } NOT = { has_country_flag = eon_framework_negotiation_trade_notice@PREV } } }
+}
+eon_consultation_ui_trade_notice_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { eon_framework_negotiation_trade_notice_ready = yes } }
+}
+eon_consultation_ui_trade_end_request_visible = {
+ eon_consultation_ui_trade_visible = yes
+ FROM = { PREV = { eon_framework_negotiation_trade_standing = yes check_variable = { eon_framework_negotiation_trade_status@PREV = 0 } PREV = { check_variable = { eon_framework_negotiation_trade_status@PREV = 0 } } } }
+}
+eon_consultation_ui_trade_end_request_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { eon_framework_negotiation_trade_end_request_ready = yes } }
+}
+eon_consultation_ui_trade_end_accept_visible = {
+ eon_consultation_ui_trade_visible = yes
+ check_variable = { eon_framework_negotiation_trade_status@FROM = 2 } check_variable = { eon_framework_negotiation_trade_kind@FROM = 2 } FROM = { PREV = { eon_framework_negotiation_trade_standing = yes } }
+}
+eon_consultation_ui_trade_end_accept_ready = {
+ eon_consultation_ui_trade_ready = yes
+ FROM = { PREV = { eon_framework_negotiation_trade_end_accept_ready = yes } }
+}

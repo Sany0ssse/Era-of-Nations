@@ -1,0 +1,244 @@
+eon_framework_negotiation_category = {
+ eon_framework_negotiation_trade_review = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { eon_framework_negotiation_trade_incoming = yes NOT = { check_variable = { eon_framework_negotiation_trade_reviewed_epoch@PREV = eon_framework_negotiation_trade_epoch@PREV } } } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_trade_incoming = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_trade_incoming = yes } eon_framework_negotiation_trade_review = yes } } } }
+  ai_will_do = { factor = 10 }
+ }
+ eon_framework_negotiation_trade_accept_90 = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_kind@PREV = 1 } check_variable = { eon_framework_negotiation_trade_terms@PREV = 90 } eon_framework_negotiation_trade_incoming = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_accept_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_accept_ready = yes } set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_accept = yes } } } }
+  ai_will_do = { factor = 8 modifier = { factor = 0 FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_reviewed_score@PREV < 0 } } } } }
+ }
+ eon_framework_negotiation_trade_counter_90 = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_kind@PREV = 1 } eon_framework_negotiation_trade_incoming = yes NOT = { check_variable = { eon_framework_negotiation_trade_terms@PREV = 90 } } } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_counter_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_counter_ready = yes } set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_trade_counter = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_framework_negotiation_trade_accept_180 = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_kind@PREV = 1 } check_variable = { eon_framework_negotiation_trade_terms@PREV = 180 } eon_framework_negotiation_trade_incoming = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_trade_accept_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_trade_accept_ready = yes } set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_trade_accept = yes } } } }
+  ai_will_do = { factor = 8 modifier = { factor = 0 FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_reviewed_score@PREV < 0 } } } } }
+ }
+ eon_framework_negotiation_trade_counter_180 = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_kind@PREV = 1 } eon_framework_negotiation_trade_incoming = yes NOT = { check_variable = { eon_framework_negotiation_trade_terms@PREV = 180 } } } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_trade_counter_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_trade_counter_ready = yes } set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_trade_counter = yes } } } }
+  ai_will_do = { factor = 5 modifier = { factor = 0 NOT = { FROM = { PREV = { check_variable = { var = eon_framework_negotiation_trade_reviewed_score@PREV value = -10 compare = greater_than_or_equals } check_variable = { eon_framework_negotiation_trade_reviewed_score@PREV < 0 } } } } } }
+ }
+ eon_framework_negotiation_trade_decline = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { eon_framework_negotiation_trade_incoming = yes } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_trade_reviewed = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_trade_reviewed = yes } eon_framework_negotiation_trade_decline = yes } } } }
+  ai_will_do = { factor = 1 modifier = { factor = 10 FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_reviewed_score@PREV < -10 } } } } }
+ }
+ eon_framework_negotiation_trade_withdraw = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_status@PREV = 1 } } } }
+  available = { FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_status@PREV = 1 } } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { check_variable = { eon_framework_negotiation_trade_status@PREV = 1 } } eon_framework_negotiation_trade_withdraw = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_framework_negotiation_trade_notice = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { eon_framework_negotiation_trade_standing = yes check_variable = { eon_framework_negotiation_trade_contract_epoch@PREV > 0 } } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_trade_notice_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_trade_notice_ready = yes } eon_framework_negotiation_trade_notice = yes } } } }
+  ai_will_do = { factor = 2 modifier = { factor = 0 NOT = { has_opinion = { target = FROM value < -25 } } } }
+ }
+ eon_framework_negotiation_trade_end_request = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { eon_framework_negotiation_trade_standing = yes } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_trade_end_request_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_trade_end_request_ready = yes } eon_framework_negotiation_trade_end_request = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_framework_negotiation_trade_end_accept = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_trade_kind@PREV = 2 } eon_framework_negotiation_trade_incoming = yes } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_trade_end_accept_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_trade_end_accept_ready = yes } eon_framework_negotiation_trade_end_accept = yes } } } }
+  ai_will_do = { factor = 1 modifier = { factor = 5 has_opinion = { target = FROM value < 0 } } }
+ }
+ eon_framework_negotiation_trade_status = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { OR = { check_variable = { eon_framework_negotiation_trade_status@PREV > 0 } eon_framework_negotiation_trade_standing = yes has_country_flag = eon_framework_negotiation_trade_notice@PREV } } } }
+  available = { FROM = { PREV = { OR = { check_variable = { eon_framework_negotiation_trade_status@PREV > 0 } eon_framework_negotiation_trade_standing = yes has_country_flag = eon_framework_negotiation_trade_notice@PREV } } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { OR = { check_variable = { eon_framework_negotiation_trade_status@PREV > 0 } eon_framework_negotiation_trade_standing = yes has_country_flag = eon_framework_negotiation_trade_notice@PREV } } custom_effect_tooltip = eon_framework_negotiation_trade_status_info_tt } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_framework_negotiation_investment_review = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { eon_framework_negotiation_investment_incoming = yes NOT = { check_variable = { eon_framework_negotiation_investment_reviewed_epoch@PREV = eon_framework_negotiation_investment_epoch@PREV } } } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_investment_incoming = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_investment_incoming = yes } eon_framework_negotiation_investment_review = yes } } } }
+  ai_will_do = { factor = 10 }
+ }
+ eon_framework_negotiation_investment_accept_90 = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_kind@PREV = 1 } check_variable = { eon_framework_negotiation_investment_terms@PREV = 90 } eon_framework_negotiation_investment_incoming = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_investment_accept_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_investment_accept_ready = yes } set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_investment_accept = yes } } } }
+  ai_will_do = { factor = 8 modifier = { factor = 0 FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_reviewed_score@PREV < 0 } } } } }
+ }
+ eon_framework_negotiation_investment_counter_90 = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_kind@PREV = 1 } eon_framework_negotiation_investment_incoming = yes NOT = { check_variable = { eon_framework_negotiation_investment_terms@PREV = 90 } } } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_investment_counter_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_investment_counter_ready = yes } set_temp_variable = { eon_framework_negotiation_selected_terms = 90 } eon_framework_negotiation_investment_counter = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_framework_negotiation_investment_accept_180 = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_kind@PREV = 1 } check_variable = { eon_framework_negotiation_investment_terms@PREV = 180 } eon_framework_negotiation_investment_incoming = yes } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_investment_accept_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_investment_accept_ready = yes } set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_investment_accept = yes } } } }
+  ai_will_do = { factor = 8 modifier = { factor = 0 FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_reviewed_score@PREV < 0 } } } } }
+ }
+ eon_framework_negotiation_investment_counter_180 = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_kind@PREV = 1 } eon_framework_negotiation_investment_incoming = yes NOT = { check_variable = { eon_framework_negotiation_investment_terms@PREV = 180 } } } } }
+  available = { FROM = { PREV = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_investment_counter_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_investment_counter_ready = yes } set_temp_variable = { eon_framework_negotiation_selected_terms = 180 } eon_framework_negotiation_investment_counter = yes } } } }
+  ai_will_do = { factor = 5 modifier = { factor = 0 NOT = { FROM = { PREV = { check_variable = { var = eon_framework_negotiation_investment_reviewed_score@PREV value = -10 compare = greater_than_or_equals } check_variable = { eon_framework_negotiation_investment_reviewed_score@PREV < 0 } } } } } }
+ }
+ eon_framework_negotiation_investment_decline = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { eon_framework_negotiation_investment_incoming = yes } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_investment_reviewed = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_investment_reviewed = yes } eon_framework_negotiation_investment_decline = yes } } } }
+  ai_will_do = { factor = 1 modifier = { factor = 10 FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_reviewed_score@PREV < -10 } } } } }
+ }
+ eon_framework_negotiation_investment_withdraw = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_status@PREV = 1 } } } }
+  available = { FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_status@PREV = 1 } } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { check_variable = { eon_framework_negotiation_investment_status@PREV = 1 } } eon_framework_negotiation_investment_withdraw = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_framework_negotiation_investment_notice = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { eon_framework_negotiation_investment_standing = yes check_variable = { eon_framework_negotiation_investment_contract_epoch@PREV > 0 } } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_investment_notice_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_investment_notice_ready = yes } eon_framework_negotiation_investment_notice = yes } } } }
+  ai_will_do = { factor = 2 modifier = { factor = 0 NOT = { has_opinion = { target = FROM value < -25 } } } }
+ }
+ eon_framework_negotiation_investment_end_request = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { eon_framework_negotiation_investment_standing = yes } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_investment_end_request_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_investment_end_request_ready = yes } eon_framework_negotiation_investment_end_request = yes } } } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_framework_negotiation_investment_end_accept = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { check_variable = { eon_framework_negotiation_investment_kind@PREV = 2 } eon_framework_negotiation_investment_incoming = yes } } }
+  available = { FROM = { PREV = { eon_framework_negotiation_investment_end_accept_ready = yes } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { eon_framework_negotiation_investment_end_accept_ready = yes } eon_framework_negotiation_investment_end_accept = yes } } } }
+  ai_will_do = { factor = 1 modifier = { factor = 5 has_opinion = { target = FROM value < 0 } } }
+ }
+ eon_framework_negotiation_investment_status = {
+  icon = generic_decision
+  allowed = { always = yes }
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { FROM = { PREV = { OR = { check_variable = { eon_framework_negotiation_investment_status@PREV > 0 } eon_framework_negotiation_investment_standing = yes has_country_flag = eon_framework_negotiation_investment_notice@PREV } } } }
+  available = { FROM = { PREV = { OR = { check_variable = { eon_framework_negotiation_investment_status@PREV > 0 } eon_framework_negotiation_investment_standing = yes has_country_flag = eon_framework_negotiation_investment_notice@PREV } } } }
+  cost = 0
+  complete_effect = { FROM = { PREV = { if = { limit = { OR = { check_variable = { eon_framework_negotiation_investment_status@PREV > 0 } eon_framework_negotiation_investment_standing = yes has_country_flag = eon_framework_negotiation_investment_notice@PREV } } custom_effect_tooltip = eon_framework_negotiation_investment_status_info_tt } } } }
+  ai_will_do = { factor = 0 }
+ }
+}
