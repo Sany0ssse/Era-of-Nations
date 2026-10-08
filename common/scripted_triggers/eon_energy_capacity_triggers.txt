@@ -47,9 +47,9 @@ eon_energy_proposed_capacity_available = {
 		limit = { check_variable = { eon_energy_capacity_amount > 0 } }
 		var:eon_energy_capacity_partner = {
 			set_temp_variable = { eon_energy_capacity_counterparty = PREV }
-			set_temp_variable = { eon_energy_capacity_quantity = PREV.eon_energy_capacity_quantity }
+			# Quantity is an execution temporary shared with the supplier.
 			eon_energy_supplier_capacity_calculated = yes
-			set_temp_variable = { PREV.eon_energy_projected_balance = eon_energy_projected_balance }
+			# The calculated execution temporary is already visible to the caller.
 			NOT = { check_variable = { eon_energy_projected_balance < 0 } }
 		}
 	}

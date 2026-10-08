@@ -31,7 +31,7 @@ def main():
     reports = {}
     reports['localisation'] = run('tools/validation/diplomacy_completion/check_localisation.py')
     reports['consultation_ui'] = run('tools/validation/diplomacy_channel_ui/run_checks.py')
-    for number in (24, 25, 26, 28):
+    for number in (24, 25, 26, 27, 28):
         path = f'tools/validation/diplomacy_package_{number}/run_checks.py'
         if not (ROOT / path).is_file():
             raise RuntimeError('Completion work is incomplete: missing ' + path)
@@ -41,6 +41,7 @@ def main():
     reports['support_native_compatibility'] = run('tools/validation/diplomacy_completion/check_support_native_compat.py')
     reports['ordinary_alliance'] = run('tools/validation/diplomacy_package_03/test_ordinary_alliance.py')
     reports['weekly_cash'] = run('tools/validation/diplomacy_completion/check_weekly_cash.py')
+    reports['annex_embargo_cleanup'] = run('tools/validation/diplomacy_completion/check_annex_embargo_cleanup.py')
     reports['integration_sources'] = run('tools/validation/diplomacy_completion/check_integration_sources.py')
     check = subprocess.run(
         ['git', '-c', 'core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol',

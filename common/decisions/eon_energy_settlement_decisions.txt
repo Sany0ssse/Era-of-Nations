@@ -1,0 +1,28 @@
+eon_energy_settlement_category = {
+ eon_energy_settlement_accounts = {
+  icon = energy_buy_button
+  visible = { is_ai = no eon_energy_settlement_accounts_visible = yes }
+  available = { always = yes }
+  cost = 0
+  complete_effect = { eon_energy_settlement_close_world_interval = yes eon_energy_settlement_update_status = yes country_event = { id = eon_energy_settlement.1 } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_energy_settlement_pay_invoices = {
+  icon = energy_buy_button
+  visible = { is_ai = no check_variable = { eon_energy_settlement_payable > 0 } }
+  available = { eon_energy_settlement_payment_available = yes }
+  cost = 0
+  days_re_enable = 1
+  complete_effect = { eon_energy_settlement_manual_pay = yes }
+  ai_will_do = { factor = 0 }
+ }
+ eon_energy_settlement_collect_paid = {
+  icon = energy_buy_button
+  visible = { is_ai = no check_variable = { eon_energy_settlement_paid_claim > 0 } }
+  available = { eon_energy_settlement_receipt_available = yes }
+  cost = 0
+  days_re_enable = 1
+  complete_effect = { eon_energy_settlement_release_paid_claims = yes }
+  ai_will_do = { factor = 0 }
+ }
+}

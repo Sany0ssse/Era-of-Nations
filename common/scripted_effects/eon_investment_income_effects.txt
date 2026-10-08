@@ -1,0 +1,29 @@
+# Investment portfolio overflow is retained by the original investor country.
+# No bilateral treaty, project, asset owner or refund claim is changed here.
+eon_investment_reinvest_weekly = {
+ set_temp_variable = { eon_investment_income_requested = int_investments }
+ add_to_temp_variable = { eon_investment_income_requested = int_investments_rate }
+ add_to_variable = { int_investments = int_investments_rate }
+ clamp_variable = { var = int_investments min = 0 max = 1000000 }
+ set_temp_variable = { eon_investment_income_overflow = eon_investment_income_requested }
+ subtract_from_temp_variable = { eon_investment_income_overflow = int_investments }
+ if = { limit = { check_variable = { eon_investment_income_overflow > 0 } }
+  add_to_variable = { eon_investment_unclaimed_income = eon_investment_income_overflow }
+ }
+}
+
+eon_investment_claim_income = {
+ if = { limit = {
+  exists = yes
+  check_variable = { eon_investment_unclaimed_income > 0 }
+  check_variable = { treasury < 1000000 }
+ }
+  set_temp_variable = { eon_investment_income_payment = 1000000 }
+  subtract_from_temp_variable = { eon_investment_income_payment = treasury }
+  if = { limit = { check_variable = { eon_investment_income_payment > eon_investment_unclaimed_income } }
+   set_temp_variable = { eon_investment_income_payment = eon_investment_unclaimed_income }
+  }
+  add_to_variable = { treasury = eon_investment_income_payment }
+  subtract_from_variable = { eon_investment_unclaimed_income = eon_investment_income_payment }
+ }
+}

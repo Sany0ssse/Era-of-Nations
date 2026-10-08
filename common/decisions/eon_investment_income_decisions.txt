@@ -1,0 +1,18 @@
+eon_investment_income_category = {
+ eon_investment_income_status = {
+  icon = generic_decision
+  visible = { check_variable = { eon_investment_unclaimed_income > 0 } }
+  available = { check_variable = { eon_investment_unclaimed_income > 0 } }
+  cost = 0
+  complete_effect = { custom_effect_tooltip = eon_investment_income_balance_tt }
+  ai_will_do = { factor = 0 }
+ }
+ eon_investment_income_collect = {
+  icon = generic_decision
+  visible = { check_variable = { eon_investment_unclaimed_income > 0 } }
+  available = { check_variable = { treasury < 1000000 } check_variable = { eon_investment_unclaimed_income > 0 } }
+  cost = 0
+  complete_effect = { eon_investment_claim_income = yes }
+  ai_will_do = { factor = 1 }
+ }
+}

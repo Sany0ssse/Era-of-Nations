@@ -1,4 +1,4 @@
-"""Interpret CURRENT ordered energy scripts; native state aggregation is a fixture boundary.
+"""Package27 CURRENT source interpreter adapted from package25; native state aggregation is a fixture boundary.
 
 No independent copied dispatch algorithm. Arrays, scopes, signed quantities,
 rounds, prices, daily latch, balance and budget deltas are read from game files.
@@ -44,7 +44,6 @@ TRIGGER_FILES=['common/scripted_triggers/eon_energy_delivery_triggers.txt',
                'common/scripted_triggers/eon_energy_capacity_triggers.txt',
                'common/scripted_triggers/eon_energy_negotiation_triggers.txt',
                'common/scripted_triggers/eon_energy_settlement_triggers.txt']
-GUI_FILE='common/scripted_guis/01_energy_gui.txt'
 triggers={k:v for path in TRIGGER_FILES for k,o,v in ast(read(path))}
 money_ast=ast(read('common/scripted_effects/00_money_system.txt'))
 effects['automated_debt_taker']=one(money_ast,'automated_debt_taker')
@@ -125,7 +124,6 @@ def trigger(nodes,s,c):
         elif k=='NOT': passed=not trigger(v,s,c)
         elif k=='OR': passed=any(trigger([node],s,c) for node in v)
         elif k=='AND':passed=trigger(v,s,c)
-        elif k=='custom_trigger_tooltip':passed=trigger([node for node in v if node[0]!='tooltip'],s,c)
         elif k=='always':passed=v=='yes'
         elif k=='check_variable':
             key,operation,wanted=variable_comparison(v);passed=compare(value(s,c,key),operation,value(s,c,wanted))
@@ -291,175 +289,3 @@ def conservation(s):
             assert abs(q)<=abs(a['energy_contracts_ammount'][idx])+.002
             if q:close(q,-delivered(s,a['energy_contractors'][idx],identity))
     close(total,0);close(income,expense)
-
-def tests():
-    for generation in (0,5,10,30,100):
-        s=state({1:(generation,5),2:(0,10),3:(0,20)});pair(s,1,2,10);pair(s,1,3,20)
-        run(s);close(delivered(s,2,1),min(max(generation-5,0),30)/3);close(delivered(s,3,1),2*min(max(generation-5,0),30)/3);conservation(s);groups['proportional_shortage']+=1
-    s=state({1:(40,10),2:(0,5),3:(0,4),4:(20,5)});pair(s,1,2,20);pair(s,2,3,12);pair(s,4,3,10)
-    run(s);close(delivered(s,3,2),12);close(delivered(s,3,4),10);conservation(s);groups['multi_supplier_chain_reexport']+=1
-    signatures=[]
-    for order in permutations((1,2,3,4)):
-        p=state({1:(40,10),2:(0,5),3:(0,4),4:(20,5)},order)
-        for args in ((1,2,20),(2,3,12),(4,3,10)):pair(p,*args)
-        run(p,actor=order[0]);signatures.append({k:v['arrays']['eon_energy_delivered'] for k,v in p['countries'].items()});conservation(p);groups['country_order_permutation']+=1
-    assert all(signature==signatures[0] for signature in signatures)
-    for source in (0,.01,10):
-        s=state({1:(source,0),2:(0,0),3:(0,0)});pair(s,1,2,10);pair(s,2,3,10);pair(s,3,1,10)
-        run(s);conservation(s)
-        if source==0:assert all(q==0 for data in s['countries'].values() for q in data['arrays']['eon_energy_delivered'])
-        if source==.01:assert 'eon_energy_delivery_conservative_incomplete' in s['global']['flags'] and s['global']['vars']['eon_energy_delivery_round']==64
-        if source==10:close(delivered(s,2,1),10)
-        groups['cycles_zero_source_real_source_incomplete']+=1
-    s=state({1:(30,5),2:(0,5),3:(0,5)});pair(s,1,2,10,0);pair(s,1,3,10,.1);run(s)
-    close(s['countries'][2]['vars']['energy_buying_expenses'],0);conservation(s);groups['zero_price_free_delivery']+=1
-    original=deepcopy(s['countries'][1]['arrays']['energy_contracts_ammount']);s['countries'][1]['vars']['modifier@energy_gain']=10;run(s);close(delivered(s,2,1),2.5)
-    assert s['countries'][1]['arrays']['energy_contracts_ammount']==original
-    s['countries'][1]['vars']['modifier@energy_gain']=30;run(s);close(delivered(s,2,1),10);groups['shortage_preserves_terms_and_recovers']+=1
-    for cause in ('war','missing','mismatched_price','duplicate','malformed_arrays','framework_removed'):
-        s=state({1:(30,5),2:(0,5),3:(0,5)});pair(s,1,2,10);pair(s,1,3,10)
-        if cause=='war':s['countries'][1]['wars'].add(2);s['countries'][2]['wars'].add(1)
-        if cause=='missing':s['countries'][2]['exists']=False
-        if cause=='mismatched_price':s['countries'][2]['arrays']['energy_contracts_price'][0]=.8
-        if cause=='duplicate':pair(s,1,2,10)
-        if cause=='malformed_arrays':s['countries'][2]['arrays']['energy_contracts_price'].clear()
-        if cause=='framework_removed':s['countries'][2]['flags'].discard('energy_agreement@1')
-        run(s);close(delivered(s,1,2),0);close(delivered(s,3,1),10);conservation(s);groups['invalid_only_affected_pair']+=1
-    s=state({1:(30,5),2:(0,5)});pair(s,1,2,10);run(s)
-    for actor in (1,2):s['countries'][actor]['arrays']['energy_contracts_ammount'][0]*=-1
-    run(s,'eon_energy_delivery_calculate_bill',1);close(s['countries'][1]['vars']['energy_selling_income'],0)
-    run(s);close(delivered(s,1,2),0);conservation(s);groups['opposite_direction_replacement_no_stale_benefit']+=1
-    s=state({1:(30,5),2:(0,5)});pair(s,1,2,10);run(s)
-    for actor in (1,2):s['countries'][actor]['arrays']['energy_contracts_price'][0]=.1
-    run(s,'eon_energy_delivery_calculate_bill',1);close(s['countries'][1]['vars']['energy_selling_income'],0)
-    run(s);close(s['countries'][1]['vars']['energy_selling_income'],1);groups['price_replacement_reconciles']+=1
-    # Native daily hooks can visit every country: only one date-scoped snapshot.
-    s=state({1:(30,5),2:(0,5)});pair(s,1,2,10);before=native['update_state_variables']
-    for actor in (1,2,1,2):run(s,'eon_energy_delivery_daily_tick',actor)
-    assert native['update_state_variables']-before==2
-    s['global']['vars']['num_days']+=1;run(s,'eon_energy_delivery_daily_tick',2)
-    assert native['update_state_variables']-before==4;groups['global_num_days_once_per_tick']+=1
-    # Repeating reconciliation changes no cash; forecasts are excluded from weekly cash.
-    s=state({1:(30,5),2:(0,5)});pair(s,1,2,10,.1);run(s);first=deepcopy(s)
-    run(s);close(s['countries'][1]['vars']['additional_income_rate'],1);close(s['countries'][2]['vars']['additional_expenses_rate'],1)
-    assert all(data['vars']['treasury']==500 for data in s['countries'].values())
-    weekly=read('common/on_actions/01_on_actions.txt');body=ast(weekly.split('# Pay down debt automatically this weekly tick',1)[1].split('#Automated taking debt',1)[0])
-    for actor in (1,2):s['temp']={};execute(body,s,context(actor))
-    close(s['countries'][1]['vars']['treasury'],500);close(s['countries'][2]['vars']['treasury'],500);groups['actual_weekly_cash_excludes_energy_forecast']+=1
-    # Replacement releases only actual old export (5), not contracted 10.
-    s=state({1:(10,5),2:(0,5)});pair(s,1,2,10);run(s);s['temp']={}
-    c=context(1);write(s,c,'eon_energy_capacity_counterparty',2,True);write(s,c,'eon_energy_capacity_quantity',8,True)
-    assert not trigger(triggers['eon_energy_supplier_capacity_available'],s,c)
-    write(s,c,'eon_energy_capacity_quantity',5,True);assert trigger(triggers['eon_energy_supplier_capacity_available'],s,c);groups['replacement_releases_actual_not_promised']+=1
-    # Storage cannot fulfill 100 GW from one GWh; exports do not use storage.
-    s=state({1:(0,100)});s['countries'][1]['vars'].update(stored_energy=1,max_stored_energy=1)
-    run(s,'calculate_energy_use');close(s['countries'][1]['vars']['energy_withdrawal_from_storage'],1/24);groups['storage_physical_gwh_limit']+=1
-    # The second balance application must NOT multiply domestic hydro/gain again.
-    s=state({1:(10,5),2:(0,5)});s['countries'][1]['state_aggregates']={'hydroelectric_energy_generation':5}
-    s['countries'][1]['vars']['modifier@energy_gain_multiplier']=.5;pair(s,1,2,10);run(s)
-    close(s['countries'][1]['vars']['eon_energy_delivery_generation'],22.5);run(s)
-    close(s['countries'][1]['vars']['eon_energy_delivery_generation'],22.5);conservation(s);groups['generation_refreshed_once_no_multiplier_compounding']+=1
-    # Zero generation infrastructure executes its explicit denominator guards.
-    s=state({1:(0,5)});s['countries'][1]['flags'].discard('disable_fossil_fuel_power_plant_flag')
-    s['countries'][1]['ideas'].add('nuclear_energy');run(s,'calculate_energy_use')
-    close(s['countries'][1]['vars']['energy_sum'],0);groups['zero_infrastructure_no_division_by_zero']+=1
-    # Safe read rejects tampered/old unmatched actual amounts on both budgets.
-    s=state({1:(30,5),2:(0,5)});pair(s,1,2,10);run(s)
-    s['countries'][2]['arrays']['eon_energy_delivered'][0]=99
-    for actor in (1,2):run(s,'eon_energy_delivery_calculate_bill',actor)
-    close(s['countries'][1]['vars']['energy_selling_income'],0);close(s['countries'][2]['vars']['energy_buying_expenses'],0);groups['unmatched_actuals_fail_closed_both_bills']+=1
-    # A malformed snapshot on either side fails closed on BOTH readers/bills.
-    for field,wrong in (('eon_energy_delivery_prices',.10),('eon_energy_delivery_terms',7),
-                        ('eon_energy_delivery_prices',None),('eon_energy_delivery_terms',None)):
-        s=state({1:(30,5),2:(0,5)});pair(s,1,2,10,.05);run(s)
-        if wrong is None:s['countries'][2]['arrays'][field].clear()
-        else:s['countries'][2]['arrays'][field][0]=wrong
-        for actor in (1,2):run(s,'eon_energy_delivery_calculate_bill',actor)
-        close(s['countries'][1]['vars']['energy_selling_income'],0)
-        close(s['countries'][2]['vars']['energy_buying_expenses'],0)
-        groups['bilateral_snapshot_terms_prices_fail_closed']+=1
-    # Execute the real receiving AI counter source with shared execution temporaries: the
-    # supplier's insufficient projection must reach the recipient before false.
-    for generation,wanted in ((10,5),(9.8,4),(5,0)):
-        s=state({1:(generation,5),2:(0,5)});pair(s,1,2,5,.05);run(s)
-        c=context(1);s['temp']={};write(s,c,'eon_energy_pair_partner',2,True)
-        execute(effects['eon_energy_read_pair_record'],s,c)
-        s['countries'][1]['vars'].update(energy_selling_selected_TAG=2,temp_energy_ammount=-8,temp_energy_price=.05)
-        execute(effects['eon_energy_send_offer'],s,c)
-        c=context(2,1);execute(effects['eon_energy_evaluate_offer'],s,c)
-        old_score=s['countries'][2]['vars']['eon_energy_ai_accept_chance']
-        execute(effects['eon_energy_prepare_ai_counter'],s,c)
-        close(s['countries'][2]['vars']['eon_energy_counter_amount'],wanted)
-        assert s['countries'][2]['vars']['eon_energy_counter_ready']==(1 if wanted else 0)
-        close(s['countries'][2]['vars']['eon_energy_ai_accept_chance'],old_score)
-        assert s['countries'][2]['vars']['eon_energy_offer_amount']==8
-        groups['actual_scoped_ai_counter_supplier_output']+=1
-    s=state({1:(10,5),2:(0,5)});pair(s,1,2,5);run(s);s['temp']={};c=context(2,1)
-    s['countries'][1]['arrays']['energy_contracts_price'].clear()
-    for key,val in (('eon_energy_capacity_partner',1),('eon_energy_capacity_amount',8),('eon_energy_projected_balance',-8)):
-        write(s,c,key,val,True)
-    assert not trigger(triggers['eon_energy_proposed_capacity_available'],s,c)
-    assert value(s,c,'eon_energy_projected_balance')==-8
-    groups['capacity_structural_failure_preserves_caller_sentinel']+=1
-    # Different edge insertion order cannot favour one buyer over another.
-    outputs=[]
-    for edges in permutations(((1,2,10),(1,3,20),(2,4,5),(3,4,9))):
-        s=state({1:(20,5),2:(0,2),3:(0,2),4:(0,5)})
-        for edge in edges:pair(s,*edge)
-        run(s);outputs.append({(a,b):delivered(s,a,b) for a,b,q in edges});conservation(s);groups['contract_order_permutation']+=1
-    assert all(output==outputs[0] for output in outputs)
-    # Execute the real proposal/acceptance/end helpers, including immediate
-    # global reconciliation AFTER reciprocal contract tables have been written.
-    s=state({1:(30,5),2:(0,5)});pair(s,1,2,10);run(s)
-    for amount,price in ((-8,.07),(-5,0)):
-        c=context(1);s['temp']={};write(s,c,'eon_energy_pair_partner',2,True)
-        execute(effects['eon_energy_read_pair_record'],s,c)
-        s['countries'][1]['vars'].update(energy_selling_selected_TAG=2,temp_energy_ammount=amount,temp_energy_price=price)
-        execute(effects['eon_energy_send_offer'],s,c)
-        execute(effects['eon_energy_accept_offer'],s,context(2,1))
-        close(delivered(s,2,1),-amount);close(s['countries'][2]['vars']['energy_buying_expenses'],-amount*price)
-        conservation(s);groups['native_frame_source_replacement_acceptance_immediate_actual']+=1
-    s['temp']={};c=context(1);write(s,c,'eon_energy_pair_partner',2,True)
-    execute(effects['eon_energy_end_pair'],s,c)
-    assert not s['countries'][1]['arrays']['energy_contractors'] and not s['countries'][2]['arrays']['energy_contractors']
-    close(s['countries'][1]['vars']['energy_selling_income'],0);close(s['countries'][2]['vars']['energy_buying_expenses'],0)
-    groups['source_termination_immediate_actual_and_bill_clear']+=1
-    # Evaluate the current button and the guarded producer branch independently;
-    # no mouse/UI simulation or replacement send predicate is used here.
-    gui=one(one(ast(read(GUI_FILE)),'scripted_gui'),'energy_scripted_gui')
-    enabled=one(one(gui,'triggers'),'confirm_energy_sell_click_enabled')
-    send=one(one(gui,'effects'),'confirm_energy_sell_click')
-    send_limit=one(one(one(send,'else'),'if'),'limit')
-    def old_gui_scalar(nodes):
-        proper=[('PREV','=',[('has_country_flag','=','energy_agreement@PREV')])]
-        result=[]
-        for key,op,body in nodes:
-            if key=='var:energy_selling_selected_TAG' and body==proper:
-                result.append(('has_country_flag','=','energy_agreement@energy_selling_selected_TAG'))
-            else:result.append((key,op,old_gui_scalar(body) if isinstance(body,list) else body))
-        return result
-    for amount in (16,32,64):
-        s=state({1:(100,5),2:(0,5),3:(0,5)});pair(s,1,2,10);run(s)
-        s['countries'][1]['vars'].update(energy_selling_selected_TAG=2,temp_energy_ammount=-amount,temp_energy_price=.0625)
-        for key,body in (('enabled',enabled),('send_limit',send_limit)):
-            s['temp']={};assert trigger(body,s,context(1)),(key,amount)
-            mutant=old_gui_scalar(body);assert mutant!=body
-            s['temp']={};assert not trigger(mutant,s,context(1)),('Old scalar flag accepted',key,amount)
-            groups['actual_GUI_'+key+'_16_32_64_and_old_scalar_mutant']+=1
-        # A flag for country3 cannot grant permission for selected country2.
-        s['countries'][1]['flags'].remove('energy_agreement@2')
-        s['countries'][1]['flags'].add('energy_agreement@3')
-        assert 'energy_agreement@1' in s['countries'][2]['flags']
-        for key,body in (('enabled',enabled),('send_limit',send_limit)):
-            s['temp']={};assert not trigger(body,s,context(1)),('Wrong caller pair accepted',key,amount)
-            groups['actual_GUI_'+key+'_wrong_pair_flag_rejected']+=1
-    return dict(groups)
-
-if __name__=='__main__':
-    scenarios=tests();print(json.dumps({'suite':'package25 actual-source energy delivery','scenarios':sum(scenarios.values()),'groups':scenarios,
-        'native_boundaries':dict(native),'source_sha256':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in FILES+TRIGGER_FILES+[GUI_FILE]},
-        'proof_limitations':['Current-source interpreter, not native engine execution','State/GDP aggregation supplied by explicit fixtures',
-            'Tax/welfare outside selected current update_display rate nodes are zero fixtures','Native country enumeration and numeric precision require separate engine verification',
-            'Interval metering, escrow and arrears are separately exercised by package27',
-            'No certified network capacity; native hourly queue and cash scheduling require campaign verification'],
-        'native_campaign_verified':False},indent=2))

@@ -1,0 +1,80 @@
+add_namespace = eon_energy_settlement
+country_event = {
+ id = eon_energy_settlement.100
+ hidden = yes
+ is_triggered_only = yes
+ immediate = {
+  if = {
+   limit = { is_debug = yes NOT = { has_global_flag = eon_energy_settlement_numeric_probe } }
+   set_global_flag = eon_energy_settlement_numeric_probe
+   set_temp_variable = { eon_es_probe_half = 0.001 }
+   multiply_temp_variable = { eon_es_probe_half = 0.5 }
+   set_temp_variable = { eon_es_probe_ratio = 0.001 }
+   divide_temp_variable = { eon_es_probe_ratio = 1.6 }
+   set_temp_variable = { eon_es_probe_product = 0.001 }
+   multiply_temp_variable = { eon_es_probe_product = 1.6 }
+   divide_temp_variable = { eon_es_probe_product = 1.6 }
+   set_temp_variable = { eon_es_probe_divisor = 1.6 }
+   divide_temp_variable = { eon_es_probe_divisor = 0.001 }
+   set_temp_variable = { eon_es_probe_dividend = 1.6 }
+   divide_temp_variable = { eon_es_probe_dividend = eon_es_probe_divisor }
+   set_temp_variable = { eon_es_probe_large_divisor = 1000000 }
+   divide_temp_variable = { eon_es_probe_large_divisor = 0.001 }
+   set_temp_variable = { eon_es_probe_large_result = 1000000 }
+   divide_temp_variable = { eon_es_probe_large_result = eon_es_probe_large_divisor }
+   log = "EON_ES_NUMERIC half=[?eon_es_probe_half|8] ratio=[?eon_es_probe_ratio|8] product=[?eon_es_probe_product|8] divisor=[?eon_es_probe_divisor|8] payment=[?eon_es_probe_dividend|8] large_divisor=[?eon_es_probe_large_divisor|8] large_payment=[?eon_es_probe_large_result|8]"
+  }
+  if = { limit = { is_debug = yes } log = "[GetDateText]: EON_ES_CLOCK anchor=[?global.eon_energy_settlement_anchor] hours=[?global.eon_energy_settlement_hour_count] date=[?global.date]" }
+  if = {
+   limit = { exists = yes check_variable = { THIS.id = global.eon_energy_settlement_anchor } }
+   eon_energy_settlement_close_world_interval = yes
+  }
+ }
+}
+country_event = {
+ id = eon_energy_settlement.1
+ title = eon_energy_settlement.1.t
+ desc = {
+  trigger = { has_global_flag = eon_energy_settlement_clock_gap }
+  text = eon_energy_settlement.1.gap
+ }
+ desc = {
+  trigger = { NOT = { has_global_flag = eon_energy_settlement_clock_gap } }
+  text = eon_energy_settlement.1.d
+ }
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_energy_settlement.ack }
+}
+country_event = {
+ id = eon_energy_settlement.2
+ title = eon_energy_settlement.2.t
+ desc = eon_energy_settlement.2.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_energy_settlement.ack }
+}
+country_event = {
+ id = eon_energy_settlement.3
+ title = eon_energy_settlement.3.t
+ desc = eon_energy_settlement.3.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_energy_settlement.ack }
+}
+country_event = {
+ id = eon_energy_settlement.4
+ title = eon_energy_settlement.4.t
+ desc = eon_energy_settlement.4.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_energy_settlement.ack }
+}
+country_event = {
+ id = eon_energy_settlement.5
+ title = eon_energy_settlement.5.t
+ desc = eon_energy_settlement.5.d
+ picture = GFX_report_event_generic_read_write
+ is_triggered_only = yes
+ option = { name = eon_energy_settlement.ack }
+}

@@ -1,0 +1,27 @@
+on_actions = {
+ on_startup = {
+  effect = { every_country = { limit = { NOT = { has_global_flag = eon_energy_settlement_clock_owned } } eon_energy_delivery_daily_tick = yes } }
+ }
+ on_daily = { effect = { eon_energy_settlement_daily_maintenance = yes } }
+ on_declare_war = { effect = { eon_energy_delivery_reconcile_world = yes } }
+ # Installed native: ROOT winner, FROM annexed. Timer ownership only.
+ on_annex = {
+  effect = {
+   if = {
+    limit = { check_variable = { global.eon_energy_settlement_anchor = FROM } }
+    eon_energy_settlement_activate_clock = yes
+   }
+   eon_energy_delivery_reconcile_world = yes
+  }
+ }
+ # Installed native: ROOT subject, FROM overlord.
+ on_subject_annexed = {
+  effect = {
+   if = {
+    limit = { check_variable = { global.eon_energy_settlement_anchor = THIS } }
+    FROM = { eon_energy_settlement_activate_clock = yes }
+   }
+   FROM = { eon_energy_delivery_reconcile_world = yes }
+  }
+ }
+}

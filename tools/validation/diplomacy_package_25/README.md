@@ -29,8 +29,11 @@ Additional scoped AI tests execute actual evaluate/prepare-counter effects:
 supplier shortage returns its projection before the numerical false predicate,
 fractional availability is floored, and structural failure retains the sentinel.
 Terms/price snapshot tampering on either side makes both bills fail closed.
-The inherited weekly charge uses the current delivery snapshot at that tick;
-there is no accumulated daily/hourly GW/GWh delivery ledger in this package.
+The displayed weekly energy forecast uses the current delivery snapshot;
+the integrated cash update excludes this forecast. Package 27 separately meters
+physical hourly GWh and executes payments, avoiding a second weekly charge.
+Execution temporaries are shared within one invocation; explicit scoped reads
+access persistent storage. The suite includes scoped-temp mutation regressions.
 
 `test_source.py` checks narrow byte boundaries against `c1420b108`, BOM/EOL,
 actual billing integration, report IDs, localization and existing sprites.

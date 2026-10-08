@@ -1,0 +1,405 @@
+# Package27: immutable invoice editions; cash-backed escrow is not unpaid debt.
+# All global array indexes are explicit GLOBAL scalar values, not donor temps.
+# The hourly timer uses native hours=1 and date EQUALITY only; no date arithmetic.
+
+eon_energy_settlement_retire_pair = {
+ set_temp_variable = { eon_es_retire_country = THIS }
+ for_each_loop = {
+  array = global.eon_energy_invoice_buyers
+  value = eon_es_retire_buyer
+  index = eon_es_retire_row
+  set_variable = { global.eon_es_retire_row = eon_es_retire_row }
+  if = {
+   limit = {
+    OR = {
+     AND = { check_variable = { eon_es_retire_buyer = eon_es_retire_country } check_variable = { global.eon_energy_invoice_sellers^global.eon_es_retire_row = eon_energy_pair_partner } }
+     AND = { check_variable = { eon_es_retire_buyer = eon_energy_pair_partner } check_variable = { global.eon_energy_invoice_sellers^global.eon_es_retire_row = eon_es_retire_country } }
+    }
+   }
+   set_variable = { global.eon_energy_invoice_active^global.eon_es_retire_row = 0 }
+  }
+ }
+}
+
+# Buyer scope, current validated delivery row. Existing contracts are adopted
+# from today's reciprocal terms only; no historical deliveries are guessed.
+eon_energy_settlement_identify_invoice = {
+ set_temp_variable = { eon_es_invoice_found = 0 }
+ set_temp_variable = { eon_es_invoice_row = 0 }
+ for_each_loop = {
+  array = global.eon_energy_invoice_buyers
+  value = eon_es_find_buyer
+  index = eon_es_find_row
+  set_variable = { global.eon_es_find_row = eon_es_find_row }
+  if = {
+   limit = {
+    check_variable = { eon_es_find_buyer = THIS }
+    check_variable = { global.eon_energy_invoice_sellers^global.eon_es_find_row = eon_energy_delivery_partner }
+    check_variable = { global.eon_energy_invoice_active^global.eon_es_find_row = 1 }
+   }
+   if = {
+    limit = {
+     check_variable = { global.eon_energy_invoice_quantity^global.eon_es_find_row = energy_contracts_ammount^eon_energy_delivery_row }
+     check_variable = { global.eon_energy_invoice_prices^global.eon_es_find_row = energy_contracts_price^eon_energy_delivery_row }
+    }
+    set_temp_variable = { eon_es_invoice_found = 1 }
+    set_temp_variable = { eon_es_invoice_row = eon_es_find_row }
+   }
+   else = { set_variable = { global.eon_energy_invoice_active^global.eon_es_find_row = 0 } }
+  }
+ }
+ if = {
+  limit = { check_variable = { eon_es_invoice_found = 0 } }
+  set_temp_variable = { eon_es_invoice_row = global.eon_energy_invoice_buyers^num }
+  add_to_array = { array = global.eon_energy_invoice_buyers value = THIS }
+  add_to_array = { array = global.eon_energy_invoice_sellers value = eon_energy_delivery_partner }
+  add_to_array = { array = global.eon_energy_invoice_quantity value = energy_contracts_ammount^eon_energy_delivery_row }
+  add_to_array = { array = global.eon_energy_invoice_prices value = energy_contracts_price^eon_energy_delivery_row }
+  add_to_array = { array = global.eon_energy_invoice_active value = 1 }
+  add_to_array = { array = global.eon_energy_invoice_gwh value = 0 }
+  add_to_array = { array = global.eon_energy_invoice_charge value = 0 }
+  add_to_array = { array = global.eon_energy_invoice_unpaid value = 0 }
+  add_to_array = { array = global.eon_energy_invoice_overdue value = 0 }
+  add_to_array = { array = global.eon_energy_invoice_paid value = 0 }
+  add_to_array = { array = global.eon_energy_invoice_escrow value = 0 }
+  add_to_array = { array = global.eon_energy_invoice_received value = 0 }
+  add_to_array = { array = global.eon_energy_invoice_numerator value = 0 }
+  add_to_array = { array = global.eon_energy_invoice_remainder value = 0 }
+ }
+}
+
+# Snapshot survives deletion, replacement, war and extinct ORIGINAL tags.
+# Physical delivery is refreshed by package25; opening never recalculates it.
+eon_energy_settlement_open_world_interval = {
+ clear_array = global.eon_energy_meter_rows
+ clear_array = global.eon_energy_meter_power
+ every_country = {
+  limit = { check_variable = { energy_contractors^num > 0 } }
+  for_each_loop = {
+   array = energy_contractors
+   value = eon_energy_delivery_partner
+   index = eon_energy_delivery_row
+   if = {
+    limit = { eon_energy_delivery_row_current = yes check_variable = { eon_energy_delivery_read_amount > 0 } }
+    eon_energy_settlement_identify_invoice = yes
+    add_to_array = { array = global.eon_energy_meter_rows value = eon_es_invoice_row }
+    add_to_array = { array = global.eon_energy_meter_power value = eon_energy_delivery_read_amount }
+   }
+  }
+ }
+ eon_energy_settlement_update_status = yes
+}
+
+# Caller supplies a MEASURED duration, not a date subtraction. Native clock=1h.
+eon_energy_settlement_accrue_open_interval = {
+ if = {
+  limit = { check_variable = { global.eon_energy_settlement_interval_hours > 0 } }
+  for_each_loop = {
+   array = global.eon_energy_meter_rows
+   value = eon_es_meter_invoice
+   index = eon_es_meter_row
+   set_variable = { global.eon_es_meter_row = eon_es_meter_row }
+   set_variable = { global.eon_es_invoice_row = eon_es_meter_invoice }
+   set_temp_variable = { eon_es_gwh = global.eon_energy_meter_power^global.eon_es_meter_row }
+   multiply_temp_variable = { eon_es_gwh = global.eon_energy_settlement_interval_hours }
+   add_to_variable = { global.eon_energy_invoice_gwh^global.eon_es_invoice_row = eon_es_gwh }
+  }
+ }
+}
+
+# Revalue the cumulative physical quantity at this edition's immutable price.
+# Never divide/truncate a tiny hourly currency flow and sum the rounded pieces.
+# Raw GWh plus cumulative numerator/remainder retain sub-currency fractions.
+eon_energy_settlement_value_accounts = {
+ for_each_loop = {
+  array = global.eon_energy_invoice_gwh
+  value = eon_es_value_gwh
+  index = eon_es_value_row
+  set_variable = { global.eon_es_value_row = eon_es_value_row }
+  set_temp_variable = { eon_es_numerator = eon_es_value_gwh }
+  multiply_temp_variable = { eon_es_numerator = global.eon_energy_invoice_prices^global.eon_es_value_row }
+  set_variable = { global.eon_energy_invoice_numerator^global.eon_es_value_row = eon_es_numerator }
+  set_temp_variable = { eon_es_valued_charge = eon_es_numerator }
+  divide_temp_variable = { eon_es_valued_charge = 168 }
+  set_temp_variable = { eon_es_charge_delta = eon_es_valued_charge }
+  subtract_from_temp_variable = { eon_es_charge_delta = global.eon_energy_invoice_charge^global.eon_es_value_row }
+  clamp_temp_variable = { var = eon_es_charge_delta min = 0 }
+  add_to_variable = { global.eon_energy_invoice_charge^global.eon_es_value_row = eon_es_charge_delta }
+  add_to_variable = { global.eon_energy_invoice_unpaid^global.eon_es_value_row = eon_es_charge_delta }
+  set_temp_variable = { eon_es_valued_numerator = global.eon_energy_invoice_charge^global.eon_es_value_row }
+  multiply_temp_variable = { eon_es_valued_numerator = 168 }
+  set_temp_variable = { eon_es_remainder = eon_es_numerator }
+  subtract_from_temp_variable = { eon_es_remainder = eon_es_valued_numerator }
+  clamp_temp_variable = { var = eon_es_remainder min = 0 }
+  set_variable = { global.eon_energy_invoice_remainder^global.eon_es_value_row = eon_es_remainder }
+ }
+}
+
+# Buyer/Seller country totals and cash snapshots are persistent country-local.
+eon_energy_settlement_prepare_accounts = {
+ eon_energy_settlement_value_accounts = yes
+ every_country = {
+  set_variable = { eon_energy_settlement_payable = 0 }
+  set_variable = { eon_energy_settlement_arrears = 0 }
+  set_variable = { eon_energy_settlement_receivable = 0 }
+  set_variable = { eon_energy_settlement_customer_arrears = 0 }
+  set_variable = { eon_energy_settlement_paid_claim = 0 }
+  set_variable = { eon_energy_settlement_import_gwh = 0 }
+  set_variable = { eon_energy_settlement_export_gwh = 0 }
+  set_variable = { eon_energy_settlement_cash_snapshot = treasury }
+  clamp_variable = { var = eon_energy_settlement_cash_snapshot min = 0 max = 1000000 }
+  set_variable = { eon_energy_settlement_cash_remaining = eon_energy_settlement_cash_snapshot }
+ }
+ for_each_loop = {
+  array = global.eon_energy_invoice_buyers
+  value = eon_es_total_buyer
+  index = eon_es_total_row
+  set_variable = { global.eon_es_total_row = eon_es_total_row }
+  var:eon_es_total_buyer = {
+   if = {
+    limit = { exists = yes check_variable = { THIS.id = eon_es_total_buyer } }
+    add_to_variable = { eon_energy_settlement_payable = global.eon_energy_invoice_unpaid^global.eon_es_total_row }
+    add_to_variable = { eon_energy_settlement_arrears = global.eon_energy_invoice_overdue^global.eon_es_total_row }
+    add_to_variable = { eon_energy_settlement_import_gwh = global.eon_energy_invoice_gwh^global.eon_es_total_row }
+   }
+  }
+  set_temp_variable = { eon_es_total_seller = global.eon_energy_invoice_sellers^global.eon_es_total_row }
+  var:eon_es_total_seller = {
+   if = {
+    limit = { exists = yes check_variable = { THIS.id = eon_es_total_seller } }
+    add_to_variable = { eon_energy_settlement_receivable = global.eon_energy_invoice_unpaid^global.eon_es_total_row }
+    add_to_variable = { eon_energy_settlement_customer_arrears = global.eon_energy_invoice_overdue^global.eon_es_total_row }
+    add_to_variable = { eon_energy_settlement_paid_claim = global.eon_energy_invoice_escrow^global.eon_es_total_row }
+    add_to_variable = { eon_energy_settlement_export_gwh = global.eon_energy_invoice_gwh^global.eon_es_total_row }
+   }
+  }
+ }
+ every_country = {
+  # Debt/cash divisor avoids truncating a tiny cash/debt ratio to zero.
+  set_variable = { eon_energy_settlement_pay_divisor = 1 }
+  if = {
+   limit = { check_variable = { eon_energy_settlement_cash_snapshot > 0 } check_variable = { eon_energy_settlement_payable > eon_energy_settlement_cash_snapshot } }
+   set_variable = { eon_energy_settlement_pay_divisor = eon_energy_settlement_payable }
+   divide_variable = { eon_energy_settlement_pay_divisor = eon_energy_settlement_cash_snapshot }
+   clamp_variable = { var = eon_energy_settlement_pay_divisor min = 1 }
+  }
+ }
+}
+
+# Only this buyer pays. Payments consume its FROZEN budget, never new receipts.
+eon_energy_settlement_pay_country = {
+ # Canonical invoice order; cumulative quotas telescope to the frozen budget.
+ set_temp_variable = { eon_es_processed_due = 0 }
+ set_temp_variable = { eon_es_paid_so_far = 0 }
+ for_each_loop = {
+  array = global.eon_energy_invoice_buyers
+  value = eon_es_pay_buyer
+  index = eon_es_pay_row
+  if = {
+   limit = { check_variable = { eon_es_pay_buyer = THIS } }
+   set_variable = { global.eon_es_pay_row = eon_es_pay_row }
+   add_to_temp_variable = { eon_es_processed_due = global.eon_energy_invoice_unpaid^global.eon_es_pay_row }
+   set_temp_variable = { eon_es_pay_target = eon_es_processed_due }
+   divide_temp_variable = { eon_es_pay_target = eon_energy_settlement_pay_divisor }
+   if = {
+    limit = { check_variable = { eon_es_processed_due = eon_energy_settlement_payable } }
+    set_temp_variable = { eon_es_pay_target = eon_energy_settlement_cash_snapshot }
+    clamp_temp_variable = { var = eon_es_pay_target min = 0 max = eon_energy_settlement_payable }
+   }
+   set_temp_variable = { eon_es_payment = eon_es_pay_target }
+   subtract_from_temp_variable = { eon_es_payment = eon_es_paid_so_far }
+   clamp_temp_variable = { var = eon_es_payment min = 0 max = global.eon_energy_invoice_unpaid^global.eon_es_pay_row }
+   clamp_temp_variable = { var = eon_es_payment min = 0 max = eon_energy_settlement_cash_remaining }
+   add_to_temp_variable = { eon_es_paid_so_far = eon_es_payment }
+   subtract_from_variable = { treasury = eon_es_payment }
+   subtract_from_variable = { eon_energy_settlement_cash_remaining = eon_es_payment }
+   subtract_from_variable = { global.eon_energy_invoice_unpaid^global.eon_es_pay_row = eon_es_payment }
+   add_to_variable = { global.eon_energy_invoice_paid^global.eon_es_pay_row = eon_es_payment }
+   add_to_variable = { global.eon_energy_invoice_escrow^global.eon_es_pay_row = eon_es_payment }
+   set_temp_variable = { eon_es_old_payment = eon_es_payment }
+   clamp_temp_variable = { var = eon_es_old_payment min = 0 max = global.eon_energy_invoice_overdue^global.eon_es_pay_row }
+   subtract_from_variable = { global.eon_energy_invoice_overdue^global.eon_es_pay_row = eon_es_old_payment }
+  }
+ }
+}
+
+eon_energy_settlement_prepare_receipts = {
+ every_country = {
+  set_variable = { eon_energy_settlement_receipt_remaining = 1000000 }
+  subtract_from_variable = { eon_energy_settlement_receipt_remaining = treasury }
+  clamp_variable = { var = eon_energy_settlement_receipt_remaining min = 0 max = 2000000 }
+  set_variable = { eon_energy_settlement_receipt_budget = eon_energy_settlement_receipt_remaining }
+  clamp_variable = { var = eon_energy_settlement_receipt_budget min = 0 max = eon_energy_settlement_paid_claim }
+  set_variable = { eon_energy_settlement_receipt_divisor = 1 }
+  if = {
+   limit = { check_variable = { eon_energy_settlement_receipt_remaining > 0 } check_variable = { eon_energy_settlement_paid_claim > eon_energy_settlement_receipt_remaining } }
+   set_variable = { eon_energy_settlement_receipt_divisor = eon_energy_settlement_paid_claim }
+   divide_variable = { eon_energy_settlement_receipt_divisor = eon_energy_settlement_receipt_remaining }
+   clamp_variable = { var = eon_energy_settlement_receipt_divisor min = 1 }
+  }
+ }
+}
+
+eon_energy_settlement_receive_country = {
+ set_temp_variable = { eon_es_processed_claim = 0 }
+ set_temp_variable = { eon_es_received_so_far = 0 }
+ for_each_loop = {
+  array = global.eon_energy_invoice_sellers
+  value = eon_es_receive_seller
+  index = eon_es_receive_row
+  if = {
+   limit = { check_variable = { eon_es_receive_seller = THIS } }
+   set_variable = { global.eon_es_receive_row = eon_es_receive_row }
+   add_to_temp_variable = { eon_es_processed_claim = global.eon_energy_invoice_escrow^global.eon_es_receive_row }
+   set_temp_variable = { eon_es_receipt_target = eon_es_processed_claim }
+   divide_temp_variable = { eon_es_receipt_target = eon_energy_settlement_receipt_divisor }
+   if = {
+    limit = { check_variable = { eon_es_processed_claim = eon_energy_settlement_paid_claim } }
+    set_temp_variable = { eon_es_receipt_target = eon_energy_settlement_receipt_budget }
+   }
+   set_temp_variable = { eon_es_receipt = eon_es_receipt_target }
+   subtract_from_temp_variable = { eon_es_receipt = eon_es_received_so_far }
+   clamp_temp_variable = { var = eon_es_receipt min = 0 max = global.eon_energy_invoice_escrow^global.eon_es_receive_row }
+   clamp_temp_variable = { var = eon_es_receipt min = 0 max = eon_energy_settlement_receipt_remaining }
+   add_to_temp_variable = { eon_es_received_so_far = eon_es_receipt }
+   add_to_variable = { treasury = eon_es_receipt }
+   subtract_from_variable = { eon_energy_settlement_receipt_remaining = eon_es_receipt }
+   subtract_from_variable = { global.eon_energy_invoice_escrow^global.eon_es_receive_row = eon_es_receipt }
+   add_to_variable = { global.eon_energy_invoice_received^global.eon_es_receive_row = eon_es_receipt }
+  }
+ }
+}
+
+eon_energy_settlement_update_status = {
+ eon_energy_settlement_prepare_accounts = yes
+ every_country = {
+  if = {
+   limit = { check_variable = { eon_energy_settlement_arrears > 0 } }
+   if = { limit = { NOT = { has_country_flag = eon_energy_settlement_in_arrears } is_ai = no } country_event = { id = eon_energy_settlement.2 } }
+   set_country_flag = eon_energy_settlement_in_arrears
+  }
+  else = {
+   if = { limit = { has_country_flag = eon_energy_settlement_in_arrears is_ai = no } country_event = { id = eon_energy_settlement.3 } }
+   clr_country_flag = eon_energy_settlement_in_arrears
+  }
+  if = {
+   limit = { check_variable = { eon_energy_settlement_customer_arrears > 0 } }
+   if = { limit = { NOT = { has_country_flag = eon_energy_settlement_customer_late } is_ai = no } country_event = { id = eon_energy_settlement.4 } }
+   set_country_flag = eon_energy_settlement_customer_late
+  }
+  else = {
+   if = { limit = { has_country_flag = eon_energy_settlement_customer_late is_ai = no } country_event = { id = eon_energy_settlement.5 } }
+   clr_country_flag = eon_energy_settlement_customer_late
+  }
+ }
+}
+
+eon_energy_settlement_release_paid_claims = {
+ eon_energy_settlement_prepare_accounts = yes
+ eon_energy_settlement_prepare_receipts = yes
+ every_country = { limit = { check_variable = { eon_energy_settlement_paid_claim > 0 } } eon_energy_settlement_receive_country = yes }
+ eon_energy_settlement_update_status = yes
+}
+
+eon_energy_settlement_settle_world = {
+ # ALL buyer budgets freeze before ANY debit or creditor credit.
+ eon_energy_settlement_prepare_accounts = yes
+ every_country = { limit = { check_variable = { eon_energy_settlement_payable > 0 } } eon_energy_settlement_pay_country = yes }
+ for_each_loop = {
+  array = global.eon_energy_invoice_unpaid
+  value = eon_es_due_left
+  index = eon_es_due_row
+  set_variable = { global.eon_es_due_row = eon_es_due_row }
+  set_variable = { global.eon_energy_invoice_overdue^global.eon_es_due_row = eon_es_due_left }
+ }
+ eon_energy_settlement_release_paid_claims = yes
+}
+
+eon_energy_settlement_manual_pay = {
+ eon_energy_settlement_close_world_interval = yes
+ eon_energy_settlement_prepare_accounts = yes
+ if = { limit = { eon_energy_settlement_payment_available = yes } eon_energy_settlement_pay_country = yes }
+ eon_energy_settlement_release_paid_claims = yes
+}
+
+# Native one-hour queue. A relocated anchor must queue independently of the
+# accrual latch; old anchor callbacks never create a new chain.
+eon_energy_settlement_queue_clock = {
+ if = {
+  limit = { OR = { NOT = { has_variable = eon_energy_settlement_last_queue_date } NOT = { check_variable = { eon_energy_settlement_last_queue_date = global.date } } NOT = { check_variable = { eon_energy_settlement_last_queue_epoch = global.eon_energy_settlement_anchor_epoch } } } }
+  set_variable = { eon_energy_settlement_last_queue_date = global.date }
+  set_variable = { eon_energy_settlement_last_queue_epoch = global.eon_energy_settlement_anchor_epoch }
+  country_event = { id = eon_energy_settlement.100 hours = 1 }
+ }
+}
+eon_energy_settlement_activate_clock = {
+ set_variable = { global.eon_energy_settlement_anchor = THIS }
+ add_to_variable = { global.eon_energy_settlement_anchor_epoch = 1 }
+ eon_energy_settlement_queue_clock = yes
+}
+eon_energy_settlement_close_world_interval = {
+ if = {
+  limit = { NOT = { has_global_flag = eon_energy_settlement_clock_owned } }
+  set_global_flag = eon_energy_settlement_clock_owned
+  set_variable = { global.eon_energy_settlement_clock_date = global.date }
+  set_variable = { global.eon_energy_settlement_clock_day = global.num_days }
+  set_variable = { global.eon_energy_settlement_hour_count = 0 }
+  set_variable = { global.eon_energy_settlement_closed_days = 0 }
+  eon_energy_settlement_activate_clock = yes
+ }
+ else = {
+  if = {
+   limit = { NOT = { var:global.eon_energy_settlement_anchor = { exists = yes check_variable = { THIS.id = global.eon_energy_settlement_anchor } } } }
+   # Unannounced disappearance: do not invent elapsed hours from a date value.
+   set_global_flag = eon_energy_settlement_clock_gap
+   clear_array = global.eon_energy_meter_rows
+   clear_array = global.eon_energy_meter_power
+   set_variable = { global.eon_energy_settlement_clock_date = global.date }
+   set_variable = { global.eon_energy_settlement_clock_day = global.num_days }
+   set_variable = { global.eon_energy_settlement_hour_count = 0 }
+   set_variable = { global.eon_energy_settlement_closed_days = 0 }
+   eon_energy_settlement_activate_clock = yes
+  }
+  else_if = {
+   limit = { NOT = { check_variable = { global.eon_energy_settlement_clock_date = global.date } } }
+   set_temp_variable = { eon_es_gap_days = global.num_days }
+   subtract_from_temp_variable = { eon_es_gap_days = global.eon_energy_settlement_clock_day }
+   set_variable = { global.eon_energy_settlement_clock_date = global.date }
+   set_variable = { global.eon_energy_settlement_clock_day = global.num_days }
+   if = {
+    limit = { OR = { check_variable = { eon_es_gap_days > 1 } check_variable = { eon_es_gap_days < 0 } } }
+    set_global_flag = eon_energy_settlement_clock_gap
+    clear_array = global.eon_energy_meter_rows
+    clear_array = global.eon_energy_meter_power
+    set_variable = { global.eon_energy_settlement_hour_count = 0 }
+    set_variable = { global.eon_energy_settlement_closed_days = 0 }
+   }
+   else = {
+    set_variable = { global.eon_energy_settlement_interval_hours = 1 }
+    eon_energy_settlement_accrue_open_interval = yes
+    add_to_variable = { global.eon_energy_settlement_hour_count = 1 }
+    if = {
+     limit = { check_variable = { global.eon_energy_settlement_hour_count > 23 } }
+     subtract_from_variable = { global.eon_energy_settlement_hour_count = 24 }
+     add_to_variable = { global.eon_energy_settlement_closed_days = 1 }
+     if = {
+      limit = { check_variable = { global.eon_energy_settlement_closed_days > 6 } }
+      subtract_from_variable = { global.eon_energy_settlement_closed_days = 7 }
+      eon_energy_settlement_settle_world = yes
+     }
+    }
+   }
+   var:global.eon_energy_settlement_anchor = { eon_energy_settlement_queue_clock = yes }
+  }
+ }
+}
+
+eon_energy_settlement_daily_maintenance = {
+ eon_energy_delivery_daily_tick = yes
+ eon_energy_settlement_close_world_interval = yes
+ if = {
+  limit = { NOT = { check_variable = { global.eon_energy_settlement_maintenance_day = global.num_days } } }
+  set_variable = { global.eon_energy_settlement_maintenance_day = global.num_days }
+  eon_energy_settlement_release_paid_claims = yes
+ }
+}

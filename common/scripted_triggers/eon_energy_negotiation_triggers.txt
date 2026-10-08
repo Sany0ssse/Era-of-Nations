@@ -31,7 +31,9 @@ eon_energy_offer_identity_current = {
 	has_country_flag = question_about_contract
 	NOT = { has_country_flag = eon_energy_offer_cancelled }
 	check_variable = { eon_energy_offer_partner = eon_energy_response_partner }
-	has_country_flag = energy_agreement@eon_energy_response_partner
+	var:eon_energy_response_partner = {
+		PREV = { has_country_flag = energy_agreement@PREV }
+	}
 	NOT = { has_war_with = var:eon_energy_response_partner }
 	check_variable = { var = eon_energy_offer_price value = 0 compare = greater_than_or_equals }
 	NOT = { check_variable = { eon_energy_offer_amount = 0 } }
@@ -48,7 +50,7 @@ eon_energy_offer_identity_current = {
 		check_variable = { eon_energy_offer_partner = PREV }
 		has_country_flag = energy_agreement@PREV
 		check_variable = { eon_energy_offer_price = PREV.eon_energy_offer_price }
-		check_variable = { eon_energy_offer_amount = PREV.eon_energy_response_mirror_amount }
+		check_variable = { eon_energy_offer_amount = eon_energy_response_mirror_amount }
 		set_temp_variable = { eon_energy_snapshot_partner = PREV }
 		eon_energy_pair_snapshot_current = yes
 	}

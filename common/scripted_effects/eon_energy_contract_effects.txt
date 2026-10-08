@@ -93,6 +93,8 @@ eon_energy_clear_pair_pending = {
 # Caller is one contracting country, eon_energy_pair_partner identifies the other.
 # The caller owns the notice; no pending lock is created by the notice.
 eon_energy_end_pair = {
+	eon_energy_settlement_close_world_interval = yes
+	eon_energy_settlement_retire_pair = yes
 	eon_energy_remove_pair_record = yes
 	eon_energy_invalidate_pair_pending = yes
 	var:eon_energy_pair_partner = {
@@ -212,6 +214,8 @@ eon_energy_accept_offer = {
 	if = {
 		limit = { check_variable = { eon_energy_offer_valid = 1 } }
 		set_temp_variable = { eon_energy_pair_partner = FROM }
+		eon_energy_settlement_close_world_interval = yes
+		eon_energy_settlement_retire_pair = yes
 		eon_energy_remove_pair_record = yes
 		add_to_array = { array = energy_contractors value = FROM }
 		add_to_array = { array = energy_contracts_ammount value = eon_energy_offer_amount }

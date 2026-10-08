@@ -132,7 +132,9 @@ scripted_gui = {
 				}
 				NOT = { tag = energy_selling_selected_TAG }
 				has_variable = energy_selling_selected_TAG
-				has_country_flag = energy_agreement@energy_selling_selected_TAG
+				var:energy_selling_selected_TAG = {
+					PREV = { has_country_flag = energy_agreement@PREV }
+				}
 				var:energy_selling_selected_TAG = {
 					exists = yes
 					has_country_flag = energy_agreement@PREV
@@ -604,7 +606,9 @@ scripted_gui = {
 							NOT = { has_war_with = PREV }
 							has_country_flag = energy_agreement@PREV
 						}
-						has_country_flag = energy_agreement@energy_selling_selected_TAG
+						var:energy_selling_selected_TAG = {
+							PREV = { has_country_flag = energy_agreement@PREV }
+						}
 						check_variable = { energy_contractors^num = energy_contracts_ammount^num }
 						check_variable = { energy_contractors^num = energy_contracts_price^num }
 					}

@@ -4450,8 +4450,8 @@ calculate_additional_expense_rate = {
 
 
 	########ENERGY SELLING SYSTEM###########
-	# Current delivered GW feed the same inherited weekly budget rate.
-	# No second treasury debit is introduced by the delivery reconciliation.
+	# Current delivered GW are forecasts in the inherited budget display.
+	# Actual invoice payments are excluded from weekly cash to avoid double charging.
 	eon_energy_delivery_calculate_bill = yes
     add_to_variable = { additional_income_rate = energy_selling_income }
     add_to_variable = { additional_expenses_rate = energy_buying_expenses }
@@ -5587,8 +5587,10 @@ update_display = {
 	if = {
 		limit = {
 			NOT = {
-				has_active_mission = cheap_loan_from_the_imf_mission
-				has_country_flag = paused_debt_repayment
+				OR = {
+					has_active_mission = cheap_loan_from_the_imf_mission
+					has_country_flag = paused_debt_repayment
+				}
 			}
 		}
 		add_to_variable = { display_expense = debt_rate }
@@ -5596,6 +5598,10 @@ update_display = {
 	add_to_variable = { display_expense = additional_expenses_rate }
 	add_to_variable = { display_expense = border_control_gain }
 
+	# Energy forecasts remain visible; actual invoices settle separately.
+	set_variable = { eon_cash_expense_rate = display_expense }
+	subtract_from_variable = { eon_cash_expense_rate = energy_buying_expenses }
+	clamp_variable = { var = eon_cash_expense_rate max = 1000000 }
 	clamp_variable = { var = display_expense max = 1000000 }
 	
 
@@ -5630,6 +5636,10 @@ update_display = {
 	}
 	add_to_variable = { display_income = additional_income_rate }
 
+	# Energy forecasts remain visible; actual invoices settle separately.
+	set_variable = { eon_cash_income_rate = display_income }
+	subtract_from_variable = { eon_cash_income_rate = energy_selling_income }
+	clamp_variable = { var = eon_cash_income_rate max = 1000000 }
 	clamp_variable = { var = display_income max = 1000000 }
 
 	# Adjusted Potential Income to the international investments so that people can't exploit the incoming financial collapse
@@ -5652,6 +5662,8 @@ update_display = {
 
 	set_variable = { treasury_rate = display_income }
 	subtract_from_variable = { treasury_rate = display_expense }
+	set_variable = { eon_treasury_cash_rate = eon_cash_income_rate }
+	subtract_from_variable = { eon_treasury_cash_rate = eon_cash_expense_rate }
 
 	if = { limit = { is_in_array = { global.arabic_countries = THIS.id } }
 		calculate_monthly_arab_spring_change = yes

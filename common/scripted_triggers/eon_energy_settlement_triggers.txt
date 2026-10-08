@@ -1,0 +1,21 @@
+eon_energy_settlement_accounts_visible = {
+ OR = {
+  check_variable = { energy_contractors^num > 0 }
+  check_variable = { eon_energy_settlement_payable > 0 }
+  check_variable = { eon_energy_settlement_receivable > 0 }
+  check_variable = { eon_energy_settlement_paid_claim > 0 }
+  check_variable = { eon_energy_settlement_import_gwh > 0 }
+  check_variable = { eon_energy_settlement_export_gwh > 0 }
+  has_global_flag = eon_energy_settlement_clock_gap
+ }
+}
+eon_energy_settlement_payment_available = {
+ exists = yes
+ check_variable = { treasury > 0 }
+ check_variable = { eon_energy_settlement_payable > 0 }
+}
+eon_energy_settlement_receipt_available = {
+ exists = yes
+ check_variable = { treasury < 1000000 }
+ check_variable = { eon_energy_settlement_paid_claim > 0 }
+}
