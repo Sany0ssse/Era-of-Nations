@@ -1,0 +1,30 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			every_country = {
+				limit = {
+					exists = yes
+					is_ai = no
+					NOT = { has_country_flag = eon_division_design_tutorial_seen }
+				}
+				# Consume before firing, so another hook cannot queue a duplicate.
+				set_country_flag = eon_division_design_tutorial_seen
+				country_event = { id = eon_division_design_tutorial.1 }
+			}
+		}
+	}
+	# Native daily scope is one country: covers old saves and later human control.
+	on_daily = {
+		effect = {
+			if = {
+				limit = {
+					exists = yes
+					is_ai = no
+					NOT = { has_country_flag = eon_division_design_tutorial_seen }
+				}
+				set_country_flag = eon_division_design_tutorial_seen
+				country_event = { id = eon_division_design_tutorial.1 }
+			}
+		}
+	}
+}

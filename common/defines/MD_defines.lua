@@ -277,6 +277,7 @@
 	-- these stats may be adjusted further, but for now, the scale remains 50% - 100%
 
 	NDefines.NMilitary.MAX_DIVISION_BRIGADE_WIDTH = 4 -- 5
+	NDefines.NMilitary.MAX_REGIMENTAL_SUPPORT_WIDTH = 4 -- Match the four native regiment columns
 	NDefines.NMilitary.MIN_DIVISION_BRIGADE_HEIGHT = 3 -- 4
 	NDefines.NMilitary.HOURLY_ORG_MOVEMENT_IMPACT = -0.1 -- -0.2
 	NDefines.NMilitary.ZERO_ORG_MOVEMENT_MODIFIER = -0.2 -- -0.8

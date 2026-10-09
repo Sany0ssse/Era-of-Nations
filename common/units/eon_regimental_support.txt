@@ -1,0 +1,92 @@
+# Era of Nations: optional regimental fires support using the native 1.19 slots.
+# A column needs three compatible line battalions (native default); its screen
+# position is an organization slot, not a tactical front/rear battle position.
+# Calibration: half Arty_Battery guns, personnel, HP, organization and base
+# supply; 0.17 base combat-stat factor is half its existing 0.34 factor. Radio
+# and motor transport needs below are additional costs, not free stat bonuses.
+sub_units = {
+	eon_regimental_light_artillery = {
+		abbreviation = "RLA"
+		sprite = artillery
+		map_icon_category = infantry
+		priority = 0
+		ai_priority = 0
+		active = yes
+		affects_speed = no
+		is_artillery_brigade = yes
+		type = { artillery support }
+		group = support
+		allowed_battalion_groups = { infantry }
+		regimental = yes
+		divisional = no
+		categories = {
+			category_support_battalions
+			category_regimental_support_battalions
+			category_army
+			category_artillery
+		}
+		combat_width = 0
+		need = {
+			artillery_equipment = 3
+			command_control_equipment = 1
+		}
+		essential = { artillery_equipment command_control_equipment }
+		can_be_parachuted = yes
+		manpower = 40
+		training_time = 120
+		max_organisation = 0.8
+		default_morale = 0.05
+		max_strength = 0.4
+		weight = 0.05
+		supply_consumption = 0.01
+		defense = -0.83
+		breakthrough = -0.83
+		soft_attack = -0.83
+		hard_attack = -0.83
+		transport = artillery_equipment
+	}
+
+	eon_regimental_motorized_artillery = {
+		abbreviation = "RMA"
+		sprite = artillery
+		map_icon_category = infantry
+		priority = 0
+		ai_priority = 0
+		active = yes
+		affects_speed = no
+		is_artillery_brigade = yes
+		type = { artillery support }
+		group = support
+		allowed_battalion_groups = { mobile armor }
+		regimental = yes
+		divisional = no
+		categories = {
+			category_support_battalions
+			category_regimental_support_battalions
+			category_army
+			category_artillery
+		}
+		combat_width = 0
+		need = {
+			artillery_equipment = 3
+			command_control_equipment = 1
+			util_vehicle_equipment = 5
+		}
+		essential = { artillery_equipment command_control_equipment util_vehicle_equipment }
+		can_be_parachuted = no
+		manpower = 40
+		training_time = 120
+		max_organisation = 0.8
+		default_morale = 0.05
+		max_strength = 0.4
+		weight = 0.1
+		supply_consumption = 0.015
+		defense = -0.83
+		breakthrough = -0.83
+		soft_attack = -0.83
+		hard_attack = -0.83
+		transport = util_vehicle_equipment
+		# Inherit native fuel consumption from the required transport vehicles.
+		own_equipment_fuel_consumption_mult = 1.0
+	}
+}
