@@ -43,7 +43,8 @@ effects={k:v for path in FILES for k,o,v in ast(read(path))}
 TRIGGER_FILES=['common/scripted_triggers/eon_energy_delivery_triggers.txt',
                'common/scripted_triggers/eon_energy_capacity_triggers.txt',
                'common/scripted_triggers/eon_energy_negotiation_triggers.txt',
-               'common/scripted_triggers/eon_energy_settlement_triggers.txt']
+               'common/scripted_triggers/eon_energy_settlement_triggers.txt',
+               'common/scripted_triggers/eon_debt_accounting_triggers.txt']
 triggers={k:v for path in TRIGGER_FILES for k,o,v in ast(read(path))}
 money_ast=ast(read('common/scripted_effects/00_money_system.txt'))
 effects['automated_debt_taker']=one(money_ast,'automated_debt_taker')

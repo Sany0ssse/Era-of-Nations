@@ -5691,14 +5691,13 @@ automated_debt_taker = { # Checks to see if treasury is negative at the same tim
 		set_temp_variable = { gdp_adder = gdp_total }
 		multiply_temp_variable = { gdp_adder = 0.01 } # 0.1% of GDP
 		add_to_temp_variable = { treasury_temp = gdp_adder }
-		set_temp_variable = { debt_temp = treasury_temp }
-		multiply_temp_variable = { debt_temp = 1.01 } # adding 1% fee to debt autmoatically taken out (manual borrowing also has this)
-
-		add_to_variable = { treasury = treasury_temp }
-		clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-		add_to_variable = { debt = debt_temp }
-	    clamp_variable = { var = debt min = 0 max = 1000000 }
-		calculate_interest_rate = yes
+		set_temp_variable = { eon_debt_borrowing_principal = treasury_temp }
+		if = {
+			limit = { eon_debt_borrow_capacity_available = yes }
+			add_to_variable = { treasury = eon_debt_borrowing_principal }
+			add_to_variable = { debt = eon_debt_manual_liability }
+			calculate_interest_rate = yes
+		}
 	}
 }
 

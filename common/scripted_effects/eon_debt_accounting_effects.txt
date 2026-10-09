@@ -1,0 +1,34 @@
+# Existing aggregate sovereign-debt accounting; no creditor/maturity is invented.
+# Caller supplies a fresh requested principal. A nominal loan is all-or-nothing:
+# both its cash and its inherited 1% capitalized fee must fit before any mutation.
+eon_debt_borrow_manual = {
+ if = {
+  limit = { eon_debt_borrow_manual_available = yes }
+  add_to_variable = { treasury = eon_debt_borrowing_principal }
+  add_to_variable = { debt = eon_debt_manual_liability }
+  ingame_update_setup = yes
+ }
+}
+
+# Main/bottom bars share the same guarded execution, including stale clicks.
+# A principal repayment cannot exceed requested amount, cash, or outstanding debt.
+# No clamp may silently erase a pre-existing balance or fabricate borrowing.
+eon_debt_repay_manual = {
+ set_temp_variable = { eon_debt_manual_payment = 0 }
+ if = {
+  limit = {
+   check_variable = { eon_debt_repayment_limit > 0 }
+   eon_debt_repay_manual_available = yes
+  }
+  set_temp_variable = { eon_debt_manual_payment = eon_debt_repayment_limit }
+  clamp_temp_variable = { var = eon_debt_manual_payment min = 0 max = treasury }
+  clamp_temp_variable = { var = eon_debt_manual_payment min = 0 max = debt }
+  subtract_from_variable = { treasury = eon_debt_manual_payment }
+  subtract_from_variable = { debt = eon_debt_manual_payment }
+  if = {
+   limit = { check_variable = { debt = 0 } }
+   clr_country_flag = automatically_pay_off_debt_enabled
+  }
+  ingame_update_setup = yes
+ }
+}

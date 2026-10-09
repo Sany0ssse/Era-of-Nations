@@ -1,7 +1,9 @@
 """Narrow source/API/byte guards for package25; no native compilation claim."""
 from pathlib import Path
-import hashlib,json,re,subprocess
+import hashlib,json,re,subprocess,sys
 from test_delivery import ROOT,ast,one,read,variable_comparison,GUI_FILE
+sys.path.insert(0, str(ROOT/'tools/validation/debt_accounting'))
+from byte_compat import restore_debt_accounting
 
 BASELINE='c1420b108dee2d129018951c9ba73c1f6bfc4360'
 checks=0
@@ -29,7 +31,7 @@ for path in NEW:
 money=read('common/scripted_effects/00_money_system.txt');oldmoney=baseline(CHANGED[1]).decode('utf-8-sig')
 before='\t########ENERGY SELLING SYSTEM###########';after='\t#Propaganda Medrese'
 check(money.split(before)[0]==oldmoney.split(before)[0],'Money bytes before owned energy section')
-money_without_cash=money
+money_without_cash=restore_debt_accounting(CHANGED[1], money)
 for kind,energy in [('expense','energy_buying_expenses'),('income','energy_selling_income')]:
     addition=('\t# Energy forecasts remain visible; actual invoices settle separately.\n'
               f'\tset_variable = {{ eon_cash_{kind}_rate = display_{kind} }}\n'

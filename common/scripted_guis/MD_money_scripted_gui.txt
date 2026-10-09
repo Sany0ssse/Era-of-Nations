@@ -59,219 +59,42 @@ scripted_gui = {
 		effects = {
 			#Take debt
 			debt_bg_click = {
-				if = {
-					limit = { check_variable = { interest_rate < 20 } }
-					add_to_variable = { treasury = 1 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = 1.01 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-				}
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: DEBUG: 1070 1b debt taken (Total Debt: Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_borrowing_principal = 1 }
+				eon_debt_borrow_manual = yes
 			}
 			debt_bg_control_click = {
-				if = {
-					limit = { check_variable = { interest_rate < 20 } }
-					add_to_variable = { treasury = 10 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = 10.1 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-				}
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: DEBUG: 1071 10b debt taken (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_borrowing_principal = 10 }
+				eon_debt_borrow_manual = yes
 			}
 			debt_bg_shift_click = {
-				if = {
-					limit = { check_variable = { interest_rate < 20 } }
-					add_to_variable = { treasury = 100 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = 101 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-				}
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: DEBUG: 1072 100b debt taken (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_borrowing_principal = 100 }
+				eon_debt_borrow_manual = yes
 			}
 			debt_bg_alt_click = {
 				if = {
-					limit = {
-						check_variable = { interest_rate < 20 }
-						check_variable = { gdp_total > 1499 }
-					}
-					add_to_variable = { treasury = 1000 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = 1010 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-				}
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: DEBUG: 1073 1000b debt taken (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
+					limit = { check_variable = { gdp_total > 1499 } }
+					set_temp_variable = { eon_debt_borrowing_principal = 1000 }
+					eon_debt_borrow_manual = yes
 				}
 			}
 
 			# Repay $1b debt
 			debt_bg_right_click = {
-				# You have enough money and debt to pay $1b T/T
-				if = { limit = {
-					check_variable = { var = treasury value = 1 compare = greater_than_or_equals }
-					check_variable = { var = debt value = 1 compare = greater_than_or_equals } }
-					add_to_variable = { treasury = -1 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = -1 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-				}
-				# You have enough money to pay $1b but less than $1b in debt T/F
-				else_if = { limit = {
-					check_variable = { var = treasury value = 1 compare = greater_than_or_equals }
-					check_variable = { var = debt value = 1 compare = less_than_or_equals } }
-					subtract_from_variable = { treasury = debt }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					subtract_from_variable = { debt = debt }
-				}
-				# You don't have enough money to pay $1b, have enough debt to pay $1b F/T
-				else_if = { limit = {
-					check_variable = { var = treasury value = 1 compare = less_than_or_equals }
-					check_variable = { var = debt value = 1 compare = greater_than_or_equals } }
-					subtract_from_variable = { debt = treasury }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					subtract_from_variable = { treasury = treasury }
-				}
-				# You don't have enough money to pay $1b, and don't have enough debt to pay $1b F/F
-				# Money > Debt
-				else_if = { limit = {
-					check_variable = { var = treasury value = debt compare = greater_than_or_equals } }
-					subtract_from_variable = { treasury = debt }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					subtract_from_variable = { debt = debt }
-				}
-				# Money < Debt
-				else_if = { limit = {
-					check_variable = { var = treasury value = debt compare = less_than_or_equals } }
-					subtract_from_variable = { debt = treasury }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					subtract_from_variable = { treasury = treasury }
-					if = { limit = { is_debug = yes }
-						log = "1b Repay debt Case 5"
-					}
-				}
-				ingame_update_setup = yes
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: DEBUG: 1073 1b debt paid (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_repayment_limit = 1 }
+				eon_debt_repay_manual = yes
 			}
 			debt_bg_control_right_click = {
-				# You have enough money and debt to pay $10b T/T
-				if = { limit = {
-					check_variable = { var = treasury value = 10 compare = greater_than_or_equals }
-					check_variable = { var = debt value = 10 compare = greater_than_or_equals } }
-					add_to_variable = { treasury = -10 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = -10 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-				}
-				# You have enough money to pay $10b but less than $10b in debt T/F
-				else_if = { limit = {
-					check_variable = { var = treasury value = 10 compare = greater_than_or_equals }
-					check_variable = { var = debt value = 10 compare = less_than_or_equals } }
-					subtract_from_variable = { treasury = debt }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					subtract_from_variable = { debt = debt }
-				}
-				# You don't have enough money to pay $10b, have enough debt to pay $10b F/T
-				else_if = { limit = {
-					check_variable = { var = treasury value = 10 compare = less_than_or_equals }
-					check_variable = { var = debt value = 10 compare = greater_than_or_equals } }
-					subtract_from_variable = { debt = treasury }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					subtract_from_variable = { treasury = treasury }
-				}
-				# You don't have enough money to pay $10b, and don't have enough debt to pay $10b F/F
-				# Money > Debt
-				else_if = { limit = {
-					check_variable = { var = treasury value = debt compare = greater_than_or_equals } }
-					subtract_from_variable = { treasury = debt }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					subtract_from_variable = { debt = debt }
-				}
-				# Money < Debt
-				else_if = { limit = {
-					check_variable = { var = treasury value = debt compare = less_than_or_equals } }
-					subtract_from_variable = { debt = treasury }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					subtract_from_variable = { treasury = treasury }
-				}
-				ingame_update_setup = yes
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: DEBUG: 1074 10b debt paid (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_repayment_limit = 10 }
+				eon_debt_repay_manual = yes
 			}
 			debt_bg_shift_right_click = {
-				# You have enough money and debt to pay $100b T/T
-				if = { limit = {
-					check_variable = { var = treasury value = 100 compare = greater_than_or_equals }
-					check_variable = { var = debt value = 100 compare = greater_than_or_equals } }
-					add_to_variable = { treasury = -100 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = -100 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-				}
-				# You have enough money to pay $100b but less than $100b in debt T/F
-				else_if = { limit = {
-					check_variable = { var = treasury value = 100 compare = greater_than_or_equals }
-					check_variable = { var = debt value = 100 compare = less_than_or_equals } }
-					subtract_from_variable = { treasury = debt }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					subtract_from_variable = { debt = debt }
-				}
-				# You don't have enough money to pay $100b, have enough debt to pay $100b F/T
-				else_if = { limit = {
-					check_variable = { var = treasury value = 100 compare = less_than_or_equals }
-					check_variable = { var = debt value = 100 compare = greater_than_or_equals } }
-					subtract_from_variable = { debt = treasury }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					subtract_from_variable = { treasury = treasury }
-				}
-				# You don't have enough money to pay $100b, and don't have enough debt to pay $100b F/F
-				# Money > Debt
-				else_if = { limit = {
-					check_variable = { var = treasury value = debt compare = greater_than_or_equals } }
-					subtract_from_variable = { treasury = debt }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					subtract_from_variable = { debt = debt }
-				}
-				# Money < Debt
-				else_if = { limit = {
-					check_variable = { var = treasury value = debt compare = less_than_or_equals } }
-					subtract_from_variable = { debt = treasury }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					subtract_from_variable = { treasury = treasury }
-				}
-				ingame_update_setup = yes
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: DEBUG: 1075 100b debt paid (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_repayment_limit = 100 }
+				eon_debt_repay_manual = yes
 			}
 			#Pay off maximum
 			debt_bg_alt_right_click = {
-				if = {
-					limit = { check_variable = { treasury > debt } }
-					subtract_from_variable = { treasury = debt }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					subtract_from_variable = { debt = debt }
-					ingame_update_setup = yes
-				}
-				else = {
-					subtract_from_variable = { debt = treasury }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					subtract_from_variable = { treasury = treasury }
-					ingame_update_setup = yes
-				}
-				log = "[GetDateText]: [THIS.GetName]: DEBUG: 1076 Max debt paid (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
+				set_temp_variable = { eon_debt_repayment_limit = debt }
+				eon_debt_repay_manual = yes
 			}
 			# Automatically Pay off Debt
 			debt_bg_alt_shift_right_click = {
@@ -290,19 +113,29 @@ scripted_gui = {
 		triggers = {
 			####
 			debt_bg_right_click_enabled = {
-				check_variable = { treasury > 0 }
-				check_variable = { debt > 0 }
+				eon_debt_repay_manual_available = yes
 			}
 			debt_bg_control_right_click_enabled = {
-				check_variable = { treasury > 0 }
-				check_variable = { debt > 0 }
+				eon_debt_repay_manual_available = yes
 			}
 			debt_bg_shift_right_click_enabled = {
-				check_variable = { treasury > 0 }
-				check_variable = { debt > 0 }
+				eon_debt_repay_manual_available = yes
 			}
 			debt_bg_alt_click_enabled = {
-				check_variable = { debt > 0 }
+				eon_debt_borrow_1000_available = yes
+				check_variable = { gdp_total > 1499 }
+			}
+			debt_bg_alt_right_click_enabled = {
+				eon_debt_repay_manual_available = yes
+			}
+			debt_bg_click_enabled = {
+				eon_debt_borrow_1_available = yes
+			}
+			debt_bg_control_click_enabled = {
+				eon_debt_borrow_10_available = yes
+			}
+			debt_bg_shift_click_enabled = {
+				eon_debt_borrow_100_available = yes
 			}
 		}
 
@@ -1050,16 +883,13 @@ scripted_gui = {
 
 			### BOTTOM BAR
 			bottom_bar_debt_bg_right_click_enabled = {
-				check_variable = { treasury > 1 }
-				check_variable = { debt > 1 }
+				eon_debt_repay_manual_available = yes
 			}
 			bottom_bar_debt_bg_control_right_click_enabled = {
-				check_variable = { treasury > 10 }
-				check_variable = { debt > 10 }
+				eon_debt_repay_manual_available = yes
 			}
 			bottom_bar_debt_bg_shift_right_click_enabled = {
-				check_variable = { treasury > 100 }
-				check_variable = { debt > 100 }
+				eon_debt_repay_manual_available = yes
 			}
 
 			bottom_bar_int_investments_bg_right_click_enabled = {
@@ -1108,6 +938,21 @@ scripted_gui = {
 			}
 			agriculture_district_button_right_click_enabled = {
 				NOT = { has_country_flag = disable_agriculture_district_employment_change }
+			}
+			bottom_bar_debt_bg_alt_right_click_enabled = {
+				eon_debt_repay_manual_available = yes
+			}
+			bottom_bar_debt_bg_click_enabled = {
+				eon_debt_borrow_1_available = yes
+			}
+			bottom_bar_debt_bg_control_click_enabled = {
+				eon_debt_borrow_10_available = yes
+			}
+			bottom_bar_debt_bg_shift_click_enabled = {
+				eon_debt_borrow_100_available = yes
+			}
+			bottom_bar_debt_bg_alt_click_enabled = {
+				eon_debt_borrow_1000_available = yes
 			}
 		}
 
@@ -1912,101 +1757,39 @@ scripted_gui = {
 
 			## BOTTOM BAR
 			bottom_bar_debt_bg_click = {
-				if = {
-					limit = { check_variable = { interest_rate < 20 } }
-					add_to_variable = { treasury = 1 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = 1.01 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-				}
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: 1b debt taken (Total Debt: Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_borrowing_principal = 1 }
+				eon_debt_borrow_manual = yes
 			}
 			bottom_bar_debt_bg_control_click = {
-				if = {
-					limit = { check_variable = { interest_rate < 20 } }
-					add_to_variable = { treasury = 10 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = 10.1 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-				}
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: 10b debt taken (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_borrowing_principal = 10 }
+				eon_debt_borrow_manual = yes
 			}
 			bottom_bar_debt_bg_shift_click = {
-				if = {
-					limit = { check_variable = { interest_rate < 20 } }
-					add_to_variable = { treasury = 100 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = 101 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-				}
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: 100b debt taken (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_borrowing_principal = 100 }
+				eon_debt_borrow_manual = yes
 			}
 			bottom_bar_debt_bg_alt_click = {
-				if = {
-					limit = { check_variable = { interest_rate < 20 } }
-					add_to_variable = { treasury = 1000 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = 1010 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-				}
-				if = { limit = { is_debug = yes }
-					log = "[GetDateText]: [THIS.GetName]: DEBUG: 1000b debt taken (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_borrowing_principal = 1000 }
+				eon_debt_borrow_manual = yes
 			}
 
 		  	#Repay debt
 			bottom_bar_debt_bg_right_click = {
-				if = {
-					limit = { check_variable = { treasury > 1 } }
-					add_to_variable = { treasury = -1 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = -1 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-					log = "[GetDateText]: [THIS.GetName]: 1b debt paid (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury]), Total Treasury Rate:[?treasury_rate]"
-				}
+				set_temp_variable = { eon_debt_repayment_limit = 1 }
+				eon_debt_repay_manual = yes
 			}
 			bottom_bar_debt_bg_control_right_click = {
-				if = {
-					limit = { check_variable = { treasury > 10 } }
-					add_to_variable = { treasury = -10 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = -10 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-					log = "[GetDateText]: [THIS.GetName]: 10b debt paid (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_repayment_limit = 10 }
+				eon_debt_repay_manual = yes
 			}
 			bottom_bar_debt_bg_shift_right_click = {
-				if = {
-					limit = { check_variable = { treasury > 100 } }
-					add_to_variable = { treasury = -100 }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					add_to_variable = { debt = -100 }
-	    			clamp_variable = { var = debt min = 0 max = 1000000 }
-					ingame_update_setup = yes
-					log = "[GetDateText]: [THIS.GetName]: 100b debt paid (Total Debt: [?debt]b, Interest Rate: [?interest_rate]% balance:[?treasury_rate]b, Total Treasury:[?treasury], Total Treasury Rate:[?treasury_rate])"
-				}
+				set_temp_variable = { eon_debt_repayment_limit = 100 }
+				eon_debt_repay_manual = yes
 			}
 			#Pay off all debt
 			bottom_bar_debt_bg_alt_right_click = {
-				if = {
-					limit = { check_variable = { treasury > debt } }
-					subtract_from_variable = { treasury = debt }
-					clamp_variable = { var = treasury min = -1000000 max = 1000000 }
-					subtract_from_variable = { debt = debt }
-					ingame_update_setup = yes
-				}
+				set_temp_variable = { eon_debt_repayment_limit = debt }
+				eon_debt_repay_manual = yes
 			}
 			bottom_bar_debt_bg_alt_shift_right_click = {
 				if = {

@@ -1,0 +1,43 @@
+# The same eligibility is used by the displayed button and by its execution.
+eon_debt_repay_manual_available = {
+ exists = yes
+ check_variable = { treasury > 0 }
+ check_variable = { debt > 0 }
+}
+
+eon_debt_borrow_manual_available = {
+ check_variable = { interest_rate < 20 }
+ eon_debt_borrow_capacity_available = yes
+}
+
+# Automatic deficit borrowing retains its existing policy, but cannot bypass
+# capacity conservation or silently erase the capitalized origination fee.
+eon_debt_borrow_capacity_available = {
+ exists = yes
+ check_variable = { eon_debt_borrowing_principal > 0 }
+ set_temp_variable = { eon_debt_manual_liability = eon_debt_borrowing_principal }
+ multiply_temp_variable = { eon_debt_manual_liability = 1.01 }
+ set_temp_variable = { eon_debt_manual_cash_room = 1000000 }
+ subtract_from_temp_variable = { eon_debt_manual_cash_room = treasury }
+ set_temp_variable = { eon_debt_manual_debt_room = 1000000 }
+ subtract_from_temp_variable = { eon_debt_manual_debt_room = debt }
+ check_variable = { var = eon_debt_manual_cash_room value = eon_debt_borrowing_principal compare = greater_than_or_equals }
+ check_variable = { var = eon_debt_manual_debt_room value = eon_debt_manual_liability compare = greater_than_or_equals }
+}
+
+eon_debt_borrow_1_available = {
+ set_temp_variable = { eon_debt_borrowing_principal = 1 }
+ eon_debt_borrow_manual_available = yes
+}
+eon_debt_borrow_10_available = {
+ set_temp_variable = { eon_debt_borrowing_principal = 10 }
+ eon_debt_borrow_manual_available = yes
+}
+eon_debt_borrow_100_available = {
+ set_temp_variable = { eon_debt_borrowing_principal = 100 }
+ eon_debt_borrow_manual_available = yes
+}
+eon_debt_borrow_1000_available = {
+ set_temp_variable = { eon_debt_borrowing_principal = 1000 }
+ eon_debt_borrow_manual_available = yes
+}

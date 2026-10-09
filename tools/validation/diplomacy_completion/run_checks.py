@@ -41,6 +41,7 @@ def main():
     reports['support_native_compatibility'] = run('tools/validation/diplomacy_completion/check_support_native_compat.py')
     reports['ordinary_alliance'] = run('tools/validation/diplomacy_package_03/test_ordinary_alliance.py')
     reports['weekly_cash'] = run('tools/validation/diplomacy_completion/check_weekly_cash.py')
+    reports['debt_accounting'] = run('tools/validation/debt_accounting/run_checks.py')
     reports['annex_embargo_cleanup'] = run('tools/validation/diplomacy_completion/check_annex_embargo_cleanup.py')
     reports['integration_sources'] = run('tools/validation/diplomacy_completion/check_integration_sources.py')
     check = subprocess.run(
