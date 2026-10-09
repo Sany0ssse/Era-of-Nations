@@ -1,0 +1,160 @@
+# One request per participant. No cash escrow; only a consumed valid response pays.
+eon_debt_bailout_clear = {
+	clr_country_flag = eon_debt_bailout_reserved
+	clr_country_flag = eon_debt_bailout_borrower
+	clr_country_flag = eon_debt_bailout_donor
+	clr_country_flag = eon_debt_bailout_cancelled
+	clr_country_flag = eon_debt_bailout_consumed
+	clr_country_flag = eon_debt_bailout_response_window
+	clear_variable = eon_debt_bailout_partner
+	clear_variable = eon_debt_bailout_kind
+	clear_variable = eon_debt_bailout_generation
+	clear_variable = eon_debt_bailout_amount
+	clear_variable = eon_debt_bailout_autonomy_terms
+}
+
+eon_debt_bailout_prepare = {
+	if = {
+		limit = { eon_debt_bailout_request_available = yes }
+		add_to_variable = { eon_debt_bailout_sequence = 1 }
+		set_variable = { eon_debt_bailout_generation = eon_debt_bailout_sequence }
+		set_variable = { eon_debt_bailout_partner = eon_debt_bailout_donor }
+		set_variable = { eon_debt_bailout_kind = eon_debt_bailout_offer_kind }
+		set_variable = { eon_debt_bailout_amount = eon_debt_bailout_quote }
+		set_variable = { eon_debt_bailout_autonomy_terms = 0 }
+		if = { limit = { check_variable = { eon_debt_bailout_kind = 4 } } set_variable = { eon_debt_bailout_autonomy_terms = 1 } }
+		set_country_flag = eon_debt_bailout_reserved
+		set_country_flag = eon_debt_bailout_borrower
+		set_country_flag = { flag = eon_debt_bailout_response_window days = 30 value = 1 }
+		if = { limit = { is_ai = yes } add_political_power = -50 }
+		else = { add_political_power = -100 }
+		var:eon_debt_bailout_partner = {
+			set_variable = { eon_debt_bailout_partner = PREV.id }
+			set_variable = { eon_debt_bailout_kind = PREV.eon_debt_bailout_kind }
+			set_variable = { eon_debt_bailout_generation = PREV.eon_debt_bailout_generation }
+			set_variable = { eon_debt_bailout_amount = PREV.eon_debt_bailout_amount }
+			set_variable = { eon_debt_bailout_autonomy_terms = PREV.eon_debt_bailout_autonomy_terms }
+			set_country_flag = eon_debt_bailout_reserved
+			set_country_flag = eon_debt_bailout_donor
+			set_country_flag = { flag = eon_debt_bailout_response_window days = 30 value = 1 }
+			if = { limit = { check_variable = { eon_debt_bailout_kind = 1 } } country_event = { id = eon_debt_bailout.1 hours = 3 } }
+			if = { limit = { check_variable = { eon_debt_bailout_kind = 2 } } country_event = { id = eon_debt_bailout.2 hours = 3 } }
+			if = { limit = { check_variable = { eon_debt_bailout_kind = 3 } } country_event = { id = eon_debt_bailout.3 hours = 3 } }
+			if = { limit = { check_variable = { eon_debt_bailout_kind = 4 } } country_event = { id = eon_debt_bailout.4 hours = 3 } }
+		}
+	}
+}
+
+# Called only from a matching sole donor response. Notices never settle money.
+eon_debt_bailout_finish_response = {
+	set_temp_variable = { eon_debt_bailout_finished_peer = eon_debt_bailout_partner }
+	var:eon_debt_bailout_partner = {
+		set_variable = { eon_debt_bailout_last_outcome = eon_debt_bailout_outcome }
+		eon_debt_bailout_clear = yes
+	}
+	set_variable = { eon_debt_bailout_last_outcome = eon_debt_bailout_outcome }
+	eon_debt_bailout_clear = yes
+	var:eon_debt_bailout_finished_peer = {
+		if = { limit = { check_variable = { eon_debt_bailout_outcome = 1 } } country_event = eon_debt_bailout.10 }
+		if = { limit = { check_variable = { eon_debt_bailout_outcome = 2 } } country_event = eon_debt_bailout.11 }
+		if = { limit = { check_variable = { eon_debt_bailout_outcome = 3 } } country_event = eon_debt_bailout.12 }
+	}
+}
+
+eon_debt_bailout_accept = {
+	if = {
+		limit = { eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_outcome = 3 }
+		set_variable = { eon_debt_bailout_last_payment = 0 }
+		var:eon_debt_bailout_partner = { set_variable = { eon_debt_bailout_last_payment = 0 } }
+		if = {
+			limit = { eon_debt_bailout_payment_ready = yes }
+			# Claim both records before any external effect can invoke another hook.
+			set_country_flag = eon_debt_bailout_consumed
+			var:eon_debt_bailout_partner = { set_country_flag = eon_debt_bailout_consumed }
+			set_variable = { eon_debt_bailout_last_cash_before = treasury }
+			var:eon_debt_bailout_partner = { PREV = { set_variable = { eon_debt_bailout_last_debt_before = PREV.debt } } }
+			subtract_from_variable = { treasury = eon_debt_bailout_payment }
+			set_variable = { eon_debt_bailout_last_payment = eon_debt_bailout_payment }
+			set_temp_variable = { eon_debt_bailout_paid_peer = eon_debt_bailout_partner }
+			set_temp_variable = { eon_debt_bailout_paid_kind = eon_debt_bailout_kind }
+			var:eon_debt_bailout_partner = {
+				subtract_from_variable = { debt = eon_debt_bailout_payment }
+				set_variable = { eon_debt_bailout_last_payment = eon_debt_bailout_payment }
+			}
+			set_variable = { eon_debt_bailout_last_cash_after = treasury }
+			var:eon_debt_bailout_partner = { PREV = { set_variable = { eon_debt_bailout_last_debt_after = PREV.debt } } }
+			log = "[EON_DEBT_BAILOUT] [GetDateText] payer=[ROOT.GetName] peer=[?eon_debt_bailout_partner] generation=[?eon_debt_bailout_generation] paid=[?eon_debt_bailout_last_payment] cash_before=[?eon_debt_bailout_last_cash_before] cash_after=[?eon_debt_bailout_last_cash_after] debt_before=[?eon_debt_bailout_last_debt_before] debt_after=[?eon_debt_bailout_last_debt_after]"
+			set_temp_variable = { eon_debt_bailout_outcome = 1 }
+			eon_debt_bailout_finish_response = yes
+			# This condition was disclosed in the subject's request and frozen.
+			var:eon_debt_bailout_paid_peer = {
+				if = { limit = { check_variable = { eon_debt_bailout_paid_kind = 4 } } add_autonomy_ratio = { value = -0.35 localization = granted_bailout } }
+				ingame_update_setup = yes
+			}
+			ingame_update_setup = yes
+		}
+		else = { eon_debt_bailout_finish_response = yes }
+	}
+}
+
+eon_debt_bailout_refuse = {
+	if = {
+		limit = { eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_outcome = 2 }
+		set_variable = { eon_debt_bailout_last_payment = 0 }
+		var:eon_debt_bailout_partner = { set_variable = { eon_debt_bailout_last_payment = 0 } }
+		if = { limit = { has_country_flag = eon_debt_bailout_cancelled } set_temp_variable = { eon_debt_bailout_outcome = 3 } }
+		eon_debt_bailout_finish_response = yes
+	}
+}
+
+# Withdrawing does not release the old native modal to answer a newer request.
+eon_debt_bailout_cancel = {
+	if = {
+		limit = { eon_debt_bailout_pair_current = yes }
+		set_country_flag = eon_debt_bailout_cancelled
+		var:eon_debt_bailout_partner = { set_country_flag = eon_debt_bailout_cancelled }
+	}
+}
+
+eon_debt_bailout_retire_pair = {
+	if = {
+		limit = { has_country_flag = eon_debt_bailout_reserved check_variable = { eon_debt_bailout_partner > 0 } }
+		var:eon_debt_bailout_partner = {
+			set_country_flag = eon_debt_bailout_retired_pair@PREV
+			PREV = { set_country_flag = eon_debt_bailout_retired_pair@PREV }
+			if = {
+				limit = { check_variable = { eon_debt_bailout_partner = PREV.id } }
+				eon_debt_bailout_clear = yes
+			}
+		}
+		eon_debt_bailout_clear = yes
+	}
+	else_if = { limit = { has_country_flag = eon_debt_bailout_reserved } eon_debt_bailout_clear = yes }
+}
+
+eon_debt_bailout_maintenance = {
+	if = {
+		limit = { has_country_flag = eon_debt_bailout_reserved }
+		if = {
+			limit = { check_variable = { eon_debt_bailout_partner > 0 } }
+			if = {
+				limit = { OR = { var:eon_debt_bailout_partner = { exists = no } NOT = { eon_debt_bailout_pair_current = yes } } }
+				eon_debt_bailout_retire_pair = yes
+			}
+			else_if = {
+				limit = { OR = { NOT = { has_country_flag = eon_debt_bailout_response_window } var:eon_debt_bailout_partner = { NOT = { has_country_flag = eon_debt_bailout_response_window } } } }
+				eon_debt_bailout_cancel = yes
+			}
+		}
+		else = { eon_debt_bailout_clear = yes }
+	}
+}
+
+# An old modal has no immutable donor/paid-stage receipt. Do not guess a refund,
+# debt reduction or claim from its shared field; IMF still uses debt_bailout.
+eon_debt_bailout_legacy_notice = {
+	set_country_flag = eon_debt_bailout_legacy_unresolved
+	custom_effect_tooltip = eon_debt_bailout_legacy_unresolved_tt
+}

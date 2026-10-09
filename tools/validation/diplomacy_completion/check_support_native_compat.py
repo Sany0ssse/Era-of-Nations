@@ -10,6 +10,10 @@ ROOT = Path(__file__).resolve().parents[3]
 BASELINE = 'c1420b108dee2d129018951c9ba73c1f6bfc4360'
 sys.path.insert(0, str(ROOT / 'tools/validation'))
 from diplomacy_package_17._scope_repair import JOURNAL, game_before
+aid_spec = importlib.util.spec_from_file_location(
+    'eon_aid_byte_compat', ROOT / 'tools/validation/aid_flag_scope/byte_compat.py')
+aid_compat = importlib.util.module_from_spec(aid_spec)
+aid_spec.loader.exec_module(aid_compat)
 spec = importlib.util.spec_from_file_location(
     'eon_compat_ast', ROOT / 'tools/validation/diplomacy_package_03/_support.py')
 parser = importlib.util.module_from_spec(spec)
@@ -57,11 +61,12 @@ def main():
         old, current = parser.ast(before), parser.ast(after)
         # Only preservation comparison receives the digest-bound inverse of
         # the accepted READ/type fields. Grammar below uses the actual AST.
-        preservation = parser.ast(game_before(relative, after))
+        historical_after = aid_compat.before_aid_flag_repair(relative, after)
+        preservation = parser.ast(game_before(relative, historical_after))
         assert normalize(preservation) == normalize(old), ('Other behavior changed', relative)
         assert before.startswith(b'\xef\xbb\xbf') == after.startswith(b'\xef\xbb\xbf')
         assert before.count(b'\r\n') == after.count(b'\r\n'), ('Changed existing CRLF', relative)
-        assert before.count(b'\n') == after.count(b'\n'), ('Changed existing line count', relative)
+        assert before.count(b'\n') == historical_after.count(b'\n'), ('Changed existing line count', relative)
         hashes[relative] = hashlib.sha256(after).hexdigest()
         for key, op, value in walk(current):
             if key != 'check_variable' or not isinstance(value, list) or not any(k == 'var' for k, _, _ in value):
@@ -89,13 +94,14 @@ def main():
     for group in ('support_reads', 'equipment_field'):
         for relative, receipt in JOURNAL[group].items():
             after = (ROOT / relative).read_bytes()
-            assert hashlib.sha256(after).hexdigest() == receipt['after_sha256']
-            preservation = game_before(relative, after)
+            historical_after = aid_compat.before_aid_flag_repair(relative, after)
+            assert hashlib.sha256(historical_after).hexdigest() == receipt['after_sha256']
+            preservation = game_before(relative, historical_after)
             assert hashlib.sha256(preservation).hexdigest() == receipt['before_sha256']
             parser.ast(after)  # actual current source, not the inverse view
             for mutated in (after + b'# memory-only unowned suffix\n', after.replace(b'= yes', b'= no', 1)):
                 assert mutated != after, ('Missing bounded predicate mutant', relative)
-                try: game_before(relative, mutated)
+                try: game_before(relative, aid_compat.before_aid_flag_repair(relative, mutated))
                 except AssertionError: pass
                 else: raise AssertionError(('Unowned repair mutation accepted', relative))
                 repair_boundary_cases += 1

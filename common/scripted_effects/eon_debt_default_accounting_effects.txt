@@ -1,0 +1,84 @@
+# Existing default claims are distinct from aggregate sovereign debt.
+# Input: fresh eon_debt_default_requested_payment. Pay from existing cash only.
+eon_debt_default_pay_from_cash = {
+	set_temp_variable = { eon_debt_default_payment = 0 }
+	if = {
+		limit = {
+			check_variable = { eon_debt_default_requested_payment > 0 }
+			eon_debt_default_payment_policy_available = yes
+		}
+		set_temp_variable = { eon_debt_default_payment = eon_debt_default_requested_payment }
+		clamp_temp_variable = { var = eon_debt_default_payment min = 0 max = treasury }
+		clamp_temp_variable = { var = eon_debt_default_payment min = 0 max = debt_default_left }
+		subtract_from_variable = { treasury = eon_debt_default_payment }
+		subtract_from_variable = { debt_default_left = eon_debt_default_payment }
+		eon_debt_default_finish_overdue_if_settled = yes
+		ingame_update_setup = yes
+	}
+}
+
+# A genuinely zero overdue claim may also have been settled by another existing
+# payment route. Remove only its metadata, never cash, debt or a positive claim.
+eon_debt_default_finish_overdue_if_settled = {
+	if = {
+		limit = {
+			has_country_flag = eon_debt_default_overdue
+			check_variable = { debt_default_left = 0 }
+			check_variable = { debt_default_total > 0 }
+		}
+		clr_country_flag = eon_debt_default_overdue
+		clear_variable = debt_default_left
+		clear_variable = debt_default_total
+		clear_variable = old_gdp
+	}
+}
+
+# Completion can run after the engine removes the mission; consume the original
+# positive total so a duplicate callback cannot grant the timed idea again.
+eon_debt_default_complete = {
+	if = {
+		limit = { eon_debt_default_completed_available = yes }
+		clear_variable = debt_default_left
+		clear_variable = debt_default_total
+		clr_country_flag = eon_debt_default_overdue
+		add_timed_idea = { idea = debt_default_ecomomic_boom days = 360 }
+		clear_variable = old_gdp
+	}
+}
+
+# A prospective quote is temporary until the actual start rechecks its policy.
+# The 50/50 split is an explicit aggregate game rule, not a creditor haircut.
+eon_debt_default_prepare_start = {
+	set_temp_variable = { eon_debt_default_start_quote = 0 }
+	if = {
+		limit = { eon_debt_default_start_available = yes }
+		set_temp_variable = { eon_debt_default_start_quote = debt }
+		multiply_temp_variable = { eon_debt_default_start_quote = 0.5 }
+	}
+}
+
+# Queued notices from the retired collection system cannot create new claims,
+# payments, war goals or autonomy changes, or guess shared legacy ownership.
+eon_debt_default_legacy_notice = {
+	set_country_flag = eon_debt_default_legacy_notice_seen
+	custom_effect_tooltip = eon_debt_default_legacy_notice_tt
+}
+
+# Recheck both the displayed policy and the amount's GDP band on a stale click.
+eon_debt_default_pay_10 = {
+	set_temp_variable = { eon_debt_default_requested_payment = 10 }
+	set_temp_variable = { eon_debt_default_payment = 0 }
+	if = {
+		limit = { eon_debt_default_pay_10_available = yes }
+		eon_debt_default_pay_from_cash = yes
+	}
+}
+
+eon_debt_default_pay_50 = {
+	set_temp_variable = { eon_debt_default_requested_payment = 50 }
+	set_temp_variable = { eon_debt_default_payment = 0 }
+	if = {
+		limit = { eon_debt_default_pay_50_available = yes }
+		eon_debt_default_pay_from_cash = yes
+	}
+}

@@ -1,0 +1,21 @@
+on_actions = {
+	on_daily = { effect = { eon_debt_bailout_maintenance = yes } }
+	on_annex = {
+		effect = {
+			FROM = { eon_debt_bailout_retire_pair = yes }
+			every_country = {
+				limit = { has_country_flag = eon_debt_bailout_reserved check_variable = { eon_debt_bailout_partner = FROM.id } }
+				eon_debt_bailout_retire_pair = yes
+			}
+		}
+	}
+	on_subject_annexed = {
+		effect = {
+			ROOT = { eon_debt_bailout_retire_pair = yes }
+			every_country = {
+				limit = { has_country_flag = eon_debt_bailout_reserved check_variable = { eon_debt_bailout_partner = ROOT.id } }
+				eon_debt_bailout_retire_pair = yes
+			}
+		}
+	}
+}

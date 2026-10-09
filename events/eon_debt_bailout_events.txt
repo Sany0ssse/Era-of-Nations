@@ -1,0 +1,328 @@
+add_namespace = eon_debt_bailout
+
+country_event = {
+	id = eon_debt_bailout.1
+	title = eon_debt_bailout_request_title
+	desc = eon_debt_bailout_request_desc
+	picture = GFX_stock_market
+	is_triggered_only = yes
+	option = {
+		name = eon_debt_bailout_accept
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 1 } eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_response_kind = 1 }
+		eon_debt_bailout_accept = yes
+		ai_chance = {
+			base = 90
+			modifier = {
+				factor = 0.25
+				OR = {
+					AND = {
+						FROM = { original_tag = GRE }
+						original_tag = TUR
+						NOT = { GRE = { is_subject_of = TUR } }
+					}
+					AND = {
+						FROM = { original_tag = TUR }
+						original_tag = GRE
+						NOT = { TUR = { is_subject_of = GRE } }
+					}
+					AND = {
+						FROM = { original_tag = SER }
+						original_tag = KOS
+						NOT = { SER = { is_subject_of = KOS } }
+					}
+					AND = {
+						FROM = { original_tag = KOS }
+						original_tag = SER
+						NOT = { KOS = { is_subject_of = SER } }
+					}
+				}
+			}
+			modifier = {
+				factor = 1.05
+				FROM = {
+					PREV_is_on_same_continent = yes
+				}
+			}
+			modifier = {
+				factor = 1.05
+				OR = {
+					AND = {
+						FROM = { has_government = democratic }
+						has_government = democratic
+					}
+					AND = {
+						FROM = { has_government = neutrality }
+						has_government = neutrality
+					}
+					AND = {
+						FROM = { has_government = communism }
+						has_government = communism
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				check_variable = { interest_rate < 5 }
+			}
+			modifier = {
+				factor = 0.8
+				check_variable = { interest_rate > 5 }
+				check_variable = { interest_rate < 10 }
+			}
+			modifier = {
+				factor = 0.25
+				check_variable = { interest_rate > 10 }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { interest_rate > 15 }
+			}
+		
+			modifier = { factor = 0 set_temp_variable = { eon_debt_bailout_response_kind = 1 } NOT = { eon_debt_bailout_payment_ready = yes } }
+		}
+	}
+	option = {
+		name = eon_debt_bailout_refuse
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 1 } eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_response_kind = 1 }
+		eon_debt_bailout_refuse = yes
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 2.5
+				check_variable = { interest_rate > 5 }
+				check_variable = { interest_rate < 10 }
+			}
+			modifier = {
+				factor = 7.5
+				check_variable = { interest_rate > 10 }
+			}
+			modifier = {
+				factor = 7.5
+				check_variable = { interest_rate > 15 }
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					OR = {
+						AND = {
+							check_variable = { influence_array^0 = PREV.id }
+							check_variable = { influence_array_val^0 < 4.99 }
+						}
+						AND = {
+							check_variable = { influence_array^1 = PREV.id }
+							check_variable = { influence_array_val^1 < 4.99 }
+						}
+						AND = {
+							check_variable = { influence_array^2 = PREV.id }
+							check_variable = { influence_array_val^2 < 4.99 }
+						}
+						AND = {
+							check_variable = { influence_array^3 = PREV.id }
+							check_variable = { influence_array_val^3 < 4.99 }
+						}
+						AND = {
+							check_variable = { influence_array^4 = PREV.id }
+							check_variable = { influence_array_val^4 < 4.99 }
+						}
+						AND = {
+							check_variable = { influence_array^5 = PREV.id }
+							check_variable = { influence_array_val^5 < 4.99 }
+						}
+						AND = {
+							check_variable = { influence_array^6 = PREV.id }
+							check_variable = { influence_array_val^6 < 4.99 }
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = eon_debt_bailout_ack
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 1 } NOT = { eon_debt_bailout_response_current = yes } }
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = eon_debt_bailout.2
+	title = eon_debt_bailout_request_title
+	desc = eon_debt_bailout_request_desc
+	picture = GFX_stock_market
+	is_triggered_only = yes
+	option = {
+		name = eon_debt_bailout_accept
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 2 } eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_response_kind = 2 }
+		eon_debt_bailout_accept = yes
+		ai_chance = {
+			base = 90
+			modifier = {
+				factor = 0.25
+				FROM = { original_tag = GRE }
+				original_tag = TUR
+			}
+			modifier = {
+				factor = 0.8
+				check_variable = { interest_rate > 5 }
+				check_variable = { interest_rate < 10 }
+			}
+			modifier = {
+				factor = 0.25
+				check_variable = { interest_rate > 10 }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { interest_rate > 15 }
+			}
+		
+			modifier = { factor = 0 set_temp_variable = { eon_debt_bailout_response_kind = 2 } NOT = { eon_debt_bailout_payment_ready = yes } }
+		}
+	}
+	option = {
+		name = eon_debt_bailout_refuse
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 2 } eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_response_kind = 2 }
+		eon_debt_bailout_refuse = yes
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 2.5
+				check_variable = { interest_rate > 5 }
+				check_variable = { interest_rate < 10 }
+			}
+			modifier = {
+				factor = 7.5
+				check_variable = { interest_rate > 10 }
+			}
+		}
+	}
+	option = {
+		name = eon_debt_bailout_ack
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 2 } NOT = { eon_debt_bailout_response_current = yes } }
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = eon_debt_bailout.3
+	title = eon_debt_bailout_request_title
+	desc = eon_debt_bailout_request_desc
+	picture = GFX_stock_market
+	is_triggered_only = yes
+	option = {
+		name = eon_debt_bailout_accept
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 3 } eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_response_kind = 3 }
+		eon_debt_bailout_accept = yes
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0.25
+				FROM = { original_tag = GRE }
+				original_tag = TUR
+			}
+			modifier = {
+				factor = 0.8
+				check_variable = { interest_rate > 5 }
+				check_variable = { interest_rate < 10 }
+			}
+			modifier = {
+				factor = 0.25
+				check_variable = { interest_rate > 10 }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { interest_rate > 15 }
+			}
+		
+			modifier = { factor = 0 set_temp_variable = { eon_debt_bailout_response_kind = 3 } NOT = { eon_debt_bailout_payment_ready = yes } }
+		}
+	}
+	option = {
+		name = eon_debt_bailout_refuse
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 3 } eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_response_kind = 3 }
+		eon_debt_bailout_refuse = yes
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 2.5
+				check_variable = { interest_rate > 5 }
+				check_variable = { interest_rate < 10 }
+			}
+			modifier = {
+				factor = 7.5
+				check_variable = { interest_rate > 10 }
+			}
+		}
+	}
+	option = {
+		name = eon_debt_bailout_ack
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 3 } NOT = { eon_debt_bailout_response_current = yes } }
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = eon_debt_bailout.4
+	title = eon_debt_bailout_request_title
+	desc = eon_debt_bailout_request_desc_overlord
+	picture = GFX_stock_market
+	is_triggered_only = yes
+	option = {
+		name = eon_debt_bailout_accept
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 4 } eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_response_kind = 4 }
+		eon_debt_bailout_accept = yes
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0.8
+				check_variable = { interest_rate > 5 }
+				check_variable = { interest_rate < 10 }
+			}
+			modifier = {
+				factor = 0.25
+				check_variable = { interest_rate > 10 }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { interest_rate > 15 }
+			}
+		
+			modifier = { factor = 0 set_temp_variable = { eon_debt_bailout_response_kind = 4 } NOT = { eon_debt_bailout_payment_ready = yes } }
+		}
+	}
+	option = {
+		name = eon_debt_bailout_refuse
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 4 } eon_debt_bailout_response_current = yes }
+		set_temp_variable = { eon_debt_bailout_response_kind = 4 }
+		eon_debt_bailout_refuse = yes
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 2.5
+				check_variable = { interest_rate > 5 }
+				check_variable = { interest_rate < 10 }
+			}
+			modifier = {
+				factor = 7.5
+				check_variable = { interest_rate > 10 }
+			}
+		}
+	}
+	option = {
+		name = eon_debt_bailout_ack
+		trigger = { set_temp_variable = { eon_debt_bailout_response_kind = 4 } NOT = { eon_debt_bailout_response_current = yes } }
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = { id = eon_debt_bailout.10 title = eon_debt_bailout_result_title desc = eon_debt_bailout_paid_desc is_triggered_only = yes picture = GFX_stock_market option = { name = eon_debt_bailout_ack } }
+
+country_event = { id = eon_debt_bailout.11 title = eon_debt_bailout_result_title desc = eon_debt_bailout_refused_desc is_triggered_only = yes picture = GFX_stock_market option = { name = eon_debt_bailout_ack } }
+
+country_event = { id = eon_debt_bailout.12 title = eon_debt_bailout_result_title desc = eon_debt_bailout_cancelled_desc is_triggered_only = yes picture = GFX_stock_market option = { name = eon_debt_bailout_ack } }

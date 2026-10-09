@@ -112,9 +112,14 @@ bankruptcy_decisions = {
 		icon = GFX_decision_bancru_ask_button
 		visible = {
 			check_variable = { influence_array^0 > 0 }
-			NOT = { check_variable = { influence_array^0 > ROOT.id } }
+			NOT = { check_variable = { influence_array^0 = ROOT.id } }
+			var:influence_array^0 = { exists = yes }
 		}
 		available = {
+			set_temp_variable = { eon_debt_bailout_donor = influence_array^0 }
+			set_temp_variable = { eon_debt_bailout_offer_kind = 1 }
+			eon_debt_bailout_request_available = yes
+
 			is_subject = no
 			custom_trigger_tooltip = {
 				tooltip = has_foreign_influence
@@ -142,19 +147,10 @@ bankruptcy_decisions = {
 		days_remove = 7
 
 		complete_effect = {
-			if = { limit = { is_ai = yes }
-				add_political_power = -50
-			}
-			else = {
-				add_political_power = -100
-			}
-			set_temp_variable = { debt_bailout_temp = debt }
-			multiply_temp_variable = { debt_bailout_temp = 0.20 }
-			clamp_temp_variable = { var = debt_bailout_temp min = 1 }
-			set_variable = { debt_bailout = debt_bailout_temp }
-			round_variable = debt_bailout
-			custom_effect_tooltip = bankruptcy_seek_bailout_from_biggest_influencer_tt
-			var:FROM.influence_array^0 = { country_event = { id = bankruptcy.1 hours = 3 } }
+			set_temp_variable = { eon_debt_bailout_donor = influence_array^0 }
+			set_temp_variable = { eon_debt_bailout_offer_kind = 1 }
+			custom_effect_tooltip = eon_debt_bailout_request_terms_tt
+			eon_debt_bailout_prepare = yes
 		}
 
 		ai_will_do = {
@@ -174,10 +170,15 @@ bankruptcy_decisions = {
 	bankruptcy_seek_bailout_from_second_biggest_influencer = {
 		icon = GFX_decision_bancru_ask_button
 		visible = {
-			check_variable = { influence_array^0 > 0 }
-			NOT = { check_variable = { influence_array^1 > ROOT.id } }
+			check_variable = { influence_array^1 > 0 }
+			NOT = { check_variable = { influence_array^1 = ROOT.id } }
+			var:influence_array^1 = { exists = yes }
 		}
 		available = {
+			set_temp_variable = { eon_debt_bailout_donor = influence_array^1 }
+			set_temp_variable = { eon_debt_bailout_offer_kind = 2 }
+			eon_debt_bailout_request_available = yes
+
 			is_subject = no
 			custom_trigger_tooltip = {
 				tooltip = has_foreign_influence
@@ -205,19 +206,10 @@ bankruptcy_decisions = {
 		days_remove = 7
 
 		complete_effect = {
-			if = { limit = { is_ai = yes }
-				add_political_power = -50
-			}
-			else = {
-				add_political_power = -100
-			}
-			set_temp_variable = { debt_bailout_temp = debt }
-			multiply_temp_variable = { debt_bailout_temp = 0.15 }
-			clamp_temp_variable = { var = debt_bailout_temp min = 1 }
-			set_variable = { debt_bailout = debt_bailout_temp }
-			round_variable = debt_bailout
-			custom_effect_tooltip = bankruptcy_seek_bailout_from_second_biggest_influencer_tt
-			var:FROM.influence_array^1 = { country_event = { id = bankruptcy.2 hours = 3 } }
+			set_temp_variable = { eon_debt_bailout_donor = influence_array^1 }
+			set_temp_variable = { eon_debt_bailout_offer_kind = 2 }
+			custom_effect_tooltip = eon_debt_bailout_request_terms_tt
+			eon_debt_bailout_prepare = yes
 		}
 
 		ai_will_do = {
@@ -248,6 +240,10 @@ bankruptcy_decisions = {
 		}
 
 		available = {
+			set_temp_variable = { eon_debt_bailout_donor = FROM }
+			set_temp_variable = { eon_debt_bailout_offer_kind = 3 }
+			eon_debt_bailout_request_available = yes
+
 			is_subject = no
 			FROM = { NOT = { has_war_with = ROOT } }
 			FROM = { has_opinion = { target = ROOT value > 0 } }
@@ -270,20 +266,10 @@ bankruptcy_decisions = {
 		days_remove = 7
 
 		complete_effect = {
-			if = { limit = { is_ai = yes }
-				add_political_power = -50
-			}
-			else = {
-				add_political_power = -100
-			}
-
-			set_temp_variable = { debt_bailout_temp = debt }
-			multiply_temp_variable = { debt_bailout_temp = 0.10 }
-			clamp_temp_variable = { var = debt_bailout_temp min = 1 }
-			set_variable = { debt_bailout = debt_bailout_temp }
-			round_variable = debt_bailout
-			custom_effect_tooltip = bankruptcy_seek_bailout_from_neighbour_tt
-			FROM = { country_event = { id = bankruptcy.3 hours = 3 } }
+			set_temp_variable = { eon_debt_bailout_donor = FROM }
+			set_temp_variable = { eon_debt_bailout_offer_kind = 3 }
+			custom_effect_tooltip = eon_debt_bailout_request_terms_tt
+			eon_debt_bailout_prepare = yes
 		}
 
 		ai_will_do = {
@@ -305,33 +291,39 @@ bankruptcy_decisions = {
 		}
 		icon = GFX_decision_bancru_ask_overlord_button
 		available = {
+			set_temp_variable = { eon_debt_bailout_donor = 0 }
 			if = {
-				limit = { is_ai = no }
-				custom_trigger_tooltip = {
-					tooltip = treasury_less_than_5
-					check_variable = { treasury < 5 }
+				limit = { is_subject = yes }
+				overlord = { set_temp_variable = { eon_debt_bailout_donor = THIS.id } }
+				set_temp_variable = { eon_debt_bailout_offer_kind = 4 }
+				eon_debt_bailout_request_available = yes
+				custom_trigger_tooltip = { tooltip = eon_debt_bailout_overlord_terms_tt always = yes }
+
+				if = {
+					limit = { is_ai = no }
+					custom_trigger_tooltip = {
+						tooltip = treasury_less_than_5
+						check_variable = { treasury < 5 }
+					}
 				}
+				is_subject = yes
+				NOT = { has_decision = bankruptcy_seek_bailout_from_imf }
+				overlord = { NOT = { has_dynamic_modifier = { modifier = very_high_interest_country_modifiers } } }
 			}
-			is_subject = yes
-			NOT = { has_decision = bankruptcy_seek_bailout_from_imf }
-			overlord = { NOT = { has_dynamic_modifier = { modifier = very_high_interest_country_modifiers } } }
+			else = { always = no }
 		}
 		days_re_enable = 360
 		days_remove = 7
 		complete_effect = {
-			if = { limit = { is_ai = yes }
-				add_political_power = -50
+			set_temp_variable = { eon_debt_bailout_donor = 0 }
+			if = {
+				limit = { is_subject = yes }
+				overlord = { set_temp_variable = { eon_debt_bailout_donor = THIS.id } }
+				set_temp_variable = { eon_debt_bailout_offer_kind = 4 }
+				custom_effect_tooltip = eon_debt_bailout_request_terms_tt
+				custom_effect_tooltip = eon_debt_bailout_overlord_terms_tt
+				eon_debt_bailout_prepare = yes
 			}
-			else = {
-				add_political_power = -100
-			}
-			set_temp_variable = { debt_bailout_temp = debt }
-			multiply_temp_variable = { debt_bailout_temp = 0.50 }
-			clamp_temp_variable = { var = debt_bailout_temp min = 1 }
-			set_variable = { debt_bailout = debt_bailout_temp }
-			round_variable = debt_bailout
-			custom_effect_tooltip = bankruptcy_seek_bailout_from_overlord_tt
-			overlord = { country_event = { id = bankruptcy.5 hours = 3 } }
 		}
 		ai_will_do = {
 			factor = 800
@@ -898,6 +890,7 @@ bankruptcy_decisions = {
 		}
 		icon = GFX_decision_bancru_depts_button
 		available = {
+			eon_debt_default_start_record_available = yes
 			check_variable = { interest_rate > 14.999 }
 			if = {
 				limit = { is_ai = no }
@@ -909,26 +902,29 @@ bankruptcy_decisions = {
 		}
 
 		complete_effect = {
-			# Cartels
-			if = { limit = { has_dynamic_modifier = { modifier = cartel_penalties } }
-				set_temp_variable = { cart_strength_change = 10 }
-				set_temp_variable = { cart_influence_change = 20 }
-				modify_treasury_effect = yes
-			}
+			eon_debt_default_prepare_start = yes
+			if = {
+				limit = {
+					eon_debt_default_start_available = yes
+					check_variable = { eon_debt_default_start_quote > 0 }
+				}
+				# Cartels
+				if = { limit = { has_dynamic_modifier = { modifier = cartel_penalties } }
+					set_temp_variable = { cart_strength_change = 10 }
+					set_temp_variable = { cart_influence_change = 20 }
+				}
 
-			set_variable = { debt_default_left = debt }
-			multiply_variable = { debt_default_left = 0.5 }
-			round_variable = debt_default_left
-			set_variable = { debt_default_total = debt_default_left }
-			multiply_variable = { debt = 0.25 }
-	    	clamp_variable = { var = debt min = 0 max = 1000000 }
-			depression = yes
-			custom_effect_tooltip = bankruptcy_default_on_debts_tt
-			activate_mission = debt_default_main_mission
-			set_variable = { old_gdp = gdp_total }
-			every_subject_country = {
-				limit = { NOT = { has_autonomy_state = autonomy_marz_arm } }
-				ROOT = { end_puppet = PREV }
+				set_variable = { debt_default_left = eon_debt_default_start_quote }
+				set_variable = { debt_default_total = eon_debt_default_start_quote }
+				subtract_from_variable = { debt = eon_debt_default_start_quote }
+				depression = yes
+				custom_effect_tooltip = bankruptcy_default_on_debts_tt
+				activate_mission = debt_default_main_mission
+				set_variable = { old_gdp = gdp_total }
+				every_subject_country = {
+					limit = { NOT = { has_autonomy_state = autonomy_marz_arm } }
+					ROOT = { end_puppet = PREV }
+				}
 			}
 		}
 
@@ -1051,6 +1047,14 @@ bankruptcy_decisions = {
 			add_relative_party_popularity = yes
 		}
 	}
+
+	eon_debt_bailout_withdraw_request = {
+		icon = GFX_decision_bancru_ask_button
+		visible = { has_country_flag = eon_debt_bailout_reserved has_country_flag = eon_debt_bailout_borrower }
+		available = { NOT = { has_country_flag = eon_debt_bailout_cancelled } eon_debt_bailout_pair_current = yes }
+		complete_effect = { eon_debt_bailout_cancel = yes }
+		ai_will_do = { factor = 0 }
+	}
 }
 
 debt_default_decisions = {
@@ -1067,7 +1071,7 @@ debt_default_decisions = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = debt_default_main_mission_complete_trigger
-				check_variable = { debt_default_left < 1 }
+				eon_debt_default_completed_available = yes
 			}
 		}
 
@@ -1082,105 +1086,13 @@ debt_default_decisions = {
 
 		timeout_effect = {
 			if = {
-				limit = { is_subject = no }
-				if = { limit = { check_variable = { influence_array^0 > 0 } }
-					if = {
-						limit = {
-							var:FROM.influence_array^0 = {
-								bankruptcy_default_intervention_trigger = yes
-							}
-						}
-						var:FROM.influence_array^0 = { country_event = { id = bankruptcy.13 hours = 6 } }
-					}
-				}
-				if = { limit = { check_variable = { influence_array^1 > 0 } }
-					if = {
-						limit = {
-							var:FROM.influence_array^1 = {
-								bankruptcy_default_intervention_trigger = yes
-							}
-						}
-						var:FROM.influence_array^1 = { country_event = { id = bankruptcy.13 hours = 6 } }
-					}
-				}
-				if = { limit = { check_variable = { influence_array^2 > 0 } }
-					if = {
-						limit = {
-							var:FROM.influence_array^2 = {
-								bankruptcy_default_intervention_trigger = yes
-							}
-						}
-						var:FROM.influence_array^2 = { country_event = { id = bankruptcy.13 hours = 6 } }
-					}
-				}
-				if = { limit = { check_variable = { influence_array^3 > 0 } }
-					if = {
-						limit = {
-							var:FROM.influence_array^3 = {
-								bankruptcy_default_intervention_trigger = yes
-							}
-						}
-						var:FROM.influence_array^3 = { country_event = { id = bankruptcy.13 hours = 6 } }
-					}
-				}
-				if = { limit = { check_variable = { influence_array^4 > 0 } }
-					if = {
-						limit = {
-							var:FROM.influence_array^4 = {
-								bankruptcy_default_intervention_trigger = yes
-							}
-						}
-						var:FROM.influence_array^4 = { country_event = { id = bankruptcy.13 hours = 6 } }
-					}
-				}
-				if = { limit = { check_variable = { influence_array^5 > 0 } }
-					if = {
-						limit = {
-							var:FROM.influence_array^5 = {
-								bankruptcy_default_intervention_trigger = yes
-							}
-						}
-						var:FROM.influence_array^5 = { country_event = { id = bankruptcy.13 hours = 6 } }
-					}
-				}
-				if = { limit = { check_variable = { influence_array^6 > 0 } }
-					if = {
-						limit = {
-							var:FROM.influence_array^6 = {
-								bankruptcy_default_intervention_trigger = yes
-							}
-						}
-						var:FROM.influence_array^6 = { country_event = { id = bankruptcy.13 hours = 6 } }
-					}
-				}
+				limit = { eon_debt_default_timeout_available = yes }
+				set_country_flag = eon_debt_default_overdue
 			}
-			else = {
-				OVERLORD = {
-					set_variable = { debt_from_subject = debt_default_left }
-					multiply_variable = { debt_from_subject = 0.50 }
-					country_event = { id = bankruptcy.14 hours = 6 }
-					effect_tooltip = {
-						ROOT = {
-							add_autonomy_score = {
-								value = -1000
-							}
-						}
-					}
-				}
-			}
-			clear_variable = debt_default_left
-			clear_variable = debt_default_total
-			custom_effect_tooltip = debt_default_cancel_int_investments
-			set_variable = { int_investments = 0 }
-			set_variable = { treasury = 0 }
-			clear_variable = old_gdp
 		}
 
 		complete_effect = {
-			clear_variable = debt_default_left
-			clear_variable = debt_default_total
-			add_timed_idea = { idea = debt_default_ecomomic_boom days = 360 }
-			clear_variable = old_gdp
+			eon_debt_default_complete = yes
 		}
 
 		ai_will_do = {
@@ -1192,26 +1104,20 @@ debt_default_decisions = {
 	debt_default_pay_10_from_treasury = {
 		icon = GFX_decision_bancru_ask_button
 		visible = {
-			has_active_mission = debt_default_main_mission
-			check_variable = { gdp_total < 100 }
+			eon_debt_default_payment_period_available = yes
+			check_variable = { var = gdp_total value = 100 compare = less_than_or_equals }
 		}
 
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = debt_default_pay_from_treasury_trigger_tooltip
-				check_variable = { interest_rate < 5 }
+				eon_debt_default_pay_10_available = yes
 			}
 		}
 
 		complete_effect = {
 			custom_effect_tooltip = debt_default_pay_10_from_treasury_tt
-			set_temp_variable = { treasury_change = -10 }
-			modify_treasury_effect = yes
-			add_to_variable = { debt_default_left = -10 }
-			clamp_variable = {
-				var = debt_default_left
-				min = 0
-			}
+			eon_debt_default_pay_10 = yes
 		}
 
 		ai_will_do = {
@@ -1223,26 +1129,20 @@ debt_default_decisions = {
 	debt_default_pay_50_from_treasury = {
 		icon = GFX_decision_bancru_ask_button
 		visible = {
-			has_active_mission = debt_default_main_mission
+			eon_debt_default_payment_period_available = yes
 			check_variable = { gdp_total > 100 }
 		}
 
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = debt_default_pay_from_treasury_trigger_tooltip
-				check_variable = { interest_rate < 5 }
+				eon_debt_default_pay_50_available = yes
 			}
 		}
 
 		complete_effect = {
 			custom_effect_tooltip = debt_default_pay_50_from_treasury_tt
-			set_temp_variable = { treasury_change = -50 }
-			modify_treasury_effect = yes
-			add_to_variable = { debt_default_left = -50 }
-			clamp_variable = {
-				var = debt_default_left
-				min = 0
-			}
+			eon_debt_default_pay_50 = yes
 		}
 
 		ai_will_do = {
@@ -1465,14 +1365,14 @@ debt_default_decisions = {
 	debt_default_sell_civilian_factories = {
 		icon = GFX_decision_bancru_ask_button
 		visible = {
-			has_active_mission = debt_default_main_mission
+			eon_debt_default_payment_period_available = yes
 		}
 
 		available = {
-			check_variable = { industrial_complex_total > 0 }
-			NOT = { has_decision = debt_default_dismantle_military_factories }
-			NOT = { has_decision = debt_default_scrap_dockyard }
-			NOT = { has_decision = debt_default_cut_down_government_services }
+			custom_trigger_tooltip = {
+				tooltip = eon_debt_default_asset_available_tt
+				eon_debt_default_asset_civilian_available = yes
+			}
 		}
 
 		days_remove = 5
@@ -1480,18 +1380,8 @@ debt_default_decisions = {
 		cost = 25
 
 		remove_effect = {
-			custom_effect_tooltip = sell_10_billion_factory
-			add_to_variable = { debt_default_left = -10 }
-			random_owned_state = {
-				limit = {
-					industrial_complex > 0
-				}
-				remove_building = {
-					type = industrial_complex
-					level = 1
-				}
-			}
-			ingame_update_setup = yes
+			custom_effect_tooltip = eon_debt_default_asset_liquidation_tt
+			eon_debt_default_asset_civilian_dispose = yes
 		}
 
 		ai_will_do = {
@@ -1509,16 +1399,14 @@ debt_default_decisions = {
 	debt_default_dismantle_military_factories = {
 		icon = GFX_decision_bancru_ask_button
 		visible = {
-			has_active_mission = debt_default_main_mission
+			eon_debt_default_payment_period_available = yes
 		}
 
 		available = {
-			any_owned_state = {
-				arms_factory > 0
+			custom_trigger_tooltip = {
+				tooltip = eon_debt_default_asset_available_tt
+				eon_debt_default_asset_military_available = yes
 			}
-			NOT = { has_decision = debt_default_sell_civilian_factories }
-			NOT = { has_decision = debt_default_scrap_dockyard }
-			NOT = { has_decision = debt_default_cut_down_government_services }
 		}
 
 		days_remove = 5
@@ -1526,18 +1414,8 @@ debt_default_decisions = {
 		cost = 25
 
 		remove_effect = {
-			custom_effect_tooltip = sell_10_billion_factory
-			add_to_variable = { debt_default_left = -10 }
-			random_owned_state = {
-				limit = {
-					arms_factory > 0
-				}
-				remove_building = {
-					type = arms_factory
-					level = 1
-				}
-			}
-			ingame_update_setup = yes
+			custom_effect_tooltip = eon_debt_default_asset_liquidation_tt
+			eon_debt_default_asset_military_dispose = yes
 		}
 
 		ai_will_do = {
@@ -1555,14 +1433,14 @@ debt_default_decisions = {
 	debt_default_scrap_dockyard = {
 		icon = GFX_decision_bancru_ask_button
 		visible = {
-			has_active_mission = debt_default_main_mission
+			eon_debt_default_payment_period_available = yes
 		}
 
 		available = {
-			check_variable = { dockyard_fac > 0 }
-			NOT = { has_decision = debt_default_sell_civilian_factories }
-			NOT = { has_decision = debt_default_dismantle_military_factories }
-			NOT = { has_decision = debt_default_cut_down_government_services }
+			custom_trigger_tooltip = {
+				tooltip = eon_debt_default_asset_available_tt
+				eon_debt_default_asset_dockyard_available = yes
+			}
 		}
 
 		days_remove = 5
@@ -1570,18 +1448,8 @@ debt_default_decisions = {
 		cost = 25
 
 		remove_effect = {
-			custom_effect_tooltip = sell_10_billion_factory
-			add_to_variable = { debt_default_left = -10 }
-			random_owned_state = {
-				limit = {
-					dockyard > 0
-				}
-				remove_building = {
-					type = dockyard
-					level = 1
-				}
-			}
-			ingame_update_setup = yes
+			custom_effect_tooltip = eon_debt_default_asset_liquidation_tt
+			eon_debt_default_asset_dockyard_dispose = yes
 		}
 
 		ai_will_do = {
@@ -1599,14 +1467,14 @@ debt_default_decisions = {
 	debt_default_cut_down_government_services = {
 		icon = GFX_decision_bancru_ask_button
 		visible = {
-			has_active_mission = debt_default_main_mission
+			eon_debt_default_payment_period_available = yes
 		}
 
 		available = {
-			check_variable = { office_park_total > 0 }
-			NOT = { has_decision = debt_default_sell_civilian_factories }
-			NOT = { has_decision = debt_default_dismantle_military_factories }
-			NOT = { has_decision = debt_default_scrap_dockyard }
+			custom_trigger_tooltip = {
+				tooltip = eon_debt_default_asset_available_tt
+				eon_debt_default_asset_offices_available = yes
+			}
 		}
 
 		days_remove = 5
@@ -1614,18 +1482,8 @@ debt_default_decisions = {
 		cost = 25
 
 		remove_effect = {
-			custom_effect_tooltip = sell_15_billion_factory
-			add_to_variable = { debt_default_left = -10 }
-			random_owned_state = {
-				limit = {
-					offices > 0
-				}
-				remove_building = {
-					type = offices
-					level = 1
-				}
-			}
-			ingame_update_setup = yes
+			custom_effect_tooltip = eon_debt_default_asset_liquidation_tt
+			eon_debt_default_asset_offices_dispose = yes
 		}
 
 		ai_will_do = {

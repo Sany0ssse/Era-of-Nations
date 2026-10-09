@@ -9,9 +9,9 @@ ROOT = Path(__file__).resolve().parents[3]
 HERE = Path(__file__).resolve().parent
 
 
-def run(relative):
+def run(relative, *arguments):
     result = subprocess.run(
-        [sys.executable, '-B', str(ROOT / relative)], cwd=ROOT,
+        [sys.executable, '-B', str(ROOT / relative), *arguments], cwd=ROOT,
         capture_output=True, text=True, encoding='utf-8',
     )
     if result.returncode:
@@ -30,6 +30,7 @@ def main():
     sys.stderr.reconfigure(encoding='utf-8')
     reports = {}
     reports['localisation'] = run('tools/validation/diplomacy_completion/check_localisation.py')
+    reports['localisation_override_boundaries'] = run('tools/validation/localisation_override_checker/test_checker.py')
     reports['consultation_ui'] = run('tools/validation/diplomacy_channel_ui/run_checks.py')
     for number in (24, 25, 26, 27, 28):
         path = f'tools/validation/diplomacy_package_{number}/run_checks.py'
@@ -42,6 +43,13 @@ def main():
     reports['ordinary_alliance'] = run('tools/validation/diplomacy_package_03/test_ordinary_alliance.py')
     reports['weekly_cash'] = run('tools/validation/diplomacy_completion/check_weekly_cash.py')
     reports['debt_accounting'] = run('tools/validation/debt_accounting/run_checks.py')
+    reports['debt_bailout'] = run('tools/validation/debt_bailout/run_checks.py')
+    reports['aid_flag_scope'] = run('tools/validation/aid_flag_scope/test_scope.py', '--json')
+    reports['debt_default_accounting'] = run('tools/validation/debt_default_accounting/test_accounting.py', '--require-integration')
+    reports['debt_default_lifecycle'] = run('tools/validation/debt_default_accounting/test_lifecycle.py')
+    reports['debt_default_assets'] = run('tools/validation/debt_default_accounting/test_assets.py')
+    reports['debt_default_asset_source_boundaries'] = run('tools/validation/debt_default_accounting/test_asset_source.py')
+    reports['debt_default_source_boundaries'] = run('tools/validation/debt_default_accounting/test_source_compat.py')
     reports['annex_embargo_cleanup'] = run('tools/validation/diplomacy_completion/check_annex_embargo_cleanup.py')
     reports['integration_sources'] = run('tools/validation/diplomacy_completion/check_integration_sources.py')
     check = subprocess.run(

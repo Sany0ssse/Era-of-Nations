@@ -26,6 +26,60 @@ EXPLICIT = {'title', 'desc', 'text', 'tooltip', 'custom_effect_tooltip',
             'accept_title', 'accept_description', 'reject_title',
             'reject_description', 'cost_string'}
 
+# Only these reviewed old IDs may have an upstream row plus a replace row.
+# File membership, key sets, and the exact two-provider pair are all required.
+BAILOUT_OVERRIDE_KEYS = {
+    'bankruptcy_seek_bailout_from_' + route + '_' + suffix
+    for route in ('biggest_influencer', 'second_biggest_influencer', 'neighbour', 'overlord')
+    for suffix in ('desc', 'tt')
+}
+DEFAULT_OVERRIDE_KEYS = {
+    'debt_default_pay_' + amount + '_from_treasury' + suffix
+    for amount in ('10', '50') for suffix in ('', '_desc', '_tt')
+} | {'debt_default_pay_from_treasury_trigger_tooltip',
+     'debt_default_main_mission_complete_trigger',
+     'bankruptcy_default_on_debts_desc', 'bankruptcy_default_on_debts_tt',
+     'bankruptcy.13.a', 'bankruptcy.13.b', 'bankruptcy.14.a',
+     'debt_default_sell_civilian_factories_desc',
+     'debt_default_dismantle_military_factories_desc',
+     'debt_default_scrap_dockyard_desc',
+     'debt_default_cut_down_government_services_desc'}
+
+
+def approved_override_files(language):
+    return {
+        f'localisation/{language}/replace/eon_debt_bailout_replace_l_{language}.yml': BAILOUT_OVERRIDE_KEYS,
+        f'localisation/{language}/replace/eon_debt_default_l_{language}.yml': DEFAULT_OVERRIDE_KEYS,
+    }
+
+
+def approved_override_pairs(language):
+    upstream = f'localisation/{language}/MD_money_l_{language}.yml'
+    return {key: (upstream, provider)
+            for provider, keys in approved_override_files(language).items() for key in keys}
+
+
+def validate_override_files(language, file_keys, errors):
+    for provider, expected in approved_override_files(language).items():
+        if provider not in file_keys:
+            errors.append(f'{language}: missing approved override file {provider}')
+        elif file_keys[provider] != expected:
+            errors.append(f'{language}: wrong approved override key set in {provider}: ' + repr({
+                'missing': sorted(expected - file_keys[provider]),
+                'unexpected': sorted(file_keys[provider] - expected),
+            }))
+
+
+def select_approved_override(language, key, rows, errors):
+    """Choose the actual replace value only for an exact reviewed two-row pair."""
+    expected = approved_override_pairs(language)[key]
+    providers = [row[1] for row in rows]
+    if len(rows) != 2 or sorted(providers) != sorted(expected):
+        errors.append(f'{language}: invalid approved override providers for {key}: ' +
+                      repr(providers) + '; expected exactly ' + repr(expected))
+        return None
+    return next(row for row in rows if row[1] == expected[1])
+
 
 def is_eon(key):
     return isinstance(key, str) and key.startswith(('eon_', 'EON_'))
@@ -48,15 +102,23 @@ def main():
     languages = {}
     owned_keys = {}
     sources = {}
+    selected_overrides = {}
     eon_file_count = 0
     for language in ('english', 'russian'):
         index = defaultdict(list)
         own_keys = set()
+        file_keys = {}
+        approved_files = approved_override_files(language)
+        upstream_file = f'localisation/{language}/MD_money_l_{language}.yml'
         for path in sorted((ROOT / 'localisation' / language).rglob('*.yml')):
             raw = path.read_bytes()
             text = raw.decode('utf-8-sig')
             relative = path.relative_to(ROOT).as_posix()
             own = path.name.startswith('eon_')
+            file_keys[relative] = set()
+            # Both providers are evidence even though replace is authoritative.
+            if relative == upstream_file or relative in approved_files:
+                sources[relative] = hashlib.sha256(raw).hexdigest()
             if own:
                 eon_file_count += 1
                 sources[relative] = hashlib.sha256(raw).hexdigest()
@@ -71,6 +133,7 @@ def main():
                 if match:
                     key, value = match.groups()
                     index[key].append((value, relative, number))
+                    file_keys[relative].add(key)
                     if own:
                         own_keys.add(key)
                 elif (KEY_START.match(line) or (own and line.strip()
@@ -78,6 +141,11 @@ def main():
                     errors.append(f'{relative}:{number}: malformed localisation line')
         languages[language] = index
         owned_keys[language] = own_keys
+        validate_override_files(language, file_keys, errors)
+        selected_overrides[language] = {
+            key: select_approved_override(language, key, index.get(key, []), errors)
+            for key in approved_override_pairs(language)
+        }
 
     required = defaultdict(set)
     action_ids = []
@@ -159,7 +227,9 @@ def main():
             if key not in index:
                 errors.append(f'{language}: missing {key} ({sorted(origins)[0]})')
             else:
-                for value, provider, number in index[key]:
+                selected = selected_overrides[language].get(key)
+                rows = ([selected] if selected is not None else [] if key in selected_overrides[language] else index[key])
+                for value, provider, number in rows:
                     if provider not in sources:
                         sources[provider] = hashlib.sha256((ROOT / provider).read_bytes()).hexdigest()
                     if not value.strip() or value.strip() == key:
@@ -168,7 +238,7 @@ def main():
         for key in own_keys:
             rows = index[key]
             checked_keys += 1
-            if len(rows) != 1:
+            if key not in selected_overrides[language] and len(rows) != 1:
                 errors.append(f'{language}: duplicate {key}: ' + ', '.join(r[1] for r in rows))
 
         def resolve(key, trail):
@@ -179,11 +249,17 @@ def main():
             if key not in index:
                 errors.append(f'{language}: missing alias target {key}')
                 return ''
-            value = index[key][0][0]
-            provider = index[key][0][1]
+            if key in selected_overrides[language]:
+                selected = selected_overrides[language][key]
+                if selected is None:
+                    return ''  # Exact provider error was already recorded.
+            else:
+                selected = index[key][0]
+            value, provider, number = selected
             if provider not in sources:
                 sources[provider] = hashlib.sha256((ROOT / provider).read_bytes()).hexdigest()
-            if not value.strip() or value.strip() == key or RAW_KEY.fullmatch(value.strip()):
+            if (not value.strip() or value.strip() == key or RAW_KEY.fullmatch(value.strip())
+                    or value.strip() in selected_overrides[language]):
                 errors.append(f'{language}: empty or raw-code value for {key}')
             # Count and validate substitutions through the whole alias chain.
             # This is static text expansion, not the engine's scope formatter.
@@ -195,7 +271,6 @@ def main():
 
         for key in own_keys:
             resolve(key, ())
-            value = index[key][0][0]
         # Custom functions can be used by inherited windows as well as owned
         # text, e.g. [From.EON_GetInvestmentOfferBuilding]. Numeric [?...] scope
         # expressions are deliberately excluded from this function lookup.
@@ -234,6 +309,14 @@ def main():
         'scripted_text_references_checked': scripted_references,
         'game_source_files': len(game_paths),
         'source_sha256': sources,
+        'approved_overrides_per_language': {
+            language: sum(row is not None for row in selected.values())
+            for language, selected in selected_overrides.items()
+        },
+        'approved_override_providers': {
+            language: {key: row[1] for key, row in selected.items() if row is not None}
+            for language, selected in selected_overrides.items()
+        },
         'resolved_text_samples': resolved_samples,
         'errors': errors,
         'native_ui_rendering_proven': False,

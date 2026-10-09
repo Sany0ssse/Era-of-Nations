@@ -1,0 +1,152 @@
+# Called in the country frame after one actual controlled asset was removed.
+# Success metadata certifies only this bounded aggregate accounting operation.
+eon_debt_default_asset_settle_removed = {
+	if = {
+		limit = {
+			check_variable = { eon_debt_default_asset_removed = 1 }
+			eon_debt_default_asset_financial_available = yes
+		}
+		set_temp_variable = { eon_debt_default_asset_cash_before_temp = treasury }
+		set_temp_variable = { eon_debt_default_asset_claim_before_temp = debt_default_left }
+		subtract_from_variable = { debt_default_left = eon_debt_default_asset_quoted_credit }
+		add_to_variable = { treasury = eon_debt_default_asset_quoted_excess }
+		set_variable = { eon_debt_default_asset_cash_before = eon_debt_default_asset_cash_before_temp }
+		set_variable = { eon_debt_default_asset_claim_before = eon_debt_default_asset_claim_before_temp }
+		add_to_variable = { eon_debt_default_asset_sequence = 1 }
+		set_variable = { eon_debt_default_asset_kind = eon_debt_default_asset_selected_kind }
+		set_variable = { eon_debt_default_asset_value = 10 }
+		set_variable = { eon_debt_default_asset_credit = eon_debt_default_asset_quoted_credit }
+		set_variable = { eon_debt_default_asset_excess = eon_debt_default_asset_quoted_excess }
+		set_variable = { eon_debt_default_asset_cash_after = treasury }
+		set_variable = { eon_debt_default_asset_claim_after = debt_default_left }
+		set_variable = { eon_debt_default_asset_state = eon_debt_default_asset_selected_state }
+		set_variable = { eon_debt_default_asset_building_before = eon_debt_default_asset_building_before_temp }
+		set_variable = { eon_debt_default_asset_building_after = eon_debt_default_asset_building_after_temp }
+		set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 3 }
+		eon_debt_default_finish_overdue_if_settled = yes
+		ingame_update_setup = yes
+	}
+}
+
+eon_debt_default_asset_civilian_dispose = {
+	set_temp_variable = { eon_debt_default_asset_selected_kind = 1 }
+	set_temp_variable = { eon_debt_default_asset_selected_state = 0 }
+	set_temp_variable = { eon_debt_default_asset_removed = 0 }
+	set_temp_variable = { eon_debt_default_asset_building_before_temp = 0 }
+	set_temp_variable = { eon_debt_default_asset_building_after_temp = 0 }
+	set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 0 }
+	eon_debt_default_asset_attempt_begin = yes
+	if = {
+		limit = { eon_debt_default_asset_civilian_available = yes }
+		set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 1 }
+		random_owned_controlled_state = {
+			limit = { check_variable = { building_level@industrial_complex > 0 } }
+			set_temp_variable = { eon_debt_default_asset_selected_state = THIS.id }
+			set_temp_variable = { eon_debt_default_asset_building_before_temp = building_level@industrial_complex }
+			remove_building = { type = industrial_complex level = 1 }
+			set_temp_variable = { eon_debt_default_asset_building_after_temp = building_level@industrial_complex }
+			set_temp_variable = { eon_debt_default_asset_removed = eon_debt_default_asset_building_before_temp }
+			subtract_from_temp_variable = { eon_debt_default_asset_removed = eon_debt_default_asset_building_after_temp }
+			set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 2 }
+			PREV = { eon_debt_default_asset_settle_removed = yes }
+		}
+	}
+	eon_debt_default_asset_attempt_finish = yes
+}
+
+eon_debt_default_asset_military_dispose = {
+	set_temp_variable = { eon_debt_default_asset_selected_kind = 2 }
+	set_temp_variable = { eon_debt_default_asset_selected_state = 0 }
+	set_temp_variable = { eon_debt_default_asset_removed = 0 }
+	set_temp_variable = { eon_debt_default_asset_building_before_temp = 0 }
+	set_temp_variable = { eon_debt_default_asset_building_after_temp = 0 }
+	set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 0 }
+	eon_debt_default_asset_attempt_begin = yes
+	if = {
+		limit = { eon_debt_default_asset_military_available = yes }
+		set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 1 }
+		random_owned_controlled_state = {
+			limit = { check_variable = { building_level@arms_factory > 0 } }
+			set_temp_variable = { eon_debt_default_asset_selected_state = THIS.id }
+			set_temp_variable = { eon_debt_default_asset_building_before_temp = building_level@arms_factory }
+			remove_building = { type = arms_factory level = 1 }
+			set_temp_variable = { eon_debt_default_asset_building_after_temp = building_level@arms_factory }
+			set_temp_variable = { eon_debt_default_asset_removed = eon_debt_default_asset_building_before_temp }
+			subtract_from_temp_variable = { eon_debt_default_asset_removed = eon_debt_default_asset_building_after_temp }
+			set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 2 }
+			PREV = { eon_debt_default_asset_settle_removed = yes }
+		}
+	}
+	eon_debt_default_asset_attempt_finish = yes
+}
+
+eon_debt_default_asset_dockyard_dispose = {
+	set_temp_variable = { eon_debt_default_asset_selected_kind = 3 }
+	set_temp_variable = { eon_debt_default_asset_selected_state = 0 }
+	set_temp_variable = { eon_debt_default_asset_removed = 0 }
+	set_temp_variable = { eon_debt_default_asset_building_before_temp = 0 }
+	set_temp_variable = { eon_debt_default_asset_building_after_temp = 0 }
+	set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 0 }
+	eon_debt_default_asset_attempt_begin = yes
+	if = {
+		limit = { eon_debt_default_asset_dockyard_available = yes }
+		set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 1 }
+		random_owned_controlled_state = {
+			limit = { check_variable = { building_level@dockyard > 0 } }
+			set_temp_variable = { eon_debt_default_asset_selected_state = THIS.id }
+			set_temp_variable = { eon_debt_default_asset_building_before_temp = building_level@dockyard }
+			remove_building = { type = dockyard level = 1 }
+			set_temp_variable = { eon_debt_default_asset_building_after_temp = building_level@dockyard }
+			set_temp_variable = { eon_debt_default_asset_removed = eon_debt_default_asset_building_before_temp }
+			subtract_from_temp_variable = { eon_debt_default_asset_removed = eon_debt_default_asset_building_after_temp }
+			set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 2 }
+			PREV = { eon_debt_default_asset_settle_removed = yes }
+		}
+	}
+	eon_debt_default_asset_attempt_finish = yes
+}
+
+eon_debt_default_asset_offices_dispose = {
+	set_temp_variable = { eon_debt_default_asset_selected_kind = 4 }
+	set_temp_variable = { eon_debt_default_asset_selected_state = 0 }
+	set_temp_variable = { eon_debt_default_asset_removed = 0 }
+	set_temp_variable = { eon_debt_default_asset_building_before_temp = 0 }
+	set_temp_variable = { eon_debt_default_asset_building_after_temp = 0 }
+	set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 0 }
+	eon_debt_default_asset_attempt_begin = yes
+	if = {
+		limit = { eon_debt_default_asset_offices_available = yes }
+		set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 1 }
+		random_owned_controlled_state = {
+			limit = { check_variable = { building_level@offices > 0 } }
+			set_temp_variable = { eon_debt_default_asset_selected_state = THIS.id }
+			set_temp_variable = { eon_debt_default_asset_building_before_temp = building_level@offices }
+			remove_building = { type = offices level = 1 }
+			set_temp_variable = { eon_debt_default_asset_building_after_temp = building_level@offices }
+			set_temp_variable = { eon_debt_default_asset_removed = eon_debt_default_asset_building_before_temp }
+			subtract_from_temp_variable = { eon_debt_default_asset_removed = eon_debt_default_asset_building_after_temp }
+			set_temp_variable = { eon_debt_default_asset_attempt_outcome_temp = 2 }
+			PREV = { eon_debt_default_asset_settle_removed = yes }
+		}
+	}
+	eon_debt_default_asset_attempt_finish = yes
+}
+
+# A diagnostic callback receipt is not a payment receipt. Rejected calls may
+# advance only this attempt counter; the paid sequence and ledger stay intact.
+eon_debt_default_asset_attempt_begin = {
+	add_to_variable = { eon_debt_default_asset_attempt_sequence = 1 }
+	set_variable = { eon_debt_default_asset_attempt_kind = eon_debt_default_asset_selected_kind }
+	set_variable = { eon_debt_default_asset_attempt_cash_before = treasury }
+	set_variable = { eon_debt_default_asset_attempt_claim_before = debt_default_left }
+}
+
+eon_debt_default_asset_attempt_finish = {
+	set_variable = { eon_debt_default_asset_attempt_outcome = eon_debt_default_asset_attempt_outcome_temp }
+	set_variable = { eon_debt_default_asset_attempt_cash_after = treasury }
+	set_variable = { eon_debt_default_asset_attempt_claim_after = debt_default_left }
+	set_variable = { eon_debt_default_asset_attempt_state = eon_debt_default_asset_selected_state }
+	set_variable = { eon_debt_default_asset_attempt_building_before = eon_debt_default_asset_building_before_temp }
+	set_variable = { eon_debt_default_asset_attempt_building_after = eon_debt_default_asset_building_after_temp }
+	log = "EON_DEBT_DEFAULT_ASSET_ATTEMPT actor=[THIS.GetTag] sequence=[?eon_debt_default_asset_attempt_sequence] kind=[?eon_debt_default_asset_attempt_kind] outcome=[?eon_debt_default_asset_attempt_outcome] cash_before=[?eon_debt_default_asset_attempt_cash_before] cash_after=[?eon_debt_default_asset_attempt_cash_after] claim_before=[?eon_debt_default_asset_attempt_claim_before] claim_after=[?eon_debt_default_asset_attempt_claim_after] state=[?eon_debt_default_asset_attempt_state] building_before=[?eon_debt_default_asset_attempt_building_before] building_after=[?eon_debt_default_asset_attempt_building_after] paid_sequence=[?eon_debt_default_asset_sequence]"
+}

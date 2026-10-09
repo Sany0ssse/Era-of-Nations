@@ -36,12 +36,16 @@ eon_aid_national_policy_allowed = {
 eon_aid_legacy_pair_available = {
 	custom_trigger_tooltip = {
 		tooltip = eon_aid_legacy_pair_available_tt
-		NOT = {
-			OR = {
-				has_country_flag = sending_small_billion_@eon_aid_policy_donor
-				has_country_flag = sending_medium_billion_@eon_aid_policy_donor
-				has_country_flag = sending_high_billion_@eon_aid_policy_donor
-				has_country_flag = eon_aid_legacy_quarantined@eon_aid_policy_donor
+		var:eon_aid_policy_donor = {
+			PREV = {
+				NOT = {
+					OR = {
+						has_country_flag = sending_small_billion_@PREV
+						has_country_flag = sending_medium_billion_@PREV
+						has_country_flag = sending_high_billion_@PREV
+						has_country_flag = eon_aid_legacy_quarantined@PREV
+					}
+				}
 			}
 		}
 	}
@@ -52,7 +56,9 @@ eon_aid_legacy_pair_available = {
 eon_aid_retired_pair_available = {
 	custom_trigger_tooltip = {
 		tooltip = eon_aid_retired_pair_available_tt
-		NOT = { has_country_flag = eon_aid_retired_pair@eon_aid_policy_donor }
+		var:eon_aid_policy_donor = {
+			PREV = { NOT = { has_country_flag = eon_aid_retired_pair@PREV } }
+		}
 		var:eon_aid_policy_donor = { NOT = { has_country_flag = eon_aid_retired_pair@PREV } }
 	}
 }

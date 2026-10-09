@@ -1,0 +1,128 @@
+# Borrower-country frame; donor and kind are initialized by each real decision.
+eon_debt_bailout_quote_positive = {
+	set_temp_variable = { eon_debt_bailout_quote = debt }
+	if = { limit = { check_variable = { eon_debt_bailout_offer_kind = 1 } } multiply_temp_variable = { eon_debt_bailout_quote = 0.20 } }
+	if = { limit = { check_variable = { eon_debt_bailout_offer_kind = 2 } } multiply_temp_variable = { eon_debt_bailout_quote = 0.15 } }
+	if = { limit = { check_variable = { eon_debt_bailout_offer_kind = 3 } } multiply_temp_variable = { eon_debt_bailout_quote = 0.10 } }
+	if = { limit = { check_variable = { eon_debt_bailout_offer_kind = 4 } } multiply_temp_variable = { eon_debt_bailout_quote = 0.50 } }
+	check_variable = { eon_debt_bailout_quote > 0 }
+}
+
+eon_debt_bailout_request_policy = {
+	if = { limit = { is_ai = no } check_variable = { treasury < 5 } }
+	if = {
+		limit = { check_variable = { eon_debt_bailout_offer_kind < 3 } }
+		is_subject = no
+		check_variable = { interest_rate > 10 }
+		if = { limit = { check_variable = { eon_debt_bailout_offer_kind = 1 } } check_variable = { influence_array^0 = eon_debt_bailout_donor } }
+		if = { limit = { check_variable = { eon_debt_bailout_offer_kind = 2 } } check_variable = { influence_array^1 = eon_debt_bailout_donor } }
+	}
+	if = {
+		limit = { check_variable = { eon_debt_bailout_offer_kind = 3 } }
+		is_subject = no
+		NOT = { check_variable = { influence_array^0 = eon_debt_bailout_donor } }
+		NOT = { check_variable = { influence_array^1 = eon_debt_bailout_donor } }
+		var:eon_debt_bailout_donor = {
+			is_neighbor_of = PREV
+			is_full_state = yes
+			check_variable = { gdp_total > PREV.gdp_total }
+			has_opinion = { target = PREV value > 0 }
+		}
+	}
+	if = {
+		limit = { check_variable = { eon_debt_bailout_offer_kind = 4 } }
+		is_subject_of = var:eon_debt_bailout_donor
+		var:eon_debt_bailout_donor = { NOT = { has_dynamic_modifier = { modifier = very_high_interest_country_modifiers } } }
+	}
+}
+
+eon_debt_bailout_request_available = {
+	exists = yes
+	NOT = { has_country_flag = eon_debt_bailout_reserved }
+	check_variable = { debt > 0 }
+	OR = {
+		check_variable = { eon_debt_bailout_offer_kind = 1 }
+		check_variable = { eon_debt_bailout_offer_kind = 2 }
+		check_variable = { eon_debt_bailout_offer_kind = 3 }
+		check_variable = { eon_debt_bailout_offer_kind = 4 }
+	}
+	check_variable = { eon_debt_bailout_donor > 0 }
+	check_variable = { eon_debt_bailout_sequence < 1000000 }
+	var:eon_debt_bailout_donor = {
+		exists = yes
+		NOT = { tag = PREV }
+		NOT = { has_country_flag = eon_debt_bailout_reserved }
+		NOT = { has_war_with = PREV }
+		NOT = { has_country_flag = eon_debt_bailout_retired_pair@PREV }
+		PREV = { NOT = { has_country_flag = eon_debt_bailout_retired_pair@PREV } }
+	}
+	eon_debt_bailout_request_policy = yes
+	eon_debt_bailout_quote_positive = yes
+}
+
+# Generation mirrors detect mismatched receipts; they are not an event-local token.
+# A sole queued modal remains reserved until its response has been consumed.
+eon_debt_bailout_pair_current = {
+	has_country_flag = eon_debt_bailout_reserved
+	check_variable = { eon_debt_bailout_partner > 0 }
+	check_variable = { eon_debt_bailout_generation > 0 }
+	check_variable = { eon_debt_bailout_amount > 0 }
+	OR = {
+		check_variable = { eon_debt_bailout_kind = 1 }
+		check_variable = { eon_debt_bailout_kind = 2 }
+		check_variable = { eon_debt_bailout_kind = 3 }
+		check_variable = { eon_debt_bailout_kind = 4 }
+	}
+	OR = {
+		AND = { has_country_flag = eon_debt_bailout_donor var:eon_debt_bailout_partner = { has_country_flag = eon_debt_bailout_borrower } }
+		AND = { has_country_flag = eon_debt_bailout_borrower var:eon_debt_bailout_partner = { has_country_flag = eon_debt_bailout_donor } }
+	}
+	var:eon_debt_bailout_partner = {
+		has_country_flag = eon_debt_bailout_reserved
+		check_variable = { eon_debt_bailout_partner = PREV.id }
+		check_variable = { eon_debt_bailout_generation = PREV.eon_debt_bailout_generation }
+		check_variable = { eon_debt_bailout_kind = PREV.eon_debt_bailout_kind }
+		check_variable = { eon_debt_bailout_amount = PREV.eon_debt_bailout_amount }
+		check_variable = { eon_debt_bailout_autonomy_terms = PREV.eon_debt_bailout_autonomy_terms }
+	}
+}
+
+# Native donor event: ROOT donor, FROM borrower; kind is a constant in the option.
+eon_debt_bailout_response_current = {
+	exists = yes
+	tag = ROOT
+	has_country_flag = eon_debt_bailout_donor
+	NOT = { has_country_flag = eon_debt_bailout_consumed }
+	check_variable = { eon_debt_bailout_partner = FROM }
+	check_variable = { eon_debt_bailout_kind = eon_debt_bailout_response_kind }
+	eon_debt_bailout_pair_current = yes
+	var:eon_debt_bailout_partner = {
+		exists = yes
+		NOT = { has_country_flag = eon_debt_bailout_consumed }
+		NOT = { has_country_flag = eon_debt_bailout_retired_pair@PREV }
+		PREV = { NOT = { has_country_flag = eon_debt_bailout_retired_pair@PREV } }
+	}
+}
+
+eon_debt_bailout_payment_ready = {
+	eon_debt_bailout_response_current = yes
+	NOT = { has_country_flag = eon_debt_bailout_cancelled }
+	has_country_flag = eon_debt_bailout_response_window
+	set_temp_variable = { eon_debt_bailout_payment = eon_debt_bailout_amount }
+	var:eon_debt_bailout_partner = {
+		NOT = { has_country_flag = eon_debt_bailout_cancelled }
+		has_country_flag = eon_debt_bailout_response_window
+		NOT = { has_war_with = PREV }
+		check_variable = { debt > 0 }
+		if = { limit = { check_variable = { eon_debt_bailout_kind < 4 } } is_subject = no }
+		if = {
+			limit = { check_variable = { eon_debt_bailout_kind = 4 } }
+			check_variable = { eon_debt_bailout_autonomy_terms = 1 }
+			is_subject_of = PREV
+		}
+		clamp_temp_variable = { var = eon_debt_bailout_payment min = 0 max = debt }
+	}
+	NOT = { has_war_with = var:eon_debt_bailout_partner }
+	check_variable = { eon_debt_bailout_payment > 0 }
+	check_variable = { var = treasury value = eon_debt_bailout_payment compare = greater_than_or_equals }
+}

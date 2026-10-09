@@ -1,0 +1,68 @@
+# An asset liquidation requires a live, certified unpaid default record.
+eon_debt_default_asset_record_available = {
+	exists = yes
+	eon_debt_default_payment_period_available = yes
+	check_variable = { debt_default_left > 0 }
+	check_variable = { debt_default_total > 0 }
+}
+
+# Quote the fixed aggregate value. Full excess must fit before removing an asset;
+# a zero excess may repay a claim even if the treasury is already over its cap.
+eon_debt_default_asset_financial_available = {
+	eon_debt_default_asset_record_available = yes
+	set_temp_variable = { eon_debt_default_asset_quoted_credit = debt_default_left }
+	clamp_temp_variable = { var = eon_debt_default_asset_quoted_credit min = 0 max = 10 }
+	set_temp_variable = { eon_debt_default_asset_quoted_excess = 10 }
+	subtract_from_temp_variable = { eon_debt_default_asset_quoted_excess = eon_debt_default_asset_quoted_credit }
+	set_temp_variable = { eon_debt_default_asset_quoted_cash = treasury }
+	add_to_temp_variable = { eon_debt_default_asset_quoted_cash = eon_debt_default_asset_quoted_excess }
+	OR = {
+		check_variable = { eon_debt_default_asset_quoted_excess = 0 }
+		check_variable = { var = eon_debt_default_asset_quoted_cash value = 1000000 compare = less_than_or_equals }
+	}
+}
+
+eon_debt_default_asset_civilian_available = {
+	eon_debt_default_asset_financial_available = yes
+	any_owned_state = {
+		is_controlled_by = PREV
+		check_variable = { building_level@industrial_complex > 0 }
+	}
+	NOT = { has_decision = debt_default_dismantle_military_factories }
+	NOT = { has_decision = debt_default_scrap_dockyard }
+	NOT = { has_decision = debt_default_cut_down_government_services }
+}
+
+eon_debt_default_asset_military_available = {
+	eon_debt_default_asset_financial_available = yes
+	any_owned_state = {
+		is_controlled_by = PREV
+		check_variable = { building_level@arms_factory > 0 }
+	}
+	NOT = { has_decision = debt_default_sell_civilian_factories }
+	NOT = { has_decision = debt_default_scrap_dockyard }
+	NOT = { has_decision = debt_default_cut_down_government_services }
+}
+
+eon_debt_default_asset_dockyard_available = {
+	eon_debt_default_asset_financial_available = yes
+	any_owned_state = {
+		is_controlled_by = PREV
+		check_variable = { building_level@dockyard > 0 }
+	}
+	NOT = { has_decision = debt_default_sell_civilian_factories }
+	NOT = { has_decision = debt_default_dismantle_military_factories }
+	NOT = { has_decision = debt_default_cut_down_government_services }
+}
+
+eon_debt_default_asset_offices_available = {
+	eon_debt_default_asset_financial_available = yes
+	any_owned_state = {
+		is_controlled_by = PREV
+		check_variable = { building_level@offices > 0 }
+	}
+	NOT = { has_decision = debt_default_sell_civilian_factories }
+	NOT = { has_decision = debt_default_dismantle_military_factories }
+	NOT = { has_decision = debt_default_scrap_dockyard }
+}
+
