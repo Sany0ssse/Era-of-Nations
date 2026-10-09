@@ -1,0 +1,25 @@
+on_actions = {
+	# Native ROOT annexer; FROM disappearing country, still present in callback.
+	on_annex = {
+		effect = {
+			# Also visit dead tags: a later release must not revive dormant consent.
+			every_possible_country = {
+				limit = { NOT = { tag = FROM } }
+				set_temp_variable = { eon_migration_treaty_annexed_partner = FROM.id }
+				eon_migration_treaty_cleanup_annexed_pair = yes
+			}
+			FROM = { eon_migration_treaty_clear_annexed_owner = yes }
+		}
+	}
+	# Native ROOT integrated subject; FROM overlord.
+	on_subject_annexed = {
+		effect = {
+			every_possible_country = {
+				limit = { NOT = { tag = ROOT } }
+				set_temp_variable = { eon_migration_treaty_annexed_partner = ROOT.id }
+				eon_migration_treaty_cleanup_annexed_pair = yes
+			}
+			ROOT = { eon_migration_treaty_clear_annexed_owner = yes }
+		}
+	}
+}

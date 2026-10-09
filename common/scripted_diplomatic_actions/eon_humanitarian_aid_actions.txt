@@ -1,0 +1,49 @@
+scripted_diplomatic_actions = {
+ eon_offer_humanitarian_aid = {
+  allowed = { ROOT = { is_subject = no } }
+  visible = { eon_humanitarian_aid_policy_allowed = yes }
+  selectable = { custom_trigger_tooltip = { tooltip = eon_humanitarian_aid_ready_tt eon_humanitarian_aid_offer_ready = yes } }
+  can_be_sent = { eon_humanitarian_aid_offer_ready = yes }
+  can_be_accepted = { eon_humanitarian_aid_response_ready = yes }
+  cost = 0
+  requires_acceptance = yes
+  show_acceptance_on_action_button = yes
+  icon = 17
+  send_description = eon_humanitarian_aid_send_desc
+  on_sent_effect = { eon_humanitarian_aid_send_offer = yes }
+  complete_effect = { eon_humanitarian_aid_accept_offer = yes }
+  reject_effect = { eon_humanitarian_aid_reject_offer = yes }
+  accept_title = eon_humanitarian_aid_accept_title
+  accept_description = eon_humanitarian_aid_accept_desc
+  reject_title = eon_humanitarian_aid_reject_title
+  reject_description = eon_humanitarian_aid_reject_desc
+  ai_acceptance = {
+   eon_humanitarian_aid_acceptance = { base = 75 modifier = { add = -1000 NOT = { eon_humanitarian_aid_response_ready = yes } } }
+  }
+  ai_desire = {
+   base = 0
+   modifier = {
+    add = 1
+    eon_humanitarian_aid_offer_ready = yes
+    ROOT = {
+     check_variable = { var = treasury value = 1 compare = greater_than_or_equals }
+     check_variable = { display_income > display_expense }
+    }
+   }
+   modifier = { factor = 0 NOT = { eon_humanitarian_aid_offer_ready = yes } }
+  }
+ }
+ eon_withdraw_humanitarian_aid = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { eon_humanitarian_aid_withdraw_available = yes }
+  selectable = { eon_humanitarian_aid_withdraw_available = yes }
+  can_be_sent = { eon_humanitarian_aid_withdraw_available = yes }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_humanitarian_aid_withdraw_desc
+  complete_effect = { eon_humanitarian_aid_withdraw_offer = yes }
+  ai_desire = { factor = 0 }
+ }
+}

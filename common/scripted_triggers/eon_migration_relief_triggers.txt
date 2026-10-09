@@ -1,0 +1,40 @@
+# Civilian movement; ordinary admission policy is separate from protection.
+eon_migration_host_available = {
+ exists = yes
+ has_war = no
+ NOT = { has_idea = closed_borders }
+ check_variable = { eon_refugee_policy > 0 }
+ check_variable = { eon_refugee_capacity_remaining > 0 }
+ any_owned_state = { is_controlled_by = PREV is_core_of = PREV state_population > 10000 }
+}
+eon_migration_safe_return_country = {
+ exists = yes
+ has_war = no
+ check_variable = { eon_migration_peace_months > 2 }
+ check_variable = { eon_migration_home_control_ratio > 0.25 }
+ any_owned_state = {
+  is_controlled_by = PREV
+  is_core_of = PREV
+  state_population > 10000
+  check_variable = { damaged_building_level@infrastructure < 0.25 }
+  check_variable = { damaged_building_level@industrial_complex < 0.25 }
+ }
+}
+eon_migration_exposed_state = {
+ is_core_of = var:global.eon_migration_origin_country
+ state_population > 20000
+ OR = {
+  NOT = { is_controlled_by = var:global.eon_migration_origin_country }
+  check_variable = { damaged_building_level@infrastructure > 0.25 }
+  check_variable = { damaged_building_level@industrial_complex > 0.25 }
+  any_neighbor_state = {
+   controller = { has_war_with = var:global.eon_migration_origin_country }
+  }
+ }
+}
+eon_migration_expand_capacity_ready = {
+ exists = yes
+ NOT = { has_country_flag = eon_migration_capacity_expanded }
+ check_variable = { var = treasury value = 0.25 compare = greater_than_or_equals }
+ check_variable = { var = treasury value = 1000000 compare = less_than_or_equals }
+}

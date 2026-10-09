@@ -1,0 +1,25 @@
+on_actions = {
+ on_daily = { effect = { eon_humanitarian_aid_daily_update = yes } }
+ # ROOT annexer, FROM annexed country; no ordinary treasury/fund inheritance.
+ on_annex = {
+  effect = {
+   every_country = {
+    limit = { exists = yes NOT = { tag = FROM } }
+    set_temp_variable = { eon_humanitarian_aid_annexed_partner = FROM }
+    eon_humanitarian_aid_annex_update = yes
+   }
+   FROM = { eon_humanitarian_aid_clear_annexed_country = yes }
+  }
+ }
+ # ROOT integrated subject, FROM overlord.
+ on_subject_annexed = {
+  effect = {
+   every_country = {
+    limit = { exists = yes NOT = { tag = ROOT } }
+    set_temp_variable = { eon_humanitarian_aid_annexed_partner = ROOT }
+    eon_humanitarian_aid_annex_update = yes
+   }
+   ROOT = { eon_humanitarian_aid_clear_annexed_country = yes }
+  }
+ }
+}

@@ -2,10 +2,15 @@
 from pathlib import Path
 import hashlib
 import json
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from aid_cash_bounds.byte_compat import before_aid_cash_bounds
 
 JOURNAL=json.loads(Path(__file__).with_name('_source_islands.json').read_text(encoding='utf-8-sig'))
 
 def before_aid_flag_repair(path,raw):
+    raw=before_aid_cash_bounds(path,raw)
     if path not in JOURNAL:
         return raw
     entry=JOURNAL[path]

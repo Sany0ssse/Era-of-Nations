@@ -1,0 +1,217 @@
+# Recruitment treaty bookkeeping only. Population movement has one separate
+# settlement owner; cancellation never removes residents or refugees.
+eon_migration_treaty_set_pair_cooldown = {
+	set_country_flag = { flag = migration_agreement_cooldown@ROOT days = 120 value = 1 }
+	ROOT = {
+		set_country_flag = { flag = migration_agreement_cooldown@PREV days = 120 value = 1 }
+	}
+}
+
+eon_migration_treaty_start = {
+	if = {
+		limit = { eon_migration_treaty_send_ready = yes }
+		set_variable = { eon_migration_treaty_pending_sender = ROOT.id }
+		set_variable = { eon_migration_treaty_pending_terms = 1 }
+		ROOT = {
+			set_variable = { pending_migration_agreement_country = PREV.id }
+			set_variable = { eon_migration_treaty_pending_terms = 1 }
+		}
+		eon_migration_treaty_set_pair_cooldown = yes
+	}
+}
+
+# Country scope: reciprocal live-country flags are authoritative, not the
+# historical increment/decrement scalars. Repeated reconciliation is idempotent.
+eon_migration_treaty_reconcile_country = {
+	eon_migration_treaty_cleanup_dead_partners = yes
+	eon_migration_treaty_refresh_counters = yes
+}
+
+# Counter refresh is separate from dead-partner cleanup to prevent recursive
+# reconciliation while the cleanup helper visits both sides of a removed pair.
+eon_migration_treaty_refresh_counters = {
+	set_variable = { migrants_add = 0 }
+	set_variable = { migrants_cut = 0 }
+	every_country = {
+		if = {
+			limit = {
+				has_country_flag = migration_agreement_migrants_cut@PREV
+				NOT = { tag = PREV }
+				PREV = { has_country_flag = migration_agreement_migrants_add@PREV }
+			}
+			add_to_variable = { PREV.migrants_add = 0.05 }
+		}
+		if = {
+			limit = {
+				has_country_flag = migration_agreement_migrants_add@PREV
+				NOT = { tag = PREV }
+				PREV = { has_country_flag = migration_agreement_migrants_cut@PREV }
+			}
+			add_to_variable = { PREV.migrants_cut = -0.05 }
+		}
+	}
+	if = {
+		limit = { check_variable = { migrants_add > 0 } }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = migrants_agreement_add } } }
+			add_dynamic_modifier = { modifier = migrants_agreement_add }
+		}
+	}
+	else = { remove_dynamic_modifier = { modifier = migrants_agreement_add } }
+	if = {
+		limit = { check_variable = { migrants_cut < 0 } }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = migrants_agreement_cut } } }
+			add_dynamic_modifier = { modifier = migrants_agreement_cut }
+		}
+	}
+	else = { remove_dynamic_modifier = { modifier = migrants_agreement_cut } }
+}
+
+eon_migration_treaty_finish_response = {
+	ROOT = {
+		if = {
+			limit = { check_variable = { pending_migration_agreement_country = PREV.id } }
+			clear_variable = pending_migration_agreement_country
+			clear_variable = eon_migration_treaty_pending_terms
+		}
+	}
+	if = {
+		limit = { check_variable = { eon_migration_treaty_pending_sender = ROOT.id } }
+		clear_variable = eon_migration_treaty_pending_sender
+		clear_variable = eon_migration_treaty_pending_terms
+	}
+}
+
+eon_migration_treaty_establish = {
+	if = {
+		limit = { eon_migration_treaty_response_valid = yes }
+		set_country_flag = migration_agreement_migrants_cut@ROOT
+		ROOT = { set_country_flag = migration_agreement_migrants_add@PREV }
+		add_opinion_modifier = { target = ROOT modifier = migration_agreement_opinion }
+		reverse_add_opinion_modifier = { target = ROOT modifier = migration_agreement_opinion }
+		eon_migration_treaty_reconcile_country = yes
+		ROOT = { eon_migration_treaty_reconcile_country = yes }
+	}
+}
+
+eon_migration_treaty_reject = {
+	if = {
+		limit = { eon_migration_treaty_response_current = yes }
+		add_opinion_modifier = { target = ROOT modifier = migration_agreement_reject }
+		reverse_add_opinion_modifier = { target = ROOT modifier = migration_agreement_reject }
+	}
+	eon_migration_treaty_finish_response = yes
+}
+
+eon_migration_treaty_cancel_pair = {
+	if = {
+		limit = { eon_migration_treaty_pair_active = yes }
+		clr_country_flag = migration_agreement_migrants_cut@ROOT
+		clr_country_flag = migration_agreement_migrants_add@ROOT
+		ROOT = {
+			clr_country_flag = migration_agreement_migrants_cut@PREV
+			clr_country_flag = migration_agreement_migrants_add@PREV
+			remove_opinion_modifier = { target = PREV modifier = migration_agreement_opinion }
+		}
+		remove_opinion_modifier = { target = ROOT modifier = migration_agreement_opinion }
+		eon_migration_treaty_set_pair_cooldown = yes
+		eon_migration_treaty_reconcile_country = yes
+		ROOT = { eon_migration_treaty_reconcile_country = yes }
+	}
+}
+
+# Country scope with shared temporary exact partner ID. Annexed countries cannot
+# answer; clear only that partner's queue fields. Third-country requests survive.
+eon_migration_treaty_cleanup_pending_annexed_pair = {
+	if = {
+		limit = { check_variable = { pending_migration_agreement_country = eon_migration_treaty_annexed_partner } }
+		clear_variable = pending_migration_agreement_country
+	}
+	if = {
+		limit = { check_variable = { eon_migration_treaty_pending_sender = eon_migration_treaty_annexed_partner } }
+		clear_variable = eon_migration_treaty_pending_sender
+	}
+	if = {
+		limit = {
+			check_variable = { pending_migration_agreement_country = 0 }
+			check_variable = { eon_migration_treaty_pending_sender = 0 }
+		}
+		clear_variable = eon_migration_treaty_pending_terms
+	}
+}
+
+# Current country owns its flags; PREV is the exact vanished or surviving peer.
+eon_migration_treaty_remove_annexed_pair_side = {
+	clr_country_flag = migration_agreement_migrants_add@PREV
+	clr_country_flag = migration_agreement_migrants_cut@PREV
+	clr_country_flag = migration_agreement_cooldown@PREV
+	remove_opinion_modifier = { target = PREV modifier = migration_agreement_opinion }
+}
+
+# The partner may still exist during the native annex callback. Cleanup includes
+# both sides, even dead tags, so releasing either country cannot revive consent.
+eon_migration_treaty_cleanup_annexed_pair = {
+	if = {
+		limit = { eon_migration_treaty_annexed_partner_identified = yes }
+		set_temp_variable = { eon_migration_treaty_annex_saved_partner = eon_migration_treaty_annexed_partner }
+		var:eon_migration_treaty_annexed_partner = {
+			eon_migration_treaty_remove_annexed_pair_side = yes
+			set_temp_variable = { eon_migration_treaty_annexed_partner = PREV.id }
+			eon_migration_treaty_cleanup_pending_annexed_pair = yes
+		}
+		set_temp_variable = { eon_migration_treaty_annexed_partner = eon_migration_treaty_annex_saved_partner }
+		var:eon_migration_treaty_annexed_partner = {
+			PREV = { eon_migration_treaty_remove_annexed_pair_side = yes }
+			if = {
+				limit = { exists = no }
+				eon_migration_treaty_clear_annexed_owner = yes
+			}
+		}
+		eon_migration_treaty_cleanup_pending_annexed_pair = yes
+		eon_migration_treaty_refresh_counters = yes
+	}
+}
+
+# Legacy saves may already contain vanished partners without a new annex event.
+# Monthly reconciliation checks only recorded pairs or queues, never unlocks a
+# living unanswered partner, and removes the dead peer's reciprocal flags too.
+eon_migration_treaty_cleanup_dead_partners = {
+	every_possible_country = {
+		limit = {
+			exists = no
+			NOT = { tag = PREV }
+			OR = {
+				has_country_flag = migration_agreement_migrants_add@PREV
+				has_country_flag = migration_agreement_migrants_cut@PREV
+				PREV = {
+					OR = {
+						has_country_flag = migration_agreement_migrants_add@PREV
+						has_country_flag = migration_agreement_migrants_cut@PREV
+						check_variable = { pending_migration_agreement_country = PREV.id }
+						check_variable = { eon_migration_treaty_pending_sender = PREV.id }
+					}
+				}
+			}
+		}
+		PREV = {
+			set_temp_variable = { eon_migration_treaty_annexed_partner = PREV.id }
+			eon_migration_treaty_cleanup_annexed_pair = yes
+		}
+	}
+}
+
+# Called on the actual disappearing owner after all possible partners were
+# visited. No pending request from this owner can complete after annexation.
+eon_migration_treaty_clear_annexed_owner = {
+	clear_variable = pending_migration_agreement_country
+	clear_variable = eon_migration_treaty_pending_sender
+	clear_variable = eon_migration_treaty_pending_terms
+	clr_country_flag = migration_agreement_migrants_add@THIS
+	clr_country_flag = migration_agreement_migrants_cut@THIS
+	clr_country_flag = migration_agreement_cooldown@THIS
+	set_variable = { migrants_add = 0 }
+	set_variable = { migrants_cut = 0 }
+	remove_dynamic_modifier = { modifier = migrants_agreement_add }
+	remove_dynamic_modifier = { modifier = migrants_agreement_cut }
+}

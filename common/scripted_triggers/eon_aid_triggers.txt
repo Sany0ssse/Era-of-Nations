@@ -104,6 +104,7 @@ eon_aid_draft_send_ready = {
 		check_variable = { eon_aid_proposed_amount = 35 }
 	}
 	check_variable = { var = treasury value = eon_aid_proposed_amount compare = greater_than_or_equals }
+	check_variable = { var = treasury value = 1000000 compare = less_than_or_equals }
 	NOT = { has_country_flag = recently_sent_aid@FROM }
 	set_temp_variable = { eon_aid_policy_donor = THIS }
 	var:eon_aid_partner = {
@@ -147,6 +148,7 @@ eon_aid_response_identity_current = {
 
 # Existing treasury cap must not silently destroy any accepted part of the gift.
 eon_aid_recipient_capacity_available = {
+	check_variable = { var = treasury value = -1000000 compare = greater_than_or_equals }
 	set_temp_variable = { eon_aid_recipient_projected_treasury = treasury }
 	add_to_temp_variable = { eon_aid_recipient_projected_treasury = eon_aid_amount }
 	check_variable = { var = eon_aid_recipient_projected_treasury value = 1000000 compare = less_than_or_equals }

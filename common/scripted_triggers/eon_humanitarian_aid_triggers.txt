@@ -1,0 +1,71 @@
+# Native actions: ROOT donor, THIS recipient. The grant funds civilian relief,
+# never unrestricted treasury, influence, debt, military access or demilitarization.
+eon_humanitarian_aid_need = {
+ exists = yes
+ OR = { has_war = yes check_variable = { eon_refugees_hosted > 0 } }
+}
+eon_humanitarian_aid_policy_allowed = {
+ eon_humanitarian_aid_need = yes
+ NOT = { tag = ROOT }
+ NOT = { has_war_with = ROOT }
+ ROOT = { exists = yes is_subject = no NOT = { has_war_with = PREV } }
+}
+eon_humanitarian_aid_cash_available = {
+ check_variable = { var = eon_refugee_relief_fund value = 0 compare = greater_than_or_equals }
+ set_temp_variable = { eon_humanitarian_aid_projected_fund = eon_refugee_relief_fund }
+ add_to_temp_variable = { eon_humanitarian_aid_projected_fund = 0.1 }
+ check_variable = { var = eon_humanitarian_aid_projected_fund value = 10 compare = less_than_or_equals }
+ ROOT = {
+  check_variable = { var = treasury value = 0.1 compare = greater_than_or_equals }
+  check_variable = { var = treasury value = 1000000 compare = less_than_or_equals }
+ }
+}
+eon_humanitarian_aid_slot_ready = {
+ NOT = { has_country_flag = eon_humanitarian_aid_pending }
+ NOT = { has_country_flag = eon_humanitarian_aid_live }
+ NOT = { has_country_flag = eon_humanitarian_aid_cancelled }
+ NOT = { has_country_flag = eon_humanitarian_aid_quarantined }
+ check_variable = { eon_humanitarian_aid_partner = 0 }
+}
+eon_humanitarian_aid_offer_ready = {
+ eon_humanitarian_aid_policy_allowed = yes
+ eon_humanitarian_aid_cash_available = yes
+ ROOT = {
+  eon_humanitarian_aid_slot_ready = yes
+  NOT = { has_country_flag = eon_humanitarian_aid_retired_pair@PREV }
+  NOT = { has_country_flag = eon_humanitarian_aid_cooldown@PREV }
+ }
+}
+# This identity gate deliberately permits closure of an invalid original reply.
+eon_humanitarian_aid_response_pending = {
+ ROOT = {
+  has_country_flag = eon_humanitarian_aid_pending
+  check_variable = { eon_humanitarian_aid_partner = PREV }
+ }
+}
+eon_humanitarian_aid_response_ready = {
+ eon_humanitarian_aid_response_pending = yes
+ eon_humanitarian_aid_policy_allowed = yes
+ eon_humanitarian_aid_cash_available = yes
+ ROOT = {
+  has_country_flag = eon_humanitarian_aid_live
+  NOT = { has_country_flag = eon_humanitarian_aid_cancelled }
+  NOT = { has_country_flag = eon_humanitarian_aid_quarantined }
+  NOT = { has_country_flag = eon_humanitarian_aid_retired_pair@PREV }
+  NOT = { has_country_flag = eon_humanitarian_aid_cooldown@PREV }
+ }
+}
+eon_humanitarian_aid_withdraw_available = {
+ exists = yes
+ eon_humanitarian_aid_response_pending = yes
+ ROOT = { exists = yes NOT = { has_country_flag = eon_humanitarian_aid_cancelled } }
+}
+# Donor record scope; positive native country IDs are checked before resolution.
+eon_humanitarian_aid_partner_identified = {
+ check_variable = { eon_humanitarian_aid_partner > 0 }
+ var:eon_humanitarian_aid_partner = {
+  OR = { exists = yes exists = no }
+  NOT = { tag = PREV }
+  check_variable = { THIS.id = PREV.eon_humanitarian_aid_partner }
+ }
+}

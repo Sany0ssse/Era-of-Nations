@@ -1,0 +1,89 @@
+# Native scripted diplomacy: ROOT imports workers, THIS exports workers.
+# Recruitment consent never grants visas, residence, or refugee admission.
+eon_migration_treaty_terms_available = {
+	exists = yes
+	NOT = { tag = ROOT }
+	NOT = { has_war_with = ROOT }
+	NOT = { has_idea = closed_borders }
+	has_opinion = { target = ROOT value > 9 }
+	has_dynamic_modifier = { modifier = high_unemployment_modifier }
+	NOT = { has_dynamic_modifier = { modifier = migrants_agreement_add } }
+	NOT = { has_country_flag = migration_agreement_migrants_cut@ROOT }
+	NOT = { has_country_flag = migration_agreement_migrants_add@ROOT }
+	any_owned_state = {
+		is_owned_and_controlled_by = PREV
+		state_population_k > 0
+	}
+	ROOT = {
+		exists = yes
+		NOT = { has_idea = closed_borders }
+		NOT = { has_dynamic_modifier = { modifier = migrants_agreement_cut } }
+		NOT = { has_country_flag = migration_agreement_migrants_add@PREV }
+		NOT = { has_country_flag = migration_agreement_migrants_cut@PREV }
+		any_owned_state = {
+			is_owned_and_controlled_by = PREV
+			state_population_k > 0
+		}
+	}
+	if = {
+		limit = { is_in_faction = yes any_allied_country = { exists = yes } }
+		NOT = { any_allied_country = { has_war_with = ROOT } }
+	}
+	if = {
+		limit = { is_subject = yes }
+		is_subject_of = ROOT
+	}
+}
+
+eon_migration_treaty_no_pending = {
+	check_variable = { pending_migration_agreement_country = 0 }
+	check_variable = { eon_migration_treaty_pending_sender = 0 }
+	ROOT = {
+		check_variable = { pending_migration_agreement_country = 0 }
+		check_variable = { eon_migration_treaty_pending_sender = 0 }
+	}
+}
+
+eon_migration_treaty_send_ready = {
+	eon_migration_treaty_terms_available = yes
+	eon_migration_treaty_no_pending = yes
+	NOT = { has_country_flag = migration_agreement_cooldown@ROOT }
+	ROOT = { NOT = { has_country_flag = migration_agreement_cooldown@PREV } }
+}
+
+# Keep reservations until the original native reply drains. Native callbacks
+# carry no nonce distinguishing an old duplicate from a new same-pair offer.
+# Version 1 excludes pre-repair outgoing-only requests from establishing terms.
+eon_migration_treaty_response_current = {
+	check_variable = { eon_migration_treaty_pending_sender = ROOT.id }
+	check_variable = { eon_migration_treaty_pending_terms = 1 }
+	ROOT = {
+		check_variable = { pending_migration_agreement_country = PREV.id }
+		check_variable = { eon_migration_treaty_pending_terms = 1 }
+	}
+}
+
+eon_migration_treaty_response_valid = {
+	eon_migration_treaty_response_current = yes
+	eon_migration_treaty_terms_available = yes
+}
+
+# Reconcile even an old one-sided pair; do not touch any third-country terms.
+eon_migration_treaty_pair_active = {
+	OR = {
+		has_country_flag = migration_agreement_migrants_cut@ROOT
+		has_country_flag = migration_agreement_migrants_add@ROOT
+		ROOT = { has_country_flag = migration_agreement_migrants_add@PREV }
+		ROOT = { has_country_flag = migration_agreement_migrants_cut@PREV }
+	}
+}
+
+# Known live or dead country scope only; never interpret zero as a country.
+eon_migration_treaty_annexed_partner_identified = {
+	check_variable = { eon_migration_treaty_annexed_partner > 0 }
+	var:eon_migration_treaty_annexed_partner = {
+		OR = { exists = yes exists = no }
+		NOT = { tag = PREV }
+		check_variable = { THIS.id = eon_migration_treaty_annexed_partner }
+	}
+}

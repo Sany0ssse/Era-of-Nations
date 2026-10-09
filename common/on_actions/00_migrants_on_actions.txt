@@ -1,22 +1,5 @@
+# Migration agreements and displacement now settle matching state flows.
+# The former unpaired population grant and attraction grant are retired.
 on_actions = {
-    on_monthly = {
-        effect = {
-            every_owned_state = {
-			    set_temp_variable = { manpower_to_add = migrants_add }
-                multiply_temp_variable = { manpower_to_add = 0.2 }
-			    multiply_temp_variable = { manpower_to_add = state_population }
-                round_temp_variable = manpower_to_add
-			    add_manpower = var:manpower_to_add
-                if = {
-                    limit = {
-                        has_dynamic_modifier = { modifier = migrants_attraction }
-                    }
-			        set_temp_variable = { manpower_to_add = state_population }
-                    multiply_temp_variable = { manpower_to_add = 0.01 }
-                    round_temp_variable = manpower_to_add
-			        add_manpower = var:manpower_to_add
-                }
-            }
-        }
-    }
+ on_monthly = { effect = { eon_migration_monthly_pulse = yes } }
 }

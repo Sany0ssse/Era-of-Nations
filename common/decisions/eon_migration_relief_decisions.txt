@@ -1,0 +1,29 @@
+eon_migration_relief_category = {
+ eon_migration_admission_paused = {
+  icon = generic_decision cost = 15
+  visible = { NOT = { check_variable = { eon_refugee_policy = 0 } } }
+  complete_effect = { set_variable = { eon_refugee_policy = 0 } eon_migration_refresh_country = yes ingame_update_setup = yes }
+  ai_will_do = { factor = 0 }
+ }
+ eon_migration_admission_regulated = {
+  icon = generic_decision cost = 15
+  available = { NOT = { has_idea = closed_borders } }
+  visible = { NOT = { check_variable = { eon_refugee_policy = 1 } } }
+  complete_effect = { set_variable = { eon_refugee_policy = 1 } eon_migration_refresh_country = yes ingame_update_setup = yes }
+  ai_will_do = { factor = 0 }
+ }
+ eon_migration_admission_expanded = {
+  icon = generic_decision cost = 25
+  available = { NOT = { has_idea = closed_borders } }
+  visible = { NOT = { check_variable = { eon_refugee_policy = 2 } } }
+  complete_effect = { set_variable = { eon_refugee_policy = 2 } eon_migration_refresh_country = yes ingame_update_setup = yes }
+  ai_will_do = { factor = 0 }
+ }
+ eon_migration_expand_reception_capacity = {
+  icon = generic_decision cost = 25
+  available = { eon_migration_expand_capacity_ready = yes }
+  visible = { NOT = { has_country_flag = eon_migration_capacity_expanded } }
+  complete_effect = { eon_migration_expand_capacity = yes }
+  ai_will_do = { factor = 0 }
+ }
+}

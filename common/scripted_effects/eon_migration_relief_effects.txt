@@ -1,0 +1,616 @@
+# Cohorts live on the actual STATE, indexed by stable registry slots. Territory
+# changing owner/controller therefore cannot clone or erase their population.
+# All coefficients below are game calibration, not measured demographic laws.
+eon_migration_register_country = {
+ # Native country scope tokens are not integer array indexes. Keep their full
+ # value in an append-only map and use our own integer slot in state ledgers.
+ # Copying country variables during a civil war cannot share an origin slot:
+ # the map must still name THIS country, otherwise a fresh slot is allocated.
+ if = {
+  limit = {
+   OR = {
+    check_variable = { eon_migration_origin_slot < 1 }
+    NOT = { check_variable = { var = global.eon_migration_origins^eon_migration_origin_slot value = THIS compare = equals } }
+   }
+  }
+  if = {
+   limit = { check_variable = { global.eon_migration_array_size < 1 } }
+   set_variable = { global.eon_migration_array_size = 1 }
+   resize_array = { array = global.eon_migration_origins size = 1 value = 0 }
+  }
+  # Recover a still-valid prior registration if unrelated copied variables
+  # overwrote this country's slot. Never strand existing cohorts in a new slot.
+  set_temp_variable = { eon_existing_origin_slot = 0 }
+  for_each_loop = {
+   array = global.eon_migration_origins index = eon_registry_index value = eon_registry_country
+   if = { limit = { check_variable = { var = eon_registry_country value = THIS compare = equals } } set_temp_variable = { eon_existing_origin_slot = eon_registry_index } }
+  }
+  if = { limit = { check_variable = { eon_existing_origin_slot > 0 } } set_variable = { eon_migration_origin_slot = eon_existing_origin_slot } }
+  else = {
+   # A genuinely new token may inherit country variables from copy_tag. Its
+   # restricted grant balance/payment receipt belongs to the original country;
+   # duplicating them would create aid without a donor payment. Existing-token
+   # recovery above preserves its real balance and once-weekly payment lock.
+   if = {
+    limit = { OR = { has_country_flag = eon_migration_relief_initialized check_variable = { eon_migration_origin_slot > 0 } } }
+    clear_variable = eon_refugee_relief_fund
+    clear_variable = eon_refugee_weekly_fund_paid
+    clr_country_flag = eon_refugee_fund_week_consumed
+   }
+   set_variable = { eon_migration_origin_slot = global.eon_migration_array_size }
+   add_to_variable = { global.eon_migration_array_size = 1 }
+   resize_array = { array = global.eon_migration_origins size = global.eon_migration_array_size value = 0 }
+   set_variable = { global.eon_migration_origins^eon_migration_origin_slot = THIS }
+  }
+ }
+}
+eon_migration_initialize_country = {
+ eon_migration_register_country = yes
+ if = {
+  limit = { NOT = { has_country_flag = eon_migration_relief_initialized } }
+  set_country_flag = eon_migration_relief_initialized
+  set_variable = { eon_refugee_policy = 1 }
+  if = { limit = { has_idea = closed_borders } set_variable = { eon_refugee_policy = 0 } }
+ }
+}
+eon_migration_refresh_country = {
+ eon_migration_initialize_country = yes
+ set_variable = { eon_refugees_hosted = 0 }
+ set_variable = { eon_refugees_integrated = 0 }
+ set_variable = { eon_refugees_longterm = 0 }
+ set_variable = { eon_civilian_relief_need = 0 }
+ set_variable = { eon_labor_migrants_hosted = 0 }
+ every_controlled_state = {
+  add_to_variable = { PREV.eon_refugees_hosted = eon_refugees_total }
+  add_to_variable = { PREV.eon_refugees_integrated = eon_refugees_integrated_total }
+  add_to_variable = { PREV.eon_refugees_longterm = eon_refugees_longterm_total }
+  add_to_variable = { PREV.eon_labor_migrants_hosted = eon_labor_migrants_total }
+ }
+ # Domestic civilian relief is a needs estimate, not another population stock.
+ # Only controlled damaged home states are serviced; no assumed access to
+ # occupied territory and no invisible transfer of people within the country.
+ if = {
+  limit = { has_war = yes }
+  every_owned_state = {
+   limit = {
+    is_controlled_by = PREV is_core_of = PREV
+    OR = { check_variable = { damaged_building_level@infrastructure > 0.25 } check_variable = { damaged_building_level@industrial_complex > 0.25 } }
+   }
+   set_temp_variable = { eon_domestic_need = state_population_k }
+   set_temp_variable = { eon_nonlocal_population_k = eon_refugees_total }
+   add_to_temp_variable = { eon_nonlocal_population_k = eon_labor_migrants_total }
+   divide_temp_variable = { eon_nonlocal_population_k = 1000 }
+   subtract_from_temp_variable = { eon_domestic_need = eon_nonlocal_population_k }
+   multiply_temp_variable = { eon_domestic_need = 10 }
+   clamp_temp_variable = { var = eon_domestic_need min = 0 max = 20000 }
+   add_to_variable = { PREV.eon_civilian_relief_need = eon_domestic_need }
+  }
+ }
+ set_variable = { eon_refugee_capacity = population_total_m }
+ multiply_variable = { eon_refugee_capacity = 20000 } # 2% of the current population
+ if = { limit = { check_variable = { eon_refugee_policy = 2 } } multiply_variable = { eon_refugee_capacity = 1.5 } }
+ if = { limit = { has_country_flag = eon_migration_capacity_expanded } multiply_variable = { eon_refugee_capacity = 1.5 } }
+ clamp_variable = { var = eon_refugee_capacity min = 1000 }
+ set_variable = { eon_refugee_capacity_remaining = eon_refugee_capacity }
+ subtract_from_variable = { eon_refugee_capacity_remaining = eon_refugees_hosted }
+ clamp_variable = { var = eon_refugee_capacity_remaining min = 0 }
+ set_variable = { eon_refugee_service_pressure = eon_refugees_hosted }
+ divide_variable = { eon_refugee_service_pressure = eon_refugee_capacity }
+ add_to_variable = { eon_refugee_service_pressure = -1 }
+ clamp_variable = { var = eon_refugee_service_pressure min = 0 max = 1 }
+ set_variable = { eon_refugee_stability_pressure = eon_refugee_service_pressure }
+ multiply_variable = { eon_refugee_stability_pressure = -0.03 }
+ set_variable = { eon_refugee_construction_pressure = eon_refugee_service_pressure }
+ multiply_variable = { eon_refugee_construction_pressure = -0.05 }
+ set_variable = { eon_refugee_workforce_delay_m = eon_refugees_hosted }
+ subtract_from_variable = { eon_refugee_workforce_delay_m = eon_refugees_integrated }
+ multiply_variable = { eon_refugee_workforce_delay_m = 0.6 }
+ divide_variable = { eon_refugee_workforce_delay_m = 1000000 }
+ clamp_variable = { var = eon_refugee_workforce_delay_m min = 0 }
+ set_variable = { eon_refugee_weekly_cost = eon_refugees_hosted }
+ # Normal population spending already covers residents. Emergency assistance
+ # tapers with integration; long-term residents leave this additional programme.
+ set_temp_variable = { eon_integrated_relief_discount = eon_refugees_integrated }
+ subtract_from_temp_variable = { eon_integrated_relief_discount = eon_refugees_longterm }
+ clamp_temp_variable = { var = eon_integrated_relief_discount min = 0 }
+ multiply_temp_variable = { eon_integrated_relief_discount = 0.75 }
+ subtract_from_variable = { eon_refugee_weekly_cost = eon_refugees_longterm }
+ subtract_from_variable = { eon_refugee_weekly_cost = eon_integrated_relief_discount }
+ add_to_variable = { eon_refugee_weekly_cost = eon_civilian_relief_need }
+ clamp_variable = { var = eon_refugee_weekly_cost min = 0 }
+ multiply_variable = { eon_refugee_weekly_cost = 0.05 }
+ divide_variable = { eon_refugee_weekly_cost = 1000000 } # $50/person/week in billions
+ set_temp_variable = { eon_refugee_cost_scaling = gdp_per_capita }
+ multiply_temp_variable = { eon_refugee_cost_scaling = 0.05 }
+ add_to_temp_variable = { eon_refugee_cost_scaling = 1 }
+ clamp_temp_variable = { var = eon_refugee_cost_scaling min = 1 max = 4 }
+ multiply_variable = { eon_refugee_weekly_cost = eon_refugee_cost_scaling }
+ set_variable = { eon_refugee_capacity_weekly_cost = 0 }
+ if = { limit = { has_country_flag = eon_migration_capacity_expanded } set_variable = { eon_refugee_capacity_weekly_cost = 0.01 } }
+ set_variable = { eon_refugee_weekly_net_cost = eon_refugee_weekly_cost }
+ subtract_from_variable = { eon_refugee_weekly_net_cost = eon_refugee_weekly_fund_paid }
+ clamp_variable = { var = eon_refugee_weekly_net_cost min = 0 }
+ if = {
+  limit = { NOT = { has_dynamic_modifier = { modifier = eon_refugee_reception_modifier } } }
+  add_dynamic_modifier = { modifier = eon_refugee_reception_modifier }
+ }
+}
+eon_migration_relief_weekly = {
+ eon_migration_refresh_country = yes
+ if = {
+  limit = { NOT = { has_country_flag = eon_refugee_fund_week_consumed } }
+  set_country_flag = { flag = eon_refugee_fund_week_consumed days = 6 value = 1 }
+  set_variable = { eon_refugee_weekly_fund_paid = eon_refugee_weekly_cost }
+  clamp_variable = { var = eon_refugee_weekly_fund_paid min = 0 max = eon_refugee_relief_fund }
+  subtract_from_variable = { eon_refugee_relief_fund = eon_refugee_weekly_fund_paid }
+  eon_migration_refresh_country = yes
+ }
+}
+eon_migration_prepare_state_ledger = {
+ resize_array = { array = eon_refugee_stock size = global.eon_migration_array_size value = 0 }
+ resize_array = { array = eon_refugee_fresh size = global.eon_migration_array_size value = 0 }
+ resize_array = { array = eon_refugee_age size = global.eon_migration_array_size value = 0 }
+ resize_array = { array = eon_refugee_integrated size = global.eon_migration_array_size value = 0 }
+ resize_array = { array = eon_refugee_longterm size = global.eon_migration_array_size value = 0 }
+ resize_array = { array = eon_labor_stock size = global.eon_migration_array_size value = 0 }
+ set_state_flag = eon_migration_has_ledger
+}
+eon_migration_recount_state = {
+ set_variable = { eon_refugees_total = 0 }
+ set_variable = { eon_refugees_integrated_total = 0 }
+ set_variable = { eon_refugees_longterm_total = 0 }
+ set_variable = { eon_labor_migrants_total = 0 }
+ for_each_loop = { array = eon_refugee_stock index = eon_recount_index value = eon_recount_stock
+  add_to_variable = { eon_refugees_total = eon_recount_stock }
+ }
+ for_each_loop = { array = eon_refugee_integrated index = eon_recount_index value = eon_integrated_stock
+  add_to_variable = { eon_refugees_integrated_total = eon_integrated_stock }
+ }
+ for_each_loop = { array = eon_labor_stock index = eon_recount_index value = eon_labor_stock_count
+  add_to_variable = { eon_labor_migrants_total = eon_labor_stock_count }
+ }
+ for_each_loop = { array = eon_refugee_longterm index = eon_recount_index value = eon_longterm_stock
+  add_to_variable = { eon_refugees_longterm_total = eon_longterm_stock }
+ }
+}
+# Synchronous monthly settlement uses global scratch pointers, consumed and
+# cleared inside one effect. No event/decision can retain or reuse this amount.
+# kind: 1 new refugees, 2 voluntary return, 3 onward relocation, 4 labour intake.
+eon_migration_move_population = {
+ # Synchronous temporary receipt: rejected transfers report zero, so callers
+ # can record unmet demand without treating a capacity choice as admission.
+ set_temp_variable = { eon_migration_moved_people = 0 }
+ clear_variable = global.eon_migration_origin_slot
+ if = {
+  limit = { check_variable = { global.eon_migration_origin_country > 0 } }
+  var:global.eon_migration_origin_country = {
+   eon_migration_register_country = yes
+   set_variable = { global.eon_migration_origin_slot = eon_migration_origin_slot }
+  }
+ }
+ if = {
+  limit = {
+   check_variable = { global.eon_migration_amount > 0 }
+   check_variable = { global.eon_migration_origin_country > 0 }
+   check_variable = { global.eon_migration_origin_slot > 0 }
+   check_variable = { global.eon_migration_target_country > 0 }
+   OR = {
+    check_variable = { global.eon_migration_kind = 1 }
+    check_variable = { global.eon_migration_kind = 2 }
+    check_variable = { global.eon_migration_kind = 3 }
+    check_variable = { global.eon_migration_kind = 4 }
+   }
+   OR = {
+    AND = { check_variable = { global.eon_migration_kind = 2 } check_variable = { global.eon_migration_target_country = global.eon_migration_origin_country } }
+    AND = { NOT = { check_variable = { global.eon_migration_kind = 2 } } NOT = { check_variable = { global.eon_migration_target_country = global.eon_migration_origin_country } } }
+   }
+   NOT = { check_variable = { global.eon_migration_source_state = global.eon_migration_target_state } }
+   var:global.eon_migration_source_state = {
+    check_variable = { state_population > global.eon_migration_amount }
+    if = {
+     limit = { OR = { check_variable = { global.eon_migration_kind = 2 } check_variable = { global.eon_migration_kind = 3 } } }
+     set_temp_variable = { eon_move_available = eon_refugee_stock^global.eon_migration_origin_slot }
+     subtract_from_temp_variable = { eon_move_available = eon_refugee_fresh^global.eon_migration_origin_slot }
+     subtract_from_temp_variable = { eon_move_available = eon_refugee_longterm^global.eon_migration_origin_slot }
+     check_variable = { var = eon_move_available value = global.eon_migration_amount compare = greater_than_or_equals }
+    }
+    else = { is_owned_by = var:global.eon_migration_origin_country }
+   }
+   var:global.eon_migration_target_state = {
+    is_owned_by = var:global.eon_migration_target_country
+    is_controlled_by = var:global.eon_migration_target_country
+    is_core_of = var:global.eon_migration_target_country
+    owner = { exists = yes }
+    controller = { exists = yes }
+   }
+  }
+  set_variable = { global.eon_migration_debit = global.eon_migration_amount }
+  multiply_variable = { global.eon_migration_debit = -1 }
+  var:global.eon_migration_source_state = {
+   add_manpower = var:global.eon_migration_debit # STATE population, never COUNTRY army reserves
+   if = {
+    limit = { OR = { check_variable = { global.eon_migration_kind = 2 } check_variable = { global.eon_migration_kind = 3 } } }
+    subtract_from_variable = { eon_refugee_stock^global.eon_migration_origin_slot = global.eon_migration_amount }
+    set_temp_variable = { eon_source_integration_max = eon_refugee_stock^global.eon_migration_origin_slot }
+    subtract_from_temp_variable = { eon_source_integration_max = eon_refugee_fresh^global.eon_migration_origin_slot }
+    clamp_variable = { var = eon_refugee_integrated^global.eon_migration_origin_slot min = eon_refugee_longterm^global.eon_migration_origin_slot max = eon_source_integration_max }
+   }
+   eon_migration_recount_state = yes
+   controller = {
+    add_to_variable = { eon_migration_month_out = global.eon_migration_amount }
+    if = { limit = { check_variable = { global.eon_migration_kind = 2 } } add_to_variable = { eon_refugee_month_returned = global.eon_migration_amount } }
+   }
+  }
+  var:global.eon_migration_target_state = {
+   add_manpower = var:global.eon_migration_amount
+   if = {
+    limit = { OR = { check_variable = { global.eon_migration_kind = 1 } check_variable = { global.eon_migration_kind = 3 } } }
+    eon_migration_prepare_state_ledger = yes
+    # One aggregate residence age per state/origin, diluted by new arrivals.
+    set_temp_variable = { eon_receiving_cohort_size = eon_refugee_stock^global.eon_migration_origin_slot }
+    set_temp_variable = { eon_receiving_cohort_age = eon_refugee_age^global.eon_migration_origin_slot }
+    set_temp_variable = { eon_receiving_new_size = eon_receiving_cohort_size }
+    add_to_temp_variable = { eon_receiving_new_size = global.eon_migration_amount }
+    divide_temp_variable = { eon_receiving_cohort_size = eon_receiving_new_size }
+    multiply_temp_variable = { eon_receiving_cohort_age = eon_receiving_cohort_size }
+    set_variable = { eon_refugee_age^global.eon_migration_origin_slot = eon_receiving_cohort_age }
+    add_to_variable = { eon_refugee_stock^global.eon_migration_origin_slot = global.eon_migration_amount }
+    add_to_variable = { eon_refugee_fresh^global.eon_migration_origin_slot = global.eon_migration_amount }
+   }
+   else_if = {
+    limit = { check_variable = { global.eon_migration_kind = 4 } }
+    eon_migration_prepare_state_ledger = yes
+    add_to_variable = { eon_labor_stock^global.eon_migration_origin_slot = global.eon_migration_amount }
+   }
+   eon_migration_recount_state = yes
+   controller = {
+    add_to_variable = { eon_migration_month_in = global.eon_migration_amount }
+    if = { limit = { OR = { check_variable = { global.eon_migration_kind = 1 } check_variable = { global.eon_migration_kind = 3 } } } add_to_variable = { eon_refugee_month_arrived = global.eon_migration_amount } }
+    else_if = { limit = { check_variable = { global.eon_migration_kind = 4 } } add_to_variable = { eon_labor_month_arrived = global.eon_migration_amount } }
+    eon_migration_refresh_country = yes
+   }
+  }
+  set_temp_variable = { eon_migration_moved_people = global.eon_migration_amount }
+ }
+ clear_variable = global.eon_migration_amount
+ clear_variable = global.eon_migration_debit
+ clear_variable = global.eon_migration_target_state
+ clear_variable = global.eon_migration_kind
+}
+eon_migration_choose_refugee_destination = {
+ # Neighbours are the accessible default. Expanded resettlement can use an
+ # existing labour/diplomatic/faction channel to reach a distant safe country.
+ random_list = {
+  3 = {
+   random_country = {
+    limit = {
+     eon_migration_host_available = yes
+     is_neighbor_of = var:global.eon_migration_origin_country
+     NOT = { tag = var:global.eon_migration_origin_country }
+    }
+    set_variable = { global.eon_migration_target_country = THIS }
+   }
+  }
+  1 = {
+   random_country = {
+    limit = {
+     eon_migration_host_available = yes
+     check_variable = { eon_refugee_policy = 2 }
+     NOT = { tag = var:global.eon_migration_origin_country }
+     var:global.eon_migration_origin_country = {
+      OR = { is_in_faction_with = PREV has_country_flag = migration_agreement_migrants_cut@PREV has_country_flag = eon_diplomatic_relations_established@PREV }
+     }
+    }
+    set_variable = { global.eon_migration_target_country = THIS }
+   }
+  }
+ }
+ if = {
+  limit = { check_variable = { global.eon_migration_target_country = 0 } }
+  random_country = {
+   limit = {
+    eon_migration_host_available = yes
+    NOT = { tag = var:global.eon_migration_origin_country }
+    OR = {
+     is_neighbor_of = var:global.eon_migration_origin_country
+     AND = {
+      check_variable = { eon_refugee_policy = 2 }
+      var:global.eon_migration_origin_country = {
+       OR = { is_in_faction_with = PREV has_country_flag = migration_agreement_migrants_cut@PREV has_country_flag = eon_diplomatic_relations_established@PREV }
+      }
+     }
+    }
+   }
+   set_variable = { global.eon_migration_target_country = THIS }
+  }
+ }
+}
+eon_migration_receive_new_flow = {
+ if = {
+  limit = { check_variable = { global.eon_migration_target_country > 0 } }
+  var:global.eon_migration_target_country = {
+   clamp_variable = { var = global.eon_migration_amount min = 0 max = eon_refugee_capacity_remaining }
+   random_owned_controlled_state = {
+    limit = { is_core_of = PREV state_population > 10000 }
+    set_variable = { global.eon_migration_target_state = THIS }
+   }
+  }
+  round_variable = global.eon_migration_amount
+  eon_migration_move_population = yes
+ }
+ clear_variable = global.eon_migration_target_country
+}
+eon_migration_refugee_departures = {
+ if = {
+  limit = { has_war = yes }
+  set_variable = { global.eon_migration_origin_country = THIS }
+  every_owned_state = {
+   limit = { eon_migration_exposed_state = yes }
+   set_variable = { global.eon_migration_source_state = THIS }
+   set_variable = { global.eon_migration_amount = state_population_k }
+   set_temp_variable = { eon_nonlocal_population_k = eon_refugees_total }
+   add_to_temp_variable = { eon_nonlocal_population_k = eon_labor_migrants_total }
+   divide_temp_variable = { eon_nonlocal_population_k = 1000 }
+   subtract_from_variable = { global.eon_migration_amount = eon_nonlocal_population_k }
+   multiply_variable = { global.eon_migration_amount = 10 }
+   clamp_variable = { var = global.eon_migration_amount min = 0 max = 20000 }
+   set_temp_variable = { eon_requested_refugees = global.eon_migration_amount }
+   set_temp_variable = { eon_migration_moved_people = 0 }
+   clear_variable = global.eon_migration_target_country
+   eon_migration_choose_refugee_destination = yes
+   if = {
+    limit = { check_variable = { global.eon_migration_target_country > 0 } }
+    set_variable = { global.eon_migration_kind = 1 }
+    eon_migration_receive_new_flow = yes
+   }
+   subtract_from_temp_variable = { eon_requested_refugees = eon_migration_moved_people }
+   clamp_temp_variable = { var = eon_requested_refugees min = 0 }
+   owner = { add_to_variable = { eon_refugee_month_unplaced = eon_requested_refugees } }
+  }
+ }
+}
+eon_migration_labor_departures = {
+ if = {
+  limit = { has_war = no NOT = { has_idea = closed_borders } check_variable = { migrants_cut < 0 } }
+  set_variable = { global.eon_migration_origin_country = THIS }
+  every_country = {
+   limit = {
+    exists = yes has_war = no NOT = { has_idea = closed_borders }
+    has_country_flag = migration_agreement_migrants_add@PREV
+    PREV = { has_country_flag = migration_agreement_migrants_cut@PREV }
+    check_variable = { average_worker_fulfillment < 1 }
+    any_owned_state = { is_controlled_by = PREV is_core_of = PREV state_population > 10000 }
+   }
+   clear_variable = global.eon_migration_amount
+   clear_variable = global.eon_migration_target_state
+   set_variable = { global.eon_migration_target_country = THIS }
+   random_owned_controlled_state = {
+    limit = { is_core_of = PREV state_population > 10000 }
+    set_variable = { global.eon_migration_target_state = THIS }
+   }
+   var:global.eon_migration_origin_country = {
+    random_owned_controlled_state = {
+     limit = { is_core_of = PREV state_population > 20000 }
+     set_variable = { global.eon_migration_source_state = THIS }
+     set_variable = { global.eon_migration_amount = state_population_k }
+     set_temp_variable = { eon_nonlocal_population_k = eon_refugees_total }
+     add_to_temp_variable = { eon_nonlocal_population_k = eon_labor_migrants_total }
+     divide_temp_variable = { eon_nonlocal_population_k = 1000 }
+     subtract_from_variable = { global.eon_migration_amount = eon_nonlocal_population_k }
+     multiply_variable = { global.eon_migration_amount = 0.1 }
+     clamp_variable = { var = global.eon_migration_amount min = 0 max = 5000 }
+    }
+   }
+   set_temp_variable = { eon_labor_vacancy_factor = 1 }
+   subtract_from_temp_variable = { eon_labor_vacancy_factor = average_worker_fulfillment }
+   clamp_temp_variable = { var = eon_labor_vacancy_factor min = 0 max = 1 }
+   multiply_variable = { global.eon_migration_amount = eon_labor_vacancy_factor }
+   set_temp_variable = { eon_labor_places = population_total_m }
+   multiply_temp_variable = { eon_labor_places = 10000 }
+   subtract_from_temp_variable = { eon_labor_places = eon_labor_migrants_hosted }
+   clamp_temp_variable = { var = eon_labor_places min = 0 }
+   clamp_variable = { var = global.eon_migration_amount min = 0 max = eon_labor_places }
+   round_variable = global.eon_migration_amount
+   set_variable = { global.eon_migration_kind = 4 }
+   eon_migration_move_population = yes
+  }
+ }
+}
+
+# STATE scope. Only cohorts present at the start of this month may move;
+# a newly received cohort cannot be relayed twice by later country iterations.
+eon_migration_process_refugee_cohorts = {
+ for_each_loop = {
+  array = eon_refugee_stock
+  index = eon_origin_index
+  value = eon_origin_stock
+  if = {
+   limit = { check_variable = { eon_origin_stock > 0 } }
+   set_variable = { global.eon_migration_source_state = THIS }
+   set_variable = { global.eon_migration_origin_country = global.eon_migration_origins^eon_origin_index }
+   set_variable = { global.eon_migration_origin_slot = eon_origin_index }
+   set_temp_variable = { eon_movable_stock = eon_origin_stock }
+   subtract_from_temp_variable = { eon_movable_stock = eon_refugee_fresh^eon_origin_index }
+   subtract_from_temp_variable = { eon_movable_stock = eon_refugee_longterm^eon_origin_index }
+   clamp_temp_variable = { var = eon_movable_stock min = 0 }
+   # No return to a nonexistent country; its displaced people keep protection.
+   if = {
+    limit = {
+     check_variable = { eon_movable_stock > 0 }
+     check_variable = { eon_refugee_age^eon_origin_index > 2 }
+     var:global.eon_migration_origin_country = { eon_migration_safe_return_country = yes }
+    }
+    set_variable = { global.eon_migration_amount = eon_movable_stock }
+    multiply_variable = { global.eon_migration_amount = 0.02 }
+    clear_variable = global.eon_migration_target_state
+    set_variable = { global.eon_migration_target_country = global.eon_migration_origin_country }
+    var:global.eon_migration_origin_country = {
+     multiply_variable = { global.eon_migration_amount = eon_migration_home_control_ratio }
+     set_variable = { global.eon_migration_return_gdpc = gdp_per_capita }
+     random_owned_controlled_state = {
+      limit = {
+       is_core_of = PREV state_population > 10000
+       check_variable = { damaged_building_level@infrastructure < 0.25 }
+       check_variable = { damaged_building_level@industrial_complex < 0.25 }
+      }
+      set_variable = { global.eon_migration_target_state = THIS }
+     }
+    }
+    controller = {
+     # Better established conditions reduce the modeled willingness to return;
+     # this is not forced removal, a legal test or an observed universal ratio.
+     if = { limit = { check_variable = { gdp_per_capita > global.eon_migration_return_gdpc } } multiply_variable = { global.eon_migration_amount = 0.5 } }
+    }
+    round_variable = global.eon_migration_amount
+    set_variable = { global.eon_migration_kind = 2 }
+    eon_migration_move_population = yes
+   }
+   # Voluntary onward resettlement has a willing receiving country and places.
+   if = {
+    limit = {
+     check_variable = { eon_movable_stock > 0 }
+     check_variable = { eon_refugee_age^eon_origin_index > 2 }
+     var:global.eon_migration_origin_country = { has_war = yes }
+     controller = { check_variable = { eon_refugee_service_pressure > 0 } }
+    }
+    set_variable = { global.eon_migration_source_state = THIS }
+    set_variable = { global.eon_migration_amount = eon_refugee_stock^eon_origin_index }
+    subtract_from_variable = { global.eon_migration_amount = eon_refugee_fresh^eon_origin_index }
+    subtract_from_variable = { global.eon_migration_amount = eon_refugee_longterm^eon_origin_index }
+    multiply_variable = { global.eon_migration_amount = 0.01 }
+    clamp_variable = { var = global.eon_migration_amount min = 0 max = 5000 }
+    clear_variable = global.eon_migration_target_country
+    set_variable = { global.eon_migration_previous_host = controller }
+    random_country = {
+     limit = {
+      eon_migration_host_available = yes
+      check_variable = { eon_refugee_policy = 2 }
+      NOT = { tag = var:global.eon_migration_origin_country }
+      NOT = { tag = var:global.eon_migration_previous_host }
+      OR = {
+       is_neighbor_of = var:global.eon_migration_previous_host
+       var:global.eon_migration_previous_host = { OR = { is_in_faction_with = PREV has_country_flag = eon_diplomatic_relations_established@PREV } }
+      }
+     }
+     set_variable = { global.eon_migration_target_country = THIS }
+    }
+    set_variable = { global.eon_migration_kind = 3 }
+    eon_migration_receive_new_flow = yes
+   }
+   # A modeled share settles after prolonged residence; this does not confer
+   # citizenship or predict any country's exact immigration-law outcome.
+   if = {
+    limit = { check_variable = { eon_refugee_age^eon_origin_index > 59 } controller = { NOT = { has_idea = closed_borders } } }
+    set_temp_variable = { eon_settlement_step = eon_refugee_stock^eon_origin_index }
+    subtract_from_temp_variable = { eon_settlement_step = eon_refugee_fresh^eon_origin_index }
+    subtract_from_temp_variable = { eon_settlement_step = eon_refugee_longterm^eon_origin_index }
+    multiply_temp_variable = { eon_settlement_step = 0.02 }
+    clamp_temp_variable = { var = eon_settlement_step min = 0 }
+    round_temp_variable = eon_settlement_step
+    add_to_variable = { eon_refugee_longterm^eon_origin_index = eon_settlement_step }
+    clamp_variable = { var = eon_refugee_integrated^eon_origin_index min = eon_refugee_longterm^eon_origin_index max = eon_refugee_stock^eon_origin_index }
+   }
+   if = {
+    limit = { check_variable = { eon_refugee_age^eon_origin_index > 2 } controller = { check_variable = { total_unemployed_percentage_display < 0.2 } } }
+    set_temp_variable = { eon_integration_step = eon_refugee_stock^eon_origin_index }
+    subtract_from_temp_variable = { eon_integration_step = eon_refugee_integrated^eon_origin_index }
+    subtract_from_temp_variable = { eon_integration_step = eon_refugee_fresh^eon_origin_index }
+    multiply_temp_variable = { eon_integration_step = 0.08 }
+    clamp_temp_variable = { var = eon_integration_step min = 0 }
+    round_temp_variable = eon_integration_step
+    add_to_variable = { eon_refugee_integrated^eon_origin_index = eon_integration_step }
+    clamp_variable = { var = eon_refugee_integrated^eon_origin_index min = 0 max = eon_refugee_stock^eon_origin_index }
+   }
+  }
+ }
+ eon_migration_recount_state = yes
+}
+eon_migration_update_home_safety = {
+ if = { limit = { has_war = yes } set_variable = { eon_migration_peace_months = 0 } }
+ else = { add_to_variable = { eon_migration_peace_months = 1 } clamp_variable = { var = eon_migration_peace_months max = 120 } }
+ set_temp_variable = { eon_all_home_states = 0 }
+ set_temp_variable = { eon_controlled_home_states = 0 }
+ every_core_state = {
+  add_to_temp_variable = { eon_all_home_states = 1 }
+  if = { limit = { is_owned_by = PREV is_controlled_by = PREV } add_to_temp_variable = { eon_controlled_home_states = 1 } }
+ }
+ clamp_temp_variable = { var = eon_all_home_states min = 1 }
+ set_variable = { eon_migration_home_control_ratio = eon_controlled_home_states }
+ divide_variable = { eon_migration_home_control_ratio = eon_all_home_states }
+}
+eon_migration_display_rates = {
+ # Display annualized realised net movement, not another birth-growth modifier.
+ set_variable = { net_immigration_rate = eon_migration_month_in }
+ subtract_from_variable = { net_immigration_rate = eon_migration_month_out }
+ divide_variable = { net_immigration_rate = 1000000 }
+ set_temp_variable = { eon_migration_rate_population = population_total_m }
+ clamp_temp_variable = { var = eon_migration_rate_population min = 0.001 }
+ divide_variable = { net_immigration_rate = eon_migration_rate_population }
+ multiply_variable = { net_immigration_rate = 12 }
+ set_variable = { neighbour_war_refugees_display = eon_refugee_month_arrived }
+ set_variable = { personal_war_refugees_display = eon_refugee_month_unplaced }
+}
+eon_migration_clear_flow_scratch = {
+ clear_variable = global.eon_migration_amount
+ clear_variable = global.eon_migration_debit
+ clear_variable = global.eon_migration_source_state
+ clear_variable = global.eon_migration_target_state
+ clear_variable = global.eon_migration_origin_country
+ clear_variable = global.eon_migration_origin_slot
+ clear_variable = global.eon_migration_target_country
+ clear_variable = global.eon_migration_previous_host
+ clear_variable = global.eon_migration_return_gdpc
+ clear_variable = global.eon_migration_kind
+}
+eon_migration_monthly_world_update = {
+ # Register new/civil-war countries without replacing existing origin slots.
+ # Arrays only grow; no fixed list of playable tags is used.
+ every_country = {
+  eon_migration_initialize_country = yes
+  if = {
+   limit = { is_ai = yes NOT = { has_idea = closed_borders } check_variable = { treasury > 1 } check_variable = { display_income > display_expense } any_neighbor_country = { has_war = yes } }
+   set_variable = { eon_refugee_policy = 2 }
+  }
+  eon_migration_treaty_reconcile_country = yes
+  eon_migration_update_home_safety = yes
+  set_variable = { eon_migration_month_in = 0 }
+  set_variable = { eon_migration_month_out = 0 }
+  set_variable = { eon_refugee_month_arrived = 0 }
+  set_variable = { eon_refugee_month_returned = 0 }
+  set_variable = { eon_refugee_month_unplaced = 0 }
+  set_variable = { eon_labor_month_arrived = 0 }
+  eon_migration_refresh_country = yes
+ }
+ every_state = {
+  limit = { has_state_flag = eon_migration_has_ledger }
+  eon_migration_prepare_state_ledger = yes
+  for_each_loop = { array = eon_refugee_stock index = eon_origin_index value = eon_origin_stock
+   set_variable = { eon_refugee_fresh^eon_origin_index = 0 }
+   if = { limit = { check_variable = { eon_origin_stock > 0 } } add_to_variable = { eon_refugee_age^eon_origin_index = 1 } }
+   else = { set_variable = { eon_refugee_age^eon_origin_index = 0 } set_variable = { eon_refugee_integrated^eon_origin_index = 0 } set_variable = { eon_refugee_longterm^eon_origin_index = 0 } }
+  }
+ }
+ every_state = { limit = { has_state_flag = eon_migration_has_ledger } eon_migration_process_refugee_cohorts = yes }
+ every_country = { eon_migration_refresh_country = yes }
+ every_country = { eon_migration_refugee_departures = yes }
+ every_country = { eon_migration_labor_departures = yes }
+ every_country = { eon_migration_refresh_country = yes eon_migration_display_rates = yes }
+ eon_migration_clear_flow_scratch = yes
+}
+eon_migration_monthly_pulse = {
+ if = {
+  limit = { NOT = { has_global_flag = eon_migration_month_consumed } }
+  set_global_flag = { flag = eon_migration_month_consumed days = 27 value = 1 }
+  eon_migration_monthly_world_update = yes
+ }
+}
+eon_migration_expand_capacity = {
+ if = {
+  limit = { eon_migration_expand_capacity_ready = yes }
+  set_temp_variable = { treasury_change = -0.25 }
+  modify_treasury_effect = yes
+  set_country_flag = { flag = eon_migration_capacity_expanded days = 365 value = 1 }
+  eon_migration_refresh_country = yes
+  ingame_update_setup = yes
+ }
+}

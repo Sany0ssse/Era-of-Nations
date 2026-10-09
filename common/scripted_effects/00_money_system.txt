@@ -64,7 +64,7 @@ ingame_update_setup = {
 			any_owned_state = { always = yes }
 			NOT = { capital_scope = { always = yes } }
 		}
-		random_owned_state = { ROOT = { set_capital = { state = PREV } } }
+		random_owned_state = { PREV = { set_capital = { state = PREV } } }
 	}
 
 	inflation_laws_update = yes
@@ -703,20 +703,9 @@ calculate_additional_income_rate = {
 	}
 	add_to_variable = { additional_income_rate = sanctions_evasion_income }
 
-	#Migrants Agreements
-	if = {
-		limit = {
-			has_dynamic_modifier = { modifier = migrants_agreement_cut }
-		}
-		set_variable = {
-			adding_migrants_income = {
-				value = migrants_cut
-				multiply = -1
-			}
-		}
-		add_to_variable = { additional_income_rate = adding_migrants_income }
-	}
-	else = { clear_variable = adding_migrants_income }
+	# Worker remittances are private transfers, not free government revenue.
+	# Resident workers enter the normal population/GDP/tax calculation once.
+	set_variable = { adding_migrants_income = 0 }
 
 	#Ledokols
 	if = {
@@ -4377,6 +4366,9 @@ calculate_additional_expense_rate = {
 	# Arsenal sustainment is a weekly cash expense; existing silo/bomber costs stay in military spending.
 	eon_nuclear_arsenal_refresh = yes
 	add_to_variable = { additional_expenses_rate = eon_nuclear_arsenal_weekly_cost }
+	eon_migration_refresh_country = yes
+	add_to_variable = { additional_expenses_rate = eon_refugee_weekly_net_cost }
+	add_to_variable = { additional_expenses_rate = eon_refugee_capacity_weekly_cost }
 	# Additional expenses, set expense amount as a variable (weekly gain)
 	# Generic Propaganda Campaign Decisions
 
@@ -5898,21 +5890,10 @@ calculate_gdp = {
 	set_temp_variable = { workforce_total_min = population_total_m }
 	multiply_temp_variable = { workforce_total_min = 0.25 }
 	clamp_temp_variable = { var = workforce_total min = workforce_total_min }
-	#Counting Migrant Workers
+	# Physical migrants are already in population_total_m; do not add them twice.
 	set_variable = { migrant_workforce_add = 0 }
-	if = {
-		limit = { check_variable = { net_immigration_rate > 0 } }
-		set_variable = { migrant_workforce_add = net_immigration_rate }
-		multiply_variable = { migrant_workforce_add = modifier@monthly_population }
-		multiply_variable = { migrant_workforce_add = population_total_m }
-		set_temp_variable = { migrant_workforce_add_multiplyer = 1 }
-		add_to_temp_variable = { migrant_workforce_add_multiplyer = modifier@migrant_workforce_modifier }
-		clamp_temp_variable = {
-			var = migrant_workforce_add_multiplyer
-			min = 0
-		}
-		multiply_variable = { migrant_workforce_add = migrant_workforce_add_multiplyer }
-	}
+	subtract_from_temp_variable = { workforce_total = eon_refugee_workforce_delay_m }
+	clamp_temp_variable = { var = workforce_total min = 0 }
 
 	#Counting base unemplemployment
 	set_temp_variable = { base_unemployment = workforce_total }
@@ -7363,6 +7344,7 @@ calculate_migration_mechanic_values = {
 	set_variable = { immigration_productivity_calculations_display = immigration_productivity_calculations }
 
 	# Calculate Unemployment/Worker fulfillment
+	set_temp_variable = { immigration_employment_factor = 0 }
 	if = { limit = { check_variable = { average_worker_fulfillment < 1 } }
 		set_temp_variable = { immigration_employment_factor = 1 }
 		subtract_from_temp_variable = { immigration_employment_factor = average_worker_fulfillment }
@@ -7391,39 +7373,9 @@ calculate_migration_mechanic_values = {
 	add_to_variable = { max_net_immigration_rate = immigration_government_factor }
 	add_to_variable = { max_net_immigration_rate = modifier@maximum_migration_rate_value }
 
-	# War Refugees Section (optimized to avoid nested neighbor checks)
-	hidden_effect = {
-		set_temp_variable = { neighbouring_war_refugees = 0 }
-		every_neighbor_country = {
-			limit = { has_war = yes }
-			add_to_temp_variable = { PREV.neighbouring_war_refugees = THIS.population_total_m }
-			multiply_temp_variable = { PREV.neighbouring_war_refugees = @refugee_percentage_adjuster }
-		}
-	}
-	set_variable = { neighbour_war_refugees_display = neighbouring_war_refugees }
-	add_to_variable = { max_net_immigration_rate = neighbouring_war_refugees }
-
-	# Check if you are at war and if you have refugees
-	set_temp_variable = { our_war_refugees = 0 }
-	if = { limit = { has_war = yes }
-		# Calculate Total Potential Refugees
-		add_to_temp_variable = { our_war_refugees = population_total_m }
-		multiply_temp_variable = { our_war_refugees = @refugee_percentage_adjuster }
-		multiply_temp_variable = { our_war_refugees = 0.20 } # Control factor to make it so the number doesn't get very big
-
-		# Reduce War Refugees Based on War Suppport
-		set_temp_variable = { total_war_support = 0.50 }
-		add_to_temp_variable = { total_war_support = modifier@war_support_factor }
-		clamp_temp_variable = { var = total_war_support min = 0 max = 1 }
-
-		set_temp_variable = { war_support_modifier = -1 }
-		add_to_temp_variable = { war_support_modifier = total_war_support }
-		multiply_temp_variable = { our_war_refugees = total_war_support }
-
-		set_variable = { personal_war_refugees_display = our_war_refugees }
-		multiply_variable = { personal_war_refugees_display = -1 }
-	}
-	subtract_from_variable = { max_net_immigration_rate = our_war_refugees }
+	# Matched state-to-state flows own refugee population; no unpaired growth.
+	set_variable = { neighbour_war_refugees_display = eon_refugee_month_arrived }
+	set_variable = { personal_war_refugees_display = eon_refugee_month_unplaced }
 
 	# Calculate Migration Rate
 	set_temp_variable = { migration_rate_value = modifier@base_migration_rate_value }
@@ -7449,6 +7401,7 @@ calculate_migration_mechanic_values = {
 	set_variable = { net_immigration_rate = max_net_immigration_rate }
 	multiply_variable = { net_immigration_rate = migration_rate_value }
 	clamp_variable = { var = net_immigration_rate min = -0.9999 max = max_net_immigration_rate }
+	eon_migration_display_rates = yes
 }
 
 calculate_cost_pp_economic_cycles = {

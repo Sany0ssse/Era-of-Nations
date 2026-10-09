@@ -11,6 +11,9 @@ import json
 import sys
 import _model as m
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from aid_cash_bounds.byte_compat import before_aid_cash_bounds
+
 ROOT = Path(__file__).resolve().parents[3]
 SOURCE = 'common/scripted_triggers/eon_aid_triggers.txt'
 DEPENDENCIES = [SOURCE, 'common/scripted_effects/eon_aid_effects.txt',
@@ -86,7 +89,8 @@ def draft_fixture():
 def validate(raw):
     source = definitions(raw)
     assert raw.count(NEW_LEGACY) == raw.count(NEW_RETIRED) == 1, 'Only two explicit source islands are allowed'
-    inverse = raw.replace(NEW_LEGACY, OLD_LEGACY, 1).replace(NEW_RETIRED, OLD_RETIRED, 1)
+    historical_bytes = before_aid_cash_bounds(SOURCE, raw)
+    inverse = historical_bytes.replace(NEW_LEGACY, OLD_LEGACY, 1).replace(NEW_RETIRED, OLD_RETIRED, 1)
     assert hashlib.sha256(inverse).hexdigest() == BASELINE_SHA, 'Unowned source bytes changed'
     assert not raw.startswith(b'\xef\xbb\xbf') and b'\r' not in raw, 'Preserve original no-BOM/LF'
     assert b'@eon_aid_policy_donor' not in raw

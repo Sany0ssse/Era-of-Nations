@@ -1,0 +1,107 @@
+eon_humanitarian_aid_clear_pending = {
+ clr_country_flag = eon_humanitarian_aid_pending
+ clr_country_flag = eon_humanitarian_aid_live
+ clr_country_flag = eon_humanitarian_aid_cancelled
+ clear_variable = eon_humanitarian_aid_partner
+}
+# ROOT donor, THIS recipient. Sending makes no financial or political payment.
+eon_humanitarian_aid_send_offer = {
+ # Register a newly created recipient before recording its first real grant.
+ # Any inherited copy_tag balance is retired before, never after, this offer.
+ eon_migration_initialize_country = yes
+ if = {
+  limit = { eon_humanitarian_aid_offer_ready = yes }
+  ROOT = {
+   set_variable = { eon_humanitarian_aid_partner = PREV }
+   set_country_flag = eon_humanitarian_aid_pending
+   set_country_flag = { flag = eon_humanitarian_aid_live days = 30 value = 1 }
+  }
+ }
+}
+# Native completion is explicit recipient consent. Validate the frozen record,
+# then consume before either financial write; repeated callbacks remain inert.
+eon_humanitarian_aid_accept_offer = {
+ if = {
+  limit = { eon_humanitarian_aid_response_pending = yes }
+  if = {
+   limit = { eon_humanitarian_aid_response_ready = yes }
+   ROOT = {
+    eon_humanitarian_aid_clear_pending = yes
+    set_country_flag = { flag = eon_humanitarian_aid_cooldown@PREV days = 180 value = 1 }
+    set_temp_variable = { treasury_change = -0.1 }
+    modify_treasury_effect = yes
+    ingame_update_setup = yes
+   }
+   add_to_variable = { eon_refugee_relief_fund = 0.1 }
+   country_event = { id = eon_humanitarian_aid.1 }
+   ROOT = { country_event = { id = eon_humanitarian_aid.1 } }
+  }
+  else = {
+   ROOT = { eon_humanitarian_aid_clear_pending = yes country_event = { id = eon_humanitarian_aid.2 } }
+  }
+ }
+}
+eon_humanitarian_aid_reject_offer = {
+ if = {
+  limit = { eon_humanitarian_aid_response_pending = yes }
+  ROOT = { eon_humanitarian_aid_clear_pending = yes country_event = { id = eon_humanitarian_aid.2 } }
+ }
+}
+eon_humanitarian_aid_withdraw_offer = {
+ if = {
+  limit = { eon_humanitarian_aid_withdraw_available = yes }
+  # The original native reply still owns this identity until consumption/expiry.
+  ROOT = { set_country_flag = eon_humanitarian_aid_cancelled }
+  country_event = { id = eon_humanitarian_aid.3 }
+ }
+}
+# Donor record scope. Unconsumed native replies have no transaction generation;
+# a forced cleanup therefore retires only the identified directed pair.
+eon_humanitarian_aid_retire_pending = {
+ if = {
+  limit = { eon_humanitarian_aid_partner_identified = yes }
+  var:eon_humanitarian_aid_partner = { PREV = { set_country_flag = eon_humanitarian_aid_retired_pair@PREV } }
+ }
+ else = { set_country_flag = eon_humanitarian_aid_quarantined }
+ eon_humanitarian_aid_clear_pending = yes
+}
+eon_humanitarian_aid_daily_update = {
+ if = {
+  limit = {
+   NOT = { has_country_flag = eon_humanitarian_aid_pending }
+   OR = {
+    has_country_flag = eon_humanitarian_aid_live
+    has_country_flag = eon_humanitarian_aid_cancelled
+    NOT = { check_variable = { eon_humanitarian_aid_partner = 0 } }
+   }
+  }
+  set_country_flag = eon_humanitarian_aid_quarantined
+  eon_humanitarian_aid_clear_pending = yes
+ }
+ if = {
+  limit = {
+   has_country_flag = eon_humanitarian_aid_pending
+   OR = {
+    exists = no
+    NOT = { eon_humanitarian_aid_partner_identified = yes }
+    NOT = { has_country_flag = eon_humanitarian_aid_live }
+    var:eon_humanitarian_aid_partner = { exists = no }
+   }
+  }
+  eon_humanitarian_aid_retire_pending = yes
+  if = { limit = { exists = yes } country_event = { id = eon_humanitarian_aid.4 } }
+ }
+}
+eon_humanitarian_aid_annex_update = {
+ if = {
+  limit = {
+   has_country_flag = eon_humanitarian_aid_pending
+   check_variable = { eon_humanitarian_aid_partner = eon_humanitarian_aid_annexed_partner }
+  }
+  eon_humanitarian_aid_retire_pending = yes
+ }
+}
+eon_humanitarian_aid_clear_annexed_country = {
+ if = { limit = { has_country_flag = eon_humanitarian_aid_pending } eon_humanitarian_aid_retire_pending = yes }
+ else = { eon_humanitarian_aid_clear_pending = yes }
+}
