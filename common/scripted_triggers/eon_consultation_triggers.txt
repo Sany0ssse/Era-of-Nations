@@ -4,7 +4,9 @@ eon_consultation_base_pair_available = {
 	exists = yes
 	NOT = { tag = var:eon_consultation_actor }
 	NOT = { has_war_with = var:eon_consultation_actor }
-	NOT = { has_country_flag = eon_consultation_retired_pair@eon_consultation_actor }
+	var:eon_consultation_actor = {
+		PREV = { NOT = { has_country_flag = eon_consultation_retired_pair@PREV } }
+	}
 	var:eon_consultation_actor = {
 		exists = yes
 		NOT = { has_war_with = PREV }
@@ -77,11 +79,18 @@ eon_consultation_draft_current = {
 	}
 }
 
+# Expiry preserves the original modal and its exact pair until acknowledgement.
+eon_consultation_expired_draft_current = {
+	eon_consultation_draft_current = yes
+	OR = { has_country_flag = eon_consultation_expired FROM = { has_country_flag = eon_consultation_expired } }
+}
+
 # Donor agenda option initializes proposed_topic in both trigger and effect.
 eon_consultation_draft_send_ready = {
 	eon_consultation_draft_current = yes
 	is_ai = no
 	has_country_flag = eon_consultation_draft_window
+	NOT = { has_country_flag = eon_consultation_expired }
 	NOT = { has_political_power < 10 }
 	OR = {
 		check_variable = { eon_consultation_proposed_topic = 1 }
@@ -92,6 +101,7 @@ eon_consultation_draft_send_ready = {
 	set_temp_variable = { eon_consultation_actor = THIS }
 	var:eon_consultation_partner = {
 		has_country_flag = eon_consultation_draft_window
+		NOT = { has_country_flag = eon_consultation_expired }
 		NOT = { has_country_flag = eon_consultation_recent_contact@PREV }
 		eon_consultation_base_pair_available = yes
 	}
@@ -117,13 +127,21 @@ eon_consultation_response_pair_current = {
 	}
 }
 
+# Structural identity remains usable when a live pending invitation expires.
+eon_consultation_expired_response_current = {
+	eon_consultation_response_pair_current = yes
+	OR = { has_country_flag = eon_consultation_expired FROM = { has_country_flag = eon_consultation_expired } }
+}
+
 eon_consultation_response_valid = {
 	eon_consultation_response_pair_current = yes
 	has_country_flag = eon_consultation_response_window
 	NOT = { has_country_flag = eon_consultation_cancelled }
+	NOT = { has_country_flag = eon_consultation_expired }
 	var:eon_consultation_partner = {
 		has_country_flag = eon_consultation_response_window
 		NOT = { has_country_flag = eon_consultation_cancelled }
+		NOT = { has_country_flag = eon_consultation_expired }
 	}
 	set_temp_variable = { eon_consultation_actor = FROM }
 	eon_consultation_base_pair_available = yes
@@ -139,11 +157,13 @@ eon_consultation_withdraw_available = {
 	has_country_flag = eon_consultation_reserved
 	has_country_flag = eon_consultation_incoming
 	NOT = { has_country_flag = eon_consultation_cancelled }
+	NOT = { has_country_flag = eon_consultation_expired }
 	check_variable = { eon_consultation_partner = ROOT }
 	ROOT = {
 		has_country_flag = eon_consultation_reserved
 		has_country_flag = eon_consultation_outgoing
 		NOT = { has_country_flag = eon_consultation_cancelled }
+		NOT = { has_country_flag = eon_consultation_expired }
 		check_variable = { eon_consultation_partner = PREV }
 		check_variable = { eon_consultation_topic = PREV.eon_consultation_topic }
 	}

@@ -8,6 +8,7 @@ eon_consultation_clear_pending = {
 	clr_country_flag = eon_consultation_incoming
 	clr_country_flag = eon_consultation_response_window
 	clr_country_flag = eon_consultation_cancelled
+	clr_country_flag = eon_consultation_expired
 	clr_country_flag = eon_consultation_active
 	clr_country_flag = eon_consultation_active_window
 	clear_variable = eon_consultation_partner
@@ -174,6 +175,10 @@ eon_consultation_resolve_invalid_request = {
 	if = {
 		limit = { eon_consultation_response_pair_current = yes }
 		if = {
+			limit = { eon_consultation_expired_response_current = yes }
+			FROM = { country_event = eon_consultation.26 }
+		}
+		else_if = {
 			limit = { OR = { has_country_flag = eon_consultation_cancelled FROM = { has_country_flag = eon_consultation_cancelled } } }
 			FROM = { country_event = eon_consultation.24 }
 		}
@@ -190,9 +195,11 @@ eon_consultation_withdraw_request = {
 			has_country_flag = eon_consultation_reserved
 			has_country_flag = eon_consultation_outgoing
 			NOT = { has_country_flag = eon_consultation_cancelled }
+			NOT = { has_country_flag = eon_consultation_expired }
 			var:eon_consultation_partner = {
 				has_country_flag = eon_consultation_reserved
 				has_country_flag = eon_consultation_incoming
+				NOT = { has_country_flag = eon_consultation_expired }
 				check_variable = { eon_consultation_partner = PREV }
 				check_variable = { eon_consultation_topic = PREV.eon_consultation_topic }
 			}
@@ -241,10 +248,9 @@ eon_consultation_daily_cleanup = {
 					AND = { OR = { has_country_flag = eon_consultation_outgoing has_country_flag = eon_consultation_incoming } NOT = { has_country_flag = eon_consultation_response_window } }
 				}
 			}
-			eon_consultation_retire_pair = yes
-			var:eon_consultation_partner = { if = { limit = { exists = yes } country_event = eon_consultation.26 } }
-			country_event = eon_consultation.26
-			eon_consultation_release_pair = yes
+			# Keep the sole original agenda/reply until its matching acknowledgement.
+			set_country_flag = eon_consultation_expired
+			var:eon_consultation_partner = { set_country_flag = eon_consultation_expired }
 		}
 		else_if = {
 			limit = {

@@ -32,6 +32,7 @@ def main():
     reports['localisation'] = run('tools/validation/diplomacy_completion/check_localisation.py')
     reports['localisation_override_boundaries'] = run('tools/validation/localisation_override_checker/test_checker.py')
     reports['consultation_ui'] = run('tools/validation/diplomacy_channel_ui/run_checks.py')
+    reports['consultation_lifecycle_completion'] = run('tools/validation/consultation_lifecycle_completion/run_checks.py')
     for number in (24, 25, 26, 27, 28):
         path = f'tools/validation/diplomacy_package_{number}/run_checks.py'
         if not (ROOT / path).is_file():

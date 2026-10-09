@@ -14,6 +14,11 @@ aid_spec = importlib.util.spec_from_file_location(
     'eon_aid_byte_compat', ROOT / 'tools/validation/aid_flag_scope/byte_compat.py')
 aid_compat = importlib.util.module_from_spec(aid_spec)
 aid_spec.loader.exec_module(aid_compat)
+consultation_spec = importlib.util.spec_from_file_location(
+    'eon_consultation_core_byte_compat',
+    ROOT / 'tools/validation/consultation_lifecycle_completion/_source_guard.py')
+consultation_compat = importlib.util.module_from_spec(consultation_spec)
+consultation_spec.loader.exec_module(consultation_compat)
 spec = importlib.util.spec_from_file_location(
     'eon_compat_ast', ROOT / 'tools/validation/diplomacy_package_03/_support.py')
 parser = importlib.util.module_from_spec(spec)
@@ -62,6 +67,10 @@ def main():
         # Only preservation comparison receives the digest-bound inverse of
         # the accepted READ/type fields. Grammar below uses the actual AST.
         historical_after = aid_compat.before_aid_flag_repair(relative, after)
+        # Later consultation lifecycle repair is inverted only for this earlier
+        # syntax-preservation assertion. Current AST below remains unchanged.
+        if relative in consultation_compat.load_journal()['files']:
+            historical_after = consultation_compat.restore_before(relative, historical_after)
         preservation = parser.ast(game_before(relative, historical_after))
         assert normalize(preservation) == normalize(old), ('Other behavior changed', relative)
         assert before.startswith(b'\xef\xbb\xbf') == after.startswith(b'\xef\xbb\xbf')

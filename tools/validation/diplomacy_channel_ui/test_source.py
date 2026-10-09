@@ -4,6 +4,7 @@ import subprocess
 import unittest
 
 import _support as s
+import consultation_compat as compat
 from test_lifecycle import ACTIONS, DECISIONS, EVENTS
 
 BASELINE = 'f2832b6bfd980066163d0a69a6306169c992c5d7'
@@ -31,15 +32,15 @@ def walk(nodes):
             yield from walk(data)
 
 class SourceTests(unittest.TestCase):
-    def test_old_consultation_callbacks_and_lifecycle_are_byte_preserved(self):
+    def test_historical_callbacks_are_preserved_outside_exact_later_repairs(self):
         for path in LEGACY:
-            self.assertEqual((s.ROOT / path).read_bytes(), old_bytes(path), path)
+            self.assertEqual(compat.restore_before(path), old_bytes(path), path)
 
     def test_legacy_notice_locales_only_add_navigation_to_20_21_22(self):
         allowed = {'eon_consultation.' + str(n) + '.desc' for n in (20, 21, 22)}
         for lang in ('english', 'russian'):
             path = f'localisation/{lang}/eon_consultation_l_{lang}.yml'
-            old, current = localisation(old_bytes(path)), localisation((s.ROOT / path).read_bytes())
+            old, current = localisation(old_bytes(path)), localisation(compat.restore_before(path))
             self.assertEqual(set(old), set(current), path)
             changed = {name for name in old if old[name] != current[name]}
             self.assertEqual(changed, allowed)
@@ -108,6 +109,14 @@ class SourceTests(unittest.TestCase):
         self.assertEqual(s.value(r, s.ctx(), 'channel_array^num'), 2)
         self.assertTrue(s.condition(s.parse('all_of = { array = channel_array value = channel_v index = channel_i check_variable = { channel_v > 0 } }'), r, s.ctx()))
         self.assertEqual(s.value(r, s.ctx(), 'channel_v'), s.IDS['C'])
+
+    def test_flag_suffix_does_not_dereference_a_scalar_country_variable(self):
+        r = s.state()
+        r['countries']['A']['flags'].add('eon_consultation_retired_pair@B')
+        s.execute(s.parse('set_temp_variable = { channel_flag_actor = FROM }'), r, s.ctx())
+        self.assertTrue(s.condition(s.parse('has_country_flag = eon_consultation_retired_pair@FROM'), r, s.ctx()))
+        self.assertFalse(s.condition(s.parse('has_country_flag = eon_consultation_retired_pair@channel_flag_actor'), r, s.ctx()))
+        self.assertEqual(s.key(r, s.ctx(), 'channel_variable@channel_flag_actor'), 'channel_variable@B')
 
 if __name__ == '__main__':
     unittest.main()

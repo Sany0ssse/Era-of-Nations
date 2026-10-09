@@ -90,6 +90,23 @@ def key(result, context, token):
     assert tag is not None, ('Missing flag/variable target', token, context)
     return field + '@' + tag
 
+
+def flag_key(result, context, token):
+    """Country FLAG suffixes do not dereference scalar country variables.
+
+    Keep the native24 literal-tag rule and synthetic one-letter country aliases.
+    Native29 independently calibrated arbitrary scalar suffixes against @PREV.
+    Variable slots still use key(), which has different engine semantics.
+    """
+    if '@' not in token:
+        return token
+    field, target = token.split('@', 1)
+    if len(target) == 3 and target.isalpha() and target.isupper():
+        return field + '@literal:' + target
+    if target in ('ROOT', 'FROM', 'THIS', 'PREV') or target in result['countries']:
+        return key(result, context, token)
+    return field + '@literal:' + target
+
 previous_value = f.value
 def value(result, context, token):
     token = token[4:] if token.startswith('var:') else token
@@ -203,6 +220,8 @@ def execute(nodes, result, context):
             event_id = one(data, 'id') if isinstance(data, list) else data
             sender = context['prev'][0] if context['prev'] else context['root']
             result['events'].append({'id': event_id, 'scope': context['scope'], 'root': context['scope'], 'from': sender})
+        elif name == 'log':
+            result.setdefault('diagnostic_logs', []).append(data)
         else:
             previous_execute(group, result, context)
 
@@ -210,6 +229,7 @@ def execute(nodes, result, context):
 for module in (m, f):
     module.value, module.key, module.country_ref = value, key, country_ref
     module.condition, module.execute = condition, execute
+m.flag_key = flag_key
 
 def state(temp_semantics='native'):
     assert temp_semantics in ('country', 'shared', 'native')
@@ -229,6 +249,7 @@ def stable(result):
     output = deepcopy(result)
     output.pop('events', None)
     output.pop('external', None)
+    output.pop('diagnostic_logs', None)
     output.get('global', {}).pop('temps', None)
     for country in output['countries'].values():
         country['temps'] = {}

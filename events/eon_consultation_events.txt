@@ -10,7 +10,10 @@ country_event = {
 country_event = {
 	id = eon_consultation.1
 	title = eon_consultation_agenda_title
-	desc = eon_consultation_agenda_desc
+	desc = { trigger = { set_temp_variable = { eon_consultation_proposed_topic = 1 } eon_consultation_draft_send_ready = yes } text = eon_consultation_agenda_desc }
+	desc = { trigger = { eon_consultation_expired_draft_current = yes } text = eon_consultation_expired_agenda_desc }
+	desc = { trigger = { eon_consultation_draft_current = yes NOT = { eon_consultation_expired_draft_current = yes } has_political_power < 10 } text = eon_consultation_low_power_agenda_desc }
+	desc = { trigger = { NOT = { OR = { AND = { set_temp_variable = { eon_consultation_proposed_topic = 1 } eon_consultation_draft_send_ready = yes } AND = { eon_consultation_expired_draft_current = yes } AND = { eon_consultation_draft_current = yes NOT = { eon_consultation_expired_draft_current = yes } has_political_power < 10 } } } } text = eon_consultation_stale_agenda_desc }
 	picture = GFX_handshake_black
 	is_triggered_only = yes
 	option = {
@@ -40,13 +43,15 @@ country_event = {
 country_event = {
 	id = eon_consultation.10
 	title = eon_consultation_trade_invite_title
-	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } eon_consultation_cancelled_response_current = yes } text = eon_consultation_cancelled_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } eon_consultation_expired_response_current = yes } text = eon_consultation_expired_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } eon_consultation_cancelled_response_current = yes NOT = { eon_consultation_expired_response_current = yes } } text = eon_consultation_cancelled_invite_desc }
 	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } eon_consultation_response_valid = yes } text = eon_consultation_trade_invite_desc }
-	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } NOT = { eon_consultation_response_valid = yes } NOT = { eon_consultation_cancelled_response_current = yes } } text = eon_consultation_stale_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } NOT = { eon_consultation_response_valid = yes } NOT = { eon_consultation_cancelled_response_current = yes } NOT = { eon_consultation_expired_response_current = yes } } text = eon_consultation_stale_invite_desc }
 	picture = GFX_handshake_black
 	is_triggered_only = yes
 	option = {
 		name = eon_consultation_accept_talks
+		log = "EON_CONSULTATION_OPTION event=eon_consultation.10 topic=1 choice=accept actor=[THIS.GetTag] partner=[FROM.GetTag]"
 		trigger = { set_temp_variable = { eon_consultation_response_topic = 1 } eon_consultation_response_valid = yes }
 		set_temp_variable = { eon_consultation_response_topic = 1 }
 		eon_consultation_accept_request = yes
@@ -61,6 +66,7 @@ country_event = {
 	}
 	option = {
 		name = eon_consultation_decline_talks
+		log = "EON_CONSULTATION_OPTION event=eon_consultation.10 topic=1 choice=refuse actor=[THIS.GetTag] partner=[FROM.GetTag]"
 		set_temp_variable = { eon_consultation_response_topic = 1 }
 		eon_consultation_refuse_request = yes
 		ai_chance = { factor = 1 modifier = { factor = 2 has_opinion = { target = FROM value < 0 } } }
@@ -70,13 +76,15 @@ country_event = {
 country_event = {
 	id = eon_consultation.11
 	title = eon_consultation_energy_invite_title
-	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } eon_consultation_cancelled_response_current = yes } text = eon_consultation_cancelled_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } eon_consultation_expired_response_current = yes } text = eon_consultation_expired_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } eon_consultation_cancelled_response_current = yes NOT = { eon_consultation_expired_response_current = yes } } text = eon_consultation_cancelled_invite_desc }
 	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } eon_consultation_response_valid = yes } text = eon_consultation_energy_invite_desc }
-	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } NOT = { eon_consultation_response_valid = yes } NOT = { eon_consultation_cancelled_response_current = yes } } text = eon_consultation_stale_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } NOT = { eon_consultation_response_valid = yes } NOT = { eon_consultation_cancelled_response_current = yes } NOT = { eon_consultation_expired_response_current = yes } } text = eon_consultation_stale_invite_desc }
 	picture = GFX_handshake_black
 	is_triggered_only = yes
 	option = {
 		name = eon_consultation_accept_talks
+		log = "EON_CONSULTATION_OPTION event=eon_consultation.11 topic=2 choice=accept actor=[THIS.GetTag] partner=[FROM.GetTag]"
 		trigger = { set_temp_variable = { eon_consultation_response_topic = 2 } eon_consultation_response_valid = yes }
 		set_temp_variable = { eon_consultation_response_topic = 2 }
 		eon_consultation_accept_request = yes
@@ -91,6 +99,7 @@ country_event = {
 	}
 	option = {
 		name = eon_consultation_decline_talks
+		log = "EON_CONSULTATION_OPTION event=eon_consultation.11 topic=2 choice=refuse actor=[THIS.GetTag] partner=[FROM.GetTag]"
 		set_temp_variable = { eon_consultation_response_topic = 2 }
 		eon_consultation_refuse_request = yes
 		ai_chance = { factor = 1 modifier = { factor = 2 has_opinion = { target = FROM value < 0 } } }
@@ -100,13 +109,15 @@ country_event = {
 country_event = {
 	id = eon_consultation.12
 	title = eon_consultation_support_invite_title
-	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } eon_consultation_cancelled_response_current = yes } text = eon_consultation_cancelled_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } eon_consultation_expired_response_current = yes } text = eon_consultation_expired_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } eon_consultation_cancelled_response_current = yes NOT = { eon_consultation_expired_response_current = yes } } text = eon_consultation_cancelled_invite_desc }
 	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } eon_consultation_response_valid = yes } text = eon_consultation_support_invite_desc }
-	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } NOT = { eon_consultation_response_valid = yes } NOT = { eon_consultation_cancelled_response_current = yes } } text = eon_consultation_stale_invite_desc }
+	desc = { trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } NOT = { eon_consultation_response_valid = yes } NOT = { eon_consultation_cancelled_response_current = yes } NOT = { eon_consultation_expired_response_current = yes } } text = eon_consultation_stale_invite_desc }
 	picture = GFX_handshake_black
 	is_triggered_only = yes
 	option = {
 		name = eon_consultation_accept_talks
+		log = "EON_CONSULTATION_OPTION event=eon_consultation.12 topic=3 choice=accept actor=[THIS.GetTag] partner=[FROM.GetTag]"
 		trigger = { set_temp_variable = { eon_consultation_response_topic = 3 } eon_consultation_response_valid = yes }
 		set_temp_variable = { eon_consultation_response_topic = 3 }
 		eon_consultation_accept_request = yes
@@ -121,6 +132,7 @@ country_event = {
 	}
 	option = {
 		name = eon_consultation_decline_talks
+		log = "EON_CONSULTATION_OPTION event=eon_consultation.12 topic=3 choice=refuse actor=[THIS.GetTag] partner=[FROM.GetTag]"
 		set_temp_variable = { eon_consultation_response_topic = 3 }
 		eon_consultation_refuse_request = yes
 		ai_chance = { factor = 1 modifier = { factor = 2 has_opinion = { target = FROM value < 0 } } }
