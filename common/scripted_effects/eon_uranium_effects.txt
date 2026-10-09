@@ -1,0 +1,405 @@
+# Era of Nations: natural uranium is a flow resource; fuel and ore stocks are kg U.
+# One native uranium unit = 100 kg natural U/week. All clocks/costs are game rules.
+# Conversion, civilian enrichment and fabrication are aggregated, not uranium mining.
+eon_uranium_initialize = {
+ # Old campaign inventories used abstract units (20/week per reactor group).
+ # Migrate once to kg while preserving their former duration of reactor supply.
+ if = {
+  limit = { NOT = { has_country_flag = eon_uranium_reactor_stock_in_kg } }
+  if = { limit = { has_variable = var_reactor_material_stockpile NOT = { has_country_flag = eon_uranium_country_initialized } } multiply_variable = { var_reactor_material_stockpile = 57.7 } }
+  set_country_flag = eon_uranium_reactor_stock_in_kg
+ }
+ if = {
+  limit = { NOT = { has_global_flag = eon_uranium_geology_initialized } }
+  eon_uranium_seed_world = yes
+  set_global_flag = eon_uranium_geology_initialized
+ }
+ if = {
+  limit = { NOT = { has_country_flag = eon_uranium_country_initialized } }
+  set_country_flag = eon_uranium_country_initialized
+  # Do not erase existing campaign or trade stocks.
+  if = { limit = { NOT = { has_variable = eon_natural_uranium_stock_kg } } set_variable = { eon_natural_uranium_stock_kg = 0 } }
+ }
+}
+
+# STATE: only change our own extraction output, preserving unrelated resources.
+eon_uranium_refresh_mine = {
+ if = {
+  limit = { has_variable = eon_uranium_reserve_kg }
+  set_temp_variable = { eon_mine_output = eon_uranium_capacity }
+  multiply_temp_variable = { eon_mine_output = 10 }
+  # Promise only material still underground, including small geological sites.
+  set_temp_variable = { eon_mine_native_multiplier = 1 }
+  if = {
+   limit = { check_variable = { eon_uranium_applied_output > 0 } }
+   set_temp_variable = { eon_mine_native_multiplier = resource@uranium }
+   divide_temp_variable = { eon_mine_native_multiplier = eon_uranium_applied_output }
+   clamp_temp_variable = { var = eon_mine_native_multiplier min = 1 }
+  }
+  set_temp_variable = { eon_mine_remaining_flow = eon_uranium_reserve_kg }
+  divide_temp_variable = { eon_mine_remaining_flow = 100 }
+  divide_temp_variable = { eon_mine_remaining_flow = eon_mine_native_multiplier }
+  clamp_temp_variable = { var = eon_mine_output min = 0 max = eon_mine_remaining_flow }
+  # Native add_resource truncates fractional amounts. Always record the same
+  # integer base flow we actually apply; never leave a phantom on subtraction.
+  set_temp_variable = { eon_mine_safe_output = eon_mine_output }
+  round_temp_variable = eon_mine_output
+  if = { limit = { check_variable = { eon_mine_output > eon_mine_safe_output } } subtract_from_temp_variable = { eon_mine_output = 1 } }
+  set_temp_variable = { eon_mine_output_delta = eon_mine_output }
+  subtract_from_temp_variable = { eon_mine_output_delta = eon_uranium_applied_output }
+  if = {
+   limit = { NOT = { check_variable = { eon_mine_output_delta = 0 } } }
+   add_resource = { type = uranium amount = eon_mine_output_delta }
+   set_variable = { eon_uranium_applied_output = eon_mine_output }
+  }
+ }
+}
+
+# COUNTRY, pure projection. Repeated GUI/economic refreshes never credit ore/fuel.
+eon_uranium_project_fuel = {
+ eon_uranium_initialize = yes
+ set_variable = { eon_uranium_available_flow_kg = resource@uranium }
+ clamp_variable = { var = eon_uranium_available_flow_kg min = 0 }
+ multiply_variable = { eon_uranium_available_flow_kg = 100 }
+ set_variable = { eon_enrichment_capacity_kg = enrichment_facilities }
+ set_temp_variable = { eon_damaged_enrichment = number_of_damaged_enrichment_facilities }
+ multiply_temp_variable = { eon_damaged_enrichment = 0.6 }
+ subtract_from_variable = { eon_enrichment_capacity_kg = eon_damaged_enrichment }
+ clamp_variable = { var = eon_enrichment_capacity_kg min = 0 }
+ multiply_variable = { eon_enrichment_capacity_kg = 20000 }
+ set_temp_variable = { eon_enrichment_modifier = 1 }
+ add_to_temp_variable = { eon_enrichment_modifier = modifier@nuclear_reactor_fuel_production }
+ clamp_temp_variable = { var = eon_enrichment_modifier min = 0 }
+ multiply_variable = { eon_enrichment_capacity_kg = eon_enrichment_modifier }
+ set_variable = { nuclear_reactor_fuel_production = 0 }
+ if = {
+  limit = { has_country_flag = enabled_nuclear_reactor_fuel_production }
+  set_temp_variable = { eon_raw_available = eon_natural_uranium_stock_kg }
+  add_to_temp_variable = { eon_raw_available = eon_uranium_available_flow_kg }
+  divide_temp_variable = { eon_raw_available = 9 }
+  clamp_temp_variable = { var = eon_raw_available min = 0 max = eon_enrichment_capacity_kg }
+  set_variable = { nuclear_reactor_fuel_production = eon_raw_available }
+ }
+}
+
+# STATE: the controller and a resource-rights beneficiary share one physical
+# extraction ledger. Whichever settles first cannot deplete the same mine twice.
+eon_uranium_settle_state_extraction = {
+ if = {
+  limit = { has_variable = eon_uranium_reserve_kg NOT = { has_state_flag = eon_uranium_state_weekly_settled } }
+  set_state_flag = { flag = eon_uranium_state_weekly_settled value = 1 days = 6 }
+  # Native has_resources_rights becomes false when the last output is removed.
+  # Freeze its recipient before depletion, so the final shipment remains valid.
+  set_variable = { eon_uranium_state_last_rights_recipient = 0 }
+  every_country = {
+   limit = { has_resources_rights = { state = PREV resources = { uranium } } }
+   set_variable = { PREV.eon_uranium_state_last_rights_recipient = THIS.id }
+  }
+  set_variable = { eon_uranium_state_last_extracted_kg = resource@uranium }
+  multiply_variable = { eon_uranium_state_last_extracted_kg = 100 }
+  clamp_variable = { var = eon_uranium_state_last_extracted_kg min = 0 max = eon_uranium_reserve_kg }
+  subtract_from_variable = { eon_uranium_reserve_kg = eon_uranium_state_last_extracted_kg }
+  clamp_variable = { var = eon_uranium_reserve_kg min = 0 }
+  eon_uranium_refresh_mine = yes
+ }
+}
+
+# COUNTRY, exactly one weekly credit. Clip extraction to real remaining deposits,
+# even if native infrastructure/resource multipliers increase the displayed flow.
+eon_uranium_weekly_materials = {
+ eon_uranium_initialize = yes
+ if = {
+  limit = { NOT = { has_country_flag = eon_uranium_weekly_settled } }
+  set_country_flag = { flag = eon_uranium_weekly_settled value = 1 days = 6 }
+  # Snapshot the week's native delivery before a depleted mine removes its flow.
+  set_temp_variable = { eon_uranium_delivered_kg = resource@uranium }
+  multiply_temp_variable = { eon_uranium_delivered_kg = 100 }
+  set_temp_variable = { eon_uranium_physical_extraction_kg = 0 }
+  every_controlled_state = {
+   if = {
+    limit = { has_variable = eon_uranium_reserve_kg }
+    eon_uranium_settle_state_extraction = yes
+    add_to_temp_variable = { eon_uranium_physical_extraction_kg = eon_uranium_state_last_extracted_kg }
+   }
+  }
+  # Resource rights are native delivery, not an imported-resource counter.
+  # Count only actual uranium rights and the shared finite extraction ledger.
+  set_temp_variable = { eon_uranium_rights_supply_kg = 0 }
+  every_state = {
+   limit = {
+    has_variable = eon_uranium_reserve_kg
+    NOT = { is_controlled_by = PREV }
+    OR = {
+     PREV = { has_resources_rights = { state = PREV resources = { uranium } } }
+     AND = { has_state_flag = eon_uranium_state_weekly_settled check_variable = { eon_uranium_state_last_rights_recipient = PREV.id } }
+    }
+   }
+   eon_uranium_settle_state_extraction = yes
+   add_to_temp_variable = { eon_uranium_rights_supply_kg = eon_uranium_state_last_extracted_kg }
+  }
+  set_temp_variable = { eon_uranium_physical_supply_kg = resource_imported@uranium }
+  multiply_temp_variable = { eon_uranium_physical_supply_kg = 100 }
+  add_to_temp_variable = { eon_uranium_physical_supply_kg = eon_uranium_physical_extraction_kg }
+  add_to_temp_variable = { eon_uranium_physical_supply_kg = eon_uranium_rights_supply_kg }
+  clamp_temp_variable = { var = eon_uranium_delivered_kg min = 0 max = eon_uranium_physical_supply_kg }
+  add_to_variable = { eon_natural_uranium_stock_kg = eon_uranium_delivered_kg }
+  # Reuse the production projection with the actual credited stock, without
+  # counting the same native weekly flow again.
+  eon_uranium_project_fuel = yes
+  set_temp_variable = { eon_actual_fuel_kg = eon_natural_uranium_stock_kg }
+  divide_temp_variable = { eon_actual_fuel_kg = 9 }
+  clamp_temp_variable = { var = eon_actual_fuel_kg min = 0 max = eon_enrichment_capacity_kg }
+  if = { limit = { NOT = { has_country_flag = enabled_nuclear_reactor_fuel_production } } set_temp_variable = { eon_actual_fuel_kg = 0 } }
+  # Finished stock/escrow cap is shared with the transaction system.
+  set_temp_variable = { eon_finished_headroom = 20000000 }
+  subtract_from_temp_variable = { eon_finished_headroom = var_reactor_material_stockpile }
+  clamp_temp_variable = { var = eon_finished_headroom min = 0 }
+  clamp_temp_variable = { var = eon_actual_fuel_kg min = 0 max = eon_finished_headroom }
+  set_temp_variable = { eon_feed_consumed_kg = eon_actual_fuel_kg }
+  multiply_temp_variable = { eon_feed_consumed_kg = 9 }
+  subtract_from_variable = { eon_natural_uranium_stock_kg = eon_feed_consumed_kg }
+  clamp_variable = { var = eon_natural_uranium_stock_kg min = 0 }
+  set_variable = { eon_uranium_last_extracted_kg = eon_uranium_physical_extraction_kg }
+  set_variable = { eon_uranium_last_delivered_kg = eon_uranium_delivered_kg }
+  set_variable = { eon_uranium_last_feed_kg = eon_feed_consumed_kg }
+  set_variable = { eon_uranium_last_fuel_kg = eon_actual_fuel_kg }
+  set_temp_variable = { eon_tails_kg = eon_feed_consumed_kg }
+  subtract_from_temp_variable = { eon_tails_kg = eon_actual_fuel_kg }
+  add_to_variable = { eon_depleted_uranium_stock_kg = eon_tails_kg }
+  add_to_variable = { var_reactor_material_stockpile = eon_actual_fuel_kg }
+  set_temp_variable = { eon_actual_reactor_consumption = nuclear_fuel_consumption }
+  clamp_temp_variable = { var = eon_actual_reactor_consumption min = 0 max = var_reactor_material_stockpile }
+  subtract_from_variable = { var_reactor_material_stockpile = eon_actual_reactor_consumption }
+  set_variable = { eon_uranium_last_reactor_use_kg = eon_actual_reactor_consumption }
+ }
+}
+
+eon_uranium_daily = {
+ eon_uranium_initialize = yes
+ every_controlled_state = { eon_uranium_refresh_mine = yes }
+ eon_nuclear_fuel_trade_daily_cleanup = yes
+ # Scripted feed demand has no native equipment recipe. Explicit bounded imports
+ # use native trade, so convoy delivery and embargoes remain native outcomes.
+ if = {
+  limit = {
+   is_ai = yes
+   has_country_flag = enabled_nuclear_reactor_fuel_production
+   check_variable = { enrichment_facilities > 0 }
+   NOT = { has_country_flag = eon_uranium_import_attempted }
+   check_variable = { num_of_civilian_factories_available_for_projects > 0 }
+  }
+  set_temp_variable = { eon_raw_target = nuclear_fuel_consumption }
+  multiply_temp_variable = { eon_raw_target = 9 }
+  set_temp_variable = { eon_raw_buffer_target = eon_raw_target }
+  multiply_temp_variable = { eon_raw_buffer_target = 26 }
+  set_temp_variable = { eon_raw_current_flow = resource@uranium }
+  multiply_temp_variable = { eon_raw_current_flow = 100 }
+  if = {
+   limit = {
+    check_variable = { eon_raw_current_flow < eon_raw_target }
+    check_variable = { eon_natural_uranium_stock_kg < eon_raw_buffer_target }
+   }
+   set_country_flag = { flag = eon_uranium_import_attempted days = 7 value = 1 }
+   random_country = {
+    limit = {
+     exists = yes NOT = { tag = PREV }
+     NOT = { has_war_with = PREV }
+     NOT = { is_embargoing = PREV }
+     NOT = { is_embargoed_by = PREV }
+     check_variable = { var = resource_exported@uranium value = 80 compare = greater_than_or_equals }
+    }
+    # The documented create_import interface accepts whole civilian factories.
+    # Uranium cic=0.0125 yields 80 native 100-kg units per factory; deliveries
+    # remain subject to the actual native market and transport counters.
+    set_temp_variable = { eon_raw_import_amount = eon_raw_target }
+    subtract_from_temp_variable = { eon_raw_import_amount = eon_raw_current_flow }
+    divide_temp_variable = { eon_raw_import_amount = 100 }
+    divide_temp_variable = { eon_raw_import_amount = 80 }
+    set_temp_variable = { eon_raw_import_required_lots = eon_raw_import_amount }
+    round_temp_variable = eon_raw_import_amount
+    if = { limit = { check_variable = { eon_raw_import_amount < eon_raw_import_required_lots } } add_to_temp_variable = { eon_raw_import_amount = 1 } }
+    set_temp_variable = { eon_raw_import_factory_cap = PREV.num_of_civilian_factories_available_for_projects }
+    clamp_temp_variable = { var = eon_raw_import_amount min = 0 max = eon_raw_import_factory_cap }
+    set_temp_variable = { eon_raw_import_exporter_cap = resource_exported@uranium }
+    divide_temp_variable = { eon_raw_import_exporter_cap = 80 }
+    clamp_temp_variable = { var = eon_raw_import_amount min = 0 max = eon_raw_import_exporter_cap }
+    # Floor both caps to whole factories; never reserve a fractional project.
+    set_temp_variable = { eon_raw_import_safe_lots = eon_raw_import_amount }
+    round_temp_variable = eon_raw_import_amount
+    if = { limit = { check_variable = { eon_raw_import_amount > eon_raw_import_safe_lots } } subtract_from_temp_variable = { eon_raw_import_amount = 1 } }
+    if = { limit = { check_variable = { eon_raw_import_amount > 0 } } PREV = { meta_effect = {
+     text = { create_import = { resource = uranium factories = [IMPORT_FACTORIES] exporter = [EXPORTER_TAG] } }
+     IMPORT_FACTORIES = "[?eon_raw_import_amount|0]"
+     EXPORTER_TAG = "[PREV.GetTag]"
+    } } }
+   }
+  }
+ }
+}
+
+# COUNTRY, economic capacity is a transparent game rule, not a geological ban.
+eon_enrichment_read_limit = {
+ set_temp_variable = { eon_enrichment_limit = industrial_complex_total }
+ divide_temp_variable = { eon_enrichment_limit = 20 }
+ round_temp_variable = eon_enrichment_limit
+ add_to_temp_variable = { eon_enrichment_limit = 1 }
+}
+
+eon_enrichment_complete_project = {
+ if = {
+  limit = { has_country_flag = eon_enrichment_project_paid }
+  set_temp_variable = { temp_change = eon_enrichment_project_count }
+  # Funds were reserved on start. Completion never borrows a second payment.
+  add_to_variable = { enrichment_facilities = temp_change }
+  if = { limit = { NOT = { is_in_array = { global.enrichment_countries = THIS.id } } } add_to_array = { global.enrichment_countries = THIS.id } }
+  set_country_flag = enabled_nuclear_reactor_fuel_production
+  clr_country_flag = eon_enrichment_project_paid
+  clear_variable = eon_enrichment_project_count
+  clear_variable = eon_enrichment_project_escrow
+  ingame_update_setup = yes
+ }
+}
+
+eon_enrichment_cancel_project = {
+ # Selectable missions can retain a timer while has_active_mission is false.
+ if = {
+  limit = { OR = {
+   has_country_flag = eon_enrichment_project_paid
+   has_active_mission = energy_building_enrichment_facilities
+   check_variable = { days_mission_timeout@energy_building_enrichment_facilities > 0 }
+  } }
+  remove_mission = energy_building_enrichment_facilities
+ }
+ if = {
+  limit = { has_country_flag = eon_enrichment_project_paid }
+  add_to_variable = { treasury = eon_enrichment_project_escrow }
+ }
+ # Explicit cancellation also closes unpaid legacy projects. Primitive native
+ # removal does not execute complete_effect, so every entry path cleans here.
+ set_country_flag = eon_enrichment_project_era
+ clr_country_flag = eon_enrichment_project_paid
+ clear_variable = eon_enrichment_project_count
+ clear_variable = eon_enrichment_project_escrow
+ clear_variable = enrichment_facility_time
+ clr_country_flag = build_three_enrichment_facility
+ clr_country_flag = single_enrichment_facility
+}
+
+eon_uranium_begin_mine_project = {
+ if = {
+  limit = { eon_uranium_mine_expansion_ready = yes }
+  subtract_from_variable = { treasury = 0.25 }
+  FROM = {
+   set_state_flag = eon_uranium_mine_project
+   set_variable = { eon_uranium_mine_project_owner = PREV.id }
+   set_variable = { eon_uranium_mine_project_escrow = 0.25 }
+  }
+ }
+}
+
+# COUNTRY with FROM = original state. Revalidate ownership/capacity on completion.
+eon_uranium_complete_mine_project = {
+ if = {
+  limit = { FROM = { has_state_flag = eon_uranium_mine_project check_variable = { eon_uranium_mine_project_owner = ROOT.id } } }
+  if = {
+   limit = {
+    FROM = {
+     is_owned_by = ROOT is_controlled_by = ROOT
+     check_variable = { eon_uranium_reserve_kg > 0 }
+     check_variable = { eon_uranium_capacity < eon_uranium_capacity_limit }
+    }
+   }
+   FROM = {
+    set_temp_variable = { eon_proposed_mine_capacity = eon_uranium_capacity }
+    if = { limit = { check_variable = { eon_proposed_mine_capacity = 0 } } set_temp_variable = { eon_proposed_mine_capacity = 1 } }
+    else = { multiply_temp_variable = { eon_proposed_mine_capacity = 1.5 } }
+    clamp_temp_variable = { var = eon_proposed_mine_capacity min = 0 max = eon_uranium_capacity_limit }
+    set_variable = { eon_uranium_capacity = eon_proposed_mine_capacity }
+    eon_uranium_refresh_mine = yes
+   }
+  }
+  else = { add_to_variable = { treasury = FROM.eon_uranium_mine_project_escrow } }
+  FROM = {
+   clr_state_flag = eon_uranium_mine_project
+   clear_variable = eon_uranium_mine_project_owner
+   clear_variable = eon_uranium_mine_project_escrow
+  }
+  ingame_update_setup = yes
+ }
+}
+
+eon_enrichment_begin_project = {
+ if = {
+  limit = { eon_enrichment_project_ready = yes }
+  set_variable = { eon_enrichment_project_count = eon_requested_facilities }
+  set_variable = { eon_enrichment_project_escrow = eon_project_price }
+  subtract_from_variable = { treasury = eon_project_price }
+  set_country_flag = eon_enrichment_project_paid
+  set_country_flag = eon_enrichment_project_era
+  if = {
+   limit = { check_variable = { eon_requested_facilities = 1 } }
+   set_country_flag = single_enrichment_facility
+   clr_country_flag = build_three_enrichment_facility
+   set_variable = { enrichment_facility_time = 730 }
+  }
+  else = {
+   set_country_flag = build_three_enrichment_facility
+   clr_country_flag = single_enrichment_facility
+   set_variable = { enrichment_facility_time = 1095 }
+  }
+  activate_mission = energy_building_enrichment_facilities
+  if = {
+   limit = { check_variable = { eon_requested_facilities = 3 } }
+   add_days_mission_timeout = { mission = energy_building_enrichment_facilities days = 365 }
+  }
+ }
+}
+
+# One-time country focus reward develops an existing district, never creates ore.
+eon_uranium_focus_expand_mine = {
+ eon_uranium_initialize = yes
+ random_owned_controlled_state = {
+  limit = { has_variable = eon_uranium_reserve_kg check_variable = { eon_uranium_reserve_kg > 0 } check_variable = { eon_uranium_capacity < eon_uranium_capacity_limit } }
+  if = { limit = { check_variable = { eon_uranium_capacity = 0 } } set_variable = { eon_uranium_capacity = 1 } }
+  else = { multiply_variable = { eon_uranium_capacity = 1.5 } }
+  clamp_variable = { var = eon_uranium_capacity min = 0 max = eon_uranium_capacity_limit }
+  eon_uranium_refresh_mine = yes
+ }
+}
+
+# Read-only current power refresh after stock transfers; never settles a week.
+eon_uranium_refresh_energy = {
+ eon_uranium_project_fuel = yes
+ calculate_energy_use = yes
+ update_energy_dirty_variable = yes
+}
+
+# Annexed country scope; assets and unfinished project escrow survive once.
+eon_uranium_transfer_annexed_assets = {
+ if = { limit = { var:eon_nuclear_fuel_trade_successor = { exists = yes NOT = { tag = PREV } } }
+  set_temp_variable = { eon_uranium_annex_raw = eon_natural_uranium_stock_kg }
+  set_temp_variable = { eon_uranium_annex_tails = eon_depleted_uranium_stock_kg }
+  set_temp_variable = { eon_uranium_annex_fuel = var_reactor_material_stockpile }
+  set_variable = { eon_natural_uranium_stock_kg = 0 }
+  set_variable = { eon_depleted_uranium_stock_kg = 0 }
+  set_variable = { var_reactor_material_stockpile = 0 }
+  set_temp_variable = { eon_uranium_annex_cash = eon_enrichment_project_escrow }
+  clr_country_flag = eon_enrichment_project_paid
+  clear_variable = eon_enrichment_project_escrow
+  clear_variable = eon_enrichment_project_count
+  every_state = {
+   limit = { has_state_flag = eon_uranium_mine_project check_variable = { eon_uranium_mine_project_owner = PREV.id } }
+   add_to_temp_variable = { eon_uranium_annex_cash = eon_uranium_mine_project_escrow }
+   clr_state_flag = eon_uranium_mine_project
+   clear_variable = eon_uranium_mine_project_owner
+   clear_variable = eon_uranium_mine_project_escrow
+  }
+  var:eon_nuclear_fuel_trade_successor = {
+   add_to_variable = { eon_natural_uranium_stock_kg = eon_uranium_annex_raw }
+   add_to_variable = { eon_depleted_uranium_stock_kg = eon_uranium_annex_tails }
+   add_to_variable = { eon_nuclear_fuel_trade_fuel_refund_due = eon_uranium_annex_fuel }
+   add_to_variable = { eon_nuclear_fuel_trade_cash_refund_due = eon_uranium_annex_cash }
+   eon_nuclear_fuel_trade_release_refunds = yes
+  }
+ }
+}

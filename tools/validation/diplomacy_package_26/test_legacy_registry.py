@@ -26,6 +26,15 @@ OPINION=re.compile(rb'\b(?P<kind>add_opinion_modifier|reverse_add_opinion_modifi
 NO_TIES=re.compile(rb'\bmodifier\s*=\s*no_diplomatic_ties\b')
 checks=Counter()
 
+# Exact independent uranium correction; all other national focus bytes remain
+# guarded against the package's fixed historic baseline.
+GER_MINING_BEFORE = b'\t\t\t\tadd_idea = GER_idea_nuclear_expansion2\n\t\t\t}\n\t\t\trandom_core_state = {\n\t\t\t\tadd_resource = {\n\t\t\t\t\ttype = chromium\n\t\t\t\t\tamount = 4\n\t\t\t\t}\n\t\t\t}\n\t\t\tset_temp_variable = { treasury_change = -5.50 }'
+GER_MINING_AFTER = b'\t\t\t\tadd_idea = GER_idea_nuclear_expansion2\n\t\t\t}\n\t\t\teon_uranium_focus_expand_mine = yes\n\t\t\tset_temp_variable = { treasury_change = -5.50 }'
+
+def restore_german_mining(data):
+ assert data.count(GER_MINING_AFTER)==1,'Changed/missing canonical German geology reward'
+ return data.replace(GER_MINING_AFTER,GER_MINING_BEFORE)
+
 def assert_(ready,group):
  assert ready,group
  checks[group]+=1
@@ -79,7 +88,19 @@ def source_inventory():
    expected=expected.replace(b'has_opinion_modifier = no_diplomatic_ties',
     b'PER = { PREV = { eon_diplomatic_relations_legacy_pair_active = yes } }',1)
   assert_(len(found)==count,'complete reviewed mutation inventory '+path)
-  assert_(current==expected,'only exact reviewed metadata/query byte delta '+path)
+  comparable=restore_german_mining(current) if path=='common/national_focus/Germany_Focus_Tree.txt' else current
+  assert_(comparable==expected,'only exact reviewed metadata/query/geology byte delta '+path)
+  if path=='common/national_focus/Germany_Focus_Tree.txt':
+   for label,mutated in (
+    ('wrong German geology helper',current.replace(b'eon_uranium_focus_expand_mine = yes',b'eon_uranium_focus_expand_mine = no',1)),
+    ('unrelated German focus change',current.replace(b'GER_idea_nuclear_expansion2',b'GER_idea_nuclear_expansion9',1)),
+   ):
+    assert mutated!=current,label
+    try:
+     assert restore_german_mining(mutated)==expected
+    except AssertionError:pass
+    else:raise AssertionError('Accepted negative control: '+label)
+    assert_(True,'reject '+label)
   assert_(current.startswith(b'\xef\xbb\xbf')==original.startswith(b'\xef\xbb\xbf'),'legacy BOM retained '+path)
   assert_(b'\r\n' in current if b'\r\n' in original else b'\r\n' not in current,'legacy newline style retained '+path)
  # In the new generic effects, each opinion mutation is immediately followed by

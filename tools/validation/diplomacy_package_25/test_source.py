@@ -1,9 +1,15 @@
 """Narrow source/API/byte guards for package25; no native compilation claim."""
 from pathlib import Path
-import hashlib,json,re,subprocess,sys
+import hashlib,json,re,subprocess,sys,importlib.util
 from test_delivery import ROOT,ast,one,read,variable_comparison,GUI_FILE
 sys.path.insert(0, str(ROOT/'tools/validation/debt_accounting'))
 from byte_compat import restore_debt_accounting
+
+# Exact canonical uranium changes are restored before historical whole-byte guards.
+_uranium_spec=importlib.util.spec_from_file_location('eon_uranium_byte_compat',
+    ROOT/'tools/validation/uranium_resources/byte_compat.py')
+_uranium_bytes=importlib.util.module_from_spec(_uranium_spec)
+_uranium_spec.loader.exec_module(_uranium_bytes)
 
 BASELINE='c1420b108dee2d129018951c9ba73c1f6bfc4360'
 checks=0
@@ -73,7 +79,8 @@ check(costili==expected_costili,'Only monthly electricity cancellation and two g
 energy=read(CHANGED[0]);oldenergy=baseline(CHANGED[0]).decode('utf-8-sig')
 check(energy.split('\t# Energy Use from Buildings')[1].split('\t# Net Energy Balance Calculations')[0]==oldenergy.split('\t# Energy Use from Buildings')[1].split('\t# Net Energy Balance Calculations')[0],'Domestic demand bytes preserved')
 check(energy.split('\t# Calculate the Non-Electric Fuel Consumption')[1].split('energy_on_daily = {')[0]==oldenergy.split('\t# Calculate the Non-Electric Fuel Consumption')[1].split('energy_on_daily = {')[0],'Non-electric fuel bytes preserved')
-check(energy.split('# Effect: random_renewable_variable_calculation')[1]==oldenergy.split('# Effect: random_renewable_variable_calculation')[1],'Unrelated energy effects preserved')
+energy_without_uranium=_uranium_bytes.restore_uranium_reward(energy.encode('utf-8')).decode('utf-8')
+check(energy_without_uranium.split('# Effect: random_renewable_variable_calculation')[1]==oldenergy.split('# Effect: random_renewable_variable_calculation')[1],'Unrelated energy effects preserved except exact kg reward migration wrapper')
 daily=one(ast(energy),'energy_on_daily');check(daily[0][0]=='eon_energy_delivery_daily_tick','Global snapshot before native storage update')
 helper=read(NEW[0]);check('treasury_change' not in helper and 'add_to_variable = { treasury =' not in helper,'No second cash debit/credit')
 check('energy_contracts_ammount value' not in helper,'Actual arrays do not replace signed contractual arrays')
@@ -124,7 +131,11 @@ for indent in (b'\t'*4,b'\t'*6):
     check(expected_gui.count(before)==1,'One original caller GUIflag guard at exact indentation')
     expected_gui=expected_gui.replace(before,after)
 current_gui=(ROOT/GUI_FILE).read_bytes()
-check(current_gui==expected_gui,'Entire GUI bytes equal original except two exact peer/PREV flag guards')
+check(_uranium_bytes.restore_uranium_gui(current_gui)==expected_gui,
+      'Entire GUI bytes equal original except two exact peer/PREV flag guards and canonical uranium controls')
+uranium_negative_controls=_uranium_bytes.negative_controls(energy.encode('utf-8'),current_gui,
+    energy_without_uranium.encode('utf-8'),expected_gui)
+check(len(uranium_negative_controls)==6,'All uranium-wrapper, migrated-stock and unrelated-byte negative controls rejected')
 check(current_gui.startswith(b'\xef\xbb\xbf')==old_gui.startswith(b'\xef\xbb\xbf') and
       current_gui.count(b'\r\n')==old_gui.count(b'\r\n'),'GUI original BOM/LF preserved')
 check('energy_agreement@energy_selling_selected_TAG' not in read(GUI_FILE),
@@ -158,5 +169,7 @@ for k,o,v in events:
 
 if __name__=='__main__':print(json.dumps({'suite':'package25 source boundaries','checks':checks,
     'source_sha256':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in CHANGED+NEW+[GUI_FILE]},
+    'uranium_byte_guard_negative_controls':uranium_negative_controls,
+    'uranium_byte_compat_sha256':hashlib.sha256(Path(_uranium_spec.origin).read_bytes()).hexdigest(),
     'proof_limitations':['Byte/API/localisation/source guards only','No native compilation, campaign, performance or multiplayer acceptance'],
     'native_campaign_verified':False},indent=2))

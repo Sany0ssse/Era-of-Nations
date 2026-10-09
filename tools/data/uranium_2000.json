@@ -1,0 +1,3921 @@
+{
+  "schema_version": 1,
+  "bookmark": "2000-01-01",
+  "title": "Historically sourced natural uranium seed and finite mining budgets",
+  "status": "Sourced seed data, not in-game validation. Country resources are 2001-reference proxies for2000 bookmark; they are not exact Jan1 2000 mine reserves.",
+  "units": {
+    "stock_and_reserve": "metric tonnes of elemental uranium (tU), not ore or U3O8",
+    "annual_production": "tU/year",
+    "native_trade_resource_unit": "100 kg U/week nominal integer flow; capacity and source production remain tU",
+    "weeks_per_model_year": 52
+  },
+  "model_choices": {
+    "target_expansion_lifetime_years": 20,
+    "default_in_situ_game_recovery_factor": 0.7,
+    "default_recoverable_game_recovery_factor": 1.0,
+    "max_weekly_formula": "max(initial_weekly_tu, reserve_tu / (20 *52)); rounded downward to6decimals for reserve-based component",
+    "existing_capacity_floor": "Existing 1999 mining flow may exceed the20year expansion budget and can exhaust earlier. It is not reduced solely to fit20years.",
+    "expansion_counter": "Finite geometric steps: new mine base min(1,max_weekly_tu), then multiply1.5 per expansion until the state max. Existing mine starts at initial_weekly_tu. Never create a second country reserve pool at each site.",
+    "geometric_expansion_factor": 1.5,
+    "fractional_flow": "Native add_resource is integer. Convert tU/week capacity to 100kg/week units, floor the promised effective-safe base flow, and preserve the remaining unextracted material. Deposits below the industrial 100kg/week quantum cannot start commercial mining. This quantum is an explicit engine/game approximation.",
+    "depletion": "Every week remove actual extracted tonnes from remaining reserve; clamp extraction to remaining reserve; imported material never increases ore still underground.",
+    "enrichment": "No geological cap on enrichment facilities. They must consume imported or domestically mined natural feed; geological restrictions apply to mining only.",
+    "national_to_state_allocation": "Shares without deposit-level measured reserves are explicit game allocations of a single finite country total among confirmed districts, not geological measurements.",
+    "unclassified_resource_policy": "China73000KCR and India54470RAR, both without cost classification, are separate historical fields and optional conservative game proxy budgets. Do not present them as RAR<130.",
+    "unknown_policy": "null means not reported/unavailable, never proven zero or no deposits. No arbitrary finite or infinite reserve is generated for unknown budgets.",
+    "greenland_policy": "Known DEN-reported deposit remains geographically in GRL state1; seed deferred because state1 is impassable."
+  },
+  "historical_trade_price_reference": {
+    "source": "esa_2000",
+    "printed_page": 57,
+    "pdf_page": 61,
+    "year": 1999,
+    "multiannual_eur_per_kgU": 34.75,
+    "spot_eur_per_kgU": 24.75,
+    "multiannual_usd_per_lbU3O8": 14.25,
+    "spot_usd_per_lbU3O8": 10.15,
+    "not_a_universal_market_price": true,
+    "note": "EU utility supply weighted prices. Natural uranium excludes conversion, enrichment services and fuel fabrication. EUR figures are1999EUR and cannot be equated toUSD."
+  },
+  "sources": {
+    "red_book_2001": {
+      "title": "Uranium 2001: Resources, Production and Demand",
+      "publisher": "OECD Nuclear Energy Agency and IAEA",
+      "publication_year": 2002,
+      "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2002/08/uranium-2001_g1gh2c35/uranium-2001-en.pdf",
+      "resource_reference_date": "2001-01-01",
+      "production_reference_year": 1999,
+      "rar_table": {
+        "number": 2,
+        "pdf_page": 22,
+        "printed_page": 22,
+        "original_units": "1000 tU"
+      },
+      "production_table": {
+        "number": 9,
+        "pdf_page": 36,
+        "printed_page": 36,
+        "original_units": "tU/year"
+      },
+      "page_convention": "pdf_page is 1-based PDF leaf; printed_page is the number printed on the report page. From country chapters PDF leaf N generally prints N+1."
+    },
+    "iaea_world_geology": {
+      "title": "World Uranium Geology, Exploration, Resources and Production",
+      "publisher": "IAEA",
+      "publication_year": 2020,
+      "url": "https://www-pub.iaea.org/MTCD/publications/PDF/WOR_URA_web.pdf",
+      "use": "Historical deposit discovery and geographic localization only. Later resource/production estimates are not substituted for the 2001 Red Book table.",
+      "page_convention": "pdf_page is 1-based PDF leaf. Main text printed_page is pdf_page - 13."
+    },
+    "esa_2000": {
+      "title": "Euratom Supply Agency Annual Report 2000",
+      "publisher": "Euratom Supply Agency",
+      "publication_year": 2001,
+      "url": "https://euratom-supply.ec.europa.eu/document/download/a61884ac-9f26-477e-bd03-026afabc00b4_en?filename=ar2000.pdf",
+      "use": "Historical natural uranium supply prices; Annex 2, printed page 57 (PDF leaf 61)."
+    }
+  },
+  "countries": [
+    {
+      "tag": "ALG",
+      "name": "Algeria",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 26000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Tin-Seririne basin; Timgaouine, Abankor, El-Bema and Ait-Oklan, southern/southwestern Hoggar",
+          "state_id": 381,
+          "state_name": "Tamanrasset",
+          "initial_owner_tag": "ALG",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 80,
+            "printed_page": 81
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 381,
+          "state_name": "Tamanrasset",
+          "initial_owner_tag": "ALG",
+          "reserve_tu": 18200.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 17.5,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 80,
+            "printed_page": 81
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 18200.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "ARG",
+      "name": "Argentina",
+      "observed_1999_production_tu": 4,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 7080,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Sierra Pintada / San Rafael and Huemul, Mendoza",
+          "state_id": 443,
+          "state_name": "Cuyo",
+          "initial_owner_tag": "ARG",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 81,
+            "printed_page": 82
+          },
+          "historical_status": "standby_by_1998",
+          "seed_eligible": true
+        },
+        {
+          "district": "Tonco / Don Otto, Salta; Las Termas, Catamarca",
+          "state_id": 446,
+          "state_name": "Noroeste",
+          "initial_owner_tag": "ARG",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 80,
+            "printed_page": 81
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Cerro Solo and Los Adobes, Chubut",
+          "state_id": 454,
+          "state_name": "Patagonia",
+          "initial_owner_tag": "ARG",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 81,
+            "printed_page": 82
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 443,
+          "state_name": "Cuyo",
+          "initial_owner_tag": "ARG",
+          "reserve_tu": 2360.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 2.26923,
+          "resource_share": 0.333333333,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 81,
+            "printed_page": 82
+          }
+        },
+        {
+          "state_id": 446,
+          "state_name": "Noroeste",
+          "initial_owner_tag": "ARG",
+          "reserve_tu": 2360.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 2.26923,
+          "resource_share": 0.333333333,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 80,
+            "printed_page": 81
+          }
+        },
+        {
+          "state_id": 454,
+          "state_name": "Patagonia",
+          "initial_owner_tag": "ARG",
+          "reserve_tu": 2360.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 2.26923,
+          "resource_share": 0.333333333,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 81,
+            "printed_page": 82
+          }
+        }
+      ],
+      "notes": [
+        "Reported output is not fully seeded as renewable mine flow: restoration/standby or missing finite budget is explicitly retained in observed_1999_production_tu."
+      ],
+      "game_resource_budget_tu": 7080.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "AST",
+      "name": "Australia",
+      "observed_1999_production_tu": 5984,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 697000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Olympic Dam; Frome Embayment / Beverley and Honeymoon, South Australia",
+          "state_id": 745,
+          "state_name": "South Australia",
+          "initial_owner_tag": "AST",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 91,
+            "printed_page": 92
+          },
+          "historical_status": "Olympic_Dam_operating_1999_Beverley_started_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Ranger and Jabiluka / Arnhem Land, Northern Territory",
+          "state_id": 747,
+          "state_name": "Northern Territory",
+          "initial_owner_tag": "AST",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 90,
+            "printed_page": 91
+          },
+          "historical_status": "Ranger_operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Kintyre / Paterson Province, Western Australia",
+          "state_id": 746,
+          "state_name": "Western Australia",
+          "initial_owner_tag": "AST",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 90,
+            "printed_page": 91
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Westmoreland and Valhalla / Mount Isa, Queensland",
+          "state_id": 741,
+          "state_name": "Queensland",
+          "initial_owner_tag": "AST",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 91,
+            "printed_page": 92
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 745,
+          "state_name": "South Australia",
+          "initial_owner_tag": "AST",
+          "reserve_tu": 487900.0,
+          "initial_weekly_tu": 52.173077,
+          "max_weekly_tu": 469.134615,
+          "resource_share": 0.7,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_Olympic_Dam_reported2713_Ranger_remainder3271",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 91,
+            "printed_page": 92
+          },
+          "production_source": {
+            "source": "red_book_2001",
+            "pdf_page": 94,
+            "printed_page": 95
+          }
+        },
+        {
+          "state_id": 747,
+          "state_name": "Northern Territory",
+          "initial_owner_tag": "AST",
+          "reserve_tu": 139400.0,
+          "initial_weekly_tu": 62.903846,
+          "max_weekly_tu": 134.038461,
+          "resource_share": 0.2,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_Olympic_Dam_reported2713_Ranger_remainder3271",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 90,
+            "printed_page": 91
+          },
+          "production_source": {
+            "source": "red_book_2001",
+            "pdf_page": 94,
+            "printed_page": 95
+          }
+        },
+        {
+          "state_id": 746,
+          "state_name": "Western Australia",
+          "initial_owner_tag": "AST",
+          "reserve_tu": 34850.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 33.509615,
+          "resource_share": 0.05,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 90,
+            "printed_page": 91
+          }
+        },
+        {
+          "state_id": 741,
+          "state_name": "Queensland",
+          "initial_owner_tag": "AST",
+          "reserve_tu": 34850.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 33.509615,
+          "resource_share": 0.05,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 91,
+            "printed_page": 92
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 697000.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 5983.999996
+    },
+    {
+      "tag": "BEL",
+      "name": "Belgium",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": null,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "unknown",
+      "resource_source": null,
+      "resource_reporting_flags": [],
+      "confirmed_sites": [],
+      "game_seed_allocations": [],
+      "notes": [
+        "Historic output came from imported-phosphate processing, not a domestic uranium ore mine; no domestic RAR reported."
+      ],
+      "game_resource_budget_tu": null,
+      "game_budget_basis": "unavailable",
+      "game_recovery_factor": null,
+      "game_budget_unallocated_tu": null,
+      "game_initial_annual_production_tu": 0
+    },
+    {
+      "tag": "BRA",
+      "name": "Brazil",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 162000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Lagoa Real / Caetite, Bahia",
+          "state_id": 887,
+          "state_name": "Bahia",
+          "initial_owner_tag": "BRA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 113,
+            "printed_page": 114
+          },
+          "historical_status": "development_1999_production_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Pocos de Caldas, Minas Gerais",
+          "state_id": 884,
+          "state_name": "Minas Gerais",
+          "initial_owner_tag": "BRA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 112,
+            "printed_page": 113
+          },
+          "historical_status": "closed_1997",
+          "seed_eligible": true
+        },
+        {
+          "district": "Itataia, Ceara",
+          "state_id": 889,
+          "state_name": "Ceara",
+          "initial_owner_tag": "BRA",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 837,
+            "printed_page": 824
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 887,
+          "state_name": "Bahia",
+          "initial_owner_tag": "BRA",
+          "reserve_tu": 45360.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 43.615384,
+          "resource_share": 0.4,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 113,
+            "printed_page": 114
+          }
+        },
+        {
+          "state_id": 884,
+          "state_name": "Minas Gerais",
+          "initial_owner_tag": "BRA",
+          "reserve_tu": 11340.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 10.903846,
+          "resource_share": 0.1,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 112,
+            "printed_page": 113
+          }
+        },
+        {
+          "state_id": 889,
+          "state_name": "Ceara",
+          "initial_owner_tag": "BRA",
+          "reserve_tu": 56700.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 54.51923,
+          "resource_share": 0.5,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 837,
+            "printed_page": 824
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 113400.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "BUL",
+      "name": "Bulgaria",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 7830,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "previous_red_book_depleted_for_production"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Buhovo / Sofia area and Eleshnitsa / southwestern Bulgaria",
+          "state_id": 153,
+          "state_name": "Western Bulgaria",
+          "initial_owner_tag": "BUL",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 477,
+            "printed_page": 464
+          },
+          "historical_status": "historical_closed_mines",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 153,
+          "state_name": "Western Bulgaria",
+          "initial_owner_tag": "BUL",
+          "reserve_tu": 5481.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 5.270192,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 477,
+            "printed_page": 464
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 5481.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "CAN",
+      "name": "Canada",
+      "observed_1999_production_tu": 8214,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 314560,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Athabasca Basin, Saskatchewan: Rabbit Lake, Key Lake, McClean Lake and McArthur River",
+          "state_id": 756,
+          "state_name": "Saskatchewan",
+          "initial_owner_tag": "CAN",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 122,
+            "printed_page": 123
+          },
+          "historical_status": "operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Thelon Basin, Nunavut",
+          "state_id": 758,
+          "state_name": "Nunavut",
+          "initial_owner_tag": "CAN",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 122,
+            "printed_page": 123
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 756,
+          "state_name": "Saskatchewan",
+          "initial_owner_tag": "CAN",
+          "reserve_tu": 283104.0,
+          "initial_weekly_tu": 157.961538,
+          "max_weekly_tu": 272.215384,
+          "resource_share": 0.9,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 122,
+            "printed_page": 123
+          }
+        },
+        {
+          "state_id": 758,
+          "state_name": "Nunavut",
+          "initial_owner_tag": "CAN",
+          "reserve_tu": 31456.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 30.246153,
+          "resource_share": 0.1,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 122,
+            "printed_page": 123
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 314560.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 8213.999976
+    },
+    {
+      "tag": "CAR",
+      "name": "Central African Republic",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 16000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "from_previous_red_book"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Bakouma, east-central Central African Republic",
+          "state_id": 325,
+          "state_name": "Bangassou",
+          "initial_owner_tag": "CAR",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 194,
+            "printed_page": 181
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 325,
+          "state_name": "Bangassou",
+          "initial_owner_tag": "CAR",
+          "reserve_tu": 16000.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 15.384615,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 194,
+            "printed_page": 181
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 16000.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "CHI",
+      "name": "China",
+      "observed_1999_production_tu": 700,
+      "production_reporting": "secretariat_estimate",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": null,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "unclassified",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 21,
+        "printed_page": 21
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Guidong granite massif, Guangdong",
+          "state_id": 534,
+          "state_name": "Guangdong",
+          "initial_owner_tag": "CHI",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          },
+          "historical_status": "known_mining_district",
+          "seed_eligible": true
+        },
+        {
+          "district": "Taoshan / Xiangshan / Xunwu, Jiangxi",
+          "state_id": 562,
+          "state_name": "Jiangxi",
+          "initial_owner_tag": "CHI",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          },
+          "historical_status": "known_mining_district",
+          "seed_eligible": true
+        },
+        {
+          "district": "Xiaoqiuyuan, Zhejiang",
+          "state_id": 538,
+          "state_name": "Zhejiang",
+          "initial_owner_tag": "CHI",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Yili Basin and Baiyanghe, Xinjiang",
+          "state_id": 592,
+          "state_name": "Xinjiang",
+          "initial_owner_tag": "CHI",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          },
+          "historical_status": "known_mining_district",
+          "seed_eligible": true
+        },
+        {
+          "district": "Erlian Basin, Inner Mongolia",
+          "state_id": 556,
+          "state_name": "Nei Mongol",
+          "initial_owner_tag": "CHI",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 534,
+          "state_name": "Guangdong",
+          "initial_owner_tag": "CHI",
+          "reserve_tu": 10220.0,
+          "initial_weekly_tu": 3.365385,
+          "max_weekly_tu": 9.826923,
+          "resource_share": 0.2,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          }
+        },
+        {
+          "state_id": 562,
+          "state_name": "Jiangxi",
+          "initial_owner_tag": "CHI",
+          "reserve_tu": 17885.0,
+          "initial_weekly_tu": 6.730769,
+          "max_weekly_tu": 17.197115,
+          "resource_share": 0.35,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          }
+        },
+        {
+          "state_id": 538,
+          "state_name": "Zhejiang",
+          "initial_owner_tag": "CHI",
+          "reserve_tu": 5110.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 4.913461,
+          "resource_share": 0.1,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          }
+        },
+        {
+          "state_id": 592,
+          "state_name": "Xinjiang",
+          "initial_owner_tag": "CHI",
+          "reserve_tu": 12775.0,
+          "initial_weekly_tu": 3.365385,
+          "max_weekly_tu": 12.283653,
+          "resource_share": 0.25,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          }
+        },
+        {
+          "state_id": 556,
+          "state_name": "Nei Mongol",
+          "initial_owner_tag": "CHI",
+          "reserve_tu": 5110.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 4.913461,
+          "resource_share": 0.1,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 138,
+            "printed_page": 139
+          }
+        }
+      ],
+      "notes": [
+        "73000 tU known conventional resources are reported without RAR/EAR-I or cost classification. They cannot be labelled RAR < USD130/kgU."
+      ],
+      "reported_kcr_cost_unassigned_tu": 73000,
+      "game_resource_budget_tu": 51100.0,
+      "game_budget_basis": "KCR_unclassified_game_proxy",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 700.000028
+    },
+    {
+      "tag": "CHL",
+      "name": "Chile",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": null,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "unknown",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [],
+      "game_seed_allocations": [],
+      "notes": [
+        "Table2 entries NA. This means unavailable reporting, not zero uranium or absence of deposits."
+      ],
+      "game_resource_budget_tu": null,
+      "game_budget_basis": "unavailable",
+      "game_recovery_factor": null,
+      "game_budget_unallocated_tu": null,
+      "game_initial_annual_production_tu": 0
+    },
+    {
+      "tag": "CZE",
+      "name": "Czech Republic",
+      "observed_1999_production_tu": 612,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 2370,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Rozna and Brzkov, western Moravia",
+          "state_id": 118,
+          "state_name": "Morovia",
+          "initial_owner_tag": "CZE",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 144,
+            "printed_page": 145
+          },
+          "historical_status": "Rozna_operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Straz / Hamr, Northern Bohemian Cretaceous Basin",
+          "state_id": 117,
+          "state_name": "Bohemia",
+          "initial_owner_tag": "CZE",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 146,
+            "printed_page": 147
+          },
+          "historical_status": "Straz_restoration_1999",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 118,
+          "state_name": "Morovia",
+          "initial_owner_tag": "CZE",
+          "reserve_tu": 1185.0,
+          "initial_weekly_tu": 5.961538,
+          "max_weekly_tu": 5.961538,
+          "resource_share": 0.5,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_method_output_processplant310_ISL270_restoration32excluded",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 144,
+            "printed_page": 145
+          },
+          "production_source": {
+            "source": "red_book_2001",
+            "pdf_page": 146,
+            "printed_page": 147
+          }
+        },
+        {
+          "state_id": 117,
+          "state_name": "Bohemia",
+          "initial_owner_tag": "CZE",
+          "reserve_tu": 1185.0,
+          "initial_weekly_tu": 5.192308,
+          "max_weekly_tu": 5.192308,
+          "resource_share": 0.5,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_method_output_processplant310_ISL270_restoration32excluded",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 146,
+            "printed_page": 147
+          },
+          "production_source": {
+            "source": "red_book_2001",
+            "pdf_page": 146,
+            "printed_page": 147
+          }
+        }
+      ],
+      "notes": [
+        "Reported output is not fully seeded as renewable mine flow: restoration/standby or missing finite budget is explicitly retained in observed_1999_production_tu."
+      ],
+      "game_resource_budget_tu": 2370.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 579.999992
+    },
+    {
+      "tag": "DEN",
+      "name": "Denmark (reported resources in Greenland)",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 27000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001",
+        "from_previous_red_book"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Kvanefjeld / Ilimaussaq, southern Greenland",
+          "state_id": 1,
+          "state_name": "Greenland",
+          "initial_owner_tag": "GRL",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 383,
+            "printed_page": 370
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": false,
+          "note": "The only current Greenland state is impassable and owned by GRL. Do not place this resource in Denmark proper or seed a buildable mine in state 1."
+        }
+      ],
+      "game_seed_allocations": [],
+      "notes": [
+        "known deposit mapping is impassable; gameplay seed deferred until a geographically correct habitable Greenland state exists"
+      ],
+      "game_resource_budget_tu": 27000.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 27000.0,
+      "game_initial_annual_production_tu": 0
+    },
+    {
+      "tag": "DRC",
+      "name": "Democratic Republic of the Congo",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 1800,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001",
+        "from_previous_red_book"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Shinkolobwe / Copper-Cobalt Belt, Katanga (Shaba)",
+          "state_id": 306,
+          "state_name": "Katanga",
+          "initial_owner_tag": "DRC",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 209,
+            "printed_page": 196
+          },
+          "historical_status": "historical_closed_mines",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 306,
+          "state_name": "Katanga",
+          "initial_owner_tag": "DRC",
+          "reserve_tu": 1260.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 1.211538,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 209,
+            "printed_page": 196
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 1260.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "FIN",
+      "name": "Finland",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 1500,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Palmottu / Nummi-Pusula, southern Finland",
+          "state_id": 102,
+          "state_name": "Uusimaa",
+          "initial_owner_tag": "FIN",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 154,
+            "printed_page": 155
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true,
+          "geology_supporting_sources": [
+            {
+              "source": "iaea_world_geology",
+              "pdf_page": 388,
+              "printed_page": 375
+            }
+          ]
+        },
+        {
+          "district": "Pahtavuoma / Kittila, Lapland",
+          "state_id": 100,
+          "state_name": "Lappi",
+          "initial_owner_tag": "FIN",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 154,
+            "printed_page": 155
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true,
+          "geology_supporting_sources": [
+            {
+              "source": "iaea_world_geology",
+              "pdf_page": 388,
+              "printed_page": 375
+            }
+          ]
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 102,
+          "state_name": "Uusimaa",
+          "initial_owner_tag": "FIN",
+          "reserve_tu": 750.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 0.721153,
+          "resource_share": 0.5,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 154,
+            "printed_page": 155
+          }
+        },
+        {
+          "state_id": 100,
+          "state_name": "Lappi",
+          "initial_owner_tag": "FIN",
+          "reserve_tu": 750.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 0.721153,
+          "resource_share": 0.5,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 154,
+            "printed_page": 155
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 1500.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "FRA",
+      "name": "France",
+      "observed_1999_production_tu": 416,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 190,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Le Bernardan / Jouac, Limousin",
+          "state_id": 958,
+          "state_name": "Poitou Limousin",
+          "initial_owner_tag": "FRA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 158,
+            "printed_page": 159
+          },
+          "historical_status": "last_operating_mine_1999",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 958,
+          "state_name": "Poitou Limousin",
+          "initial_owner_tag": "FRA",
+          "reserve_tu": 190.0,
+          "initial_weekly_tu": 8.0,
+          "max_weekly_tu": 8.0,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 158,
+            "printed_page": 159
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 190.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 416.0
+    },
+    {
+      "tag": "GAB",
+      "name": "Gabon",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 4830,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "previous_red_book_depleted_for_production"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Mounana / Oklo, Franceville basin, southeastern Gabon",
+          "state_id": 1004,
+          "state_name": "Gabon Highlands",
+          "initial_owner_tag": "GAB",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 167,
+            "printed_page": 168
+          },
+          "historical_status": "production_ended_1999",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 1004,
+          "state_name": "Gabon Highlands",
+          "initial_owner_tag": "GAB",
+          "reserve_tu": 4830.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 4.64423,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 167,
+            "printed_page": 168
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 4830.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "GER",
+      "name": "Germany",
+      "observed_1999_production_tu": 29,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 3000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Erzgebirge / Konigstein, Saxony",
+          "state_id": 44,
+          "state_name": "Sachsen",
+          "initial_owner_tag": "GER",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 169,
+            "printed_page": 170
+          },
+          "historical_status": "restoration_only_by_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Ronneburg / Eastern Thuringia",
+          "state_id": 545,
+          "state_name": "Thuringen",
+          "initial_owner_tag": "GER",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 170,
+            "printed_page": 171
+          },
+          "historical_status": "closed_mines",
+          "seed_eligible": true
+        },
+        {
+          "district": "Menzenschwand and Mullenbach, Black Forest",
+          "state_id": 42,
+          "state_name": "Baden-Wurttemberg",
+          "initial_owner_tag": "GER",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 170,
+            "printed_page": 171
+          },
+          "historical_status": "closed_mines",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 44,
+          "state_name": "Sachsen",
+          "initial_owner_tag": "GER",
+          "reserve_tu": 1000.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 0.961538,
+          "resource_share": 0.333333333,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 169,
+            "printed_page": 170
+          }
+        },
+        {
+          "state_id": 545,
+          "state_name": "Thuringen",
+          "initial_owner_tag": "GER",
+          "reserve_tu": 1000.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 0.961538,
+          "resource_share": 0.333333333,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 170,
+            "printed_page": 171
+          }
+        },
+        {
+          "state_id": 42,
+          "state_name": "Baden-Wurttemberg",
+          "initial_owner_tag": "GER",
+          "reserve_tu": 1000.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 0.961538,
+          "resource_share": 0.333333333,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 170,
+            "printed_page": 171
+          }
+        }
+      ],
+      "notes": [
+        "Reported output is not fully seeded as renewable mine flow: restoration/standby or missing finite budget is explicitly retained in observed_1999_production_tu.",
+        "1999 recovery from clean-up/restoration is not an operating fresh-ore mine and is not extrapolated indefinitely."
+      ],
+      "game_resource_budget_tu": 3000.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "GRE",
+      "name": "Greece",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 1000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "from_previous_red_book"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Paranesti / Drama and Serres, northern Greece",
+          "state_id": 140,
+          "state_name": "Southern Macedonia",
+          "initial_owner_tag": "GRE",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 501,
+            "printed_page": 488
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 140,
+          "state_name": "Southern Macedonia",
+          "initial_owner_tag": "GRE",
+          "reserve_tu": 1000.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 0.961538,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 501,
+            "printed_page": 488
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 1000.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "HUN",
+      "name": "Hungary",
+      "observed_1999_production_tu": 10,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": null,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "unknown",
+      "resource_source": null,
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Mecsek / Pecs, Transdanubia",
+          "state_id": 123,
+          "state_name": "Transdanubia",
+          "initial_owner_tag": "HUN",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 175,
+            "printed_page": 176
+          },
+          "historical_status": "mine_closed_1997_restoration_only",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [],
+      "notes": [
+        "No RAR number in Table2. Country chapter EAR-II 18399 tU is separately retained; no new RAR mine budget is invented.",
+        "Reported output is not fully seeded as renewable mine flow: restoration/standby or missing finite budget is explicitly retained in observed_1999_production_tu.",
+        "1999 recovery from clean-up/restoration is not an operating fresh-ore mine and is not extrapolated indefinitely."
+      ],
+      "additional_resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 175,
+        "printed_page": 176
+      },
+      "game_resource_budget_tu": null,
+      "game_budget_basis": "unavailable",
+      "game_recovery_factor": null,
+      "game_budget_unallocated_tu": null,
+      "game_initial_annual_production_tu": 0,
+      "reported_ear_ii_lt130_tu": 18399
+    },
+    {
+      "tag": "IND",
+      "name": "Indonesia",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 6800,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Kalan / Rirang / Mentawa, West Kalimantan",
+          "state_id": 640,
+          "state_name": "Kalimantan",
+          "initial_owner_tag": "IND",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 189,
+            "printed_page": 190
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 640,
+          "state_name": "Kalimantan",
+          "initial_owner_tag": "IND",
+          "reserve_tu": 4760.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 4.576923,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 189,
+            "printed_page": 190
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 4760.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "ITA",
+      "name": "Italy",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 4800,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001",
+        "from_previous_red_book"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Novazza and Valvedello, Lombardy / Bergamasc Alps",
+          "state_id": 80,
+          "state_name": "Lombardia",
+          "initial_owner_tag": "ITA",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 423,
+            "printed_page": 410
+          },
+          "historical_status": "dormant_unoperated_projects",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 80,
+          "state_name": "Lombardia",
+          "initial_owner_tag": "ITA",
+          "reserve_tu": 4800.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 4.615384,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 423,
+            "printed_page": 410
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 4800.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "JAP",
+      "name": "Japan",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 6600,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Ningyo-toge, Okayama / Tottori",
+          "state_id": 611,
+          "state_name": "Chugoku",
+          "initial_owner_tag": "JAP",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 195,
+            "printed_page": 196
+          },
+          "historical_status": "pilot_production_ended_1982",
+          "seed_eligible": true
+        },
+        {
+          "district": "Tono ore field, Gifu / Chubu",
+          "state_id": 613,
+          "state_name": "Chubu",
+          "initial_owner_tag": "JAP",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 646,
+            "printed_page": 633
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true,
+          "note": "IAEA2020 localizes the historical1962 discovery at Tono; the national2001 RAR figure remains from Red Book2001. State613 Chubu contains Gifu."
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 611,
+          "state_name": "Chugoku",
+          "initial_owner_tag": "JAP",
+          "reserve_tu": 3300.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 3.173076,
+          "resource_share": 0.5,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 195,
+            "printed_page": 196
+          }
+        },
+        {
+          "state_id": 613,
+          "state_name": "Chubu",
+          "initial_owner_tag": "JAP",
+          "reserve_tu": 3300.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 3.173076,
+          "resource_share": 0.5,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 646,
+            "printed_page": 633
+          }
+        }
+      ],
+      "notes": [
+        "Ningyo-toge and Tono are known districts; Japan chapter reports only a national RAR sum. The district allocation is a game abstraction."
+      ],
+      "game_resource_budget_tu": 6600.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "KAZ",
+      "name": "Kazakhstan",
+      "observed_1999_production_tu": 1560,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 594830,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Chu-Sarysu northern basin and Syr-Darya: Uvanas, Mynkuduk, Inkay, Karamurun",
+          "state_id": 717,
+          "state_name": "Kazakh Desert",
+          "initial_owner_tag": "KAZ",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 199,
+            "printed_page": 200
+          },
+          "historical_status": "ISL_operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Chu-Sarysu southern basin / Kandjugan and Moynkum near Shu",
+          "state_id": 719,
+          "state_name": "Almaty",
+          "initial_owner_tag": "KAZ",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 199,
+            "printed_page": 200
+          },
+          "historical_status": "ISL_operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Kokchetav / Stepnogorsk district, northern Kazakhstan",
+          "state_id": 714,
+          "state_name": "North Kazakhstan",
+          "initial_owner_tag": "KAZ",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 203,
+            "printed_page": 204
+          },
+          "historical_status": "partly_mothballed_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Pribalkash district, central Kazakhstan",
+          "state_id": 716,
+          "state_name": "Kazakh Central Highlands",
+          "initial_owner_tag": "KAZ",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 199,
+            "printed_page": 200
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Pricaspian district / Melovoye, Mangyshlak",
+          "state_id": 718,
+          "state_name": "Caspian Basin",
+          "initial_owner_tag": "KAZ",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 205,
+            "printed_page": 206
+          },
+          "historical_status": "mothballed",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 717,
+          "state_name": "Kazakh Desert",
+          "initial_owner_tag": "KAZ",
+          "reserve_tu": 229009.55,
+          "initial_weekly_tu": 21.076923,
+          "max_weekly_tu": 220.20149,
+          "resource_share": 0.55,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 199,
+            "printed_page": 200
+          }
+        },
+        {
+          "state_id": 719,
+          "state_name": "Almaty",
+          "initial_owner_tag": "KAZ",
+          "reserve_tu": 104095.25,
+          "initial_weekly_tu": 5.269231,
+          "max_weekly_tu": 100.091586,
+          "resource_share": 0.25,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 199,
+            "printed_page": 200
+          }
+        },
+        {
+          "state_id": 714,
+          "state_name": "North Kazakhstan",
+          "initial_owner_tag": "KAZ",
+          "reserve_tu": 41638.1,
+          "initial_weekly_tu": 3.653846,
+          "max_weekly_tu": 40.036634,
+          "resource_share": 0.1,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 203,
+            "printed_page": 204
+          }
+        },
+        {
+          "state_id": 716,
+          "state_name": "Kazakh Central Highlands",
+          "initial_owner_tag": "KAZ",
+          "reserve_tu": 20819.05,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 20.018317,
+          "resource_share": 0.05,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 199,
+            "printed_page": 200
+          }
+        },
+        {
+          "state_id": 718,
+          "state_name": "Caspian Basin",
+          "initial_owner_tag": "KAZ",
+          "reserve_tu": 20819.05,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 20.018317,
+          "resource_share": 0.05,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 205,
+            "printed_page": 206
+          }
+        }
+      ],
+      "notes": [
+        "Underground190 tU and ISL1370 tU are reported for1999 (PDF203); splitting ISL80:20 between northern/southern basins is a game allocation."
+      ],
+      "game_resource_budget_tu": 416381.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 1560.0
+    },
+    {
+      "tag": "MEX",
+      "name": "Mexico",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 1700,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001",
+        "from_previous_red_book"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Sierra Pena Blanca and Sierra de Gomez, Chihuahua",
+          "state_id": 830,
+          "state_name": "Chihuahua",
+          "initial_owner_tag": "MEX",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 913,
+            "printed_page": 900
+          },
+          "historical_status": "historical_explored_deposits",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 830,
+          "state_name": "Chihuahua",
+          "initial_owner_tag": "MEX",
+          "reserve_tu": 1190.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 1.14423,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 913,
+            "printed_page": 900
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 1190.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "MLW",
+      "name": "Malawi",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 11700,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "previous_red_book_depleted_for_production"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Kayelekera, northern Malawi",
+          "state_id": 259,
+          "state_name": "Northern Malawi",
+          "initial_owner_tag": "MLW",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 266,
+            "printed_page": 253
+          },
+          "historical_status": "known_since_1980s_not_producing_1999",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 259,
+          "state_name": "Northern Malawi",
+          "initial_owner_tag": "MLW",
+          "reserve_tu": 8190.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 7.875,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 266,
+            "printed_page": 253
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 8190.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "MON",
+      "name": "Mongolia",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 61600,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "previous_red_book_depleted_for_production"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Dornod / Mardai, Gurvanbulag, Mardaingol and Nemer, northeastern Mongolia",
+          "state_id": 596,
+          "state_name": "Eastern Mongolia",
+          "initial_owner_tag": "MON",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 663,
+            "printed_page": 650
+          },
+          "historical_status": "mining_suspended_1995",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 596,
+          "state_name": "Eastern Mongolia",
+          "initial_owner_tag": "MON",
+          "reserve_tu": 43120.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 41.461538,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 663,
+            "printed_page": 650
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 43120.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "NAM",
+      "name": "Namibia",
+      "observed_1999_production_tu": 2690,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 175100,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "table2_insitu_flag_conflicts_with_country_chapter_recoverable_RAR"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Rossing, Trekkopje and Langer Heinrich / Erongo-Damara belt",
+          "state_id": 283,
+          "state_name": "Namibian Plateau",
+          "initial_owner_tag": "NAM",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 215,
+            "printed_page": 216
+          },
+          "historical_status": "Rossing_operating_1999",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 283,
+          "state_name": "Namibian Plateau",
+          "initial_owner_tag": "NAM",
+          "reserve_tu": 175100.0,
+          "initial_weekly_tu": 51.730769,
+          "max_weekly_tu": 168.365384,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 215,
+            "printed_page": 216
+          }
+        }
+      ],
+      "notes": [
+        "Use the country chapter explicit recoverable RAR basis; Table2(a) must not cause a second recovery deduction."
+      ],
+      "resource_basis_source": {
+        "source": "red_book_2001",
+        "pdf_page": 215,
+        "printed_page": 216
+      },
+      "game_resource_budget_tu": 175100.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 2689.999988
+    },
+    {
+      "tag": "NGR",
+      "name": "Niger",
+      "observed_1999_production_tu": 2907,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 29600,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Arlit / Akouta, Agadez region: Arlette, Taza, Tamou, Akola",
+          "state_id": 329,
+          "state_name": "Zinder",
+          "initial_owner_tag": "NGR",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 223,
+            "printed_page": 224
+          },
+          "historical_status": "operating_1999",
+          "seed_eligible": true,
+          "note": "Current coarse mod state is named Zinder but contains Arlit VP14559 and Agadez VP11324; do not use Tahoua state330."
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 329,
+          "state_name": "Zinder",
+          "initial_owner_tag": "NGR",
+          "reserve_tu": 20720.0,
+          "initial_weekly_tu": 55.903846,
+          "max_weekly_tu": 55.903846,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 223,
+            "printed_page": 224
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 20720.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 2906.999992
+    },
+    {
+      "tag": "PAK",
+      "name": "Pakistan",
+      "observed_1999_production_tu": 23,
+      "production_reporting": "secretariat_estimate",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": null,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "unknown",
+      "resource_source": null,
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Baghal Chur / Dera Ghazi Khan, southern Punjab",
+          "state_id": 573,
+          "state_name": "Southern Punjab",
+          "initial_owner_tag": "PAK",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 778,
+            "printed_page": 765
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": false,
+          "note": "Historic locality confirmed, but reserve remaining at 2000 and allocation of national production unknown; do not turn the 1976 estimate or later depleted status into a 2000 finite reserve."
+        }
+      ],
+      "game_seed_allocations": [],
+      "notes": [
+        "1999 output23 tU is a Secretariat estimate. No national RAR budget reported; geological seed and expansion are deferred, not set to absence/zero.",
+        "Reported output is not fully seeded as renewable mine flow: restoration/standby or missing finite budget is explicitly retained in observed_1999_production_tu."
+      ],
+      "game_resource_budget_tu": null,
+      "game_budget_basis": "unavailable",
+      "game_recovery_factor": null,
+      "game_budget_unallocated_tu": null,
+      "game_initial_annual_production_tu": 0
+    },
+    {
+      "tag": "PER",
+      "name": "Iran",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 490,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Saghand I and II, Yazd",
+          "state_id": 1147,
+          "state_name": "Yazd",
+          "initial_owner_tag": "PER",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 192,
+            "printed_page": 193
+          },
+          "historical_status": "exploration_or_development",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 1147,
+          "state_name": "Yazd",
+          "initial_owner_tag": "PER",
+          "reserve_tu": 343.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 0.329807,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 192,
+            "printed_page": 193
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 343.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "POL",
+      "name": "Poland",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": null,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "unknown",
+      "resource_source": null,
+      "resource_reporting_flags": [],
+      "confirmed_sites": [],
+      "game_seed_allocations": [],
+      "notes": [
+        "Table9 reports historical production, but Table2 gives no RAR. Deposit localization and finite budget not seeded in this revision."
+      ],
+      "game_resource_budget_tu": null,
+      "game_budget_basis": "unavailable",
+      "game_recovery_factor": null,
+      "game_budget_unallocated_tu": null,
+      "game_initial_annual_production_tu": 0
+    },
+    {
+      "tag": "POR",
+      "name": "Portugal",
+      "observed_1999_production_tu": 10,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 7450,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Beiras / Urgeirica, Cunha Baixa and Quinta do Bispo / Viseu",
+          "state_id": 97,
+          "state_name": "Central Portgual",
+          "initial_owner_tag": "POR",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 231,
+            "printed_page": 232
+          },
+          "historical_status": "operating_1999",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 97,
+          "state_name": "Central Portgual",
+          "initial_owner_tag": "POR",
+          "reserve_tu": 7450.0,
+          "initial_weekly_tu": 0.192308,
+          "max_weekly_tu": 7.163461,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 231,
+            "printed_page": 232
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 7450.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 10.000016
+    },
+    {
+      "tag": "PRU",
+      "name": "Peru",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 1790,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "from_previous_red_book"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Macusani / Puno, southeastern Peruvian Andes",
+          "state_id": 902,
+          "state_name": "Peruvian Andes",
+          "initial_owner_tag": "PRU",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 930,
+            "printed_page": 917
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 902,
+          "state_name": "Peruvian Andes",
+          "initial_owner_tag": "PRU",
+          "reserve_tu": 1253.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 1.204807,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 930,
+            "printed_page": 917
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 1253.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "RAJ",
+      "name": "India",
+      "observed_1999_production_tu": 207,
+      "production_reporting": "secretariat_estimate",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": null,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 21,
+        "printed_page": 21
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Singhbhum / Jaduguda, Bhatin and Narwapahar, Jharkhand",
+          "state_id": 451,
+          "state_name": "Jharkhand",
+          "initial_owner_tag": "RAJ",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 184,
+            "printed_page": 185
+          },
+          "historical_status": "operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Domiasiat / Meghalaya sandstone district",
+          "state_id": 980,
+          "state_name": "Meghalya",
+          "initial_owner_tag": "RAJ",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 182,
+            "printed_page": 183
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Cuddapah Basin / Tummalapalle, Andhra Pradesh",
+          "state_id": 461,
+          "state_name": "Rayalaseema",
+          "initial_owner_tag": "RAJ",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 181,
+            "printed_page": 182
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 451,
+          "state_name": "Jharkhand",
+          "initial_owner_tag": "RAJ",
+          "reserve_tu": 22877.4,
+          "initial_weekly_tu": 3.980769,
+          "max_weekly_tu": 21.9975,
+          "resource_share": 0.6,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 184,
+            "printed_page": 185
+          }
+        },
+        {
+          "state_id": 980,
+          "state_name": "Meghalya",
+          "initial_owner_tag": "RAJ",
+          "reserve_tu": 7625.8,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 7.3325,
+          "resource_share": 0.2,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 182,
+            "printed_page": 183
+          }
+        },
+        {
+          "state_id": 461,
+          "state_name": "Rayalaseema",
+          "initial_owner_tag": "RAJ",
+          "reserve_tu": 7625.8,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 7.3325,
+          "resource_share": 0.2,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 181,
+            "printed_page": 182
+          }
+        }
+      ],
+      "notes": [
+        "No cost classification for the reported 54470 tU RAR; not reported as RAR < USD130/kgU."
+      ],
+      "reported_rar_cost_unassigned_tu": 54470,
+      "reported_kcr_cost_unassigned_tu": 78030,
+      "game_resource_budget_tu": 38129.0,
+      "game_budget_basis": "RAR_cost_unassigned_game_proxy",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 206.999988,
+      "resource_detail_source": {
+        "source": "red_book_2001",
+        "pdf_page": 183,
+        "printed_page": 184
+      }
+    },
+    {
+      "tag": "ROM",
+      "name": "Romania",
+      "observed_1999_production_tu": 89,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 4550,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Bihor / Apuseni Mountains",
+          "state_id": 909,
+          "state_name": "Northern Transylvania",
+          "initial_owner_tag": "ROM",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 237,
+            "printed_page": 238
+          },
+          "historical_status": "operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Banat / Ciudanovita and Dobrei",
+          "state_id": 910,
+          "state_name": "Banat",
+          "initial_owner_tag": "ROM",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 237,
+            "printed_page": 238
+          },
+          "historical_status": "operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Crucea and Botusana / Suceava, Eastern Carpathians",
+          "state_id": 152,
+          "state_name": "Moldavia",
+          "initial_owner_tag": "ROM",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 237,
+            "printed_page": 238
+          },
+          "historical_status": "operating_1999",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 909,
+          "state_name": "Northern Transylvania",
+          "initial_owner_tag": "ROM",
+          "reserve_tu": 1516.666667,
+          "initial_weekly_tu": 0.570513,
+          "max_weekly_tu": 1.458333,
+          "resource_share": 0.333333333,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 237,
+            "printed_page": 238
+          }
+        },
+        {
+          "state_id": 910,
+          "state_name": "Banat",
+          "initial_owner_tag": "ROM",
+          "reserve_tu": 1516.666667,
+          "initial_weekly_tu": 0.570513,
+          "max_weekly_tu": 1.458333,
+          "resource_share": 0.333333333,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 237,
+            "printed_page": 238
+          }
+        },
+        {
+          "state_id": 152,
+          "state_name": "Moldavia",
+          "initial_owner_tag": "ROM",
+          "reserve_tu": 1516.666666,
+          "initial_weekly_tu": 0.570513,
+          "max_weekly_tu": 1.458333,
+          "resource_share": 0.333333333,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 237,
+            "printed_page": 238
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 4550.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 89.000028
+    },
+    {
+      "tag": "SAF",
+      "name": "South Africa",
+      "observed_1999_production_tu": 927,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 291000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Vaal River / Klerksdorp and Chemwes, Witwatersrand gold basin",
+          "state_id": 276,
+          "state_name": "Northwest South Africa",
+          "initial_owner_tag": "SAF",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 257,
+            "printed_page": 258
+          },
+          "historical_status": "by_product_operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Palabora / Northern Province (Limpopo)",
+          "state_id": 273,
+          "state_name": "Limpopo",
+          "initial_owner_tag": "SAF",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 257,
+            "printed_page": 258
+          },
+          "historical_status": "by_product_operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "East Rand / ERGO, Witwatersrand tailings",
+          "state_id": 275,
+          "state_name": "Gauteng",
+          "initial_owner_tag": "SAF",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 257,
+            "printed_page": 258
+          },
+          "historical_status": "historical_by_product",
+          "seed_eligible": true
+        },
+        {
+          "district": "Welkom / Free State goldfields, Witwatersrand basin",
+          "state_id": 277,
+          "state_name": "Free State",
+          "initial_owner_tag": "SAF",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 257,
+            "printed_page": 258
+          },
+          "historical_status": "historical_by_product",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 276,
+          "state_name": "Northwest South Africa",
+          "initial_owner_tag": "SAF",
+          "reserve_tu": 174600.0,
+          "initial_weekly_tu": 16.044231,
+          "max_weekly_tu": 167.884615,
+          "resource_share": 0.6,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 257,
+            "printed_page": 258
+          }
+        },
+        {
+          "state_id": 273,
+          "state_name": "Limpopo",
+          "initial_owner_tag": "SAF",
+          "reserve_tu": 14550.0,
+          "initial_weekly_tu": 1.782692,
+          "max_weekly_tu": 13.990384,
+          "resource_share": 0.05,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 257,
+            "printed_page": 258
+          }
+        },
+        {
+          "state_id": 275,
+          "state_name": "Gauteng",
+          "initial_owner_tag": "SAF",
+          "reserve_tu": 58200.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 55.961538,
+          "resource_share": 0.2,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 257,
+            "printed_page": 258
+          }
+        },
+        {
+          "state_id": 277,
+          "state_name": "Free State",
+          "initial_owner_tag": "SAF",
+          "reserve_tu": 43650.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 41.971153,
+          "resource_share": 0.15,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 257,
+            "printed_page": 258
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 291000.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 926.999996
+    },
+    {
+      "tag": "SER",
+      "name": "Yugoslavia (historical reporting entity)",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": null,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "unknown",
+      "resource_source": null,
+      "resource_reporting_flags": [],
+      "confirmed_sites": [],
+      "game_seed_allocations": [],
+      "notes": [
+        "Table9 historical entity does not correspond to all current country tags; no country resource seed inferred."
+      ],
+      "game_resource_budget_tu": null,
+      "game_budget_basis": "unavailable",
+      "game_recovery_factor": null,
+      "game_budget_unallocated_tu": null,
+      "game_initial_annual_production_tu": 0
+    },
+    {
+      "tag": "SIA",
+      "name": "Thailand",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 10,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Phu Wiang Basin, Khon Kaen / Isaan",
+          "state_id": 506,
+          "state_name": "Isaan",
+          "initial_owner_tag": "SIA",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 691,
+            "printed_page": 678
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 506,
+          "state_name": "Isaan",
+          "initial_owner_tag": "SIA",
+          "reserve_tu": 10.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 0.009615,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 691,
+            "printed_page": 678
+          }
+        }
+      ],
+      "notes": [
+        "National table rounds to 10 tU; the later historical geology compilation identifies 4.5 tU RAR at Phu Wiang. Keep the table figure as the national upper budget, not as an exact mine estimate.",
+        "A max below1 native resource unit/week must not be rounded upward. This tiny historical resource is chiefly a documented fractional-flow case."
+      ],
+      "game_resource_budget_tu": 10.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "SLV",
+      "name": "Slovenia",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 2200,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Zirovski Vrh, southwest of Skofja Loka",
+          "state_id": 124,
+          "state_name": "Carniola",
+          "initial_owner_tag": "SLV",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 252,
+            "printed_page": 253
+          },
+          "historical_status": "closed_1990_decommissioning_1992",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 124,
+          "state_name": "Carniola",
+          "initial_owner_tag": "SLV",
+          "reserve_tu": 2200.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 2.115384,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 252,
+            "printed_page": 253
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 2200.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "SOM",
+      "name": "Somalia",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 6600,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001",
+        "from_previous_red_book"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Mudug / Dusa Mareb, Wabo and Mirig calcretes",
+          "state_id": 975,
+          "state_name": "Galmudug",
+          "initial_owner_tag": "SOM",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 325,
+            "printed_page": 312
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 975,
+          "state_name": "Galmudug",
+          "initial_owner_tag": "SOM",
+          "reserve_tu": 4620.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 4.442307,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 325,
+            "printed_page": 312
+          }
+        }
+      ],
+      "notes": [
+        "The 2001 national total is retained; it is not an exact estimate of the three individual calcrete sites."
+      ],
+      "game_resource_budget_tu": 4620.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "SOV",
+      "name": "Russian Federation",
+      "observed_1999_production_tu": 2610,
+      "production_reporting": "secretariat_estimate",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 138000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "secretariat_resource_estimate"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Streltsovsk / Priargunsky, southeastern Transbaikal",
+          "state_id": 1070,
+          "state_name": "Transbaikal",
+          "initial_owner_tag": "SOV",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 243,
+            "printed_page": 244
+          },
+          "historical_status": "operating_1999",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 1070,
+          "state_name": "Transbaikal",
+          "initial_owner_tag": "SOV",
+          "reserve_tu": 96600.0,
+          "initial_weekly_tu": 50.192308,
+          "max_weekly_tu": 92.884615,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 243,
+            "printed_page": 244
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 96600.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 2610.000016
+    },
+    {
+      "tag": "SPR",
+      "name": "Spain",
+      "observed_1999_production_tu": 255,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 4920,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Fe Mine / Salamanca",
+          "state_id": 971,
+          "state_name": "Leon",
+          "initial_owner_tag": "SPR",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 263,
+            "printed_page": 264
+          },
+          "historical_status": "operating_1999_closed_December2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 971,
+          "state_name": "Leon",
+          "initial_owner_tag": "SPR",
+          "reserve_tu": 4920.0,
+          "initial_weekly_tu": 4.903846,
+          "max_weekly_tu": 4.903846,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 263,
+            "printed_page": 264
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 4920.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 254.999992
+    },
+    {
+      "tag": "SWE",
+      "name": "Sweden",
+      "observed_1999_production_tu": 0,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 4000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Pleutajokk / Arjeplog-Arvidsjaur, northern Sweden, granite vein resources",
+          "state_id": 33,
+          "state_name": "Norrland",
+          "initial_owner_tag": "SWE",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 268,
+            "printed_page": 269
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Asele / Sorsele uranium province, northern Sweden",
+          "state_id": 442,
+          "state_name": "Vasterbotten",
+          "initial_owner_tag": "SWE",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 268,
+            "printed_page": 269
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 33,
+          "state_name": "Norrland",
+          "initial_owner_tag": "SWE",
+          "reserve_tu": 2000.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 1.923076,
+          "resource_share": 0.5,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 268,
+            "printed_page": 269
+          }
+        },
+        {
+          "state_id": 442,
+          "state_name": "Vasterbotten",
+          "initial_owner_tag": "SWE",
+          "reserve_tu": 2000.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 1.923076,
+          "resource_share": 0.5,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 268,
+            "printed_page": 269
+          }
+        }
+      ],
+      "notes": [
+        "Ranstad alum shale resources cost above USD130/kgU and are excluded from this RAR seed."
+      ],
+      "game_resource_budget_tu": 4000.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "TUR",
+      "name": "Turkey",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 9130,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Salihli-Koprubasi, Fakili, Kocarli / Kucukcavdar and Demirtepe, Aegean Turkey",
+          "state_id": 156,
+          "state_name": "Turkish Aegean",
+          "initial_owner_tag": "TUR",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 276,
+            "printed_page": 277
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Yozgat-Sorgun, central Anatolia",
+          "state_id": 159,
+          "state_name": "Central Anatolia",
+          "initial_owner_tag": "TUR",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 276,
+            "printed_page": 277
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 156,
+          "state_name": "Turkish Aegean",
+          "initial_owner_tag": "TUR",
+          "reserve_tu": 3695.704787,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 3.553562,
+          "resource_share": 0.578267061,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 276,
+            "printed_page": 277
+          }
+        },
+        {
+          "state_id": 159,
+          "state_name": "Central Anatolia",
+          "initial_owner_tag": "TUR",
+          "reserve_tu": 2695.295213,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 2.59163,
+          "resource_share": 0.421732939,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 276,
+            "printed_page": 277
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 6391.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "UKR",
+      "name": "Ukraine",
+      "observed_1999_production_tu": 1000,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 81000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Kirovograd / Michurinskoye (Ingulskii) and Vatutinskii (Smolina)",
+          "state_id": 1090,
+          "state_name": "Kirovohrad",
+          "initial_owner_tag": "UKR",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 278,
+            "printed_page": 279
+          },
+          "historical_status": "two_operating_mines_1999",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 1090,
+          "state_name": "Kirovohrad",
+          "initial_owner_tag": "UKR",
+          "reserve_tu": 56700.0,
+          "initial_weekly_tu": 19.230769,
+          "max_weekly_tu": 54.51923,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 278,
+            "printed_page": 279
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 56700.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 999.999988
+    },
+    {
+      "tag": "USA",
+      "name": "United States",
+      "observed_1999_production_tu": 1773,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 348000,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "recoverable",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Smith Ranch / Highland, Powder River and Wind River basins, Wyoming",
+          "state_id": 789,
+          "state_name": "Wyoming",
+          "initial_owner_tag": "USA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          },
+          "historical_status": "ISL_operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Crow Butte / northwest Nebraska",
+          "state_id": 785,
+          "state_name": "Nebraska",
+          "initial_owner_tag": "USA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          },
+          "historical_status": "ISL_operating_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Texas Gulf Coast / Rosita and Kingsville districts",
+          "state_id": 800,
+          "state_name": "Texas",
+          "initial_owner_tag": "USA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          },
+          "historical_status": "mixed_active_and_restoration_1999",
+          "seed_eligible": true
+        },
+        {
+          "district": "Grants Mineral Belt / Ambrosia Lake, New Mexico",
+          "state_id": 803,
+          "state_name": "New Mexico",
+          "initial_owner_tag": "USA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          },
+          "historical_status": "mixed_standby_and_cleanup",
+          "seed_eligible": true
+        },
+        {
+          "district": "Canon City / Tallahassee Creek / Front Range, Colorado",
+          "state_id": 804,
+          "state_name": "Colorado",
+          "initial_owner_tag": "USA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          },
+          "historical_status": "mill_operating_2000",
+          "seed_eligible": true
+        },
+        {
+          "district": "Paradox Basin / White Mesa and Shootaring, Utah",
+          "state_id": 805,
+          "state_name": "Utah",
+          "initial_owner_tag": "USA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          },
+          "historical_status": "standby",
+          "seed_eligible": true
+        },
+        {
+          "district": "Dawn / Ford, Washington",
+          "state_id": 809,
+          "state_name": "Washington",
+          "initial_owner_tag": "USA",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          },
+          "historical_status": "restoration_only_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 789,
+          "state_name": "Wyoming",
+          "initial_owner_tag": "USA",
+          "reserve_tu": 104400.0,
+          "initial_weekly_tu": 27.276923,
+          "max_weekly_tu": 100.384615,
+          "resource_share": 0.3,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          }
+        },
+        {
+          "state_id": 785,
+          "state_name": "Nebraska",
+          "initial_owner_tag": "USA",
+          "reserve_tu": 17400.0,
+          "initial_weekly_tu": 6.819231,
+          "max_weekly_tu": 16.730769,
+          "resource_share": 0.05,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          }
+        },
+        {
+          "state_id": 800,
+          "state_name": "Texas",
+          "initial_owner_tag": "USA",
+          "reserve_tu": 52200.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 50.192307,
+          "resource_share": 0.15,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          }
+        },
+        {
+          "state_id": 803,
+          "state_name": "New Mexico",
+          "initial_owner_tag": "USA",
+          "reserve_tu": 69600.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 66.923076,
+          "resource_share": 0.2,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          }
+        },
+        {
+          "state_id": 804,
+          "state_name": "Colorado",
+          "initial_owner_tag": "USA",
+          "reserve_tu": 34800.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 33.461538,
+          "resource_share": 0.1,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          }
+        },
+        {
+          "state_id": 805,
+          "state_name": "Utah",
+          "initial_owner_tag": "USA",
+          "reserve_tu": 52200.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 50.192307,
+          "resource_share": 0.15,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          }
+        },
+        {
+          "state_id": 809,
+          "state_name": "Washington",
+          "initial_owner_tag": "USA",
+          "reserve_tu": 17400.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 16.730769,
+          "resource_share": 0.05,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 294,
+            "printed_page": 295
+          }
+        }
+      ],
+      "notes": [
+        "State shares of 1999 production and RAR are not supplied by Table9/Table2; allocations below are explicitly game choices."
+      ],
+      "game_resource_budget_tu": 348000.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 1.0,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 1773.000008
+    },
+    {
+      "tag": "UZB",
+      "name": "Uzbekistan",
+      "observed_1999_production_tu": 2159,
+      "production_reporting": "reported",
+      "production_source": {
+        "source": "red_book_2001",
+        "pdf_page": 36,
+        "printed_page": 36
+      },
+      "reported_rar_lt130_tu": 115350,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [],
+      "confirmed_sites": [
+        {
+          "district": "Central Kyzylkum: Uchkuduk, Zarafshan, Zafarabad and Nurabad",
+          "state_id": 726,
+          "state_name": "Transoxiana",
+          "initial_owner_tag": "UZB",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 313,
+            "printed_page": 314
+          },
+          "historical_status": "ISL_operating_1999",
+          "seed_eligible": true,
+          "note": "Current Transoxiana state includes Uchkuduk VP1532, Zarafshan VP1554 and Samarkand VP10671."
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 726,
+          "state_name": "Transoxiana",
+          "initial_owner_tag": "UZB",
+          "reserve_tu": 80745.0,
+          "initial_weekly_tu": 41.519231,
+          "max_weekly_tu": 77.639423,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "1999_national_production_game_allocation",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 313,
+            "printed_page": 314
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 80745.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 2159.000012
+    },
+    {
+      "tag": "VIE",
+      "name": "Viet Nam",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 1340,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "assessment_over_5_years_old_or_not_updated_in2001"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Nong Son basin / Quang Nam, including Khe Hoa-Khe Cao and Tabhing district",
+          "state_id": 521,
+          "state_name": "Central Vietnam",
+          "initial_owner_tag": "VIE",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 322,
+            "printed_page": 323
+          },
+          "historical_status": "known_deposit_by_2000",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 521,
+          "state_name": "Central Vietnam",
+          "initial_owner_tag": "VIE",
+          "reserve_tu": 938.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 0.901923,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "red_book_2001",
+            "pdf_page": 322,
+            "printed_page": 323
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 938.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    },
+    {
+      "tag": "ZIM",
+      "name": "Zimbabwe",
+      "observed_1999_production_tu": null,
+      "production_reporting": "not_reported",
+      "production_source": null,
+      "reported_rar_lt130_tu": 1800,
+      "resource_reference_date": "2001-01-01",
+      "resource_basis": "in_situ",
+      "resource_source": {
+        "source": "red_book_2001",
+        "pdf_page": 22,
+        "printed_page": 22
+      },
+      "resource_reporting_flags": [
+        "from_previous_red_book"
+      ],
+      "confirmed_sites": [
+        {
+          "district": "Kanyemba-1, northern Zimbabwe near Mozambique",
+          "state_id": 290,
+          "state_name": "Mashonaland",
+          "initial_owner_tag": "ZIM",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 373,
+            "printed_page": 360
+          },
+          "historical_status": "project_suspended_1992",
+          "seed_eligible": true
+        }
+      ],
+      "game_seed_allocations": [
+        {
+          "state_id": 290,
+          "state_name": "Mashonaland",
+          "initial_owner_tag": "ZIM",
+          "reserve_tu": 1260.0,
+          "initial_weekly_tu": 0.0,
+          "max_weekly_tu": 1.211538,
+          "resource_share": 1.0,
+          "allocation_basis": "game_distribution_of_single_national_budget_not_individual_deposit_reserve",
+          "initial_rate_basis": "no_operating_mine_seed",
+          "geology_source": {
+            "source": "iaea_world_geology",
+            "pdf_page": 373,
+            "printed_page": 360
+          }
+        }
+      ],
+      "notes": [],
+      "game_resource_budget_tu": 1260.0,
+      "game_budget_basis": "RAR_lt130",
+      "game_recovery_factor": 0.7,
+      "game_budget_unallocated_tu": 0,
+      "game_initial_annual_production_tu": 0.0
+    }
+  ],
+  "coverage": {
+    "rar_lt130_table_country_count": 41,
+    "production_table_total_1999_tu": 32179,
+    "all_listed_1999_production_rows_included": true,
+    "omitted_country_policy": "Countries absent from these reporting tables are unknown, not geologically barren. Future sourced deposit additions must cite pre2000 discovery and finite resource basis.",
+    "rar_lt130_table_total_tu": 3182520
+  }
+}

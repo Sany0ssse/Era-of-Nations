@@ -249,29 +249,9 @@ calculate_energy_use = {
 	}
 	add_to_variable = { energy_sum = fossil_pp_energy_generation }
 
-	# Nuclear Energy Section
-	if = { limit = { has_country_flag = enabled_nuclear_reactor_fuel_production }
-		set_temp_variable = { base_nuclear_reactor_fuel_production = 200 } # CHANGE ME IF YOU WANT ME TO BE MORE PRODUCTIVE, weekly production value
+	# Nuclear fuel needs actual domestic/imported natural uranium.
+	eon_uranium_project_fuel = yes
 
-		set_temp_variable = { modify_leu = 1 }
-		add_to_temp_variable = { modify_leu = modifier@nuclear_reactor_fuel_production }
-
-		multiply_temp_variable = { base_nuclear_reactor_fuel_production = modify_leu }
-		round_variable = base_nuclear_reactor_fuel_production
-
-        set_variable = { damaged_enrichment_facilities_debuff = number_of_damaged_enrichment_facilities }
-		multiply_variable = { damaged_enrichment_facilities_debuff = 0.6 }
-
-		set_temp_variable = { enrichment_facilities_count = enrichment_facilities }
-		subtract_from_temp_variable = { enrichment_facilities_count = damaged_enrichment_facilities_debuff }
-
-		set_temp_variable = { temp1 = base_nuclear_reactor_fuel_production }
-		multiply_temp_variable = { temp1 = enrichment_facilities_count }
-		set_variable = { nuclear_reactor_fuel_production = temp1 }
-	}
-	else = {
-		set_variable = { nuclear_reactor_fuel_production = 0 }
-	}
 
 	if = {
 		limit = {
@@ -310,12 +290,12 @@ calculate_energy_use = {
 		add_to_temp_variable = { nuclear_energy_generation_multiplier = modifier@nuclear_energy_generation_modifier }
 		multiply_variable = { nuclear_energy_generation = nuclear_energy_generation_multiplier }
 
-		if = { limit = { check_variable = { var_reactor_material_stockpile = 0 } }
-			set_temp_variable = { nuclear_fuel_fulfillment = nuclear_reactor_fuel_production }
-			divide_temp_variable = { nuclear_fuel_fulfillment = nuclear_fuel_consumption }
-			clamp_temp_variable = { var = nuclear_fuel_fulfillment min = 0 max = 1 }
-			multiply_variable = { nuclear_energy_generation = nuclear_fuel_fulfillment }
-		}
+		# A small positive stock is not enough to supply every reactor.
+		set_temp_variable = { nuclear_fuel_fulfillment = var_reactor_material_stockpile }
+		add_to_temp_variable = { nuclear_fuel_fulfillment = nuclear_reactor_fuel_production }
+		divide_temp_variable = { nuclear_fuel_fulfillment = nuclear_fuel_consumption }
+		clamp_temp_variable = { var = nuclear_fuel_fulfillment min = 0 max = 1 }
+		multiply_variable = { nuclear_energy_generation = nuclear_fuel_fulfillment }
 
 		multiply_variable = { nuclear_energy_generation = temp_energy_gain_m }
 		add_to_variable = { energy_sum = nuclear_energy_generation }
@@ -564,8 +544,12 @@ add_hydroelectric_energy_production_effect = {
 }
 
 change_reactor_grade_material_effect = {
+	eon_uranium_initialize = yes
+	# Legacy focus rewards used abstract units: preserve their weeks of fuel.
+	set_temp_variable = { eon_legacy_reactor_reward_kg = change_resource }
+	multiply_temp_variable = { eon_legacy_reactor_reward_kg = 57.7 }
 	custom_effect_tooltip = change_reactor_grade_material_effect_tt
-	add_to_variable = { var_reactor_material_stockpile = change_resource }
+	add_to_variable = { var_reactor_material_stockpile = eon_legacy_reactor_reward_kg }
 }
 
 change_weapons_grade_material_effect = {

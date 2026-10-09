@@ -1256,27 +1256,33 @@ GENERIC_economic_category = {
 	#NUCLEAR ENERGY - BUILD FACILITIES
 	energy_building_enrichment_facilities = {
 		icon = GFX_decision_energy_build_button
-		allowed = { always = no }
+		allowed = { always = yes }
+		activation = { always = no }
+		visible = { OR = { has_country_flag = eon_enrichment_project_paid has_country_flag = single_enrichment_facility has_country_flag = build_three_enrichment_facility } }
 		available = { always = yes }
 
-		days_mission_timeout = ROOT.enrichment_facility_time
+		# Explicit base duration; three-facility projects add365days after activation.
+		days_mission_timeout = 730
 		fire_only_once = no
 		selectable_mission = yes
 
 		timeout_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision energy_building_enrichment_facilities"
-			if = { limit = { has_country_flag = single_enrichment_facility }
-				set_temp_variable = { temp_change = 1 }
+			if = { limit = { has_country_flag = eon_enrichment_project_paid }
+				eon_enrichment_complete_project = yes
+			}
+			else_if = { limit = { NOT = { has_country_flag = eon_enrichment_project_era } } # Existing unpaid legacy mission only.
+				set_country_flag = eon_enrichment_project_era
+				if = { limit = { has_country_flag = single_enrichment_facility } set_temp_variable = { temp_change = 1 } }
+				else = { set_temp_variable = { temp_change = 3 } }
 				build_enrichment_facilities_effect = yes
 			}
-			else = {
-				set_temp_variable = { temp_change = 3 }
-				build_enrichment_facilities_effect = yes
-			}
+			clear_variable = enrichment_facility_time
+			clr_country_flag = build_three_enrichment_facility
+			clr_country_flag = single_enrichment_facility
 		}
 		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision energy_building_enrichment_facilities"
-			clear_variable = ROOT.enrichment_facility_time
+			eon_enrichment_cancel_project = yes
+			clear_variable = enrichment_facility_time
 			clr_country_flag = build_three_enrichment_facility
 			clr_country_flag = single_enrichment_facility
 		}

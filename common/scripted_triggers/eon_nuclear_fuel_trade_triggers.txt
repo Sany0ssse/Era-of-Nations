@@ -1,0 +1,220 @@
+# Finished reactor-grade uranium, kg. Price: thousand USD/kg; treasury: bn USD.
+# All temporary quote variables are freshly initialized before scoped arithmetic.
+eon_nuclear_fuel_trade_quote_numbers = {
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_quantity = temp_nuclear_fuel_ammount }
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_direction = 1 }
+	if = {
+		limit = { check_variable = { temp_nuclear_fuel_ammount < 0 } }
+		multiply_temp_variable = { eon_nuclear_fuel_trade_quote_quantity = -1 }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_direction = 2 }
+	}
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_price = temp_nuclear_fuel_price }
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_total = eon_nuclear_fuel_trade_quote_quantity }
+	multiply_temp_variable = { eon_nuclear_fuel_trade_quote_total = eon_nuclear_fuel_trade_quote_price }
+	divide_temp_variable = { eon_nuclear_fuel_trade_quote_total = 1000000 }
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_buyer = THIS.id }
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_seller = nuclear_fuel_selling_selected_TAG }
+	if = {
+		limit = { check_variable = { eon_nuclear_fuel_trade_quote_direction = 2 } }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_buyer = nuclear_fuel_selling_selected_TAG }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_seller = THIS.id }
+	}
+	always = yes
+}
+
+# Calculate the representable debit in the buyer's current currency magnitude.
+# Both sides must be able to represent the same positive cash delta. A tiny
+# quote that rounds to zero at a high treasury is unavailable, never free fuel.
+eon_nuclear_fuel_trade_cash_step_available = {
+	var:eon_nuclear_fuel_trade_quote_buyer = {
+		check_variable = { var = treasury value = eon_nuclear_fuel_trade_quote_total compare = greater_than_or_equals }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_cash_after = treasury }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_quote_cash_after = eon_nuclear_fuel_trade_quote_total }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_cash = treasury }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_quote_cash = eon_nuclear_fuel_trade_quote_cash_after }
+	}
+	check_variable = { eon_nuclear_fuel_trade_quote_cash > 0 }
+	var:eon_nuclear_fuel_trade_quote_seller = {
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_cash_after = treasury }
+		add_to_temp_variable = { eon_nuclear_fuel_trade_quote_cash_after = eon_nuclear_fuel_trade_quote_cash }
+		check_variable = { var = eon_nuclear_fuel_trade_quote_cash_after value = 1000000 compare = less_than_or_equals }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_cash_credit = eon_nuclear_fuel_trade_quote_cash_after }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_quote_cash_credit = treasury }
+		check_variable = { eon_nuclear_fuel_trade_quote_cash_credit = eon_nuclear_fuel_trade_quote_cash }
+	}
+}
+
+eon_nuclear_fuel_trade_fuel_step_available = {
+	var:eon_nuclear_fuel_trade_quote_seller = {
+		check_variable = { var = var_reactor_material_stockpile value = eon_nuclear_fuel_trade_quote_quantity compare = greater_than_or_equals }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_after = var_reactor_material_stockpile }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_after = eon_nuclear_fuel_trade_quote_quantity }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_delta = var_reactor_material_stockpile }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_delta = eon_nuclear_fuel_trade_quote_fuel_after }
+		check_variable = { eon_nuclear_fuel_trade_quote_fuel_delta = eon_nuclear_fuel_trade_quote_quantity }
+	}
+	var:eon_nuclear_fuel_trade_quote_buyer = {
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_after = var_reactor_material_stockpile }
+		add_to_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_after = eon_nuclear_fuel_trade_quote_quantity }
+		check_variable = { var = eon_nuclear_fuel_trade_quote_fuel_after value = 20000000 compare = less_than_or_equals }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_delta = eon_nuclear_fuel_trade_quote_fuel_after }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_delta = var_reactor_material_stockpile }
+		check_variable = { eon_nuclear_fuel_trade_quote_fuel_delta = eon_nuclear_fuel_trade_quote_quantity }
+	}
+}
+
+eon_nuclear_fuel_trade_send_ready = {
+	exists = yes
+	has_variable = nuclear_fuel_selling_selected_TAG
+	NOT = { tag = var:nuclear_fuel_selling_selected_TAG }
+	NOT = { has_country_flag = eon_nuclear_fuel_trade_reserved }
+	NOT = { has_country_flag = currently_considering_an_offer }
+	var:nuclear_fuel_selling_selected_TAG = {
+		exists = yes
+		NOT = { has_war_with = PREV }
+		NOT = { is_embargoed_by = PREV }
+		NOT = { is_embargoing = PREV }
+		NOT = { has_country_flag = eon_nuclear_fuel_trade_reserved }
+		NOT = { has_country_flag = currently_considering_an_offer }
+		NOT = { has_country_flag = eon_nuclear_fuel_trade_retired_pair@PREV }
+		PREV = {
+			NOT = { has_war_with = PREV }
+			NOT = { is_embargoed_by = PREV }
+		NOT = { is_embargoing = PREV }
+			NOT = { has_country_flag = eon_nuclear_fuel_trade_retired_pair@PREV }
+		}
+	}
+	eon_nuclear_fuel_trade_quote_numbers = yes
+	var:eon_nuclear_fuel_trade_quote_seller = { NOT = { has_country_flag = eon_nuclear_fuel_exports_blocked } }
+	check_variable = { eon_nuclear_fuel_trade_quote_quantity > 0 }
+	check_variable = { var = eon_nuclear_fuel_trade_quote_quantity value = 20000000 compare = less_than_or_equals }
+	check_variable = { eon_nuclear_fuel_trade_quote_price > 0 }
+	check_variable = { var = eon_nuclear_fuel_trade_quote_price value = 1000 compare = less_than_or_equals }
+	check_variable = { eon_nuclear_fuel_trade_quote_total > 0 }
+	eon_nuclear_fuel_trade_cash_step_available = yes
+	eon_nuclear_fuel_trade_fuel_step_available = yes
+}
+
+# Incoming original response, FROM original sender; caller initializes kind
+# 1 for energy.1 (sender buys), 2 for energy.10 (sender sells).
+eon_nuclear_fuel_trade_response_pair_pending = {
+	has_country_flag = eon_nuclear_fuel_trade_reserved
+	has_country_flag = eon_nuclear_fuel_trade_incoming
+	check_variable = { eon_nuclear_fuel_trade_partner = FROM }
+	check_variable = { eon_nuclear_fuel_trade_direction = eon_nuclear_fuel_trade_response_kind }
+	var:eon_nuclear_fuel_trade_partner = {
+		has_country_flag = eon_nuclear_fuel_trade_reserved
+		has_country_flag = eon_nuclear_fuel_trade_outgoing
+		check_variable = { eon_nuclear_fuel_trade_partner = PREV }
+		check_variable = { eon_nuclear_fuel_trade_direction = PREV.eon_nuclear_fuel_trade_direction }
+	}
+}
+
+eon_nuclear_fuel_trade_terms_match = {
+	check_variable = { eon_nuclear_fuel_trade_quantity > 0 }
+	check_variable = { var = eon_nuclear_fuel_trade_quantity value = 20000000 compare = less_than_or_equals }
+	check_variable = { eon_nuclear_fuel_trade_price > 0 }
+	check_variable = { var = eon_nuclear_fuel_trade_price value = 1000 compare = less_than_or_equals }
+	check_variable = { eon_nuclear_fuel_trade_total > 0 }
+	check_variable = { eon_nuclear_fuel_trade_quoted_total > 0 }
+	var:eon_nuclear_fuel_trade_partner = {
+		check_variable = { eon_nuclear_fuel_trade_quantity = PREV.eon_nuclear_fuel_trade_quantity }
+		check_variable = { eon_nuclear_fuel_trade_price = PREV.eon_nuclear_fuel_trade_price }
+		check_variable = { eon_nuclear_fuel_trade_total = PREV.eon_nuclear_fuel_trade_total }
+		check_variable = { eon_nuclear_fuel_trade_quoted_total = PREV.eon_nuclear_fuel_trade_quoted_total }
+		check_variable = { eon_nuclear_fuel_trade_phase = PREV.eon_nuclear_fuel_trade_phase }
+	}
+}
+
+eon_nuclear_fuel_trade_response_ready = {
+	eon_nuclear_fuel_trade_response_pair_pending = yes
+	eon_nuclear_fuel_trade_terms_match = yes
+	exists = yes
+	check_variable = { eon_nuclear_fuel_trade_phase = 1 }
+	has_country_flag = eon_nuclear_fuel_trade_live
+	NOT = { has_war_with = FROM }
+	NOT = { is_embargoed_by = FROM }
+	NOT = { is_embargoing = FROM }
+	var:eon_nuclear_fuel_trade_partner = {
+		exists = yes
+		has_country_flag = eon_nuclear_fuel_trade_live
+		NOT = { has_war_with = PREV }
+		NOT = { is_embargoed_by = PREV }
+		NOT = { is_embargoing = PREV }
+	}
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_quantity = eon_nuclear_fuel_trade_quantity }
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_total = eon_nuclear_fuel_trade_total }
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_buyer = eon_nuclear_fuel_trade_partner }
+	set_temp_variable = { eon_nuclear_fuel_trade_quote_seller = THIS.id }
+	if = {
+		limit = { check_variable = { eon_nuclear_fuel_trade_direction = 1 } }
+		NOT = { has_country_flag = eon_nuclear_fuel_exports_blocked }
+		# Buyer's cash is already escrowed. Validate the remaining fuel debit,
+		# fuel credit, and supplier cash credit; don't require a second debit.
+		check_variable = { eon_nuclear_fuel_trade_cash_escrow = 0 }
+		check_variable = { eon_nuclear_fuel_trade_fuel_escrow = 0 }
+		var:eon_nuclear_fuel_trade_partner = {
+			check_variable = { eon_nuclear_fuel_trade_cash_escrow = PREV.eon_nuclear_fuel_trade_total }
+			check_variable = { eon_nuclear_fuel_trade_fuel_escrow = 0 }
+		}
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_cash_after = treasury }
+		add_to_temp_variable = { eon_nuclear_fuel_trade_quote_cash_after = eon_nuclear_fuel_trade_total }
+		check_variable = { var = eon_nuclear_fuel_trade_quote_cash_after value = 1000000 compare = less_than_or_equals }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_cash_credit = eon_nuclear_fuel_trade_quote_cash_after }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_quote_cash_credit = treasury }
+		check_variable = { eon_nuclear_fuel_trade_quote_cash_credit = eon_nuclear_fuel_trade_total }
+		eon_nuclear_fuel_trade_fuel_step_available = yes
+	}
+	else_if = {
+		limit = { check_variable = { eon_nuclear_fuel_trade_direction = 2 } }
+		var:eon_nuclear_fuel_trade_partner = { NOT = { has_country_flag = eon_nuclear_fuel_exports_blocked } }
+		# Supplier's material is held. Revalidate buyer cash and fuel capacity,
+		# supplier cash capacity, and the exact representable currency delta.
+		check_variable = { eon_nuclear_fuel_trade_cash_escrow = 0 }
+		check_variable = { eon_nuclear_fuel_trade_fuel_escrow = 0 }
+		var:eon_nuclear_fuel_trade_partner = {
+			check_variable = { eon_nuclear_fuel_trade_fuel_escrow = PREV.eon_nuclear_fuel_trade_quantity }
+			check_variable = { eon_nuclear_fuel_trade_cash_escrow = 0 }
+		}
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_buyer = THIS.id }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_seller = eon_nuclear_fuel_trade_partner }
+		eon_nuclear_fuel_trade_cash_step_available = yes
+		check_variable = { eon_nuclear_fuel_trade_quote_cash = eon_nuclear_fuel_trade_total }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_after = var_reactor_material_stockpile }
+		add_to_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_after = eon_nuclear_fuel_trade_quantity }
+		check_variable = { var = eon_nuclear_fuel_trade_quote_fuel_after value = 20000000 compare = less_than_or_equals }
+		set_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_delta = eon_nuclear_fuel_trade_quote_fuel_after }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_quote_fuel_delta = var_reactor_material_stockpile }
+		check_variable = { eon_nuclear_fuel_trade_quote_fuel_delta = eon_nuclear_fuel_trade_quantity }
+	}
+	else = { always = no }
+}
+
+# Sender result modal, FROM original responder. Keep these slots until that
+# modal is consumed, so an old result cannot clear a subsequent transaction.
+eon_nuclear_fuel_trade_acknowledgement_ready = {
+	has_country_flag = eon_nuclear_fuel_trade_reserved
+	has_country_flag = eon_nuclear_fuel_trade_outgoing
+	check_variable = { eon_nuclear_fuel_trade_partner = FROM }
+	check_variable = { eon_nuclear_fuel_trade_direction = eon_nuclear_fuel_trade_response_kind }
+	OR = {
+		AND = {
+			check_variable = { eon_nuclear_fuel_trade_result_kind = 2 }
+			check_variable = { eon_nuclear_fuel_trade_phase = 2 }
+		}
+		AND = {
+			check_variable = { eon_nuclear_fuel_trade_result_kind = 3 }
+			OR = {
+				check_variable = { eon_nuclear_fuel_trade_phase = 3 }
+				check_variable = { eon_nuclear_fuel_trade_phase = 5 }
+			}
+		}
+	}
+	var:eon_nuclear_fuel_trade_partner = {
+		has_country_flag = eon_nuclear_fuel_trade_reserved
+		has_country_flag = eon_nuclear_fuel_trade_incoming
+		check_variable = { eon_nuclear_fuel_trade_partner = PREV }
+		check_variable = { eon_nuclear_fuel_trade_direction = PREV.eon_nuclear_fuel_trade_direction }
+		check_variable = { eon_nuclear_fuel_trade_phase = PREV.eon_nuclear_fuel_trade_phase }
+	}
+}

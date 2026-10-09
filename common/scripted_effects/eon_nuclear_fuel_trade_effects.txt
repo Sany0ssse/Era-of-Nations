@@ -1,0 +1,441 @@
+# Bilateral, immutable finished-fuel offer. Phase 1 pending, 2 settled,
+# 3 refused, 4 expired/war, 5 no longer executable. Modal identity survives
+# expiry and settlement until the original response/result is acknowledged.
+eon_nuclear_fuel_trade_clear_record = {
+	clr_country_flag = eon_nuclear_fuel_trade_reserved
+	clr_country_flag = eon_nuclear_fuel_trade_outgoing
+	clr_country_flag = eon_nuclear_fuel_trade_incoming
+	clr_country_flag = eon_nuclear_fuel_trade_live
+	clr_country_flag = currently_considering_an_offer
+	clear_variable = eon_nuclear_fuel_trade_partner
+	clear_variable = eon_nuclear_fuel_trade_direction
+	clear_variable = eon_nuclear_fuel_trade_quantity
+	clear_variable = eon_nuclear_fuel_trade_price
+	clear_variable = eon_nuclear_fuel_trade_total
+	clear_variable = eon_nuclear_fuel_trade_quoted_total
+	clear_variable = eon_nuclear_fuel_trade_phase
+	clear_variable = eon_nuclear_fuel_trade_cash_escrow
+	clear_variable = eon_nuclear_fuel_trade_fuel_escrow
+}
+
+# A refund remains an owned asset if stock/treasury headroom or float magnitude
+# prevents immediate credit. Never clamp away returned cash or material.
+eon_nuclear_fuel_trade_release_refunds = {
+	if = {
+		limit = { exists = yes check_variable = { eon_nuclear_fuel_trade_cash_refund_due > 0 } }
+		set_temp_variable = { eon_nuclear_fuel_trade_refund_credit = 1000000 }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_refund_credit = treasury }
+		clamp_temp_variable = { var = eon_nuclear_fuel_trade_refund_credit min = 0 max = eon_nuclear_fuel_trade_cash_refund_due }
+		set_temp_variable = { eon_nuclear_fuel_trade_refund_after = treasury }
+		add_to_temp_variable = { eon_nuclear_fuel_trade_refund_after = eon_nuclear_fuel_trade_refund_credit }
+		set_temp_variable = { eon_nuclear_fuel_trade_refund_actual = eon_nuclear_fuel_trade_refund_after }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_refund_actual = treasury }
+		if = {
+			limit = {
+				check_variable = { eon_nuclear_fuel_trade_refund_actual > 0 }
+				check_variable = { var = eon_nuclear_fuel_trade_refund_actual value = eon_nuclear_fuel_trade_cash_refund_due compare = less_than_or_equals }
+			}
+			add_to_variable = { treasury = eon_nuclear_fuel_trade_refund_actual }
+			subtract_from_variable = { eon_nuclear_fuel_trade_cash_refund_due = eon_nuclear_fuel_trade_refund_actual }
+		}
+	}
+	if = {
+		limit = { exists = yes check_variable = { eon_nuclear_fuel_trade_fuel_refund_due > 0 } }
+		set_temp_variable = { eon_nuclear_fuel_trade_refund_credit = 20000000 }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_refund_credit = var_reactor_material_stockpile }
+		clamp_temp_variable = { var = eon_nuclear_fuel_trade_refund_credit min = 0 max = eon_nuclear_fuel_trade_fuel_refund_due }
+		set_temp_variable = { eon_nuclear_fuel_trade_refund_after = var_reactor_material_stockpile }
+		add_to_temp_variable = { eon_nuclear_fuel_trade_refund_after = eon_nuclear_fuel_trade_refund_credit }
+		set_temp_variable = { eon_nuclear_fuel_trade_refund_actual = eon_nuclear_fuel_trade_refund_after }
+		subtract_from_temp_variable = { eon_nuclear_fuel_trade_refund_actual = var_reactor_material_stockpile }
+		if = {
+			limit = {
+				check_variable = { eon_nuclear_fuel_trade_refund_actual > 0 }
+				check_variable = { var = eon_nuclear_fuel_trade_refund_actual value = eon_nuclear_fuel_trade_fuel_refund_due compare = less_than_or_equals }
+			}
+			add_to_variable = { var_reactor_material_stockpile = eon_nuclear_fuel_trade_refund_actual }
+			eon_uranium_refresh_energy = yes
+			subtract_from_variable = { eon_nuclear_fuel_trade_fuel_refund_due = eon_nuclear_fuel_trade_refund_actual }
+		}
+	}
+}
+
+eon_nuclear_fuel_trade_return_escrow = {
+	if = {
+		limit = { check_variable = { eon_nuclear_fuel_trade_cash_escrow > 0 } }
+		add_to_variable = { eon_nuclear_fuel_trade_cash_refund_due = eon_nuclear_fuel_trade_cash_escrow }
+		set_variable = { eon_nuclear_fuel_trade_cash_escrow = 0 }
+	}
+	if = {
+		limit = { check_variable = { eon_nuclear_fuel_trade_fuel_escrow > 0 } }
+		add_to_variable = { eon_nuclear_fuel_trade_fuel_refund_due = eon_nuclear_fuel_trade_fuel_escrow }
+		set_variable = { eon_nuclear_fuel_trade_fuel_escrow = 0 }
+	}
+	eon_nuclear_fuel_trade_release_refunds = yes
+}
+
+# Player/AI sender scope. No amount or price is reread from GUI after this send.
+# Sender reserves only its own asset; counterparty commits on its own reply.
+eon_nuclear_fuel_trade_send = {
+	# Normalize old campaign stock units before either participant is quoted.
+	eon_uranium_initialize = yes
+	if = {
+		limit = {
+			has_variable = nuclear_fuel_selling_selected_TAG
+			var:nuclear_fuel_selling_selected_TAG = { exists = yes }
+		}
+		var:nuclear_fuel_selling_selected_TAG = { eon_uranium_initialize = yes }
+	}
+	if = {
+		limit = { eon_nuclear_fuel_trade_send_ready = yes }
+		set_variable = { eon_nuclear_fuel_trade_partner = nuclear_fuel_selling_selected_TAG }
+		set_variable = { eon_nuclear_fuel_trade_quantity = eon_nuclear_fuel_trade_quote_quantity }
+		set_variable = { eon_nuclear_fuel_trade_price = eon_nuclear_fuel_trade_quote_price }
+		set_variable = { eon_nuclear_fuel_trade_quoted_total = eon_nuclear_fuel_trade_quote_total }
+		set_variable = { eon_nuclear_fuel_trade_total = eon_nuclear_fuel_trade_quote_cash }
+		set_variable = { eon_nuclear_fuel_trade_direction = eon_nuclear_fuel_trade_quote_direction }
+		set_variable = { eon_nuclear_fuel_trade_phase = 1 }
+		set_variable = { eon_nuclear_fuel_trade_cash_escrow = 0 }
+		set_variable = { eon_nuclear_fuel_trade_fuel_escrow = 0 }
+		set_country_flag = eon_nuclear_fuel_trade_reserved
+		set_country_flag = eon_nuclear_fuel_trade_outgoing
+		set_country_flag = currently_considering_an_offer
+		set_country_flag = { flag = eon_nuclear_fuel_trade_live days = 30 value = 1 }
+		if = {
+			limit = { check_variable = { eon_nuclear_fuel_trade_direction = 1 } }
+			subtract_from_variable = { treasury = eon_nuclear_fuel_trade_total }
+			set_variable = { eon_nuclear_fuel_trade_cash_escrow = eon_nuclear_fuel_trade_total }
+		}
+		else = {
+			subtract_from_variable = { var_reactor_material_stockpile = eon_nuclear_fuel_trade_quantity }
+			set_variable = { eon_nuclear_fuel_trade_fuel_escrow = eon_nuclear_fuel_trade_quantity }
+		}
+		var:eon_nuclear_fuel_trade_partner = {
+			set_variable = { eon_nuclear_fuel_trade_partner = PREV.id }
+			set_variable = { eon_nuclear_fuel_trade_quantity = PREV.eon_nuclear_fuel_trade_quantity }
+			set_variable = { eon_nuclear_fuel_trade_price = PREV.eon_nuclear_fuel_trade_price }
+			set_variable = { eon_nuclear_fuel_trade_quoted_total = PREV.eon_nuclear_fuel_trade_quoted_total }
+			set_variable = { eon_nuclear_fuel_trade_total = PREV.eon_nuclear_fuel_trade_total }
+			set_variable = { eon_nuclear_fuel_trade_direction = PREV.eon_nuclear_fuel_trade_direction }
+			set_variable = { eon_nuclear_fuel_trade_phase = 1 }
+			set_variable = { eon_nuclear_fuel_trade_cash_escrow = 0 }
+			set_variable = { eon_nuclear_fuel_trade_fuel_escrow = 0 }
+			set_country_flag = eon_nuclear_fuel_trade_reserved
+			set_country_flag = eon_nuclear_fuel_trade_incoming
+			set_country_flag = currently_considering_an_offer
+			set_country_flag = { flag = eon_nuclear_fuel_trade_live days = 30 value = 1 }
+			if = {
+				limit = { check_variable = { eon_nuclear_fuel_trade_direction = 1 } }
+				country_event = { id = energy.1 hours = 1 }
+			}
+			else = { country_event = { id = energy.10 hours = 1 } }
+			PREV = {
+				if = {
+					limit = { is_ai = yes }
+					set_country_flag = { flag = energy_nuclear_calldown@PREV days = 365 value = 1 }
+				}
+			}
+		}
+		country_event = { id = eon_nuclear_fuel_trade.1 days = 31 }
+		update_energy_dirty_variable = yes
+	}
+	else = { custom_effect_tooltip = eon_nuclear_fuel_trade_unavailable_tt }
+}
+
+# Incoming response. Consume held assets before issuing the one transfer; phase
+# changes first, so any repeated accept/refuse cannot transfer or refund twice.
+eon_nuclear_fuel_trade_accept = {
+	if = {
+		limit = { eon_nuclear_fuel_trade_response_ready = yes }
+		set_variable = { eon_nuclear_fuel_trade_phase = 2 }
+		clr_country_flag = eon_nuclear_fuel_trade_live
+		var:eon_nuclear_fuel_trade_partner = {
+			set_variable = { eon_nuclear_fuel_trade_phase = 2 }
+			clr_country_flag = eon_nuclear_fuel_trade_live
+			set_variable = { eon_nuclear_fuel_trade_cash_escrow = 0 }
+			set_variable = { eon_nuclear_fuel_trade_fuel_escrow = 0 }
+		}
+		if = {
+			limit = { check_variable = { eon_nuclear_fuel_trade_direction = 1 } }
+			subtract_from_variable = { var_reactor_material_stockpile = eon_nuclear_fuel_trade_quantity }
+			add_to_variable = { treasury = eon_nuclear_fuel_trade_total }
+			var:eon_nuclear_fuel_trade_partner = {
+				add_to_variable = { var_reactor_material_stockpile = eon_nuclear_fuel_trade_quantity }
+				country_event = { id = energy.2 hours = 1 }
+			}
+		}
+		else = {
+			subtract_from_variable = { treasury = eon_nuclear_fuel_trade_total }
+			add_to_variable = { var_reactor_material_stockpile = eon_nuclear_fuel_trade_quantity }
+			var:eon_nuclear_fuel_trade_partner = {
+				add_to_variable = { treasury = eon_nuclear_fuel_trade_total }
+				country_event = { id = energy.11 hours = 1 }
+			}
+		}
+		var:eon_nuclear_fuel_trade_partner = { eon_uranium_refresh_energy = yes }
+		eon_uranium_refresh_energy = yes
+		custom_effect_tooltip = eon_nuclear_fuel_trade_settled_tt
+		update_energy_dirty_variable = yes
+	}
+	else = { eon_nuclear_fuel_trade_resolve_invalid_response = yes }
+}
+
+eon_nuclear_fuel_trade_resolve_invalid_response = {
+	if = {
+		limit = {
+			eon_nuclear_fuel_trade_response_pair_pending = yes
+			OR = {
+				check_variable = { eon_nuclear_fuel_trade_phase = 1 }
+				check_variable = { eon_nuclear_fuel_trade_phase = 4 }
+			}
+			var:eon_nuclear_fuel_trade_partner = {
+				OR = {
+					check_variable = { eon_nuclear_fuel_trade_phase = 1 }
+					check_variable = { eon_nuclear_fuel_trade_phase = 4 }
+				}
+			}
+		}
+		set_variable = { eon_nuclear_fuel_trade_phase = 5 }
+		clr_country_flag = eon_nuclear_fuel_trade_live
+		var:eon_nuclear_fuel_trade_partner = {
+			set_variable = { eon_nuclear_fuel_trade_phase = 5 }
+			clr_country_flag = eon_nuclear_fuel_trade_live
+			eon_nuclear_fuel_trade_return_escrow = yes
+			if = {
+				limit = { check_variable = { eon_nuclear_fuel_trade_direction = 1 } }
+				country_event = { id = energy.3 hours = 1 }
+			}
+			else = { country_event = { id = energy.12 hours = 1 } }
+		}
+		custom_effect_tooltip = eon_nuclear_fuel_trade_expired_tt
+		update_energy_dirty_variable = yes
+	}
+	else = { eon_nuclear_fuel_trade_resolve_legacy_response = yes }
+}
+
+# Pre-migration popup: no escrow/immutable terms exists, so never execute its
+# mutable transfer. Retire this pair against other unknown old popups, clear
+# only identifiable legacy locks, and notify the sender of the failed offer.
+eon_nuclear_fuel_trade_resolve_legacy_response = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = eon_nuclear_fuel_trade_reserved }
+			has_country_flag = currently_considering_an_offer
+			OR = {
+				check_variable = { eon_nuclear_fuel_trade_response_kind = 1 }
+				check_variable = { eon_nuclear_fuel_trade_response_kind = 2 }
+			}
+			FROM = {
+				NOT = { has_country_flag = eon_nuclear_fuel_trade_reserved }
+				has_country_flag = currently_considering_an_offer
+			}
+		}
+		clr_country_flag = currently_considering_an_offer
+		set_country_flag = eon_nuclear_fuel_trade_retired_pair@FROM
+		FROM = {
+			clr_country_flag = currently_considering_an_offer
+			set_country_flag = eon_nuclear_fuel_trade_retired_pair@PREV
+			if = {
+				limit = { check_variable = { eon_nuclear_fuel_trade_response_kind = 1 } }
+				country_event = { id = energy.3 hours = 1 }
+			}
+			else = { country_event = { id = energy.12 hours = 1 } }
+		}
+		custom_effect_tooltip = eon_nuclear_fuel_trade_expired_tt
+		update_energy_dirty_variable = yes
+	}
+}
+
+eon_nuclear_fuel_trade_refuse = {
+	if = {
+		limit = { eon_nuclear_fuel_trade_response_ready = yes }
+		set_variable = { eon_nuclear_fuel_trade_phase = 3 }
+		clr_country_flag = eon_nuclear_fuel_trade_live
+		var:eon_nuclear_fuel_trade_partner = {
+			set_variable = { eon_nuclear_fuel_trade_phase = 3 }
+			clr_country_flag = eon_nuclear_fuel_trade_live
+			eon_nuclear_fuel_trade_return_escrow = yes
+			if = {
+				limit = { check_variable = { eon_nuclear_fuel_trade_direction = 1 } }
+				country_event = { id = energy.3 hours = 1 }
+			}
+			else = { country_event = { id = energy.12 hours = 1 } }
+		}
+		update_energy_dirty_variable = yes
+	}
+	else = { eon_nuclear_fuel_trade_resolve_invalid_response = yes }
+}
+
+# Original sender result acknowledged. GUI scratch fields are not cleared here:
+# they are neither authoritative terms nor assets, and another editor may exist.
+eon_nuclear_fuel_trade_acknowledge = {
+	if = {
+		limit = { eon_nuclear_fuel_trade_acknowledgement_ready = yes }
+		var:eon_nuclear_fuel_trade_partner = { eon_nuclear_fuel_trade_clear_record = yes }
+		eon_nuclear_fuel_trade_clear_record = yes
+		update_energy_dirty_variable = yes
+	}
+	else = { eon_nuclear_fuel_trade_resolve_legacy_result = yes }
+}
+
+# A pre-migration result can already reflect the old transfer. Acknowledge its
+# identifiable locks without replaying/refunding that historical transfer. A
+# pair tombstone protects against other unknown legacy replies still in flight.
+eon_nuclear_fuel_trade_resolve_legacy_result = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = eon_nuclear_fuel_trade_reserved }
+			has_country_flag = currently_considering_an_offer
+			OR = {
+				check_variable = { eon_nuclear_fuel_trade_response_kind = 1 }
+				check_variable = { eon_nuclear_fuel_trade_response_kind = 2 }
+			}
+			OR = {
+				check_variable = { eon_nuclear_fuel_trade_result_kind = 2 }
+				check_variable = { eon_nuclear_fuel_trade_result_kind = 3 }
+			}
+			FROM = {
+				NOT = { tag = PREV }
+				NOT = { has_country_flag = eon_nuclear_fuel_trade_reserved }
+				has_country_flag = currently_considering_an_offer
+			}
+		}
+		clr_country_flag = currently_considering_an_offer
+		set_country_flag = eon_nuclear_fuel_trade_retired_pair@FROM
+		FROM = {
+			clr_country_flag = currently_considering_an_offer
+			set_country_flag = eon_nuclear_fuel_trade_retired_pair@PREV
+		}
+		update_energy_dirty_variable = yes
+	}
+}
+
+# A vanished/rebound partner cannot safely identify an old native popup. Retire
+# only that pair permanently; other countries remain available. Owned refund
+# claims survive record clearing and can be transferred by the annex hook.
+eon_nuclear_fuel_trade_retire_record = {
+	if = {
+		limit = { has_variable = eon_nuclear_fuel_trade_partner }
+		var:eon_nuclear_fuel_trade_partner = {
+			set_country_flag = eon_nuclear_fuel_trade_retired_pair@PREV
+			PREV = { set_country_flag = eon_nuclear_fuel_trade_retired_pair@PREV }
+			if = {
+				limit = {
+					has_country_flag = eon_nuclear_fuel_trade_reserved
+					check_variable = { eon_nuclear_fuel_trade_partner = PREV }
+				}
+				eon_nuclear_fuel_trade_return_escrow = yes
+				eon_nuclear_fuel_trade_clear_record = yes
+			}
+		}
+	}
+	eon_nuclear_fuel_trade_return_escrow = yes
+	eon_nuclear_fuel_trade_clear_record = yes
+}
+
+eon_nuclear_fuel_trade_daily_cleanup = {
+	eon_nuclear_fuel_trade_release_refunds = yes
+	if = {
+		limit = { has_country_flag = eon_nuclear_fuel_trade_reserved }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = eon_nuclear_fuel_trade_partner }
+					var:eon_nuclear_fuel_trade_partner = { exists = no }
+					NOT = {
+						var:eon_nuclear_fuel_trade_partner = {
+							has_country_flag = eon_nuclear_fuel_trade_reserved
+							check_variable = { eon_nuclear_fuel_trade_partner = PREV }
+							check_variable = { eon_nuclear_fuel_trade_direction = PREV.eon_nuclear_fuel_trade_direction }
+							check_variable = { eon_nuclear_fuel_trade_phase = PREV.eon_nuclear_fuel_trade_phase }
+						}
+					}
+					NOT = {
+						OR = {
+							AND = {
+								has_country_flag = eon_nuclear_fuel_trade_outgoing
+								NOT = { has_country_flag = eon_nuclear_fuel_trade_incoming }
+								var:eon_nuclear_fuel_trade_partner = {
+									has_country_flag = eon_nuclear_fuel_trade_incoming
+									NOT = { has_country_flag = eon_nuclear_fuel_trade_outgoing }
+								}
+							}
+							AND = {
+								has_country_flag = eon_nuclear_fuel_trade_incoming
+								NOT = { has_country_flag = eon_nuclear_fuel_trade_outgoing }
+								var:eon_nuclear_fuel_trade_partner = {
+									has_country_flag = eon_nuclear_fuel_trade_outgoing
+									NOT = { has_country_flag = eon_nuclear_fuel_trade_incoming }
+								}
+							}
+						}
+					}
+				}
+			}
+			eon_nuclear_fuel_trade_retire_record = yes
+		}
+		else_if = {
+			limit = {
+				check_variable = { eon_nuclear_fuel_trade_phase = 1 }
+				OR = {
+					NOT = { has_country_flag = eon_nuclear_fuel_trade_live }
+					var:eon_nuclear_fuel_trade_partner = {
+						OR = {
+							NOT = { has_country_flag = eon_nuclear_fuel_trade_live }
+							has_war_with = PREV
+						}
+					}
+					has_war_with = var:eon_nuclear_fuel_trade_partner
+				}
+			}
+			set_variable = { eon_nuclear_fuel_trade_phase = 4 }
+			clr_country_flag = eon_nuclear_fuel_trade_live
+			eon_nuclear_fuel_trade_return_escrow = yes
+			var:eon_nuclear_fuel_trade_partner = {
+				set_variable = { eon_nuclear_fuel_trade_phase = 4 }
+				clr_country_flag = eon_nuclear_fuel_trade_live
+				eon_nuclear_fuel_trade_return_escrow = yes
+			}
+			update_energy_dirty_variable = yes
+		}
+	}
+}
+
+# Annex callback input: temporary eon_nuclear_fuel_trade_annexed_partner.
+eon_nuclear_fuel_trade_cleanup_annexed_pair = {
+	if = {
+		limit = {
+			has_country_flag = eon_nuclear_fuel_trade_reserved
+			check_variable = { eon_nuclear_fuel_trade_partner = eon_nuclear_fuel_trade_annexed_partner }
+		}
+		eon_nuclear_fuel_trade_retire_record = yes
+	}
+}
+
+# Called in annexed country scope; input temporary successor country ID.
+# Ordinary treasury/stock inheritance belongs to the existing engine path.
+# This effect transfers only still-held trade assets and deferred claims once.
+eon_nuclear_fuel_trade_transfer_annexed_assets = {
+	if = {
+		limit = {
+			var:eon_nuclear_fuel_trade_successor = {
+				exists = yes
+				NOT = { tag = PREV }
+			}
+		}
+	set_temp_variable = { eon_nuclear_fuel_trade_annex_cash = eon_nuclear_fuel_trade_cash_refund_due }
+	add_to_temp_variable = { eon_nuclear_fuel_trade_annex_cash = eon_nuclear_fuel_trade_cash_escrow }
+	set_temp_variable = { eon_nuclear_fuel_trade_annex_fuel = eon_nuclear_fuel_trade_fuel_refund_due }
+	add_to_temp_variable = { eon_nuclear_fuel_trade_annex_fuel = eon_nuclear_fuel_trade_fuel_escrow }
+	clear_variable = eon_nuclear_fuel_trade_cash_refund_due
+	clear_variable = eon_nuclear_fuel_trade_fuel_refund_due
+	set_variable = { eon_nuclear_fuel_trade_cash_escrow = 0 }
+	set_variable = { eon_nuclear_fuel_trade_fuel_escrow = 0 }
+	eon_nuclear_fuel_trade_retire_record = yes
+	var:eon_nuclear_fuel_trade_successor = {
+		add_to_variable = { eon_nuclear_fuel_trade_cash_refund_due = eon_nuclear_fuel_trade_annex_cash }
+		add_to_variable = { eon_nuclear_fuel_trade_fuel_refund_due = eon_nuclear_fuel_trade_annex_fuel }
+		eon_nuclear_fuel_trade_release_refunds = yes
+	}
+	}
+}

@@ -38,7 +38,9 @@ FILES=['common/scripted_effects/eon_energy_delivery_effects.txt',
        'common/scripted_effects/eon_energy_negotiation_effects.txt',
        'common/scripted_effects/eon_energy_ai_effects.txt',
        'common/scripted_effects/eon_energy_settlement_effects.txt',
-       'common/scripted_effects/eon_investment_income_effects.txt']
+       'common/scripted_effects/eon_investment_income_effects.txt',
+       'common/scripted_effects/eon_uranium_effects.txt',
+       'common/scripted_effects/eon_uranium_seed_effects.txt']
 effects={k:v for path in FILES for k,o,v in ast(read(path))}
 TRIGGER_FILES=['common/scripted_triggers/eon_energy_delivery_triggers.txt',
                'common/scripted_triggers/eon_energy_capacity_triggers.txt',
@@ -260,13 +262,24 @@ def execute(nodes,s,c):
         else:raise AssertionError(('Unknown effect',k,op,v))
 
 def state(inputs,order=None):
-    result={'global':{'vars':{'num_days':100,'date':2400},'flags':set(),'arrays':{}},'countries':{},'temp':{},'events':[]}
+    # These electricity-delivery fixtures have no reactors, ore or enrichment.
+    # Geography/unit initialization is an explicit already-initialized boundary;
+    # the real fuel projection AST still executes on every energy calculation.
+    result={'global':{'vars':{'num_days':100,'date':2400},
+        'flags':{'eon_uranium_geology_initialized'},'arrays':{}},'countries':{},'temp':{},'events':[]}
     for identity in (order or list(inputs)):
         generation,demand=inputs[identity]
         result['countries'][identity]={'vars':{'modifier@energy_gain':generation,'modifier@energy_use':demand/1.25,
-            'fuel_k':10,'stored_energy':0,'max_stored_energy':0,'treasury':500,'gdp_total':1},
+            'fuel_k':10,'stored_energy':0,'max_stored_energy':0,'treasury':500,'gdp_total':1,
+            'resource@uranium':0,'eon_natural_uranium_stock_kg':0,'var_reactor_material_stockpile':0,
+            'enrichment_facilities':0,'number_of_damaged_enrichment_facilities':0,
+            'modifier@nuclear_reactor_fuel_production':0,'nuclear_reactors':0,
+            'num_of_damaged_nuclear_reactor':0,'modifier@nuclear_fuel_consumption':0,
+            'modifier@nuclear_energy_gain':0},
             'arrays':{'energy_contractors':[],'energy_contracts_ammount':[],'energy_contracts_price':[]},
-            'flags':{'disable_fossil_fuel_power_plant_flag'},'ideas':set(),'modifiers':set(),'wars':set(),'exists':True,'ai':True}
+            'flags':{'disable_fossil_fuel_power_plant_flag','eon_uranium_country_initialized',
+                     'eon_uranium_reactor_stock_in_kg'},
+            'ideas':set(),'modifiers':set(),'wars':set(),'exists':True,'ai':True}
     return result
 def pair(s,supplier,buyer,quantity,price=.05):
     for country,partner,amount in ((supplier,buyer,-quantity),(buyer,supplier,quantity)):

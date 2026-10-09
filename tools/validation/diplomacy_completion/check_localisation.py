@@ -46,16 +46,24 @@ DEFAULT_OVERRIDE_KEYS = {
      'debt_default_cut_down_government_services_desc'}
 
 
+URANIUM_OVERRIDE_KEYS = {
+    'build_enrichment_facility_button_tt', 'TOTAL_WEEKLY_NUCLEAR_MATERIAL_PRODUCTION_TT',
+    'URANIUM_ENRICHMENT', 'energy.1.d', 'energy.10.d',
+    'change_reactor_grade_material_effect_tt',
+}
+
+
 def approved_override_files(language):
     return {
         f'localisation/{language}/replace/eon_debt_bailout_replace_l_{language}.yml': BAILOUT_OVERRIDE_KEYS,
         f'localisation/{language}/replace/eon_debt_default_l_{language}.yml': DEFAULT_OVERRIDE_KEYS,
+        f'localisation/{language}/replace/eon_uranium_l_{language}.yml': URANIUM_OVERRIDE_KEYS,
     }
 
 
 def approved_override_pairs(language):
     upstream = f'localisation/{language}/MD_money_l_{language}.yml'
-    return {key: (upstream, provider)
+    return {key: (f'localisation/{language}/0_energy_l_{language}.yml' if key in URANIUM_OVERRIDE_KEYS else upstream, provider)
             for provider, keys in approved_override_files(language).items() for key in keys}
 
 

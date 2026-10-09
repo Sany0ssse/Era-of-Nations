@@ -19,15 +19,15 @@ country_event = {
 				set_temp_variable = { nuclear_fuel_consumption_tmp = nuclear_fuel_consumption }
 				multiply_temp_variable = { nuclear_fuel_consumption_tmp = 10 }
 				set_temp_variable = { var_reactor_material_stockpile_tmp = var_reactor_material_stockpile }
-				subtract_from_temp_variable = { var_reactor_material_stockpile_tmp = FROM.temp_nuclear_fuel_ammount }
-				check_variable = { var_reactor_material_stockpile < nuclear_fuel_consumption_tmp }
+				subtract_from_temp_variable = { var_reactor_material_stockpile_tmp = eon_nuclear_fuel_trade_quantity }
+				check_variable = { var_reactor_material_stockpile_tmp < nuclear_fuel_consumption_tmp }
 			}
 			add_to_variable = { ai_accept_chance = -50 }
 		}
 		if = {
 			limit = {
 				has_opinion = {
-					target = PREV
+					target = FROM
 					value > 100
 				}
 			}
@@ -36,7 +36,7 @@ country_event = {
 		if = {
 			limit = {
 				has_opinion = {
-					target = PREV
+					target = FROM
 					value > 150
 				}
 			}
@@ -45,7 +45,7 @@ country_event = {
 		if = {
 			limit = {
 				has_opinion = {
-					target = PREV
+					target = FROM
 					value > 200
 				}
 			}
@@ -53,7 +53,7 @@ country_event = {
 		}
 		if = {
 			limit = {
-				has_war_with = PREV
+				has_war_with = FROM
 			}
 			add_to_variable = { ai_accept_chance = -1000 }
 		}
@@ -104,67 +104,27 @@ country_event = {
 		}
 		if = {
 			limit = {
-				check_variable = { FROM.temp_nuclear_fuel_price = 0 }
+				check_variable = { eon_nuclear_fuel_trade_price = 0 }
 			}
 			add_to_variable = { ai_accept_chance = -1000 }
 		}
-		if = {
-			limit = {
-				check_variable = { nuclear_reactor_fuel_production = 0 }
-			}
-			add_to_variable = { ai_accept_chance = -250 }
-		}
-		set_temp_variable = { price_adjust = FROM.temp_nuclear_fuel_price }
-		add_to_temp_variable = { price_adjust = -0.05 }
-		multiply_temp_variable = { price_adjust = 10000 }
+
+		set_temp_variable = { price_adjust = eon_nuclear_fuel_trade_price }
+		add_to_temp_variable = { price_adjust = -0.5 }
+		multiply_temp_variable = { price_adjust = 100 }
 		add_to_variable = { ai_accept_chance = price_adjust }
-		set_temp_variable = { ammount_adjuster = FROM.temp_nuclear_fuel_ammount }
+		set_temp_variable = { ammount_adjuster = eon_nuclear_fuel_trade_quantity }
 		multiply_temp_variable = { ammount_adjuster = -0.001 }
 		add_to_variable = { ai_accept_chance = ammount_adjuster }
 	}
 
-	option = { #accept to sell
+	option = {
 		name = energy.1.a
+		trigger = { set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 1 } eon_nuclear_fuel_trade_response_ready = yes }
 		log = "[GetDateText]: [This.GetName]: energy.1.a executed"
-		if = {
-			limit = {
-				FROM = { is_ai = yes }
-			}
-			set_temp_variable = { change_resource = -500 }
-			change_reactor_grade_material_effect = yes
-			set_temp_variable = { treasury_change = 0.25 }
-			modify_treasury_effect = yes
-			FROM = {
-				set_temp_variable = { change_resource = 500 }
-				change_reactor_grade_material_effect = yes
-				set_temp_variable = { treasury_change = -0.25 }
-				modify_treasury_effect = yes
-				country_event = energy.2
-			}
-		}
-		else = {
-			set_temp_variable = { change_resource = FROM.temp_nuclear_fuel_ammount }
-			multiply_temp_variable = { change_resource = -1 }
-			change_reactor_grade_material_effect = yes
-			set_temp_variable = { purchase_price =  FROM.temp_nuclear_fuel_price }
-			multiply_temp_variable = { purchase_price = FROM.temp_nuclear_fuel_ammount }
-			multiply_temp_variable = { purchase_price = 0.01 }
-			set_temp_variable = { treasury_change = purchase_price }
-			modify_treasury_effect = yes
-			FROM = {
-				set_temp_variable = { change_resource = FROM.temp_nuclear_fuel_ammount }
-				change_reactor_grade_material_effect = yes
-				set_temp_variable = { purchase_price =  FROM.temp_nuclear_fuel_price }
-				multiply_temp_variable = { purchase_price = FROM.temp_nuclear_fuel_ammount }
-				multiply_temp_variable = { purchase_price = -0.01 }
-				set_temp_variable = { treasury_change = purchase_price }
-				modify_treasury_effect = yes
-				country_event = energy.2
-			}
-		}
-		
+		set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 1 }
+		eon_nuclear_fuel_trade_accept = yes
 		clear_variable = ai_accept_chance
-
 		ai_chance = {
 			base = 100
 			modifier = {
@@ -175,21 +135,22 @@ country_event = {
     				compare = less_than_or_equals
 				}
 			}
+
+			modifier = { factor = 0 set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 1 } NOT = { eon_nuclear_fuel_trade_response_ready = yes } }
 		}
 	}
-	option = { #refuse to sell
+	option = {
 		name = energy.1.b
 		log = "[GetDateText]: [This.GetName]: energy.1.b executed"
-		FROM = {
-			country_event = energy.3
-		}
-
+		set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 1 }
+		eon_nuclear_fuel_trade_refuse = yes
 		clear_variable = ai_accept_chance
-
 		ai_chance = {
 			base = 100
 			modifier = {
 				factor = 0
+				set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 1 }
+				eon_nuclear_fuel_trade_response_ready = yes
 				check_variable = { ai_accept_chance > 0 }
 			}
 		}
@@ -205,19 +166,9 @@ country_event = {
 
 	option = {
 		name = energy.2.a
-		log = "[GetDateText]: [This.GetName]: energy.2.a executed"
-		hidden_effect = {
-			clr_country_flag = currently_considering_an_offer
-			clear_variable = temp_nuclear_fuel_ammount
-			clear_variable = temp_nuclear_fuel_price
-			clear_variable = nuclear_fuel_selling_selected_TAG
-			FROM = {
-				clr_country_flag = currently_considering_an_offer
-				clear_variable = temp_nuclear_fuel_ammount
-				clear_variable = temp_nuclear_fuel_price
-				clear_variable = nuclear_fuel_selling_selected_TAG
-			}
-		}
+		set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 1 }
+		set_temp_variable = { eon_nuclear_fuel_trade_result_kind = 2 }
+		eon_nuclear_fuel_trade_acknowledge = yes
 	}
 }
 
@@ -229,17 +180,9 @@ country_event = {
 
 	option = {
 		name = energy.3.a
-		log = "[GetDateText]: [This.GetName]: energy.3.a executed"
-		clr_country_flag = currently_considering_an_offer
-		clear_variable = temp_nuclear_fuel_ammount
-		clear_variable = temp_nuclear_fuel_price
-		clear_variable = nuclear_fuel_selling_selected_TAG
-		FROM = {
-			clr_country_flag = currently_considering_an_offer
-			clear_variable = temp_nuclear_fuel_ammount
-			clear_variable = temp_nuclear_fuel_price
-			clear_variable = nuclear_fuel_selling_selected_TAG
-		}
+		set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 1 }
+		set_temp_variable = { eon_nuclear_fuel_trade_result_kind = 3 }
+		eon_nuclear_fuel_trade_acknowledge = yes
 	}
 }
 
@@ -381,6 +324,7 @@ country_event = {
 	option = {
 		name = energy.5.a
 		log = "[GetDateText]: [This.GetName]: energy.5.a executed"
+		eon_enrichment_cancel_project = yes
 		remove_mission = energy_building_enrichment_facilities
 		add_opinion_modifier = { target = FROM modifier = canceled_our_enrichment_facility_construction }
 		FROM = {
@@ -443,11 +387,6 @@ country_event = {
 	option = {
 		name = energy.6.a
 		log = "[GetDateText]: [This.GetName]: energy.6.a executed"
-		effect_tooltip = {
-			FROM = {
-				remove_mission = energy_building_enrichment_facilities
-			}
-		}
 		hidden_effect = {
 			FROM = {
 				clear_variable = new_enrichment_country
@@ -530,8 +469,9 @@ country_event = {
 
 	immediate = {
 		set_variable = { ai_accept_chance = 0 }
+		# Preserve the legacy fuel duration after converting stock units to kg.
 		if = {
-			limit = { check_variable = { var_reactor_material_stockpile < 3000 } }
+			limit = { check_variable = { var_reactor_material_stockpile < 173100 } }
 			add_to_variable = { ai_accept_chance = 100 }
 		}
 		if = {
@@ -589,7 +529,7 @@ country_event = {
 		if = {
 			limit = {
 				has_opinion = {
-					target = ROOT
+					target = FROM
 					value < 75
 				}
 			}
@@ -609,63 +549,52 @@ country_event = {
 					any_other_country = {
 						is_in_array = { global.enrichment_countries = THIS.id }
 						check_variable = { nuclear_reactor_fuel_production > nuclear_fuel_consumption }
-						check_variable = { var_reactor_material_stockpile > 1500 }
+						# Preserve the legacy fuel duration after converting stock units to kg.
+						check_variable = { var_reactor_material_stockpile > 86550 }
 					}
 				}
 			}
 			add_to_variable = { ai_accept_chance = 100 }
 		}
-		set_temp_variable = { price_adjust = FROM.temp_nuclear_fuel_price }
-		add_to_temp_variable = { price_adjust = -0.05 }
-		multiply_temp_variable = { price_adjust = -1000 }
+		set_temp_variable = { price_adjust = eon_nuclear_fuel_trade_price }
+		add_to_temp_variable = { price_adjust = -0.5 }
+		multiply_temp_variable = { price_adjust = -100 }
 		add_to_variable = { ai_accept_chance = price_adjust }
-		set_temp_variable = { ammount_adjuster = FROM.temp_nuclear_fuel_ammount }
-		multiply_temp_variable = { ammount_adjuster = 0.01 }
-		add_to_variable = { ai_accept_chance = ammount_adjuster }
+		# Benefit follows a six-month reserve shortfall, not the absolute kg lot.
+		# A huge unwanted shipment cannot buy acceptance through an AI bonus.
+		set_temp_variable = { eon_fuel_ai_reserve_target = nuclear_fuel_consumption }
+		multiply_temp_variable = { eon_fuel_ai_reserve_target = 26 }
+		clamp_temp_variable = { var = eon_fuel_ai_reserve_target min = 0 max = 20000000 }
+		set_temp_variable = { eon_fuel_ai_reserve_gap = eon_fuel_ai_reserve_target }
+		subtract_from_temp_variable = { eon_fuel_ai_reserve_gap = var_reactor_material_stockpile }
+		clamp_temp_variable = { var = eon_fuel_ai_reserve_gap min = 0 }
+		set_temp_variable = { ammount_adjuster = 0 }
+		if = {
+			limit = { check_variable = { eon_fuel_ai_reserve_gap > 0 } }
+			set_temp_variable = { ammount_adjuster = eon_nuclear_fuel_trade_quantity }
+			clamp_temp_variable = { var = ammount_adjuster min = 0 max = eon_fuel_ai_reserve_gap }
+			divide_temp_variable = { ammount_adjuster = eon_fuel_ai_reserve_gap }
+			multiply_temp_variable = { ammount_adjuster = 50 }
+			clamp_temp_variable = { var = ammount_adjuster min = 0 max = 50 }
+			add_to_variable = { ai_accept_chance = ammount_adjuster }
+		}
+		else = { clamp_variable = { var = ai_accept_chance max = 0 } }
+		set_temp_variable = { eon_fuel_ai_max_useful_lot = eon_fuel_ai_reserve_gap }
+		# One editor step accommodates procurement lot rounding near the target.
+		add_to_temp_variable = { eon_fuel_ai_max_useful_lot = 500 }
+		if = {
+			limit = { check_variable = { eon_nuclear_fuel_trade_quantity > eon_fuel_ai_max_useful_lot } }
+			clamp_variable = { var = ai_accept_chance max = 0 }
+		}
 	}
 
-	option = { #accept to sell
+	option = {
 		name = energy.10.a
+		trigger = { set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 2 } eon_nuclear_fuel_trade_response_ready = yes }
 		log = "[GetDateText]: [This.GetName]: energy.10.a executed"
-		if = {
-			limit = {
-				FROM = { is_ai = yes }
-			}
-			set_temp_variable = { change_resource = 500 }
-			change_reactor_grade_material_effect = yes
-			set_temp_variable = { treasury_change = -0.25 }
-			modify_treasury_effect = yes
-			FROM = {
-				set_temp_variable = { change_resource = -500 }
-				change_reactor_grade_material_effect = yes
-				set_temp_variable = { treasury_change = 0.25 }
-				modify_treasury_effect = yes
-				country_event = energy.11
-			}
-		}
-		else = {
-			set_temp_variable = { change_resource = FROM.temp_nuclear_fuel_ammount }
-			multiply_temp_variable = { change_resource = -1 }
-			change_reactor_grade_material_effect = yes
-			set_temp_variable = { purchase_price =  FROM.temp_nuclear_fuel_price }
-			multiply_temp_variable = { purchase_price = FROM.temp_nuclear_fuel_ammount }
-			multiply_temp_variable = { purchase_price = 0.01 }
-			set_temp_variable = { treasury_change = purchase_price }
-			modify_treasury_effect = yes
-			FROM = {
-				set_temp_variable = { change_resource = FROM.temp_nuclear_fuel_ammount }
-				change_reactor_grade_material_effect = yes
-				set_temp_variable = { purchase_price =  FROM.temp_nuclear_fuel_price }
-				multiply_temp_variable = { purchase_price = FROM.temp_nuclear_fuel_ammount }
-				multiply_temp_variable = { purchase_price = -0.01 }
-				set_temp_variable = { treasury_change = purchase_price }
-				modify_treasury_effect = yes
-				country_event = energy.11
-			}
-		}
-		
+		set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 2 }
+		eon_nuclear_fuel_trade_accept = yes
 		clear_variable = ai_accept_chance
-
 		ai_chance = {
 			base = 100
 			modifier = {
@@ -676,21 +605,22 @@ country_event = {
     				compare = less_than_or_equals
 				}
 			}
+
+			modifier = { factor = 0 set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 2 } NOT = { eon_nuclear_fuel_trade_response_ready = yes } }
 		}
 	}
-	option = { #refuse to sell
+	option = {
 		name = energy.10.b
 		log = "[GetDateText]: [This.GetName]: energy.10.b executed"
-		FROM = {
-			country_event = energy.12
-		}
-		
+		set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 2 }
+		eon_nuclear_fuel_trade_refuse = yes
 		clear_variable = ai_accept_chance
-
 		ai_chance = {
 			base = 100
 			modifier = {
 				factor = 0
+				set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 2 }
+				eon_nuclear_fuel_trade_response_ready = yes
 				check_variable = { ai_accept_chance > 0 }
 			}
 		}
@@ -706,19 +636,9 @@ country_event = {
 
 	option = {
 		name = energy.11.a
-		log = "[GetDateText]: [This.GetName]: energy.11.a executed"
-		hidden_effect = {
-			clr_country_flag = currently_considering_an_offer
-			clear_variable = temp_nuclear_fuel_ammount
-			clear_variable = temp_nuclear_fuel_price
-			clear_variable = nuclear_fuel_selling_selected_TAG
-			FROM = {
-				clr_country_flag = currently_considering_an_offer
-				clear_variable = temp_nuclear_fuel_ammount
-				clear_variable = temp_nuclear_fuel_price
-				clear_variable = nuclear_fuel_selling_selected_TAG
-			}
-		}
+		set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 2 }
+		set_temp_variable = { eon_nuclear_fuel_trade_result_kind = 2 }
+		eon_nuclear_fuel_trade_acknowledge = yes
 	}
 }
 
@@ -730,16 +650,8 @@ country_event = {
 
 	option = {
 		name = energy.12.a
-		log = "[GetDateText]: [This.GetName]: energy.12.a executed"
-		clr_country_flag = currently_considering_an_offer
-		clear_variable = nuclear_fuel_selling_selected_TAG
-		clear_variable = temp_nuclear_fuel_ammount
-		clear_variable = temp_nuclear_fuel_price
-		FROM = {
-			clr_country_flag = currently_considering_an_offer
-			clear_variable = temp_nuclear_fuel_ammount
-			clear_variable = temp_nuclear_fuel_price
-			clear_variable = nuclear_fuel_selling_selected_TAG
-		}
+		set_temp_variable = { eon_nuclear_fuel_trade_response_kind = 2 }
+		set_temp_variable = { eon_nuclear_fuel_trade_result_kind = 3 }
+		eon_nuclear_fuel_trade_acknowledge = yes
 	}
 }

@@ -2552,12 +2552,7 @@ update_missile_satellite_inventory = {
 # Function: nuclear_reactor_fuel_consumption
 # Purpose: This subtracts reactor grade material from the stockpile based on number of reactors
 nuclear_reactor_fuel_consumption = {
-	subtract_from_variable = { var_reactor_material_stockpile = nuclear_fuel_consumption } #consumption calculated in energy effects
-	clamp_variable = { var = var_reactor_material_stockpile min = 0 }
-
-	# Update Stockpile
-	add_to_variable = { var_reactor_material_stockpile = nuclear_reactor_fuel_production }
-	clamp_variable = { var = var_reactor_material_stockpile min = 0 max = 20000000 }
+	eon_uranium_weekly_materials = yes
 }
 
 # Function: setup_starting_reactor_stockpile
@@ -2573,8 +2568,9 @@ setup_starting_reactor_stockpile = {
 		add_to_variable = { PREV.nuclear_reactors = building_level@nuclear_reactor }
 	}
 	set_temp_variable = { starting_reactor_grade_stockpile = nuclear_reactors }
-	multiply_temp_variable = { starting_reactor_grade_stockpile = 2500 }
+	multiply_temp_variable = { starting_reactor_grade_stockpile = 144250 } # kg U: retain about 125 weeks of the existing startup buffer
 	set_variable = { var_reactor_material_stockpile = starting_reactor_grade_stockpile }
+	set_country_flag = eon_uranium_reactor_stock_in_kg
 }
 
 # Utilities

@@ -22,6 +22,7 @@ SCRATCH.mkdir(parents=True, exist_ok=True)
 KEY = 'debt_default_pay_10_from_treasury'
 BAILOUT = 'bankruptcy_seek_bailout_from_biggest_influencer_desc'
 COMPLETE = 'debt_default_main_mission_complete_trigger'
+REWARD = 'change_reactor_grade_material_effect_tt'
 
 
 def paths(language):
@@ -32,7 +33,7 @@ def paths(language):
 
 def create_fixture(folder):
     for language in ('english', 'russian'):
-        for relative in paths(language):
+        for relative in paths(language) + (f'localisation/{language}/0_energy_l_{language}.yml', f'localisation/{language}/replace/eon_uranium_l_{language}.yml'):
             target = folder / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes((ROOT / relative).read_bytes())
@@ -40,7 +41,8 @@ def create_fixture(folder):
         alias.write_bytes(('\ufeffl_' + language + ':\n' +
                           f' EON_OPEN_ECONOMIC_CONSULTATIONS_TITLE:0 "${KEY}$"\n' +
                           f' EON_WITHDRAW_CONSULTATION_REQUEST_TITLE:0 "${BAILOUT}$"\n' +
-                          f' EON_PROPOSE_DEFENSIVE_ALLIANCE_TITLE:0 "${COMPLETE}$"\n').encode('utf-8'))
+                          f' EON_PROPOSE_DEFENSIVE_ALLIANCE_TITLE:0 "${COMPLETE}$"\n' +
+                          f' PROPOSE_ENERGY_AGREEMENT_REJECT_TT:0 "${REWARD}$"\n').encode('utf-8'))
 
 
 def line_for(folder, relative, key):
@@ -77,7 +79,7 @@ def run_case(label, mutate=None, error_marker=None):
             return {'case': label, 'expected_rejection': True,
                     'matching_errors': [error for error in report['errors'] if error_marker in error]}
         assert completed.returncode == 0 and report['checks_passed'], (label, report['errors'])
-        assert report['approved_overrides_per_language'] == {'english': 25, 'russian': 25}
+        assert report['approved_overrides_per_language'] == {'english': 31, 'russian': 31}
         for language in ('english', 'russian'):
             upstream, bailout, default = paths(language)
             for relative in (upstream, bailout, default):
@@ -86,9 +88,11 @@ def run_case(label, mutate=None, error_marker=None):
                 ('EON_OPEN_ECONOMIC_CONSULTATIONS_TITLE', KEY, default),
                 ('EON_WITHDRAW_CONSULTATION_REQUEST_TITLE', BAILOUT, bailout),
                 ('EON_PROPOSE_DEFENSIVE_ALLIANCE_TITLE', COMPLETE, default),
+                ('PROPOSE_ENERGY_AGREEMENT_REJECT_TT', REWARD, f'localisation/{language}/replace/eon_uranium_l_{language}.yml'),
             ):
                 replacement = c.KEY.fullmatch(line_for(folder, provider, key))[2]
-                original = c.KEY.fullmatch(line_for(folder, upstream, key))[2]
+                original_provider = f'localisation/{language}/0_energy_l_{language}.yml' if key == REWARD else upstream
+                original = c.KEY.fullmatch(line_for(folder, original_provider, key))[2]
                 assert replacement != original, 'The alias probe must distinguish old and replacement values'
                 assert report['resolved_text_samples'][language][sample] == replacement
                 assert report['approved_override_providers'][language][key] == provider
@@ -119,6 +123,12 @@ def main():
     assert not c.BAILOUT_OVERRIDE_KEYS & c.DEFAULT_OVERRIDE_KEYS
     assert c.approved_override_pairs('english').keys() == c.approved_override_pairs('russian').keys()
     controls = [run_case('exact_two_providers_use_replace_aliases')]
+    uranium = 'localisation/english/replace/eon_uranium_l_english.yml'
+    controls.append(run_case('missing_kg_reward_override',
+                             lambda f: replace_line(f, uranium, REWARD, ''), 'wrong approved override key set'))
+    controls.append(run_case('kg_reward_third_provider',
+                             lambda f: new_provider(f, 'eon_third_kg_reward_l_english.yml', REWARD),
+                             'invalid approved override providers'))
     upstream, bailout, default = paths('english')
     controls.append(run_case('missing_override_file', lambda f: (f / default).unlink(), 'missing approved override file'))
     controls.append(run_case('third_provider', lambda f: new_provider(f, 'unapproved_l_english.yml'), 'invalid approved override providers'))

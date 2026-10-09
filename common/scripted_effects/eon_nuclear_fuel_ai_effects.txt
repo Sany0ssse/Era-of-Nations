@@ -1,0 +1,64 @@
+# COUNTRY: prepare editable terms only. Actual sending repeats the transaction
+# guards and reserves an owned asset. Buffer lengths and price are game rules.
+eon_nuclear_fuel_ai_prepare_offer = {
+ if = {
+  limit = { is_ai = yes NOT = { has_country_flag = eon_nuclear_fuel_trade_reserved } NOT = { has_country_flag = currently_considering_an_offer } }
+  clear_variable = nuclear_fuel_selling_selected_TAG
+  set_temp_variable = { eon_fuel_ai_buffer = nuclear_fuel_consumption }
+  multiply_temp_variable = { eon_fuel_ai_buffer = 26 }
+  set_temp_variable = { eon_fuel_ai_low_buffer = nuclear_fuel_consumption }
+  multiply_temp_variable = { eon_fuel_ai_low_buffer = 4 }
+  if = {
+   limit = { has_nuclear_reactors = yes check_variable = { nuclear_reactor_fuel_production < nuclear_fuel_consumption } check_variable = { var_reactor_material_stockpile < eon_fuel_ai_low_buffer } }
+   set_temp_variable = { eon_fuel_ai_buy_quantity = eon_fuel_ai_buffer }
+   subtract_from_temp_variable = { eon_fuel_ai_buy_quantity = var_reactor_material_stockpile }
+   clamp_temp_variable = { var = eon_fuel_ai_buy_quantity min = 100 max = 20000000 }
+   set_variable = { temp_nuclear_fuel_price = 0.5 }
+   random_country = {
+    limit = {
+     exists = yes NOT = { tag = PREV } NOT = { has_war_with = PREV }
+     NOT = { is_embargoing = PREV } NOT = { is_embargoed_by = PREV }
+     NOT = { has_country_flag = eon_nuclear_fuel_exports_blocked }
+     NOT = { has_country_flag = eon_nuclear_fuel_trade_reserved }
+    NOT = { has_country_flag = currently_considering_an_offer }
+     set_temp_variable = { eon_fuel_ai_sellable = var_reactor_material_stockpile }
+     set_temp_variable = { eon_fuel_ai_keep = nuclear_fuel_consumption }
+     multiply_temp_variable = { eon_fuel_ai_keep = 10 }
+     subtract_from_temp_variable = { eon_fuel_ai_sellable = eon_fuel_ai_keep }
+     NOT = { check_variable = { eon_fuel_ai_sellable < eon_fuel_ai_buy_quantity } }
+    }
+    PREV = {
+     set_variable = { nuclear_fuel_selling_selected_TAG = PREV.id }
+     set_variable = { temp_nuclear_fuel_ammount = eon_fuel_ai_buy_quantity }
+    }
+   }
+  }
+  else_if = {
+   limit = { check_variable = { nuclear_reactor_fuel_production > nuclear_fuel_consumption } check_variable = { var_reactor_material_stockpile > eon_fuel_ai_buffer } }
+   set_temp_variable = { eon_fuel_ai_sell_quantity = var_reactor_material_stockpile }
+   subtract_from_temp_variable = { eon_fuel_ai_sell_quantity = eon_fuel_ai_buffer }
+   clamp_temp_variable = { var = eon_fuel_ai_sell_quantity min = 0 max = 20000000 }
+   random_country = {
+    limit = {
+     exists = yes NOT = { tag = PREV } has_nuclear_reactors = yes
+     NOT = { has_war_with = PREV } NOT = { is_embargoing = PREV } NOT = { is_embargoed_by = PREV }
+     NOT = { has_country_flag = eon_nuclear_fuel_trade_reserved }
+    NOT = { has_country_flag = currently_considering_an_offer }
+     set_temp_variable = { eon_fuel_ai_buyer_low = nuclear_fuel_consumption }
+     multiply_temp_variable = { eon_fuel_ai_buyer_low = 4 }
+     check_variable = { var_reactor_material_stockpile < eon_fuel_ai_buyer_low }
+    }
+    set_temp_variable = { eon_fuel_ai_buyer_need = nuclear_fuel_consumption }
+    multiply_temp_variable = { eon_fuel_ai_buyer_need = 26 }
+    subtract_from_temp_variable = { eon_fuel_ai_buyer_need = var_reactor_material_stockpile }
+    clamp_temp_variable = { var = eon_fuel_ai_sell_quantity min = 0 max = eon_fuel_ai_buyer_need }
+    PREV = {
+     set_variable = { nuclear_fuel_selling_selected_TAG = PREV.id }
+     set_variable = { temp_nuclear_fuel_price = 0.5 }
+     set_variable = { temp_nuclear_fuel_ammount = eon_fuel_ai_sell_quantity }
+     multiply_variable = { temp_nuclear_fuel_ammount = -1 }
+    }
+   }
+  }
+ }
+}

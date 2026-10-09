@@ -1,0 +1,33 @@
+on_actions = {
+ on_daily = { effect = { eon_uranium_daily = yes } }
+ # ROOT annexer; FROM annexed country. Source stocks are cleared before reuse.
+ on_annex = {
+  effect = {
+   set_temp_variable = { eon_nuclear_fuel_trade_successor = ROOT.id }
+   FROM = {
+    eon_nuclear_fuel_trade_transfer_annexed_assets = yes
+    eon_uranium_transfer_annexed_assets = yes
+   }
+   every_country = {
+    limit = { exists = yes NOT = { tag = FROM } }
+    set_temp_variable = { eon_nuclear_fuel_trade_annexed_partner = FROM.id }
+    eon_nuclear_fuel_trade_cleanup_annexed_pair = yes
+   }
+  }
+ }
+ # ROOT integrated subject; FROM overlord (native subject integration scope).
+ on_subject_annexed = {
+  effect = {
+   set_temp_variable = { eon_nuclear_fuel_trade_successor = FROM.id }
+   ROOT = {
+    eon_nuclear_fuel_trade_transfer_annexed_assets = yes
+    eon_uranium_transfer_annexed_assets = yes
+   }
+   every_country = {
+    limit = { exists = yes NOT = { tag = ROOT } }
+    set_temp_variable = { eon_nuclear_fuel_trade_annexed_partner = ROOT.id }
+    eon_nuclear_fuel_trade_cleanup_annexed_pair = yes
+   }
+  }
+ }
+}

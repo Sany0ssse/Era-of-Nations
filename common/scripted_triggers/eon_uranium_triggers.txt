@@ -1,0 +1,31 @@
+eon_enrichment_project_ready = {
+ OR = { check_variable = { eon_requested_facilities = 1 } check_variable = { eon_requested_facilities = 3 } }
+ has_tech = nuclear_technology
+ NOT = { has_active_mission = bankruptcy_incoming_collapse }
+ NOT = { has_active_mission = energy_building_enrichment_facilities }
+ # Selectable mission timers can run while has_active_mission is false.
+ NOT = { check_variable = { days_mission_timeout@energy_building_enrichment_facilities > 0 } }
+ NOT = { has_country_flag = eon_enrichment_project_paid }
+ set_temp_variable = { eon_enrichment_limit = industrial_complex_total }
+ divide_temp_variable = { eon_enrichment_limit = 20 }
+ round_temp_variable = eon_enrichment_limit
+ add_to_temp_variable = { eon_enrichment_limit = 1 }
+ set_temp_variable = { eon_proposed_facilities = enrichment_facilities }
+ add_to_temp_variable = { eon_proposed_facilities = eon_requested_facilities }
+ NOT = { check_variable = { eon_proposed_facilities > eon_enrichment_limit } }
+ set_temp_variable = { eon_project_price = eon_requested_facilities }
+ multiply_temp_variable = { eon_project_price = 25 }
+ NOT = { check_variable = { treasury < eon_project_price } }
+}
+eon_uranium_mine_expansion_ready = {
+ # Mining does not require owning a reactor or an enrichment programme.
+ NOT = { check_variable = { treasury < 0.25 } }
+ FROM = {
+  is_owned_by = ROOT is_controlled_by = ROOT
+  has_variable = eon_uranium_reserve_kg
+  NOT = { check_variable = { eon_uranium_capacity_limit < 0.1 } }
+  NOT = { has_state_flag = eon_uranium_mine_project }
+  check_variable = { eon_uranium_reserve_kg > 0 }
+  check_variable = { eon_uranium_capacity < eon_uranium_capacity_limit }
+ }
+}

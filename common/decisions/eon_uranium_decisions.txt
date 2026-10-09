@@ -1,0 +1,40 @@
+eon_uranium_category = {
+ eon_nuclear_fuel_block_exports = {
+  icon = generic_decision
+  visible = { is_ai = no NOT = { has_country_flag = eon_nuclear_fuel_exports_blocked } }
+  available = { always = yes }
+  cost = 0
+  complete_effect = { set_country_flag = eon_nuclear_fuel_exports_blocked }
+  ai_will_do = { factor = 0 }
+ }
+ eon_nuclear_fuel_unblock_exports = {
+  icon = generic_decision
+  visible = { is_ai = no has_country_flag = eon_nuclear_fuel_exports_blocked }
+  available = { always = yes }
+  cost = 0
+  complete_effect = { clr_country_flag = eon_nuclear_fuel_exports_blocked }
+  ai_will_do = { factor = 0 }
+ }
+ eon_uranium_status = {
+  icon = generic_decision
+  visible = { is_ai = no }
+  available = { always = yes }
+  cost = 0
+  complete_effect = { eon_uranium_project_fuel = yes }
+  ai_will_do = { factor = 0 }
+ }
+ eon_uranium_expand_mine = {
+  icon = generic_prospect_for_resources
+  state_target = any_owned_state
+  on_map_mode = map_and_decisions_view
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { is_owned_by = ROOT is_controlled_by = ROOT has_variable = eon_uranium_reserve_kg } }
+  visible = { FROM = { has_variable = eon_uranium_reserve_kg } }
+  available = { custom_trigger_tooltip = { tooltip = eon_uranium_mine_ready_tt eon_uranium_mine_expansion_ready = yes } }
+  cost = 0
+  days_remove = 730
+  complete_effect = { eon_uranium_begin_mine_project = yes }
+  remove_effect = { eon_uranium_complete_mine_project = yes }
+  ai_will_do = { factor = 1 }
+ }
+}

@@ -38,7 +38,9 @@ FILES=['common/scripted_effects/eon_energy_delivery_effects.txt',
        'common/scripted_effects/eon_energy_negotiation_effects.txt',
        'common/scripted_effects/eon_energy_ai_effects.txt',
        'common/scripted_effects/eon_energy_settlement_effects.txt',
-       'common/scripted_effects/eon_investment_income_effects.txt']
+       'common/scripted_effects/eon_investment_income_effects.txt',
+       'common/scripted_effects/eon_uranium_effects.txt',
+       'common/scripted_effects/eon_uranium_seed_effects.txt']
 effects={k:v for path in FILES for k,o,v in ast(read(path))}
 TRIGGER_FILES=['common/scripted_triggers/eon_energy_delivery_triggers.txt',
                'common/scripted_triggers/eon_energy_capacity_triggers.txt',
@@ -261,13 +263,24 @@ def execute(nodes,s,c):
         else:raise AssertionError(('Unknown effect',k,op,v))
 
 def state(inputs,order=None):
-    result={'global':{'vars':{'num_days':100,'date':2400},'flags':set(),'arrays':{}},'countries':{},'temp':{},'events':[]}
+    # These electricity-delivery fixtures have no reactors, ore or enrichment.
+    # Geography/unit initialization is an explicit already-initialized boundary;
+    # the real fuel projection AST still executes on every energy calculation.
+    result={'global':{'vars':{'num_days':100,'date':2400},
+        'flags':{'eon_uranium_geology_initialized'},'arrays':{}},'countries':{},'temp':{},'events':[]}
     for identity in (order or list(inputs)):
         generation,demand=inputs[identity]
         result['countries'][identity]={'vars':{'modifier@energy_gain':generation,'modifier@energy_use':demand/1.25,
-            'fuel_k':10,'stored_energy':0,'max_stored_energy':0,'treasury':500,'gdp_total':1},
+            'fuel_k':10,'stored_energy':0,'max_stored_energy':0,'treasury':500,'gdp_total':1,
+            'resource@uranium':0,'eon_natural_uranium_stock_kg':0,'var_reactor_material_stockpile':0,
+            'enrichment_facilities':0,'number_of_damaged_enrichment_facilities':0,
+            'modifier@nuclear_reactor_fuel_production':0,'nuclear_reactors':0,
+            'num_of_damaged_nuclear_reactor':0,'modifier@nuclear_fuel_consumption':0,
+            'modifier@nuclear_energy_gain':0},
             'arrays':{'energy_contractors':[],'energy_contracts_ammount':[],'energy_contracts_price':[]},
-            'flags':{'disable_fossil_fuel_power_plant_flag'},'ideas':set(),'modifiers':set(),'wars':set(),'exists':True,'ai':True}
+            'flags':{'disable_fossil_fuel_power_plant_flag','eon_uranium_country_initialized',
+                     'eon_uranium_reactor_stock_in_kg'},
+            'ideas':set(),'modifiers':set(),'wars':set(),'exists':True,'ai':True}
     return result
 def pair(s,supplier,buyer,quantity,price=.05):
     for country,partner,amount in ((supplier,buyer,-quantity),(buyer,supplier,quantity)):
@@ -293,6 +306,17 @@ def conservation(s):
     close(total,0);close(income,expense)
 
 def tests():
+    # An enabled processing plant still cannot manufacture fuel without feed.
+    # Execute current source; do not replace the newly called helper with a stub.
+    s=state({1:(30,5)});data=s['countries'][1]
+    data['vars']['enrichment_facilities']=1
+    data['flags'].add('enabled_nuclear_reactor_fuel_production')
+    run(s,'calculate_energy_use')
+    close(data['vars']['nuclear_reactor_fuel_production'],0)
+    close(data['vars']['eon_natural_uranium_stock_kg'],0)
+    close(data['vars']['var_reactor_material_stockpile'],0)
+    close(data['vars']['eon_energy_delivery_generation'],30)
+    groups['actual_uranium_projection_no_feed_preserves_delivery_inputs']+=1
     for generation in (0,5,10,30,100):
         s=state({1:(generation,5),2:(0,10),3:(0,20)});pair(s,1,2,10);pair(s,1,3,20)
         run(s);close(delivered(s,2,1),min(max(generation-5,0),30)/3);close(delivered(s,3,1),2*min(max(generation-5,0),30)/3);conservation(s);groups['proportional_shortage']+=1
@@ -459,7 +483,9 @@ if __name__=='__main__':
     scenarios=tests();print(json.dumps({'suite':'package25 actual-source energy delivery','scenarios':sum(scenarios.values()),'groups':scenarios,
         'native_boundaries':dict(native),'source_sha256':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in FILES+TRIGGER_FILES+[GUI_FILE]},
         'proof_limitations':['Current-source interpreter, not native engine execution','State/GDP aggregation supplied by explicit fixtures',
-            'Tax/welfare outside selected current update_display rate nodes are zero fixtures','Native country enumeration and numeric precision require separate engine verification',
+            'Tax/welfare outside selected current update_display rate nodes are zero fixtures',
+            'Uranium geography is preinitialized; no-reactor/no-feed inputs execute actual fuel projection, not mining/trade settlement',
+            'Native country enumeration and numeric precision require separate engine verification',
             'Interval metering, escrow and arrears are separately exercised by package27',
             'No certified network capacity; native hourly queue and cash scheduling require campaign verification'],
         'native_campaign_verified':False},indent=2))
