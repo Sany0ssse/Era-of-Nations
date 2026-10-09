@@ -16,6 +16,14 @@ OWNED_SHA256 = {'common/scripted_guis/MD_money_scripted_gui.txt': {'effects/debt
 def restore_debt_accounting(relative, raw):
     if isinstance(raw, str):
         return restore_debt_accounting(relative, raw.encode('utf-8')).decode('utf-8')
+    # Later missile packet adds exact arsenal hooks and one market-temp reset.
+    # Keep the debt-body digests and every other byte comparison intact.
+    if relative == 'common/scripted_effects/00_money_system.txt':
+        arsenal_spec = importlib.util.spec_from_file_location(
+            'arsenal_budget_bytes', ROOT/'tools/validation/missile_system/byte_compat.py')
+        arsenal = importlib.util.module_from_spec(arsenal_spec)
+        arsenal_spec.loader.exec_module(arsenal)
+        raw = arsenal.restore_arsenal_budget(relative, raw)
     expected = OWNED_SHA256[relative]
     spec = importlib.util.spec_from_file_location('debt_byte_parser', ROOT/'tools/validation/diplomacy_package_03/_support.py')
     p = importlib.util.module_from_spec(spec)

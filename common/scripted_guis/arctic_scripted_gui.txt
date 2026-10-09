@@ -827,61 +827,7 @@ scripted_gui = {
 				}
 				NOT = { has_active_mission = arctic_attack_region }
 			}
-			arctic_big_red_button_click_enabled = {
-				command_power > 50
-				custom_trigger_tooltip = {
-					tooltip = able_to_nuke_arctic_tt
-					any_country = {
-						is_in_array = {
-							array = global.arctic_controllers
-							value = THIS
-						}
-					}
-					NOT = {
-						is_in_array = {
-							array = global.arctic_controllers
-							value = THIS
-						}
-					}
-					NOT = {
-						any_country = {
-							is_in_array = {
-								array = global.arctic_controllers
-								value = THIS
-							}
-							NOT = { has_war_with = PREV }
-						}
-					}
-				}
-				NOT = {
-					has_idea = no_use_case
-				}
-				NOT = {
-					has_idea = non_nuclear_power
-				}
-				NOT = {
-					has_idea = nuclear_energy
-				}
-				custom_trigger_tooltip = {
-					tooltip = able_to_do_nukes_tt
-					OR = {
-						check_variable = { num_equipment@nuclear_missile_equipment > 0 }
-						check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
-					}
-					OR = {
-						any_controlled_state = {
-							OR = {
-								check_variable = { non_damaged_building_level@rocket_site > 0 }
-								AND = {
-									check_variable = { non_damaged_building_level@air_base > 0 }
-									check_variable = { num_equipment@strategic_bomber > 0 }
-								}
-							}
-						}
-						check_variable = { deployed_navy_manpower_k > 0 }
-					}
-				}
-			}
+			arctic_big_red_button_click_enabled = { eon_arctic_nuclear_launch_allowed = yes }
 			arctic_negotiations_button_click_enabled = {
 				has_political_power > 150
 				custom_trigger_tooltip = {
@@ -2558,6 +2504,12 @@ scripted_gui = {
 				update_arctic_dirty_variable = yes
 			}
 			arctic_big_red_button_click = {
+				if = {
+					limit = { eon_arctic_nuclear_launch_allowed = yes }
+					set_temp_variable = { eon_nuclear_scripted_request = 1 }
+					eon_nuclear_scripted_pay_reserve = yes
+					if = {
+						limit = { has_country_flag = eon_nuclear_scripted_reserve_paid }
 				add_command_power = -50
 
 				set_temp_variable = { ai_nuke_success_chance = 0 }
@@ -2885,23 +2837,13 @@ scripted_gui = {
 						set_variable = { global.arctic_unit_xp^i = 0 }
 					}
 				}
-				hidden_effect = {
-					send_equipment = {
-						equipment = nuclear_ballistic_missile_equipment
-						amount = 1
-						target = EUU
-					}
-					send_equipment = {
-						equipment = nuclear_missile_equipment
-						amount = 1
-						target = EUU
-					}
-				}
 				add_named_threat = {
 					threat = 50
 					name = state_nuclear_strike_wt_tt
 				}
 				update_arctic_dirty_variable = yes
+					}
+				}
 			}
 			arctic_negotiations_button_click = {
 				set_variable = { global.arctic_land_to_squander = selected_region }

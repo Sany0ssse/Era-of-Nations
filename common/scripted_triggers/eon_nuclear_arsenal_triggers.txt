@@ -1,0 +1,17 @@
+# Prototype retained; incomplete deployed inventory accounting is default off.
+eon_nuclear_arsenal_enabled = { always = no }
+
+# Funding/certification gate only. National nuclear policies, war, range and
+# available equipment remain separate mandatory native/scripted launch checks.
+eon_nuclear_arsenal_ready = {
+ custom_override_tooltip = {
+  tooltip = eon_nuclear_arsenal_launch_ready_tt
+  OR = {
+   NOT = { eon_nuclear_arsenal_enabled = yes }
+   AND = {
+    NOT = { has_country_flag = eon_nuclear_arsenal_safety_mode }
+    NOT = { check_variable = { eon_nuclear_arsenal_recovery_remaining > 0 } }
+   }
+  }
+ }
+}

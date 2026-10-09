@@ -1,0 +1,97 @@
+# Disabled pending a verified native deployed-missile inventory API.
+# GAME ECONOMIC ABSTRACTION ONLY. Nuclear missile equipment already contains its
+# weapon in this fork. Do not count a second warhead ledger or burn reactor fuel.
+# Existing military spending pays for silos and bomber platforms separately.
+
+eon_nuclear_arsenal_refresh = {
+ set_variable = { eon_nuclear_arsenal_weekly_cost = 0 }
+ if = {
+  limit = { eon_nuclear_arsenal_enabled = yes }
+  if = {
+   limit = { NOT = { has_country_flag = eon_nuclear_arsenal_initialized } }
+   set_country_flag = eon_nuclear_arsenal_initialized
+   if = {
+    limit = { NOT = { has_variable = eon_nuclear_arsenal_recovery_remaining } }
+    set_variable = { eon_nuclear_arsenal_recovery_remaining = 0 }
+   }
+  }
+
+  set_variable = { eon_nuclear_arsenal_reserve = num_equipment@nuclear_missile_equipment }
+  add_to_variable = { eon_nuclear_arsenal_reserve = num_equipment@nuclear_ballistic_missile_equipment }
+  clamp_variable = { var = eon_nuclear_arsenal_reserve min = 0 }
+  set_variable = { eon_nuclear_arsenal_deployed = num_deployed_planes_with_type@nuclear_missile_equipment }
+  add_to_variable = { eon_nuclear_arsenal_deployed = num_deployed_planes_with_type@nuclear_ballistic_missile_equipment }
+  clamp_variable = { var = eon_nuclear_arsenal_deployed min = 0 }
+  set_variable = { eon_nuclear_arsenal_total = eon_nuclear_arsenal_reserve }
+  add_to_variable = { eon_nuclear_arsenal_total = eon_nuclear_arsenal_deployed }
+
+  if = {
+   limit = { check_variable = { eon_nuclear_arsenal_total > 0 } }
+   # Explicit game calibration in billions USD per week, not a quoted unit price.
+   set_variable = { eon_nuclear_arsenal_weekly_cost = eon_nuclear_arsenal_total }
+   multiply_variable = { eon_nuclear_arsenal_weekly_cost = 0.00002 }
+   set_variable = { eon_nuclear_arsenal_deployed_premium = eon_nuclear_arsenal_deployed }
+   multiply_variable = { eon_nuclear_arsenal_deployed_premium = 0.00004 }
+   add_to_variable = { eon_nuclear_arsenal_weekly_cost = eon_nuclear_arsenal_deployed_premium }
+   add_to_variable = { eon_nuclear_arsenal_weekly_cost = 0.002 }
+   if = {
+    limit = { has_country_flag = eon_nuclear_arsenal_safety_mode }
+    multiply_variable = { eon_nuclear_arsenal_weekly_cost = 0.35 }
+   }
+  }
+  else = { set_variable = { eon_nuclear_arsenal_deployed_premium = 0 } }
+  clamp_variable = { var = eon_nuclear_arsenal_weekly_cost min = 0 }
+ }
+}
+
+eon_nuclear_arsenal_weekly = {
+ eon_nuclear_arsenal_refresh = yes
+ if = {
+  limit = { eon_nuclear_arsenal_enabled = yes }
+  # Refresh is free of payment/progress. Only the normal weekly budget pays.
+  if = {
+   limit = { NOT = { has_country_flag = eon_nuclear_arsenal_weekly_processed } }
+   set_country_flag = { flag = eon_nuclear_arsenal_weekly_processed days = 6 value = 1 }
+   if = {
+    limit = {
+     NOT = { has_country_flag = eon_nuclear_arsenal_safety_mode }
+     check_variable = { eon_nuclear_arsenal_recovery_remaining > 0 }
+    }
+    subtract_from_variable = { eon_nuclear_arsenal_recovery_remaining = 1 }
+    clamp_variable = { var = eon_nuclear_arsenal_recovery_remaining min = 0 }
+   }
+  }
+ }
+}
+
+eon_nuclear_arsenal_set_safety = {
+ if = {
+  limit = { eon_nuclear_arsenal_enabled = yes }
+  eon_nuclear_arsenal_refresh = yes
+  if = {
+   limit = {
+    check_variable = { eon_nuclear_arsenal_total > 0 }
+    NOT = { has_country_flag = eon_nuclear_arsenal_safety_mode }
+   }
+   set_country_flag = eon_nuclear_arsenal_safety_mode
+   set_variable = { eon_nuclear_arsenal_recovery_remaining = 0 }
+   eon_nuclear_arsenal_refresh = yes
+   ingame_update_setup = yes
+  }
+ }
+}
+
+eon_nuclear_arsenal_resume_full = {
+ if = {
+  limit = { eon_nuclear_arsenal_enabled = yes }
+  if = {
+   limit = { has_country_flag = eon_nuclear_arsenal_safety_mode }
+   clr_country_flag = eon_nuclear_arsenal_safety_mode
+   # Four successful weekly upkeep pulses; ordinary UI/economic refreshes do not
+   # advance this game certification period and repeated clicks cannot reset it.
+   set_variable = { eon_nuclear_arsenal_recovery_remaining = 4 }
+   eon_nuclear_arsenal_refresh = yes
+   ingame_update_setup = yes
+  }
+ }
+}

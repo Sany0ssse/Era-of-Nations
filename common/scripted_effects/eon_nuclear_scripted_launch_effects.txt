@@ -1,0 +1,51 @@
+# Country scope: pay one reserve family for a scripted AI strike, once.
+# Native raids use their selected air unit; this helper is only for the
+# separate upstream scripted AI route. No civilian reactor fuel is consumed.
+eon_nuclear_scripted_pay_reserve = {
+	clr_country_flag = eon_nuclear_scripted_reserve_paid
+	set_variable = { eon_nuclear_scripted_paid_family = 0 }
+	set_variable = { eon_nuclear_scripted_paid_amount = 0 }
+	if = {
+		limit = {
+			eon_nuclear_arsenal_ready = yes
+			OR = {
+				check_variable = { eon_nuclear_scripted_request = 1 }
+				check_variable = { eon_nuclear_scripted_request = 10 }
+			}
+		}
+		set_temp_variable = { eon_nuclear_scripted_minimum_minus_one = eon_nuclear_scripted_request }
+		subtract_from_temp_variable = { eon_nuclear_scripted_minimum_minus_one = 1 }
+		set_temp_variable = { eon_nuclear_scripted_remove_amount = 0 }
+		subtract_from_temp_variable = { eon_nuclear_scripted_remove_amount = eon_nuclear_scripted_request }
+		if = {
+			limit = { has_equipment = { nuclear_ballistic_missile_equipment > eon_nuclear_scripted_minimum_minus_one } }
+			set_temp_variable = { eon_nuclear_scripted_expected_after = num_equipment@nuclear_ballistic_missile_equipment }
+			subtract_from_temp_variable = { eon_nuclear_scripted_expected_after = eon_nuclear_scripted_request }
+			add_equipment_to_stockpile = {
+				type = nuclear_ballistic_missile_equipment
+				amount = eon_nuclear_scripted_remove_amount
+			}
+			if = {
+				limit = { check_variable = { num_equipment@nuclear_ballistic_missile_equipment = eon_nuclear_scripted_expected_after } }
+				set_country_flag = eon_nuclear_scripted_reserve_paid
+				set_variable = { eon_nuclear_scripted_paid_family = 1 }
+				set_variable = { eon_nuclear_scripted_paid_amount = eon_nuclear_scripted_request }
+			}
+		}
+		else_if = {
+			limit = { has_equipment = { nuclear_missile_equipment > eon_nuclear_scripted_minimum_minus_one } }
+			set_temp_variable = { eon_nuclear_scripted_expected_after = num_equipment@nuclear_missile_equipment }
+			subtract_from_temp_variable = { eon_nuclear_scripted_expected_after = eon_nuclear_scripted_request }
+			add_equipment_to_stockpile = {
+				type = nuclear_missile_equipment
+				amount = eon_nuclear_scripted_remove_amount
+			}
+			if = {
+				limit = { check_variable = { num_equipment@nuclear_missile_equipment = eon_nuclear_scripted_expected_after } }
+				set_country_flag = eon_nuclear_scripted_reserve_paid
+				set_variable = { eon_nuclear_scripted_paid_family = 2 }
+				set_variable = { eon_nuclear_scripted_paid_amount = eon_nuclear_scripted_request }
+			}
+		}
+	}
+}

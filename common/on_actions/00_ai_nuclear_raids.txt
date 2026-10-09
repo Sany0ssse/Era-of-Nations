@@ -237,6 +237,8 @@ on_peaceconference_ended = {  ##removing war_with_nukestate_idea
   effect = {
 	    if = {
 			limit = {
+			FROM = { eon_nuclear_arsenal_ready = yes }
+
 				threat > 0.99
 				has_global_flag = age_has_begun_4
 				FROM = {
@@ -314,27 +316,23 @@ on_peaceconference_ended = {  ##removing war_with_nukestate_idea
 				set_temp_variable = { global.nuke_striker = FROM }
 				launch_nuclear_ai_country_strike = yes
 			}
+			if = {
+				limit = { ROOT = { has_country_flag = eon_nuclear_scripted_launch_succeeded } }
 			FROM = {
 				  add_named_threat = {
 					threat = 100
 					name = strat_nuclear_strike_wt_tt
 				                     }
-				  send_equipment = {
-						equipment = nuclear_ballistic_missile_equipment
-						amount = 10
-						target = EUU
-					}
-				  send_equipment = {
-						equipment = nuclear_missile_equipment
-						amount = 10
-						target = EUU
-					}
+
 		          set_country_flag = hrucker
 			}
 			set_global_flag = defender_used_first_strike
+			}
 		}
 		if = {
 			limit = {
+			ROOT = { eon_nuclear_arsenal_ready = yes }
+
 				ROOT = {
 					is_ai = yes
 					has_capitulated = no
@@ -388,27 +386,23 @@ on_peaceconference_ended = {  ##removing war_with_nukestate_idea
 					set_temp_variable = { global.nuke_striker = ROOT }
 					launch_nuclear_ai_country_strike = yes
 				}
+				if = {
+					limit = { FROM = { has_country_flag = eon_nuclear_scripted_launch_succeeded } }
 				ROOT = {
 				  add_named_threat = {
 					threat = 100
 					name = strat_nuclear_strike_wt_tt
 				                     }
-				  send_equipment = {
-						equipment = nuclear_ballistic_missile_equipment
-						amount = 10
-						target = EUU
-					}
-				  send_equipment = {
-						equipment = nuclear_missile_equipment
-						amount = 10
-						target = EUU
-					}
+
 					set_country_flag = hrucker
 				}
 				set_global_flag = attaker_used_first_strike
+				}
 		}
 		if = {
 			limit = {
+			ROOT = { eon_nuclear_arsenal_ready = yes }
+
 					has_global_flag = defender_used_first_strike
 					NOT = { has_global_flag = attaker_used_first_strike }
 					ROOT = {
@@ -424,26 +418,22 @@ on_peaceconference_ended = {  ##removing war_with_nukestate_idea
 					set_temp_variable = { global.nuke_striker = ROOT }
 					launch_nuclear_ai_country_strike = yes
 				}
+				 if = {
+					limit = { FROM = { has_country_flag = eon_nuclear_scripted_launch_succeeded } }
 				 ROOT = {
 					   add_named_threat = {
 						 threat = 100
 						 name = strat_nuclear_strike_wt_tt
 										  }
-					   send_equipment = {
-							 equipment = nuclear_ballistic_missile_equipment
-							 amount = 10
-							 target = EUU
-						 }
-					   send_equipment = {
-							 equipment = nuclear_missile_equipment
-							 amount = 10
-							 target = EUU
-						 }
+
 						 set_country_flag = hrucker
 						 }
+				 }
 		}
 		else_if = {
 				limit = {
+			FROM = { eon_nuclear_arsenal_ready = yes }
+
 					has_global_flag = attaker_used_first_strike
 					NOT = { has_global_flag = defender_used_first_strike }
 					FROM = {
@@ -459,23 +449,17 @@ on_peaceconference_ended = {  ##removing war_with_nukestate_idea
 					set_temp_variable = { global.nuke_striker = FROM }
 					launch_nuclear_ai_country_strike = yes
 				}
+				 if = {
+					limit = { ROOT = { has_country_flag = eon_nuclear_scripted_launch_succeeded } }
 				 FROM = {
 					   add_named_threat = {
 						 threat = 100
 						 name = strat_nuclear_strike_wt_tt
 										  }
-					   send_equipment = {
-							 equipment = nuclear_ballistic_missile_equipment
-							 amount = 10
-							 target = EUU
-						 }
-					   send_equipment = {
-							 equipment = nuclear_missile_equipment
-							 amount = 10
-							 target = EUU
-						 }
+
 						 set_country_flag = hrucker
 						 }
+				 }
 		}
 		clr_global_flag = attaker_used_first_strike
 		clr_global_flag = defender_used_first_strike
@@ -486,6 +470,8 @@ on_monthly = { #last_stand_strike
  effect = {
    if = {
 	limit = {
+			ROOT = { eon_nuclear_arsenal_ready = yes }
+
 			has_war = yes
 			is_ai = yes
 			has_capitulated = no
@@ -520,7 +506,6 @@ on_monthly = { #last_stand_strike
 		    }
 	set_variable = { global.banner = THIS }
 	set_country_flag = sugomusus
-	set_country_flag = hrucker
 	every_other_country = {
 		limit = {
 			has_war_with = var:global.banner
@@ -552,7 +537,10 @@ on_monthly = { #last_stand_strike
 		set_variable = { global.temp_arctic_nuclear_level = PREV.arctic_nuclear_level }
 		set_temp_variable = { global.nuke_striker = PREV }
 		launch_nuclear_ai_country_strike = yes
+		if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded }
 		add_to_variable = { nukes_strikes_count = 1 }
+			PREV = { set_country_flag = hrucker }
+		}
 	}
 	clear_variable = global.banner
                     }
@@ -568,6 +556,8 @@ on_monthly = {  ##first_tactical_strikes
 	 }
      if = {
 	                  limit = {
+			ROOT = { eon_nuclear_arsenal_ready = yes }
+
 		                     has_war = yes
 							 is_ai = yes
 							 NOT = {
@@ -588,8 +578,8 @@ on_monthly = {  ##first_tactical_strikes
 										   }
 			                  }
 					  set_variable = { global.nuke_striker = ROOT }
-					  set_country_flag = hrucker
 					  launch_tactical_nuclear_ai_first_strike = yes
+					  if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded } set_country_flag = hrucker }
 				     }
 		  }
 	       }
@@ -604,6 +594,8 @@ effect = {
 	}
 	if = {
 		             limit = {
+			ROOT = { eon_nuclear_arsenal_ready = yes }
+
 			                  has_war = yes
 			                  is_ai = yes
 							  NOT = {
@@ -624,8 +616,8 @@ effect = {
 			                                }
 		                     }
 		             set_variable = { global.nuke_striker = ROOT }
-		             set_country_flag = hrucker
 		             launch_tactical_nuclear_ai_strike = yes
+		             if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded } set_country_flag = hrucker }
 			        }
 		}
 		 }
@@ -645,36 +637,75 @@ on_annex = { ##PAKISTAN FAKE NUKES KOSTILb
 
 on_daily = {
 	effect = {
+		# An old unbound target cannot borrow another callback's global shooter.
+		if = {
+			limit = {
+				has_country_flag = sugoma
+				OR = {
+					has_capitulated = yes
+					NOT = { has_global_flag = amogus }
+					NOT = { has_variable = eon_nuclear_queued_shooter }
+					NOT = { has_variable = eon_nuclear_queued_level }
+					NOT = { var:eon_nuclear_queued_shooter = { exists = yes has_capitulated = no eon_nuclear_arsenal_ready = yes } }
+				}
+			}
+			clr_country_flag = sugoma
+			clr_country_flag = eon_nuclear_scripted_launch_succeeded
+			clear_variable = eon_nuclear_queued_shooter
+			clear_variable = eon_nuclear_queued_level
+		}
+		if = { limit = { has_country_flag = sussy_baka OR = { has_capitulated = yes NOT = { eon_nuclear_arsenal_ready = yes } } } clr_country_flag = sussy_baka }
 		if = {
 			limit = {
 				has_global_flag = amogus
 				has_country_flag = sugoma
 				has_capitulated = no
-				}
-				launch_nuclear_ai_country_strike = yes
-				clr_country_flag = sugoma
+				has_variable = eon_nuclear_queued_shooter
+				has_variable = eon_nuclear_queued_level
+				var:eon_nuclear_queued_shooter = { exists = yes has_capitulated = no eon_nuclear_arsenal_ready = yes }
 			}
+			# The helpers still take a transient global frame. Restore the incoming
+			# frame after the attempt, including an originally absent variable.
+			set_temp_variable = { eon_nuclear_daily_previous_has_shooter = 0 }
+			set_temp_variable = { eon_nuclear_daily_previous_has_level = 0 }
+			if = { limit = { has_variable = global.nuke_striker } set_temp_variable = { eon_nuclear_daily_previous_has_shooter = 1 } }
+			if = { limit = { has_variable = global.temp_arctic_nuclear_level } set_temp_variable = { eon_nuclear_daily_previous_has_level = 1 } }
+			set_temp_variable = { eon_nuclear_daily_previous_shooter = global.nuke_striker }
+			set_temp_variable = { eon_nuclear_daily_previous_level = global.temp_arctic_nuclear_level }
+			set_temp_variable = { eon_nuclear_daily_queue_shooter = eon_nuclear_queued_shooter }
+			set_variable = { global.nuke_striker = eon_nuclear_queued_shooter }
+			set_variable = { global.temp_arctic_nuclear_level = eon_nuclear_queued_level }
+			launch_nuclear_ai_country_strike = yes
+			if = { limit = { check_variable = { eon_nuclear_daily_previous_has_shooter > 0 } } set_variable = { global.nuke_striker = eon_nuclear_daily_previous_shooter } }
+			else = { clear_variable = global.nuke_striker }
+			if = { limit = { check_variable = { eon_nuclear_daily_previous_has_level > 0 } } set_variable = { global.temp_arctic_nuclear_level = eon_nuclear_daily_previous_level } }
+			else = { clear_variable = global.temp_arctic_nuclear_level }
+			if = {
+				limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded }
+				var:eon_nuclear_daily_queue_shooter = {
+					if = {
+						limit = { exists = yes has_capitulated = no eon_nuclear_arsenal_ready = yes has_country_flag = sussy_baka }
+						set_country_flag = hrucker
+						add_named_threat = { threat = 100 name = strat_nuclear_strike_wt_tt }
+						# A paid but intercepted attempt still counts. Multiple queued
+						# targets report once, on the shooter, after its first payment.
+						clr_country_flag = sussy_baka
+					}
+				}
+			}
+			clr_country_flag = sugoma
+			clear_variable = eon_nuclear_queued_shooter
+			clear_variable = eon_nuclear_queued_level
+		}
 		if = {
 			limit = {
 				has_global_flag = amogus
 				has_country_flag = sussy_baka
 				has_capitulated = no
-				}
-			set_country_flag = hrucker
-			add_named_threat = {
-				threat = 100
-				name = strat_nuclear_strike_wt_tt
-				}
-			send_equipment = {
-				equipment = nuclear_ballistic_missile_equipment
-				amount = 10
-				target = EUU
-				}
-			send_equipment = {
-				equipment = nuclear_missile_equipment
-				amount = 10
-				target = EUU
-				}
+				NOT = { any_country = { has_country_flag = sugoma } }
+			}
+			# No target was paid: cancel without reporting a strike. This branch
+			# can run before or after targets; pending targets keep the queue alive.
 			clr_country_flag = sussy_baka
 		}
 		if = {
@@ -695,9 +726,9 @@ on_daily = {
 			every_country = {
 				clr_country_flag = sugoma
 				clr_country_flag = sussy_baka
+				clear_variable = eon_nuclear_queued_shooter
+				clear_variable = eon_nuclear_queued_level
 			}
-			clear_variable = global.temp_arctic_nuclear_level
-			clear_variable = global.nuke_striker
 		}
 		if = {
 		    limit = { has_country_flag = remove_fake_nukes }

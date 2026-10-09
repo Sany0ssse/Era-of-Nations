@@ -11,6 +11,12 @@ _uranium_spec=importlib.util.spec_from_file_location('eon_uranium_byte_compat',
 _uranium_bytes=importlib.util.module_from_spec(_uranium_spec)
 _uranium_spec.loader.exec_module(_uranium_bytes)
 
+# Exact later arsenal insertion is removed only for historical byte comparisons.
+_arsenal_spec=importlib.util.spec_from_file_location('eon_arsenal_budget_byte_compat',
+    ROOT/'tools/validation/missile_system/byte_compat.py')
+_arsenal_bytes=importlib.util.module_from_spec(_arsenal_spec)
+_arsenal_spec.loader.exec_module(_arsenal_bytes)
+
 BASELINE='c1420b108dee2d129018951c9ba73c1f6bfc4360'
 checks=0
 def check(condition,why):
@@ -35,6 +41,7 @@ for path in NEW:
     if path.endswith('.yml'):check(b.startswith(b'\xef\xbb\xbf'),path+' UTF8 BOM')
     else:check(bool(ast(read(path))),path+' parses')
 money=read('common/scripted_effects/00_money_system.txt');oldmoney=baseline(CHANGED[1]).decode('utf-8-sig')
+money=_arsenal_bytes.restore_arsenal_budget(CHANGED[1],money)
 before='\t########ENERGY SELLING SYSTEM###########';after='\t#Propaganda Medrese'
 check(money.split(before)[0]==oldmoney.split(before)[0],'Money bytes before owned energy section')
 money_without_cash=restore_debt_accounting(CHANGED[1], money)

@@ -1,0 +1,363 @@
+types = {
+	eon_tactical_nuclear_missile_strike = {
+		days_to_prepare = 1
+		days_re_enable = 10
+
+		category = nuclear_raids
+
+		command_power = 20 # command power allocation cost
+
+		allowed = {
+			has_dlc = "Gotterdammerung"
+		}
+		# Raid Type is visible
+
+		# Specific Target is visible
+		show_target = {
+			has_war_with = FROM
+		}
+
+		# Can prepare
+		available = {
+			FROM = { exists = yes }
+			has_war_with = FROM
+			eon_nuclear_arsenal_ready = yes
+			is_able_to_launch_a_nuclear_strike = yes
+			is_able_to_use_nuclear_strikes_tac = yes
+			ai_is_able_to_use_nuclear_strikes_tac = yes
+		}
+		launchable = {
+			FROM = { exists = yes }
+			has_war_with = FROM
+			eon_nuclear_arsenal_ready = yes
+			is_able_to_launch_a_nuclear_strike = yes
+			is_able_to_use_nuclear_strikes_tac = yes
+			ai_is_able_to_use_nuclear_strikes_tac = yes
+		}
+
+		launch_sound = raid_launch_nuclear_strike
+		target_icon = GFX_other_target_icon
+		target_type = {
+			province = any
+		}
+
+		unit_requirements = {
+			equipment = {
+				type = { nuclear_ballistic_missile_equipment }
+				amount = { min = 1 }
+			}
+		}
+		essential_equipment = {
+
+		}
+
+		starting_point = {
+			types = { rocket_site submarine }
+		}
+
+		arrow = {
+			type = ballistic
+		}
+
+		success_factors = {
+			success = {
+				base = 1
+				experience = {
+					weight = 0.1
+					start_weight = -0.1
+					reference = 1000
+				}
+				air_defence = {
+					reference = 100
+					start_weight = -0.05
+					weight = 0.05
+				}
+				air_agility = {
+					reference = 100
+					start_weight = -0.1
+					weight = 0.1
+				}
+				reliability = {
+					start_weight = -0.1
+					weight = 0.1
+				}
+
+				air_superiority = {
+					reference = 1.0
+					start_weight = -0.25
+					weight = 0.25
+				}
+
+				# Target
+				interception = {
+					reference = 10
+					weight = -0.25
+				}
+				anti_air = {
+					weight = -0.05
+				}
+				radar = {
+					weight = -0.05
+				}
+				intel = {
+					weight = 0.2
+					#start_reference = 50
+					reference = 100
+				}
+			}
+		}
+
+		success_levels = {
+			failure = {
+				actor_effects = {
+					var:actor_country = {
+						add_war_support = -0.01
+						set_country_flag = hrucker
+					}
+				}
+			}
+			limited_success = {
+				actor_effects = {
+					raid_damage_units = {
+						plane_loss = 0.05
+						ratio = yes
+					}
+					var:actor_country = {
+						launch_nuke = {
+							province = var:ROOT.target_province #optional use either province or state
+							use_nuke = no
+						}
+						add_named_threat = {
+							threat = 20
+							name = tactical_nuclear_strike_wt_tt
+						}
+						if = {
+							limit = {
+								has_idea = nuclear_power_off
+								surrender_progress < 0.5
+							}
+							add_stability = -0.1
+						}
+						set_country_flag = hrucker
+					}
+				}
+				victim_effects = {
+					var:victim_country = {
+						set_country_flag = has_been_nuked
+						set_country_flag = has_been_hrucked
+					}
+					var:target_state = {
+						custom_effect_tooltip = raid_nuclear_strike_tt
+						if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								has_dynamic_modifier = { modifier = Underground_modifier }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout1
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		civil_bunker > 0
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout2
+								days = 365
+							}
+						}
+						else = {
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout3
+								days = 365
+							}
+						}
+					}
+					var:ROOT.target_province = {
+						damage_units = {
+							province = THIS
+							damage = 0.5
+							army = yes
+							navy = yes
+						}
+					}
+				}
+			}
+			success = {
+				actor_effects = {
+					raid_damage_units = {
+						plane_loss = 0.05
+						ratio = yes
+					}
+					var:actor_country = {
+						launch_nuke = {
+							province = var:ROOT.target_province #optional use either province or state
+							use_nuke = no
+						}
+						add_named_threat = {
+							threat = 20
+							name = tactical_nuclear_strike_wt_tt
+						}
+						if = {
+							limit = {
+								has_idea = nuclear_power_off
+								surrender_progress < 0.5
+							}
+							add_stability = -0.1
+						}
+						set_country_flag = hrucker
+					}
+				}
+				victim_effects = {
+					var:victim_country = {
+						set_country_flag = has_been_nuked
+						set_country_flag = has_been_hrucked
+					}
+					var:target_state = {
+						custom_effect_tooltip = raid_nuclear_strike_tt
+						if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								has_dynamic_modifier = { modifier = Underground_modifier }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout1
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		civil_bunker > 0
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout2
+								days = 365
+							}
+						}
+						else = {
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout3
+								days = 365
+							}
+						}
+					}
+					var:ROOT.target_province = {
+						damage_units = {
+							province = THIS
+							damage = 0.75
+							army = yes
+							navy = yes
+						}
+					}
+				}
+			}
+			critical_success = {
+				actor_effects = {
+					raid_damage_units = {
+						plane_loss = 0.05
+						ratio = yes
+					}
+					var:actor_country = {
+						launch_nuke = {
+							province = var:ROOT.target_province #optional use either province or state
+							use_nuke = no
+						}
+						add_named_threat = {
+							threat = 20
+							name = tactical_nuclear_strike_wt_tt
+						}
+						if = {
+							limit = {
+								has_idea = nuclear_power_off
+								surrender_progress < 0.5
+							}
+							add_stability = -0.1
+						}
+						set_country_flag = hrucker
+					}
+				}
+				victim_effects = {
+					var:victim_country = {
+						set_country_flag = has_been_nuked
+						set_country_flag = has_been_hrucked
+					}
+					var:target_state = {
+						custom_effect_tooltip = raid_nuclear_strike_tt
+						if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								has_dynamic_modifier = { modifier = Underground_modifier }
+                        		NOT = { civil_bunker > 0 }
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout1
+								days = 365
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { has_dynamic_modifier = { modifier = Underground_modifier } }
+                        		civil_bunker > 0
+							}
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout2
+								days = 365
+							}
+						}
+						else = {
+							add_dynamic_modifier = {
+								modifier = nuclear_fallout3
+								days = 365
+							}
+						}
+					}
+					var:ROOT.target_province = {
+						damage_units = {
+							province = THIS
+							damage = 0.75
+							army = yes
+							navy = yes
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 25
+		}
+	}
+	#Nuke a whole state for the price of one
+}

@@ -1,0 +1,40 @@
+eon_nuclear_arsenal_category = {
+ eon_nuclear_arsenal_status = {
+  icon = generic_decision
+  visible = { eon_nuclear_arsenal_enabled = yes is_ai = no }
+  available = { eon_nuclear_arsenal_enabled = yes }
+  cost = 0
+  complete_effect = {
+   hidden_effect = { eon_nuclear_arsenal_refresh = yes }
+   custom_effect_tooltip = eon_nuclear_arsenal_status_desc
+  }
+  ai_will_do = { factor = 0 }
+ }
+ eon_nuclear_arsenal_safety = {
+  icon = generic_decision
+  visible = {
+   eon_nuclear_arsenal_enabled = yes
+   is_ai = no
+   NOT = { has_country_flag = eon_nuclear_arsenal_safety_mode }
+   check_variable = { eon_nuclear_arsenal_total > 0 }
+  }
+  available = { eon_nuclear_arsenal_enabled = yes }
+  cost = 0
+  complete_effect = {
+   custom_effect_tooltip = eon_nuclear_arsenal_safety_tt
+   hidden_effect = { eon_nuclear_arsenal_set_safety = yes }
+  }
+  ai_will_do = { factor = 0 }
+ }
+ eon_nuclear_arsenal_full = {
+  icon = generic_decision
+  visible = { eon_nuclear_arsenal_enabled = yes is_ai = no has_country_flag = eon_nuclear_arsenal_safety_mode }
+  available = { eon_nuclear_arsenal_enabled = yes }
+  cost = 0
+  complete_effect = {
+   custom_effect_tooltip = eon_nuclear_arsenal_full_tt
+   hidden_effect = { eon_nuclear_arsenal_resume_full = yes }
+  }
+  ai_will_do = { factor = 0 }
+ }
+}

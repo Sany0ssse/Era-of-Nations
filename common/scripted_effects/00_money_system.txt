@@ -4374,6 +4374,9 @@ modify_base_inflation_effect = {
 
 calculate_additional_expense_rate = {
 	set_variable = { additional_expenses_rate = 0 }
+	# Arsenal sustainment is a weekly cash expense; existing silo/bomber costs stay in military spending.
+	eon_nuclear_arsenal_refresh = yes
+	add_to_variable = { additional_expenses_rate = eon_nuclear_arsenal_weekly_cost }
 	# Additional expenses, set expense amount as a variable (weekly gain)
 	# Generic Propaganda Campaign Decisions
 
@@ -4723,6 +4726,7 @@ calculate_additional_expense_rate = {
 	}
 
 	if = { limit = { check_variable = { market_purchase_factories > 0 } }
+		set_temp_variable = { market_purchase_factories_cost = 0 }
 		#start the math
 		set_temp_variable = {
 			temp_inf_equip_cost = {

@@ -23,8 +23,8 @@ types = {
 		available = {
 			FROM = { exists = yes }
 			has_war_with = FROM
-			set_temp_variable = { temp_check = 1 }
-			check_if_nuclear_weapons_in_stockpile = yes
+			eon_nuclear_arsenal_ready = yes
+			has_equipment = { nuclear_ballistic_missile_equipment > 0 }
 			is_able_to_launch_a_nuclear_strike = yes
 			is_able_to_use_nuclear_strikes_tac = yes
 			ai_is_able_to_use_nuclear_strikes_tac = yes
@@ -32,6 +32,10 @@ types = {
 		launchable = {
 			FROM = { exists = yes }
 			has_war_with = FROM
+			eon_nuclear_arsenal_ready = yes
+			is_able_to_launch_a_nuclear_strike = yes
+			is_able_to_use_nuclear_strikes_tac = yes
+			ai_is_able_to_use_nuclear_strikes_tac = yes
 		}
 
 		launch_sound = raid_launch_nuclear_strike
@@ -47,18 +51,12 @@ types = {
 				amount = { min = 1 }
 			}
 		}
-		unit_requirements = {
-			equipment = {
-				type = { nuclear_ballistic_missile_equipment }
-				amount = { min = 1 }
-			}
-		}
 		essential_equipment = {
-
+			nuclear_ballistic_missile_equipment = 1
 		}
 
 		starting_point = {
-			types = { air_base carrier rocket_site submarine }
+			types = { air_base carrier }
 		}
 
 		arrow = {
@@ -124,6 +122,10 @@ types = {
 			}
 			limited_success = {
 				actor_effects = {
+					raid_damage_units = {
+						plane_loss = 0.05
+						ratio = yes
+					}
 					var:actor_country = {
 						launch_nuke = {
 							province = var:ROOT.target_province #optional use either province or state
@@ -139,22 +141,6 @@ types = {
 								surrender_progress < 0.5
 							}
 							add_stability = -0.1
-						}
-						raid_damage_units = {
-							plane_loss = 0.05
-							ratio = yes
-						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 1
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 1
-								target = EUU
-							}
 						}
 						set_country_flag = hrucker
 					}
@@ -215,6 +201,10 @@ types = {
 			}
 			success = {
 				actor_effects = {
+					raid_damage_units = {
+						plane_loss = 0.05
+						ratio = yes
+					}
 					var:actor_country = {
 						launch_nuke = {
 							province = var:ROOT.target_province #optional use either province or state
@@ -230,22 +220,6 @@ types = {
 								surrender_progress < 0.5
 							}
 							add_stability = -0.1
-						}
-						raid_damage_units = {
-							plane_loss = 0.05
-							ratio = yes
-						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 1
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 1
-								target = EUU
-							}
 						}
 						set_country_flag = hrucker
 					}
@@ -306,6 +280,10 @@ types = {
 			}
 			critical_success = {
 				actor_effects = {
+					raid_damage_units = {
+						plane_loss = 0.05
+						ratio = yes
+					}
 					var:actor_country = {
 						launch_nuke = {
 							province = var:ROOT.target_province #optional use either province or state
@@ -321,22 +299,6 @@ types = {
 								surrender_progress < 0.5
 							}
 							add_stability = -0.1
-						}
-						raid_damage_units = {
-							plane_loss = 0.05
-							ratio = yes
-						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 1
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 1
-								target = EUU
-							}
 						}
 						set_country_flag = hrucker
 					}
@@ -425,8 +387,7 @@ types = {
 		available = {
 			FROM = { exists = yes }
 			has_war_with = FROM
-			set_temp_variable = { temp_check = 1 }
-			check_if_nuclear_weapons_in_stockpile = yes
+			eon_nuclear_arsenal_ready = yes
 			is_able_to_use_nuclear_strikes = yes
 			is_able_to_launch_a_nuclear_strike = yes
 			is_ai = no
@@ -434,6 +395,10 @@ types = {
 		launchable = {
 			FROM = { exists = yes }
 			has_war_with = FROM
+			eon_nuclear_arsenal_ready = yes
+			is_able_to_use_nuclear_strikes = yes
+			is_able_to_launch_a_nuclear_strike = yes
+			is_ai = no
 		}
 
 		target_type = {
@@ -514,18 +479,6 @@ types = {
 								surrender_progress < 0.5
 							}
 							add_stability = -0.1
-						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 1
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 1
-								target = EUU
-							}
 						}
 						set_country_flag = hrucker
 					}
@@ -943,18 +896,6 @@ types = {
 							}
 							add_stability = -0.1
 						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 1
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 1
-								target = EUU
-							}
-						}
 						set_country_flag = hrucker
 					}
 				}
@@ -1370,18 +1311,6 @@ types = {
 								surrender_progress < 0.5
 							}
 							add_stability = -0.1
-						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 1
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 1
-								target = EUU
-							}
 						}
 						set_country_flag = hrucker
 					}
@@ -1812,8 +1741,7 @@ types = {
 			FROM = { exists = yes }
 			NOT = { has_global_flag = amogus }
 			has_war_with = FROM
-			set_temp_variable = { temp_check = 10 }
-			check_if_nuclear_weapons_in_stockpile = yes
+			eon_nuclear_arsenal_ready = yes
 			is_able_to_use_nuclear_strikes = yes
 			if = { limit = { has_idea = nuclear_power_def }
 				surrender_progress > 0.5
@@ -1822,7 +1750,14 @@ types = {
 		}
 		launchable = {
 			FROM = { exists = yes }
+			NOT = { has_global_flag = amogus }
 			has_war_with = FROM
+			eon_nuclear_arsenal_ready = yes
+			is_able_to_use_nuclear_strikes = yes
+			if = { limit = { has_idea = nuclear_power_def }
+				surrender_progress > 0.5
+			}
+			is_ai = no
 		}
 
 		target_type = {
@@ -1879,10 +1814,10 @@ types = {
 			failure = {
 				victim_effects = {
 					var:victim_country = {
-						set_variable = { global.temp_arctic_nuclear_level = THIS.arctic_nuclear_level }
-						set_variable = { global.nuke_striker = THIS }
 						if = {
 							limit = {
+							eon_nuclear_arsenal_ready = yes
+
 							 OR = {
 							 is_ai = yes
 							 has_country_flag = perimetr_system
@@ -1908,9 +1843,18 @@ types = {
 									has_idea = nuclear_energy
 							       }
 								     }
-							set_global_flag = amogus
+							# Keep each pending response's shooter and yield on its target.
+							var:ROOT.actor_country = {
+								if = {
+									limit = { exists = yes has_capitulated = no }
+									set_variable = { eon_nuclear_queued_shooter = PREV }
+									set_variable = { eon_nuclear_queued_level = PREV.arctic_nuclear_level }
+									set_country_flag = sugoma
+									PREV = { set_country_flag = sussy_baka }
+									set_global_flag = amogus
+								}
+							}
 						}
-						set_country_flag = sussy_baka
 						set_country_flag = has_been_nuked
 						set_country_flag = has_been_hrucked
 						set_country_flag = {
@@ -2313,7 +2257,6 @@ types = {
 				}
 				actor_effects = {
 					var:actor_country = {
-						set_country_flag = sugoma
 						add_named_threat = {
 							threat = 100
 							name = strat_nuclear_strike_wt_tt
@@ -2325,18 +2268,6 @@ types = {
 							}
 							add_stability = -0.1
 						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 10
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 10
-								target = EUU
-							}
-										}
 						set_country_flag = hrucker
 				                        }
 				                 }
@@ -2344,10 +2275,10 @@ types = {
 			limited_success = {
 				victim_effects = {
 					var:victim_country = {
-						set_variable = { global.temp_arctic_nuclear_level = THIS.arctic_nuclear_level }
-						set_variable = { global.nuke_striker = THIS }
 						if = {
 							limit = {
+							eon_nuclear_arsenal_ready = yes
+
 							 OR = {
 							 is_ai = yes
 							 has_country_flag = perimetr_system
@@ -2373,9 +2304,18 @@ types = {
 									has_idea = nuclear_energy
 							       }
 								     }
-							set_global_flag = amogus
+							# Keep each pending response's shooter and yield on its target.
+							var:ROOT.actor_country = {
+								if = {
+									limit = { exists = yes has_capitulated = no }
+									set_variable = { eon_nuclear_queued_shooter = PREV }
+									set_variable = { eon_nuclear_queued_level = PREV.arctic_nuclear_level }
+									set_country_flag = sugoma
+									PREV = { set_country_flag = sussy_baka }
+									set_global_flag = amogus
+								}
+							}
 						}
-						set_country_flag = sussy_baka
 						set_country_flag = has_been_nuked
 						set_country_flag = has_been_hrucked
 						set_country_flag = {
@@ -2778,7 +2718,6 @@ types = {
 				}
 				actor_effects = {
 					var:actor_country = {
-						set_country_flag = sugoma
 						add_named_threat = {
 							threat = 100
 							name = strat_nuclear_strike_wt_tt
@@ -2790,18 +2729,6 @@ types = {
 							}
 							add_stability = -0.1
 						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 10
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 10
-								target = EUU
-							}
-										}
 						set_country_flag = hrucker
 				                        }
 				                 }
@@ -2809,10 +2736,10 @@ types = {
 			success = {
 				victim_effects = {
 					var:victim_country = {
-						set_variable = { global.temp_arctic_nuclear_level = THIS.arctic_nuclear_level }
-						set_variable = { global.nuke_striker = THIS }
 						if = {
 							limit = {
+							eon_nuclear_arsenal_ready = yes
+
 							 OR = {
 							 is_ai = yes
 							 has_country_flag = perimetr_system
@@ -2838,9 +2765,18 @@ types = {
 									has_idea = nuclear_energy
 							       }
 								     }
-							set_global_flag = amogus
+							# Keep each pending response's shooter and yield on its target.
+							var:ROOT.actor_country = {
+								if = {
+									limit = { exists = yes has_capitulated = no }
+									set_variable = { eon_nuclear_queued_shooter = PREV }
+									set_variable = { eon_nuclear_queued_level = PREV.arctic_nuclear_level }
+									set_country_flag = sugoma
+									PREV = { set_country_flag = sussy_baka }
+									set_global_flag = amogus
+								}
+							}
 						}
-						set_country_flag = sussy_baka
 						set_country_flag = has_been_nuked
 						set_country_flag = has_been_hrucked
 						set_country_flag = {
@@ -3243,7 +3179,6 @@ types = {
 				}
 				actor_effects = {
 					var:actor_country = {
-						set_country_flag = sugoma
 						add_named_threat = {
 							threat = 100
 							name = strat_nuclear_strike_wt_tt
@@ -3255,18 +3190,6 @@ types = {
 							}
 							add_stability = -0.1
 						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 10
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 10
-								target = EUU
-							}
-										}
 						set_country_flag = hrucker
 				                        }
 				                 }
@@ -3274,10 +3197,10 @@ types = {
 			critical_success = {
 				victim_effects = {
 					var:victim_country = {
-						set_variable = { global.temp_arctic_nuclear_level = THIS.arctic_nuclear_level }
-						set_variable = { global.nuke_striker = THIS }
 						if = {
 							limit = {
+							eon_nuclear_arsenal_ready = yes
+
 							 OR = {
 							 is_ai = yes
 							 has_country_flag = perimetr_system
@@ -3303,9 +3226,18 @@ types = {
 									has_idea = nuclear_energy
 							       }
 								     }
-							set_global_flag = amogus
+							# Keep each pending response's shooter and yield on its target.
+							var:ROOT.actor_country = {
+								if = {
+									limit = { exists = yes has_capitulated = no }
+									set_variable = { eon_nuclear_queued_shooter = PREV }
+									set_variable = { eon_nuclear_queued_level = PREV.arctic_nuclear_level }
+									set_country_flag = sugoma
+									PREV = { set_country_flag = sussy_baka }
+									set_global_flag = amogus
+								}
+							}
 						}
-						set_country_flag = sussy_baka
 						set_country_flag = has_been_nuked
 						set_country_flag = has_been_hrucked
 						set_country_flag = {
@@ -3708,7 +3640,6 @@ types = {
 				}
 				actor_effects = {
 					var:actor_country = {
-						set_country_flag = sugoma
 						add_named_threat = {
 							threat = 100
 							name = strat_nuclear_strike_wt_tt
@@ -3720,18 +3651,6 @@ types = {
 							}
 							add_stability = -0.1
 						}
-						hidden_effect = {
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 10
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 10
-								target = EUU
-							}
-						               }
 						set_country_flag = hrucker
 					                   }
 				               }

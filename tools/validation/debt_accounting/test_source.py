@@ -74,6 +74,11 @@ p.format_preserved(before, current)
 
 money = 'common/scripted_effects/00_money_system.txt'
 before, current = old(money), (ROOT/money).read_bytes()
+arsenal_spec = importlib.util.spec_from_file_location(
+    'arsenal_budget_bytes', ROOT/'tools/validation/missile_system/byte_compat.py')
+arsenal = importlib.util.module_from_spec(arsenal_spec)
+arsenal_spec.loader.exec_module(arsenal)
+current = arsenal.restore_arsenal_budget(money, current)
 def loan_block(raw):
     found = [b for b in p.blocks(raw) if b['key']=='automated_debt_taker' and b['depth']==0]
     check(len(found)==1, 'One automatic loan definition')

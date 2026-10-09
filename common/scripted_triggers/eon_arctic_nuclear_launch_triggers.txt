@@ -1,0 +1,57 @@
+# Shared GUI/effect gate: preserve the original Arctic restrictions and require funded readiness.
+eon_arctic_nuclear_launch_allowed = {
+ eon_nuclear_arsenal_ready = yes
+				command_power > 50
+				custom_trigger_tooltip = {
+					tooltip = able_to_nuke_arctic_tt
+					any_country = {
+						is_in_array = {
+							array = global.arctic_controllers
+							value = THIS
+						}
+					}
+					NOT = {
+						is_in_array = {
+							array = global.arctic_controllers
+							value = THIS
+						}
+					}
+					NOT = {
+						any_country = {
+							is_in_array = {
+								array = global.arctic_controllers
+								value = THIS
+							}
+							NOT = { has_war_with = PREV }
+						}
+					}
+				}
+				NOT = {
+					has_idea = no_use_case
+				}
+				NOT = {
+					has_idea = non_nuclear_power
+				}
+				NOT = {
+					has_idea = nuclear_energy
+				}
+				custom_trigger_tooltip = {
+					tooltip = able_to_do_nukes_tt
+					OR = {
+						check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+						check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+					}
+					OR = {
+						any_controlled_state = {
+							OR = {
+								check_variable = { non_damaged_building_level@rocket_site > 0 }
+								AND = {
+									check_variable = { non_damaged_building_level@air_base > 0 }
+									check_variable = { num_equipment@strategic_bomber > 0 }
+								}
+							}
+						}
+						check_variable = { deployed_navy_manpower_k > 0 }
+					}
+				}
+}

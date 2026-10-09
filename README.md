@@ -2,13 +2,14 @@
 
 ![Era of Nations](thumbnail.png)
 
-A standalone Hearts of Iron IV fork, beginning with an inherited modern era gameplay baseline. The first development build changes the project name, presentation, and local setup; the source gameplay remains the starting point for future work.
+A standalone modern era development fork for Hearts of Iron IV 1.19.x. Current work extends diplomacy, economic agreements, resource accounting and missile systems from the inherited gameplay base. The validation status below records what has been checked in source and in the game.
 
 Development repository: [Sany0ssse/Era-of-Nations](https://github.com/Sany0ssse/Era-of-Nations).
 
 - [Local setup](docs/development/SETUP.md)
 - [Source and attribution](docs/development/SOURCE.md)
 - [Current validation status](docs/development/STATUS.md)
+- [Missiles and nuclear arsenal maintenance](docs/development/MISSILE_SYSTEM_UK.md)
 - [Contributing](CONTRIBUTING.md)
 - [Inherited authors and asset credits](docs/misc/authors.md)
 

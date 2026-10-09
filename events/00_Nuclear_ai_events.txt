@@ -24,38 +24,27 @@ country_event = {
 						threat = 100
 						name = strat_nuclear_strike_wt_tt
 						}
-			        send_equipment = {
-						equipment = nuclear_ballistic_missile_equipment
-						amount = 10
-						target = EUU
-					}
-			        send_equipment = {
-						equipment = nuclear_missile_equipment
-						amount = 10
-						target = EUU
-					}
+
 					if = {
 						limit = {
-							     var:v = { has_country_flag = perimetr_system }
+							     var:v = { has_country_flag = perimetr_system eon_nuclear_arsenal_ready = yes OR = { check_variable = { num_equipment@nuclear_missile_equipment > 9 } check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 9 } } }
 					            }
+						set_temp_variable = { eon_nuclear_ai_retaliation_previous_level = global.temp_arctic_nuclear_level }
 						set_variable = { global.temp_arctic_nuclear_level = var:v.arctic_nuclear_level }
+						set_temp_variable = { eon_nuclear_ai_retaliation_previous_shooter = global.nuke_striker }
+						set_variable = { global.nuke_striker = var:v }
 						launch_nuclear_ai_country_strike = yes
+						set_variable = { global.nuke_striker = eon_nuclear_ai_retaliation_previous_shooter }
+						set_variable = { global.temp_arctic_nuclear_level = eon_nuclear_ai_retaliation_previous_level }
+                        if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded }
                         var:v = {
 							add_named_threat = {
 								threat = 100
 								name = strat_nuclear_strike_wt_tt
 								}
-							send_equipment = {
-								equipment = nuclear_ballistic_missile_equipment
-								amount = 10
-								target = EUU
-							}
-							send_equipment = {
-								equipment = nuclear_missile_equipment
-								amount = 10
-								target = EUU
-							}
+
 						}
+                        }
 					}
 				}
 				}

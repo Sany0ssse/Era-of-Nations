@@ -1,4 +1,11 @@
 launch_nuclear_ai_country_strike = {
+	clr_country_flag = eon_nuclear_scripted_launch_succeeded
+	if = {
+		limit = { var:global.nuke_striker = { exists = yes eon_nuclear_arsenal_ready = yes } any_owned_state = { is_fully_controlled_by = PREV } }
+		var:global.nuke_striker = { set_temp_variable = { eon_nuclear_scripted_request = 10 } eon_nuclear_scripted_pay_reserve = yes }
+		if = { limit = { var:global.nuke_striker = { has_country_flag = eon_nuclear_scripted_reserve_paid } }
+			set_country_flag = eon_nuclear_scripted_launch_succeeded
+
  country_event = nuclear_ai_raid.1
  set_country_flag = has_been_nuked
  set_country_flag = has_been_hrucked
@@ -392,9 +399,17 @@ launch_nuclear_ai_country_strike = {
 					   }
 					  }
 	                 }
+
+		}
+
+	}
 }
 
 launch_tactical_nuclear_ai_strike = {
+	clr_country_flag = eon_nuclear_scripted_launch_succeeded
+	if = {
+		limit = { var:global.nuke_striker = { exists = yes eon_nuclear_arsenal_ready = yes } }
+
  	set_variable = { global.amogusus_count = 0 }
 	random_list = {
 		25 = {
@@ -420,7 +435,47 @@ launch_tactical_nuclear_ai_strike = {
 							check_variable = { deployed_navy_manpower_k > 0 }
 						}
 					}
+					any_controlled_state = {
+						NOT = { is_controlled_by = var:global.nuke_striker }
+						is_fully_controlled_by = PREV
+						any_neighbor_state = {
+							is_controlled_by = var:global.nuke_striker
+						}
+						any_country = {
+							divisions_in_state = {
+								size > 0
+							state = PREV
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout1
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout2
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout3
+							}
+						}
+
+					}
 	        	}
+				clr_country_flag = eon_nuclear_scripted_launch_succeeded
+				set_temp_variable = { eon_nuclear_scripted_actor = global.nuke_striker }
+				var:global.nuke_striker = { set_temp_variable = { eon_nuclear_scripted_request = 1 } eon_nuclear_scripted_pay_reserve = yes }
+				if = { limit = { var:global.nuke_striker = { has_country_flag = eon_nuclear_scripted_reserve_paid } }
+					set_country_flag = eon_nuclear_scripted_launch_succeeded
+
 				set_country_flag = has_been_nuked
 				set_country_flag = has_been_hrucked
 				country_event = nuclear_ai_raid.2
@@ -846,24 +901,18 @@ launch_tactical_nuclear_ai_strike = {
 			 			}
 					}
 		    	}
-	    	}
+
+					if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded } var:eon_nuclear_scripted_actor = { set_country_flag = eon_nuclear_scripted_launch_succeeded } }
+				}
+}
 			var:global.nuke_striker = {
 				if = {
-					limit = { check_variable = { global.amogusus_count > 0 } }
+					limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded }
 					add_named_threat = {
 						threat = 50
 						name = state_nuclear_strike_wt_tt
 					}
-	    			send_equipment = {
-		    			equipment = nuclear_ballistic_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
-	    			send_equipment = {
-		    			equipment = nuclear_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
+
 				}
 	        }
 		}
@@ -889,7 +938,42 @@ launch_tactical_nuclear_ai_strike = {
 							check_variable = { deployed_navy_manpower_k > 0 }
 						}
 					}
+					any_owned_state = {
+						NOT = { is_controlled_by = var:global.nuke_striker }
+						is_fully_controlled_by = PREV
+						OR = {
+							arms_factory > 0
+							dockyard > 0
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout1
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout2
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout3
+							}
+						}
+
+					}
 	        	}
+				clr_country_flag = eon_nuclear_scripted_launch_succeeded
+				set_temp_variable = { eon_nuclear_scripted_actor = global.nuke_striker }
+				var:global.nuke_striker = { set_temp_variable = { eon_nuclear_scripted_request = 1 } eon_nuclear_scripted_pay_reserve = yes }
+				if = { limit = { var:global.nuke_striker = { has_country_flag = eon_nuclear_scripted_reserve_paid } }
+					set_country_flag = eon_nuclear_scripted_launch_succeeded
+
 				set_country_flag = has_been_nuked
 				set_country_flag = has_been_hrucked
 				country_event = nuclear_ai_raid.2
@@ -1310,24 +1394,18 @@ launch_tactical_nuclear_ai_strike = {
 			 			}
 					}
 		    	}
-	    	}
+
+					if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded } var:eon_nuclear_scripted_actor = { set_country_flag = eon_nuclear_scripted_launch_succeeded } }
+				}
+}
 			var:global.nuke_striker = {
 				if = {
-					limit = { check_variable = { global.amogusus_count > 0 } }
+					limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded }
 					add_named_threat = {
 						threat = 50
 						name = state_nuclear_strike_wt_tt
 					}
-	    			send_equipment = {
-		    			equipment = nuclear_ballistic_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
-	    			send_equipment = {
-		    			equipment = nuclear_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
+
 				}
 	        }
 		}
@@ -1353,7 +1431,38 @@ launch_tactical_nuclear_ai_strike = {
 							check_variable = { deployed_navy_manpower_k > 0 }
 						}
 					}
+					capital_scope = {
+							NOT = { is_controlled_by = var:global.nuke_striker }
+							is_fully_controlled_by = PREV
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout1
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout2
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout3
+								}
+							}
+
+					}
 	        	}
+				clr_country_flag = eon_nuclear_scripted_launch_succeeded
+				set_temp_variable = { eon_nuclear_scripted_actor = global.nuke_striker }
+				var:global.nuke_striker = { set_temp_variable = { eon_nuclear_scripted_request = 1 } eon_nuclear_scripted_pay_reserve = yes }
+				if = { limit = { var:global.nuke_striker = { has_country_flag = eon_nuclear_scripted_reserve_paid } }
+					set_country_flag = eon_nuclear_scripted_launch_succeeded
+
 				set_country_flag = has_been_nuked
 				set_country_flag = has_been_hrucked
 				country_event = nuclear_ai_raid.2
@@ -1772,32 +1881,32 @@ launch_tactical_nuclear_ai_strike = {
 						}
 					}
 		    	}
-	    	}
+
+					if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded } var:eon_nuclear_scripted_actor = { set_country_flag = eon_nuclear_scripted_launch_succeeded } }
+				}
+}
 			var:global.nuke_striker = {
 				if = {
-					limit = { check_variable = { global.amogusus_count > 0 } }
+					limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded }
 					add_named_threat = {
 						threat = 50
 						name = state_nuclear_strike_wt_tt
 					}
-	    			send_equipment = {
-		    			equipment = nuclear_ballistic_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
-	    			send_equipment = {
-		    			equipment = nuclear_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
+
 				}
 	        }
 		}
 		25 = {}
 	}
+
+	}
 }
 
 launch_tactical_nuclear_ai_first_strike = {
+	clr_country_flag = eon_nuclear_scripted_launch_succeeded
+	if = {
+		limit = { var:global.nuke_striker = { exists = yes eon_nuclear_arsenal_ready = yes } }
+
 	set_variable = { global.amogusus_count = 0 }
 	random_list = {
 		25 = {
@@ -1850,7 +1959,47 @@ launch_tactical_nuclear_ai_first_strike = {
 					else = {
 						check_variable = { nuclear_potential_difference_percent > 2 }
 					}
+					any_controlled_state = {
+						NOT = { is_controlled_by = var:global.nuke_striker }
+						is_fully_controlled_by = PREV
+						any_neighbor_state = {
+							is_controlled_by = var:global.nuke_striker
+						}
+						any_country = {
+							divisions_in_state = {
+								size > 0
+							state = PREV
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout1
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout2
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout3
+							}
+						}
+
+					}
 	        	}
+				clr_country_flag = eon_nuclear_scripted_launch_succeeded
+				set_temp_variable = { eon_nuclear_scripted_actor = global.nuke_striker }
+				var:global.nuke_striker = { set_temp_variable = { eon_nuclear_scripted_request = 1 } eon_nuclear_scripted_pay_reserve = yes }
+				if = { limit = { var:global.nuke_striker = { has_country_flag = eon_nuclear_scripted_reserve_paid } }
+					set_country_flag = eon_nuclear_scripted_launch_succeeded
+
 				set_country_flag = has_been_nuked
 				set_country_flag = has_been_hrucked
 				country_event = nuclear_ai_raid.2
@@ -2276,24 +2425,18 @@ launch_tactical_nuclear_ai_first_strike = {
 			 			}
 					}
 		    	}
-	    	}
+
+					if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded } var:eon_nuclear_scripted_actor = { set_country_flag = eon_nuclear_scripted_launch_succeeded } }
+				}
+}
 			var:global.nuke_striker = {
 				if = {
-					limit = { check_variable = { global.amogusus_count > 0 } }
+					limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded }
 					add_named_threat = {
 						threat = 50
 						name = state_nuclear_strike_wt_tt
 					}
-	    			send_equipment = {
-		    			equipment = nuclear_ballistic_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
-	    			send_equipment = {
-		    			equipment = nuclear_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
+
 				}
 	        }
 		}
@@ -2346,7 +2489,42 @@ launch_tactical_nuclear_ai_first_strike = {
 					else = {
 						check_variable = { nuclear_potential_difference_percent > 2 }
 					}
+					any_owned_state = {
+						NOT = { is_controlled_by = var:global.nuke_striker }
+						is_fully_controlled_by = PREV
+						OR = {
+							arms_factory > 0
+							dockyard > 0
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout1
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout2
+							}
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = nuclear_fallout3
+							}
+						}
+
+					}
 	        	}
+				clr_country_flag = eon_nuclear_scripted_launch_succeeded
+				set_temp_variable = { eon_nuclear_scripted_actor = global.nuke_striker }
+				var:global.nuke_striker = { set_temp_variable = { eon_nuclear_scripted_request = 1 } eon_nuclear_scripted_pay_reserve = yes }
+				if = { limit = { var:global.nuke_striker = { has_country_flag = eon_nuclear_scripted_reserve_paid } }
+					set_country_flag = eon_nuclear_scripted_launch_succeeded
+
 				set_country_flag = has_been_nuked
 				set_country_flag = has_been_hrucked
 				country_event = nuclear_ai_raid.2
@@ -2767,24 +2945,18 @@ launch_tactical_nuclear_ai_first_strike = {
 			 			}
 					}
 		    	}
-	    	}
+
+					if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded } var:eon_nuclear_scripted_actor = { set_country_flag = eon_nuclear_scripted_launch_succeeded } }
+				}
+}
 			var:global.nuke_striker = {
 				if = {
-					limit = { check_variable = { global.amogusus_count > 0 } }
+					limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded }
 					add_named_threat = {
 						threat = 50
 						name = state_nuclear_strike_wt_tt
 					}
-	    			send_equipment = {
-		    			equipment = nuclear_ballistic_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
-	    			send_equipment = {
-		    			equipment = nuclear_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
+
 				}
 	        }
 		}
@@ -2837,7 +3009,38 @@ launch_tactical_nuclear_ai_first_strike = {
 					else = {
 						check_variable = { nuclear_potential_difference_percent > 2 }
 					}
+					capital_scope = {
+							NOT = { is_controlled_by = var:global.nuke_striker }
+							is_fully_controlled_by = PREV
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout1
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout2
+								}
+							}
+							NOT = {
+								has_dynamic_modifier = {
+									modifier = nuclear_fallout3
+								}
+							}
+
+					}
 	        	}
+				clr_country_flag = eon_nuclear_scripted_launch_succeeded
+				set_temp_variable = { eon_nuclear_scripted_actor = global.nuke_striker }
+				var:global.nuke_striker = { set_temp_variable = { eon_nuclear_scripted_request = 1 } eon_nuclear_scripted_pay_reserve = yes }
+				if = { limit = { var:global.nuke_striker = { has_country_flag = eon_nuclear_scripted_reserve_paid } }
+					set_country_flag = eon_nuclear_scripted_launch_succeeded
+
 				set_country_flag = has_been_nuked
 				set_country_flag = has_been_hrucked
 				country_event = nuclear_ai_raid.2
@@ -3256,27 +3459,23 @@ launch_tactical_nuclear_ai_first_strike = {
 						}
 					}
 		    	}
-	    	}
+
+					if = { limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded } var:eon_nuclear_scripted_actor = { set_country_flag = eon_nuclear_scripted_launch_succeeded } }
+				}
+}
 			var:global.nuke_striker = {
 				if = {
-					limit = { check_variable = { global.amogusus_count > 0 } }
+					limit = { has_country_flag = eon_nuclear_scripted_launch_succeeded }
 					add_named_threat = {
 						threat = 50
 						name = state_nuclear_strike_wt_tt
 					}
-	    			send_equipment = {
-		    			equipment = nuclear_ballistic_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
-	    			send_equipment = {
-		    			equipment = nuclear_missile_equipment
-		    			amount = global.amogusus_count
-		    			target = EUU
-	            	}
+
 				}
 	        }
 		}
 		25 = {}
+	}
+
 	}
 }
