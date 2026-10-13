@@ -1,6 +1,6 @@
 # Era of Nations
 
-![Era of Nations](thumbnail.png)
+
 
 **Version 0.1.0-demo.3**
 Build: 0.1.0-demo.3-20261013-6725dc23d26b
