@@ -13,4 +13,6 @@ Development repository: [Sany0ssse/Era-of-Nations](https://github.com/Sany0ssse/
 - [Contributing](CONTRIBUTING.md)
 - [Inherited authors and asset credits](docs/misc/authors.md)
 
-Enable Era of Nations by itself in a dedicated launcher playset. Steam Workshop publication is reserved for a later stage of development.
+Enable Era of Nations by itself in a dedicated launcher playset. The [Steam Workshop playtest](https://steamcommunity.com/sharedfiles/filedetails/?id=3814861738) provides a separate multiplayer demo. Enable only one copy of the mod, and compare the game version and main-menu checksum before joining friends.
+
+Voluntary support: [Monobank donation jar](https://send.monobank.ua/jar/6TBAbiNNan), [Monobank QR](https://send.monobank.ua/widget.html?jar=5j55h27mgVWM95aXWtooM7Q2VBwnmSAQ&sendId=6TBAbiNNan&type=qr), or [Ko-fi creator page](https://ko-fi.com/mrsan1n1). The mod is free; contributions do not unlock gameplay features.

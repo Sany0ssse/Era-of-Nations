@@ -1,0 +1,165 @@
+# Era of Nations: membership identity and consent. Preserve upstream EU IDs.
+eon_eu_is_live_legal_member = {
+ exists = yes
+ is_subject = no
+ has_idea = EU_member
+ OR = { NOT = { has_global_flag = eon_eu_admission_guard_ready } has_country_flag = eon_eu_membership_recognized }
+ any_owned_state = { always = yes }
+ NOT = { has_global_flag = GAME_RULE_eu_disabled }
+ NOT = { has_global_flag = usoe_formed }
+}
+eon_eu_is_active_member = {
+ eon_eu_is_live_legal_member = yes
+ NOT = { has_global_flag = eon_eu_dormant }
+}
+eon_eu_union_active = {
+ NOT = { has_global_flag = GAME_RULE_eu_disabled }
+ NOT = { has_global_flag = eon_eu_dormant }
+ NOT = { has_global_flag = usoe_formed }
+ check_variable = { global.EU_member_count > 0 }
+}
+eon_eu_is_sovereign_european = {
+ exists = yes
+ is_subject = no
+ is_EU_potential = yes
+ any_owned_state = { always = yes }
+ NOT = { has_global_flag = GAME_RULE_eu_disabled }
+ NOT = { has_global_flag = usoe_formed }
+}
+eon_eu_is_candidate = {
+ eon_eu_is_sovereign_european = yes
+ eon_eu_union_active = yes
+ has_country_flag = EU_candidate
+ NOT = { has_idea = EU_member }
+}
+eon_eu_reform_conditions = {
+ eon_eu_is_sovereign_european = yes
+ has_elections = yes
+ check_variable = { breach_of_EU_value < 3 }
+ check_variable = { eurosceptic < 0.5 }
+}
+eon_eu_application_ready = {
+ eon_eu_union_active = yes
+ eon_eu_reform_conditions = yes
+ NOT = { has_idea = EU_member }
+ NOT = { has_country_flag = EU_candidate }
+ NOT = { check_variable = { eon_eu_accession_phase > 0 } }
+ NOT = { has_country_flag = eon_eu_application_cooldown }
+}
+eon_eu_application_current = {
+ eon_eu_union_active = yes
+ eon_eu_is_sovereign_european = yes
+ NOT = { has_idea = EU_member }
+ has_country_flag = eon_eu_application_window
+ OR = {
+  check_variable = { eon_eu_accession_phase = 1 }
+  check_variable = { eon_eu_accession_phase = 3 }
+  check_variable = { eon_eu_accession_phase = 4 }
+ }
+}
+eon_eu_all_members_approved = {
+ eon_eu_union_active = yes
+ all_of_scopes = {
+  array = global.EU_member
+  is_in_array = { PREV.eon_eu_accession_approvals = THIS }
+ }
+}
+eon_eu_treaty_submission_ready = {
+ eon_eu_is_candidate = yes
+ eon_eu_reform_conditions = yes
+ check_variable = { eon_eu_accession_phase = 2 }
+ NOT = { has_country_flag = eon_eu_negotiation_period }
+ NOT = { has_country_flag = eon_eu_application_cooldown }
+}
+eon_eu_accession_final_ready = {
+ eon_eu_application_current = yes
+ eon_eu_is_candidate = yes
+ eon_eu_reform_conditions = yes
+ check_variable = { eon_eu_accession_phase = 4 }
+ eon_eu_all_members_approved = yes
+ has_country_flag = eon_eu_accession_ep_consent
+}
+# Pair APIs: ROOT is the responding member, FROM is the applicant.
+eon_eu_member_can_respond = {
+ eon_eu_is_active_member = yes
+ FROM = {
+  eon_eu_application_current = yes
+  NOT = { tag = ROOT }
+  NOT = { is_in_array = { eon_eu_accession_approvals = ROOT } }
+ }
+}
+# An unconditional revocation does not need a reconstructed old expiry date.
+eon_eu_can_revoke_withdrawal = {
+ eon_eu_is_active_member = yes
+ has_country_flag = Article_50
+}
+eon_eu_withdrawal_current = {
+ eon_eu_is_active_member = yes
+ has_country_flag = Article_50
+ has_country_flag = eon_eu_withdrawal_clock_started
+}
+eon_eu_withdrawal_proposal_current = {
+ eon_eu_withdrawal_current = yes
+ has_country_flag = eon_eu_withdrawal_proposal
+}
+eon_eu_member_can_approve_withdrawal = {
+ eon_eu_can_vote = yes
+ FROM = {
+  eon_eu_withdrawal_proposal_current = yes
+  NOT = { tag = ROOT }
+  NOT = { is_in_array = { eon_eu_withdrawal_approvals = ROOT } }
+ }
+}
+eon_eu_refound_offer_ready = {
+ eon_eu_is_sovereign_european = yes
+ eon_eu_reform_conditions = yes
+ has_global_flag = eon_eu_dormant
+ NOT = { has_country_flag = eon_eu_refound_outgoing }
+ FROM = {
+  eon_eu_reform_conditions = yes
+  NOT = { tag = ROOT }
+  NOT = { has_country_flag = eon_eu_refound_incoming }
+ }
+}
+eon_eu_refound_response_ready = {
+ eon_eu_reform_conditions = yes
+ has_global_flag = eon_eu_dormant
+ has_country_flag = eon_eu_refound_incoming
+ FROM = {
+  eon_eu_reform_conditions = yes
+  has_country_flag = eon_eu_refound_outgoing
+  check_variable = { var = eon_eu_refound_target value = ROOT.id compare = equals }
+ }
+}
+
+# Federal reform authority; utility EUU coordinates an active federation only.
+eon_eu_potef_system_current = {
+ eon_eu_union_active = yes
+ has_global_flag = european_federation
+ NOT = { has_global_flag = usoe_formed }
+}
+eon_eu_potef_campaign_owner_current = {
+ eon_eu_potef_system_current = yes
+ OR = { eon_eu_is_active_member = yes tag = EUU }
+}
+eon_eu_potef_campaign_current = {
+ eon_eu_potef_campaign_owner_current = yes
+ has_global_flag = ongoing_potef_election
+}
+eon_eu_potef_term_current = {
+ eon_eu_potef_system_current = yes
+ eon_eu_is_active_member = yes
+ has_idea = EU_president
+ check_variable = { var = global.eupresfederation value = THIS.id compare = equals }
+}
+eon_eu_potef_environmental_current = {
+ eon_eu_potef_system_current = yes
+ has_country_flag = EU_POTEF_environmental_imperialism_target
+ check_variable = { eon_eu_potef_environmental_issuer > 0 }
+ var:eon_eu_potef_environmental_issuer = {
+  eon_eu_is_active_member = yes
+  has_idea = EU_president
+  has_country_flag = environmental_imperialism
+  check_variable = { var = global.eupresfederation value = THIS.id compare = equals }
+ }
+}

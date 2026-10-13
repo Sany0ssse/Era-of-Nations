@@ -1,0 +1,162 @@
+# Native diplomatic callbacks: THIS=recipient, ROOT=sender.
+# Reservation is released only by a terminal native response; expiry invalidates consent.
+
+eon_peace_reject_statusquo = {
+ clr_country_flag = eon_peace_pending_statusquo@ROOT
+ clr_country_flag = eon_peace_reserved_statusquo@ROOT
+ ROOT = {
+  clr_country_flag = eon_peace_pending_statusquo@PREV
+  clr_country_flag = eon_peace_reserved_statusquo@PREV
+ }
+}
+
+eon_peace_reject_armistice_90 = {
+ clr_country_flag = eon_peace_pending_armistice_90@ROOT
+ clr_country_flag = eon_peace_reserved_armistice_90@ROOT
+ ROOT = {
+  clr_country_flag = eon_peace_pending_armistice_90@PREV
+  clr_country_flag = eon_peace_reserved_armistice_90@PREV
+ }
+}
+
+eon_peace_reject_armistice_180 = {
+ clr_country_flag = eon_peace_pending_armistice_180@ROOT
+ clr_country_flag = eon_peace_reserved_armistice_180@ROOT
+ ROOT = {
+  clr_country_flag = eon_peace_pending_armistice_180@PREV
+  clr_country_flag = eon_peace_reserved_armistice_180@PREV
+ }
+}
+
+eon_peace_reject_payment_5 = {
+ clr_country_flag = eon_peace_pending_payment_5@ROOT
+ clr_country_flag = eon_peace_reserved_payment_5@ROOT
+ ROOT = {
+  clr_country_flag = eon_peace_pending_payment_5@PREV
+  clr_country_flag = eon_peace_reserved_payment_5@PREV
+ }
+}
+
+eon_peace_reject_payment_10 = {
+ clr_country_flag = eon_peace_pending_payment_10@ROOT
+ clr_country_flag = eon_peace_reserved_payment_10@ROOT
+ ROOT = {
+  clr_country_flag = eon_peace_pending_payment_10@PREV
+  clr_country_flag = eon_peace_reserved_payment_10@PREV
+ }
+}
+
+eon_peace_reject_conference = {
+ clr_country_flag = eon_peace_pending_conference@ROOT
+ clr_country_flag = eon_peace_reserved_conference@ROOT
+ ROOT = {
+  clr_country_flag = eon_peace_pending_conference@PREV
+  clr_country_flag = eon_peace_reserved_conference@PREV
+ }
+}
+
+# Direct native pair settlement; no iteration over other belligerents.
+eon_peace_native_statusquo = {
+ set_country_flag = eon_consensual_peace@ROOT
+ ROOT = { set_country_flag = eon_consensual_peace@PREV }
+ white_peace = { tag = ROOT message = eon_peace_native_message }
+}
+
+eon_peace_execute_statusquo = {
+ if = { limit = { eon_peace_accept_statusquo_ready = yes }
+ eon_peace_reject_statusquo = yes
+ eon_peace_native_statusquo = yes
+ if = { limit = { NOT = { has_war_with = ROOT } }
+  set_variable = { eon_peace_last_kind = 1 }
+  ROOT = { set_variable = { eon_peace_last_kind = 1 } }
+  country_event = { id = eon_peace_settlement.2 }
+  ROOT = { country_event = { id = eon_peace_settlement.2 } }
+  log = "[EON_PEACE_EXECUTED] sender=[ROOT.GetTag] recipient=[THIS.GetTag] kind=1"
+ }
+ }
+}
+
+eon_peace_execute_armistice_90 = {
+ if = { limit = { eon_peace_accept_armistice_90_ready = yes }
+ eon_peace_reject_armistice_90 = yes
+ eon_peace_native_statusquo = yes
+ if = { limit = { NOT = { has_war_with = ROOT } }
+  set_truce = { target = ROOT days = 90 }
+  set_country_flag = { flag = eon_peace_armistice@ROOT days = 90 value = 1 }
+  ROOT = {
+   set_country_flag = { flag = eon_peace_armistice@PREV days = 90 value = 1 }
+   country_event = { id = eon_peace_settlement.3 days = 90 }
+  }
+  country_event = { id = eon_peace_settlement.3 days = 90 }
+  set_variable = { eon_peace_last_kind = 2 }
+  ROOT = { set_variable = { eon_peace_last_kind = 2 } }
+  country_event = { id = eon_peace_settlement.2 }
+  ROOT = { country_event = { id = eon_peace_settlement.2 } }
+  log = "[EON_PEACE_EXECUTED] sender=[ROOT.GetTag] recipient=[THIS.GetTag] kind=2"
+ }
+ }
+}
+
+eon_peace_execute_armistice_180 = {
+ if = { limit = { eon_peace_accept_armistice_180_ready = yes }
+ eon_peace_reject_armistice_180 = yes
+ eon_peace_native_statusquo = yes
+ if = { limit = { NOT = { has_war_with = ROOT } }
+  set_truce = { target = ROOT days = 180 }
+  set_country_flag = { flag = eon_peace_armistice@ROOT days = 180 value = 1 }
+  ROOT = {
+   set_country_flag = { flag = eon_peace_armistice@PREV days = 180 value = 1 }
+   country_event = { id = eon_peace_settlement.3 days = 180 }
+  }
+  country_event = { id = eon_peace_settlement.3 days = 180 }
+  set_variable = { eon_peace_last_kind = 3 }
+  ROOT = { set_variable = { eon_peace_last_kind = 3 } }
+  country_event = { id = eon_peace_settlement.2 }
+  ROOT = { country_event = { id = eon_peace_settlement.2 } }
+  log = "[EON_PEACE_EXECUTED] sender=[ROOT.GetTag] recipient=[THIS.GetTag] kind=3"
+ }
+ }
+}
+
+eon_peace_execute_payment_5 = {
+ if = { limit = { eon_peace_accept_payment_5_ready = yes }
+ eon_peace_reject_payment_5 = yes
+ # Claim the agreed payment before native peace hooks can spend it.
+ ROOT = { subtract_from_variable = { treasury = 5 } }
+ eon_peace_native_statusquo = yes
+ if = { limit = { NOT = { has_war_with = ROOT } }
+  add_to_variable = { treasury = 5 }
+  set_variable = { eon_peace_last_kind = 4 }
+  ROOT = { set_variable = { eon_peace_last_kind = 4 } }
+  country_event = { id = eon_peace_settlement.2 }
+  ROOT = { country_event = { id = eon_peace_settlement.2 } }
+  log = "[EON_PEACE_EXECUTED] sender=[ROOT.GetTag] recipient=[THIS.GetTag] kind=4"
+ }
+ else = { ROOT = { add_to_variable = { treasury = 5 } } }
+ }
+}
+
+eon_peace_execute_payment_10 = {
+ if = { limit = { eon_peace_accept_payment_10_ready = yes }
+ eon_peace_reject_payment_10 = yes
+ # Claim the agreed payment before native peace hooks can spend it.
+ ROOT = { subtract_from_variable = { treasury = 10 } }
+ eon_peace_native_statusquo = yes
+ if = { limit = { NOT = { has_war_with = ROOT } }
+  add_to_variable = { treasury = 10 }
+  set_variable = { eon_peace_last_kind = 5 }
+  ROOT = { set_variable = { eon_peace_last_kind = 5 } }
+  country_event = { id = eon_peace_settlement.2 }
+  ROOT = { country_event = { id = eon_peace_settlement.2 } }
+  log = "[EON_PEACE_EXECUTED] sender=[ROOT.GetTag] recipient=[THIS.GetTag] kind=5"
+ }
+ else = { ROOT = { add_to_variable = { treasury = 10 } } }
+ }
+}
+
+eon_peace_execute_conference = {
+ if = { limit = { eon_peace_accept_conference_ready = yes }
+ eon_peace_reject_conference = yes
+ trigger_peace_deal = yes
+ }
+}

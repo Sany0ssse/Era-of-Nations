@@ -1,0 +1,35 @@
+eon_migration_monthly_world_update = {
+ # Register new/civil-war countries without replacing existing origin slots.
+ # Arrays only grow; no fixed list of playable tags is used.
+ every_country = {
+  eon_migration_initialize_country = yes
+  if = {
+   limit = { is_ai = yes NOT = { has_idea = closed_borders } check_variable = { treasury > 1 } check_variable = { display_income > display_expense } any_neighbor_country = { has_war = yes } }
+   set_variable = { eon_refugee_policy = 2 }
+  }
+  eon_migration_treaty_reconcile_country = yes
+  eon_migration_update_home_safety = yes
+  set_variable = { eon_migration_month_in = 0 }
+  set_variable = { eon_migration_month_out = 0 }
+  set_variable = { eon_refugee_month_arrived = 0 }
+  set_variable = { eon_refugee_month_returned = 0 }
+  set_variable = { eon_refugee_month_unplaced = 0 }
+  set_variable = { eon_labor_month_arrived = 0 }
+  eon_migration_refresh_country = yes
+ }
+ every_state = {
+  limit = { has_state_flag = eon_migration_has_ledger }
+  eon_migration_prepare_state_ledger = yes
+  for_each_loop = { array = eon_refugee_stock index = eon_origin_index value = eon_origin_stock
+   set_variable = { eon_refugee_fresh^eon_origin_index = 0 }
+   if = { limit = { check_variable = { eon_origin_stock > 0 } } add_to_variable = { eon_refugee_age^eon_origin_index = 1 } }
+   else = { set_variable = { eon_refugee_age^eon_origin_index = 0 } set_variable = { eon_refugee_integrated^eon_origin_index = 0 } set_variable = { eon_refugee_longterm^eon_origin_index = 0 } }
+  }
+ }
+ every_state = { limit = { has_state_flag = eon_migration_has_ledger } eon_migration_process_refugee_cohorts = yes }
+ every_country = { eon_migration_refresh_country = yes }
+ every_country = { eon_migration_refugee_departures = yes }
+ every_country = { eon_migration_labor_departures = yes }
+ every_country = { eon_migration_refresh_country = yes eon_migration_display_rates = yes }
+ eon_migration_clear_flow_scratch = yes
+}

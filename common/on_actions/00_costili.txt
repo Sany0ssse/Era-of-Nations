@@ -197,6 +197,13 @@ on_actions = {
 						tag = CHE
 					}
 					NOT = { has_global_flag = chechen_war_ended }
+					# A mutually accepted peace must not trigger historical forced annexation.
+					NOT = {
+						AND = {
+							ROOT = { has_country_flag = eon_consensual_peace@FROM }
+							FROM = { has_country_flag = eon_consensual_peace@ROOT }
+						}
+					}
 				}
 				if = {
 					limit = {
@@ -216,6 +223,13 @@ on_actions = {
 			else_if = {
 				limit = {
 					ROOT = { has_country_flag = annex_on_peace_conference@FROM }
+					# A mutually accepted peace must not trigger historical forced annexation.
+					NOT = {
+						AND = {
+							ROOT = { has_country_flag = eon_consensual_peace@FROM }
+							FROM = { has_country_flag = eon_consensual_peace@ROOT }
+						}
+					}
 				}
 				ROOT = {
 					annex_country = {

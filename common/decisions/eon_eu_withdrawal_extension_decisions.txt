@@ -1,0 +1,66 @@
+# Article50 extension decisions share the existing membership category.
+eon_eu_membership_category = {
+ eon_eu_extension_propose = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_extension_notice_current = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_extension_propose_requirements eon_eu_extension_can_propose = yes } }
+  cost = 0
+  complete_effect = { eon_eu_extension_propose = yes }
+  ai_will_do = { factor = 1 }
+ }
+ eon_eu_extension_approve = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_can_vote = yes FROM = { eon_eu_extension_proposal_current = yes NOT = { tag = ROOT } } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_extension_approve_requirements eon_eu_extension_can_approve = yes } }
+  cost = 0
+  complete_effect = { eon_eu_extension_approve = yes }
+  ai_will_do = { factor = 4 modifier = { factor = 0 has_opinion = { target = FROM value < -50 } } }
+  target_array = global.EU_member
+  target_root_trigger = { eon_eu_can_vote = yes }
+  target_trigger = { FROM = { eon_eu_extension_proposal_current = yes NOT = { tag = ROOT } } }
+ }
+ eon_eu_extension_reject = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_can_vote = yes FROM = { eon_eu_extension_proposal_current = yes NOT = { tag = ROOT } } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_extension_reject_requirements eon_eu_extension_can_reject = yes } }
+  cost = 0
+  complete_effect = { eon_eu_extension_reject = yes }
+  ai_will_do = { factor = 0 modifier = { add = 4 has_opinion = { target = FROM value < -50 } } }
+  target_array = global.EU_member
+  target_root_trigger = { eon_eu_can_vote = yes }
+  target_trigger = { FROM = { eon_eu_extension_proposal_current = yes NOT = { tag = ROOT } } }
+ }
+ eon_eu_extension_abstain = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_can_vote = yes FROM = { eon_eu_extension_proposal_current = yes NOT = { tag = ROOT } } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_extension_abstain_requirements eon_eu_extension_can_abstain = yes } }
+  cost = 0
+  complete_effect = { eon_eu_extension_abstain = yes }
+  ai_will_do = { factor = 0 }
+  target_array = global.EU_member
+  target_root_trigger = { eon_eu_can_vote = yes }
+  target_trigger = { FROM = { eon_eu_extension_proposal_current = yes NOT = { tag = ROOT } } }
+ }
+ eon_eu_extension_accept_final = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_extension_proposal_current = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_extension_accept_final_requirements eon_eu_extension_final_ready = yes } }
+  cost = 0
+  complete_effect = { eon_eu_extension_accept_final = yes }
+  ai_will_do = { factor = 4 }
+ }
+ eon_eu_extension_cancel_proposal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_extension_proposal_current = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_extension_cancel_proposal_requirements eon_eu_extension_proposal_current = yes } }
+  cost = 0
+  complete_effect = { eon_eu_extension_cancel_proposal = yes }
+  ai_will_do = { factor = 0 }
+ }
+}

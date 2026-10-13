@@ -156,6 +156,11 @@ def condition(nodes,result,context):
   elif name=='NOT':ready=not condition(data,result,context)
   elif name=='always':ready=value(result,context,data)
   elif name=='exists':ready=c['exists']==value(result,context,data)
+  elif name=='is_ai':
+   assert op=='=' and data in ('yes','no'),'Native is_ai requires an explicit Boolean equality'
+   current=c.get('is_ai',False)
+   assert type(current) is bool,'Model AI ownership must be a Boolean'
+   ready=current==(data=='yes')
   elif name=='tag':ready=context['scope']==country_ref(result,context,data)
   elif name=='has_war_with':ready=country_ref(result,context,data) in c['wars']
   elif name=='has_country_flag':ready=hasflag(result,context,data)

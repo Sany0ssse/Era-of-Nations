@@ -3,6 +3,7 @@ eon_mediation_clear_record = {
  eon_mediation_terms_before_base_clear = yes
  clr_country_flag = eon_mediation_reserved
  clr_country_flag = eon_mediation_cancelled
+ clr_country_flag = eon_mediation_expired
  clr_country_flag = eon_mediation_draft_window
  clr_country_flag = eon_mediation_response_window
  clr_country_flag = eon_mediation_active_window
@@ -151,7 +152,8 @@ eon_mediation_notice_37 = {
  if = { limit = { check_variable = { eon_mediation_party_b > 0 } } var:eon_mediation_party_b = { if = { limit = { exists = yes eon_mediation_origin_linked = yes } country_event = { id = eon_mediation.37 } } } }
 }
 eon_mediation_resolve_invalid_response = {
- if = { limit = { eon_mediation_cancelled_current = yes } eon_mediation_notice_33 = yes }
+ if = { limit = { eon_mediation_expired_current = yes } eon_mediation_notice_37 = yes }
+ else_if = { limit = { eon_mediation_cancelled_current = yes } eon_mediation_notice_33 = yes }
  else = { eon_mediation_notice_32 = yes }
  eon_mediation_release_record = yes
 }
@@ -198,7 +200,7 @@ eon_mediation_end_active = {
  }
 }
 eon_mediation_withdraw_record = {
- if = { limit = { eon_mediation_state_consistent = yes NOT = { has_country_flag = eon_mediation_cancelled } }
+ if = { limit = { eon_mediation_state_consistent = yes NOT = { has_country_flag = eon_mediation_cancelled } NOT = { has_country_flag = eon_mediation_expired } }
   if = { limit = { check_variable = { eon_mediation_phase = 0 } } eon_mediation_release_record = yes }
   else_if = { limit = { check_variable = { eon_mediation_phase = 3 } } eon_mediation_end_active = yes }
   else = {
@@ -212,7 +214,18 @@ eon_mediation_withdraw_record = {
 }
 eon_mediation_force_cleanup = {
  eon_mediation_retire_response_edges = yes
+ # Retire only the closing base terms, preserving a held older triad.
+ eon_mediation_terms_before_forced_base_clear = yes
  eon_mediation_release_record = yes
+}
+# Ordinary live timeout retains the original reply until acknowledgement.
+eon_mediation_mark_expired = {
+ if = { limit = { eon_mediation_state_consistent = yes NOT = { has_country_flag = eon_mediation_expired } OR = { check_variable = { eon_mediation_phase = 1 } check_variable = { eon_mediation_phase = 2 } } var:eon_mediation_party_a = { exists = yes } var:eon_mediation_party_b = { exists = yes } var:eon_mediation_mediator = { exists = yes } }
+  set_country_flag = eon_mediation_expired
+  var:eon_mediation_party_a = { set_country_flag = eon_mediation_expired }
+  var:eon_mediation_party_b = { set_country_flag = eon_mediation_expired }
+  var:eon_mediation_mediator = { set_country_flag = eon_mediation_expired }
+ }
 }
 eon_mediation_daily_cleanup = {
  if = { limit = { has_country_flag = eon_mediation_reserved }
@@ -223,8 +236,7 @@ eon_mediation_daily_cleanup = {
   else_if = { limit = { OR = { var:eon_mediation_party_a = { exists = no } var:eon_mediation_party_b = { exists = no } var:eon_mediation_mediator = { exists = no } } } eon_mediation_force_cleanup = yes }
   else_if = { limit = { OR = { check_variable = { eon_mediation_phase = 1 } check_variable = { eon_mediation_phase = 2 } } }
    if = { limit = { OR = { NOT = { has_country_flag = eon_mediation_response_window } var:eon_mediation_party_a = { NOT = { has_country_flag = eon_mediation_response_window } } var:eon_mediation_party_b = { NOT = { has_country_flag = eon_mediation_response_window } } var:eon_mediation_mediator = { NOT = { has_country_flag = eon_mediation_response_window } } } }
-    eon_mediation_notice_37 = yes
-    eon_mediation_force_cleanup = yes
+    eon_mediation_mark_expired = yes
    }
   }
   else = {
@@ -233,13 +245,18 @@ eon_mediation_daily_cleanup = {
  }
 }
 eon_mediation_cleanup_annexed_pair = {
+ eon_mediation_terms_cleanup_annexed_pair = yes
  if = { limit = { has_country_flag = eon_mediation_reserved OR = { check_variable = { eon_mediation_party_a = eon_mediation_annexed_partner } check_variable = { eon_mediation_party_b = eon_mediation_annexed_partner } check_variable = { eon_mediation_mediator = eon_mediation_annexed_partner } } }
+  eon_mediation_terms_before_forced_base_clear = yes
   if = { limit = { eon_mediation_state_consistent = yes OR = { check_variable = { eon_mediation_phase = 0 } check_variable = { eon_mediation_phase = 3 } } } eon_mediation_release_record = yes }
   else = { eon_mediation_force_cleanup = yes }
  }
 }
 eon_mediation_cleanup_annexed_owner = {
+ # This actor is actually annexed, even when native exists is still true.
+ eon_mediation_terms_force_cleanup = yes
  if = { limit = { has_country_flag = eon_mediation_reserved }
+  eon_mediation_terms_before_forced_base_clear = yes
   if = { limit = { eon_mediation_state_consistent = yes OR = { check_variable = { eon_mediation_phase = 0 } check_variable = { eon_mediation_phase = 3 } } } eon_mediation_release_record = yes }
   else = { eon_mediation_force_cleanup = yes }
  }

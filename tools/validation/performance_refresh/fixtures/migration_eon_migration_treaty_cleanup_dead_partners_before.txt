@@ -1,0 +1,24 @@
+eon_migration_treaty_cleanup_dead_partners = {
+	every_possible_country = {
+		limit = {
+			exists = no
+			NOT = { tag = PREV }
+			OR = {
+				has_country_flag = migration_agreement_migrants_add@PREV
+				has_country_flag = migration_agreement_migrants_cut@PREV
+				PREV = {
+					OR = {
+						has_country_flag = migration_agreement_migrants_add@PREV
+						has_country_flag = migration_agreement_migrants_cut@PREV
+						check_variable = { pending_migration_agreement_country = PREV.id }
+						check_variable = { eon_migration_treaty_pending_sender = PREV.id }
+					}
+				}
+			}
+		}
+		PREV = {
+			set_temp_variable = { eon_migration_treaty_annexed_partner = PREV.id }
+			eon_migration_treaty_cleanup_annexed_pair = yes
+		}
+	}
+}

@@ -97,10 +97,10 @@ eon_mediation_terms_opponent_pair_current = {
 eon_mediation_terms_offer_valid = {
  eon_mediation_terms_base_matches = yes
  has_country_flag = eon_mediation_terms_response_window
- NOT = { has_country_flag = eon_mediation_terms_cancelled }
- var:eon_mediation_terms_a = { has_country_flag = eon_mediation_terms_response_window NOT = { has_country_flag = eon_mediation_terms_cancelled } }
- var:eon_mediation_terms_b = { has_country_flag = eon_mediation_terms_response_window NOT = { has_country_flag = eon_mediation_terms_cancelled } }
- var:eon_mediation_terms_m = { has_country_flag = eon_mediation_terms_response_window NOT = { has_country_flag = eon_mediation_terms_cancelled } }
+ NOT = { has_country_flag = eon_mediation_terms_cancelled } NOT = { has_country_flag = eon_mediation_terms_expired }
+ var:eon_mediation_terms_a = { has_country_flag = eon_mediation_terms_response_window NOT = { has_country_flag = eon_mediation_terms_cancelled } NOT = { has_country_flag = eon_mediation_terms_expired } }
+ var:eon_mediation_terms_b = { has_country_flag = eon_mediation_terms_response_window NOT = { has_country_flag = eon_mediation_terms_cancelled } NOT = { has_country_flag = eon_mediation_terms_expired } }
+ var:eon_mediation_terms_m = { has_country_flag = eon_mediation_terms_response_window NOT = { has_country_flag = eon_mediation_terms_cancelled } NOT = { has_country_flag = eon_mediation_terms_expired } }
 }
 eon_mediation_terms_mediator_response_valid = { eon_mediation_terms_mediator_pair_current = yes eon_mediation_terms_offer_valid = yes }
 eon_mediation_terms_opponent_response_valid = { eon_mediation_terms_opponent_pair_current = yes eon_mediation_terms_offer_valid = yes }
@@ -116,5 +116,16 @@ eon_mediation_terms_cancelled_current = {
 eon_mediation_terms_cancel_ready = {
  is_ai = no
  eon_mediation_terms_state_consistent = yes
- NOT = { has_country_flag = eon_mediation_terms_cancelled }
+ NOT = { has_country_flag = eon_mediation_terms_cancelled } NOT = { has_country_flag = eon_mediation_terms_expired }
+}
+
+# Only the held original response can acknowledge this expired record.
+eon_mediation_terms_expired_current = {
+ OR = { eon_mediation_terms_mediator_pair_current = yes eon_mediation_terms_opponent_pair_current = yes }
+ OR = {
+  has_country_flag = eon_mediation_terms_expired
+  var:eon_mediation_terms_a = { has_country_flag = eon_mediation_terms_expired }
+  var:eon_mediation_terms_b = { has_country_flag = eon_mediation_terms_expired }
+  var:eon_mediation_terms_m = { has_country_flag = eon_mediation_terms_expired }
+ }
 }

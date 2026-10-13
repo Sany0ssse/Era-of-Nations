@@ -1,0 +1,434 @@
+# Development EDU: native113 exposed constructor success without a formed callback.
+eon_edu_create_decision_effect = {
+	ROOT = {
+		add_to_variable = { eon_edu_creation_attempt_serial = 1 }
+		set_variable = { eon_edu_creation_result = 0 }
+		log = "EON_EDU CREATE_DECISION actor=[?ROOT.id] scope=[?THIS.id] sender=[?FROM.id]"
+		if = {
+			limit = { eon_edu_founder_eligible = yes is_in_faction = no }
+			add_to_variable = { global.eon_edu_generation_counter = 1 }
+			set_variable = { global.eon_edu_creation_actor = ROOT.id }
+			set_variable = { eon_edu_creation_intent = global.eon_edu_generation_counter }
+			# This witness is written only after verified factionless founder eligibility.
+			set_variable = { eon_edu_creation_constructor_instance = eon_edu_creation_intent }
+			set_temp_variable = { eon_edu_constructor_call_instance = eon_edu_creation_intent }
+			clear_variable = eon_edu_constructor_confirmed_instance
+			set_country_flag = { flag = eon_edu_creation_deadline days = 1 value = 1 }
+			set_variable = { eon_edu_creation_result = 3 }
+			log = "EON_EDU CTOR_BEFORE factionless=1 actor=[?ROOT.id] scope=[?THIS.id] sender=[?FROM.id] attempt=[?eon_edu_creation_attempt_serial] reserved=[?global.eon_edu_generation_counter] intent=[?eon_edu_creation_intent] constructor_instance=[?eon_edu_constructor_call_instance] confirmation_before=[?eon_edu_confirmation_commit_serial] constructor_before=[?eon_edu_constructor_commit_serial] native_before=[?eon_edu_native_formation_commit_serial]"
+			create_faction_from_template = faction_template_edu
+			# A successful native constructor need not emit on_faction_formed.
+			# Confirm actual state; do not synthesize a native hook or its counters.
+			set_temp_variable = { eon_edu_confirmation_origin = 2 }
+			eon_edu_confirm_created_faction = yes
+			if = {
+				limit = { check_variable = { eon_edu_creation_intent > 0 } }
+				eon_edu_fail_creation_intent = yes
+			}
+			set_temp_variable = { eon_edu_constructor_return_faction = 0 }
+			set_temp_variable = { eon_edu_constructor_return_leader = 0 }
+			if = { limit = { is_in_faction = yes } set_temp_variable = { eon_edu_constructor_return_faction = 1 } }
+			if = { limit = { is_faction_leader = yes } set_temp_variable = { eon_edu_constructor_return_leader = 1 } }
+			log = "EON_EDU CTOR_RETURN actor=[?ROOT.id] scope=[?THIS.id] sender=[?FROM.id] attempt=[?eon_edu_creation_attempt_serial] reserved=[?global.eon_edu_generation_counter] intent=[?eon_edu_constructor_call_instance] constructor_instance=[?eon_edu_constructor_call_instance] remaining_intent=[?eon_edu_creation_intent] in_faction=[?eon_edu_constructor_return_faction] is_leader=[?eon_edu_constructor_return_leader] result=[?eon_edu_creation_result] instance=[?global.eon_edu_instance] member_instance=[?eon_edu_member_instance] return_receipt=[?eon_edu_constructor_confirmed_instance] confirmation=[?eon_edu_confirmation_commit_serial] native=[?eon_edu_native_formation_commit_serial] constructor=[?eon_edu_constructor_commit_serial]"
+		}
+	}
+}
+eon_edu_clear_creation_intent = {
+	if = {
+		limit = {
+			check_variable = { var = global.eon_edu_creation_actor value = THIS.id compare = equals }
+			check_variable = { var = eon_edu_creation_intent value = global.eon_edu_generation_counter compare = equals }
+		}
+		clear_variable = global.eon_edu_creation_actor
+	}
+	clear_variable = eon_edu_creation_intent
+	clear_variable = eon_edu_creation_constructor_instance
+	clr_country_flag = eon_edu_creation_deadline
+}
+eon_edu_fail_creation_intent = {
+	if = {
+		limit = { check_variable = { eon_edu_creation_intent > 0 } }
+		set_variable = { eon_edu_creation_result = 2 }
+		eon_edu_clear_creation_intent = yes
+		country_event = { id = eon_edu.7 }
+	}
+}
+eon_edu_clear_request = {
+	clear_variable = eon_edu_request_leader
+	clear_variable = eon_edu_request_instance
+	clr_country_flag = eon_edu_request_deadline
+	set_country_flag = { flag = eon_edu_request_cooldown days = 14 value = 1 }
+}
+eon_edu_request_join_effect = {
+	if = {
+		limit = { eon_edu_request_available = yes }
+		set_variable = { eon_edu_request_leader = FROM.id }
+		set_variable = { eon_edu_request_instance = global.eon_edu_instance }
+		add_to_variable = { eon_edu_request_round = 1 }
+		set_variable = { eon_edu_request_result = 0 }
+		set_country_flag = { flag = eon_edu_request_deadline days = 42 value = 1 }
+		FROM = { country_event = { id = eon_edu.1 } }
+	}
+}
+eon_edu_accept_request_effect = {
+	if = {
+		limit = { eon_edu_accept_available = yes }
+		add_to_faction = FROM
+		if = {
+			limit = { FROM = { is_in_faction_with = ROOT } }
+			FROM = { eon_edu_commit_actual_join = yes }
+		}
+	}
+}
+# Called only after a verified actual join; can reconcile a native route too.
+# A scripted add may fire on_offer, so both routes share one notification guard.
+eon_edu_commit_actual_join = {
+	clr_country_flag = eon_edu_departure_failure_notified
+	set_variable = { eon_edu_member_instance = global.eon_edu_instance }
+	if = {
+		limit = {
+			eon_edu_request_active = yes
+			var:eon_edu_request_leader = {
+				is_faction_leader = yes
+				is_in_faction_with = PREV
+			}
+		}
+		set_variable = { eon_edu_request_result = 1 }
+		eon_edu_clear_request = yes
+		country_event = { id = eon_edu.2 }
+	}
+	else_if = {
+		limit = { check_variable = { eon_edu_request_instance > 0 } }
+		set_variable = { eon_edu_request_result = 5 }
+		eon_edu_clear_request = yes
+		country_event = { id = eon_edu.6 }
+	}
+}
+eon_edu_reject_request_effect = {
+	if = {
+		limit = { eon_edu_reject_available = yes }
+		FROM = {
+			set_variable = { eon_edu_request_result = 2 }
+			eon_edu_clear_request = yes
+			country_event = { id = eon_edu.3 }
+		}
+	}
+}
+eon_edu_withdraw_request_effect = {
+	if = {
+		limit = { eon_edu_withdraw_available = yes }
+		set_variable = { eon_edu_request_result = 3 }
+		eon_edu_clear_request = yes
+		country_event = { id = eon_edu.4 }
+	}
+}
+# Both routes confirm only a current constructor's verified actual faction.
+# Origin 1 is a real native formation hook; origin 2 is constructor return.
+eon_edu_confirm_created_faction = {
+	if = {
+		limit = {
+			eon_edu_creation_constructor_bound = yes
+			is_in_faction = yes
+			is_faction_leader = yes
+			eon_edu_creation_policy_still_valid = yes
+			NOT = { has_global_flag = EDU }
+			OR = {
+				check_variable = { eon_edu_confirmation_origin = 1 }
+				check_variable = { eon_edu_confirmation_origin = 2 }
+			}
+		}
+		set_variable = { global.eon_edu_instance = eon_edu_creation_intent }
+		set_variable = { eon_edu_member_instance = global.eon_edu_instance }
+		set_global_flag = EDU
+		set_variable = { eon_edu_creation_result = 1 }
+		add_to_variable = { eon_edu_confirmation_commit_serial = 1 }
+		if = {
+			limit = { check_variable = { eon_edu_confirmation_origin = 1 } }
+			add_to_variable = { eon_edu_native_formation_commit_serial = 1 }
+			clear_variable = eon_edu_constructor_confirmed_instance
+			log = "EON_EDU FORMED_COMMIT actor=[?ROOT.id] scope=[?THIS.id] instance=[?global.eon_edu_instance] date=[?global.date]"
+			log = "EON_EDU CONFIRM_COMMIT route=native_formed actor=[?ROOT.id] scope=[?THIS.id] instance=[?global.eon_edu_instance] attempt=[?eon_edu_creation_attempt_serial] confirmation=[?eon_edu_confirmation_commit_serial] date=[?global.date]"
+		}
+		else = {
+			add_to_variable = { eon_edu_constructor_commit_serial = 1 }
+			set_variable = { eon_edu_constructor_confirmed_instance = global.eon_edu_instance }
+			log = "EON_EDU CONFIRM_COMMIT route=creation_return actor=[?ROOT.id] scope=[?THIS.id] instance=[?global.eon_edu_instance] attempt=[?eon_edu_creation_attempt_serial] confirmation=[?eon_edu_confirmation_commit_serial] date=[?global.date]"
+		}
+		eon_edu_clear_creation_intent = yes
+		news_event = { id = eon_edu.10 }
+	}
+}
+eon_edu_on_formed = {
+	add_to_variable = { eon_edu_formed_hook_serial = 1 }
+	log = "EON_EDU FORMED_HOOK actor=[?ROOT.id] scope=[?THIS.id] sender=[?FROM.id] intent=[?eon_edu_creation_intent] reserved=[?global.eon_edu_generation_counter] bound_actor=[?global.eon_edu_creation_actor] date=[?global.date]"
+	# A late real hook may acknowledge an already completed constructor.
+	# Leave/archive clear this return receipt. Without a leave hook and native
+	# faction identity, unrelated same-founder recreation remains unprovable.
+	if = {
+		limit = { eon_edu_constructor_confirmation_current = yes }
+		log = "EON_EDU LATE_FORMED_ACK actor=[?ROOT.id] scope=[?THIS.id] instance=[?global.eon_edu_instance] date=[?global.date]"
+	}
+	else = {
+		clear_variable = eon_edu_member_instance
+		clear_variable = eon_edu_constructor_confirmed_instance
+		every_faction_member = {
+			clear_variable = eon_edu_member_instance
+			clear_variable = eon_edu_constructor_confirmed_instance
+		}
+		set_temp_variable = { eon_edu_confirmation_origin = 1 }
+		eon_edu_confirm_created_faction = yes
+		if = {
+			limit = { eon_edu_creation_intent_bound = yes }
+			eon_edu_fail_creation_intent = yes
+		}
+	}
+}
+eon_edu_on_leave = {
+	clear_variable = eon_edu_constructor_confirmed_instance
+	add_to_variable = { eon_edu_leave_hook_serial = 1 }
+	log = "EON_EDU LEAVE_HOOK actor=[?ROOT.id] scope=[?THIS.id] sender=[?FROM.id]"
+	clear_variable = eon_edu_member_instance
+	eon_edu_fail_creation_intent = yes
+}
+eon_edu_on_assume_leadership = {
+	add_to_variable = { eon_edu_leadership_hook_serial = 1 }
+	log = "EON_EDU LEADERSHIP_HOOK actor=[?ROOT.id] scope=[?THIS.id] sender=[?FROM.id]"
+	if = {
+		limit = {
+			has_global_flag = EDU
+			is_faction_leader = yes
+			FROM = {
+				exists = yes
+				is_in_faction_with = ROOT
+				check_variable = { eon_edu_member_instance > 0 }
+				check_variable = { var = eon_edu_member_instance value = global.eon_edu_instance compare = equals }
+			}
+		}
+		set_variable = { eon_edu_member_instance = global.eon_edu_instance }
+	}
+}
+eon_edu_on_join = {
+	if = {
+		limit = { FROM = { eon_edu_is_operational_leader = yes } is_in_faction_with = FROM }
+		eon_edu_commit_actual_join = yes
+	}
+}
+eon_edu_on_offer_join = {
+	if = {
+		limit = { eon_edu_is_operational_leader = yes FROM = { is_in_faction_with = ROOT } }
+		FROM = { eon_edu_commit_actual_join = yes }
+	}
+}
+eon_edu_close = {
+	clr_global_flag = EDU
+	# Serial survives archive. No automatic dismantle or unrelated faction mutation.
+	every_possible_country = {
+		eon_edu_fail_creation_intent = yes
+		clear_variable = eon_edu_member_instance
+		clear_variable = eon_edu_constructor_confirmed_instance
+		if = {
+			limit = { check_variable = { eon_edu_request_instance > 0 } }
+			set_variable = { eon_edu_request_result = 5 }
+			eon_edu_clear_request = yes
+			country_event = { id = eon_edu.6 }
+		}
+	}
+}
+eon_edu_dissolve_confirmed_union = {
+	eon_edu_adopt_legacy_template = yes
+	every_country = {
+		limit = { eon_edu_is_confirmed_member = yes is_faction_leader = yes }
+		dismantle_faction = yes
+	}
+	if = {
+		limit = { NOT = { any_country = { eon_edu_is_confirmed_member = yes } } }
+		eon_edu_close = yes
+	}
+	else = { log = "EON_EDU DISSOLVE_FAILED actual confirmed faction remains" }
+}
+# Current THIS is the departing country, even when leaving_EU has foreign ROOT.
+eon_edu_depart_eu = {
+	eon_edu_adopt_legacy_template = yes
+	if = {
+		limit = { eon_edu_is_confirmed_member = yes }
+		set_variable = { eon_edu_departure_result = 0 }
+		if = {
+			limit = { is_faction_leader = yes }
+			set_variable = { eon_edu_depart_successor = 0 }
+			every_country = {
+				limit = {
+					eon_edu_is_confirmed_member = yes
+					eon_eu_is_active_member = yes
+					is_subject = no
+					is_faction_leader = no
+					is_in_faction_with = PREV
+					PREV = { check_variable = { eon_edu_depart_successor = 0 } }
+				}
+				PREV = { set_variable = { eon_edu_depart_successor = PREV.id } }
+			}
+			if = {
+				limit = { check_variable = { eon_edu_depart_successor > 0 } }
+				var:eon_edu_depart_successor = { set_faction_leader = yes }
+				if = {
+					limit = {
+						is_faction_leader = no
+						faction_leader = {
+							eon_edu_is_confirmed_member = yes
+							is_in_faction_with = PREV
+							check_variable = { var = PREV.eon_edu_depart_successor value = THIS.id compare = equals }
+						}
+					}
+					faction_leader = {
+						if = {
+							limit = {
+								is_faction_leader = yes
+								eon_edu_is_confirmed_member = yes
+								is_in_faction_with = PREV
+								PREV = { eon_edu_is_confirmed_member = yes }
+							}
+							remove_from_faction = PREV
+						}
+					}
+					if = {
+						limit = { is_in_faction = no }
+						set_variable = { eon_edu_departure_result = 1 }
+						clear_variable = eon_edu_member_instance
+						clear_variable = eon_edu_constructor_confirmed_instance
+					}
+				}
+				else = {
+					set_variable = { eon_edu_departure_result = 2 }
+					log = "EON_EDU DEPART_TRANSFER_FAILED country=[?THIS.id] successor=[?eon_edu_depart_successor]"
+				}
+			}
+			else = {
+				dismantle_faction = yes
+				if = {
+					limit = { is_in_faction = no }
+					set_variable = { eon_edu_departure_result = 1 }
+					eon_edu_close = yes
+				}
+			}
+			clear_variable = eon_edu_depart_successor
+		}
+		else = {
+			faction_leader = {
+				if = {
+					limit = {
+						is_faction_leader = yes
+						eon_edu_is_confirmed_member = yes
+						is_in_faction_with = PREV
+						PREV = { eon_edu_is_confirmed_member = yes }
+					}
+					remove_from_faction = PREV
+				}
+			}
+			if = {
+				limit = { is_in_faction = no }
+				set_variable = { eon_edu_departure_result = 1 }
+				clear_variable = eon_edu_member_instance
+				clear_variable = eon_edu_constructor_confirmed_instance
+			}
+		}
+		if = {
+			limit = { is_in_faction = yes }
+			set_variable = { eon_edu_departure_result = 2 }
+			log = "EON_EDU DEPART_FAILED country=[?THIS.id] actual faction retained"
+			if = {
+				limit = { NOT = { has_country_flag = eon_edu_departure_failure_notified } }
+				set_country_flag = eon_edu_departure_failure_notified
+				country_event = { id = eon_edu.8 }
+			}
+		}
+		else = { clr_country_flag = eon_edu_departure_failure_notified }
+	}
+}
+# Metadata is authoritative only when the installed engine exposes it. Never
+# adopt by name, an old global flag, or a founder pointer. No new-creation news.
+eon_edu_adopt_legacy_template = {
+	if = {
+		limit = {
+			check_variable = { global.eon_edu_creation_actor = 0 }
+			NOT = { any_country = { check_variable = { eon_edu_creation_intent > 0 } } }
+			NOT = { any_country = { eon_edu_is_confirmed_member = yes } }
+		}
+		set_temp_variable = { eon_edu_legacy_leaders = 0 }
+		set_temp_variable = { eon_edu_legacy_leader = 0 }
+		every_country = {
+			limit = { is_in_faction = yes is_faction_leader = yes has_faction_template = faction_template_edu }
+			PREV = {
+				add_to_temp_variable = { eon_edu_legacy_leaders = 1 }
+				set_temp_variable = { eon_edu_legacy_leader = PREV.id }
+			}
+		}
+		if = {
+			limit = { check_variable = { eon_edu_legacy_leaders = 1 } }
+			var:eon_edu_legacy_leader = {
+				if = {
+					limit = { is_in_faction = yes is_faction_leader = yes has_faction_template = faction_template_edu }
+					add_to_variable = { global.eon_edu_generation_counter = 1 }
+					set_variable = { global.eon_edu_instance = global.eon_edu_generation_counter }
+					set_variable = { eon_edu_member_instance = global.eon_edu_instance }
+					set_variable = { eon_edu_legacy_adoption_serial = global.eon_edu_instance }
+					every_faction_member = { set_variable = { eon_edu_member_instance = global.eon_edu_instance } }
+					set_global_flag = EDU
+					log = "EON_EDU LEGACY_TEMPLATE_ADOPT leader=[?THIS.id] instance=[?global.eon_edu_instance]"
+				}
+			}
+		}
+	}
+}
+eon_edu_daily_pulse = {
+	eon_edu_adopt_legacy_template = yes
+	if = {
+		limit = { has_global_flag = EDU NOT = { eon_eu_union_active = yes } }
+		eon_edu_dissolve_confirmed_union = yes
+	}
+	else = {
+		every_country = {
+			limit = {
+				eon_edu_is_confirmed_member = yes
+				OR = {
+					NOT = { has_idea = EU_member }
+					AND = { has_global_flag = eon_eu_admission_guard_ready NOT = { has_country_flag = eon_eu_membership_recognized } }
+					NOT = { any_owned_state = { always = yes } }
+				}
+			}
+			eon_edu_depart_eu = yes
+		}
+	}
+	if = {
+		limit = { check_variable = { global.eon_edu_creation_actor > 0 } }
+		var:global.eon_edu_creation_actor = {
+			if = {
+				limit = { NOT = { eon_edu_creation_intent_bound = yes eon_edu_creation_policy_still_valid = yes } }
+				eon_edu_fail_creation_intent = yes
+			}
+		}
+		if = {
+			limit = { NOT = { var:global.eon_edu_creation_actor = { exists = yes check_variable = { eon_edu_creation_intent > 0 } } } }
+			clear_variable = global.eon_edu_creation_actor
+		}
+	}
+	if = {
+		limit = { has_global_flag = EDU NOT = { any_country = { eon_edu_is_confirmed_member = yes } } }
+		eon_edu_close = yes
+	}
+	every_possible_country = {
+		if = {
+			limit = { check_variable = { eon_edu_request_instance > 0 } }
+			if = {
+				limit = { NOT = { has_country_flag = eon_edu_request_deadline } }
+				set_variable = { eon_edu_request_result = 4 }
+				eon_edu_clear_request = yes
+				country_event = { id = eon_edu.5 }
+			}
+			else_if = {
+				limit = { NOT = { eon_edu_request_can_continue = yes } }
+				set_variable = { eon_edu_request_result = 5 }
+				eon_edu_clear_request = yes
+				country_event = { id = eon_edu.6 }
+			}
+		}
+	}
+}

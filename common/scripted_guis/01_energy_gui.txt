@@ -788,192 +788,98 @@ scripted_gui = {
 					}
 				}
 			}
-			# Power Consumption
+			# Rationing responds to shortage; recovery has a separate threshold.
+			# Zero base prevents pointless clicks and tag-specific forced consumption.
 			heavy_power_restrictions_button_click = {
 				ai_will_do = {
-					base = 1
+					base = 0
 					modifier = {
-						add = 100
+						add = 1000
 						check_variable = { energy_balance_value_display < 0.75 }
-						has_idea = some_additional_consumption_spirit
-						NOT = {
-							has_idea = some_additional_consumption_spirit
-							has_idea = heavy_additional_consumption_spirit
-						}
-					}
-					# DO NOT GO TO HEAVY POWER RESTRICTION UNLESS NEED BE
-					modifier = {
-						factor = 0
-						check_variable = { energy_balance_value_display > 0.75 }
-					}
-					modifier = {
-						add = 500
-						check_variable = { energy_balance_value_display < 0 }
-						has_idea = some_power_restrictions_spirit
+						NOT = { has_idea = heavy_power_restrictions_spirit }
 					}
 				}
 			}
 			some_power_restrictions_button_click = {
 				ai_will_do = {
-					base = 1
-					# Power has recovered, add up the restrictions
-					modifier = {
-						add = 100
-						check_variable = { energy_balance_value_display > 1.05 }
-						has_idea = heavy_power_restrictions_spirit
-						NOT = {
-							has_idea = some_additional_consumption_spirit
-							has_idea = heavy_additional_consumption_spirit
-						}
-					}
+					base = 0
 					modifier = {
 						add = 150
-						check_variable = { energy_balance_value_display < 0.85 }
-						NOT = {
-							has_idea = some_additional_consumption_spirit
-							has_idea = heavy_additional_consumption_spirit
-						}
+						NOT = { check_variable = { energy_balance_value_display < 0.75 } }
+						check_variable = { energy_balance_value_display < 0.95 }
+						NOT = { OR = { has_idea = heavy_power_restrictions_spirit has_idea = some_power_restrictions_spirit has_idea = some_additional_consumption_spirit has_idea = heavy_additional_consumption_spirit } }
 					}
 					modifier = {
-						factor = 0
-						check_variable = { energy_balance_value_display > 0.95 }
-					}
-					modifier = {
-						add = 500
-						check_variable = { energy_balance_value_display < 0 }
-						NOT = {	has_idea = heavy_power_restrictions_spirit	}
-						NOT = {	has_idea = some_additional_consumption_spirit	}
-						NOT = {	has_idea = heavy_additional_consumption_spirit	}
+						add = 100
+						has_idea = heavy_power_restrictions_spirit
+						check_variable = { energy_balance_value_display > 1.20 }
+						NOT = { check_variable = { energy_balance_value_display > 1.35 } }
+						set_temp_variable = { eon_energy_ai_demand_increase = 0.1 }
+						set_temp_variable = { eon_energy_ai_min_fulfillment = 1.05 }
+						eon_energy_ai_can_raise_demand = yes
 					}
 				}
 			}
 			no_power_rules_button_click = {
 				ai_will_do = {
-					base = 100
+					base = 0
 					modifier = {
-						add = 100
-						check_variable = { energy_balance_value_display > 1.15 }
-						OR = {
-							has_idea = heavy_power_restrictions_spirit
-							has_idea = some_power_restrictions_spirit
-						}
-					}
-					modifier = {
-						add = 100
-						check_variable = { energy_balance_value_display > 1.10 }
-						has_idea = some_power_restrictions_spirit
-					}
-					modifier = {
-						add = 100
-						check_variable = { energy_balance_value_display < 0.90 }
+						add = 500
 						has_idea = some_additional_consumption_spirit
-					}
-					modifier = {
-						factor = 0
-						NOT = {
-							has_idea = heavy_power_restrictions_spirit
-							has_idea = some_power_restrictions_spirit
-							has_idea = some_additional_consumption_spirit
-							has_idea = heavy_additional_consumption_spirit
-						}
-					}
-					modifier = {
-						factor = 0
-						OR = {
-							has_idea = some_additional_consumption_spirit
-							has_idea = heavy_additional_consumption_spirit
-						}
-					}
-					modifier = {
-						factor = 0
-						original_tag = USA
+						check_variable = { energy_balance_value_display < 1.00 }
 					}
 					modifier = {
 						add = 500
-						check_variable = { energy_balance_value_display < 0 }
-						has_idea = some_additional_consumption_button_click
+						has_idea = heavy_additional_consumption_spirit
+						check_variable = { energy_balance_value_display < 0.90 }
+					}
+					modifier = {
+						add = 100
+						has_idea = some_power_restrictions_spirit
+						check_variable = { energy_balance_value_display > 1.15 }
+						set_temp_variable = { eon_energy_ai_demand_increase = 0.1 }
+						set_temp_variable = { eon_energy_ai_min_fulfillment = 1.05 }
+						eon_energy_ai_can_raise_demand = yes
+					}
+					modifier = {
+						add = 100
+						has_idea = heavy_power_restrictions_spirit
+						check_variable = { energy_balance_value_display > 1.35 }
+						set_temp_variable = { eon_energy_ai_demand_increase = 0.2 }
+						set_temp_variable = { eon_energy_ai_min_fulfillment = 1.15 }
+						eon_energy_ai_can_raise_demand = yes
 					}
 				}
 			}
 			some_additional_consumption_button_click = {
 				ai_will_do = {
-					base = 1
+					base = 0
 					modifier = {
 						add = 50
-						check_variable = { energy_balance_value_display > 1.15 }
-						NOT = {
-							has_idea = heavy_power_restrictions_spirit
-							has_idea = some_power_restrictions_spirit
-							has_idea = heavy_additional_consumption_spirit
-						}
-					}
-					modifier = {
-						add = 50
-						check_variable = { energy_balance_value_display < 0.90 }
-						has_idea = heavy_additional_consumption_spirit
-						NOT = {
-							has_idea = heavy_power_restrictions_spirit
-							has_idea = some_power_restrictions_spirit
-						}
-					}
-					modifier = {
-						factor = 0
-						check_variable = { energy_balance_value_display > 1.15 }
-						has_idea = heavy_additional_consumption_spirit
-						NOT = {
-							has_idea = heavy_power_restrictions_spirit
-							has_idea = some_power_restrictions_spirit
-						}
-					}
-					modifier = {
-						factor = 0
-						check_variable = { energy_balance_value_display > 0.95 }
-						check_variable = { energy_balance_value_display < 1.15 }
-					}
-					modifier = {
-						factor = 0
-						check_variable = { energy_balance_value_display < 0.95 }
-						NOT = {
-							has_idea = heavy_additional_consumption_spirit
-							has_idea = heavy_power_restrictions_spirit
-							has_idea = some_power_restrictions_spirit
-						}
-					}
-					modifier = {
-						add = 100
-						original_tag = USA
+						check_variable = { energy_balance_value_display > 1.25 }
+						NOT = { OR = { has_idea = heavy_power_restrictions_spirit has_idea = some_power_restrictions_spirit has_idea = some_additional_consumption_spirit has_idea = heavy_additional_consumption_spirit } }
+						set_temp_variable = { eon_energy_ai_demand_increase = 0.1 }
+						set_temp_variable = { eon_energy_ai_min_fulfillment = 1.10 }
+						eon_energy_ai_can_raise_demand = yes
 					}
 					modifier = {
 						add = 500
-						check_variable = { energy_balance_value_display < 0 }
 						has_idea = heavy_additional_consumption_spirit
+						NOT = { check_variable = { energy_balance_value_display < 0.90 } }
+						check_variable = { energy_balance_value_display < 1.00 }
 					}
 				}
 			}
 			heavy_additional_consumption_button_click = {
 				ai_will_do = {
-					base = 1
+					base = 0
 					modifier = {
 						add = 50
-						check_variable = { energy_balance_value_display > 1.15 }
 						has_idea = some_additional_consumption_spirit
-						NOT = {
-							has_idea = heavy_power_restrictions_spirit
-							has_idea = some_power_restrictions_spirit
-						}
-					}
-					modifier = {
-						factor = 0
-						check_variable = { energy_balance_value_display > 0.95 }
-						check_variable = { energy_balance_value_display < 1.15 }
-					}
-					modifier = {
-						factor = 0
-						check_variable = { energy_balance_value_display < 0.95 }
-					}
-					modifier = {
-						add = 100
-						original_tag = USA
+						check_variable = { energy_balance_value_display > 1.15 }
+						set_temp_variable = { eon_energy_ai_demand_increase = 0.1 }
+						set_temp_variable = { eon_energy_ai_min_fulfillment = 1.05 }
+						eon_energy_ai_can_raise_demand = yes
 					}
 				}
 			}

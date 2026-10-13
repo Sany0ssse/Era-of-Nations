@@ -9,6 +9,9 @@ import sys
 ROOT=Path(__file__).resolve().parents[3]
 PATH='common/on_actions/00_costili.txt'
 BASELINE='f2832b6bfd980066163d0a69a6306169c992c5d7'
+LEGACY_SHA256='d9926b76681318590660883b468756f926711ae633a40813c5734fc353fe01cb'
+sys.path.insert(0,str(ROOT/'tools/validation'))
+from peace_settlement.legacy_source_compat import restore_consensual_annex_guards
 spec=importlib.util.spec_from_file_location('eon_annex_cleanup_ast',ROOT/'tools/validation/diplomacy_package_03/_support.py')
 parser=importlib.util.module_from_spec(spec)
 sys.modules[spec.name]=parser
@@ -34,17 +37,25 @@ class CleanupModel(parser.Model):
             else:
                 super().effect([(key,op,value)],stack)
 
-def main():
-    raw=(ROOT/PATH).read_bytes()
-    before=subprocess.check_output(['git','show',BASELINE+':'+PATH],cwd=ROOT)
+def assert_historical_annex_source(raw,before):
+    # Preservation only: inverse the already accepted two exact peace guards.
+    # Runtime/model assertions below still parse the complete current source.
+    assert hashlib.sha256(before).hexdigest()==LEGACY_SHA256, 'Whole legacy baseline changed'
+    preservation=restore_consensual_annex_guards(raw)
     newline=b'\r\n' if b'\r\n' in before else b'\n'
     old=b'\t\t\t\tremove_dynamic_modifier = {\tmodifier = embargo_dynamic_modifier\t}'
     new=newline.join((b'\t\t\t\tif = {',
         b'\t\t\t\t\tlimit = { has_dynamic_modifier = embargo_dynamic_modifier }',
         b'\t\t\t\t\tremove_dynamic_modifier = {\tmodifier = embargo_dynamic_modifier\t}',
         b'\t\t\t\t}'))
-    assert before.count(old)==raw.count(new)==2
-    assert raw.replace(new,old)==before, 'Unrelated legacy bytes changed'
+    assert before.count(old)==preservation.count(new)==2
+    assert preservation.replace(new,old)==before, 'Unrelated legacy bytes changed'
+    return preservation
+
+def main():
+    raw=(ROOT/PATH).read_bytes()
+    before=subprocess.check_output(['git','show',BASELINE+':'+PATH],cwd=ROOT)
+    assert_historical_annex_source(raw,before)
     actions=parser.one(parser.ast(raw),'on_actions')
     cases=0
     for hook,scope,target in (('on_annex','FROM',2),('on_subject_annexed','ROOT',1)):

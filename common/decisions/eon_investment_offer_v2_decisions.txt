@@ -1,0 +1,47 @@
+eon_investment_offer_v2_category = {
+ eon_investment_offer_v2_review = {
+  icon = generic_decision allowed = { always = no }
+  target_root_trigger = { exists = yes is_ai = no } target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { is_ai = no FROM = { PREV = { eon_investment_offer_v2_incoming = yes } } }
+  available = { is_ai = no FROM = { PREV = { eon_investment_offer_v2_incoming = yes } } } cost = 0
+  complete_effect = { if = { limit = { always = no } FROM = { PREV = { if = { limit = { eon_investment_offer_v2_incoming = yes } eon_investment_offer_v2_review = yes } } } }
+ }
+  ai_will_do = { factor = 0 }
+ }
+ eon_investment_offer_v2_accept = {
+  icon = generic_decision allowed = { always = no }
+  target_root_trigger = { exists = yes is_ai = no } target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { is_ai = no FROM = { PREV = { eon_investment_offer_v2_incoming = yes } } }
+  available = { is_ai = no FROM = { PREV = { eon_investment_offer_v2_accept_ready = yes } } } cost = 0
+  complete_effect = { if = { limit = { always = no } FROM = { PREV = { if = { limit = { eon_investment_offer_v2_accept_ready = yes } set_temp_variable = { eon_investment_offer_v2_expected_epoch = eon_investment_offer_v2_epoch@PREV } eon_investment_offer_v2_accept = yes } } } }
+ }
+  ai_will_do = { factor = 0 }
+ }
+ eon_investment_offer_v2_decline = {
+  icon = generic_decision allowed = { always = no }
+  target_root_trigger = { exists = yes is_ai = no } target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { is_ai = no FROM = { PREV = { eon_investment_offer_v2_incoming = yes } } }
+  available = { is_ai = no FROM = { PREV = { eon_investment_offer_v2_reviewed = yes } } } cost = 0
+  complete_effect = { if = { limit = { always = no } FROM = { PREV = { if = { limit = { eon_investment_offer_v2_reviewed = yes } set_temp_variable = { eon_investment_offer_v2_expected_epoch = eon_investment_offer_v2_epoch@PREV } eon_investment_offer_v2_decline = yes } } } }
+ }
+  ai_will_do = { factor = 0 }
+ }
+ eon_investment_offer_v2_withdraw = {
+  icon = generic_decision allowed = { always = no }
+  target_root_trigger = { exists = yes is_ai = no } target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { is_ai = no FROM = { PREV = { eon_investment_offer_v2_outgoing = yes } } }
+  available = { is_ai = no FROM = { PREV = { eon_investment_offer_v2_outgoing = yes } } } cost = 0
+  complete_effect = { if = { limit = { always = no } FROM = { PREV = { if = { limit = { eon_investment_offer_v2_outgoing = yes } set_temp_variable = { eon_investment_offer_v2_expected_epoch = eon_investment_offer_v2_epoch@PREV } eon_investment_offer_v2_withdraw = yes } } } }
+ }
+  ai_will_do = { factor = 0 }
+ }
+ eon_investment_offer_v2_status = {
+  icon = generic_decision allowed = { always = no }
+  target_root_trigger = { exists = yes is_ai = no } target_trigger = { FROM = { exists = yes NOT = { tag = PREV } } }
+  visible = { is_ai = no FROM = { PREV = { check_variable = { eon_investment_offer_v2_epoch@PREV > 0 } } } }
+  available = { is_ai = no FROM = { PREV = { check_variable = { eon_investment_offer_v2_epoch@PREV > 0 } } } } cost = 0
+  complete_effect = { if = { limit = { always = no } FROM = { PREV = { if = { limit = { check_variable = { eon_investment_offer_v2_epoch@PREV > 0 } } custom_effect_tooltip = eon_investment_offer_v2_terms_tt } } } }
+ }
+  ai_will_do = { factor = 0 }
+ }
+}

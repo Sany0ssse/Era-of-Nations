@@ -430,15 +430,50 @@ count_current_consumption = {
                         }
                     }
                     set_temp_variable = { i = 0 }
+                    set_temp_variable = { eon_ammo_port_loop_break = 0 }
+                    set_temp_variable = { i = 1 }
+                    set_temp_variable = { eon_ammo_port_ceiling = 2 }
+                    set_temp_variable = { eon_ammo_port_searching = 1 }
+                    # Bracket the count exponentially, keeping the inherited per-port cap of 100.
                     while_loop_effect = {
-                        limit = {
-                            check_variable = { i < 100 }
-                            ships_in_state_ports = {
-                                size  > i
-                                state = PREV
+                        break = eon_ammo_port_loop_break
+                        limit = { check_variable = { eon_ammo_port_searching = 1 } }
+                        set_temp_variable = { eon_ammo_port_probe = eon_ammo_port_ceiling }
+                        subtract_from_temp_variable = { eon_ammo_port_probe = 1 }
+                        if = {
+                            limit = { ships_in_state_ports = { size > eon_ammo_port_probe state = PREV } }
+                            set_temp_variable = { i = eon_ammo_port_ceiling }
+                            if = { limit = { check_variable = { i = 100 } }
+                                set_temp_variable = { eon_ammo_port_searching = 0 }
+                            }
+                            else = {
+                                multiply_temp_variable = { eon_ammo_port_ceiling = 2 }
+                                clamp_temp_variable = { var = eon_ammo_port_ceiling min = 2 max = 100 }
                             }
                         }
-                        add_to_temp_variable = { i = 1 }
+                        else = {
+                            subtract_from_temp_variable = { eon_ammo_port_ceiling = 1 }
+                            set_temp_variable = { eon_ammo_port_searching = 0 }
+                        }
+                    }
+                    # Refine with an integer midpoint, independent of native half-way rounding ties.
+                    while_loop_effect = {
+                        break = eon_ammo_port_loop_break
+                        limit = { check_variable = { var = i value = eon_ammo_port_ceiling compare = less_than } }
+                        set_temp_variable = { eon_ammo_port_probe = i }
+                        add_to_temp_variable = { eon_ammo_port_probe = eon_ammo_port_ceiling }
+                        add_to_temp_variable = { eon_ammo_port_probe = 1 }
+                        set_temp_variable = { eon_ammo_port_parity = eon_ammo_port_probe }
+                        modulo_temp_variable = { var = eon_ammo_port_parity value = 2 }
+                        subtract_from_temp_variable = { eon_ammo_port_probe = eon_ammo_port_parity }
+                        divide_temp_variable = { eon_ammo_port_probe = 2 }
+                        subtract_from_temp_variable = { eon_ammo_port_probe = 1 }
+                        if = {
+                            limit = { ships_in_state_ports = { size > eon_ammo_port_probe state = PREV } }
+                            set_temp_variable = { i = eon_ammo_port_probe }
+                            add_to_temp_variable = { i = 1 }
+                        }
+                        else = { set_temp_variable = { eon_ammo_port_ceiling = eon_ammo_port_probe } }
                     }
                     subtract_from_temp_variable = {
                         number_of_ships_in_combat = i

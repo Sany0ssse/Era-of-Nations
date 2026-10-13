@@ -37,6 +37,18 @@ access persistent storage. The suite includes scoped-temp mutation regressions.
 
 `test_source.py` checks narrow byte boundaries against `c1420b108`, BOM/EOL,
 actual billing integration, report IDs, localization and existing sprites.
+The historical comparison now explicitly restores exactly two later EU budget
+eligibility gates and seven digest-bound migration98 money islands. The latter
+match the sealed native98 money source (SHA256
+`24c243eae9c63d45a6af1c0743bd411c5ea50d5c63384edc072d3e24836b6aaa`)
+after the existing exact arsenal compatibility step. They cover private
+remittances, physical workforce/refugee accounting, expense hooks, display
+refresh and the capital-scope repair; they do not grant a general normalization.
+Whole foreign prefix/suffix bytes still equal the original Git blob after the
+reviewed restorations. Five EU controls and fourteen migration controls reject
+missing/modified islands or preserve unrelated mutations for that comparison.
+This baseline-scope migration changes tests only, not game source, and does not
+add new native electricity or campaign acceptance.
 Negotiation guards compare ordered AST predicates/operands after normalizing
 documented var/value/compare syntax and explicit variable country targets.
 The interpreter executes both comparison forms; source guards reject native

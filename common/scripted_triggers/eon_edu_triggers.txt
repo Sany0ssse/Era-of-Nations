@@ -1,0 +1,111 @@
+# Development EDU: native108 callback/identity acceptance remains required.
+eon_edu_is_confirmed_member = {
+	exists = yes
+	is_in_faction = yes
+	has_global_flag = EDU
+	check_variable = { eon_edu_member_instance > 0 }
+	check_variable = { var = eon_edu_member_instance value = global.eon_edu_instance compare = equals }
+	faction_leader = {
+		check_variable = { var = eon_edu_member_instance value = global.eon_edu_instance compare = equals }
+	}
+}
+eon_edu_is_operational_leader = {
+	eon_edu_is_confirmed_member = yes
+	is_faction_leader = yes
+	eon_eu_is_active_member = yes
+	is_subject = no
+	has_offensive_war = no
+}
+eon_edu_candidate_eligible = {
+	eon_eu_is_active_member = yes
+	eon_defensive_alliance_member_eligible = yes
+}
+eon_edu_founder_eligible = {
+	custom_trigger_tooltip = {
+		tooltip = eon_edu_founder_requirements_tt
+		eon_edu_candidate_eligible = yes
+		has_idea = European_Security_Council
+		has_idea = EU_foreign_minister
+		influence_on_all_other_EU_members_25_percent = yes
+		NOT = { has_global_flag = EDU }
+		check_variable = { global.eon_edu_creation_actor = 0 }
+	}
+}
+eon_edu_creation_intent_bound = {
+	check_variable = { eon_edu_creation_intent > 0 }
+	has_country_flag = eon_edu_creation_deadline
+	check_variable = { var = eon_edu_creation_intent value = global.eon_edu_generation_counter compare = equals }
+	check_variable = { var = global.eon_edu_creation_actor value = THIS.id compare = equals }
+}
+# Set only in the eligible, factionless constructor branch; not an old founder pointer.
+eon_edu_creation_constructor_bound = {
+	eon_edu_creation_intent_bound = yes
+	check_variable = { eon_edu_creation_constructor_instance > 0 }
+	check_variable = { var = eon_edu_creation_constructor_instance value = eon_edu_creation_intent compare = equals }
+}
+# Return-origin receipt permits a real delayed hook without a second commit.
+eon_edu_constructor_confirmation_current = {
+	check_variable = { eon_edu_constructor_confirmed_instance > 0 }
+	check_variable = { var = eon_edu_constructor_confirmed_instance value = global.eon_edu_instance compare = equals }
+	check_variable = { var = eon_edu_constructor_confirmed_instance value = eon_edu_member_instance compare = equals }
+	eon_edu_is_confirmed_member = yes
+}
+eon_edu_creation_policy_still_valid = {
+	eon_eu_is_active_member = yes
+	exists = yes
+	is_subject = no
+	has_offensive_war = no
+	has_rule = can_join_factions
+	NOT = { has_idea = BLR_neutrality_politic }
+	has_idea = European_Security_Council
+	has_idea = EU_foreign_minister
+	influence_on_all_other_EU_members_25_percent = yes
+	set_temp_variable = { eon_edu_intent_join_tension = modifier@join_faction_tension }
+	check_variable = { var = global.threat value = eon_edu_intent_join_tension compare = greater_than_or_equals }
+}
+eon_edu_request_available = {
+	custom_trigger_tooltip = {
+		tooltip = eon_edu_request_requirements_tt
+		eon_edu_candidate_eligible = yes
+		check_variable = { eon_edu_request_instance = 0 }
+		NOT = { has_country_flag = eon_edu_request_cooldown }
+		FROM = { eon_edu_is_operational_leader = yes }
+	}
+}
+eon_edu_request_active = {
+	check_variable = { eon_edu_request_instance > 0 }
+	has_country_flag = eon_edu_request_deadline
+	check_variable = { var = eon_edu_request_instance value = global.eon_edu_instance compare = equals }
+}
+eon_edu_request_can_continue = {
+	eon_edu_request_active = yes
+	eon_edu_candidate_eligible = yes
+	var:eon_edu_request_leader = { eon_edu_is_operational_leader = yes }
+}
+eon_edu_reply_pair_live = {
+	eon_edu_is_operational_leader = yes
+	FROM = {
+		eon_edu_request_active = yes
+		check_variable = { var = eon_edu_request_leader value = ROOT.id compare = equals }
+	}
+}
+eon_edu_accept_available = {
+	custom_trigger_tooltip = {
+		tooltip = eon_edu_reply_requirements_tt
+		eon_edu_reply_pair_live = yes
+		FROM = { eon_edu_candidate_eligible = yes }
+	}
+}
+eon_edu_reject_available = {
+	custom_trigger_tooltip = {
+		tooltip = eon_edu_reply_requirements_tt
+		eon_edu_reply_pair_live = yes
+	}
+}
+eon_edu_withdraw_available = {
+	custom_trigger_tooltip = {
+		tooltip = eon_edu_withdraw_requirements_tt
+		check_variable = { eon_edu_request_instance > 0 }
+		has_country_flag = eon_edu_request_deadline
+	}
+}

@@ -124,10 +124,10 @@ eon_mediation_opponent_pair_current = {
 eon_mediation_request_valid = {
  eon_mediation_conflict_current = yes
  has_country_flag = eon_mediation_response_window
- NOT = { has_country_flag = eon_mediation_cancelled }
- var:eon_mediation_party_a = { has_country_flag = eon_mediation_response_window NOT = { has_country_flag = eon_mediation_cancelled } }
- var:eon_mediation_party_b = { has_country_flag = eon_mediation_response_window NOT = { has_country_flag = eon_mediation_cancelled } }
- var:eon_mediation_mediator = { has_country_flag = eon_mediation_response_window NOT = { has_country_flag = eon_mediation_cancelled } }
+ NOT = { has_country_flag = eon_mediation_cancelled } NOT = { has_country_flag = eon_mediation_expired }
+ var:eon_mediation_party_a = { has_country_flag = eon_mediation_response_window NOT = { has_country_flag = eon_mediation_cancelled } NOT = { has_country_flag = eon_mediation_expired } }
+ var:eon_mediation_party_b = { has_country_flag = eon_mediation_response_window NOT = { has_country_flag = eon_mediation_cancelled } NOT = { has_country_flag = eon_mediation_expired } }
+ var:eon_mediation_mediator = { has_country_flag = eon_mediation_response_window NOT = { has_country_flag = eon_mediation_cancelled } NOT = { has_country_flag = eon_mediation_expired } }
 }
 eon_mediation_mediator_response_valid = { eon_mediation_mediator_pair_current = yes eon_mediation_request_valid = yes }
 eon_mediation_opponent_response_valid = { eon_mediation_opponent_pair_current = yes eon_mediation_request_valid = yes }
@@ -144,6 +144,17 @@ eon_mediation_cancelled_current = {
 eon_mediation_withdraw_ready = {
  eon_mediation_state_consistent = yes
  NOT = { tag = ROOT }
- NOT = { has_country_flag = eon_mediation_cancelled }
+ NOT = { has_country_flag = eon_mediation_cancelled } NOT = { has_country_flag = eon_mediation_expired }
  ROOT = { is_ai = no eon_mediation_origin_matches = yes eon_mediation_record_current = yes }
+}
+
+# Only the held original response can acknowledge this expired record.
+eon_mediation_expired_current = {
+ OR = { eon_mediation_mediator_pair_current = yes eon_mediation_opponent_pair_current = yes }
+ OR = {
+  has_country_flag = eon_mediation_expired
+  var:eon_mediation_party_a = { has_country_flag = eon_mediation_expired }
+  var:eon_mediation_party_b = { has_country_flag = eon_mediation_expired }
+  var:eon_mediation_mediator = { has_country_flag = eon_mediation_expired }
+ }
 }

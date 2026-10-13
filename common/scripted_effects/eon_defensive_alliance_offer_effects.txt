@@ -4,6 +4,10 @@ eon_defensive_alliance_offer_start = {
 	set_variable = { eon_defensive_alliance_pending_sender = ROOT.id }
 	ROOT = {
 		set_variable = { eon_defensive_alliance_pending_recipient = PREV.id }
+		if = {
+			limit = { is_ai = yes }
+			set_country_flag = { flag = eon_defensive_alliance_ai_offer_cooldown value = 1 days = 180 }
+		}
 	}
 }
 

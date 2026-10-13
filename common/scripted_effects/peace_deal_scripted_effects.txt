@@ -89,7 +89,14 @@ trigger_peace_deal = {
 				
 				log = "statevalue_4 = [?controlled_states_value]"
 			}
-			divide_temp_variable = { controlled_states_value = PREV.num_owned_states }
+			set_temp_variable = { peace_owned_states_denominator = PREV.num_owned_states }
+			if = {
+				limit = { check_variable = { peace_owned_states_denominator > 0 } }
+				divide_temp_variable = { controlled_states_value = var:peace_owned_states_denominator }
+			}
+			else = {
+				set_temp_variable = { controlled_states_value = 0 }
+			}
 			
 			log = "statevalue_5 = [?controlled_states_value]"
 			
@@ -232,7 +239,13 @@ trigger_peace_deal = {
 				
 				set_temp_variable = { faction_leader_ic = PREV.num_of_owned_factories }
 				set_temp_variable = { faction_members_ic = num_of_owned_factories }
-				divide_temp_variable = { faction_members_ic = var:faction_leader_ic }
+				if = {
+					limit = { check_variable = { faction_leader_ic > 0 } }
+					divide_temp_variable = { faction_members_ic = var:faction_leader_ic }
+				}
+				else = {
+					set_temp_variable = { faction_members_ic = 0 }
+				}
 				
 				### done
 				
@@ -343,7 +356,13 @@ trigger_peace_deal = {
 				set_temp_variable = { overlord_ic = PREV.num_of_owned_factories }
 				set_temp_variable = { subject_ic = num_of_owned_factories }
 				
-				divide_temp_variable = { subject_ic = var:overlod_ic }
+				if = {
+					limit = { check_variable = { overlord_ic > 0 } }
+					divide_temp_variable = { subject_ic = var:overlord_ic }
+				}
+				else = {
+					set_temp_variable = { subject_ic = 0 }
+				}
 				
 				multiply_temp_variable = { subject_score = var:subject_ic }
 				
@@ -448,7 +467,14 @@ trigger_peace_deal = {
 			
 			log = "statevalue_4 = [?controlled_states_value]"
 		}
-		divide_temp_variable = { controlled_states_value = PREV.num_owned_states }
+		set_temp_variable = { peace_owned_states_denominator = PREV.num_owned_states }
+		if = {
+			limit = { check_variable = { peace_owned_states_denominator > 0 } }
+			divide_temp_variable = { controlled_states_value = var:peace_owned_states_denominator }
+		}
+		else = {
+			set_temp_variable = { controlled_states_value = 0 }
+		}
 		
 		log = "statevalue_5 = [?controlled_states_value]"
 		
@@ -601,7 +627,13 @@ trigger_peace_deal = {
 					
 					set_temp_variable = { faction_leader_ic = PREV.num_of_owned_factories }
 					set_temp_variable = { faction_members_ic = num_of_owned_factories }
-					divide_temp_variable = { faction_members_ic = var:faction_leader_ic }
+					if = {
+						limit = { check_variable = { faction_leader_ic > 0 } }
+						divide_temp_variable = { faction_members_ic = var:faction_leader_ic }
+					}
+					else = {
+						set_temp_variable = { faction_members_ic = 0 }
+					}
 					
 					### done
 					
@@ -723,7 +755,13 @@ trigger_peace_deal = {
 					set_temp_variable = { overlord_ic = PREV.num_of_owned_factories }
 					set_temp_variable = { subject_ic = num_of_owned_factories }
 					
-					divide_temp_variable = { subject_ic = var:overlod_ic }
+					if = {
+						limit = { check_variable = { overlord_ic > 0 } }
+						divide_temp_variable = { subject_ic = var:overlord_ic }
+					}
+					else = {
+						set_temp_variable = { subject_ic = 0 }
+					}
 					
 					multiply_temp_variable = { subject_score = var:subject_ic }
 					
@@ -739,171 +777,17 @@ trigger_peace_deal = {
 	log = "peace_score_root: [?ceasefire_score_root]"
 	log = "peace_score_this: [?ceasefire_score_this]"
 
+	# Protect all native dispatch branches from automatic annex callbacks.
+	set_country_flag = eon_consensual_peace@ROOT
+	ROOT = { set_country_flag = eon_consensual_peace@PREV }
+
 	if = {
 		limit = {
 			check_variable = { ceasefire_score_root = var:ceasefire_score_this }
 		}
 
-		THIS = {
-			ROOT = {
-				every_subject_country = {
-					limit = { all_owned_state = { is_controlled_by = PREV.PREV.PREV } }
-					PREV.PREV = {
-						if = {
-							limit = {
-								has_global_flag = GAME_RULE_allow_colored_puppets
-							}
-							set_autonomy = {
-								target = PREV
-								autonomy_state = autonomy_autonomous_state_colored
-								end_wars = yes
-							}
-						}
-						else = {
-							set_autonomy = {
-								target = PREV
-								autonomy_state = autonomy_autonomous_state
-								end_wars = yes
-							}
-						}
-					}
-				}
-			}
-		}
-
-		if = {
-			limit = { ROOT = { is_faction_leader = yes } }
-			THIS = {
-				ROOT = {
-					every_allied_country = {
-						every_subject_country = {
-							limit = { all_owned_state = { is_controlled_by = PREV.PREV.PREV.PREV } }
-							PREV.PREV.PREV = {
-								if = {
-									limit = {
-										has_global_flag = GAME_RULE_allow_colored_puppets
-									}
-									set_autonomy = {
-										target = PREV
-										autonomy_state = autonomy_autonomous_state_colored
-										end_wars = yes
-									}
-								}
-								else = {
-									set_autonomy = {
-										target = PREV
-										autonomy_state = autonomy_autonomous_state
-										end_wars = yes
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		THIS = {
-			every_subject_country = {
-				limit = { all_owned_state = { is_controlled_by = ROOT } }
-				ROOT = {
-					if = {
-						limit = {
-							has_global_flag = GAME_RULE_allow_colored_puppets
-						}
-						set_autonomy = {
-							target = PREV
-							autonomy_state = autonomy_autonomous_state_colored
-							end_wars = yes
-						}
-					}
-					else = {
-						set_autonomy = {
-							target = PREV
-							autonomy_state = autonomy_autonomous_state
-							end_wars = yes
-						}
-					}
-				}
-			}
-		}
-
-		if = {
-			limit = { THIS = { is_faction_leader = yes } }
-			THIS = {
-				every_allied_country = {
-					every_subject_country = {
-						limit = { all_owned_state = { is_controlled_by = ROOT } }
-						ROOT = {
-							if = {
-								limit = {
-									has_global_flag = GAME_RULE_allow_colored_puppets
-								}
-								set_autonomy = {
-									target = PREV
-									autonomy_state = autonomy_autonomous_state_colored
-									end_wars = yes
-								}
-							}
-							else = {
-								set_autonomy = {
-									target = PREV
-									autonomy_state = autonomy_autonomous_state
-									end_wars = yes
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		THIS = {
-			every_subject_country = {
-				every_other_country = {
-					limit = {
-						is_in_faction_with = ROOT
-						has_war_with = PREV
-					}
-					white_peace = PREV
-				}
-			}
-			if = {
-				limit = { is_faction_leader = yes }
-				every_allied_country = {
-					every_other_country = {
-						limit = {
-							is_in_faction_with = ROOT
-							has_war_with = PREV
-						}
-						white_peace = PREV
-					}
-				}
-			}
-			ROOT = {
-				every_subject_country = {
-					every_other_country = {
-						limit = {
-							is_in_faction_with = PREV.PREV.PREV
-							has_war_with = ROOT
-						}
-						white_peace = PREV.PREV.PREV
-					}
-				}
-				if = {
-					limit = { is_faction_leader = yes }
-					every_allied_country = {
-						every_other_country = {
-							limit = {
-								is_in_faction_with = PREV.PREV.PREV
-								has_war_with = ROOT
-							}
-							white_peace = PREV.PREV.PREV
-						}
-					}
-				}
-			}
-			white_peace = ROOT
-		}
+		# A tied settlement changes neither ownership nor subject autonomy.
+		white_peace = ROOT
 	}
 	else_if = {
 		limit = {
@@ -926,6 +810,8 @@ trigger_peace_deal = {
 		start_peace_conference = {
 			tag = ROOT
 			score_factor = var:ceasefire_score_root
+			winner_scope = LIMITED
+			loser_scope = LIMITED
 		}
 	}
 	else = {
@@ -947,6 +833,8 @@ trigger_peace_deal = {
 			start_peace_conference = {
 				tag = PREV
 				score_factor = var:ceasefire_score_this
+				winner_scope = LIMITED
+				loser_scope = LIMITED
 			}
 		}	
 	}

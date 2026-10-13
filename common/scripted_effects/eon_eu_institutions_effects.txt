@@ -1,0 +1,521 @@
+# Explicit independent-institution abstraction: country flags denote nominee origin.
+# All country tokens stay full precision; ballots are separate from legislative votes.
+eon_eu_clear_office_ballot = {
+ set_variable = { global.eon_eu_office_id = 0 }
+ set_variable = { global.eon_eu_office_nominee = 0 }
+ set_variable = { global.eon_eu_office_phase = 0 }
+ set_variable = { global.eon_eu_office_yes = 0 }
+ set_variable = { global.eon_eu_office_no = 0 }
+ set_variable = { global.eon_eu_office_deadline = 0 }
+ set_variable = { global.eon_eu_office_voters = 0 }
+ set_variable = { global.eon_eu_office_population_k = 0 }
+ set_variable = { global.eon_eu_office_yes_population_k = 0 }
+ set_variable = { global.eon_eu_office_ep_total = 0 }
+ set_variable = { global.eon_eu_office_ep_yes = 0 }
+ set_variable = { global.eon_eu_office_ep_no = 0 }
+ clear_array = global.eon_eu_office_supporters
+ clear_array = global.eon_eu_office_rejecters
+ clr_global_flag = eon_eu_office_ballot_deadline
+ update_eu_dirty_variable = yes
+}
+eon_eu_open_office_ballot = {
+ if = {
+  limit = { eon_eu_office_nomination_ready = yes }
+  if = { limit = { check_variable = { eon_eu_office_nominee_generation < 1 } } set_variable = { eon_eu_office_nominee_generation = 1 } }
+  set_variable = { global.eon_eu_office_id = eon_eu_office_requested_id }
+  set_variable = { global.eon_eu_office_nominee = THIS }
+  set_variable = { global.eon_eu_office_nominee_generation = eon_eu_office_nominee_generation }
+  set_variable = { global.eon_eu_office_phase = 1 }
+  set_variable = { global.eon_eu_office_deadline = 14 }
+  clear_array = global.eon_eu_office_supporters
+  clear_array = global.eon_eu_office_rejecters
+  set_global_flag = { flag = eon_eu_office_ballot_deadline value = 1 days = 14 }
+  eon_eu_recount_office_ballot = yes
+  eon_eu_notify_office_ballot = yes
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_notify_office_ballot = {
+ for_each_scope_loop = {
+  array = global.EU_member
+  if = { limit = { eon_eu_can_cast_office_ballot = yes is_ai = no } country_event = { id = eon_eu_institutions.1 } }
+ }
+}
+eon_eu_cast_office_abstain = {
+ if = {
+  limit = { eon_eu_can_cast_office_ballot = yes }
+  remove_from_array = { array = global.eon_eu_office_supporters value = THIS }
+  remove_from_array = { array = global.eon_eu_office_rejecters value = THIS }
+  eon_eu_recount_office_ballot = yes
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_cast_office_yes = {
+ if = {
+  limit = { eon_eu_can_cast_office_ballot = yes }
+  eon_eu_cast_office_abstain = yes
+  add_to_array = { array = global.eon_eu_office_supporters value = THIS }
+  eon_eu_recount_office_ballot = yes
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_cast_office_no = {
+ if = {
+  limit = { eon_eu_can_cast_office_ballot = yes }
+  eon_eu_cast_office_abstain = yes
+  add_to_array = { array = global.eon_eu_office_rejecters value = THIS }
+  eon_eu_recount_office_ballot = yes
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_recount_office_ballot = {
+ # Root helper recomputes actual state-resident population, independent of conscription.
+ eon_eu_recount_council_vote = yes
+ set_variable = { global.eon_eu_office_voters = 0 }
+ set_variable = { global.eon_eu_office_population_k = 0 }
+ set_variable = { global.eon_eu_office_yes_population_k = 0 }
+ set_variable = { global.eon_eu_office_yes = 0 }
+ set_variable = { global.eon_eu_office_no = 0 }
+ set_variable = { global.eon_eu_office_ep_total = 0 }
+ set_variable = { global.eon_eu_office_ep_yes = 0 }
+ set_variable = { global.eon_eu_office_ep_no = 0 }
+ for_each_scope_loop = {
+  array = global.EU_member
+  if = {
+   limit = { eon_eu_is_active_member = yes }
+   add_to_variable = { global.eon_eu_office_ep_total = THIS.MEP_Total }
+   if = { limit = { is_in_array = { array = global.eon_eu_office_supporters value = THIS } }
+    add_to_variable = { global.eon_eu_office_ep_yes = THIS.MEP_Total }
+   }
+   else_if = { limit = { is_in_array = { array = global.eon_eu_office_rejecters value = THIS } }
+    add_to_variable = { global.eon_eu_office_ep_no = THIS.MEP_Total }
+   }
+   if = {
+    limit = {
+     NOT = { has_idea = EUU_voting_rights_suspended }
+     OR = { NOT = { check_variable = { global.eon_eu_office_id = 3 } } has_idea = the_euro }
+    }
+    add_to_variable = { global.eon_eu_office_voters = 1 }
+    add_to_variable = { global.eon_eu_office_population_k = THIS.eon_eu_voting_population_k }
+    if = { limit = { is_in_array = { array = global.eon_eu_office_supporters value = THIS } }
+     add_to_variable = { global.eon_eu_office_yes = 1 }
+     add_to_variable = { global.eon_eu_office_yes_population_k = THIS.eon_eu_voting_population_k }
+    }
+    else_if = { limit = { is_in_array = { array = global.eon_eu_office_rejecters value = THIS } }
+     add_to_variable = { global.eon_eu_office_no = 1 }
+    }
+   }
+  }
+ }
+ set_temp_variable = { eon_eu_office_state_threshold = global.eon_eu_office_voters }
+ multiply_temp_variable = { eon_eu_office_state_threshold = 0.72 }
+ set_temp_variable = { eon_eu_office_population_threshold = global.eon_eu_office_population_k }
+ multiply_temp_variable = { eon_eu_office_population_threshold = 0.65 }
+ set_temp_variable = { eon_eu_office_non_supporters = global.eon_eu_office_voters }
+ subtract_from_temp_variable = { eon_eu_office_non_supporters = global.eon_eu_office_yes }
+ set_temp_variable = { eon_eu_office_ep_threshold = global.eon_eu_office_ep_total }
+ multiply_temp_variable = { eon_eu_office_ep_threshold = 0.5 }
+ set_temp_variable = { eon_eu_office_board_total_times_two = global.eon_eu_office_voters }
+ multiply_temp_variable = { eon_eu_office_board_total_times_two = 2 }
+ set_temp_variable = { eon_eu_office_board_yes_times_three = global.eon_eu_office_yes }
+ multiply_temp_variable = { eon_eu_office_board_yes_times_three = 3 }
+}
+eon_eu_resolve_office_ballot = {
+ if = {
+  limit = { check_variable = { global.eon_eu_office_id > 0 } NOT = { has_global_flag = eon_eu_office_ballot_deadline } }
+  set_temp_variable = { eon_eu_office_requested_id = global.eon_eu_office_id }
+  set_temp_variable = { eon_eu_office_ballot_valid = 0 }
+  var:global.eon_eu_office_nominee = {
+   if = {
+    limit = {
+     eon_eu_office_nominee_eligible = yes
+     eon_eu_office_vacant = yes
+     check_variable = { var = eon_eu_office_nominee_generation value = global.eon_eu_office_nominee_generation compare = equals }
+    }
+    set_temp_variable = { eon_eu_office_ballot_valid = 1 }
+   }
+  }
+  eon_eu_recount_office_ballot = yes
+  set_temp_variable = { eon_eu_office_ballot_passed = 0 }
+  if = {
+   limit = { check_variable = { eon_eu_office_ballot_valid = 1 } }
+   if = { limit = { OR = { check_variable = { global.eon_eu_office_id = 2 } AND = { check_variable = { global.eon_eu_office_id = 1 } check_variable = { global.eon_eu_office_phase = 2 } } } eon_eu_office_ep_majority_passed = yes }
+    set_temp_variable = { eon_eu_office_ballot_passed = 1 }
+   }
+   else_if = { limit = { check_variable = { global.eon_eu_office_id = 6 } eon_eu_office_board_passed = yes }
+    set_temp_variable = { eon_eu_office_ballot_passed = 1 }
+   }
+   else_if = { limit = { NOT = { OR = { check_variable = { global.eon_eu_office_id = 2 } check_variable = { global.eon_eu_office_id = 6 } AND = { check_variable = { global.eon_eu_office_id = 1 } check_variable = { global.eon_eu_office_phase = 2 } } } } eon_eu_office_enhanced_qmv_passed = yes }
+    set_temp_variable = { eon_eu_office_ballot_passed = 1 }
+   }
+  }
+  if = {
+   limit = { check_variable = { eon_eu_office_ballot_passed = 1 } }
+   if = { limit = { check_variable = { global.eon_eu_office_id = 1 } check_variable = { global.eon_eu_office_phase = 1 } }
+    set_variable = { global.eon_eu_office_phase = 2 }
+    clear_array = global.eon_eu_office_supporters
+    clear_array = global.eon_eu_office_rejecters
+    set_global_flag = { flag = eon_eu_office_ballot_deadline value = 1 days = 14 }
+    eon_eu_recount_office_ballot = yes
+    eon_eu_notify_office_ballot = yes
+   }
+   else = { eon_eu_appoint_current_office = yes }
+  }
+  else = {
+   var:global.eon_eu_office_nominee = {
+    set_country_flag = { flag = eon_eu_office_nomination_cooldown value = 1 days = 60 }
+    if = { limit = { is_ai = no } country_event = { id = eon_eu_institutions.3 } }
+   }
+   eon_eu_clear_office_ballot = yes
+   set_global_flag = { flag = eon_eu_office_appointment_cooldown value = 1 days = 7 }
+  }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_appoint_current_office = {
+ # Freeze accepted request before consuming it; stale repeated callbacks become inert.
+ set_temp_variable = { eon_eu_accepted_office_id = global.eon_eu_office_id }
+ set_temp_variable = { eon_eu_accepted_office_nominee = global.eon_eu_office_nominee }
+ eon_eu_clear_office_ballot = yes
+ var:eon_eu_accepted_office_nominee = {
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 1 } eon_eu_is_active_member = yes } eon_eu_appoint_office_1 = yes }
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 2 } eon_eu_is_active_member = yes } eon_eu_appoint_office_2 = yes }
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 3 } eon_eu_is_active_member = yes } eon_eu_appoint_office_3 = yes }
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 4 } eon_eu_is_active_member = yes } eon_eu_appoint_office_4 = yes }
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 5 } eon_eu_is_active_member = yes } eon_eu_appoint_office_5 = yes }
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 6 } eon_eu_is_active_member = yes } eon_eu_appoint_office_6 = yes }
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 7 } eon_eu_is_active_member = yes } eon_eu_appoint_office_7 = yes }
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 8 } eon_eu_is_active_member = yes } eon_eu_appoint_office_8 = yes }
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 9 } eon_eu_is_active_member = yes } eon_eu_appoint_office_9 = yes }
+  if = { limit = { check_variable = { eon_eu_accepted_office_id = 10 } eon_eu_is_active_member = yes } eon_eu_appoint_office_10 = yes }
+  set_variable = { eon_eu_last_appointed_office = eon_eu_accepted_office_id }
+  if = { limit = { is_ai = no } country_event = { id = eon_eu_institutions.2 } }
+ }
+ set_global_flag = { flag = eon_eu_office_appointment_cooldown value = 1 days = 3 }
+}
+eon_eu_appoint_office_1 = {
+ add_timed_idea = { idea = EU_commission_president days = 1825 }
+ set_variable = { global.eucomission = THIS }
+}
+eon_eu_appoint_office_2 = {
+ add_timed_idea = { idea = EU_parliament_president days = 913 }
+ set_variable = { global.euparliamentpresident = THIS }
+}
+eon_eu_appoint_office_3 = {
+ add_timed_idea = { idea = ECB_president days = 2920 }
+ set_variable = { global.eucentralbank = THIS }
+ set_variable = { eon_eu_ecb_appointed_generation = eon_eu_office_nominee_generation }
+}
+eon_eu_appoint_office_4 = {
+ add_timed_idea = { idea = EU_council_president days = 913 }
+ set_variable = { global.eucouncil = THIS }
+ if = { limit = { NOT = { check_variable = { var = eon_eu_council_served_generation value = eon_eu_office_nominee_generation compare = equals } } }
+  set_variable = { eon_eu_council_nominee_terms = 0 }
+ }
+ set_variable = { eon_eu_council_served_generation = eon_eu_office_nominee_generation }
+ add_to_variable = { eon_eu_council_nominee_terms = 1 }
+}
+eon_eu_appoint_office_5 = {
+ add_timed_idea = { idea = EU_foreign_minister days = 1825 }
+ set_variable = { global.euforeignaffairs = THIS }
+}
+eon_eu_appoint_office_6 = {
+ add_timed_idea = { idea = frontex_ExDir days = 1825 }
+ set_variable = { global.eufrontex = THIS }
+ if = { limit = { NOT = { check_variable = { var = eon_eu_frontex_served_generation value = eon_eu_office_nominee_generation compare = equals } } }
+  set_variable = { eon_eu_frontex_nominee_terms = 0 }
+ }
+ set_variable = { eon_eu_frontex_served_generation = eon_eu_office_nominee_generation }
+ add_to_variable = { eon_eu_frontex_nominee_terms = 1 }
+}
+eon_eu_appoint_office_7 = {
+ add_timed_idea = { idea = EU_finance_minister days = 1825 }
+ set_variable = { global.eufinance = THIS }
+}
+eon_eu_appoint_office_8 = {
+ add_timed_idea = { idea = EUU_euroarmy_sc days = 1825 }
+ set_variable = { global.euarmy = THIS }
+}
+eon_eu_appoint_office_9 = {
+ add_timed_idea = { idea = EUU_euronavy_sc days = 1825 }
+ set_variable = { global.eunavy = THIS }
+}
+eon_eu_appoint_office_10 = {
+ add_timed_idea = { idea = EUU_ambassador_unsc days = 1825 }
+ set_variable = { global.euambassador = THIS }
+}
+eon_eu_reconcile_office_holders = {
+ every_possible_country = {
+  limit = { NOT = { eon_eu_is_active_member = yes } }
+  if = { limit = { has_idea = EU_commission_president } remove_ideas = EU_commission_president }
+  if = { limit = { has_idea = EU_parliament_president } remove_ideas = EU_parliament_president }
+  if = { limit = { has_idea = ECB_president } remove_ideas = ECB_president }
+  if = { limit = { has_idea = EU_council_president } remove_ideas = EU_council_president }
+  if = { limit = { has_idea = EU_foreign_minister } remove_ideas = EU_foreign_minister }
+  if = { limit = { has_idea = frontex_ExDir } remove_ideas = frontex_ExDir }
+  if = { limit = { has_idea = EU_finance_minister } remove_ideas = EU_finance_minister }
+  if = { limit = { has_idea = EUU_euroarmy_sc } remove_ideas = EUU_euroarmy_sc }
+  if = { limit = { has_idea = EUU_euronavy_sc } remove_ideas = EUU_euronavy_sc }
+  if = { limit = { has_idea = EUU_ambassador_unsc } remove_ideas = EUU_ambassador_unsc }
+ }
+ set_temp_variable = { eon_eu_seen_1 = 0 }
+ set_temp_variable = { eon_eu_seen_2 = 0 }
+ set_temp_variable = { eon_eu_seen_3 = 0 }
+ set_temp_variable = { eon_eu_seen_4 = 0 }
+ set_temp_variable = { eon_eu_seen_5 = 0 }
+ set_temp_variable = { eon_eu_seen_6 = 0 }
+ set_temp_variable = { eon_eu_seen_7 = 0 }
+ set_temp_variable = { eon_eu_seen_8 = 0 }
+ set_temp_variable = { eon_eu_seen_9 = 0 }
+ set_temp_variable = { eon_eu_seen_10 = 0 }
+ for_each_scope_loop = {
+  array = global.EU_member
+  if = { limit = { eon_eu_is_active_member = yes }
+   if = { limit = { has_idea = EU_commission_president }
+    set_temp_variable = { eon_eu_office_requested_id = 1 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_1 = 0 } } set_temp_variable = { eon_eu_seen_1 = THIS } }
+    else = { remove_ideas = EU_commission_president }
+   }
+   if = { limit = { has_idea = EU_parliament_president }
+    set_temp_variable = { eon_eu_office_requested_id = 2 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_2 = 0 } } set_temp_variable = { eon_eu_seen_2 = THIS } }
+    else = { remove_ideas = EU_parliament_president }
+   }
+   if = { limit = { has_idea = ECB_president }
+    set_temp_variable = { eon_eu_office_requested_id = 3 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_3 = 0 } has_idea = the_euro } set_temp_variable = { eon_eu_seen_3 = THIS } }
+    else = { remove_ideas = ECB_president }
+   }
+   if = { limit = { has_idea = EU_council_president }
+    set_temp_variable = { eon_eu_office_requested_id = 4 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_4 = 0 } } set_temp_variable = { eon_eu_seen_4 = THIS } }
+    else = { remove_ideas = EU_council_president }
+   }
+   if = { limit = { has_idea = EU_foreign_minister }
+    set_temp_variable = { eon_eu_office_requested_id = 5 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_5 = 0 } } set_temp_variable = { eon_eu_seen_5 = THIS } }
+    else = { remove_ideas = EU_foreign_minister }
+   }
+   if = { limit = { has_idea = frontex_ExDir }
+    set_temp_variable = { eon_eu_office_requested_id = 6 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_6 = 0 } } set_temp_variable = { eon_eu_seen_6 = THIS } }
+    else = { remove_ideas = frontex_ExDir }
+   }
+   if = { limit = { has_idea = EU_finance_minister }
+    set_temp_variable = { eon_eu_office_requested_id = 7 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_7 = 0 } } set_temp_variable = { eon_eu_seen_7 = THIS } }
+    else = { remove_ideas = EU_finance_minister }
+   }
+   if = { limit = { has_idea = EUU_euroarmy_sc }
+    set_temp_variable = { eon_eu_office_requested_id = 8 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_8 = 0 } } set_temp_variable = { eon_eu_seen_8 = THIS } }
+    else = { remove_ideas = EUU_euroarmy_sc }
+   }
+   if = { limit = { has_idea = EUU_euronavy_sc }
+    set_temp_variable = { eon_eu_office_requested_id = 9 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_9 = 0 } } set_temp_variable = { eon_eu_seen_9 = THIS } }
+    else = { remove_ideas = EUU_euronavy_sc }
+   }
+   if = { limit = { has_idea = EUU_ambassador_unsc }
+    set_temp_variable = { eon_eu_office_requested_id = 10 }
+    if = { limit = { eon_eu_office_available = yes check_variable = { eon_eu_seen_10 = 0 } } set_temp_variable = { eon_eu_seen_10 = THIS } }
+    else = { remove_ideas = EUU_ambassador_unsc }
+   }
+  }
+ }
+ if = { limit = { check_variable = { eon_eu_seen_1 = 0 } } set_variable = { global.eucomission = EUU } }
+ else = { set_variable = { global.eucomission = eon_eu_seen_1 } }
+ if = { limit = { check_variable = { eon_eu_seen_2 = 0 } } set_variable = { global.euparliamentpresident = EUU } }
+ else = { set_variable = { global.euparliamentpresident = eon_eu_seen_2 } }
+ if = { limit = { check_variable = { eon_eu_seen_3 = 0 } } set_variable = { global.eucentralbank = EUU } }
+ else = { set_variable = { global.eucentralbank = eon_eu_seen_3 } }
+ if = { limit = { check_variable = { eon_eu_seen_4 = 0 } } set_variable = { global.eucouncil = EUU } }
+ else = { set_variable = { global.eucouncil = eon_eu_seen_4 } }
+ if = { limit = { check_variable = { eon_eu_seen_5 = 0 } } set_variable = { global.euforeignaffairs = EUU } }
+ else = { set_variable = { global.euforeignaffairs = eon_eu_seen_5 } }
+ if = { limit = { check_variable = { eon_eu_seen_6 = 0 } } set_variable = { global.eufrontex = EUU } }
+ else = { set_variable = { global.eufrontex = eon_eu_seen_6 } }
+ if = { limit = { check_variable = { eon_eu_seen_7 = 0 } } set_variable = { global.eufinance = EUU } }
+ else = { set_variable = { global.eufinance = eon_eu_seen_7 } }
+ if = { limit = { check_variable = { eon_eu_seen_8 = 0 } } set_variable = { global.euarmy = EUU } }
+ else = { set_variable = { global.euarmy = eon_eu_seen_8 } }
+ if = { limit = { check_variable = { eon_eu_seen_9 = 0 } } set_variable = { global.eunavy = EUU } }
+ else = { set_variable = { global.eunavy = eon_eu_seen_9 } }
+ if = { limit = { check_variable = { eon_eu_seen_10 = 0 } } set_variable = { global.euambassador = EUU } }
+ else = { set_variable = { global.euambassador = eon_eu_seen_10 } }
+}
+eon_eu_rotate_council_presidency = {
+ # Rotation is independent of the Lisbon European Council presidency.
+ if = {
+  limit = { NOT = { has_global_flag = eon_eu_council_rotating_term } }
+  set_temp_variable = { eon_eu_rotation_selected = 0 }
+  set_temp_variable = { eon_eu_rotation_first = 0 }
+  set_temp_variable = { eon_eu_rotation_after = 0 }
+  for_each_scope_loop = {
+   array = global.EU_member
+   if = {
+    limit = { eon_eu_is_active_member = yes NOT = { has_idea = EUU_voting_rights_suspended } }
+    if = { limit = { check_variable = { eon_eu_rotation_first = 0 } } set_temp_variable = { eon_eu_rotation_first = THIS } }
+    if = { limit = { check_variable = { eon_eu_rotation_after = 1 } check_variable = { eon_eu_rotation_selected = 0 } }
+     set_temp_variable = { eon_eu_rotation_selected = THIS }
+    }
+    if = { limit = { check_variable = { global.eon_eu_council_rotating_holder = THIS } } set_temp_variable = { eon_eu_rotation_after = 1 } }
+   }
+  }
+  if = { limit = { check_variable = { eon_eu_rotation_selected = 0 } } set_temp_variable = { eon_eu_rotation_selected = eon_eu_rotation_first } }
+  if = { limit = { NOT = { check_variable = { eon_eu_rotation_selected = 0 } } }
+   set_variable = { global.eon_eu_council_rotating_holder = eon_eu_rotation_selected }
+   set_global_flag = { flag = eon_eu_council_rotating_term value = 1 days = 182 }
+  }
+ }
+}
+eon_eu_ai_office_voting = {
+ for_each_scope_loop = {
+  array = global.EU_member
+  if = {
+   limit = {
+    eon_eu_can_cast_office_ballot = yes is_ai = yes
+    NOT = { is_in_array = { array = global.eon_eu_office_supporters value = THIS } }
+    NOT = { is_in_array = { array = global.eon_eu_office_rejecters value = THIS } }
+   }
+   if = {
+    limit = {
+     check_variable = { eurosceptic < 0.6 }
+     # Resolve the nominee, then return to the voter; PREV is now the nominee.
+     var:global.eon_eu_office_nominee = { PREV = { has_opinion = { target = PREV value > -25 } } }
+    }
+    eon_eu_cast_office_yes = yes
+   }
+   else = { eon_eu_cast_office_no = yes }
+  }
+ }
+}
+eon_eu_ai_select_office_nominee = {
+ # Stable member order and a paid retry delay prevent GUI timing from leaving vacancies permanent.
+ for_each_scope_loop = {
+  array = global.EU_member
+  if = { limit = { is_ai = yes eon_eu_can_refresh_nominee_cohort = yes } eon_eu_refresh_nominee_cohort = yes }
+  if = {
+   limit = { is_ai = yes eon_eu_office_nomination_ready = yes check_variable = { eurosceptic < 0.7 } }
+   eon_eu_open_office_ballot = yes
+  }
+ }
+}
+eon_eu_refresh_nominee_cohort = {
+ if = { limit = { eon_eu_can_refresh_nominee_cohort = yes }
+  add_to_variable = { eon_eu_office_nominee_generation = 1 }
+  set_country_flag = { flag = eon_eu_national_nominees_recently_refreshed value = 1 days = 365 }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_initialize_historical_offices = {
+ # 2000 historical origins: Prodi(ITA), Fontaine(FRA), Duisenberg(HOL), Solana(SPR).
+ # Existing holders are never overwritten; these are origin proxies, not governments' control.
+ if = {
+  limit = { NOT = { has_global_flag = eon_eu_institutions_initialized } }
+  set_global_flag = eon_eu_institutions_initialized
+  for_each_scope_loop = { array = global.EU_member if = { limit = { check_variable = { eon_eu_office_nominee_generation < 1 } } set_variable = { eon_eu_office_nominee_generation = 1 } } }
+  # Adopt old-save holders without restarting or extending their existing timed ideas.
+  for_each_scope_loop = {
+   array = global.EU_member
+   if = { limit = { has_idea = ECB_president check_variable = { eon_eu_ecb_appointed_generation < 1 } }
+    set_variable = { eon_eu_ecb_appointed_generation = eon_eu_office_nominee_generation }
+   }
+   if = { limit = { has_idea = EU_council_president check_variable = { eon_eu_council_served_generation < 1 } }
+    set_variable = { eon_eu_council_served_generation = eon_eu_office_nominee_generation }
+    set_variable = { eon_eu_council_nominee_terms = 1 }
+   }
+   if = { limit = { has_idea = frontex_ExDir check_variable = { eon_eu_frontex_served_generation < 1 } }
+    set_variable = { eon_eu_frontex_served_generation = eon_eu_office_nominee_generation }
+    set_variable = { eon_eu_frontex_nominee_terms = 1 }
+   }
+  }
+  if = { limit = { date < 2000.2.1 }
+   if = { limit = { NOT = { any_of_scopes = { array = global.EU_member has_idea = EU_commission_president } } }
+    ITA = { if = { limit = { eon_eu_is_active_member = yes } eon_eu_appoint_office_1 = yes } }
+   }
+   if = { limit = { NOT = { any_of_scopes = { array = global.EU_member has_idea = EU_parliament_president } } }
+    FRA = { if = { limit = { eon_eu_is_active_member = yes } eon_eu_appoint_office_2 = yes } }
+   }
+   if = { limit = { NOT = { any_of_scopes = { array = global.EU_member has_idea = ECB_president } } }
+    HOL = { if = { limit = { eon_eu_is_active_member = yes has_idea = the_euro } eon_eu_appoint_office_3 = yes } }
+   }
+   if = { limit = { NOT = { any_of_scopes = { array = global.EU_member has_idea = EU_foreign_minister } } }
+    SPR = { if = { limit = { eon_eu_is_active_member = yes } eon_eu_appoint_office_5 = yes } }
+   }
+  }
+ }
+}
+eon_eu_close_institutions = {
+ eon_eu_clear_office_ballot = yes
+ clr_global_flag = eon_eu_council_rotating_term
+ set_variable = { global.eon_eu_council_rotating_holder = EUU }
+ every_possible_country = {
+  limit = { always = yes }
+  if = { limit = { has_idea = EU_commission_president } remove_ideas = EU_commission_president }
+  if = { limit = { has_idea = EU_parliament_president } remove_ideas = EU_parliament_president }
+  if = { limit = { has_idea = ECB_president } remove_ideas = ECB_president }
+  if = { limit = { has_idea = EU_council_president } remove_ideas = EU_council_president }
+  if = { limit = { has_idea = EU_foreign_minister } remove_ideas = EU_foreign_minister }
+  if = { limit = { has_idea = frontex_ExDir } remove_ideas = frontex_ExDir }
+  if = { limit = { has_idea = EU_finance_minister } remove_ideas = EU_finance_minister }
+  if = { limit = { has_idea = EUU_euroarmy_sc } remove_ideas = EUU_euroarmy_sc }
+  if = { limit = { has_idea = EUU_euronavy_sc } remove_ideas = EUU_euronavy_sc }
+  if = { limit = { has_idea = EUU_ambassador_unsc } remove_ideas = EUU_ambassador_unsc }
+ }
+ set_variable = { global.eucomission = EUU }
+ set_variable = { global.euparliamentpresident = EUU }
+ set_variable = { global.eucentralbank = EUU }
+ set_variable = { global.eucouncil = EUU }
+ set_variable = { global.euforeignaffairs = EUU }
+ set_variable = { global.eufrontex = EUU }
+ set_variable = { global.eufinance = EUU }
+ set_variable = { global.euarmy = EUU }
+ set_variable = { global.eunavy = EUU }
+ set_variable = { global.euambassador = EUU }
+ update_eu_dirty_variable = yes
+}
+eon_eu_daily_institutions_pulse = {
+ # Called by root after membership reconciliation; one shared state per institution.
+ if = {
+  limit = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes } }
+  eon_eu_reconcile_office_holders = yes
+  eon_eu_initialize_historical_offices = yes
+  set_temp_variable = { eon_eu_rotating_valid = 0 }
+  var:global.eon_eu_council_rotating_holder = { if = { limit = { eon_eu_is_active_member = yes NOT = { has_idea = EUU_voting_rights_suspended } } set_temp_variable = { eon_eu_rotating_valid = 1 } } }
+  if = { limit = { check_variable = { eon_eu_rotating_valid = 0 } } clr_global_flag = eon_eu_council_rotating_term }
+  eon_eu_rotate_council_presidency = yes
+  # Annexed/withdrawn nominees close before any late yes/no callback can appoint them.
+  if = { limit = { check_variable = { global.eon_eu_office_id > 0 } }
+   set_temp_variable = { eon_eu_office_pending_valid = 0 }
+   var:global.eon_eu_office_nominee = { if = { limit = { eon_eu_is_active_member = yes } set_temp_variable = { eon_eu_office_pending_valid = 1 } } }
+   if = { limit = { check_variable = { eon_eu_office_pending_valid = 0 } } eon_eu_clear_office_ballot = yes }
+  }
+  eon_eu_ai_office_voting = yes
+  eon_eu_resolve_office_ballot = yes
+  if = { limit = { check_variable = { global.eon_eu_office_id = 0 } NOT = { has_global_flag = eon_eu_office_appointment_cooldown } }
+   set_temp_variable = { eon_eu_office_requested_id = 1 }
+   eon_eu_ai_select_office_nominee = yes
+   set_temp_variable = { eon_eu_office_requested_id = 2 }
+   eon_eu_ai_select_office_nominee = yes
+   set_temp_variable = { eon_eu_office_requested_id = 3 }
+   eon_eu_ai_select_office_nominee = yes
+   set_temp_variable = { eon_eu_office_requested_id = 4 }
+   eon_eu_ai_select_office_nominee = yes
+   set_temp_variable = { eon_eu_office_requested_id = 5 }
+   eon_eu_ai_select_office_nominee = yes
+   set_temp_variable = { eon_eu_office_requested_id = 6 }
+   eon_eu_ai_select_office_nominee = yes
+   set_temp_variable = { eon_eu_office_requested_id = 7 }
+   eon_eu_ai_select_office_nominee = yes
+   set_temp_variable = { eon_eu_office_requested_id = 8 }
+   eon_eu_ai_select_office_nominee = yes
+   set_temp_variable = { eon_eu_office_requested_id = 9 }
+   eon_eu_ai_select_office_nominee = yes
+   set_temp_variable = { eon_eu_office_requested_id = 10 }
+   eon_eu_ai_select_office_nominee = yes
+  }
+  update_eu_dirty_variable = yes
+ }
+ else = { eon_eu_close_institutions = yes }
+}

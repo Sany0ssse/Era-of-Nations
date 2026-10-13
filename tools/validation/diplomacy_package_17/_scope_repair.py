@@ -8,6 +8,7 @@ unowned suffix, condition change or second occurrence is rejected.
 from pathlib import Path
 import hashlib
 import json
+from performance_refresh.weekly_optimization_byte_compat import restore_weekly_validator_bytes as _restore_weekly_validator
 
 JOURNAL = json.loads(Path(__file__).with_name('_scope_repair.json').read_text(encoding='utf-8'))
 
@@ -33,4 +34,5 @@ def game_before(path, actual):
 
 
 def test_before(path, actual):
+    actual = _restore_weekly_validator(path, actual)
     return inverse('test_adapters', path, actual)

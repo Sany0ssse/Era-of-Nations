@@ -109,6 +109,7 @@ class Country:
     arrays: dict = field(default_factory=dict)
     continent: str = 'europe'
     opinions: dict = field(default_factory=dict)
+    stability: float = .7
 
 
 class Model:
@@ -123,6 +124,9 @@ class Model:
         self.callbacks, self.create_callback_partner = callbacks, create_callback_partner
         self.legacy_template = legacy_template
         self.game_rules = {'allow_mp_optimizations': 'no'}
+        # Explicit native fixture inputs for the actual EDU membership helper;
+        # empty by default. This does not model the EDU protocol or global writes.
+        self.global_flags, self.global_variables = set(), {}
         self.temp, self.factions, self.native_calls = {}, {}, []
         self.next_faction = 100
         self.effects, self.triggers = {}, {}
@@ -131,6 +135,10 @@ class Model:
                 for key, op, value in source(str(path.relative_to(ROOT)).replace('\\', '/')):
                     assert key not in target, ('Duplicate helper', key)
                     target[key] = value
+        # Current native JOIN/OFFER first distinguish confirmed EDU membership.
+        # Execute this exact helper AST rather than treating EDU as always false.
+        self.triggers['eon_edu_is_confirmed_member'] = one(source(
+            'common/scripted_triggers/eon_edu_triggers.txt'), 'eon_edu_is_confirmed_member')
         native = source('common/scripted_triggers/00_game_rule_triggers.txt')
         for key in ('DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER', 'DIPLOMACY_JOIN_ALLY_ENABLE_TRIGGER',
                     'DIPLOMACY_JOIN_FACTION_ENABLE_TRIGGER', 'DIPLOMACY_OFFER_JOIN_FACTION_ENABLE_TRIGGER'):
@@ -170,6 +178,7 @@ class Model:
             assert name in self.countries[stack[-1]].native_modifiers, ('Unknown native modifier', name)
             return self.countries[stack[-1]].native_modifiers[name]
         if token in ('threat', 'global.threat'): return self.tension
+        if token.startswith('global.'): return self.global_variables.get(token[7:], 0)
         parts, owner, ancestor = token.split('.'), stack[-1], len(stack) - 1
         while len(parts) > 1:
             scope = parts.pop(0)
@@ -233,6 +242,7 @@ class Model:
             elif key == 'exists': passed = country.exists == (value == 'yes')
             elif key == 'is_subject': passed = country.subject == (value == 'yes')
             elif key == 'is_ai': passed = country.ai == (value == 'yes')
+            elif key == 'has_stability': passed = compare(country.stability, op, self.value(value, stack))
             elif key == 'has_government':
                 expected = self.countries[self.ref(value, stack)].government if value in ('FROM', 'ROOT', 'PREV', 'THIS') or value.startswith('var:') else value
                 passed = country.government == expected
@@ -240,6 +250,7 @@ class Model:
             elif key == 'tag': passed = country.ident == self.ref(value, stack)
             elif key == 'has_idea': passed = value in country.ideas
             elif key == 'has_country_flag': passed = self.flag(value, stack) in country.flags
+            elif key == 'has_global_flag': passed = value in self.global_flags
             elif key == 'has_rule':
                 if isinstance(value, str): passed = country.rules.get(value, False)
                 else:

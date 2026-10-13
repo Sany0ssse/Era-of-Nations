@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[3]
 BASELINE = 'c1420b108dee2d129018951c9ba73c1f6bfc4360'
 sys.path.insert(0, str(ROOT / 'tools/validation'))
 from diplomacy_package_17._scope_repair import JOURNAL, game_before
+from diplomacy_package_24.investment_offer_source import legacy_source_bytes, verify_cohort, live_protocol24_inner
 aid_spec = importlib.util.spec_from_file_location(
     'eon_aid_byte_compat', ROOT / 'tools/validation/aid_flag_scope/byte_compat.py')
 aid_compat = importlib.util.module_from_spec(aid_spec)
@@ -98,19 +99,26 @@ def main():
     # Bind the complete exact25 READ + nine type-field repair, including source
     # paths outside this earlier syntax inventory. Reject a changed predicate or
     # suffix; no broad token removal or whole-file normalization is permitted.
+    verify_cohort(ROOT)
+    live_inner = live_protocol24_inner(ROOT, lambda text: parser.ast(text.encode('utf-8')), None)
     repair_boundary_cases = 0
     repair_hashes = {}
     for group in ('support_reads', 'equipment_field'):
         for relative, receipt in JOURNAL[group].items():
             after = (ROOT / relative).read_bytes()
-            historical_after = aid_compat.before_aid_flag_repair(relative, after)
+            projected = legacy_source_bytes(ROOT, relative) if relative == 'common/scripted_effects/eon_investment_project_effects.txt' else after
+            historical_after = aid_compat.before_aid_flag_repair(relative, projected)
             assert hashlib.sha256(historical_after).hexdigest() == receipt['after_sha256']
             preservation = game_before(relative, historical_after)
             assert hashlib.sha256(preservation).hexdigest() == receipt['before_sha256']
             parser.ast(after)  # actual current source, not the inverse view
             for mutated in (after + b'# memory-only unowned suffix\n', after.replace(b'= yes', b'= no', 1)):
                 assert mutated != after, ('Missing bounded predicate mutant', relative)
-                try: game_before(relative, aid_compat.before_aid_flag_repair(relative, mutated))
+                try:
+                    if relative == 'common/scripted_effects/eon_investment_project_effects.txt':
+                        catalog, _, before_files = __import__('diplomacy_package_24.investment_offer_source', fromlist=['finite_data']).finite_data()
+                        assert mutated == before_files[relative] or hashlib.sha256(mutated).hexdigest() == catalog['source_after_sha256'][relative], 'Foreign investment bytes rejected'
+                    game_before(relative, aid_compat.before_aid_flag_repair(relative, mutated))
                 except AssertionError: pass
                 else: raise AssertionError(('Unowned repair mutation accepted', relative))
                 repair_boundary_cases += 1
@@ -138,6 +146,8 @@ def main():
                       'accepted_repair_source_sha256': repair_hashes,
                       'exact_read_operand_repairs': 25, 'exact_equipment_field_repairs': 9,
                       'repair_mutation_boundary_cases': repair_boundary_cases,
+                      'investment_legacy_READ_only_projected': True,
+                      'investment_live_protocol24_inner': live_inner,
                       'native_runtime_proven': False,
                       'proof_scope': 'full parsed statement equivalence and exact comparison boundaries; native load still required'}, indent=2))
 

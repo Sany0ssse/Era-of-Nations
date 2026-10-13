@@ -9,9 +9,20 @@ from decimal import Decimal, ROUND_DOWN
 from copy import deepcopy
 from itertools import permutations
 from collections import Counter
-import hashlib, json, re
+import hashlib, json, re, importlib.util
 
 ROOT = Path(__file__).resolve().parents[3]
+
+# Exact certified adjacent damage/state boundary only; unknown effects stay closed.
+_economy_spec=importlib.util.spec_from_file_location('eon_economy_refresh_compat',
+    ROOT/'tools/validation/performance_refresh/byte_compat.py')
+_economy_bytes=importlib.util.module_from_spec(_economy_spec)
+_economy_spec.loader.exec_module(_economy_bytes)
+
+# These already-existing native fixture delegates are used only after actual
+# CURRENT fused helper AST and dependency certification. No full finance model.
+_ECONOMY_NATIVE_BOUNDARY=_economy_bytes.certified_native_boundary()
+
 TOKEN = re.compile(r'"(?:\\.|[^"\\])*"|#[^\r\n]*|[{}]|[=<>!]+|[^\s{}=<>!#"]+')
 def read(path): return (ROOT/path).read_text(encoding='utf-8-sig')
 def ast(text):
@@ -173,6 +184,9 @@ def execute(nodes,s,c):
             for branch in branches:
                 limits=[body for name,o,body in branch if name=='limit']
                 if not limits or trigger(limits[0],s,c):execute([node for node in branch if node[0]!='limit'],s,c);break
+        elif k=='eon_economy_refresh_state_and_damage':
+            assert op=='=' and v=='yes', 'Only certified fused-boundary invocation supported'
+            execute(_ECONOMY_NATIVE_BOUNDARY,s,c)
         elif k in ('calculate_damaged_buildings_count','update_state_variables','ingame_update_setup'):
             native[k]+=1
             # Explicit native aggregation boundary. Dynamic generation/demand
@@ -240,6 +254,18 @@ def execute(nodes,s,c):
                 write(s,c,d.get('value','v'),entry,True);write(s,c,d.get('index','i'),idx,True)
                 execute([node for node in v if node[0] not in d],s,c)
                 if 'break' in d and value(s,c,d['break']):break
+        elif k=='for_each_scope_loop':
+            # Installed native API changes THIS to each opaque country token;
+            # ROOT/FROM stay fixed, and PREV receives the caller's scope.
+            d={a:b for a,o,b in v if a in ('array','break','tooltip')}
+            assert len([a for a,o,b in v if a=='array'])==1
+            assert d['array'].startswith('global.'),'Only reviewed global country arrays supported'
+            scope,name=target(s,c,d['array']);assert scope=='global'
+            entries=list(s['global']['arrays'].get(name,[]))
+            for token in entries:
+                assert token in s['countries'],'Unknown native country token is not a fixture country'
+                execute([node for node in v if node[0] not in d],s,switch(c,token))
+                if value(s,c,d.get('break','break')):break
         elif k=='every_country':
             limits=[body for name,o,body in v if name=='limit']
             for scope,data in list(s['countries'].items()):

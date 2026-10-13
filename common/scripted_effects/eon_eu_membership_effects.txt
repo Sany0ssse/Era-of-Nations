@@ -1,0 +1,612 @@
+# Close historical admission only after country/state history is fully loaded.
+eon_eu_close_historical_admission = {
+ if = { limit = { NOT = { has_global_flag = eon_eu_admission_guard_ready } }
+  every_country = { limit = { exists = yes any_owned_state = { always = yes } has_idea = EU_member NOT = { has_global_flag = GAME_RULE_eu_disabled } NOT = { has_global_flag = usoe_formed } }
+   set_country_flag = eon_eu_membership_recognized
+  }
+  set_global_flag = eon_eu_admission_guard_ready
+ }
+}
+eon_eu_reject_unapproved_membership = {
+ # The rejected idea must not erase a genuine candidate's negotiations.
+ set_country_flag = eon_eu_rejecting_membership
+ remove_ideas = EU_member
+ clr_country_flag = eon_eu_rejecting_membership
+}
+eon_eu_member_added = {
+ if = { limit = { has_country_flag = eon_eu_admission_commit }
+  clr_country_flag = eon_eu_admission_commit
+  set_country_flag = eon_eu_membership_recognized
+  eon_eu_register_admitted_member = yes
+ }
+ else_if = { limit = { has_country_flag = eon_eu_membership_recognized has_idea = EU_member }
+  # An already-recognized callback replay neither re-admits nor removes the member.
+ }
+ else_if = { limit = { has_global_flag = eon_eu_admission_guard_ready }
+  eon_eu_reject_unapproved_membership = yes
+ }
+ # History on_add callbacks defer registration until the explicit startup boundary.
+}
+# Era of Nations: bounded sovereign membership, not a playable EU country.
+eon_eu_clear_country_access = {
+ eon_eu_extension_clear_notice = yes
+ clr_country_flag = eon_eu_membership_recognized
+ clr_country_flag = eon_eu_admission_commit
+ clr_country_flag = new_EU_open
+ eu_screen_selection = yes
+ clr_country_flag = eu_sec_dis_open
+ clr_country_flag = EU_candidate
+ clr_country_flag = Article_50
+ clr_country_flag = withdrawal_treaty
+ clr_country_flag = eon_eu_application_window
+ clr_country_flag = eon_eu_negotiation_period
+ clr_country_flag = eon_eu_accession_ep_consent
+ clr_country_flag = eon_eu_withdrawal_clock_started
+ clr_country_flag = eon_eu_withdrawal_deadline
+ clr_country_flag = eon_eu_withdrawal_proposal
+ clr_country_flag = eon_eu_withdrawal_ep_consent
+ clr_country_flag = eon_eu_withdrawal_council_consent
+ clear_array = eon_eu_accession_approvals
+ clear_array = eon_eu_accession_ep_approvals
+ clear_array = eon_eu_withdrawal_approvals
+ clear_array = eon_eu_withdrawal_ep_approvals
+ clear_array = eon_eu_withdrawal_ep_rejections
+ set_variable = { eon_eu_accession_phase = 0 }
+ set_variable = { EU_budget_contribution = 0 }
+ set_variable = { EU_budget_contribution_weekly = 0 }
+ set_variable = { EU_budget_ratio = 0 }
+ set_variable = { EU_natural_subsidies = 0 }
+ set_variable = { EU_growth_subsidies = 0 }
+ set_variable = { EU_admin_subsidies = 0 }
+ set_variable = { EU_global_exp_subsidies = 0 }
+ set_variable = { EU_subsidies = 0 }
+ while_loop_effect = {
+  limit = { is_in_array = { global.EU_candidates = THIS } }
+  remove_from_array = { global.EU_candidates = THIS }
+ }
+ remove_mission = EU_exit
+ remove_mission = EU_exit_three_month
+ remove_mission = EU_budget_draft_preparations
+ remove_mission = EU_mff_draft_preparations
+ remove_mission = pre_accession_assistance_program
+ remove_mission = EU_update_vars_mission
+ remove_mission = EU_clear_voting_mission
+ remove_mission = EU_election_2004
+ remove_mission = EU_election_5_years
+ remove_mission = EU_parliament_focus_EUXXX_approve
+ remove_mission = EU_parliament_focus_EUXXX_approve_timer
+ remove_mission = EU_voting_mission_focus_EUXXX_QMV_result
+ remove_mission = EU_voting_mission_focus_EUXXX_QMV_result_timer
+ remove_mission = EU_budget_yearly_timer
+ remove_mission = EU_budget_draft_ongoing
+ remove_mission = EU_budget_draft_ongoing_president
+ remove_mission = EU_mff_yearly_timer
+ remove_mission = EU_mff_draft_ongoing
+ remove_mission = EU_mff_draft_ongoing_president
+ clr_country_flag = EU_budget_draft
+ clr_country_flag = EU_mff_draft
+ clr_country_flag = EU_budget_EP_block
+ clr_country_flag = EU_mff_EP_block
+ remove_mission = eurozone_reforms
+ remove_mission = troika_reforms
+ remove_mission = EU_military_exercise_mission
+ remove_mission = EU_POTEF_election_campaign
+ remove_mission = EU_POTEF_term
+}
+eon_eu_register_admitted_member = {
+ # Record the transition before normalizing the roster, so daily refresh sees it.
+ if = { limit = { eon_eu_is_active_member = yes NOT = { is_in_array = { global.EU_member = THIS } } }
+  set_global_flag = eon_eu_membership_changed
+ }
+ while_loop_effect = {
+  limit = { is_in_array = { global.EU_member = THIS } }
+  remove_from_array = { global.EU_member = THIS }
+ }
+ add_to_array = { global.EU_member = THIS }
+ clr_country_flag = EU_candidate
+ clr_country_flag = eon_eu_application_window
+ clr_country_flag = eon_eu_accession_ep_consent
+ set_variable = { eon_eu_accession_phase = 0 }
+ clear_array = eon_eu_accession_approvals
+ clear_array = eon_eu_accession_ep_approvals
+ while_loop_effect = {
+  limit = { is_in_array = { global.EU_candidates = THIS } }
+  remove_from_array = { global.EU_candidates = THIS }
+ }
+ if = { limit = { NOT = { has_global_flag = eon_eu_registry_refreshing } } eon_eu_refresh_membership = yes }
+}
+eon_eu_refresh_membership = {
+ if = {
+  limit = { NOT = { has_global_flag = eon_eu_registry_refreshing } }
+  set_global_flag = eon_eu_registry_refreshing
+  every_country = { limit = { has_global_flag = eon_eu_admission_guard_ready has_idea = EU_member NOT = { has_country_flag = eon_eu_membership_recognized } } eon_eu_reject_unapproved_membership = yes }
+  clear_array = global.eon_eu_previous_members
+  for_each_scope_loop = { array = global.EU_member add_to_array = { global.eon_eu_previous_members = THIS } }
+  clear_array = global.EU_member
+  clear_array = global.EU_candidates
+  set_variable = { global.EU_member_count = 0 }
+  every_country = {
+   limit = { eon_eu_is_live_legal_member = yes }
+   add_to_array = { global.EU_member = THIS }
+   add_to_variable = { global.EU_member_count = 1 }
+  }
+  if = {
+   limit = { check_variable = { global.EU_member_count = 0 } }
+   if = { limit = { NOT = { has_global_flag = eon_eu_dormant } }
+    eon_eu_reset_institutional_laws = yes
+    set_global_flag = eon_eu_archive_cleaned
+   }
+   set_global_flag = eon_eu_dormant
+   every_country = { eon_eu_clear_country_access = yes }
+   for_each_scope_loop = {
+    array = global.eon_eu_previous_members
+    # Legal membership survives temporary subordination while other institutions function.
+    # With no representation left, archive the game institution; no automatic resurrection.
+    remove_ideas = EU_member
+    eon_eu_clear_country_access = yes
+   }
+   every_country = {
+    limit = { OR = { has_idea = EU_member has_country_flag = EU_candidate check_variable = { eon_eu_accession_phase > 0 } } }
+    remove_ideas = EU_member
+    eon_eu_clear_country_access = yes
+   }
+   set_variable = { global.var_EUpopTotal = 0 }
+   set_variable = { global.var_EUpopTotalDisplay = 0 }
+   set_variable = { global.var_europeanism = 0 }
+   set_variable = { global.EU_total_qmv_state = 0 }
+   set_variable = { global.EU_majority_qmv_state = 0 }
+   set_variable = { global.EU_gdp = 0 }
+   set_variable = { global.EU_gdp_capita = 0 }
+   set_variable = { global.EU_total_budget = 0 }
+   set_variable = { global.EU_total_exp = 0 }
+  }
+  else = {
+   # An archived union can only resume via the explicit consenting founding pair.
+   if = { limit = { has_global_flag = eon_eu_dormant }
+    # Stray script-granted membership cannot revive an archived institution or its bonuses.
+    every_country = {
+     limit = { OR = { has_idea = EU_member has_country_flag = EU_candidate check_variable = { eon_eu_accession_phase > 0 } } }
+     remove_ideas = EU_member
+     eon_eu_clear_country_access = yes
+    }
+    clear_array = global.EU_member
+    set_variable = { global.EU_member_count = 0 }
+   }
+   else = {
+    every_country = {
+     limit = { eon_eu_is_candidate = yes }
+     add_to_array = { global.EU_candidates = THIS }
+    }
+    EU_update_vars = yes
+   }
+  }
+  if = {
+   limit = {
+    OR = {
+     NOT = { check_variable = { var = global.eon_eu_previous_members^num value = global.EU_member_count compare = equals } }
+     any_of_scopes = { array = global.eon_eu_previous_members NOT = { is_in_array = { global.EU_member = THIS } } }
+    }
+   }
+   set_global_flag = eon_eu_membership_changed
+  }
+  clear_array = global.eon_eu_previous_members
+  clr_global_flag = eon_eu_registry_refreshing
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_apply_for_membership_start = {
+ if = { limit = { eon_eu_application_ready = yes }
+  set_variable = { eon_eu_accession_phase = 1 }
+  clear_array = eon_eu_accession_approvals
+  clear_array = eon_eu_accession_ep_approvals
+  set_country_flag = { flag = eon_eu_application_window days = 365 value = 1 }
+  clr_country_flag = eon_eu_accession_ep_consent
+  # Inform human counterparts once on this real phase transition; the popup never votes.
+  every_country = {
+   limit = { eon_eu_is_active_member = yes is_ai = no NOT = { tag = PREV } }
+   country_event = { id = eon_eu_membership.9 }
+  }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_endorse_application = {
+ if = { limit = { eon_eu_member_can_respond = yes FROM = { check_variable = { eon_eu_accession_phase = 1 } } }
+  FROM = { add_to_array = { eon_eu_accession_approvals = ROOT } }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_cancel_application = {
+ clear_array = eon_eu_accession_approvals
+ clear_array = eon_eu_accession_ep_approvals
+ clr_country_flag = eon_eu_application_window
+ clr_country_flag = eon_eu_accession_ep_consent
+ set_country_flag = { flag = eon_eu_application_cooldown days = 90 value = 1 }
+ if = { limit = { has_country_flag = EU_candidate } set_variable = { eon_eu_accession_phase = 2 } }
+ else = { set_variable = { eon_eu_accession_phase = 0 } }
+ update_eu_dirty_variable = yes
+}
+eon_eu_reject_application = {
+ if = { limit = { eon_eu_is_active_member = yes FROM = { eon_eu_application_current = yes } }
+  FROM = { eon_eu_cancel_application = yes country_event = { id = eon_eu_membership.3 } }
+ }
+}
+eon_eu_submit_accession_treaty = {
+ if = { limit = { eon_eu_treaty_submission_ready = yes }
+  clear_array = eon_eu_accession_approvals
+  clear_array = eon_eu_accession_ep_approvals
+  clr_country_flag = eon_eu_accession_ep_consent
+  set_variable = { eon_eu_accession_phase = 3 }
+  set_country_flag = { flag = eon_eu_application_window days = 365 value = 1 }
+  # Inform human counterparts once on this real phase transition; the popup never votes.
+  every_country = {
+   limit = { eon_eu_is_active_member = yes is_ai = no NOT = { tag = PREV } }
+   country_event = { id = eon_eu_membership.10 }
+  }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_ratify_accession_treaty = {
+ eon_eu_refresh_membership = yes
+ eon_eu_recount_treaty_parliament = yes
+ if = { limit = { eon_eu_accession_final_ready = yes }
+  # Consume the draft before on_add callbacks. Repeated callbacks cannot admit twice.
+  clr_country_flag = eon_eu_application_window
+  set_variable = { eon_eu_accession_phase = 0 }
+  set_country_flag = eon_eu_admission_commit
+  add_ideas = EU_member
+  set_variable = { EU_budget_call_rate = global.EU_budget_min_call_rate }
+  eon_eu_refresh_membership = yes
+  country_event = { id = eon_eu_membership.2 }
+ }
+}
+eon_eu_progress_accession = {
+ set_variable = { eon_eu_accession_yes_display = 0 }
+ for_each_scope_loop = {
+  array = global.EU_member
+  if = { limit = { is_in_array = { PREV.eon_eu_accession_approvals = THIS } }
+   PREV = { add_to_variable = { eon_eu_accession_yes_display = 1 } }
+  }
+ }
+ if = { limit = { eon_eu_application_current = yes eon_eu_reform_conditions = yes eon_eu_all_members_approved = yes }
+  if = { limit = { check_variable = { eon_eu_accession_phase = 1 } }
+   set_country_flag = EU_candidate
+   if = { limit = { NOT = { is_in_array = { global.EU_candidates = THIS } } } add_to_array = { global.EU_candidates = THIS } }
+   set_variable = { eon_eu_accession_phase = 2 }
+   clr_country_flag = eon_eu_application_window
+   clear_array = eon_eu_accession_approvals
+   set_country_flag = { flag = eon_eu_negotiation_period days = 180 value = 1 }
+   country_event = { id = eon_eu_membership.1 }
+  }
+  else_if = { limit = { check_variable = { eon_eu_accession_phase = 3 } has_country_flag = eon_eu_accession_ep_consent }
+   set_variable = { eon_eu_accession_phase = 4 }
+   country_event = { id = eon_eu_membership.4 }
+  }
+ }
+ if = { limit = { check_variable = { eon_eu_accession_phase > 0 } NOT = { check_variable = { eon_eu_accession_phase = 2 } } NOT = { eon_eu_application_current = yes } }
+  eon_eu_cancel_application = yes
+ }
+ # Preserve legacy region-agenda candidacies; initialise a real negotiation stage once.
+ if = { limit = { eon_eu_is_candidate = yes check_variable = { eon_eu_accession_phase = 0 } }
+  set_variable = { eon_eu_accession_phase = 2 }
+  set_country_flag = { flag = eon_eu_negotiation_period days = 180 value = 1 }
+ }
+}
+eon_eu_notify_withdrawal = {
+ if = { limit = { eon_eu_is_active_member = yes NOT = { has_country_flag = Article_50 } NOT = { has_country_flag = cant_invoke_article_50 } }
+  set_country_flag = Article_50
+  set_country_flag = eon_eu_withdrawal_clock_started
+  set_country_flag = { flag = eon_eu_withdrawal_deadline days = 730 value = 1 }
+  activate_mission = EU_exit
+  eon_eu_extension_begin_notice = yes
+  country_event = { id = eon_eu_membership.5 }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_revoke_withdrawal = {
+ if = { limit = { eon_eu_can_revoke_withdrawal = yes }
+  eon_eu_extension_clear_notice = yes
+  clr_country_flag = Article_50
+  clr_country_flag = eon_eu_withdrawal_clock_started
+  clr_country_flag = eon_eu_withdrawal_deadline
+  clr_country_flag = eon_eu_withdrawal_proposal
+  clr_country_flag = eon_eu_withdrawal_ep_consent
+  clr_country_flag = eon_eu_withdrawal_council_consent
+  clear_array = eon_eu_withdrawal_approvals
+  clear_array = eon_eu_withdrawal_ep_approvals
+ clear_array = eon_eu_withdrawal_ep_rejections
+  remove_mission = EU_exit
+  remove_mission = EU_exit_three_month
+  set_country_flag = { flag = cant_invoke_article_50 days = 180 value = 1 }
+  news_event = { id = EU_news.22 }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_propose_withdrawal_treaty = {
+ if = { limit = { eon_eu_withdrawal_current = yes NOT = { has_country_flag = eon_eu_withdrawal_proposal } }
+  set_country_flag = eon_eu_withdrawal_proposal
+  clr_country_flag = eon_eu_withdrawal_ep_consent
+  clr_country_flag = eon_eu_withdrawal_council_consent
+  clear_array = eon_eu_withdrawal_approvals
+  clear_array = eon_eu_withdrawal_ep_approvals
+ clear_array = eon_eu_withdrawal_ep_rejections
+  # Inform human counterparts once on this real phase transition; the popup never votes.
+  every_country = {
+   limit = { eon_eu_is_active_member = yes is_ai = no NOT = { tag = PREV } }
+   country_event = { id = eon_eu_membership.11 }
+  }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_approve_withdrawal_treaty = {
+ if = { limit = { eon_eu_member_can_approve_withdrawal = yes }
+  FROM = { add_to_array = { eon_eu_withdrawal_approvals = ROOT } }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_finish_withdrawal = {
+ eon_eu_refresh_membership = yes
+ eon_eu_recount_treaty_parliament = yes
+ eon_eu_recount_withdrawal = yes
+ if = { limit = { eon_eu_withdrawal_proposal_current = yes has_country_flag = eon_eu_withdrawal_ep_consent has_country_flag = eon_eu_withdrawal_council_consent }
+  add_ideas = withdrawal_treaty
+  leaving_EU = yes
+ }
+}
+eon_eu_force_deadline_withdrawal = {
+ # One resolver handles the flag clock, saved native clocks and agreed extensions.
+ eon_eu_extension_daily_pulse = yes
+}
+eon_eu_recount_withdrawal = {
+ clr_country_flag = eon_eu_withdrawal_council_consent
+ set_temp_variable = { eon_eu_exit_states = 0 }
+ set_temp_variable = { eon_eu_exit_yes_states = 0 }
+ set_temp_variable = { eon_eu_exit_pop = 0 }
+ set_temp_variable = { eon_eu_exit_yes_pop = 0 }
+ for_each_scope_loop = {
+  array = global.EU_member
+  if = { limit = { eon_eu_can_vote = yes NOT = { tag = PREV } }
+   # Count current residents, independently of recruitment laws and a stale daily cache.
+   set_variable = { eon_eu_voting_population_k = 0 }
+   every_owned_state = { add_to_variable = { PREV.eon_eu_voting_population_k = state_population_k } }
+   add_to_temp_variable = { eon_eu_exit_states = 1 }
+   add_to_temp_variable = { eon_eu_exit_pop = eon_eu_voting_population_k }
+   if = { limit = { is_in_array = { PREV.eon_eu_withdrawal_approvals = THIS } }
+    add_to_temp_variable = { eon_eu_exit_yes_states = 1 }
+    add_to_temp_variable = { eon_eu_exit_yes_pop = eon_eu_voting_population_k }
+   }
+  }
+ }
+ set_variable = { eon_eu_exit_yes_display = eon_eu_exit_yes_states }
+ set_variable = { eon_eu_exit_total_display = eon_eu_exit_states }
+ set_variable = { eon_eu_exit_pop_ratio_display = 0 }
+ if = { limit = { check_variable = { eon_eu_exit_pop > 0 } }
+  set_temp_variable = { eon_eu_exit_pop_ratio = eon_eu_exit_yes_pop }
+  divide_temp_variable = { eon_eu_exit_pop_ratio = eon_eu_exit_pop }
+  set_variable = { eon_eu_exit_pop_ratio_display = eon_eu_exit_pop_ratio }
+ }
+ # Enhanced QMV for Article 50: withdrawing state does not vote on its own agreement.
+ set_temp_variable = { eon_eu_exit_state_threshold = eon_eu_exit_states }
+ multiply_temp_variable = { eon_eu_exit_state_threshold = 0.72 }
+ set_temp_variable = { eon_eu_exit_pop_threshold = eon_eu_exit_pop }
+ multiply_temp_variable = { eon_eu_exit_pop_threshold = 0.65 }
+ if = { limit = { eon_eu_withdrawal_proposal_current = yes check_variable = { eon_eu_exit_states > 0 } check_variable = { var = eon_eu_exit_yes_states value = eon_eu_exit_state_threshold compare = greater_than_or_equals } check_variable = { var = eon_eu_exit_yes_pop value = eon_eu_exit_pop_threshold compare = greater_than_or_equals } }
+  set_country_flag = eon_eu_withdrawal_council_consent
+ }
+}
+eon_eu_propose_refounding = {
+ if = { limit = { eon_eu_refound_offer_ready = yes }
+  set_variable = { eon_eu_refound_target = FROM.id }
+  set_country_flag = { flag = eon_eu_refound_outgoing days = 60 value = 1 }
+  FROM = {
+   set_variable = { eon_eu_refound_sender = ROOT.id }
+   set_country_flag = { flag = eon_eu_refound_incoming days = 60 value = 1 }
+   country_event = { id = eon_eu_membership.6 }
+  }
+ }
+}
+eon_eu_accept_refounding = {
+ if = { limit = { eon_eu_refound_response_ready = yes check_variable = { var = eon_eu_refound_sender value = FROM.id compare = equals } }
+  clr_country_flag = eon_eu_refound_incoming
+  FROM = { clr_country_flag = eon_eu_refound_outgoing }
+  eon_eu_reset_institutional_laws = yes
+  clr_global_flag = eon_eu_dormant
+  # Restore only the two consenting founders. Former members must apply afresh.
+  set_global_flag = eon_eu_registry_refreshing
+  every_country = { limit = { has_idea = EU_member } remove_ideas = EU_member }
+  set_variable = { global.EU_budget_min_call_rate = 1 }
+  set_variable = { EU_budget_call_rate = 1 }
+  set_country_flag = eon_eu_admission_commit
+  add_ideas = EU_member
+  FROM = { set_variable = { EU_budget_call_rate = 1 } set_country_flag = eon_eu_admission_commit add_ideas = EU_member }
+  clr_global_flag = eon_eu_registry_refreshing
+  eon_eu_refresh_membership = yes
+  country_event = { id = eon_eu_membership.7 }
+  FROM = { country_event = { id = eon_eu_membership.7 } }
+ }
+}
+eon_eu_refuse_refounding = {
+ if = { limit = { has_country_flag = eon_eu_refound_incoming check_variable = { var = eon_eu_refound_sender value = FROM.id compare = equals } }
+  clr_country_flag = eon_eu_refound_incoming
+  FROM = { clr_country_flag = eon_eu_refound_outgoing }
+ }
+}
+eon_eu_daily_membership_pulse = {
+ eon_eu_refresh_membership = yes
+ eon_eu_daily_membership_update = yes
+}
+# Internal daily step; the lifecycle caller has refreshed the legal registry.
+eon_eu_daily_membership_update = {
+ every_country = {
+  limit = { is_EU_potential = yes }
+  if = { limit = { eon_eu_is_sovereign_european = no }
+   eon_eu_cancel_application = yes
+   clr_country_flag = EU_candidate
+  }
+  else = { eon_eu_recount_treaty_parliament = yes eon_eu_progress_accession = yes }
+  # Saved clock migration occurs in the shared resolver without restarting its remainder.
+  eon_eu_recount_treaty_parliament = yes
+  eon_eu_recount_withdrawal = yes
+  eon_eu_force_deadline_withdrawal = yes
+ }
+}
+
+# Treaty EP consent is a transparent game abstraction: each country controls its
+# national delegation. Its existing elected MEP_Total seats vote as one block.
+# It is separate from national governments' Council / ratification decisions.
+eon_eu_recount_treaty_parliament = {
+ clr_country_flag = eon_eu_accession_ep_consent
+ clr_country_flag = eon_eu_withdrawal_ep_consent
+ set_temp_variable = { eon_eu_treaty_ep_total = 0 }
+ set_temp_variable = { eon_eu_treaty_accession_ep_yes = 0 }
+ set_temp_variable = { eon_eu_treaty_withdrawal_ep_yes = 0 }
+ set_temp_variable = { eon_eu_treaty_withdrawal_ep_no = 0 }
+ for_each_scope_loop = {
+  array = global.EU_member
+  if = { limit = { eon_eu_is_active_member = yes check_variable = { MEP_Total > 0 } }
+   add_to_temp_variable = { eon_eu_treaty_ep_total = MEP_Total }
+   if = { limit = { is_in_array = { PREV.eon_eu_accession_ep_approvals = THIS } }
+    add_to_temp_variable = { eon_eu_treaty_accession_ep_yes = MEP_Total }
+   }
+   # The withdrawing state is excluded from Council deliberation, not automatically
+   # from its MEPs' democratic mandate before effective departure.
+   if = { limit = { is_in_array = { PREV.eon_eu_withdrawal_ep_approvals = THIS } }
+    add_to_temp_variable = { eon_eu_treaty_withdrawal_ep_yes = MEP_Total }
+   }
+   if = { limit = { is_in_array = { PREV.eon_eu_withdrawal_ep_rejections = THIS } }
+    add_to_temp_variable = { eon_eu_treaty_withdrawal_ep_no = MEP_Total }
+   }
+  }
+ }
+ set_temp_variable = { eon_eu_treaty_ep_threshold = eon_eu_treaty_ep_total }
+ multiply_temp_variable = { eon_eu_treaty_ep_threshold = 0.5 }
+ set_variable = { eon_eu_treaty_ep_total_display = eon_eu_treaty_ep_total }
+ set_variable = { eon_eu_treaty_accession_ep_yes_display = eon_eu_treaty_accession_ep_yes }
+ set_variable = { eon_eu_treaty_withdrawal_ep_yes_display = eon_eu_treaty_withdrawal_ep_yes }
+ set_variable = { eon_eu_treaty_withdrawal_ep_no_display = eon_eu_treaty_withdrawal_ep_no }
+ if = { limit = { eon_eu_application_current = yes check_variable = { eon_eu_treaty_ep_total > 0 } check_variable = { var = eon_eu_treaty_accession_ep_yes value = eon_eu_treaty_ep_threshold compare = greater_than } }
+  set_country_flag = eon_eu_accession_ep_consent
+ }
+ if = { limit = { eon_eu_withdrawal_proposal_current = yes check_variable = { eon_eu_treaty_ep_total > 0 } check_variable = { eon_eu_treaty_withdrawal_ep_yes > 0 } check_variable = { var = eon_eu_treaty_withdrawal_ep_yes value = eon_eu_treaty_withdrawal_ep_no compare = greater_than } }
+  set_country_flag = eon_eu_withdrawal_ep_consent
+ }
+}
+
+eon_eu_support_accession_ep = {
+ if = { limit = { eon_eu_is_active_member = yes FROM = { eon_eu_application_current = yes OR = { check_variable = { eon_eu_accession_phase = 3 } check_variable = { eon_eu_accession_phase = 4 } } NOT = { is_in_array = { eon_eu_accession_ep_approvals = ROOT } } } }
+  FROM = { add_to_array = { eon_eu_accession_ep_approvals = ROOT } eon_eu_recount_treaty_parliament = yes }
+ }
+}
+eon_eu_support_withdrawal_ep = {
+ if = { limit = { eon_eu_is_active_member = yes FROM = { eon_eu_withdrawal_proposal_current = yes NOT = { is_in_array = { eon_eu_withdrawal_ep_approvals = ROOT } } } }
+  FROM = { remove_from_array = { eon_eu_withdrawal_ep_rejections = ROOT } add_to_array = { eon_eu_withdrawal_ep_approvals = ROOT } eon_eu_recount_treaty_parliament = yes }
+ }
+}
+
+eon_eu_ratify_member_accession = {
+ if = { limit = { eon_eu_member_can_respond = yes FROM = { eon_eu_reform_conditions = yes OR = { check_variable = { eon_eu_accession_phase = 3 } check_variable = { eon_eu_accession_phase = 4 } } } }
+  FROM = { add_to_array = { eon_eu_accession_approvals = ROOT } }
+  update_eu_dirty_variable = yes
+ }
+}
+
+# Article 50 EP consent: majority of votes cast. Abstentions are not votes cast.
+eon_eu_reject_withdrawal_ep = {
+ if = { limit = { eon_eu_is_active_member = yes FROM = { eon_eu_withdrawal_proposal_current = yes NOT = { is_in_array = { eon_eu_withdrawal_ep_rejections = ROOT } } } }
+  FROM = { remove_from_array = { eon_eu_withdrawal_ep_approvals = ROOT } add_to_array = { eon_eu_withdrawal_ep_rejections = ROOT } eon_eu_recount_treaty_parliament = yes }
+ }
+}
+eon_eu_abstain_withdrawal_ep = {
+ if = { limit = { eon_eu_is_active_member = yes FROM = { eon_eu_withdrawal_proposal_current = yes } }
+  FROM = { remove_from_array = { eon_eu_withdrawal_ep_approvals = ROOT } remove_from_array = { eon_eu_withdrawal_ep_rejections = ROOT } eon_eu_recount_treaty_parliament = yes }
+ }
+}
+eon_eu_support_own_withdrawal_ep = {
+ if = { limit = { eon_eu_withdrawal_proposal_current = yes NOT = { is_in_array = { eon_eu_withdrawal_ep_approvals = THIS } } }
+  remove_from_array = { eon_eu_withdrawal_ep_rejections = THIS }
+  add_to_array = { eon_eu_withdrawal_ep_approvals = THIS }
+  eon_eu_recount_treaty_parliament = yes
+ }
+}
+eon_eu_reject_own_withdrawal_ep = {
+ if = { limit = { eon_eu_withdrawal_proposal_current = yes NOT = { is_in_array = { eon_eu_withdrawal_ep_rejections = THIS } } }
+  remove_from_array = { eon_eu_withdrawal_ep_approvals = THIS }
+  add_to_array = { eon_eu_withdrawal_ep_rejections = THIS }
+  eon_eu_recount_treaty_parliament = yes
+ }
+}
+eon_eu_abstain_own_withdrawal_ep = {
+ if = { limit = { eon_eu_withdrawal_proposal_current = yes }
+  remove_from_array = { eon_eu_withdrawal_ep_approvals = THIS }
+  remove_from_array = { eon_eu_withdrawal_ep_rejections = THIS }
+  eon_eu_recount_treaty_parliament = yes
+ }
+}
+
+eon_eu_member_removed = {
+ # Native remove callbacks may fire again after the idea was already removed.
+ if = { limit = { OR = { eon_eu_is_active_member = yes is_in_array = { global.EU_member = THIS } } }
+  set_global_flag = eon_eu_membership_changed
+ }
+}
+
+eon_eu_close_federation_authority = {
+ every_possible_country = {
+  remove_mission = EU_POTEF_election_campaign
+  remove_mission = EU_POTEF_term
+  remove_mission = EU_POTEF_environmental_imperialism_mission
+  clr_country_flag = EU_POTEF_environmental_imperialism_target
+  clear_variable = eon_eu_potef_environmental_issuer
+  if = { limit = { has_idea = EU_president } remove_ideas = EU_president }
+  clr_country_flag = POTEF_nominee_0
+  clr_country_flag = POTEF_nominee_1
+  clr_country_flag = POTEF_nominee_2
+  clr_country_flag = POTEF_nominee_3
+  clr_country_flag = POTEF_nominee_4
+  clr_country_flag = POTEF_nominee_5
+  clr_country_flag = POTEF_nominee_6
+  clr_country_flag = POTEF_nominee_7
+  clr_country_flag = POTEF_nominee_8
+  clr_country_flag = POTEF_nominee_9
+  clr_country_flag = POTEF_nominee_10
+  clr_country_flag = POTEF_nominee_11
+  clr_country_flag = POTEF_nominee_12
+  clr_country_flag = POTEF_nominee_13
+  clr_country_flag = POTEF_nominee_14
+  clr_country_flag = POTEF_nominee_15
+  clr_country_flag = POTEF_nominee_16
+  clr_country_flag = POTEF_nominee_17
+  clr_country_flag = POTEF_nominee_18
+  clr_country_flag = POTEF_nominee_19
+  clr_country_flag = POTEF_nominee_20
+  clr_country_flag = POTEF_nominee_21
+  clr_country_flag = POTEF_nominee_22
+  clr_country_flag = POTEF_nominee_23
+ }
+ clr_global_flag = ongoing_potef_election
+ clr_global_flag = EU_president_ai
+ set_variable = { global.eupresfederation = EUU.id }
+ clear_variable = global.var_POTEF_nominee_0
+ clear_variable = global.var_POTEF_nominee_1
+ clear_variable = global.var_POTEF_nominee_2
+ clear_variable = global.var_POTEF_nominee_3
+ clear_variable = global.var_POTEF_nominee_4
+ clear_variable = global.var_POTEF_nominee_5
+ clear_variable = global.var_POTEF_nominee_6
+ clear_variable = global.var_POTEF_nominee_7
+ clear_variable = global.var_POTEF_nominee_8
+ clear_variable = global.var_POTEF_nominee_9
+ clear_variable = global.var_POTEF_nominee_10
+ clear_variable = global.var_POTEF_nominee_11
+ clear_variable = global.var_POTEF_nominee_12
+ clear_variable = global.var_POTEF_nominee_13
+ clear_variable = global.var_POTEF_nominee_14
+ clear_variable = global.var_POTEF_nominee_15
+ clear_variable = global.var_POTEF_nominee_16
+ clear_variable = global.var_POTEF_nominee_17
+ clear_variable = global.var_POTEF_nominee_18
+ clear_variable = global.var_POTEF_nominee_19
+ clear_variable = global.var_POTEF_nominee_20
+ clear_variable = global.var_POTEF_nominee_21
+ clear_variable = global.var_POTEF_nominee_22
+ clear_variable = global.var_POTEF_nominee_23
+}

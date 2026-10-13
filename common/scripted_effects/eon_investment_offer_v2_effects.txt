@@ -1,0 +1,536 @@
+
+eon_investment_offer_v2_untrack_local = {
+ if = { limit = { is_in_array = { array = eon_investment_offer_v2_partners value = PREV } }
+  remove_from_array = { array = eon_investment_offer_v2_partners value = PREV }
+ }
+}
+# Pair lifecycle only. Construction protocol24 remains the original implementation.
+# Status: 1 outgoing,2 incoming,3 synchronous processing,5 started,6 refused,
+# 7 withdrawn,8 expired,9 invalid/annexed,10 bridge failed. Epoch never resets.
+eon_investment_offer_v2_legacy_drain_once = {
+ if = { limit = { NOT = { has_country_flag = eon_investment_offer_v2_legacy_drained } }
+  # Legacy offers did not charge principal; retirement invents no refund/penalty.
+  if = { limit = { is_ai = no OR = { has_variable = eon_investment_offer_partner has_country_flag = AC_ai_investment_pending } } country_event = { id = eon_investment_offer_v2_notice.2 } }
+  eon_investment_clear_offer = yes
+  set_country_flag = eon_investment_offer_v2_legacy_drained
+ }
+}
+eon_investment_offer_v2_track_pair = {
+ if = { limit = { NOT = { is_in_array = { array = eon_investment_offer_v2_partners value = PREV } } } add_to_array = { array = eon_investment_offer_v2_partners value = PREV } }
+ PREV = { if = { limit = { NOT = { is_in_array = { array = eon_investment_offer_v2_partners value = PREV } } } add_to_array = { array = eon_investment_offer_v2_partners value = PREV } } }
+}
+eon_investment_offer_v2_finish_local = {
+ if = { limit = { OR = { check_variable = { eon_investment_offer_v2_status@PREV = 1 } check_variable = { eon_investment_offer_v2_status@PREV = 2 } check_variable = { eon_investment_offer_v2_status@PREV = 3 } } }
+  if = { limit = { check_variable = { eon_investment_offer_v2_counted@PREV = 1 } }
+   subtract_from_variable = { eon_investment_offer_v2_outgoing_count = 1 } clamp_variable = { var = eon_investment_offer_v2_outgoing_count min = 0 }
+   clear_variable = eon_investment_offer_v2_counted@PREV
+  }
+  set_variable = { eon_investment_offer_v2_result_epoch@PREV = eon_investment_offer_v2_epoch@PREV }
+  set_variable = { eon_investment_offer_v2_result@PREV = eon_investment_offer_v2_finish_result }
+  set_variable = { eon_investment_offer_v2_status@PREV = eon_investment_offer_v2_finish_result }
+  clear_variable = eon_investment_offer_v2_reviewed_epoch@PREV
+  set_variable = { eon_investment_offer_v2_days@PREV = 0 } clr_country_flag = eon_investment_offer_v2_window@PREV
+  eon_investment_offer_v2_untrack_local = yes
+ }
+}
+eon_investment_offer_v2_finish_pair = {
+ # Do not clear a replacement or a corrupted unrelated peer record.
+ set_temp_variable = { eon_investment_offer_v2_finish_epoch = eon_investment_offer_v2_epoch@PREV }
+ set_temp_variable = { eon_investment_offer_v2_finish_donor = eon_investment_offer_v2_donor@PREV }
+ set_temp_variable = { eon_investment_offer_v2_finish_recipient = eon_investment_offer_v2_recipient@PREV }
+ PREV = { if = { limit = {
+  check_variable = { eon_investment_offer_v2_epoch@PREV = eon_investment_offer_v2_finish_epoch }
+  check_variable = { eon_investment_offer_v2_donor@PREV = eon_investment_offer_v2_finish_donor }
+  check_variable = { eon_investment_offer_v2_recipient@PREV = eon_investment_offer_v2_finish_recipient }
+ } eon_investment_offer_v2_finish_local = yes } }
+ eon_investment_offer_v2_finish_local = yes
+}
+eon_investment_offer_v2_prepare = {
+ set_temp_variable = { eon_investment_offer_prepared = 0 }
+ eon_investment_offer_v2_legacy_drain_once = yes
+ if = { limit = { eon_investment_offer_v2_capacity = yes NOT = { check_variable = { AC_nation_target = 0 } } }
+  var:AC_nation_target = { PREV = { if = { limit = { eon_investment_offer_v2_pair_idle = yes } eon_investment_offer_v2_stage_pair = yes } } }
+ }
+}
+eon_investment_offer_v2_stage_pair = {
+ if = { limit = { exists = yes PREV = { exists = yes NOT = { tag = PREV } } eon_investment_offer_v2_capacity = yes eon_investment_offer_v2_pair_idle = yes }
+  eon_investment_offer_v2_track_pair = yes
+  set_temp_variable = { eon_investment_offer_v2_next_epoch = eon_investment_offer_v2_epoch@PREV }
+  PREV = { set_temp_variable = { eon_investment_offer_v2_peer_epoch = eon_investment_offer_v2_epoch@PREV } }
+  if = { limit = { check_variable = { eon_investment_offer_v2_peer_epoch > eon_investment_offer_v2_next_epoch } } set_temp_variable = { eon_investment_offer_v2_next_epoch = eon_investment_offer_v2_peer_epoch } }
+  add_to_temp_variable = { eon_investment_offer_v2_next_epoch = 1 }
+  set_variable = { eon_investment_offer_v2_epoch@PREV = eon_investment_offer_v2_next_epoch }
+  set_variable = { eon_investment_offer_v2_donor@PREV = THIS } set_variable = { eon_investment_offer_v2_recipient@PREV = PREV }
+  set_temp_variable = { eon_investment_offer_v2_selected_state_token = 0 }
+  var:AC_state_target = { set_temp_variable = { eon_investment_offer_v2_selected_state_token = THIS } }
+  set_variable = { eon_investment_offer_v2_state@PREV = eon_investment_offer_v2_selected_state_token }
+  set_variable = { eon_investment_offer_v2_type@PREV = project_building_type^-1 }
+  set_variable = { eon_investment_offer_v2_amount@PREV = project_build_amount^-1 }
+  set_variable = { eon_investment_offer_v2_cost@PREV = project_monetary_cost^-1 }
+  set_variable = { eon_investment_offer_v2_cofunding@PREV = project_monetary_cost^-1 } multiply_variable = { eon_investment_offer_v2_cofunding@PREV = 0.10 }
+  set_variable = { eon_investment_offer_v2_duration@PREV = project_construction_duration^-1 }
+  set_variable = { eon_investment_offer_v2_total_duration@PREV = project_total_construction_duration_display^-1 }
+  set_variable = { eon_investment_offer_v2_status@PREV = 1 } set_variable = { eon_investment_offer_v2_counted@PREV = 1 }
+  add_to_variable = { eon_investment_offer_v2_outgoing_count = 1 }
+  set_variable = { eon_investment_offer_v2_days@PREV = 90 } set_country_flag = { flag = eon_investment_offer_v2_window@PREV days = 90 value = 1 }
+  clear_variable = eon_investment_offer_v2_reviewed_epoch@PREV
+  set_temp_variable = { eon_investment_offer_v2_dispatch_donor = eon_investment_offer_v2_donor@PREV }
+  set_temp_variable = { eon_investment_offer_v2_dispatch_recipient = eon_investment_offer_v2_recipient@PREV }
+  set_temp_variable = { eon_investment_offer_v2_dispatch_state = eon_investment_offer_v2_state@PREV }
+  set_temp_variable = { eon_investment_offer_v2_dispatch_type = eon_investment_offer_v2_type@PREV }
+  set_temp_variable = { eon_investment_offer_v2_dispatch_amount = eon_investment_offer_v2_amount@PREV }
+  set_temp_variable = { eon_investment_offer_v2_dispatch_cost = eon_investment_offer_v2_cost@PREV }
+  set_temp_variable = { eon_investment_offer_v2_dispatch_cofunding = eon_investment_offer_v2_cofunding@PREV }
+  set_temp_variable = { eon_investment_offer_v2_dispatch_duration = eon_investment_offer_v2_duration@PREV }
+  set_temp_variable = { eon_investment_offer_v2_dispatch_total_duration = eon_investment_offer_v2_total_duration@PREV }
+  PREV = {
+   set_variable = { eon_investment_offer_v2_donor@PREV = eon_investment_offer_v2_dispatch_donor }
+   set_variable = { eon_investment_offer_v2_recipient@PREV = eon_investment_offer_v2_dispatch_recipient }
+   set_variable = { eon_investment_offer_v2_state@PREV = eon_investment_offer_v2_dispatch_state }
+   set_variable = { eon_investment_offer_v2_type@PREV = eon_investment_offer_v2_dispatch_type }
+   set_variable = { eon_investment_offer_v2_amount@PREV = eon_investment_offer_v2_dispatch_amount }
+   set_variable = { eon_investment_offer_v2_cost@PREV = eon_investment_offer_v2_dispatch_cost }
+   set_variable = { eon_investment_offer_v2_cofunding@PREV = eon_investment_offer_v2_dispatch_cofunding }
+   set_variable = { eon_investment_offer_v2_duration@PREV = eon_investment_offer_v2_dispatch_duration }
+   set_variable = { eon_investment_offer_v2_total_duration@PREV = eon_investment_offer_v2_dispatch_total_duration }
+   set_variable = { eon_investment_offer_v2_epoch@PREV = eon_investment_offer_v2_next_epoch }
+   set_variable = { eon_investment_offer_v2_status@PREV = 2 } clear_variable = eon_investment_offer_v2_counted@PREV
+   clear_variable = eon_investment_offer_v2_reviewed_epoch@PREV
+   set_variable = { eon_investment_offer_v2_days@PREV = 90 } set_country_flag = { flag = eon_investment_offer_v2_window@PREV days = 90 value = 1 }
+  }
+  if = { limit = { eon_investment_offer_v2_payload_valid = yes }
+   set_temp_variable = { eon_investment_offer_prepared = 1 }
+   log = "[GetDateText]: [This.GetName]: Investment proposal prepared; no principal charged"
+   PREV = {
+    if = { limit = { PREV = { is_ai = yes } } set_country_flag = { flag = recently_accepted_an_investment value = 1 days = 21 } }
+    if = { limit = { is_ai = no } country_event = { id = eon_investment_offer_v2_notice.1 } }
+    eon_investment_offer_v2_automatic_reply = yes
+   }
+  }
+  else = { set_temp_variable = { eon_investment_offer_v2_finish_result = 9 } eon_investment_offer_v2_finish_pair = yes }
+ }
+}
+eon_investment_offer_v2_review = {
+ if = { limit = { eon_investment_offer_v2_incoming = yes }
+  set_variable = { eon_investment_offer_v2_reviewed_epoch@PREV = eon_investment_offer_v2_epoch@PREV }
+  custom_effect_tooltip = eon_investment_offer_v2_terms_tt
+ }
+}
+eon_investment_offer_v2_accept = {
+ if = { limit = { eon_investment_offer_v2_accept_ready = yes check_variable = { eon_investment_offer_v2_epoch@PREV = eon_investment_offer_v2_expected_epoch } }
+  PREV = { eon_investment_offer_v2_bridge_start = yes }
+ }
+}
+eon_investment_offer_v2_bridge_start = {
+ # THIS donor / PREV recipient. Full revalidation before any field or cash write.
+ if = { limit = { eon_investment_offer_v2_outgoing = yes eon_investment_offer_v2_payload_valid = yes
+  check_variable = { eon_investment_offer_v2_epoch@PREV = eon_investment_offer_v2_expected_epoch }
+  PREV = { eon_investment_offer_v2_reviewed = yes }
+  NOT = { has_country_flag = eon_investment_offer_v2_bridge_in_progress }
+  NOT = { has_variable = eon_investment_offer_partner }
+ }
+  set_variable = { eon_investment_offer_v2_status@PREV = 3 } PREV = { set_variable = { eon_investment_offer_v2_status@PREV = 3 } }
+  set_variable = { eon_investment_offer_partner = eon_investment_offer_v2_recipient@PREV }
+  set_variable = { eon_investment_offer_state = eon_investment_offer_v2_state@PREV }
+  set_variable = { eon_investment_offer_type = eon_investment_offer_v2_type@PREV }
+  set_variable = { eon_investment_offer_amount = eon_investment_offer_v2_amount@PREV }
+  set_variable = { eon_investment_offer_cost = eon_investment_offer_v2_cost@PREV }
+  set_variable = { eon_investment_offer_cofunding = eon_investment_offer_v2_cofunding@PREV }
+  set_variable = { eon_investment_offer_duration = eon_investment_offer_v2_duration@PREV }
+  set_variable = { eon_investment_offer_total_duration = eon_investment_offer_v2_total_duration@PREV }
+  set_country_flag = eon_investment_offer_v2_bridge_in_progress
+  eon_investment_execute_offer = yes
+  clr_country_flag = eon_investment_offer_v2_bridge_in_progress
+  set_temp_variable = { eon_investment_offer_v2_finish_result = 10 }
+  if = { limit = { check_variable = { eon_investment_project_started = 1 } } set_temp_variable = { eon_investment_offer_v2_finish_result = 5 } }
+  eon_investment_offer_v2_finish_pair = yes
+ }
+}
+eon_investment_offer_v2_decline = {
+ if = { limit = { eon_investment_offer_v2_reviewed = yes check_variable = { eon_investment_offer_v2_epoch@PREV = eon_investment_offer_v2_expected_epoch } }
+  set_country_flag = { flag = recently_refused_investment@PREV days = 30 value = 1 }
+  PREV = { country_event = { id = AC_event.11 } }
+  set_temp_variable = { eon_investment_offer_v2_finish_result = 6 } eon_investment_offer_v2_finish_pair = yes
+ }
+}
+eon_investment_offer_v2_withdraw = {
+ if = { limit = { eon_investment_offer_v2_outgoing = yes check_variable = { eon_investment_offer_v2_epoch@PREV = eon_investment_offer_v2_expected_epoch } }
+  set_temp_variable = { eon_investment_offer_v2_finish_result = 7 } eon_investment_offer_v2_finish_pair = yes
+ }
+}
+eon_investment_offer_v2_automatic_reply = {
+ if = { limit = { eon_investment_offer_v2_incoming = yes OR = { is_ai = yes has_country_flag = int_auto_accept_investment_flag has_country_flag = int_auto_reject_investment_flag } }
+  eon_investment_offer_v2_review = yes
+  set_temp_variable = { eon_investment_offer_v2_expected_epoch = eon_investment_offer_v2_epoch@PREV }
+  if = { limit = { eon_investment_offer_v2_accept_ready = yes }
+   if = { limit = { has_country_flag = int_auto_accept_investment_flag } eon_investment_offer_v2_accept = yes }
+   else = { eon_investment_offer_v2_ai_choose = yes }
+  }
+  else = { eon_investment_offer_v2_decline = yes }
+ }
+}
+
+eon_investment_offer_v2_ai_probe_decline_sign = {
+ set_temp_variable = { eon_investment_offer_v2_ai_decline_probe = 0 }
+ if = { limit = {
+				set_temp_variable = { opinion_calculator = opinion@PREV }
+				multiply_temp_variable = { opinion_calculator = -0.05 }
+				check_variable = { opinion_calculator > -30 }
+
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_decline_probe = opinion_calculator } }
+ if = { limit = {
+				has_government = nationalist
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_probe = 2 } }
+ if = { limit = {
+				has_government = neutrality
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_probe = 1.3 } }
+ if = { limit = {
+				OR = {
+					AND = {
+						has_government = democratic
+						NOT = { PREV = { has_government = democratic } }
+					}
+					AND = {
+						has_government = neutrality
+						NOT = { PREV = { has_government = neutrality } }
+					}
+					AND = {
+						has_government = fascism
+						NOT = { PREV = { has_government = fascism } }
+					}
+					AND = {
+						has_government = nationalist
+						NOT = { PREV = { has_government = nationalist } }
+					}
+					AND = {
+						has_government = communism
+						NOT = { PREV = { has_government = communism } }
+					}
+				}
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_decline_probe = 1 } }
+ if = { limit = { #Less likely is not a top influencer
+
+				OR = {
+					NOT = { check_variable = { influence_array^0 = PREV } }
+					NOT = { check_variable = { influence_array^1 = PREV } }
+					NOT = { check_variable = { influence_array^2 = PREV } }
+					NOT = { check_variable = { influence_array^3 = PREV } }
+				}
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_decline_probe = 1 } }
+ if = { limit = {
+				OR = {
+					AND = {
+						original_tag = NKO
+						PREV = { NOT = { original_tag = CHI } }
+					}
+					AND = {
+						original_tag = PER
+						PREV = { NOT = { has_government = communism } }
+					}
+					AND = {
+						OR = {
+							original_tag = CHI
+							original_tag = SOV
+						}
+						PREV = { original_tag = USA }
+					}
+				}
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_decline_probe = 20 } }
+ clamp_temp_variable = { var = eon_investment_offer_v2_ai_decline_probe min = 0 }
+}
+eon_investment_offer_v2_ai_compute_weights = {
+ set_temp_variable = { eon_investment_offer_v2_ai_type = eon_investment_offer_v2_type@PREV }
+ set_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 10 }
+ if = { limit = {
+				eon_investment_offer_v2_ai_same_organization = yes
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 1 } }
+ if = { limit = {
+				set_temp_variable = { opinion_calculator = opinion@PREV }
+				multiply_temp_variable = { opinion_calculator = 0.05 }
+				check_variable = { opinion_calculator > -30 }
+
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_accept_weight = opinion_calculator } }
+ if = { limit = {
+				OR = {
+					AND = {
+						has_government = democratic
+						PREV = { has_government = democratic }
+					}
+					AND = {
+						has_government = neutrality
+						PREV = { has_government = neutrality }
+					}
+					AND = {
+						has_government = fascism
+						PREV = { has_government = fascism }
+					}
+					AND = {
+						has_government = nationalist
+						PREV = { has_government = nationalist }
+					}
+					AND = {
+						has_government = communism
+						PREV = { has_government = communism }
+					}
+				}
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 1 } }
+ if = { limit = {
+				is_subject_of = PREV
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 2 } }
+ if = { limit = {
+				check_variable = { gdp_per_capita < 15 }
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 2 } }
+ if = { limit = {
+				num_of_factories < 30
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 5 } }
+ if = { limit = {
+				num_of_available_civilian_factories < 30
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 2 } }
+ if = { limit = { #More likely if you are a top influencer
+
+				OR = {
+					check_variable = { influence_array^0 = PREV }
+					check_variable = { influence_array^1 = PREV }
+					check_variable = { influence_array^2 = PREV }
+					check_variable = { influence_array^3 = PREV }
+				}
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 2 } }
+ if = { limit = {
+				set_temp_variable = { tmp = gdp_total }
+				multiply_temp_variable = { tmp = 0.03 }
+				divide_temp_variable = { tmp = 56 }
+
+				# Check if weekly treasury leads to spending at 3% of GDP or greater. Be more likely to accept if this is the case.
+				check_variable = { treasury_rate > tmp }
+				OR = {
+					check_variable = { eon_investment_offer_v2_ai_type = 1 }
+					check_variable = { eon_investment_offer_v2_ai_type = 5 }
+				}
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 5 } }
+ if = { limit = {
+				OR = {
+					check_variable = { eon_investment_offer_v2_ai_type = 12 }
+					check_variable = { eon_investment_offer_v2_ai_type = 13 }
+				}
+				check_variable = { unfulfilled_energy_demand_var > -0.02 }
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 2 } }
+ if = { limit = {
+				OR = {
+					check_variable = { interest_rate > 9.999 }
+					has_country_flag = recently_refused_investment@PREV
+					AND = {
+						original_tag = BOS
+						has_stability < 0.40
+						date < 2000.6.01
+					}
+				}
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_accept_weight = 0 } }
+ clamp_temp_variable = { var = eon_investment_offer_v2_ai_accept_weight min = 0 }
+ set_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 0 }
+ if = { limit = {
+				set_temp_variable = { opinion_calculator = opinion@PREV }
+				multiply_temp_variable = { opinion_calculator = -0.05 }
+				check_variable = { opinion_calculator > -30 }
+
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_decline_weight = opinion_calculator } }
+ if = { limit = {
+				has_government = nationalist
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 2 } }
+ if = { limit = {
+				has_government = neutrality
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 1.3 } }
+ if = { limit = {
+				OR = {
+					AND = {
+						has_government = democratic
+						NOT = { PREV = { has_government = democratic } }
+					}
+					AND = {
+						has_government = neutrality
+						NOT = { PREV = { has_government = neutrality } }
+					}
+					AND = {
+						has_government = fascism
+						NOT = { PREV = { has_government = fascism } }
+					}
+					AND = {
+						has_government = nationalist
+						NOT = { PREV = { has_government = nationalist } }
+					}
+					AND = {
+						has_government = communism
+						NOT = { PREV = { has_government = communism } }
+					}
+				}
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 1 } }
+ if = { limit = { #Less likely is not a top influencer
+
+				OR = {
+					NOT = { check_variable = { influence_array^0 = PREV } }
+					NOT = { check_variable = { influence_array^1 = PREV } }
+					NOT = { check_variable = { influence_array^2 = PREV } }
+					NOT = { check_variable = { influence_array^3 = PREV } }
+				}
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 1 } }
+ if = { limit = {
+				OR = {
+					AND = {
+						original_tag = NKO
+						PREV = { NOT = { original_tag = CHI } }
+					}
+					AND = {
+						original_tag = PER
+						PREV = { NOT = { has_government = communism } }
+					}
+					AND = {
+						OR = {
+							original_tag = CHI
+							original_tag = SOV
+						}
+						PREV = { original_tag = USA }
+					}
+				}
+			
+ } add_to_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 20 } }
+ if = { limit = {
+				check_variable = { domestic_influence_amount < 60.00 }
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 2.5 } }
+ if = { limit = {
+				check_variable = { domestic_influence_amount < 50.00 }
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 5 } }
+ if = { limit = {
+				check_variable = { domestic_influence_amount < 35.00 }
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 5 } }
+ if = { limit = {
+				check_variable = { domestic_influence_amount < 20.00 }
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 5 } }
+ if = { limit = {
+				check_variable = { domestic_influence_amount < 10.00 }
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 10 } }
+ multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 0.5 }
+ if = { limit = {
+				OR = {
+					check_variable = { eon_investment_offer_v2_ai_type = 1 }
+					check_variable = { eon_investment_offer_v2_ai_type = 2 }
+					check_variable = { eon_investment_offer_v2_ai_type = 3 }
+					check_variable = { eon_investment_offer_v2_ai_type = 5 }
+					check_variable = { eon_investment_offer_v2_ai_type = 14 }
+				}
+				check_variable = { unfulfilled_energy_demand_var > -0.02 }
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 10 } }
+ if = { limit = {
+				has_country_flag = recently_refused_investment@PREV
+			
+ } multiply_temp_variable = { eon_investment_offer_v2_ai_decline_weight = 1000 } }
+ clamp_temp_variable = { var = eon_investment_offer_v2_ai_decline_weight min = 0 }
+ set_temp_variable = { eon_investment_offer_v2_ai_total_weight = eon_investment_offer_v2_ai_accept_weight }
+ add_to_temp_variable = { eon_investment_offer_v2_ai_total_weight = eon_investment_offer_v2_ai_decline_weight }
+}
+eon_investment_offer_v2_ai_choose = {
+ set_temp_variable = { eon_investment_offer_v2_ai_zero_choice = 0 }
+ if = { limit = {
+				OR = {
+					check_variable = { interest_rate > 9.999 }
+					has_country_flag = recently_refused_investment@PREV
+					AND = {
+						original_tag = BOS
+						has_stability < 0.40
+						date < 2000.6.01
+					}
+				}
+			
+ }
+  set_temp_variable = { eon_investment_offer_v2_ai_zero_choice = 1 }
+  eon_investment_offer_v2_decline = yes
+ }
+ else = {
+  eon_investment_offer_v2_ai_compute_weights = yes
+  if = { limit = { check_variable = { eon_investment_offer_v2_ai_total_weight > 0 } }
+   random_list = {
+    eon_investment_offer_v2_ai_accept_weight = { eon_investment_offer_v2_accept = yes }
+    eon_investment_offer_v2_ai_decline_weight = { eon_investment_offer_v2_decline = yes }
+   }
+  }
+  else = { set_temp_variable = { eon_investment_offer_v2_ai_zero_choice = 1 } eon_investment_offer_v2_decline = yes }
+ }
+}
+
+eon_investment_offer_v2_daily_pair = {
+ if = { limit = { OR = { check_variable = { eon_investment_offer_v2_status@PREV = 1 } check_variable = { eon_investment_offer_v2_status@PREV = 2 } check_variable = { eon_investment_offer_v2_status@PREV = 3 } } }
+  if = { limit = { check_variable = { eon_investment_offer_v2_status@PREV = 3 } }
+   set_temp_variable = { eon_investment_offer_v2_finish_result = 9 } eon_investment_offer_v2_finish_pair = yes
+  }
+  else_if = { limit = { NOT = { exists = yes PREV = { exists = yes } eon_investment_offer_v2_pair_matches = yes eon_investment_offer_v2_viable = yes } }
+   set_temp_variable = { eon_investment_offer_v2_finish_result = 9 } eon_investment_offer_v2_finish_pair = yes
+  }
+  else_if = { limit = { NOT = { eon_investment_offer_v2_current = yes } }
+   set_temp_variable = { eon_investment_offer_v2_finish_result = 8 } eon_investment_offer_v2_finish_pair = yes
+  }
+  else_if = { limit = { check_variable = { eon_investment_offer_v2_status@PREV = 1 } }
+   subtract_from_variable = { eon_investment_offer_v2_days@PREV = 1 }
+   clamp_variable = { var = eon_investment_offer_v2_days@PREV min = 0 }
+   set_temp_variable = { eon_investment_offer_v2_new_days = eon_investment_offer_v2_days@PREV }
+   PREV = { set_variable = { eon_investment_offer_v2_days@PREV = eon_investment_offer_v2_new_days } }
+  }
+  else = { eon_investment_offer_v2_automatic_reply = yes }
+ }
+ else = { eon_investment_offer_v2_untrack_local = yes }
+}
+eon_investment_offer_v2_daily_update = {
+ eon_investment_offer_v2_legacy_drain_once = yes
+ clear_temp_array = eon_investment_offer_v2_daily_work
+ set_temp_variable = { eon_investment_offer_v2_daily_copy_break = 0 }
+ for_each_loop = { array = eon_investment_offer_v2_partners value = eon_investment_offer_v2_daily_copy_partner index = eon_investment_offer_v2_daily_copy_index break = eon_investment_offer_v2_daily_copy_break
+  add_to_temp_array = { array = eon_investment_offer_v2_daily_work value = eon_investment_offer_v2_daily_copy_partner }
+ }
+ set_temp_variable = { eon_investment_offer_v2_daily_work_break = 0 }
+ for_each_loop = { array = eon_investment_offer_v2_daily_work value = eon_investment_offer_v2_daily_partner index = eon_investment_offer_v2_daily_index break = eon_investment_offer_v2_daily_work_break
+  var:eon_investment_offer_v2_daily_partner = { PREV = { eon_investment_offer_v2_daily_pair = yes } }
+ }
+ clear_temp_array = eon_investment_offer_v2_daily_work
+}
+
+eon_investment_offer_v2_annex_pair = {
+ set_temp_variable = { eon_investment_offer_v2_finish_result = 9 } eon_investment_offer_v2_finish_pair = yes
+}
+
+eon_investment_offer_v2_annex_cleanup = {
+ clear_temp_array = eon_investment_offer_v2_annex_work
+ set_temp_variable = { eon_investment_offer_v2_annex_copy_break = 0 }
+ for_each_loop = { array = eon_investment_offer_v2_partners value = eon_investment_offer_v2_annex_copy_partner index = eon_investment_offer_v2_annex_copy_index break = eon_investment_offer_v2_annex_copy_break
+  add_to_temp_array = { array = eon_investment_offer_v2_annex_work value = eon_investment_offer_v2_annex_copy_partner }
+ }
+ set_temp_variable = { eon_investment_offer_v2_annex_work_break = 0 }
+ for_each_loop = { array = eon_investment_offer_v2_annex_work value = eon_investment_offer_v2_annex_partner index = eon_investment_offer_v2_annex_index break = eon_investment_offer_v2_annex_work_break
+  var:eon_investment_offer_v2_annex_partner = { PREV = { eon_investment_offer_v2_annex_pair = yes } }
+ }
+ clear_temp_array = eon_investment_offer_v2_annex_work
+}

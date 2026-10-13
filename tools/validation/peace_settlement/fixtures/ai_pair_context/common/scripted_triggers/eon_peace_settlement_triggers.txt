@@ -1,0 +1,252 @@
+# Scripted diplomacy context: ROOT is sender; current country is receiver.
+# Contact is deliberately open to defenders, minor members and early wars.
+eon_peace_contact_ready = {
+	exists = yes
+	ROOT = { exists = yes }
+	NOT = { tag = ROOT }
+	has_war_with = ROOT
+	ROOT = { has_war_with = PREV }
+}
+# The settlement affects the selected two countries; no government may bind a subject silently.
+eon_peace_settlement_ready = {
+	eon_peace_contact_ready = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { is_in_peace_conference = yes }
+	NOT = { civilwar_target = ROOT }
+	NOT = { any_subject_country = { has_war_together_with = PREV } }
+	ROOT = {
+		is_subject = no
+		has_capitulated = no
+		NOT = { is_in_peace_conference = yes }
+		NOT = { civilwar_target = PREV }
+		NOT = { any_subject_country = { has_war_together_with = PREV } }
+	}
+}
+# Conference can involve subjects/factions implicitly: require a verified isolated conflict.
+eon_peace_conference_scope_ready = {
+	eon_peace_settlement_ready = yes
+	NOT = { any_subject_country = { exists = yes } }
+	ROOT = { NOT = { any_subject_country = { exists = yes } } }
+	NOT = { any_enemy_country = { NOT = { tag = ROOT } } }
+	ROOT = { NOT = { any_enemy_country = { NOT = { tag = PREV.PREV } } } }
+	NOT = {
+		any_country = {
+			NOT = { tag = ROOT }
+			NOT = { tag = PREV }
+			OR = { has_war_together_with = ROOT has_war_together_with = PREV }
+		}
+	}
+}
+# Native primitive r2 confirms pair-only execution; participating subjects remain excluded.
+eon_peace_bilateral_engine_scope_ready = {
+	eon_peace_settlement_ready = yes
+}
+# Untimed reservations survive deadline expiration until the old native response is closed.
+# Clearing these on a timer would alias an old callback to a new offer of the same kind.
+eon_peace_pair_no_pending = {
+	NOT = {
+		OR = {
+			has_country_flag = eon_peace_pending_statusquo@ROOT
+			has_country_flag = eon_peace_reserved_statusquo@ROOT
+			has_country_flag = eon_peace_pending_armistice_90@ROOT
+			has_country_flag = eon_peace_reserved_armistice_90@ROOT
+			has_country_flag = eon_peace_pending_armistice_180@ROOT
+			has_country_flag = eon_peace_reserved_armistice_180@ROOT
+			has_country_flag = eon_peace_pending_payment_5@ROOT
+			has_country_flag = eon_peace_reserved_payment_5@ROOT
+			has_country_flag = eon_peace_pending_payment_10@ROOT
+			has_country_flag = eon_peace_reserved_payment_10@ROOT
+			has_country_flag = eon_peace_pending_conference@ROOT
+			has_country_flag = eon_peace_reserved_conference@ROOT
+		}
+	}
+	ROOT = {
+		NOT = {
+			OR = {
+				has_country_flag = eon_peace_pending_statusquo@PREV
+				has_country_flag = eon_peace_reserved_statusquo@PREV
+				has_country_flag = eon_peace_pending_armistice_90@PREV
+				has_country_flag = eon_peace_reserved_armistice_90@PREV
+				has_country_flag = eon_peace_pending_armistice_180@PREV
+				has_country_flag = eon_peace_reserved_armistice_180@PREV
+				has_country_flag = eon_peace_pending_payment_5@PREV
+				has_country_flag = eon_peace_reserved_payment_5@PREV
+				has_country_flag = eon_peace_pending_payment_10@PREV
+				has_country_flag = eon_peace_reserved_payment_10@PREV
+				has_country_flag = eon_peace_pending_conference@PREV
+				has_country_flag = eon_peace_reserved_conference@PREV
+			}
+		}
+	}
+}
+eon_peace_offer_statusquo_send_ready = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	eon_peace_pair_no_pending = yes
+	ROOT = {
+		OR = {
+			AND = {
+				is_ai = yes
+				NOT = { has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+			}
+			AND = {
+				is_ai = no
+				check_variable = { eon_peace_draft_target = PREV }
+				check_variable = { eon_peace_draft_kind = 1 }
+			}
+		}
+	}
+}
+eon_peace_offer_statusquo_response_valid = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	has_country_flag = eon_peace_pending_statusquo@ROOT
+	has_country_flag = eon_peace_reserved_statusquo@ROOT
+	ROOT = {
+		has_country_flag = eon_peace_pending_statusquo@PREV
+		has_country_flag = eon_peace_reserved_statusquo@PREV
+	}
+	OR = {
+		is_ai = no
+		NOT = { has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+	}
+}
+eon_peace_accept_statusquo_ready = {
+	eon_peace_offer_statusquo_response_valid = yes
+}
+eon_peace_offer_armistice_90_send_ready = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	eon_peace_pair_no_pending = yes
+	ROOT = {
+		OR = {
+			AND = {
+				is_ai = yes
+				NOT = { has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+			}
+			AND = {
+				is_ai = no
+				check_variable = { eon_peace_draft_target = PREV }
+				check_variable = { eon_peace_draft_kind = 2 }
+			}
+		}
+	}
+}
+eon_peace_offer_armistice_90_response_valid = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	has_country_flag = eon_peace_pending_armistice_90@ROOT
+	has_country_flag = eon_peace_reserved_armistice_90@ROOT
+	ROOT = {
+		has_country_flag = eon_peace_pending_armistice_90@PREV
+		has_country_flag = eon_peace_reserved_armistice_90@PREV
+	}
+	OR = {
+		is_ai = no
+		NOT = { has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+	}
+}
+eon_peace_accept_armistice_90_ready = {
+	eon_peace_offer_armistice_90_response_valid = yes
+}
+eon_peace_offer_armistice_180_send_ready = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	eon_peace_pair_no_pending = yes
+	ROOT = {
+		is_ai = no
+		check_variable = { eon_peace_draft_target = PREV }
+		check_variable = { eon_peace_draft_kind = 3 }
+	}
+}
+eon_peace_offer_armistice_180_response_valid = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	has_country_flag = eon_peace_pending_armistice_180@ROOT
+	has_country_flag = eon_peace_reserved_armistice_180@ROOT
+	ROOT = {
+		has_country_flag = eon_peace_pending_armistice_180@PREV
+		has_country_flag = eon_peace_reserved_armistice_180@PREV
+	}
+	OR = {
+		is_ai = no
+		NOT = { has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+	}
+}
+eon_peace_accept_armistice_180_ready = {
+	eon_peace_offer_armistice_180_response_valid = yes
+}
+eon_peace_offer_payment_5_send_ready = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	eon_peace_pair_no_pending = yes
+	ROOT = {
+		is_ai = no
+		check_variable = { eon_peace_draft_target = PREV }
+		check_variable = { eon_peace_draft_kind = 4 }
+	}
+	ROOT = { NOT = { check_variable = { treasury < 5 } } }
+}
+eon_peace_offer_payment_5_response_valid = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	has_country_flag = eon_peace_pending_payment_5@ROOT
+	has_country_flag = eon_peace_reserved_payment_5@ROOT
+	ROOT = {
+		has_country_flag = eon_peace_pending_payment_5@PREV
+		has_country_flag = eon_peace_reserved_payment_5@PREV
+	}
+	ROOT = { NOT = { check_variable = { treasury < 5 } } }
+	OR = {
+		is_ai = no
+		NOT = { has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+	}
+}
+eon_peace_accept_payment_5_ready = {
+	eon_peace_offer_payment_5_response_valid = yes
+}
+eon_peace_offer_payment_10_send_ready = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	eon_peace_pair_no_pending = yes
+	ROOT = {
+		is_ai = no
+		check_variable = { eon_peace_draft_target = PREV }
+		check_variable = { eon_peace_draft_kind = 5 }
+	}
+	ROOT = { NOT = { check_variable = { treasury < 10 } } }
+}
+eon_peace_offer_payment_10_response_valid = {
+	eon_peace_bilateral_engine_scope_ready = yes
+	has_country_flag = eon_peace_pending_payment_10@ROOT
+	has_country_flag = eon_peace_reserved_payment_10@ROOT
+	ROOT = {
+		has_country_flag = eon_peace_pending_payment_10@PREV
+		has_country_flag = eon_peace_reserved_payment_10@PREV
+	}
+	ROOT = { NOT = { check_variable = { treasury < 10 } } }
+	OR = {
+		is_ai = no
+		NOT = { has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+	}
+}
+eon_peace_accept_payment_10_ready = {
+	eon_peace_offer_payment_10_response_valid = yes
+}
+eon_peace_offer_conference_send_ready = {
+	eon_peace_conference_scope_ready = yes
+	eon_peace_pair_no_pending = yes
+	ROOT = {
+		is_ai = no
+		check_variable = { eon_peace_draft_target = PREV }
+		check_variable = { eon_peace_draft_kind = 6 }
+	}
+}
+eon_peace_offer_conference_response_valid = {
+	eon_peace_conference_scope_ready = yes
+	has_country_flag = eon_peace_pending_conference@ROOT
+	has_country_flag = eon_peace_reserved_conference@ROOT
+	ROOT = {
+		has_country_flag = eon_peace_pending_conference@PREV
+		has_country_flag = eon_peace_reserved_conference@PREV
+	}
+	OR = {
+		is_ai = no
+		NOT = { has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+	}
+}
+eon_peace_accept_conference_ready = {
+	eon_peace_offer_conference_response_valid = yes
+}

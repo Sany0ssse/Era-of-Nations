@@ -6,6 +6,7 @@ scripted_gui = {
 		dirty = global.EU_dirty_update_var
 
 		visible = {
+			eon_eu_can_view_union = yes
 			NOT = { has_global_flag = GAME_RULE_eu_disabled }
 			OR = {
 				AND = {
@@ -24,11 +25,7 @@ scripted_gui = {
 		# ai_check = Ensures they are in the EU before opening the GUI
 		ai_enabled = { NOT = { has_global_flag = GAME_RULE_eu_disabled } }
 		ai_check = {
-			OR = {
-				has_idea = superpower
-				has_idea = great_power
-				is_in_array = { global.EU_member = THIS.id }
-			}
+			eon_eu_is_active_member = yes
 		}
 		# Test Interval
 		ai_test_interval = 72
@@ -52,22 +49,26 @@ scripted_gui = {
 			# Main Screen Buttons
 			# Can only click if you haven't adopted EU law yet
 			adopt_eu_law_click_enabled = {
+				eon_eu_is_active_member = yes
 				NOT = { has_country_flag = adopt_eu_law }
 				has_idea = EU_member
 			}
 			parliament_button_click_enabled = {
+				eon_eu_is_active_member = yes
 				OR = {
 					has_idea = EU_member
 					has_country_flag = EU_candidate
 				}
 			}
 			euro_voting_button_click_enabled = {
+				eon_eu_is_active_member = yes
 				OR = {
 					has_idea = EU_member
 					has_country_flag = EU_candidate
 				}
 			}
 			fiscal_button_click_enabled = {
+				eon_eu_is_active_member = yes
 				OR = {
 					has_idea = EU_member
 					has_country_flag = EU_candidate
@@ -97,282 +98,87 @@ scripted_gui = {
 			}
 			# Offices Screen
 			eu_president_council_back_click_enabled = {
-				has_idea = EU_member
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 4 }
 				custom_trigger_tooltip = {
-					tooltip = EU_president_council_unlocks_tt
-					has_global_flag = treaty_of_lisbon
-				}
-				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = EU_council_president
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_president
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
-					EU_all_player_or_majors_hold_office = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			foreign_affairs_security_back_click_enabled = {
-				has_idea = EU_member
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 5 }
 				custom_trigger_tooltip = {
-					tooltip = EU_high_representative_unlocks_tt
-					has_global_flag = EU_foreign_minister
-				}
-				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = EU_foreign_minister
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_president
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
-					EU_all_player_or_majors_hold_office = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			eu_sec_general_euro_army_back_click_enabled = {
-				has_idea = EU_member
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 8 }
 				custom_trigger_tooltip = {
-					tooltip = EU_sec_general_euro_army_unlocks_tt
-					has_global_flag = euro_army
-				}
-				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = EUU_euroarmy_sc
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_president
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
-					EU_all_player_or_majors_hold_office = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			eu_sec_general_euro_navy_back_click_enabled = {
-				has_idea = EU_member
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 9 }
 				custom_trigger_tooltip = {
-					tooltip = EU_sec_general_euro_navy_unlocks_tt
-					has_global_flag = euro_navy
-				}
-				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = EUU_euronavy_sc
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_president
-				}
-				# MUST BE COASTAL TO TAKE EURONAVY
-				any_owned_state = {
-					is_coastal = yes
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
-					EU_all_player_or_majors_hold_office = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			eu_parliament_president_back_click_enabled = {
-				has_idea = EU_member
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 2 }
 				custom_trigger_tooltip = {
-					tooltip = eu_parliament_president_unlocks_tt
-					has_global_flag = treaty_of_lisbon
-				}
-				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = EU_parliament_president
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_president
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
-					EU_all_player_or_majors_hold_office = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			eu_president_commission_back_click_enabled = {
-				is_in_array = { global.EU_member = THIS.id }
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 1 }
 				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = EU_commission_president
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_commission_president
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			eu_central_bank_president_back_click_enabled = {
-				has_idea = EU_member
-				has_idea = the_euro
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 3 }
 				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = ECB_president
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_president
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
-					EU_all_player_or_majors_hold_office = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			eu_minister_economy_finance_back_click_enabled = {
-				has_idea = EU_member
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 7 }
 				custom_trigger_tooltip = {
-					tooltip = EU_ministry_of_economy_and_finance_unlocks_tt
-					has_global_flag = EU_finance_minister
-				}
-				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = EU_finance_minister
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_president
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
-					EU_all_player_or_majors_hold_office = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			eu_ambassador_to_un_back_click_enabled = {
-				has_idea = EU_member
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 10 }
 				custom_trigger_tooltip = {
-					tooltip = EU_ambassador_to_un_unlocks_tt
-					has_global_flag = EU_UNSC
-				}
-				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = EUU_ambassador_unsc
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_president
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
-					EU_all_player_or_majors_hold_office = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			eu_frontex_director_back_click_enabled = {
-				has_idea = EU_member
+				eon_eu_is_active_member = yes
+				set_temp_variable = { eon_eu_office_requested_id = 6 }
 				custom_trigger_tooltip = {
-					tooltip = EU_frontex_director_unlocks_tt
-					has_global_flag = frontex_ExDir
-				}
-				custom_trigger_tooltip = {
-					tooltip = office_occupied_tt
-					NOT = {
-						any_of = {
-							array = global.EU_member
-							value = v
-							var:v = {
-								has_idea = frontex_ExDir
-							}
-						}
-					}
-				}
-				OR = {
-					EU_does_not_hold_another_office = yes
-					has_idea = EU_president
-				}
-				OR = {
-					influence_on_all_other_EU_members_5_percent = yes
-					EU_has_over_five_percent_pop = yes
-					EU_all_player_or_majors_hold_office = yes
+					tooltip = eon_eu_office_nomination_ready_tt
+					eon_eu_office_nomination_ready = yes
 				}
 			}
 			eu_pres_federation_back_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				has_global_flag = european_federation
 				always = no
@@ -403,6 +209,7 @@ scripted_gui = {
 				has_global_flag = european_federation
 			}
 			retire_office_click_enabled = {
+				eon_eu_is_active_member = yes
 				OR = {
 					has_idea = EU_commission_president
 					has_idea = EU_council_president
@@ -535,6 +342,7 @@ scripted_gui = {
 			}
 
 			EU_Article_50_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				custom_trigger_tooltip = {
 					tooltip = tooltip_EU_exit_available
@@ -559,7 +367,14 @@ scripted_gui = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_0_influence_click_enabled = {
+
+PG_party_0_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_0_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -575,12 +390,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_0 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_1_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_1_influence_click_enabled = {
+
+PG_party_1_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_1_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -596,12 +422,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_1 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_2_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_2_influence_click_enabled = {
+
+PG_party_2_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_2_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -617,12 +454,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_2 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_3_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_3_influence_click_enabled = {
+
+PG_party_3_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_3_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -638,12 +486,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_3 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_4_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_4_influence_click_enabled = {
+
+PG_party_4_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_4_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -659,12 +518,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_4 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_5_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_5_influence_click_enabled = {
+
+PG_party_5_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_5_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -680,12 +550,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_5 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_6_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_6_influence_click_enabled = {
+
+PG_party_6_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_6_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -701,12 +582,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_6 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_7_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_7_influence_click_enabled = {
+
+PG_party_7_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_7_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -722,12 +614,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_7 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_8_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_8_influence_click_enabled = {
+
+PG_party_8_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_8_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -743,12 +646,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_8 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_9_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_9_influence_click_enabled = {
+
+PG_party_9_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_9_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -764,12 +678,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_9 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_10_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_10_influence_click_enabled = {
+
+PG_party_10_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_10_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -785,12 +710,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_10 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_11_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_11_influence_click_enabled = {
+
+PG_party_11_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_11_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -806,12 +742,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_11 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_12_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_12_influence_click_enabled = {
+
+PG_party_12_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_12_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -827,12 +774,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_12 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_13_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_13_influence_click_enabled = {
+
+PG_party_13_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_13_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -848,12 +806,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_13 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_14_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_14_influence_click_enabled = {
+
+PG_party_14_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_14_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -869,12 +838,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_14 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_15_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_15_influence_click_enabled = {
+
+PG_party_15_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_15_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -890,12 +870,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_15 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_16_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_16_influence_click_enabled = {
+
+PG_party_16_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_16_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -911,12 +902,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_16 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_17_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_17_influence_click_enabled = {
+
+PG_party_17_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_17_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -932,12 +934,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_17 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_18_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_18_influence_click_enabled = {
+
+PG_party_18_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_18_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -953,12 +966,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_18 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_19_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_19_influence_click_enabled = {
+
+PG_party_19_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_19_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -974,12 +998,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_19 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_20_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_20_influence_click_enabled = {
+
+PG_party_20_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_20_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -995,12 +1030,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_20 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_21_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_21_influence_click_enabled = {
+
+PG_party_21_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_21_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -1016,12 +1062,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_21 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_22_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_22_influence_click_enabled = {
+
+PG_party_22_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_22_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -1037,12 +1094,23 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_22 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 			PG_party_23_influence_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			PG_party_23_influence_click_enabled = {
+
+PG_party_23_influence_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_group_23_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -1058,13 +1126,24 @@ scripted_gui = {
 				set_temp_variable = { temp_pp_mod = global.MEP_PG_party_23 }
 				multiply_temp_variable = { temp_pp_mod = 2 }
 				has_political_power > temp_pp_mod
-			}
+
+ }
+ else = { always = no }
+}
+
 
 			pass_vote_button_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			pass_vote_button_click_enabled = {
+
+pass_vote_button_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_human_pass_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -1078,12 +1157,23 @@ scripted_gui = {
 					}
 				}
 				hidden_trigger = { is_ai = no }
-			}
+
+ }
+ else = { always = no }
+}
+
 			remove_vote_button_visible = {
 				EU_european_union_euro_parliament_trigger = yes
 				has_idea = EU_member
 			}
-			remove_vote_button_click_enabled = {
+
+remove_vote_button_click_enabled = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_human_withdraw_ready = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = EU_parliament_is_in_session_tt
 					NOT = { check_variable = { global.current_active_agenda_disp = 0 } }
@@ -1098,7 +1188,11 @@ scripted_gui = {
 					EUXXX = "[EUXXX_EP_agenda]"
 				}
 				hidden_trigger = { is_ai = no }
-			}
+
+ }
+ else = { always = no }
+}
+
 
 			# Euro-Info
 			# Euro Sceptic Stuff
@@ -1106,6 +1200,7 @@ scripted_gui = {
 				EU_european_union_euro_info_trigger = yes
 			}
 			euroscepticism_country_button_click_enabled = {
+				eon_eu_is_active_member = yes
 				NOT = { has_country_flag = euroscepticism_country_button_click_cooldown }
 				has_idea = EU_member
 				has_political_power > 100
@@ -1115,6 +1210,7 @@ scripted_gui = {
 				EU_european_union_euro_info_trigger = yes
 			}
 			euroscepticism_euwide_button_click_enabled = {
+				eon_eu_is_active_member = yes
 				NOT = { has_country_flag = euroscepticism_euwide_button_click_cooldown }
 				set_temp_variable = { the_cost = 200 }
 				if = {
@@ -1130,6 +1226,7 @@ scripted_gui = {
 				EU_european_union_euro_info_trigger = yes
 			}
 			proeuro_country_button_click_enabled = {
+				eon_eu_is_active_member = yes
 				NOT = { has_country_flag = proeuro_country_button_click_cooldown }
 				has_idea = EU_member
 				has_political_power > 100
@@ -1139,6 +1236,7 @@ scripted_gui = {
 				EU_european_union_euro_info_trigger = yes
 			}
 			proeuro_euwide_button_click_enabled = {
+				eon_eu_is_active_member = yes
 				NOT = { has_country_flag = proeuro_euwide_button_click_cooldown }
 				set_temp_variable = { the_cost = 200 }
 				if = {
@@ -1154,6 +1252,7 @@ scripted_gui = {
 				EU_european_union_euro_info_trigger = yes
 			}
 			approve_IPA_button_click_enabled = {
+				eon_eu_is_active_member = yes
 				custom_trigger_tooltip = {
 					tooltip = "EU_no_ongoing_ipa"
 					NOT = { has_country_flag = instrument_for_pre_accession_assistance }
@@ -1187,15 +1286,15 @@ scripted_gui = {
 				EU_european_union_council_voting_trigger = yes
 			}
 			support_council_vote_button_click_enabled = {
-				NOT = { check_variable = { global.current_active_vote_disp = 0 } }
-				NOT = { is_in_array = { array = global.EU_active_vote_supporters value = THIS } }
+				eon_eu_is_active_member = yes
+				eon_eu_can_cast_council_vote = yes
 			}
 			reject_council_vote_button_visible = {
 				EU_european_union_council_voting_trigger = yes
 			}
 			reject_council_vote_button_click_enabled = {
-				NOT = { check_variable = { global.current_active_vote_disp = 0 } }
-				NOT = { is_in_array = { array = global.EU_active_vote_rejecters value = THIS } }
+				eon_eu_is_active_member = yes
+				eon_eu_can_cast_council_vote = yes
 			}
 
 			# Fiscal buttons
@@ -1203,6 +1302,7 @@ scripted_gui = {
 				EU_european_union_euro_fiscal_trigger = yes
 			}
 			EU_min_call_rate_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				EU_ongoing_mff_draft_trigger = yes
 				check_variable = { global.EU_budget_min_call_rate < 10 }
@@ -1222,6 +1322,7 @@ scripted_gui = {
 				}
 			}
 			EU_min_call_rate_right_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				EU_ongoing_mff_draft_trigger = yes
 				check_variable = { global.EU_budget_min_call_rate > 0 }
@@ -1244,6 +1345,7 @@ scripted_gui = {
 				EU_european_union_euro_fiscal_trigger = yes
 			}
 			EU_global_call_rate_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				EU_ongoing_mff_draft_trigger = yes
 				any_of_scopes = {
@@ -1266,6 +1368,7 @@ scripted_gui = {
 				}
 			}
 			EU_global_call_rate_right_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				EU_ongoing_mff_draft_trigger = yes
 				any_of_scopes = {
@@ -1292,6 +1395,7 @@ scripted_gui = {
 				EU_european_union_euro_fiscal_trigger = yes
 			}
 			EU_THIS_call_rate_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				EU_ongoing_mff_draft_trigger = yes
 				check_variable = { THIS.EU_budget_call_rate < 100 }
@@ -1311,6 +1415,7 @@ scripted_gui = {
 				}
 			}
 			EU_THIS_call_rate_right_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				EU_ongoing_mff_draft_trigger = yes
 				check_variable = { THIS.EU_budget_call_rate > global.EU_budget_min_call_rate }
@@ -1334,6 +1439,7 @@ scripted_gui = {
 			}
 			# Budget Sections
 			EU_global_expenses_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				check_variable = { global.EU_global_exp_ratio < 0.80 }
 				check_variable = { global.EU_growth_exp_ratio > 0.05 }
@@ -1355,6 +1461,7 @@ scripted_gui = {
 				}
 			}
 			EU_global_expenses_right_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				check_variable = { global.EU_global_exp_ratio > 0.09 }
 				check_variable = { global.EU_growth_exp_ratio < 0.80 }
@@ -1379,6 +1486,7 @@ scripted_gui = {
 				EU_european_union_euro_fiscal_trigger = yes
 			}
 			EU_administration_expenses_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				check_variable = { global.EU_admin_exp_ratio < 0.80 }
 				check_variable = { global.EU_growth_exp_ratio > 0.05 }
@@ -1400,6 +1508,7 @@ scripted_gui = {
 				}
 			}
 			EU_administration_expenses_right_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				check_variable = { global.EU_admin_exp_ratio > 0.09 }
 				check_variable = { global.EU_growth_exp_ratio < 0.80 }
@@ -1424,6 +1533,7 @@ scripted_gui = {
 				EU_european_union_euro_fiscal_trigger = yes
 			}
 			EU_growth_natural_subsidies_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				check_variable = { global.EU_natural_exp_ratio > 0.09 }
 				check_variable = { global.EU_growth_exp_ratio < 0.80 }
@@ -1444,6 +1554,7 @@ scripted_gui = {
 				}
 			}
 			EU_growth_natural_subsidies_right_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				check_variable = { global.EU_growth_exp_ratio > 0.09 }
 				check_variable = { global.EU_natural_exp_ratio < 0.80 }
@@ -1467,6 +1578,7 @@ scripted_gui = {
 				EU_european_union_euro_fiscal_trigger = yes
 			}
 			EU_run_omt_program_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = ECB_zero_interest_rate_policy
 				has_idea = ECB_president
 				custom_trigger_tooltip = {
@@ -1478,6 +1590,7 @@ scripted_gui = {
 				EU_european_union_euro_fiscal_trigger = yes
 			}
 			EU_adjust_omt_program_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				has_idea = ECB_president
 				has_idea = ECB_zero_interest_rate_policy
@@ -1488,12 +1601,14 @@ scripted_gui = {
 				}
 			}
 			EU_adjust_omt_program_right_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				has_idea = ECB_president
 				has_idea = ECB_zero_interest_rate_policy
 				check_variable = { global.OMT_size_limit > 0 }
 			}
 			EU_run_omt_program_right_click_enabled = {
+				eon_eu_is_active_member = yes
 				has_idea = EU_member
 				has_idea = ECB_president
 				has_idea = ECB_zero_interest_rate_policy
@@ -1748,10 +1863,7 @@ scripted_gui = {
 
 			# Triggers Article 50
 			EU_Article_50_click = {
-				activate_mission = EU_exit
-				set_country_flag = Article_50
-				news_event = { id = EU_news.34 }
-				update_eu_dirty_variable = yes
+				eon_eu_notify_withdrawal = yes
 			}
 
 			euro_open_sec_dis_click = {
@@ -2048,125 +2160,44 @@ scripted_gui = {
 
 			# Offices Screen
 			eu_president_council_back_click = {
-				add_timed_idea = { idea = EU_council_president days = 1825 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.3
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.3
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 4 }
+				eon_eu_open_office_ballot = yes
 			}
 			foreign_affairs_security_back_click = {
-				add_timed_idea = { idea = EU_foreign_minister days = 1825 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.4
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.4
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 5 }
+				eon_eu_open_office_ballot = yes
 			}
 			eu_sec_general_euro_army_back_click = {
-				add_timed_idea = { idea = EUU_euroarmy_sc days = 1825 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.9
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.9
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 8 }
+				eon_eu_open_office_ballot = yes
 			}
 			eu_sec_general_euro_navy_back_click = {
-				add_timed_idea = { idea = EUU_euronavy_sc days = 1825 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.10
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.10
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 9 }
+				eon_eu_open_office_ballot = yes
 			}
 			eu_parliament_president_back_click = {
-				add_timed_idea = { idea = EU_parliament_president days = 1825 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.5
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.5
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 2 }
+				eon_eu_open_office_ballot = yes
 			}
 			eu_president_commission_back_click = {
-				add_timed_idea = { idea = EU_commission_president days = 1825 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.2
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.2
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 1 }
+				eon_eu_open_office_ballot = yes
 			}
 			eu_central_bank_president_back_click = {
-				add_timed_idea = { idea = ECB_president days = 2920 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.6
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.6
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 3 }
+				eon_eu_open_office_ballot = yes
 			}
 			eu_minister_economy_finance_back_click = {
-				add_timed_idea = { idea = EU_finance_minister days = 1825 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.7
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.7
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 7 }
+				eon_eu_open_office_ballot = yes
 			}
 			eu_ambassador_to_un_back_click = {
-				add_timed_idea = { idea = EUU_ambassador_UNSC days = 1825 }
-				add_timed_idea = { idea = p5_member days = 1825 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.11
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.11
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 10 }
+				eon_eu_open_office_ballot = yes
 			}
 			eu_frontex_director_back_click = {
-				add_timed_idea = { idea = frontex_ExDir days = 1825 }
-				custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = EU_news.8
-				}
-				for_each_scope_loop = {
-					array = global.EU_member
-					news_event = EU_news.8
-				}
-				update_eu_dirty_variable = yes
+				set_temp_variable = { eon_eu_office_requested_id = 6 }
+				eon_eu_open_office_ballot = yes
 			}
 			eu_pres_federation_back_click = {
 				add_timed_idea = { idea = EU_president days = 1825 }
@@ -2248,7 +2279,13 @@ scripted_gui = {
 			}
 
 			# European Parliament
-			PG_party_0_influence_click = {
+
+PG_party_0_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_0 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_0_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_0_influence"
@@ -2259,8 +2296,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_1_influence_click = {
+
+ }
+}
+
+
+PG_party_1_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_1 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_1_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_1_influence"
@@ -2271,8 +2317,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_2_influence_click = {
+
+ }
+}
+
+
+PG_party_2_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_2 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_2_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_2_influence"
@@ -2283,8 +2338,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_3_influence_click = {
+
+ }
+}
+
+
+PG_party_3_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_3 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_3_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_3_influence"
@@ -2295,8 +2359,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_4_influence_click = {
+
+ }
+}
+
+
+PG_party_4_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_4 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_4_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_4_influence"
@@ -2307,8 +2380,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_5_influence_click = {
+
+ }
+}
+
+
+PG_party_5_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_5 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_5_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_5_influence"
@@ -2319,8 +2401,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_6_influence_click = {
+
+ }
+}
+
+
+PG_party_6_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_6 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_6_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_6_influence"
@@ -2331,8 +2422,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_7_influence_click = {
+
+ }
+}
+
+
+PG_party_7_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_7 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_7_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_7_influence"
@@ -2343,8 +2443,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_8_influence_click = {
+
+ }
+}
+
+
+PG_party_8_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_8 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_8_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_8_influence"
@@ -2355,8 +2464,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_9_influence_click = {
+
+ }
+}
+
+
+PG_party_9_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_9 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_9_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_9_influence"
@@ -2367,8 +2485,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_10_influence_click = {
+
+ }
+}
+
+
+PG_party_10_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_10 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_10_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_10_influence"
@@ -2379,8 +2506,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_11_influence_click = {
+
+ }
+}
+
+
+PG_party_11_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_11 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_11_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_11_influence"
@@ -2391,8 +2527,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_12_influence_click = {
+
+ }
+}
+
+
+PG_party_12_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_12 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_12_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_12_influence"
@@ -2403,8 +2548,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_13_influence_click = {
+
+ }
+}
+
+
+PG_party_13_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_13 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_13_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_13_influence"
@@ -2415,8 +2569,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_14_influence_click = {
+
+ }
+}
+
+
+PG_party_14_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_14 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_14_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_14_influence"
@@ -2427,8 +2590,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_15_influence_click = {
+
+ }
+}
+
+
+PG_party_15_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_15 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_15_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_15_influence"
@@ -2439,8 +2611,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_16_influence_click = {
+
+ }
+}
+
+
+PG_party_16_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_16 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_16_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_16_influence"
@@ -2451,8 +2632,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_17_influence_click = {
+
+ }
+}
+
+
+PG_party_17_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_17 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_17_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_17_influence"
@@ -2463,8 +2653,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_18_influence_click = {
+
+ }
+}
+
+
+PG_party_18_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_18 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_18_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_18_influence"
@@ -2475,8 +2674,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_19_influence_click = {
+
+ }
+}
+
+
+PG_party_19_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_19 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_19_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_19_influence"
@@ -2487,8 +2695,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_20_influence_click = {
+
+ }
+}
+
+
+PG_party_20_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_20 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_20_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_20_influence"
@@ -2499,8 +2716,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_21_influence_click = {
+
+ }
+}
+
+
+PG_party_21_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_21 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_21_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_21_influence"
@@ -2511,8 +2737,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_22_influence_click = {
+
+ }
+}
+
+
+PG_party_22_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_22 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_22_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_22_influence"
@@ -2523,8 +2758,17 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
-			PG_party_23_influence_click = {
+
+ }
+}
+
+
+PG_party_23_influence_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_influence_group_23 = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				custom_effect_tooltip = tooltip_EU_parl_PG_party_23_influence
 				hidden_effect = {
 					log = "[GetDateText]: [Root.GetName]: Decision EU_parl_PG_party_23_influence"
@@ -2535,10 +2779,19 @@ scripted_gui = {
 					add_political_power = temp_pp_mod
 				}
 				update_eu_dirty_variable = yes
-			}
+
+ }
+}
+
 
 			# Voting Buttons
-			pass_vote_button_click = {
+
+pass_vote_button_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_human_pass = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				log = "[GetDateText]: [Root.GetName]: EU Pass EP Agenda Button"
 				meta_effect = {
 					text = {
@@ -2630,8 +2883,17 @@ scripted_gui = {
 					EUXXX = "[EUXXX_EP_agenda]"
 					PG_X = "[PG_X_influence]"
 				}
-			}
-			remove_vote_button_click = {
+
+ }
+}
+
+
+remove_vote_button_click = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_human_withdraw = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 				log = "[GetDateText]: [Root.GetName]: EU Remove EP Agenda Button"
 				meta_effect = {
 					text = {
@@ -2691,7 +2953,10 @@ scripted_gui = {
 					EUXXX = "[EUXXX_EP_agenda]"
 					PG_X = "[PG_X_influence]"
 				}
-			}
+
+ }
+}
+
 
 			approve_IPA_button_click = {
 				set_country_flag = { flag = instrument_for_pre_accession_assistance days = 180 value = 1 }
@@ -2965,46 +3230,10 @@ scripted_gui = {
 			}
 
 			support_council_vote_button_click = {
-				add_to_array = { global.EU_active_vote_supporters = THIS }
-				add_to_variable = { global.EU_active_vote_yes = 1 }
-				set_temp_variable = { add_ratio_value = THIS.EU_pop_ratio }
-				add_to_variable = { global.EU_pop_ratio_yes = add_ratio_value }
-				if = {
-					limit = {
-						is_in_array = {
-							array = global.EU_active_vote_rejecters
-							value = THIS
-						}
-					}
-					remove_from_array = {
-						array = global.EU_active_vote_rejecters
-						value = THIS
-					}
-					add_to_variable = { global.EU_active_vote_no = -1 }
-					subtract_from_variable = { global.EU_pop_ratio_no = add_ratio_value }
-				}
-				update_eu_dirty_variable = yes
+				eon_eu_support_council_vote = yes
 			}
 			reject_council_vote_button_click = {
-				add_to_array = { global.EU_active_vote_rejecters = THIS }
-				add_to_variable = { global.EU_active_vote_no = 1 }
-				set_temp_variable = { add_ratio_value = THIS.EU_pop_ratio }
-				add_to_variable = { global.EU_pop_ratio_no = add_ratio_value }
-				if = {
-					limit = {
-						is_in_array = {
-							array = global.EU_active_vote_supporters
-							value = THIS
-						}
-					}
-					remove_from_array = {
-						array = global.EU_active_vote_supporters
-						value = THIS
-					}
-					add_to_variable = { global.EU_active_vote_yes = -1 }
-					subtract_from_variable = { global.EU_pop_ratio_yes = add_ratio_value }
-				}
-				update_eu_dirty_variable = yes
+				eon_eu_reject_council_vote = yes
 			}
 
 			EU_min_call_rate_click = {
@@ -4692,7 +4921,7 @@ scripted_gui = {
 			is_in_array = { global.EU_member = THIS.id }
 
 			# Check for the AI to push a vote to council
-			NOT = { has_global_flag = delay_next_council_vote }
+			OR = { NOT = { has_global_flag = delay_next_council_vote } eon_eu_handoff_actor_has_pending = yes }
 			OR = {
 				AND = {
 					NOT = {
@@ -4713,236 +4942,17 @@ scripted_gui = {
 		ai_max_weight_taken_per_test = 1
 
 		triggers = {
-			eu_council_available_reforms_button_click_enabled = {
-				if = { limit = { has_global_flag = delay_next_council_vote }
-					custom_trigger_tooltip = {
-						tooltip = con_vote_wait
-						NOT = { has_global_flag = delay_next_council_vote }
-						NOT = { has_country_flag = delay_player_next_council_vote }
-					}
-				}
-				else = {
-					custom_trigger_tooltip = {
-						tooltip = con_vote_wait_no_flag
-						NOT = { has_global_flag = delay_next_council_vote }
-						NOT = { has_country_flag = delay_player_next_council_vote }
-					}
-				}
 
-				ROOT = {
-					OR = {
-						has_political_power > 500
-						has_idea = EU_commission_president
-						has_idea = EU_council_president
-						has_idea = EU_parliament_president
-						influence_on_all_other_EU_members_3_percent = yes
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = EU_commission_president_taken
-					OR = {
-						any_of = {
-							array = global.EU_member
-							value = v_eu_commission
-							var:v_eu_commission = {
-								has_idea = EU_commission_president
-							}
-						}
-						check_variable = { global.EU_member_count < 2 }
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = no_council_vote_tt
-					check_variable = { global.current_active_vote_disp = 0 }
-				}
-				custom_trigger_tooltip = {
-					tooltip = EU_no_external_chi_influence_15_tt
-					EU_external_chi_influence_15 = no
-				}
-				custom_trigger_tooltip = {
-					tooltip = EU_no_external_sov_influence_15_tt
-					OR = {
-						EU_external_sov_influence_15 = no
-						SOV = { has_idea = EU_member }
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = no_high_sceptics_tt
-					NOT = {
-						check_variable = {
-							var = THIS.eurosceptic
-							value = 0.4
-							compare = greater_than_or_equals
-						}
-					}
-				}
-			}
-			eu_council_voting_members_list_button_click_enabled = {
-				custom_trigger_tooltip = {
-					tooltip = no_ongoing_vote
-					NOT = { check_variable = { global.current_active_vote_disp = 0 } }
-				}
-				custom_trigger_tooltip = {
-					tooltip = country_not_supporting
-					OR = {
-						AND = {
-							is_in_array = { array = global.EU_active_vote_supporters value = ROOT }
-							is_in_array = { array = global.EU_active_vote_rejecters value = THIS }
-						}
-						AND = {
-							is_in_array = { array = global.EU_active_vote_supporters value = THIS }
-							is_in_array = { array = global.EU_active_vote_rejecters value = ROOT }
-						}
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = EU_no_external_chi_influence_15_tt
-					EU_external_chi_influence_15 = no
-				}
-				custom_trigger_tooltip = {
-					tooltip = EU_no_external_sov_influence_15_tt
-					OR = {
-						EU_external_sov_influence_15 = no
-						SOV = { has_idea = EU_member }
-					}
-				}
-				THIS = { is_ai = yes }
-				ROOT = {
-					set_temp_variable = { base_pp_cost = 200 }
-					set_temp_variable = { pp_multipler = PREV.EU_pop_ratio }
-					multiply_temp_variable = { pp_multipler = 25 }
-					multiply_temp_variable = { base_pp_cost = pp_multipler }
-					clamp_temp_variable = {
-						var = base_pp_cost
-						max = 750
-					}
-					has_political_power > base_pp_cost
-				}
-				NOT = { has_idea = EUU_voting_rights_suspended }
-				custom_trigger_tooltip = {
-					tooltip = cur_inf_nat
-					NOT = { has_country_flag = current_vote_influenced }
-				}
-				#TODO: Add a favor requirement to sway a nation, outside of the pp requirements
-				#Swaying a large block of nations, especially those who don't support the measure, should not be cheap or easy
-				#Scale the demand based on the PP requirement
-			}
+			eu_council_available_reforms_button_click_enabled = { eon_eu_council_proposal_ready = yes }
+
+			eu_council_voting_members_list_button_click_enabled = { eon_eu_council_sway_ready = yes }
 		}
 
 		effects = {
-			eu_council_available_reforms_button_click = {
-				log = "[GetDateText]: [ROOT.GetTag]: Enacted an EU Wide Vote with the id of [?v]."
-				set_variable = { global.current_active_vote_disp = v }
-				set_variable = { global.EUXXX_council_agenda = global.current_active_vote_disp }
-				set_variable = { global.EU_active_vote_yes = 0 }
-				set_variable = { global.EU_active_vote_no = 0 }
-				clear_array = global.EU_active_vote_supporters
-				clear_array = global.EU_active_vote_rejecters
 
-				if = {
-					limit = {
-						NOT = { is_ai = yes }
-					}
-					set_global_flag = EUU_player_proposed_law
-				}
+			eu_council_available_reforms_button_click = { eon_eu_start_council_proposal = yes }
 
-				ROOT = {
-					if = {
-						limit = {
-							NOT = {
-								has_idea = EU_commission_president
-								has_idea = EU_council_president
-								has_idea = EU_parliament_president
-								influence_on_all_other_EU_members_3_percent = yes
-							}
-						}
-						add_political_power = -500
-					}
-				}
-				hidden_effect = {
-					for_each_scope_loop = {
-						array = global.EU_member
-						if = { limit = { is_ai = no }
-							country_event = { id = EUvote.2 }
-						}
-					}
-					meta_effect = {
-						text = {
-							if = {
-								set_global_flag = focus_[index]_QMV_voted
-								var:global.eucomission = {
-									activate_mission = EU_voting_mission_focus_EUXXX_QMV_result
-								}
-								for_each_scope_loop = {
-									array = global.EU_member
-									if = {
-										limit = { NOT = { has_idea = EU_commission_president } }
-										activate_mission = EU_voting_mission_focus_EUXXX_QMV_result_timer
-									}
-								}
-								if = {
-									limit = { NOT = { check_variable = { subjects^0 = 0 } } }
-									EU_update_AI_focus_[index]_voting_modifier = yes
-								}
-								for_each_scope_loop = {
-									array = global.EU_member
-									if = {
-										limit = { NOT = { has_idea = EUU_voting_rights_suspended } }
-										EU_update_AI_focus_[index]_voting_modifier = yes
-									}
-								}
-							}
-						}
-						date = "[GetDateText]"
-						tag = "[ROOT.GetName]"
-						index = "EU[?v]"
-					}
-				}
-
-
-				EU_show_display_effects_for_law = yes
-				clr_global_flag = EUU_player_proposed_law
-				update_eu_dirty_variable = yes
-			}
-			eu_council_voting_members_list_button_click = {
-				if = { limit = { is_in_array = { array = global.EU_active_vote_supporters value = ROOT } }
-					add_to_array = { global.EU_active_vote_supporters = THIS }
-					add_to_variable = { global.EU_active_vote_yes = 1 }
-					if = { limit = { is_in_array = { array = global.EU_active_vote_rejecters value = THIS } }
-						remove_from_array = { array = global.EU_active_vote_rejecters value = THIS }
-						add_to_variable = { global.EU_active_vote_no = -1 }
-					}
-					set_temp_variable = { add_ratio_value = THIS.EU_pop_ratio }
-					add_to_variable = { global.EU_pop_ratio_yes = add_ratio_value }
-					subtract_from_variable = { global.EU_pop_ratio_no = add_ratio_value }
-				} else = {
-					add_to_array = { global.EU_active_vote_rejecters = THIS }
-					add_to_variable = { global.EU_active_vote_no = 1 }
-					if = { limit = { is_in_array = { array = global.EU_active_vote_supporters value = THIS } }
-						remove_from_array = { array = global.EU_active_vote_supporters value = THIS }
-						add_to_variable = { global.EU_active_vote_yes = -1 }
-					}
-					set_temp_variable = { add_ratio_value = THIS.EU_pop_ratio }
-					add_to_variable = { global.EU_pop_ratio_no = add_ratio_value }
-					subtract_from_variable = { global.EU_pop_ratio_yes = add_ratio_value }
-				}
-				ROOT = {
-					set_temp_variable = { base_pp_cost = 300 }
-					set_temp_variable = { pp_multipler = PREV.EU_pop_ratio }
-					multiply_temp_variable = { pp_multipler = 25 }
-					multiply_temp_variable = { base_pp_cost = pp_multipler }
-					multiply_temp_variable = { base_pp_cost = -1 }
-					clamp_temp_variable = {
-						var = base_pp_cost
-						min = -1000
-					}
-					add_political_power = base_pp_cost
-				}
-				THIS = {
-					set_country_flag = current_vote_influenced
-				}
-				update_eu_dirty_variable = yes
-			}
+			eu_council_voting_members_list_button_click = { eon_eu_sway_council_vote = yes }
 		}
 
 		dynamic_lists = {
@@ -5184,6 +5194,7 @@ scripted_gui = {
 							modifier = {
 								factor = 0
 								has_global_flag = delay_next_council_vote_ai
+								NOT = { eon_eu_handoff_selected_pending = yes }
 							}
 						}
 					}
@@ -5236,578 +5247,14 @@ scripted_gui = {
 
 		triggers = {
 			# Shit
-			eu_parliament_available_reforms_button_click_enabled = {
-				if = {
-					limit = { has_country_flag = delay_next_parliament_vote }
-					custom_trigger_tooltip = {
-						tooltip = par_vote_wait
-						NOT = { has_country_flag = delay_next_parliament_vote }
-					}
-				}
-				else = {
-					custom_trigger_tooltip = {
-						tooltip = par_vote_wait_no_flag
-						NOT = { has_country_flag = delay_next_parliament_vote }
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = EU_commission_president_taken
-					OR = {
-						any_of = {
-							array = global.EU_member
-							value = v_eu_commission
-							var:v_eu_commission = {
-								has_idea = EU_commission_president
-							}
-						}
-						check_variable = { global.EU_member_count < 2 }
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = no_active_agenda
-					check_variable = { global.current_active_agenda_disp = 0 }
-				}
-				custom_trigger_tooltip = {
-					tooltip = no_active_budget_mff_draft
-					NOT = {
-						has_country_flag = EU_budget_draft
-						has_country_flag = EU_mff_draft
-						has_country_flag = EU_budget_EP_block
-						has_country_flag = EU_mff_EP_block
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = EU_no_external_chi_influence_15_tt
-					EU_external_chi_influence_15 = no
-				}
-				custom_trigger_tooltip = {
-					tooltip = EU_no_external_sov_influence_15_tt
-					OR = {
-						EU_external_sov_influence_15 = no
-						SOV = { has_idea = EU_member }
-					}
-				}
-				if = { limit = { check_variable = { v = 101 } }
-					has_political_power > 200
-				}
-				else_if = {
-					limit = { check_variable = { v = 102 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_convention_tt
-						is_in_array = { global.EU_passed_votes = 101 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 103 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_constitution_tt
-						is_in_array = { global.EU_passed_votes = 102 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 104 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_con_pass_tt
-						is_in_array = { global.EU_passed_votes = 103 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 105 } }
-					custom_trigger_tooltip = {
-						tooltip = treaty_of_lisbon_tt
-						is_in_array = { global.EU_passed_votes = 104 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 201 } }
-					has_political_power > 200
-				}
-				else_if = {
-					limit = { check_variable = { v = 202 } }
-					custom_trigger_tooltip = {
-						tooltip = ecb_intervention_tt
-						is_in_array = { global.EU_passed_votes = 201 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 203 } }
-					has_political_power > 200
-				}
-				else_if = {
-					limit = { check_variable = { v = 204 } }
-					has_political_power > 200
-				}
-				else_if = {
-					limit = { check_variable = { v = 205 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_fin_stab_facility_tt
-						is_in_array = { global.EU_passed_votes = 204 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = eurobonds_tt
-						is_in_array = { global.EU_passed_votes = 203 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 206 } }
-					custom_trigger_tooltip = {
-						tooltip = treaty_of_lisbon_tt
-						is_in_array = { global.EU_passed_votes = 104 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = euro_bank_union_tt
-						is_in_array = { global.EU_passed_votes = 202 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 207 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_stability_mech_tt
-						is_in_array = { global.EU_passed_votes = 205 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 208 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_eco_govment_tt
-						is_in_array = { global.EU_passed_votes = 207 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = fiscal_union_tt
-						is_in_array = { global.EU_passed_votes = 206 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 301 } }
-					has_political_power > 200
-				}
-				else_if = {
-					limit = { check_variable = { v = 302 } }
-					custom_trigger_tooltip = {
-						tooltip = eda_pass_tt
-						is_in_array = { global.EU_passed_votes = 301 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 303 } }
-					custom_trigger_tooltip = {
-						tooltip = perm_struc_cooperation_tt
-						is_in_array = { global.EU_passed_votes = 302 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 304 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_def_fund_tt
-						is_in_array = { global.EU_passed_votes = 303 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = euro_external_action_tt
-						is_in_array = { global.EU_passed_votes = 105 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 305 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_security_council_tt
-						is_in_array = { global.EU_passed_votes = 304 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 306 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_security_council_tt
-						is_in_array = { global.EU_passed_votes = 304 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 307 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_army_tt
-						is_in_array = { global.EU_passed_votes = 305 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = euro_navy_tt
-						is_in_array = { global.EU_passed_votes = 306 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = euro_nuclear_power_tt
-						is_in_array = { global.EU_passed_votes = 308 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 308 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_army_tt
-						is_in_array = { global.EU_passed_votes = 305 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = euro_navy_tt
-						is_in_array = { global.EU_passed_votes = 306 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 401 } }
-					has_political_power > 200
-				}
-				else_if = {
-					limit = { check_variable = { v = 402 } }
-					has_political_power > 200
-				}
-				else_if = {
-					limit = { check_variable = { v = 403 } }
-					has_political_power > 200
-				}
-				else_if = {
-					limit = { check_variable = { v = 404 } }
-					custom_trigger_tooltip = {
-						tooltip = dublin_II_tt
-						is_in_array = { global.EU_passed_votes = 403 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 405 } }
-					custom_trigger_tooltip = {
-						tooltip = dublin_II_tt
-						is_in_array = { global.EU_passed_votes = 403 }
-					}
-					NOT = { TUR = { has_idea = EU_member } }
-					has_global_flag = EUU_migrant_crisis_triggered
-				}
-				else_if = {
-					limit = { check_variable = { v = 406 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_border_coast_guard_tt
-						is_in_array = { global.EU_passed_votes = 408 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = reloc_resettle_asylum_tt
-						is_in_array = { global.EU_passed_votes = 404 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 407 } }
-					custom_trigger_tooltip = {
-						tooltip = dublin_II_tt
-						is_in_array = { global.EU_passed_votes = 403 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = eda_pass_tt
-						is_in_array = { global.EU_passed_votes = 301 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 408 } }
-					custom_trigger_tooltip = {
-						tooltip = frontex_pass_tt
-						is_in_array = { global.EU_passed_votes = 407 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 601 } }
-					has_political_power > 300
-					date > 2002.1.1
-				}
-				else_if = {
-					limit = { check_variable = { v = 602 } }
-					has_political_power > 300
-					is_in_array = { global.EU_passed_votes = 601 }
-					custom_trigger_tooltip = {
-						tooltip = allow_2007_enlargement_tt
-						is_in_array = { global.EU_passed_votes = 601 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = no_ongoing_expansion_tt
-						check_variable = { global.EU_expansion_check = 0 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 603 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = allow_2013_enlargement_tt
-						is_in_array = { global.EU_passed_votes = 602 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = no_ongoing_expansion_tt
-						check_variable = { global.EU_expansion_check = 0 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 605 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = 2013_enlargement_pass_tt
-						is_in_array = { global.EU_passed_votes = 603 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = no_ongoing_expansion_tt
-						check_variable = { global.EU_expansion_check = 0 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 606 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = 2013_enlargement_pass_tt
-						is_in_array = { global.EU_passed_votes = 603 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = no_ongoing_expansion_tt
-						check_variable = { global.EU_expansion_check = 0 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 607 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = 2013_enlargement_pass_tt
-						is_in_array = { global.EU_passed_votes = 603 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = no_ongoing_expansion_tt
-						check_variable = { global.EU_expansion_check = 0 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 608 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = 2013_enlargement_pass_tt
-						is_in_array = { global.EU_passed_votes = 603 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = no_ongoing_expansion_tt
-						check_variable = { global.EU_expansion_check = 0 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 609 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = 2013_enlargement_pass_tt
-						is_in_array = { global.EU_passed_votes = 603 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = no_ongoing_expansion_tt
-						check_variable = { global.EU_expansion_check = 0 }
-					}
-				}
-				else_if = {
-					limit = { check_variable = { v = 610 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = 2013_enlargement_pass_tt
-						is_in_array = { global.EU_passed_votes = 603 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = no_ongoing_expansion_tt
-						check_variable = { global.EU_expansion_check = 0 }
-					}
-				}
-				else_if = { limit = { check_variable = { v = 611 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = 2013_enlargement_pass_tt
-						is_in_array = { global.EU_passed_votes = 603 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = no_ongoing_expansion_tt
-						check_variable = { global.EU_expansion_check = 0 }
-					}
-				}
-				else_if = { limit = { check_variable = { v = 650 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = 2013_enlargement_pass_tt
-						is_in_array = { global.EU_passed_votes = 603 }
-					}
-				}
-				else_if = { limit = { check_variable = { v = 651 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = extended_enlargement_framework_pass_tt
-						is_in_array = { global.EU_passed_votes = 650 }
-					}
-				}
-				else_if = { limit = { check_variable = { v = 652 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = lisbon_treaty_amendment_pass_tt
-						is_in_array = { global.EU_passed_votes = 651 }
-					}
-				}
-				else_if = { limit = { check_variable = { v = 653 } }
-					has_political_power > 300
-					custom_trigger_tooltip = {
-						tooltip = eu_russia_treaty_pass_tt
-						is_in_array = { global.EU_passed_votes = 652 }
-					}
-				}
-				else_if = { limit = { check_variable = { v = 112 } }
-					custom_trigger_tooltip = {
-						tooltip = federalized_eu_tt
-						is_in_array = { global.EU_passed_votes = 110 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = not_usoe_tt
-						NOT = { is_in_array = { global.EU_passed_votes = 111 } }
-					}
-					has_political_power > 300
-				}
-				else_if = { limit = { check_variable = { v = 110 } }
-					custom_trigger_tooltip = {
-						tooltip = euro_min_fin_eco_tt
-						is_in_array = { global.EU_passed_votes = 208 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = euro_army_tt
-						is_in_array = { global.EU_passed_votes = 305 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = euro_navy_tt
-						is_in_array = { global.EU_passed_votes = 306 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = euro_asylum_agency_tt
-						is_in_array = { global.EU_passed_votes = 406 }
-					}
-				}
-				else_if = { limit = { check_variable = { v = 111 } }
-					custom_trigger_tooltip = {
-						tooltip = federalized_eu_tt
-						is_in_array = { global.EU_passed_votes = 110 }
-					}
-					custom_trigger_tooltip = {
-						tooltip = not_poteuf_tt
-						NOT = { is_in_array = { global.EU_passed_votes = 112 } }
-					}
-					has_political_power > 300
-				}
-			}
+
+eu_parliament_available_reforms_button_click_enabled = { eon_eu_ep_proposal_ready = yes }
 		}
 
 		effects = {
 			# Scrollbar Buttons
-			eu_parliament_available_reforms_button_click = {
-				set_variable = { global.current_active_agenda_disp = v }
-				set_variable = { global.active_MEP_Support = 0 }
-				# Notify all nations if not AI
-				hidden_effect = {
-					every_country = {
-						limit = {
-							is_ai = no
-							has_idea = EU_member
-						}
-						country_event = EUvote.1
-					}
-				}
 
-				meta_effect = {
-					text = {
-						if = {
-							custom_effect_tooltip = tooltip_EU_parliament_focus_[index]_EP_agenda
-						}
-						hidden_effect = {
-							log = "[date]: [tag]: Decision EU_parliament_focus_[index]_EP_agenda"
-							set_ruling_party_PG_support = yes
-							var:global.eucomission = {
-								set_country_flag = focus_[index]_EP_agenda
-								activate_mission = EU_parliament_focus_EUXXX_approve
-							}
-						}
-					}
-					date = "[GetDateText]"
-					tag = "[ROOT.GetName]"
-					index = "EU[?v]"
-				}
-				hidden_effect = {
-					for_each_scope_loop = {
-						array = global.EU_member
-						if = { limit = { NOT = { has_idea = EU_commission_president } }
-							activate_mission = EU_parliament_focus_EUXXX_approve_timer
-						}
-					}
-				}
-
-				# Political Power
-				if = { limit = { check_variable = { v = 101 } }
-					hidden_effect = { add_political_power = -200 }
-				}
-				else_if = { limit = { check_variable = { v = 201 } }
-					hidden_effect = { add_political_power = -200 }
-				}
-				else_if = { limit = { check_variable = { v = 203 } }
-					hidden_effect = { add_political_power = -200 }
-				}
-				else_if = { limit = { check_variable = { v = 204 } }
-					hidden_effect = { add_political_power = -200 }
-				}
-				else_if = { limit = { check_variable = { v = 301 } }
-					hidden_effect = { add_political_power = -200 }
-				}
-				else_if = { limit = { check_variable = { v = 401 } }
-					hidden_effect = { add_political_power = -200 }
-				}
-				else_if = { limit = { check_variable = { v = 402 } }
-					hidden_effect = { add_political_power = -200 }
-				}
-				else_if = { limit = { check_variable = { v = 403 } }
-					hidden_effect = { add_political_power = -200 }
-				}
-				else_if = { limit = { check_variable = { v = 601 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 602 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 603 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 605 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 606 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 607 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 608 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 609 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 610 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 611 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 650 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 651 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 652 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 653 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 112 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-				else_if = { limit = { check_variable = { v = 111 } }
-					hidden_effect = { add_political_power = -300 }
-				}
-
-				# Display Section:
-				EU_show_display_effects_for_law = yes
-				update_eu_dirty_variable = yes
-			}
+eu_parliament_available_reforms_button_click = { eon_eu_ep_start_proposal = yes }
 		}
 
 		dynamic_lists = {

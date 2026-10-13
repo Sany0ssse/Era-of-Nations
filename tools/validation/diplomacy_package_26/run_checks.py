@@ -3,7 +3,8 @@ from pathlib import Path
 import json,os,subprocess,sys
 folder=Path(__file__).resolve().parent
 reports={}
-commands=[('relations',folder/'test_relations.py'),('source',folder/'test_source.py'),
+commands=[('ai_ownership_primitive',folder/'test_ai_primitive.py'),
+ ('relations',folder/'test_relations.py'),('source',folder/'test_source.py'),
  ('legacy_registry',folder/'test_legacy_registry.py'),
  ('national_relations',folder.parent/'diplomacy_package_23/test_relations.py')]
 for name,path in commands:

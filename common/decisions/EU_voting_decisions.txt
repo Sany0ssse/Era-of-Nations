@@ -17,9 +17,7 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
-			log = "[GetDateText]: [Root.GetName]: mission timeout_effect EU_update_vars_mission"
-			EU_update_vars = yes
-			activate_mission = EU_update_vars_mission
+			# Central daily coordinator owns EU updates and receipt lifetimes.
 		}
 	}
 
@@ -40,9 +38,7 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
-			log = "[GetDateText]: [Root.GetName]: mission timeout_effect EU_clear_voting_mission"
-			EU_clear_voting = yes
-			activate_mission = EU_clear_voting_mission
+			# Central daily coordinator owns EU updates and receipt lifetimes.
 		}
 	}
 
@@ -63,11 +59,7 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
-			log = "[GetDateText]: [Root.GetName]: mission timeout_effect EU_election_2004"
-			country_event = {
-				id = EUelection.1
-			}
-			activate_mission = EU_election_5_years
+			# Central eon_eu_parliament_term clock owns elections; retain this legacy mission ID.
 		}
 	}
 
@@ -88,11 +80,7 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
-			log = "[GetDateText]: [Root.GetName]: mission timeout_effect EU_election_5_years"
-			country_event = {
-				id = EUelection.1
-			}
-			activate_mission = EU_election_5_years
+			# Central eon_eu_parliament_term clock owns elections; retain this legacy mission ID.
 		}
 	}
 	#############
@@ -100,12 +88,39 @@ EU_voting_category = {
 	#############
 
 	EU_parliament_focus_EUXXX_approve = {
+
+cancel_trigger = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+NOT = { eon_eu_ep_mission_retained = yes }
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+ NOT = { eon_eu_is_active_member = yes }
+ }
+ else = { always = yes }
+}
+
 		allowed = { always = yes }
-		available = { check_variable = { global.pass_vote_mission_ender = 1 } }
+
+available = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+always = no
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+ check_variable = { global.pass_vote_mission_ender = 1 }
+ }
+ else = { always = no }
+}
+
 		activation = { always = no }
 		is_good = yes
 
-		visible = {
+
+visible = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_mission_current = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 			meta_trigger = {
 				text = {
 					has_country_flag = focus_[EUXXX]_EP_agenda
@@ -118,15 +133,26 @@ EU_voting_category = {
 				}
 				EUXXX = "[EUXXX_EP_agenda]"
 			}
-		}
+
+ }
+ else = { always = no }
+}
+
 
 		days_mission_timeout = 14
 
 		selectable_mission = no
 
-		fire_only_once = yes
+		fire_only_once = no
 
-		complete_effect = {
+
+complete_effect = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_result_timeout = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+			if = { limit = { eon_eu_is_active_member = yes }
 			log = "[GetDateText]: [Root.GetName]: mission complete_effect EU_parliament_focus_EUXXX_approve:"
 			meta_effect = {
 				text = {
@@ -212,8 +238,20 @@ EU_voting_category = {
 					remove_mission = EU_parliament_focus_EUXXX_approve_timer
 				}
 			}
-		}
-		timeout_effect = {
+					}
+			else = { remove_mission = EU_parliament_focus_EUXXX_approve }
+
+ }
+}
+
+
+timeout_effect = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_result_timeout = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+			if = { limit = { eon_eu_is_active_member = yes }
 			if = {
 				limit = {
 					OR = {
@@ -384,19 +422,51 @@ EU_voting_category = {
 					remove_mission = EU_parliament_focus_EUXXX_approve_timer
 				}
 			}
-		}
+					}
+			else = { remove_mission = EU_parliament_focus_EUXXX_approve }
+
+ }
+}
+
 		ai_will_do = {
 			factor = 1
 		}
 	}
 
 	EU_parliament_focus_EUXXX_approve_timer = {
+
+cancel_trigger = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+NOT = { eon_eu_ep_mission_retained = yes }
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+ NOT = { eon_eu_is_active_member = yes }
+ }
+ else = { always = yes }
+}
+
 		allowed = { always = yes }
-		available = { check_variable = { global.pass_vote_mission_ender = 1 } }
+
+available = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+always = no
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+ check_variable = { global.pass_vote_mission_ender = 1 }
+ }
+ else = { always = no }
+}
+
 		activation = { always = no }
 		is_good = yes
 
-		visible = {
+
+visible = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_mission_current = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
 			meta_trigger = {
 				text = {
 					has_country_flag = focus_[EUXXX]_EP_agenda
@@ -409,12 +479,35 @@ EU_voting_category = {
 				}
 				EUXXX = "[EUXXX_EP_agenda]"
 			}
-		}
+
+ }
+ else = { always = no }
+}
+
 
 		days_mission_timeout = 14
 		selectable_mission = no
-		fire_only_once = yes
-	}
+		fire_only_once = no
+
+complete_effect = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_timer_timeout = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+ }
+}
+
+timeout_effect = {
+ if = { limit = { eon_eu_ep_ordinary_context = yes }
+eon_eu_ep_timer_timeout = yes
+ }
+ else_if = { limit = { eon_eu_ep_special_context = yes }
+
+ }
+}
+}
+
 
 	EU_council_determine_serious_breach_of_EU_values = {
 		allowed = { is_EU_potential = yes }
@@ -818,66 +911,51 @@ EU_voting_category = {
 	### Unified Result Mission QMV ###
 
 	EU_voting_mission_focus_EUXXX_QMV_result = {
+
+		cancel_trigger = { NOT = { eon_eu_council_mission_retained = yes } }
 		#icon = EU_voting_decision
 		allowed = { always = yes }
-		available = { EU_voting_decision_result_trigger = yes }
+
+		available = { eon_eu_council_result_current = yes NOT = { has_global_flag = eon_eu_council_vote_deadline } }
 		activation = { always = no }
 		is_good = yes
-		visible = {
-			meta_trigger = {
-				text = {
-					has_country_flag = focus_[EUXXX]_QMV
-				}
-				EUXXX = "EU[?global.EUXXX_council_agenda]"
-			}
-		}
+
+		visible = { eon_eu_council_mission_retained = yes }
 		days_mission_timeout = 14
 		selectable_mission = yes
 		fire_only_once = yes
-		complete_effect = {
-			meta_effect = {
-				text = {
-					focus_[EUXXX]_QMV_result = yes
-				}
-				EUXXX = "EU[?global.EUXXX_council_agenda]"
-			}
-		}
-		timeout_effect = {
-			meta_effect = {
-				text = {
-					focus_[EUXXX]_QMV_result = yes
-				}
-				EUXXX = "EU[?global.EUXXX_council_agenda]"
-			}
-		}
+
+		complete_effect = { eon_eu_council_result_complete = yes }
+
+		timeout_effect = { eon_eu_council_result_timeout = yes }
 		ai_will_do = { factor = -1000 }
 	}
 
 	EU_voting_mission_focus_EUXXX_QMV_result_timer = {
+
+		cancel_trigger = { NOT = { eon_eu_council_mission_retained = yes } }
 		#icon = EU_voting_decision
 		allowed = { always = yes }
+
 		available = { always = no }
 		activation = { always = no }
 		is_good = yes
-		visible = {
-			meta_trigger = {
-				text = {
-					has_country_flag = focus_[EUXXX]_QMV
-				}
-				EUXXX = "EU[?global.EUXXX_council_agenda]"
-			}
-		}
+
+		visible = { eon_eu_council_mission_retained = yes }
 		days_mission_timeout = 14
 		selectable_mission = yes
 		fire_only_once = yes
-		complete_effect = { }
-		timeout_effect = { remove_mission = EU_voting_mission_focus_EUXXX_QMV_result_timer }
+
+		complete_effect = { eon_eu_council_timer_timeout = yes }
+
+		timeout_effect = { eon_eu_council_timer_timeout = yes }
 		ai_will_do = { factor = -1000 }
 	}
 
 	### Budget and MFF missions
 
 	EU_budget_yearly_timer = {
+		cancel_trigger = { NOT = { eon_eu_is_active_member = yes } }
 		allowed = { always = yes }
 		available = { always = no }
 		activation = { always = no }
@@ -888,17 +966,21 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			remove_mission = EU_budget_yearly_timer
 			activate_mission = EU_budget_draft_preparations
 			set_country_flag = EU_budget_EP_block
 			update_eu_dirty_variable = yes
 			country_event = { id = EUbudget.10 }
+					}
+			else = { remove_mission = EU_budget_yearly_timer }
 		}
 
 		ai_will_do = { factor = 0 }
 	}
 
 	EU_budget_draft_preparations = {
+		cancel_trigger = { NOT = { eon_eu_is_active_member = yes } }
 		allowed = { always = yes }
 		available = { always = no }
 		activation = { always = no }
@@ -909,6 +991,7 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			set_EU_gdp = yes
 			EU_save_budget_values = yes
 			update_EU_budget_call_rate = yes
@@ -936,12 +1019,15 @@ EU_voting_category = {
 			set_country_flag = EU_budget_EP_block # failgate
 			update_eu_dirty_variable = yes
 			country_event = { id = EUbudget.11 }
+					}
+			else = { remove_mission = EU_budget_draft_preparations }
 		}
 
 		ai_will_do = { factor = 0 }
 	}
 
 	EU_budget_draft_ongoing = {
+		cancel_trigger = { NOT = { eon_eu_is_active_member = yes } }
 		allowed = { always = yes }
 		available = { always = no }
 		activation = { always = no }
@@ -952,18 +1038,22 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			set_EU_gdp = yes
 			update_EU_budget_call_rate = yes
 			set_country_flag = focus_EU999_EP_agenda
 			activate_mission = EU_parliament_focus_EUXXX_approve_timer
 			activate_mission = EU_budget_yearly_timer
 			remove_mission = EU_budget_draft_ongoing
+					}
+			else = { remove_mission = EU_budget_draft_ongoing }
 		}
 
 		ai_will_do = { factor = 0 }
 	}
 
-	EU_budget_draft_ongoing_president = { # seperate for central bank president for calculations
+	EU_budget_draft_ongoing_president = {
+		cancel_trigger = { NOT = { eon_eu_is_active_member = yes has_idea = ECB_president } } # seperate for central bank president for calculations
 		allowed = { always = yes }
 		available = { always = no }
 		activation = { always = no }
@@ -974,6 +1064,7 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes has_idea = ECB_president }
 			set_EU_gdp = yes
 			update_EU_budget_call_rate = yes
 			if = {
@@ -990,12 +1081,15 @@ EU_voting_category = {
 			activate_mission = EU_budget_yearly_timer
 			set_variable = { global.current_active_agenda_disp = 999 }
 			remove_mission = EU_budget_draft_ongoing_president
+					}
+			else = { remove_mission = EU_budget_draft_ongoing_president }
 		}
 
 		ai_will_do = { factor = 0 }
 	}
 
 	EU_mff_yearly_timer = {
+		cancel_trigger = { NOT = { eon_eu_is_active_member = yes } }
 		allowed = { always = yes }
 		available = { always = no }
 		activation = { always = no }
@@ -1006,18 +1100,22 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			set_country_flag = EU_mff_draft
 			set_country_flag = EU_mff_EP_block
 			remove_mission = EU_mff_yearly_timer
 			activate_mission = EU_mff_draft_preparations
 			update_eu_dirty_variable = yes
 			country_event = { id = EUbudget.20 }
+					}
+			else = { remove_mission = EU_mff_yearly_timer }
 		}
 
 		ai_will_do = { factor = 0 }
 	}
 
 	EU_mff_draft_preparations = {
+		cancel_trigger = { NOT = { eon_eu_is_active_member = yes } }
 		allowed = { always = yes }
 		available = { always = no }
 		activation = { always = no }
@@ -1028,6 +1126,7 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			set_EU_gdp = yes
 			EU_save_mff_values = yes
 			update_EU_budget_call_rate = yes
@@ -1048,12 +1147,15 @@ EU_voting_category = {
 			set_country_flag = EU_mff_EP_block # failgate
 			update_eu_dirty_variable = yes
 			country_event = { id = EUbudget.21 }
+					}
+			else = { remove_mission = EU_mff_draft_preparations }
 		}
 
 		ai_will_do = { factor = 0 }
 	}
 
 	EU_mff_draft_ongoing = {
+		cancel_trigger = { NOT = { eon_eu_is_active_member = yes } }
 		allowed = { always = yes }
 		available = { always = no }
 		activation = { always = no }
@@ -1064,18 +1166,22 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			set_EU_gdp = yes
 			update_EU_budget_call_rate = yes
 			set_country_flag = focus_EU998_EP_agenda
 			activate_mission = EU_parliament_focus_EUXXX_approve_timer
 			activate_mission = EU_mff_yearly_timer
 			remove_mission = EU_mff_draft_ongoing
+					}
+			else = { remove_mission = EU_mff_draft_ongoing }
 		}
 
 		ai_will_do = { base = 0 }
 	}
 
 	EU_mff_draft_ongoing_president = {
+		cancel_trigger = { NOT = { eon_eu_is_active_member = yes has_idea = ECB_president } }
 		allowed = { always = yes }
 		available = { always = no }
 		activation = { always = no }
@@ -1086,6 +1192,7 @@ EU_voting_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes has_idea = ECB_president }
 			set_EU_gdp = yes
 			update_EU_budget_call_rate = yes
 			if = {
@@ -1102,6 +1209,8 @@ EU_voting_category = {
 			activate_mission = EU_parliament_focus_EUXXX_approve
 			set_variable = { global.current_active_agenda_disp = 998 }
 			remove_mission = EU_mff_draft_ongoing_president
+					}
+			else = { remove_mission = EU_mff_draft_ongoing_president }
 		}
 
 		ai_will_do = { base = 0 }
@@ -1185,6 +1294,7 @@ EU_fiscal_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
 			effect_tooltip = {
 				country_event = EUevent.5
@@ -1222,13 +1332,19 @@ EU_fiscal_category = {
 					}
 				}
 			}
+					}
+			else = { remove_mission = eurozone_reforms }
 		}
 
 		cancel_trigger = {
+			OR = { NOT = { eon_eu_is_active_member = yes }
+
 			has_global_flag = eurozone_reforms
+					}
 		}
 
 		complete_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
 			effect_tooltip = {
 				country_event = { id = EUevent.6 }
@@ -1239,6 +1355,8 @@ EU_fiscal_category = {
 				country_event = { id = EUevent.6 }
 				remove_mission = eurozone_reforms
 			}
+					}
+			else = { remove_mission = eurozone_reforms }
 		}
 
 		ai_will_do = {
@@ -1352,25 +1470,34 @@ EU_fiscal_category = {
 		}
 
 		cancel_trigger = {
+			OR = { NOT = { eon_eu_is_active_member = yes }
+
 			ROOT = {
 				NOT = {
 					has_idea = EUU_national_dept_crisis_eu
 				}
 			}
+					}
 		}
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			ROOT = {
 				country_event = {
 					id = EUevent.9
 				}
 			}
+					}
+			else = { remove_mission = troika_reforms }
 		}
 		complete_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			ROOT = {
 				country_event = {
 					id = EUevent.8
 				}
 			}
+					}
+			else = { remove_mission = troika_reforms }
 		}
 	}
 }
@@ -1390,16 +1517,7 @@ EU_exit_category = {
 			}
 		}
 
-		complete_effect = {
-			custom_effect_tooltip = tooltip_EU_Revoke_Article_50_effect
-			hidden_effect = {
-				ROOT = {
-					clr_country_flag = Article_50
-					news_event = { id = EU_news.22 }
-					set_country_flag = { flag = cant_invoke_article_50 days = 180 value = 1 }
-				}
-			}
-		}
+		complete_effect = { eon_eu_revoke_withdrawal = yes }
 
 		# AI EU Exit
 		ai_will_do = {
@@ -1430,10 +1548,9 @@ EU_exit_category = {
 		activation = { always = no }
 
 		available = {
-			custom_trigger_tooltip = {
-				tooltip = tooltip_EU_exit_available
-				has_country_flag = withdrawal_treaty
-			}
+			eon_eu_withdrawal_proposal_current = yes
+			has_country_flag = eon_eu_withdrawal_council_consent
+			has_country_flag = eon_eu_withdrawal_ep_consent
 		}
 
 		visible = {
@@ -1448,47 +1565,30 @@ EU_exit_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
-			# Unprepared No Deal Exit
-			if = { limit = { NOT = { ROOT = { has_country_flag = focus_EU703_completed } } }
-				add_timed_idea = {
-					idea = no_deal_exit
-					days = 1825 # five years # unprepared no deal exit # prepared no deal exit with two years with focus EU703
-				}
-				leaving_EU = yes
-				clr_country_flag = Article_50
+			# A saved native clock may expire before its first migration pulse.
+			if = { limit = { eon_eu_is_active_member = yes has_country_flag = Article_50 }
+				eon_eu_extension_legacy_timeout = yes
 			}
-			else_if = {
-				limit = {
-					ROOT = { has_country_flag = focus_EU703_completed }
-				}
-				add_timed_idea = {
-					idea = no_deal_exit
-					days = 730 # five years # unprepared no deal exit # prepared no deal exit with two years with focus EU703
-				}
-				leaving_EU = yes
-				clr_country_flag = Article_50
-			}
-
-			# One Member State Leaves
-			news_event = { id = EU_news.21 }
+			else = { remove_mission = EU_exit }
 		}
 
-		cancel_trigger = { ### by EU_Revoke_Article_50
+		cancel_trigger = {
+			OR = { NOT = { eon_eu_is_active_member = yes } NOT = { has_country_flag = Article_50 }
+ ### by EU_Revoke_Article_50
 			custom_trigger_tooltip = {
 				tooltip = tooltip_EU_exit_cancel_trigger
 				ROOT = { NOT = { has_country_flag = Article_50 } }
 			}
+					}
 		}
 
 		remove_effect = {
-			news_event = { id = EU_news.22 } ### Article 50 is revoked
+			# Clock removal also occurs on expiry, departure and archiving.
+			# Only the actual revocation helper announces a revoked notice.
 		}
 		complete_effect = {
-			add_ideas = withdrawal_treaty
-			leaving_EU = yes
-			clr_country_flag = Article_50
-			### one member state leaves
-			news_event = { id = EU_news.21 }
+			if = { limit = { eon_eu_withdrawal_current = yes } eon_eu_finish_withdrawal = yes 			}
+			else = { remove_mission = EU_exit }
 		}
 
 		### AI Withdrawal Treaty
@@ -1550,6 +1650,10 @@ EU_exit_category = {
 
 	EU_extend_Article_50 = {
 
+		# Retired: the legacy mission did not extend the actual Article50 clock.
+		# A future extension requires unanimous remaining-member consent.
+		allowed = { always = no }
+
 		available = {
 			#has_idea = EU_member
 			custom_trigger_tooltip = {
@@ -1577,10 +1681,9 @@ EU_exit_category = {
 		allowed = { always = no }
 
 		available = {
-			custom_trigger_tooltip = {
-				tooltip = tooltip_EU_exit_available
-				has_country_flag = withdrawal_treaty
-			}
+			eon_eu_withdrawal_proposal_current = yes
+			has_country_flag = eon_eu_withdrawal_council_consent
+			has_country_flag = eon_eu_withdrawal_ep_consent
 		}
 
 		visible = {
@@ -1595,32 +1698,16 @@ EU_exit_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
-			if = { ### unprepared no deal exit
-				limit = {
-					NOT = { ROOT = { has_country_flag = EU_article_50_prepared_no_deal_exit } }
-				}
-				add_timed_idea = {
-					idea = no_deal_exit
-					days = 1825 # five years # unprepared no deal exit # prepared no deal exit with two years with focus EU703
-				}
-				leaving_EU = yes
-				clr_country_flag = Article_50
+			# A sole saved short clock is distinct from a still-running main clock.
+			if = { limit = { eon_eu_is_active_member = yes has_country_flag = Article_50 }
+				eon_eu_extension_legacy_short_timeout = yes
 			}
-			else_if = { ### prepared no deal exit
-				limit = {
-					ROOT = { has_country_flag = EU_article_50_prepared_no_deal_exit }
-				}
-				add_timed_idea = {
-					idea = no_deal_exit
-					days = 730 # five years # unprepared no deal exit # prepared no deal exit with two years with focus EU703
-				}
-				leaving_EU = yes
-				clr_country_flag = Article_50
-			}
-			news_event = EU_news.21 ### one member state leaves
+			else = { remove_mission = EU_exit_three_month }
 		}
 
-		cancel_trigger = { ### by EU_Revoke_Article_50
+		cancel_trigger = {
+			OR = { NOT = { eon_eu_is_active_member = yes } NOT = { has_country_flag = Article_50 }
+ ### by EU_Revoke_Article_50
 			custom_trigger_tooltip = {
 				#same tooltip as EU_exit
 				tooltip = tooltip_EU_exit_cancel_trigger
@@ -1630,27 +1717,16 @@ EU_exit_category = {
 					}
 				}
 			}
+					}
 		}
 
 		remove_effect = {
-			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-			effect_tooltip = {
-				news_event = EU_news.22 ### Article 50 is revoked
-			}
-			for_each_scope_loop = {
-				array = global.EU_member
-				news_event = EU_news.22 ### Article 50 is revoked
-			}
+			# Removing a saved short clock is not a revocation of Article50.
+			# The successful revocation helper sends one truthful news event.
 		}
 		complete_effect = {
-			ROOT = {
-				add_ideas = withdrawal_treaty
-				leaving_EU = yes
-				clr_country_flag = Article_50
-			}
-			news_event = {
-				id = EU_news.23 ### withdrawal_treaty
-			}
+			if = { limit = { eon_eu_withdrawal_current = yes } eon_eu_finish_withdrawal = yes 			}
+			else = { remove_mission = EU_exit_three_month }
 		}
 		### AI Withdrawal Treaty
 		ai_will_do = {
@@ -1710,20 +1786,20 @@ EU_exit_category = {
 	}
 
 	EU_withdrawal_treaty = {
+		cost = 25
 
 		available = {
-			influence_on_all_other_EU_members_5_percent = yes
+			eon_eu_withdrawal_current = yes
+			NOT = { has_country_flag = eon_eu_withdrawal_proposal }
 		}
 
 		visible = {
-			has_idea = EU_member
-			has_country_flag = Article_50
+			eon_eu_withdrawal_current = yes
 		}
 
 		complete_effect = {
-			set_country_flag = withdrawal_treaty
-			### withdrawal_treaty
-			news_event = { id = EU_news.23 }
+			eon_eu_propose_withdrawal_treaty = yes
+			custom_effect_tooltip = eon_eu_legacy_withdrawal_proposal_tt
 		}
 
 		ai_will_do = {
@@ -1971,42 +2047,10 @@ EU_defense_category = {
 	}
 
 	EU_create_EDU = {
-
-		available = {
-			#has_idea = European_Security_Council
-			has_idea = EU_foreign_minister
-			#has_idea = EU_member
-			ROOT = {
-				influence_on_all_other_EU_members_25_percent = yes
-			}
-		}
-
-		visible = {
-			NOT = { has_global_flag = EDU }
-			has_idea = European_Security_Council
-			has_idea = EU_member
-		}
-
-		complete_effect = {
-			set_global_flag = EDU
-			for_each_scope_loop = {
-				array = global.EU_member
-				if = {
-					limit = { has_idea = NATO_member }
-					remove_ideas = NATO_member
-				}
-			}
-			create_faction_from_template = faction_template_edu
-			for_each_scope_loop = {
-				array = global.EU_member
-				FROM = {
-					add_to_faction = PREV
-				}
-				add_ai_strategy = { type = alliance id = FROM value = 200 }
-			}
-			### non-EU NATO members notification of EDU
-			news_event = { id = EU_news.48 }
-		}
+		visible = { eon_eu_is_active_member = yes has_idea = European_Security_Council NOT = { has_global_flag = EDU } }
+		available = { eon_edu_founder_eligible = yes }
+		complete_effect = { eon_edu_create_decision_effect = yes }
+		ai_will_do = { factor = 1 }
 	}
 
 	EU_military_exercise = {
@@ -2134,6 +2178,7 @@ EU_defense_category = {
 	}
 
 	EU_military_exercise_mission = {
+		cancel_trigger = { NOT = { eon_eu_is_active_member = yes } }
 
 		allowed = { always = no }
 
@@ -2167,6 +2212,7 @@ EU_defense_category = {
 		fire_only_once = yes
 
 		timeout_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			log = "[GetDateText]: [Root.GetName]: mission timeout_effect EU_military_exercise_mission"
 			add_command_power = -40
 			#bugfix
@@ -2185,8 +2231,11 @@ EU_defense_category = {
 			clear_variable = ROOT.var_EU_military_exercise_host_state
 			clear_variable = ROOT.var_EU_military_exercise_host_tag
 			#end of bugfix
+					}
+			else = { remove_mission = EU_military_exercise_mission }
 		}
 		complete_effect = {
+			if = { limit = { eon_eu_is_active_member = yes }
 			log = "[GetDateText]: [Root.GetName]: mission timeout_effect EU_military_exercise_mission"
 			### mission reward
 			if = {
@@ -2263,6 +2312,8 @@ EU_defense_category = {
 				}
 				activate_mission = counter_military_exercise_mission
 			}
+					}
+			else = { remove_mission = EU_military_exercise_mission }
 		}
 		remove_effect = {
 			every_country = {
@@ -2395,173 +2446,10 @@ generic_coalition_politics_decisions = { ### temp category
 EU_apply_for_membership_category = {
 	EU_apply_for_membership = {
 		cost = 50
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = EU_level_of_breaches_less_than_3_tt
-				check_variable = { THIS.breach_of_EU_value < 3 }
-			}
-			has_country_flag = EU_candidate
-			NOT = { has_war = yes }
-			custom_trigger_tooltip = {
-				tooltip = EU_no_external_chi_influence_15_tt
-				EU_external_chi_influence_15 = no
-			}
-			OR = {
-				custom_trigger_tooltip = {
-					tooltip = EU_no_external_sov_influence_15_tt
-					EU_external_sov_influence_15 = no
-				}
-				SOV = { has_country_flag = EU_candidate }
-			}
-			custom_trigger_tooltip = {
-				tooltip = less_than_15_eurosceptic
-				check_variable = { THIS.eurosceptic < 0.15 }
-			}
-		}
-
-		visible = {
-			is_EU_potential = yes
-			NOT = { has_idea = EU_member }
-		}
-
-		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision complete EU_apply_for_membership"
-			add_ideas = EU_member
-			#force_update_map_mode = { mapmode = EU_map_mode }
-			if = {
-				limit = {
-					has_global_flag = EDU
-					has_idea = NATO_member
-				}
-				remove_ideas = NATO_member
-			}
-			if = { limit = { has_global_flag = EDU }
-				every_country = {
-					limit = {
-						has_idea = EU_member
-						is_faction_leader = yes
-					}
-					add_to_faction = ROOT
-					ROOT = {
-						add_ai_strategy = { type = alliance id = PREV value = 200 }
-					}
-				}
-				custom_effect_tooltip = TT_ALL_NATO_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = {
-						id = EU_news.49 ### NATO members leaves and joins EU and EDU
-					}
-				}
-				for_each_scope_loop = {
-					array = global.nato_members
-					news_event = {
-						id = EU_news.49 ### NATO members leaves and joins EU and EDU
-					}
-				}
-			}
-			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-			effect_tooltip = {
-				news_event = {
-					id = EU_news.27 ### one country joins
-				}
-			}
-			for_each_scope_loop = {
-				array = global.EU_member
-				news_event = {
-					id = EU_news.27 ### one country joins
-				}
-			}
-			hidden_effect = {
-				EU_clear_voting = yes
-				if = {
-					limit = { original_tag = SOV }
-					mark_focus_tree_layout_dirty = yes
-				}
-			}
-		}
-
-		ai_will_do = {
-			base = 250
-			# Europeanism
-			modifier = {
-				add = -100
-				check_variable = { global.var_europeanism < 0.50 }
-			}
-			modifier = {
-				factor = 10
-				OR = {
-					has_government = democratic
-					has_government = neutrality
-				}
-			}
-			modifier = {
-				factor = 1.5
-				any_of_scopes = {
-					array = THIS.influence_array
-					has_idea = EU_member
-				}
-			}
-			modifier = {
-				add = 15
-				var:influence_array^0 = {
-					has_idea = EU_member
-				}
-			}
-			modifier = {
-				add = 15
-				var:influence_array^1 = {
-					has_idea = EU_member
-				}
-			}
-			modifier = {
-				add = 15
-				var:influence_array^2 = {
-					has_idea = EU_member
-				}
-			}
-			modifier = {
-				factor = 1.5
-				any_of_scopes = {
-					array = THIS.influence_array
-					OR = {
-						AND = {
-							NOT = { original_tag = SOV }
-							SOV = { NOT = { has_idea = EU_member } }
-						}
-						NOT = { original_tag = CHI }
-					}
-				}
-			}
-			modifier = {
-				factor = 2.5
-				# Russia is at war with European democratic nations
-				NOT = { SOV = { has_idea = EU_member } }
-				SOV = { NOT = { has_government = democratic } }
-				OR = {
-					SOV = { has_war_with = UKR }
-					SOV = { has_war_with = FIN }
-					SOV = { has_war_with = LIT }
-					SOV = { has_war_with = LAT }
-					SOV = { has_war_with = EST }
-					SOV = { has_war_with = GEO }
-					SOV = { has_war_with = BLR }
-					SOV = { has_war_with = ABK }
-					SOV = { has_war_with = SOO }
-				}
-			}
-			modifier = {
-				factor = 100
-				date > 2004.1.1
-			}
-			modifier = {
-				factor = 100
-				date > 2007.1.1
-			}
-			modifier = {
-				factor = 100
-				date > 2013.1.1
-			}
-		}
+		available = { eon_eu_application_ready = yes }
+		visible = { always = no } # Preserved alias; the visible workflow lives in eon_eu_membership_category.
+		complete_effect = { eon_eu_apply_for_membership_start = yes }
+		ai_will_do = { factor = 0 }
 	}
 
 	EU_join_the_Euro = {
@@ -2626,6 +2514,7 @@ EU_apply_for_membership_category = {
 	}
 
 	pre_accession_assistance_program = {
+		cancel_trigger = { NOT = { eon_eu_is_candidate = yes } }
 		allowed = { always = no }
 		available = {
 			OR = {
@@ -2643,14 +2532,20 @@ EU_apply_for_membership_category = {
 		selectable_mission = yes
 		fire_only_once = yes
 		timeout_effect = {
+			if = { limit = { eon_eu_is_candidate = yes }
 			var:var_IPA = {
 				country_event = {
 					id = EUevent.20
 				}
 			}
+					}
+			else = { remove_mission = pre_accession_assistance_program }
 		}
 		complete_effect = {
+			if = { limit = { eon_eu_is_candidate = yes }
 			add_political_power = 400
+					}
+			else = { remove_mission = pre_accession_assistance_program }
 		}
 		ai_will_do = {
 			base = 100

@@ -87,7 +87,7 @@ scripted_gui = {
 			}
 			# Begins project or cancels the project if you have one active in a given state
 			AC_build_button_click = {
-				if = { limit = { NOT = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } } ROOT = { check_variable = { eon_investment_offer_partner = 0 } } }
+				if = { limit = { NOT = { is_in_array = { array = THIS.projects_in_state value = ROOT.id } } CONTROLLER = { ROOT = { eon_investment_offer_v2_capacity = yes eon_investment_offer_v2_pair_idle = yes } } }
 					# PREV is the state target
 					THIS = {
 						set_variable = { ROOT.AC_state_target = THIS.id }
@@ -439,7 +439,6 @@ scripted_gui = {
 						NOT = { is_justifying_wargoal_against = PREV.CONTROLLER }
 						# General things
 						has_available_treasury_investment = yes
-						currently_is_considering_a_project = yes
 					}
 					if = { limit = { check_variable = { ROOT.project_building_type^-1 = 1 } }
 						AC_building_cic_available = yes

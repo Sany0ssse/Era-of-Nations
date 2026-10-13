@@ -1,0 +1,461 @@
+# Reprice current participants and office allocations without transferring treasury.
+# Role changes must not trigger a new Parliament election or renew its mandate.
+eon_eu_update_budget = {
+ if = { limit = {
+  eon_eu_union_active = yes
+  OR = { has_global_flag = eon_eu_membership_changed has_global_flag = eon_eu_budget_changed NOT = { has_global_flag = eon_eu_budget_year } }
+ }
+  set_EU_gdp = yes
+  update_EU_budget_call_rate = yes
+  set_variable = { global.EU_total_exp = global.EU_total_budget }
+  set_temp_variable = { eon_eu_budget_ratio_sum = global.EU_growth_exp_ratio }
+  add_to_temp_variable = { eon_eu_budget_ratio_sum = global.EU_natural_exp_ratio }
+  add_to_temp_variable = { eon_eu_budget_ratio_sum = global.EU_global_exp_ratio }
+  add_to_temp_variable = { eon_eu_budget_ratio_sum = global.EU_admin_exp_ratio }
+  if = { limit = { check_variable = { eon_eu_budget_ratio_sum > 0 } }
+   update_EU_expenditure = yes
+  }
+  else = { set_EU_expenditure = yes }
+  distribute_EU_budget = yes
+  EU_global_click_cost = yes
+  # Membership and office changes do not postpone the annual recalculation.
+  if = { limit = { NOT = { has_global_flag = eon_eu_budget_year } }
+   set_global_flag = { flag = eon_eu_budget_year days = 365 value = 1 }
+  }
+  clr_global_flag = eon_eu_budget_changed
+ }
+}
+
+# One world clock: the EU does not depend on an immortal utility country or GUI.
+eon_eu_update_parliament = {
+	if = { limit = { eon_eu_union_active = yes }
+		eon_eu_update_budget = yes
+		if = { limit = {
+			OR = { has_global_flag = eon_eu_membership_changed NOT = { has_global_flag = eon_eu_parliament_term } }
+		}
+			clear_EU_Parliament = yes
+			election_EU_Parliament = yes
+			# A changed delegation does not renew the whole Parliament's mandate.
+			if = { limit = { NOT = { has_global_flag = eon_eu_parliament_term } }
+				if = { limit = { date < 2000.2.1 }
+					set_global_flag = { flag = eon_eu_parliament_term days = 1625 value = 1 }
+				}
+				else = { set_global_flag = { flag = eon_eu_parliament_term days = 1825 value = 1 } }
+			}
+			every_country = {
+				remove_mission = EU_update_vars_mission
+				remove_mission = EU_clear_voting_mission
+				remove_mission = EU_election_2004
+				remove_mission = EU_election_5_years
+			}
+			clr_global_flag = eon_eu_membership_changed
+		}
+	}
+}
+
+eon_eu_reset_institutional_laws = {
+	eon_eu_handoff_archive = yes
+	# Archiving a nonoperational game institution is not a claim of legal dissolution.
+	# The confirmed optional defence charter owns its cleanup and retries on failure.
+	eon_edu_dissolve_confirmed_union = yes
+	eon_eu_archive_council_round = yes
+	eon_eu_ep_close_round = yes
+	eon_eu_close_council_vote = yes
+	eon_eu_close_institutions = yes
+	eon_eu_close_federation_authority = yes
+	clear_EU_Parliament = yes
+	clear_array = global.EU_passed_votes
+	clear_array = global.EU_council_votes
+	set_variable = { global.current_active_agenda_disp = 0 }
+	set_variable = { global.active_MEP_Support = 0 }
+	set_variable = { global.pass_vote_mission_ender = 0 }
+	clr_global_flag = eon_eu_parliament_term
+	clr_global_flag = eon_eu_budget_changed
+	clr_global_flag = eon_eu_budget_year
+	clr_global_flag = EU_UNSC
+	clr_global_flag = EU_finance_minister
+	clr_global_flag = EU_foreign_minister
+	clr_global_flag = euro_army
+	clr_global_flag = euro_navy
+	clr_global_flag = european_federation
+	clr_global_flag = frontex_ExDir
+	clr_global_flag = treaty_of_lisbon
+	clr_global_flag = EU_gdp_updated
+	eon_eu_reset_legacy_agenda_receipts = yes
+}
+
+eon_eu_daily_lifecycle_pulse = {
+	# Loaded older worlds may have no admission receipt but a still-active daily lock.
+	# Close that one-time boundary before the lock, after all world data are loaded.
+	eon_eu_close_historical_admission = yes
+	if = { limit = { NOT = { has_global_flag = eon_eu_daily_lifecycle_done } }
+		set_global_flag = { flag = eon_eu_daily_lifecycle_done days = 1 value = 1 }
+		eon_eu_capture_council_deadline_outcome = yes
+		eon_eu_ep_capture_deadline_outcome = yes
+		eon_eu_refresh_membership = yes
+		eon_eu_recount_council_vote = yes
+		eon_eu_update_parliament = yes
+		eon_eu_daily_membership_pulse = yes
+		# A successful accession or departure changes the electorate immediately.
+		eon_eu_refresh_membership = yes
+		# Also reconcile a dormant union; native failures retain a receipt for retry.
+		eon_edu_daily_pulse = yes
+		eon_eu_recount_council_vote = yes
+		eon_eu_update_parliament = yes
+		eon_eu_daily_institutions_pulse = yes
+		eon_eu_reconcile_council_vote_owner = yes
+		eon_eu_ep_reconcile_owner = yes
+		eon_eu_update_budget = yes
+		if = { limit = { eon_eu_union_active = yes }
+			clr_global_flag = eon_eu_archive_cleaned
+			eon_eu_council_ai_pulse = yes
+		}
+		else_if = { limit = { NOT = { has_global_flag = eon_eu_archive_cleaned } }
+			eon_eu_reset_institutional_laws = yes
+			set_global_flag = eon_eu_archive_cleaned
+		}
+	}
+}
+
+eon_eu_reset_legacy_agenda_receipts = {
+	clear_array = global.EU_potential_votes
+	clr_global_flag = focus_EU101_EP_approval
+	clr_global_flag = focus_EU101_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 101 }
+	clr_global_flag = focus_EU102_EP_approval
+	clr_global_flag = focus_EU102_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 102 }
+	clr_global_flag = focus_EU103_EP_approval
+	clr_global_flag = focus_EU103_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 103 }
+	clr_global_flag = focus_EU104_EP_approval
+	clr_global_flag = focus_EU104_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 104 }
+	clr_global_flag = focus_EU105_EP_approval
+	clr_global_flag = focus_EU105_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 105 }
+	clr_global_flag = focus_EU201_EP_approval
+	clr_global_flag = focus_EU201_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 201 }
+	clr_global_flag = focus_EU202_EP_approval
+	clr_global_flag = focus_EU202_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 202 }
+	clr_global_flag = focus_EU203_EP_approval
+	clr_global_flag = focus_EU203_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 203 }
+	clr_global_flag = focus_EU204_EP_approval
+	clr_global_flag = focus_EU204_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 204 }
+	clr_global_flag = focus_EU205_EP_approval
+	clr_global_flag = focus_EU205_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 205 }
+	clr_global_flag = focus_EU206_EP_approval
+	clr_global_flag = focus_EU206_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 206 }
+	clr_global_flag = focus_EU207_EP_approval
+	clr_global_flag = focus_EU207_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 207 }
+	clr_global_flag = focus_EU208_EP_approval
+	clr_global_flag = focus_EU208_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 208 }
+	clr_global_flag = focus_EU301_EP_approval
+	clr_global_flag = focus_EU301_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 301 }
+	clr_global_flag = focus_EU302_EP_approval
+	clr_global_flag = focus_EU302_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 302 }
+	clr_global_flag = focus_EU303_EP_approval
+	clr_global_flag = focus_EU303_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 303 }
+	clr_global_flag = focus_EU304_EP_approval
+	clr_global_flag = focus_EU304_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 304 }
+	clr_global_flag = focus_EU305_EP_approval
+	clr_global_flag = focus_EU305_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 305 }
+	clr_global_flag = focus_EU306_EP_approval
+	clr_global_flag = focus_EU306_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 306 }
+	clr_global_flag = focus_EU307_EP_approval
+	clr_global_flag = focus_EU307_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 307 }
+	clr_global_flag = focus_EU308_EP_approval
+	clr_global_flag = focus_EU308_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 308 }
+	clr_global_flag = focus_EU401_EP_approval
+	clr_global_flag = focus_EU401_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 401 }
+	clr_global_flag = focus_EU402_EP_approval
+	clr_global_flag = focus_EU402_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 402 }
+	clr_global_flag = focus_EU403_EP_approval
+	clr_global_flag = focus_EU403_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 403 }
+	clr_global_flag = focus_EU404_EP_approval
+	clr_global_flag = focus_EU404_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 404 }
+	clr_global_flag = focus_EU405_EP_approval
+	clr_global_flag = focus_EU405_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 405 }
+	clr_global_flag = focus_EU406_EP_approval
+	clr_global_flag = focus_EU406_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 406 }
+	clr_global_flag = focus_EU407_EP_approval
+	clr_global_flag = focus_EU407_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 407 }
+	clr_global_flag = focus_EU408_EP_approval
+	clr_global_flag = focus_EU408_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 408 }
+	clr_global_flag = focus_EU601_EP_approval
+	clr_global_flag = focus_EU601_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 601 }
+	clr_global_flag = focus_EU602_EP_approval
+	clr_global_flag = focus_EU602_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 602 }
+	clr_global_flag = focus_EU603_EP_approval
+	clr_global_flag = focus_EU603_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 603 }
+	clr_global_flag = focus_EU703_EP_approval
+	clr_global_flag = focus_EU703_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 703 }
+	clr_global_flag = focus_EU110_EP_approval
+	clr_global_flag = focus_EU110_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 110 }
+	clr_global_flag = focus_EU111_EP_approval
+	clr_global_flag = focus_EU111_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 111 }
+	clr_global_flag = focus_EU112_EP_approval
+	clr_global_flag = focus_EU112_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 112 }
+	clr_global_flag = focus_EU605_EP_approval
+	clr_global_flag = focus_EU605_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 605 }
+	clr_global_flag = focus_EU606_EP_approval
+	clr_global_flag = focus_EU606_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 606 }
+	clr_global_flag = focus_EU607_EP_approval
+	clr_global_flag = focus_EU607_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 607 }
+	clr_global_flag = focus_EU608_EP_approval
+	clr_global_flag = focus_EU608_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 608 }
+	clr_global_flag = focus_EU609_EP_approval
+	clr_global_flag = focus_EU609_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 609 }
+	clr_global_flag = focus_EU610_EP_approval
+	clr_global_flag = focus_EU610_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 610 }
+	clr_global_flag = focus_EU611_EP_approval
+	clr_global_flag = focus_EU611_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 611 }
+	clr_global_flag = focus_EU650_EP_approval
+	clr_global_flag = focus_EU650_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 650 }
+	clr_global_flag = focus_EU651_EP_approval
+	clr_global_flag = focus_EU651_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 651 }
+	clr_global_flag = focus_EU652_EP_approval
+	clr_global_flag = focus_EU652_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 652 }
+	clr_global_flag = focus_EU653_EP_approval
+	clr_global_flag = focus_EU653_QMV_voted
+	add_to_array = { array = global.EU_potential_votes value = 653 }
+	every_possible_country = {
+		clr_country_flag = focus_EU101_yes
+		clr_country_flag = focus_EU101_QMV_yes
+		clr_country_flag = focus_EU101_EP_agenda
+		clr_country_flag = focus_EU101_QMV
+		clr_country_flag = focus_EU102_yes
+		clr_country_flag = focus_EU102_QMV_yes
+		clr_country_flag = focus_EU102_EP_agenda
+		clr_country_flag = focus_EU102_QMV
+		clr_country_flag = focus_EU103_yes
+		clr_country_flag = focus_EU103_QMV_yes
+		clr_country_flag = focus_EU103_EP_agenda
+		clr_country_flag = focus_EU103_QMV
+		clr_country_flag = focus_EU104_yes
+		clr_country_flag = focus_EU104_QMV_yes
+		clr_country_flag = focus_EU104_EP_agenda
+		clr_country_flag = focus_EU104_QMV
+		clr_country_flag = focus_EU105_yes
+		clr_country_flag = focus_EU105_QMV_yes
+		clr_country_flag = focus_EU105_EP_agenda
+		clr_country_flag = focus_EU105_QMV
+		clr_country_flag = focus_EU201_yes
+		clr_country_flag = focus_EU201_QMV_yes
+		clr_country_flag = focus_EU201_EP_agenda
+		clr_country_flag = focus_EU201_QMV
+		clr_country_flag = focus_EU202_yes
+		clr_country_flag = focus_EU202_QMV_yes
+		clr_country_flag = focus_EU202_EP_agenda
+		clr_country_flag = focus_EU202_QMV
+		clr_country_flag = focus_EU203_yes
+		clr_country_flag = focus_EU203_QMV_yes
+		clr_country_flag = focus_EU203_EP_agenda
+		clr_country_flag = focus_EU203_QMV
+		clr_country_flag = focus_EU204_yes
+		clr_country_flag = focus_EU204_QMV_yes
+		clr_country_flag = focus_EU204_EP_agenda
+		clr_country_flag = focus_EU204_QMV
+		clr_country_flag = focus_EU205_yes
+		clr_country_flag = focus_EU205_QMV_yes
+		clr_country_flag = focus_EU205_EP_agenda
+		clr_country_flag = focus_EU205_QMV
+		clr_country_flag = focus_EU206_yes
+		clr_country_flag = focus_EU206_QMV_yes
+		clr_country_flag = focus_EU206_EP_agenda
+		clr_country_flag = focus_EU206_QMV
+		clr_country_flag = focus_EU207_yes
+		clr_country_flag = focus_EU207_QMV_yes
+		clr_country_flag = focus_EU207_EP_agenda
+		clr_country_flag = focus_EU207_QMV
+		clr_country_flag = focus_EU208_yes
+		clr_country_flag = focus_EU208_QMV_yes
+		clr_country_flag = focus_EU208_EP_agenda
+		clr_country_flag = focus_EU208_QMV
+		clr_country_flag = focus_EU301_yes
+		clr_country_flag = focus_EU301_QMV_yes
+		clr_country_flag = focus_EU301_EP_agenda
+		clr_country_flag = focus_EU301_QMV
+		clr_country_flag = focus_EU302_yes
+		clr_country_flag = focus_EU302_QMV_yes
+		clr_country_flag = focus_EU302_EP_agenda
+		clr_country_flag = focus_EU302_QMV
+		clr_country_flag = focus_EU303_yes
+		clr_country_flag = focus_EU303_QMV_yes
+		clr_country_flag = focus_EU303_EP_agenda
+		clr_country_flag = focus_EU303_QMV
+		clr_country_flag = focus_EU304_yes
+		clr_country_flag = focus_EU304_QMV_yes
+		clr_country_flag = focus_EU304_EP_agenda
+		clr_country_flag = focus_EU304_QMV
+		clr_country_flag = focus_EU305_yes
+		clr_country_flag = focus_EU305_QMV_yes
+		clr_country_flag = focus_EU305_EP_agenda
+		clr_country_flag = focus_EU305_QMV
+		clr_country_flag = focus_EU306_yes
+		clr_country_flag = focus_EU306_QMV_yes
+		clr_country_flag = focus_EU306_EP_agenda
+		clr_country_flag = focus_EU306_QMV
+		clr_country_flag = focus_EU307_yes
+		clr_country_flag = focus_EU307_QMV_yes
+		clr_country_flag = focus_EU307_EP_agenda
+		clr_country_flag = focus_EU307_QMV
+		clr_country_flag = focus_EU308_yes
+		clr_country_flag = focus_EU308_QMV_yes
+		clr_country_flag = focus_EU308_EP_agenda
+		clr_country_flag = focus_EU308_QMV
+		clr_country_flag = focus_EU401_yes
+		clr_country_flag = focus_EU401_QMV_yes
+		clr_country_flag = focus_EU401_EP_agenda
+		clr_country_flag = focus_EU401_QMV
+		clr_country_flag = focus_EU402_yes
+		clr_country_flag = focus_EU402_QMV_yes
+		clr_country_flag = focus_EU402_EP_agenda
+		clr_country_flag = focus_EU402_QMV
+		clr_country_flag = focus_EU403_yes
+		clr_country_flag = focus_EU403_QMV_yes
+		clr_country_flag = focus_EU403_EP_agenda
+		clr_country_flag = focus_EU403_QMV
+		clr_country_flag = focus_EU404_yes
+		clr_country_flag = focus_EU404_QMV_yes
+		clr_country_flag = focus_EU404_EP_agenda
+		clr_country_flag = focus_EU404_QMV
+		clr_country_flag = focus_EU405_yes
+		clr_country_flag = focus_EU405_QMV_yes
+		clr_country_flag = focus_EU405_EP_agenda
+		clr_country_flag = focus_EU405_QMV
+		clr_country_flag = focus_EU406_yes
+		clr_country_flag = focus_EU406_QMV_yes
+		clr_country_flag = focus_EU406_EP_agenda
+		clr_country_flag = focus_EU406_QMV
+		clr_country_flag = focus_EU407_yes
+		clr_country_flag = focus_EU407_QMV_yes
+		clr_country_flag = focus_EU407_EP_agenda
+		clr_country_flag = focus_EU407_QMV
+		clr_country_flag = focus_EU408_yes
+		clr_country_flag = focus_EU408_QMV_yes
+		clr_country_flag = focus_EU408_EP_agenda
+		clr_country_flag = focus_EU408_QMV
+		clr_country_flag = focus_EU601_yes
+		clr_country_flag = focus_EU601_QMV_yes
+		clr_country_flag = focus_EU601_EP_agenda
+		clr_country_flag = focus_EU601_QMV
+		clr_country_flag = focus_EU602_yes
+		clr_country_flag = focus_EU602_QMV_yes
+		clr_country_flag = focus_EU602_EP_agenda
+		clr_country_flag = focus_EU602_QMV
+		clr_country_flag = focus_EU603_yes
+		clr_country_flag = focus_EU603_QMV_yes
+		clr_country_flag = focus_EU603_EP_agenda
+		clr_country_flag = focus_EU603_QMV
+		clr_country_flag = focus_EU703_yes
+		clr_country_flag = focus_EU703_QMV_yes
+		clr_country_flag = focus_EU703_EP_agenda
+		clr_country_flag = focus_EU703_QMV
+		clr_country_flag = focus_EU110_yes
+		clr_country_flag = focus_EU110_QMV_yes
+		clr_country_flag = focus_EU110_EP_agenda
+		clr_country_flag = focus_EU110_QMV
+		clr_country_flag = focus_EU111_yes
+		clr_country_flag = focus_EU111_QMV_yes
+		clr_country_flag = focus_EU111_EP_agenda
+		clr_country_flag = focus_EU111_QMV
+		clr_country_flag = focus_EU112_yes
+		clr_country_flag = focus_EU112_QMV_yes
+		clr_country_flag = focus_EU112_EP_agenda
+		clr_country_flag = focus_EU112_QMV
+		clr_country_flag = focus_EU605_yes
+		clr_country_flag = focus_EU605_QMV_yes
+		clr_country_flag = focus_EU605_EP_agenda
+		clr_country_flag = focus_EU605_QMV
+		clr_country_flag = focus_EU606_yes
+		clr_country_flag = focus_EU606_QMV_yes
+		clr_country_flag = focus_EU606_EP_agenda
+		clr_country_flag = focus_EU606_QMV
+		clr_country_flag = focus_EU607_yes
+		clr_country_flag = focus_EU607_QMV_yes
+		clr_country_flag = focus_EU607_EP_agenda
+		clr_country_flag = focus_EU607_QMV
+		clr_country_flag = focus_EU608_yes
+		clr_country_flag = focus_EU608_QMV_yes
+		clr_country_flag = focus_EU608_EP_agenda
+		clr_country_flag = focus_EU608_QMV
+		clr_country_flag = focus_EU609_yes
+		clr_country_flag = focus_EU609_QMV_yes
+		clr_country_flag = focus_EU609_EP_agenda
+		clr_country_flag = focus_EU609_QMV
+		clr_country_flag = focus_EU610_yes
+		clr_country_flag = focus_EU610_QMV_yes
+		clr_country_flag = focus_EU610_EP_agenda
+		clr_country_flag = focus_EU610_QMV
+		clr_country_flag = focus_EU611_yes
+		clr_country_flag = focus_EU611_QMV_yes
+		clr_country_flag = focus_EU611_EP_agenda
+		clr_country_flag = focus_EU611_QMV
+		clr_country_flag = focus_EU650_yes
+		clr_country_flag = focus_EU650_QMV_yes
+		clr_country_flag = focus_EU650_EP_agenda
+		clr_country_flag = focus_EU650_QMV
+		clr_country_flag = focus_EU651_yes
+		clr_country_flag = focus_EU651_QMV_yes
+		clr_country_flag = focus_EU651_EP_agenda
+		clr_country_flag = focus_EU651_QMV
+		clr_country_flag = focus_EU652_yes
+		clr_country_flag = focus_EU652_QMV_yes
+		clr_country_flag = focus_EU652_EP_agenda
+		clr_country_flag = focus_EU652_QMV
+		clr_country_flag = focus_EU653_yes
+		clr_country_flag = focus_EU653_QMV_yes
+		clr_country_flag = focus_EU653_EP_agenda
+		clr_country_flag = focus_EU653_QMV
+		remove_mission = EU_parliament_focus_EUXXX_approve
+		remove_mission = EU_parliament_focus_EUXXX_approve_timer
+		remove_mission = EU_voting_mission_focus_EUXXX_QMV_result
+		remove_mission = EU_voting_mission_focus_EUXXX_QMV_result_timer
+		remove_mission = EU_update_vars_mission
+		remove_mission = EU_clear_voting_mission
+		remove_mission = EU_election_2004
+		remove_mission = EU_election_5_years
+	}
+}

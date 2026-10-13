@@ -11,11 +11,45 @@ _uranium_spec=importlib.util.spec_from_file_location('eon_uranium_byte_compat',
 _uranium_bytes=importlib.util.module_from_spec(_uranium_spec)
 _uranium_spec.loader.exec_module(_uranium_bytes)
 
+# Project only the later frozen energy-AI policy island before the old GUI
+# comparison; its independent negative controls retain the byte boundary.
+_ai_energy_spec=importlib.util.spec_from_file_location('eon_ai_energy_byte_compat',
+    ROOT/'tools/validation/ai_policy/energy_byte_compat.py')
+_ai_energy_bytes=importlib.util.module_from_spec(_ai_energy_spec)
+_ai_energy_spec.loader.exec_module(_ai_energy_bytes)
+
 # Exact later arsenal insertion is removed only for historical byte comparisons.
 _arsenal_spec=importlib.util.spec_from_file_location('eon_arsenal_budget_byte_compat',
     ROOT/'tools/validation/missile_system/byte_compat.py')
 _arsenal_bytes=importlib.util.module_from_spec(_arsenal_spec)
 _arsenal_spec.loader.exec_module(_arsenal_bytes)
+
+# Explicit native98 migration islands supplement the c1420b historical baseline.
+# Their exact bytes/digests are restored before comparing all foreign money code.
+_migration_spec=importlib.util.spec_from_file_location('eon_migration_money_byte_compat',
+    ROOT/'tools/validation/migration_relief/byte_compat.py')
+_migration_bytes=importlib.util.module_from_spec(_migration_spec)
+_migration_spec.loader.exec_module(_migration_bytes)
+
+# The annual-to-weekly EU grant correction is an independent exact calculation
+# projection. Migration's seven islands and the two eligibility gates stay exact.
+_eu_weekly_spec=importlib.util.spec_from_file_location('eon_eu_weekly_byte_compat',
+    ROOT/'tools/validation/eu_weekly_cash/byte_compat.py')
+_eu_weekly_bytes=importlib.util.module_from_spec(_eu_weekly_spec)
+_eu_weekly_spec.loader.exec_module(_eu_weekly_bytes)
+
+# Exact later consensual-peace guards are projected out before old assertions.
+_peace_spec=importlib.util.spec_from_file_location('eon_peace_legacy_source_compat',
+    ROOT/'tools/validation/peace_settlement/legacy_source_compat.py')
+_peace_bytes=importlib.util.module_from_spec(_peace_spec)
+_peace_spec.loader.exec_module(_peace_bytes)
+
+
+# Exact certified adjacent damage/state boundary only; unknown effects stay closed.
+_economy_spec=importlib.util.spec_from_file_location('eon_economy_refresh_compat',
+    ROOT/'tools/validation/performance_refresh/byte_compat.py')
+_economy_bytes=importlib.util.module_from_spec(_economy_spec)
+_economy_spec.loader.exec_module(_economy_bytes)
 
 BASELINE='c1420b108dee2d129018951c9ba73c1f6bfc4360'
 checks=0
@@ -40,9 +74,64 @@ for path in NEW:
     b=(ROOT/path).read_bytes();check(bool(b),path+' exists')
     if path.endswith('.yml'):check(b.startswith(b'\xef\xbb\xbf'),path+' UTF8 BOM')
     else:check(bool(ast(read(path))),path+' parses')
+# Later EU eligibility changes are permitted only at these exact two money
+# gates. Restore them before the historical comparison; all other bytes stay
+# subject to the original before/after guards and their explicit migrations.
+EU_FINANCE_REPLACEMENTS = (
+    ('\t# EU\n\tif = {\n\t\tlimit = {\n\t\t\teon_eu_is_budget_participant = yes\n'
+     '\t\t\tNOT = { has_idea = EUU_subsidies_suspended }\n',
+     '\t# EU\n\tif = {\n\t\tlimit = {\n\t\t\tis_in_array = { global.EU_member = THIS }\n'
+     '\t\t\tNOT = { has_idea = EUU_subsidies_suspended }\n'),
+    ('\t# European Union Contribution Expenses\n'
+     '\tif = { limit = { eon_eu_is_budget_participant = yes }\n'
+     '\t\tadd_to_variable = { additional_expenses_rate = EU_budget_contribution_weekly }\n\t}\n',
+     '\t# European Union Contribution Expenses\n'
+     '\tif = { limit = { has_idea = EU_member }\n'
+     '\t\tadd_to_variable = { additional_expenses_rate = EU_budget_contribution_weekly }\n\t}\n'),
+)
+
+def restore_eu_finance_eligibility(text):
+    if text.count('eon_eu_is_budget_participant = yes') != 2:
+        raise AssertionError('Exactly two current EU finance gate references required')
+    for current, original in EU_FINANCE_REPLACEMENTS:
+        if text.count(current) != 1:
+            raise AssertionError('Exact unique current EU finance gate required')
+        text = text.replace(current, original, 1)
+    return text
+
 money=read('common/scripted_effects/00_money_system.txt');oldmoney=baseline(CHANGED[1]).decode('utf-8-sig')
+money=_economy_bytes.restore_adjacent_state_refresh(CHANGED[1],money)
 money=_arsenal_bytes.restore_arsenal_budget(CHANGED[1],money)
+check(_migration_bytes.CATALOG['baseline_commit']==BASELINE and
+      len(_migration_bytes.CATALOG['islands'])==7,'Seven explicit native98 migration money islands')
+check(all(oldmoney.count(item['original'])==1 for item in _migration_bytes.CATALOG['islands']),
+      'Every migration original is exact and unique in historical Git bytes')
+migration_money_negative_controls=_migration_bytes.negative_controls(money)
+check(len(migration_money_negative_controls)==14,'All changed-island and foreign-byte migration mutants rejected')
+money=_migration_bytes.restore_migration_money(CHANGED[1],money)
+money=_eu_weekly_bytes.restore_weekly_subsidy(CHANGED[1],money)
 before='\t########ENERGY SELLING SYSTEM###########';after='\t#Propaganda Medrese'
+current_eu_money=money
+money=restore_eu_finance_eligibility(current_eu_money)
+check(all(money.count(original)==1 for current,original in EU_FINANCE_REPLACEMENTS),
+      'Exactly two EU finance gates restored to historical member eligibility')
+eu_finance_negative_controls=[]
+for index,(current,original) in enumerate(EU_FINANCE_REPLACEMENTS,1):
+    mutant=current_eu_money.replace(current,original,1)
+    try: restore_eu_finance_eligibility(mutant)
+    except AssertionError: eu_finance_negative_controls.append('missing current gate '+str(index))
+    else: raise AssertionError('Missing current EU gate was silently accepted')
+try: restore_eu_finance_eligibility(current_eu_money+EU_FINANCE_REPLACEMENTS[0][0])
+except AssertionError: eu_finance_negative_controls.append('extra current gate')
+else: raise AssertionError('Extra EU eligibility reference was silently accepted')
+for marker,region in (('\t\tset_variable = { additional_income_agrarian_economy = weekly_harvest_billion }\n','prefix'),('\t# Cartel Mechanic Costs\n','suffix')):
+    check(current_eu_money.count(marker)==1,'One unrelated-byte mutant anchor '+region)
+    mutant=restore_eu_finance_eligibility(current_eu_money.replace(marker,marker+'# unrelated mutation\n',1))
+    part=(lambda value: value.split(before,1)[0]) if region=='prefix' else (lambda value: value.split(after,1)[1])
+    check(hashlib.sha256(part(mutant).encode('utf-8')).digest()!=hashlib.sha256(part(money).encode('utf-8')).digest(),
+          'Unrelated '+region+' mutation remains visible to exact byte guard')
+    eu_finance_negative_controls.append('unrelated '+region+' byte mutation')
+check(len(eu_finance_negative_controls)==5,'All narrow EU finance restoration negative controls rejected')
 check(money.split(before)[0]==oldmoney.split(before)[0],'Money bytes before owned energy section')
 money_without_cash=restore_debt_accounting(CHANGED[1], money)
 for kind,energy in [('expense','energy_buying_expenses'),('income','energy_selling_income')]:
@@ -70,7 +159,7 @@ check(money_without_cash.split(after,1)[1]==oldmoney.split(after,1)[1],
       'Money bytes after energy section preserved except exact cash exclusion and debt pause guard')
 section=money.split(before,1)[1].split(after,1)[0]
 check([k for k,o,v in ast(section)]==['eon_energy_delivery_calculate_bill','add_to_variable','add_to_variable'],'Only actual billing uses existing rate fields')
-costili=read('common/on_actions/00_costili.txt');oldcostili=baseline(CHANGED[2]).decode('utf-8-sig')
+costili=_peace_bytes.restore_consensual_annex_guards((ROOT/'common/on_actions/00_costili.txt').read_bytes()).decode('utf-8-sig');oldcostili=baseline(CHANGED[2]).decode('utf-8-sig')
 start='\ton_monthly = {\n\t\teffect = {\n\t\t\tif = {\n\t\t\t\tlimit = { check_variable = { energy_balance < -1 } }'
 begin=oldcostili.index(start);end=oldcostili.index('\ton_daily = {',begin)
 newcomment='\t# Electricity shortages reduce daily actual deliveries proportionally.\n\t# Contract terms survive and recover; no monthly blanket export cancellation.\n'
@@ -138,9 +227,13 @@ for indent in (b'\t'*4,b'\t'*6):
     check(expected_gui.count(before)==1,'One original caller GUIflag guard at exact indentation')
     expected_gui=expected_gui.replace(before,after)
 current_gui=(ROOT/GUI_FILE).read_bytes()
-check(_uranium_bytes.restore_uranium_gui(current_gui)==expected_gui,
-      'Entire GUI bytes equal original except two exact peer/PREV flag guards and canonical uranium controls')
-uranium_negative_controls=_uranium_bytes.negative_controls(energy.encode('utf-8'),current_gui,
+gui_before_ai_policy=_ai_energy_bytes.restore_energy_ai(GUI_FILE,current_gui)
+check(_uranium_bytes.restore_uranium_gui(gui_before_ai_policy)==expected_gui,
+      'Entire GUI bytes equal original except exact peer/PREV, uranium, and frozen energy-AI islands')
+energy_ai_negative_controls=_ai_energy_bytes.negative_controls(GUI_FILE,current_gui)
+check(len(energy_ai_negative_controls)==4,
+      'Energy-AI ownership rejects changed, missing, duplicate and unrelated GUI bytes')
+uranium_negative_controls=_uranium_bytes.negative_controls(energy.encode('utf-8'),gui_before_ai_policy,
     energy_without_uranium.encode('utf-8'),expected_gui)
 check(len(uranium_negative_controls)==6,'All uranium-wrapper, migrated-stock and unrelated-byte negative controls rejected')
 check(current_gui.startswith(b'\xef\xbb\xbf')==old_gui.startswith(b'\xef\xbb\xbf') and
@@ -177,6 +270,13 @@ for k,o,v in events:
 if __name__=='__main__':print(json.dumps({'suite':'package25 source boundaries','checks':checks,
     'source_sha256':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in CHANGED+NEW+[GUI_FILE]},
     'uranium_byte_guard_negative_controls':uranium_negative_controls,
+    'energy_ai_byte_guard_negative_controls':energy_ai_negative_controls,
+    'energy_ai_byte_compat_sha256':hashlib.sha256(Path(_ai_energy_spec.origin).read_bytes()).hexdigest(),
+    'energy_ai_canonical_islands_sha256':hashlib.sha256((ROOT/'tools/validation/ai_policy/canonical_energy_ai.json').read_bytes()).hexdigest(),
+    'eu_finance_byte_guard_negative_controls':eu_finance_negative_controls,
+    'migration_money_byte_guard_negative_controls':migration_money_negative_controls,
+    'migration_money_byte_compat_sha256':hashlib.sha256(Path(_migration_spec.origin).read_bytes()).hexdigest(),
+    'migration_money_islands_sha256':hashlib.sha256(_migration_bytes.CATALOG_PATH.read_bytes()).hexdigest(),
     'uranium_byte_compat_sha256':hashlib.sha256(Path(_uranium_spec.origin).read_bytes()).hexdigest(),
     'proof_limitations':['Byte/API/localisation/source guards only','No native compilation, campaign, performance or multiplayer acceptance'],
     'native_campaign_verified':False},indent=2))

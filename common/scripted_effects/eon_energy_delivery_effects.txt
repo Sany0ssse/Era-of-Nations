@@ -136,8 +136,7 @@ eon_energy_delivery_snapshot_country = {
  # domestic demand before ANY country receives the new round's imports.
  # These two effects use THIS/PREV; no ROOT-dependent whole-budget call here.
  set_variable = { num_of_synthetic_refinery = 0 }
- calculate_damaged_buildings_count = yes
- update_state_variables = yes
+ eon_economy_refresh_state_and_damage = yes
  clear_array = eon_energy_delivered
  clear_array = eon_energy_delivery_next
  clear_array = eon_energy_delivery_partners
@@ -307,11 +306,16 @@ eon_energy_delivery_reconcile_world = {
   set_global_flag = eon_energy_delivery_running
   eon_energy_settlement_close_world_interval = yes
   set_global_flag = eon_energy_delivery_collecting
+  # Rebuild in native country order, including former participants needing cleanup.
+  clear_array = global.eon_energy_delivery_participants
   every_country = {
    limit = { OR = { check_variable = { energy_contractors^num > 0 } has_country_flag = eon_energy_delivery_participant } }
    eon_energy_delivery_snapshot_country = yes
+   add_to_array = { array = global.eon_energy_delivery_participants value = THIS }
   }
   clr_global_flag = eon_energy_delivery_collecting
+  # A caller's unrelated break temporary must not stop any phase.
+  set_temp_variable = { eon_energy_delivery_participant_loop_break = 0 }
   set_variable = { global.eon_energy_delivery_round = 0 }
   set_variable = { global.eon_energy_delivery_delta = 1000000 }
   while_loop_effect = {
@@ -319,10 +323,22 @@ eon_energy_delivery_reconcile_world = {
     check_variable = { global.eon_energy_delivery_round < 64 }
     check_variable = { global.eon_energy_delivery_delta > 0.001 }
    }
-   every_country = { limit = { has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_prepare_round = yes }
-   every_country = { limit = { has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_dispatch_round = yes }
+   for_each_scope_loop = {
+    array = global.eon_energy_delivery_participants
+    break = eon_energy_delivery_participant_loop_break
+    if = { limit = { exists = yes has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_prepare_round = yes }
+   }
+   for_each_scope_loop = {
+    array = global.eon_energy_delivery_participants
+    break = eon_energy_delivery_participant_loop_break
+    if = { limit = { exists = yes has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_dispatch_round = yes }
+   }
    set_variable = { global.eon_energy_delivery_delta = 0 }
-   every_country = { limit = { has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_commit_round = yes }
+   for_each_scope_loop = {
+    array = global.eon_energy_delivery_participants
+    break = eon_energy_delivery_participant_loop_break
+    if = { limit = { exists = yes has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_commit_round = yes }
+   }
    add_to_variable = { global.eon_energy_delivery_round = 1 }
   }
   if = {
@@ -330,8 +346,13 @@ eon_energy_delivery_reconcile_world = {
    set_global_flag = eon_energy_delivery_conservative_incomplete
   }
   else = { clr_global_flag = eon_energy_delivery_conservative_incomplete }
-  every_country = { limit = { has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_apply_country = yes }
+  for_each_scope_loop = {
+   array = global.eon_energy_delivery_participants
+   break = eon_energy_delivery_participant_loop_break
+   if = { limit = { exists = yes has_country_flag = eon_energy_delivery_participant } eon_energy_delivery_apply_country = yes }
+  }
   eon_energy_settlement_open_world_interval = yes
+  clear_array = global.eon_energy_delivery_participants
   clr_global_flag = eon_energy_delivery_running
  }
 }

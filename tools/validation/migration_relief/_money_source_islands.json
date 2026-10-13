@@ -1,0 +1,58 @@
+{
+  "baseline_commit": "c1420b108dee2d129018951c9ba73c1f6bfc4360",
+  "source_path": "common/scripted_effects/00_money_system.txt",
+  "native98_frozen_money_sha256": "24c243eae9c63d45a6af1c0743bd411c5ea50d5c63384edc072d3e24836b6aaa",
+  "native98_seal_receipt_sha256": "bb92cf692765c71b6331919362b7fa3a721cc78a95a06819dae108f31558997a",
+  "frozen_context_normalization": "existing exact arsenal-budget byte compatibility only",
+  "islands": [
+    {
+      "label": "random_owned_state = { PREV = { set_capital",
+      "original": "\t\t\tNOT = { capital_scope = { always = yes } }\n\t\t}\n\t\trandom_owned_state = { ROOT = { set_capital = { state = PREV } } }\n\t}\n\n",
+      "current": "\t\t\tNOT = { capital_scope = { always = yes } }\n\t\t}\n\t\trandom_owned_state = { PREV = { set_capital = { state = PREV } } }\n\t}\n\n",
+      "original_sha256": "f8ab8cd689b6e21f5ea8a412e404c03fbe657dd5f15e57f832a43cbc8047ffc6",
+      "current_sha256": "5d2f40659f359abde16a65aecb9733257007fec85bf333afaf5ad70cc98a4462"
+    },
+    {
+      "label": "private transfers, not free government revenue",
+      "original": "\tadd_to_variable = { additional_income_rate = sanctions_evasion_income }\n\n\t#Migrants Agreements\n\tif = {\n\t\tlimit = {\n\t\t\thas_dynamic_modifier = { modifier = migrants_agreement_cut }\n\t\t}\n\t\tset_variable = {\n\t\t\tadding_migrants_income = {\n\t\t\t\tvalue = migrants_cut\n\t\t\t\tmultiply = -1\n\t\t\t}\n\t\t}\n\t\tadd_to_variable = { additional_income_rate = adding_migrants_income }\n\t}\n\telse = { clear_variable = adding_migrants_income }\n\n\t#Ledokols\n",
+      "current": "\tadd_to_variable = { additional_income_rate = sanctions_evasion_income }\n\n\t# Worker remittances are private transfers, not free government revenue.\n\t# Resident workers enter the normal population/GDP/tax calculation once.\n\tset_variable = { adding_migrants_income = 0 }\n\n\t#Ledokols\n",
+      "original_sha256": "fc8bd4c5b06291df7363aa8f49e5ccd94df2140a6f8a193f9b07e77fb322f3d6",
+      "current_sha256": "303acd75060b0c69091a9f68c4f2852d1c51a8e314db679def9ae48b29d07280"
+    },
+    {
+      "label": "eon_refugee_capacity_weekly_cost",
+      "original": "calculate_additional_expense_rate = {\n\tset_variable = { additional_expenses_rate = 0 }\n\t# Additional expenses, set expense amount as a variable (weekly gain)\n\t# Generic Propaganda Campaign Decisions\n",
+      "current": "calculate_additional_expense_rate = {\n\tset_variable = { additional_expenses_rate = 0 }\n\teon_migration_refresh_country = yes\n\tadd_to_variable = { additional_expenses_rate = eon_refugee_weekly_net_cost }\n\tadd_to_variable = { additional_expenses_rate = eon_refugee_capacity_weekly_cost }\n\t# Additional expenses, set expense amount as a variable (weekly gain)\n\t# Generic Propaganda Campaign Decisions\n",
+      "original_sha256": "3d759857d5f68e646abe6c12850d5b346382cf607034e359b2169ec04153c1f9",
+      "current_sha256": "5008728e2cba647fe10bac982ffb98e2d4582fb36f96415b4618027695e667c4"
+    },
+    {
+      "label": "Physical migrants are already",
+      "original": "\tmultiply_temp_variable = { workforce_total_min = 0.25 }\n\tclamp_temp_variable = { var = workforce_total min = workforce_total_min }\n\t#Counting Migrant Workers\n\tset_variable = { migrant_workforce_add = 0 }\n\tif = {\n\t\tlimit = { check_variable = { net_immigration_rate > 0 } }\n\t\tset_variable = { migrant_workforce_add = net_immigration_rate }\n\t\tmultiply_variable = { migrant_workforce_add = modifier@monthly_population }\n\t\tmultiply_variable = { migrant_workforce_add = population_total_m }\n\t\tset_temp_variable = { migrant_workforce_add_multiplyer = 1 }\n\t\tadd_to_temp_variable = { migrant_workforce_add_multiplyer = modifier@migrant_workforce_modifier }\n\t\tclamp_temp_variable = {\n\t\t\tvar = migrant_workforce_add_multiplyer\n\t\t\tmin = 0\n\t\t}\n\t\tmultiply_variable = { migrant_workforce_add = migrant_workforce_add_multiplyer }\n\t}\n\n\t#Counting base unemplemployment\n",
+      "current": "\tmultiply_temp_variable = { workforce_total_min = 0.25 }\n\tclamp_temp_variable = { var = workforce_total min = workforce_total_min }\n\t# Physical migrants are already in population_total_m; do not add them twice.\n\tset_variable = { migrant_workforce_add = 0 }\n\tsubtract_from_temp_variable = { workforce_total = eon_refugee_workforce_delay_m }\n\tclamp_temp_variable = { var = workforce_total min = 0 }\n\n\t#Counting base unemplemployment\n",
+      "original_sha256": "bcd9e2ee1f40d4b80eb5dbf0ee44b3ce6e99fb905173c96cf32f5beafc4009c6",
+      "current_sha256": "56b99229539bef88079119f5e19c1dfcdc70df340a9ccb3142090b611f8b5344"
+    },
+    {
+      "label": "set_temp_variable = { immigration_employment_factor = 0 }",
+      "original": "\n\t# Calculate Unemployment/Worker fulfillment\n\tif = { limit = { check_variable = { average_worker_fulfillment < 1 } }\n\t\tset_temp_variable = { immigration_employment_factor = 1 }\n",
+      "current": "\n\t# Calculate Unemployment/Worker fulfillment\n\tset_temp_variable = { immigration_employment_factor = 0 }\n\tif = { limit = { check_variable = { average_worker_fulfillment < 1 } }\n\t\tset_temp_variable = { immigration_employment_factor = 1 }\n",
+      "original_sha256": "353701adc6bc943848b53da7ce76a398ee3ebe5f186cb6978779fc681e0d352a",
+      "current_sha256": "1afc8b7ddfbe75641841f520f94d02c7c040cf049c18a23d90f129481e1ec57a"
+    },
+    {
+      "label": "Matched state-to-state flows",
+      "original": "\tadd_to_variable = { max_net_immigration_rate = modifier@maximum_migration_rate_value }\n\n\t# War Refugees Section (optimized to avoid nested neighbor checks)\n\thidden_effect = {\n\t\tset_temp_variable = { neighbouring_war_refugees = 0 }\n\t\tevery_neighbor_country = {\n\t\t\tlimit = { has_war = yes }\n\t\t\tadd_to_temp_variable = { PREV.neighbouring_war_refugees = THIS.population_total_m }\n\t\t\tmultiply_temp_variable = { PREV.neighbouring_war_refugees = @refugee_percentage_adjuster }\n\t\t}\n\t}\n\tset_variable = { neighbour_war_refugees_display = neighbouring_war_refugees }\n\tadd_to_variable = { max_net_immigration_rate = neighbouring_war_refugees }\n\n\t# Check if you are at war and if you have refugees\n\tset_temp_variable = { our_war_refugees = 0 }\n\tif = { limit = { has_war = yes }\n\t\t# Calculate Total Potential Refugees\n\t\tadd_to_temp_variable = { our_war_refugees = population_total_m }\n\t\tmultiply_temp_variable = { our_war_refugees = @refugee_percentage_adjuster }\n\t\tmultiply_temp_variable = { our_war_refugees = 0.20 } # Control factor to make it so the number doesn't get very big\n\n\t\t# Reduce War Refugees Based on War Suppport\n\t\tset_temp_variable = { total_war_support = 0.50 }\n\t\tadd_to_temp_variable = { total_war_support = modifier@war_support_factor }\n\t\tclamp_temp_variable = { var = total_war_support min = 0 max = 1 }\n\n\t\tset_temp_variable = { war_support_modifier = -1 }\n\t\tadd_to_temp_variable = { war_support_modifier = total_war_support }\n\t\tmultiply_temp_variable = { our_war_refugees = total_war_support }\n\n\t\tset_variable = { personal_war_refugees_display = our_war_refugees }\n\t\tmultiply_variable = { personal_war_refugees_display = -1 }\n\t}\n\tsubtract_from_variable = { max_net_immigration_rate = our_war_refugees }\n\n\t# Calculate Migration Rate\n",
+      "current": "\tadd_to_variable = { max_net_immigration_rate = modifier@maximum_migration_rate_value }\n\n\t# Matched state-to-state flows own refugee population; no unpaired growth.\n\tset_variable = { neighbour_war_refugees_display = eon_refugee_month_arrived }\n\tset_variable = { personal_war_refugees_display = eon_refugee_month_unplaced }\n\n\t# Calculate Migration Rate\n",
+      "original_sha256": "106aeb42d158a64acf51829cdef6efcc746082cf4cdafee1b497fd6288f3242e",
+      "current_sha256": "65301b63651ed4a16600af20779c94272d4debeaeb50943bbff69bb9ca784106"
+    },
+    {
+      "label": "eon_migration_display_rates = yes",
+      "original": "\tmultiply_variable = { net_immigration_rate = migration_rate_value }\n\tclamp_variable = { var = net_immigration_rate min = -0.9999 max = max_net_immigration_rate }\n}\n\n",
+      "current": "\tmultiply_variable = { net_immigration_rate = migration_rate_value }\n\tclamp_variable = { var = net_immigration_rate min = -0.9999 max = max_net_immigration_rate }\n\teon_migration_display_rates = yes\n}\n\n",
+      "original_sha256": "34f2fc38af59174794015fbe44808fe5fd47e34616d379cfcf9dae5e03ba7cd3",
+      "current_sha256": "b9b2c26dd79f3b9df3b8b836e27b9f39fef7b26dc0f3f30eb19382d52b9a6ccf"
+    }
+  ]
+}

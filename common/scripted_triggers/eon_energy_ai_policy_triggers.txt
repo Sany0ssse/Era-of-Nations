@@ -1,0 +1,23 @@
+# AI callers set both temporary inputs immediately before this trigger.
+# Project a demand increase against today's measured domestic demand, leaving
+# actual exports unchanged. Difficulty and other modifiers alter the current
+# coefficient, so fixed fulfillment thresholds alone cannot prevent cycling.
+eon_energy_ai_can_raise_demand = {
+	set_temp_variable = { eon_energy_ai_current_use_multiplier = 1 }
+	add_to_temp_variable = { eon_energy_ai_current_use_multiplier = modifier@energy_use_multiplier }
+	add_to_temp_variable = { eon_energy_ai_current_use_multiplier = global.ai_energy_use_modifier }
+	check_variable = { eon_energy_ai_current_use_multiplier > 0.001 }
+	clamp_temp_variable = { var = eon_energy_ai_current_use_multiplier min = 0.001 }
+	set_temp_variable = { eon_energy_ai_target_use_multiplier = eon_energy_ai_current_use_multiplier }
+	add_to_temp_variable = { eon_energy_ai_target_use_multiplier = eon_energy_ai_demand_increase }
+	set_temp_variable = { eon_energy_ai_target_demand = eon_energy_delivery_demand }
+	divide_temp_variable = { eon_energy_ai_target_demand = eon_energy_ai_current_use_multiplier }
+	multiply_temp_variable = { eon_energy_ai_target_demand = eon_energy_ai_target_use_multiplier }
+	set_temp_variable = { eon_energy_ai_actual_exports = energy_consumption }
+	subtract_from_temp_variable = { eon_energy_ai_actual_exports = eon_energy_delivery_demand }
+	add_to_temp_variable = { eon_energy_ai_target_demand = eon_energy_ai_actual_exports }
+	clamp_temp_variable = { var = eon_energy_ai_target_demand min = 0.001 }
+	set_temp_variable = { eon_energy_ai_target_fulfillment = energy_sum }
+	divide_temp_variable = { eon_energy_ai_target_fulfillment = eon_energy_ai_target_demand }
+	check_variable = { eon_energy_ai_target_fulfillment > eon_energy_ai_min_fulfillment }
+}

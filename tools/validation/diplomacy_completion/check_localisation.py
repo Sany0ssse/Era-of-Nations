@@ -26,6 +26,55 @@ EXPLICIT = {'title', 'desc', 'text', 'tooltip', 'custom_effect_tooltip',
             'accept_title', 'accept_description', 'reject_title',
             'reject_description', 'cost_string'}
 
+# These retained internal IDs are deliberately empty, never player-facing.
+# The separate private_debug_panel validator also checks the alpha-zero asset,
+# current GUI bindings and effects. This checker independently pins that same
+# reviewed transparent texture before granting any narrow text exception.
+PRIVATE_BLANK_KEYS = frozenset(('EON_CHEAT_HOTKEY_ON', 'EON_CHEAT_HOTKEY_OFF', 'EON_CHEAT_HOTKEY_TT'))
+PRIVATE_LISTENER = 'interface/eon_cheat_hotkey.gui'
+PRIVATE_SPRITES = 'interface/MD_protest_decision.gfx'
+PRIVATE_TEXTURE = 'gfx/interface/scripted_gui/expected_spending/empty.dds'
+PRIVATE_TEXTURE_SHA256 = '474073fbf54a233c851906639d5c05c30e13e562b798ef1ed8af68869b10f474'
+
+
+def private_listener_is_hidden(root, sources, errors):
+    if not (root / PRIVATE_LISTENER).is_file():
+        return False
+
+    def one(nodes, key):
+        values = [value for name, op, value in nodes if name == key and op == '=']
+        if len(values) != 1:
+            raise ValueError('expected exactly one ' + key)
+        return values[0]
+
+    try:
+        raw = {relative: (root / relative).read_bytes()
+               for relative in (PRIVATE_LISTENER, PRIVATE_SPRITES, PRIVATE_TEXTURE)}
+        sources.update({relative: hashlib.sha256(data).hexdigest() for relative, data in raw.items()})
+        window = one(one(ast(raw[PRIVATE_LISTENER]), 'guiTypes'), 'containerWindowType')
+        button = one(window, 'buttonType')
+        assert one(window, 'name') == 'eon_cheat_hotkey_window'
+        assert {name for name, op, value in window} == {'name', 'position', 'orientation', 'size', 'buttonType'}
+        assert one(button, 'name') == 'eon_cheat_toggle_button'
+        assert one(button, 'buttonText') == ''
+        assert one(button, 'pdx_tooltip') == 'EON_CHEAT_HOTKEY_TT'
+        assert one(button, 'quadTextureSprite') == 'GFX_expected_spending_empty'
+        sprites = [body for key, op, body in one(ast(raw[PRIVATE_SPRITES]), 'spriteTypes')
+                   if key.lower() == 'spritetype' and isinstance(body, list)
+                   and one(body, 'name') == 'GFX_expected_spending_empty']
+        assert len(sprites) == 1 and one(sprites[0], 'texturefile') == PRIVATE_TEXTURE
+        assert sources[PRIVATE_TEXTURE] == PRIVATE_TEXTURE_SHA256
+        return True
+    except (OSError, ValueError, AssertionError) as error:
+        errors.append('Private blank labels require the reviewed hidden listener: ' + str(error))
+        return False
+
+
+def intentional_private_blank(language, key, value, provider, hidden_listener):
+    return (hidden_listener and key in PRIVATE_BLANK_KEYS and value == ''
+            and provider == f'localisation/{language}/eon_cheat_hotkey_l_{language}.yml')
+
+
 # Only these reviewed old IDs may have an upstream row plus a replace row.
 # File membership, key sets, and the exact two-provider pair are all required.
 BAILOUT_OVERRIDE_KEYS = {
@@ -52,19 +101,56 @@ URANIUM_OVERRIDE_KEYS = {
     'change_reactor_grade_material_effect_tt',
 }
 
+MIGRATION_TREATY_OVERRIDE_KEYS = {
+    'propose_migrants_agreement', 'migrants_agreement_add', 'migrants_agreement_cut',
+    'cancel_migrants_agreement',
+} | {
+    prefix + suffix
+    for prefix in ('PROPOSE_MIGRANTS_AGREEMENT_', 'CANCEL_MIGRANTS_AGREEMENT_')
+    for suffix in ('ACTION_DESC', 'DESC', 'ACTION_TITLE', 'TITLE', 'TOOLTIP')
+}
+MIGRATION_TREATY_NEW_KEYS = {
+    'eon_migration_treaty_offer_available_tt', 'eon_migration_treaty_response_valid_tt',
+}
+MIGRATION_RELIEF_OVERRIDE_KEYS = {
+    'additional_migrants_agreements_income_tt', 'MAXIMUM_MIGRATION_RATE_TT_DELAYED',
+    'NET_MIGRATION_RATE_TT_DELAYED', 'EMPLOYMENT_TOOLTIP_DELAYED',
+}
+MIGRATION_RELIEF_NEW_KEYS = {
+    'eon_migration_relief_category', 'eon_migration_relief_category_desc',
+    'eon_migration_policy_paused', 'eon_migration_policy_regulated', 'eon_migration_policy_expanded',
+    'eon_migration_admission_paused', 'eon_migration_admission_paused_desc',
+    'eon_migration_admission_regulated', 'eon_migration_admission_regulated_desc',
+    'eon_migration_admission_expanded', 'eon_migration_admission_expanded_desc',
+    'eon_migration_expand_reception_capacity', 'eon_migration_expand_reception_capacity_desc',
+    'eon_refugee_reception_modifier', 'eon_refugee_reception_modifier_tt',
+    'eon_migration_population_flow_tt',
+}
+
 
 def approved_override_files(language):
     return {
         f'localisation/{language}/replace/eon_debt_bailout_replace_l_{language}.yml': BAILOUT_OVERRIDE_KEYS,
         f'localisation/{language}/replace/eon_debt_default_l_{language}.yml': DEFAULT_OVERRIDE_KEYS,
         f'localisation/{language}/replace/eon_uranium_l_{language}.yml': URANIUM_OVERRIDE_KEYS,
+        f'localisation/{language}/replace/eon_migration_treaty_l_{language}.yml': MIGRATION_TREATY_OVERRIDE_KEYS | MIGRATION_TREATY_NEW_KEYS,
+        f'localisation/{language}/replace/eon_migration_relief_l_{language}.yml': MIGRATION_RELIEF_OVERRIDE_KEYS | MIGRATION_RELIEF_NEW_KEYS,
     }
 
 
 def approved_override_pairs(language):
     upstream = f'localisation/{language}/MD_money_l_{language}.yml'
-    return {key: (f'localisation/{language}/0_energy_l_{language}.yml' if key in URANIUM_OVERRIDE_KEYS else upstream, provider)
-            for provider, keys in approved_override_files(language).items() for key in keys}
+    pairs = {}
+    for provider, keys in approved_override_files(language).items():
+        for key in keys:
+            if key in MIGRATION_TREATY_NEW_KEYS | MIGRATION_RELIEF_NEW_KEYS:
+                continue  # New IDs still require one provider, never two.
+            original = (f'localisation/{language}/MDC_diplomatic_actions_l_{language}.yml'
+                        if key in MIGRATION_TREATY_OVERRIDE_KEYS else
+                        f'localisation/{language}/0_energy_l_{language}.yml'
+                        if key in URANIUM_OVERRIDE_KEYS else upstream)
+            pairs[key] = (original, provider)
+    return pairs
 
 
 def validate_override_files(language, file_keys, errors):
@@ -117,7 +203,7 @@ def main():
         own_keys = set()
         file_keys = {}
         approved_files = approved_override_files(language)
-        upstream_file = f'localisation/{language}/MD_money_l_{language}.yml'
+        upstream_files = {pair[0] for pair in approved_override_pairs(language).values()}
         for path in sorted((ROOT / 'localisation' / language).rglob('*.yml')):
             raw = path.read_bytes()
             text = raw.decode('utf-8-sig')
@@ -125,7 +211,7 @@ def main():
             own = path.name.startswith('eon_')
             file_keys[relative] = set()
             # Both providers are evidence even though replace is authoritative.
-            if relative == upstream_file or relative in approved_files:
+            if relative in upstream_files or relative in approved_files:
                 sources[relative] = hashlib.sha256(raw).hexdigest()
             if own:
                 eon_file_count += 1
@@ -224,6 +310,18 @@ def main():
                                 if key == 'name':
                                     require(value, relative + ': event option')
 
+    hidden_listener = private_listener_is_hidden(ROOT, sources, errors)
+    private_labels_present = ((ROOT / PRIVATE_LISTENER).is_file()
+                              or any(PRIVATE_BLANK_KEYS & set(index) for index in languages.values()))
+    if private_labels_present:
+        for key in PRIVATE_BLANK_KEYS:
+            require(key, PRIVATE_LISTENER + ': retained hidden label', any_key=True)
+        for language, index in languages.items():
+            for key in PRIVATE_BLANK_KEYS:
+                rows = index.get(key, [])
+                if rows and (len(rows) != 1 or not intentional_private_blank(language, key, *rows[0][:2], hidden_listener)):
+                    errors.append(f'{language}: intentional hidden label must be exactly empty in its sole approved provider: {key}')
+
     # Follow static aliases in every own localisation value, even if a future
     # action is not visible in the current campaign. Do not depend on EN fallback.
     alias_edges = 0
@@ -240,7 +338,8 @@ def main():
                 for value, provider, number in rows:
                     if provider not in sources:
                         sources[provider] = hashlib.sha256((ROOT / provider).read_bytes()).hexdigest()
-                    if not value.strip() or value.strip() == key:
+                    if ((not value.strip() or value.strip() == key)
+                            and not intentional_private_blank(language, key, value, provider, hidden_listener)):
                         errors.append(f'{language}: empty or raw-code value for {key}')
         own_keys = sorted(owned_keys[language] | {key for key in index if is_eon(key)})
         for key in own_keys:
@@ -266,8 +365,11 @@ def main():
             value, provider, number = selected
             if provider not in sources:
                 sources[provider] = hashlib.sha256((ROOT / provider).read_bytes()).hexdigest()
-            if (not value.strip() or value.strip() == key or RAW_KEY.fullmatch(value.strip())
-                    or value.strip() in selected_overrides[language]):
+            if (intentional_private_blank(language, key, value, provider, hidden_listener) and trail):
+                errors.append(f'{language}: hidden label cannot be an alias target in visible text: {key}')
+            if ((not value.strip() or value.strip() == key or RAW_KEY.fullmatch(value.strip())
+                    or value.strip() in selected_overrides[language])
+                    and not intentional_private_blank(language, key, value, provider, hidden_listener)):
                 errors.append(f'{language}: empty or raw-code value for {key}')
             # Count and validate substitutions through the whole alias chain.
             # This is static text expansion, not the engine's scope formatter.
@@ -295,7 +397,9 @@ def main():
                 'EON_OPEN_ECONOMIC_CONSULTATIONS_TITLE',
                 'EON_WITHDRAW_CONSULTATION_REQUEST_TITLE',
                 'EON_PROPOSE_DEFENSIVE_ALLIANCE_TITLE',
-                'PROPOSE_ENERGY_AGREEMENT_REJECT_TT') if key in index
+                'PROPOSE_ENERGY_AGREEMENT_REJECT_TT',
+                'PROPOSE_MIGRANTS_AGREEMENT_ACTION_DESC',
+                'additional_migrants_agreements_income_tt') if key in index
         }
 
     if owned_keys['english'] != owned_keys['russian']:
@@ -325,6 +429,8 @@ def main():
             language: {key: row[1] for key, row in selected.items() if row is not None}
             for language, selected in selected_overrides.items()
         },
+        'reviewed_hidden_listener': hidden_listener,
+        'intentional_blank_internal_keys': sorted(PRIVATE_BLANK_KEYS) if hidden_listener else [],
         'resolved_text_samples': resolved_samples,
         'errors': errors,
         'native_ui_rendering_proven': False,

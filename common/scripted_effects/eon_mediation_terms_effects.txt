@@ -3,6 +3,7 @@ eon_mediation_terms_clear_record = {
  clr_country_flag = eon_mediation_terms_reserved
  clr_country_flag = eon_mediation_terms_response_window
  clr_country_flag = eon_mediation_terms_cancelled
+ clr_country_flag = eon_mediation_terms_expired
  clear_variable = eon_mediation_terms_a
  clear_variable = eon_mediation_terms_b
  clear_variable = eon_mediation_terms_m
@@ -48,8 +49,32 @@ eon_mediation_terms_force_cleanup = {
  eon_mediation_terms_retire_response_edges = yes
  eon_mediation_terms_release_record = yes
 }
+# Force current unexpired terms, or an unsafe/dead terms record.
+# Healthy expired terms may coexist with a new base, even with the same triad.
+eon_mediation_terms_before_forced_base_clear = {
+ if = { limit = { has_country_flag = eon_mediation_terms_reserved OR = {
+  NOT = { eon_mediation_terms_state_consistent = yes }
+  NOT = { has_country_flag = eon_mediation_terms_expired }
+  var:eon_mediation_terms_a = { exists = no }
+  var:eon_mediation_terms_b = { exists = no }
+  var:eon_mediation_terms_m = { exists = no }
+ } }
+  eon_mediation_terms_force_cleanup = yes
+ }
+}
+eon_mediation_terms_cleanup_annexed_pair = {
+ if = { limit = { has_country_flag = eon_mediation_terms_reserved OR = { check_variable = { eon_mediation_terms_a = eon_mediation_annexed_partner } check_variable = { eon_mediation_terms_b = eon_mediation_annexed_partner } check_variable = { eon_mediation_terms_m = eon_mediation_annexed_partner } } }
+  eon_mediation_terms_force_cleanup = yes
+ }
+}
 eon_mediation_terms_before_base_clear = {
- if = { limit = { has_country_flag = eon_mediation_terms_reserved } eon_mediation_terms_force_cleanup = yes }
+ if = { limit = { has_country_flag = eon_mediation_terms_reserved }
+  if = { limit = { eon_mediation_terms_state_consistent = yes var:eon_mediation_terms_a = { exists = yes } var:eon_mediation_terms_b = { exists = yes } var:eon_mediation_terms_m = { exists = yes } }
+   # Closing a live mandate invalidates the revision; preserve its old reply.
+   eon_mediation_terms_mark_expired = yes
+  }
+  else = { eon_mediation_terms_force_cleanup = yes }
+ }
 }
 eon_mediation_terms_send_offer = {
  if = { limit = { eon_mediation_terms_send_ready = yes }
@@ -104,7 +129,8 @@ eon_mediation_terms_notice_35 = {
  var:eon_mediation_terms_m = { if = { limit = { exists = yes eon_mediation_terms_origin_linked = yes } country_event = { id = eon_mediation_terms.35 } } }
 }
 eon_mediation_terms_resolve_invalid_response = {
- if = { limit = { eon_mediation_terms_cancelled_current = yes } eon_mediation_terms_notice_33 = yes }
+ if = { limit = { eon_mediation_terms_expired_current = yes } eon_mediation_terms_notice_35 = yes }
+ else_if = { limit = { eon_mediation_terms_cancelled_current = yes } eon_mediation_terms_notice_33 = yes }
  else = { eon_mediation_terms_notice_32 = yes }
  eon_mediation_terms_release_record = yes
 }
@@ -176,9 +202,19 @@ eon_mediation_terms_cancel_offer = {
   eon_mediation_terms_notice_33 = yes
  }
 }
+# Retain literal stage/topic/duration and the original reply, without new consent.
+eon_mediation_terms_mark_expired = {
+ if = { limit = { eon_mediation_terms_state_consistent = yes NOT = { has_country_flag = eon_mediation_terms_expired } var:eon_mediation_terms_a = { exists = yes } var:eon_mediation_terms_b = { exists = yes } var:eon_mediation_terms_m = { exists = yes } }
+  set_country_flag = eon_mediation_terms_expired
+  var:eon_mediation_terms_a = { set_country_flag = eon_mediation_terms_expired }
+  var:eon_mediation_terms_b = { set_country_flag = eon_mediation_terms_expired }
+  var:eon_mediation_terms_m = { set_country_flag = eon_mediation_terms_expired }
+ }
+}
 eon_mediation_terms_daily_cleanup = {
  if = { limit = { has_country_flag = eon_mediation_terms_reserved }
   if = { limit = { NOT = { eon_mediation_terms_state_consistent = yes } } eon_mediation_terms_force_cleanup = yes }
+  else_if = { limit = { OR = { var:eon_mediation_terms_a = { exists = no } var:eon_mediation_terms_b = { exists = no } var:eon_mediation_terms_m = { exists = no } } } eon_mediation_terms_force_cleanup = yes }
   else_if = { limit = { OR = {
    NOT = { eon_mediation_terms_base_matches = yes }
    NOT = { has_country_flag = eon_mediation_terms_response_window }
@@ -186,8 +222,7 @@ eon_mediation_terms_daily_cleanup = {
    var:eon_mediation_terms_b = { NOT = { has_country_flag = eon_mediation_terms_response_window } }
    var:eon_mediation_terms_m = { NOT = { has_country_flag = eon_mediation_terms_response_window } }
   } }
-   eon_mediation_terms_notice_35 = yes
-   eon_mediation_terms_force_cleanup = yes
+   eon_mediation_terms_mark_expired = yes
   }
  }
 }

@@ -6,6 +6,7 @@ This does not test native callback delivery, rule composition, UI or a campaign.
 from collections import Counter
 from copy import deepcopy
 from itertools import product
+import hashlib
 import json
 
 from _support import ROOT, Model, ast, baseline, maybe, one, source
@@ -177,7 +178,10 @@ for sender_outlook, receiver_outlook, rank, ncns in product(OUTLOOKS, OUTLOOKS, 
 for sender_ai, recipient_ai in product((False, True), repeat=2):
     model = Model(); model.countries[1].ai = sender_ai; model.countries[2].ai = recipient_ai
     assert ready(model) == (not sender_ai)
-    passed('human_sender_ai_recipient_policy')
+    # This fixture has no bilateral trust or security need; native AI must not
+    # initiate merely because a second country exists. Eligible AI proposals
+    # and the 180-day retry guard are covered by ai_policy/test_alliance_initiative.py.
+    passed('human_sender_and_unmotivated_ai_sender_policy')
 
 # Four countries: outgoing, incoming, crossed and third-party reservations serialize.
 for owner, field, peer in product((1, 2), (PENDING_IN, PENDING_OUT), (1, 2, 3, 4)):
@@ -429,6 +433,81 @@ for ncns, candidate_invalid, leader_invalid in product((False, True),
     assert not model.trigger(one(joining, 'can_remove'))
     passed('native_join_request_and_invitation_share_current_candidate_policy')
 
+# The newer EDU discriminator uses the actual source helper, not an inferred
+# spirit or a constant-false adapter. These inputs are bounded native fixtures;
+# operational EDU leaders, EU membership and the full protocol are not simulated.
+EDU_MEMBER = 'eon_edu_is_confirmed_member'
+
+
+def edu_member_fixture(ncns=True):
+    model = Model(ncns=ncns, current=2, from_=1)
+    model.make_faction(1, None, members=(2,))
+    model.global_flags.add('EDU')
+    model.global_variables['eon_edu_instance'] = 14.5
+    for ident in (1, 2):
+        model.countries[ident].variables['eon_edu_member_instance'] = 14.5
+    return model
+
+
+def invalidate_edu_member(model, kind):
+    member, leader = model.countries[2], model.countries[1]
+    if kind == 'missing_global_flag': model.global_flags.clear()
+    elif kind == 'missing_global_instance': model.global_variables.clear()
+    elif kind == 'stale_member_instance': member.variables['eon_edu_member_instance'] = 13.5
+    elif kind == 'stale_leader_instance': leader.variables['eon_edu_member_instance'] = 13.5
+    elif kind == 'zero_member_instance': member.variables['eon_edu_member_instance'] = 0
+    elif kind == 'negative_member_instance': member.variables['eon_edu_member_instance'] = -14.5
+    elif kind == 'missing_member_instance': member.variables.clear()
+    elif kind == 'factionless': member.faction = None
+    elif kind == 'nonexistent': member.exists = False
+    elif kind == 'idea_without_confirmation':
+        model.global_flags.clear()
+        member.ideas.add('European_Security_Council')
+    else: assert kind == 'confirmed', kind
+
+
+for ncns, kind in product((False, True), (
+        'confirmed', 'missing_global_flag', 'missing_global_instance',
+        'stale_member_instance', 'stale_leader_instance', 'zero_member_instance',
+        'negative_member_instance', 'missing_member_instance', 'factionless',
+        'nonexistent', 'idea_without_confirmation')):
+    model = edu_member_fixture(ncns)
+    invalidate_edu_member(model, kind)
+    assert model.gate(EDU_MEMBER) == (kind == 'confirmed'), kind
+    assert model.trigger([(EDU_MEMBER, '=', 'no')]) == (kind != 'confirmed'), kind
+    passed('actual_edu_confirmed_member_ast_native_fixture_boundaries')
+
+model = edu_member_fixture()
+model.countries[2].variables['eon_edu_member_instance'] = 13.5
+assert not model.gate(EDU_MEMBER, current=2, from_=1)
+assert model.gate(EDU_MEMBER, current=1, from_=2)
+assert model.trigger([('FROM', '=', [(EDU_MEMBER, '=', 'yes')])], [2])
+assert not model.trigger([('THIS', '=', [(EDU_MEMBER, '=', 'yes')])], [2])
+passed('edu_helper_current_country_and_faction_leader_scope')
+
+# Removing an actual membership guard must admit its matching invalid fixture.
+# Copy the AST first: the shared read-only source parser cache stays unchanged.
+for node_key, invalid in (('exists', 'nonexistent'), ('has_global_flag', 'missing_global_flag'),
+                          ('faction_leader', 'stale_leader_instance')):
+    model = edu_member_fixture()
+    invalidate_edu_member(model, invalid)
+    assert not model.gate(EDU_MEMBER)
+    original = deepcopy(model.triggers[EDU_MEMBER])
+    model.triggers[EDU_MEMBER] = [node for node in original if node[0] != node_key]
+    assert len(model.triggers[EDU_MEMBER]) == len(original) - 1
+    assert model.gate(EDU_MEMBER), (node_key, invalid)
+    passed('edu_membership_guard_mutants_detectably_change_outcomes')
+
+model = edu_member_fixture()
+model.triggers[EDU_MEMBER] = deepcopy(model.triggers[EDU_MEMBER]) + [('unmodeled_edu_probe', '=', 'yes')]
+try:
+    model.gate(EDU_MEMBER)
+except AssertionError as error:
+    assert 'Unsupported trigger' in str(error)
+else:
+    raise AssertionError('Unknown EDU source primitive was silently accepted')
+passed('edu_helper_unknown_visited_primitive_still_fails_closed')
+
 # Actual inherited JOIN and OFFER predicates remain effective for scripted
 # formation. Supply branch-specific country/continent/party/SCO native fixtures.
 policy_cases = [
@@ -519,6 +598,9 @@ for kind in ('unsupported_trigger', 'unsupported_effect', 'dotted_prev'):
 
 print(json.dumps({'all_passed': True, 'cases_passed': sum(groups.values()), 'total_cases': sum(groups.values()),
                   'groups': groups, 'method': 'actual ordered source AST with explicit native inputs/outcomes',
+                  'edu_confirmed_member_source_sha256': hashlib.sha256((ROOT / 'common/scripted_triggers/eon_edu_triggers.txt').read_bytes()).hexdigest(),
+                  'edu_fixture_scope': 'actual confirmed-member helper only; global flags/variables and faction identity are explicit native inputs',
                   'not_proven': ['HOI4 parsing/UI/campaign', 'native rule and modifier composition',
                                  'native callback delivery/order', 'single-founder legacy callback coverage',
-                                 'selected-war identity', 'duplicate older same-pair response versus a newer same-pair offer']}, indent=2))
+                                 'selected-war identity', 'duplicate older same-pair response versus a newer same-pair offer',
+                                 'full EDU protocol, operational leadership and EU membership']}, indent=2))

@@ -1,6 +1,7 @@
 scripted_gui = {
 	MD_topbar_missiles_scripted_gui = {
 		window_name = after_logistics_button
+		parent_window_name = "after_intel_agency_button"
 		context_type = player_context
 
 		dirty = global.date
@@ -16,9 +17,36 @@ scripted_gui = {
 				missile_ui_update = yes
 			}
 		}
-		properties = {
-			missiles_button = {
-				x = global.var_missiles_button_x
+	}
+
+	# Era of Nations: this opens the member panel; it never changes membership.
+	eon_eu_topbar_entry_scripted_gui = {
+		window_name = eon_eu_topbar_entry_window
+		parent_scripted_gui = MD_topbar_missiles_scripted_gui
+		context_type = player_context
+		dirty = global.EU_dirty_update_var
+		visible = {
+			is_ai = no
+			eon_eu_is_active_member = yes
+		}
+		triggers = {
+			eon_eu_topbar_open_button_click_enabled = {
+				is_ai = no
+				eon_eu_is_active_member = yes
+			}
+		}
+		effects = {
+			eon_eu_topbar_open_button_click = {
+				if = {
+					limit = {
+						is_ai = no
+						eon_eu_is_active_member = yes
+					}
+					eu_screen_selection = yes
+					set_country_flag = new_EU_open
+					set_country_flag = show_offices_screen
+					update_eu_dirty_variable = yes
+				}
 			}
 		}
 	}

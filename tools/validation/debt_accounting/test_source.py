@@ -73,12 +73,10 @@ check(restore == before, 'All unrelated GUI bytes remain exactly unchanged')
 p.format_preserved(before, current)
 
 money = 'common/scripted_effects/00_money_system.txt'
-before, current = old(money), (ROOT/money).read_bytes()
-arsenal_spec = importlib.util.spec_from_file_location(
-    'arsenal_budget_bytes', ROOT/'tools/validation/missile_system/byte_compat.py')
-arsenal = importlib.util.module_from_spec(arsenal_spec)
-arsenal_spec.loader.exec_module(arsenal)
-current = arsenal.restore_arsenal_budget(money, current)
+before, raw_money = old(money), (ROOT/money).read_bytes()
+p.format_preserved(before, raw_money)
+from current_money_projection import project_current_money, arsenal, migration, weekly, EU_FINANCE_ISLANDS
+current = project_current_money(money, raw_money)
 def loan_block(raw):
     found = [b for b in p.blocks(raw) if b['key']=='automated_debt_taker' and b['depth']==0]
     check(len(found)==1, 'One automatic loan definition')
@@ -100,15 +98,77 @@ for path in ('common/scripted_effects/eon_debt_accounting_effects.txt',
 from byte_compat import restore_debt_accounting
 for path in (gui_path, money):
     raw = (ROOT/path).read_bytes()
-    check(restore_debt_accounting(path, raw) == old(path), 'Exact accepted inverse '+path)
+    projected = project_current_money(path, raw)
+    check(restore_debt_accounting(path, projected) == old(path), 'Exact accepted inverse '+path)
     mutant = raw.replace(b'eon_debt_repay_manual = yes', b'eon_debt_repay_manual = no', 1) if path == gui_path else raw.replace(b'eon_debt_borrow_capacity_available = yes', b'eon_debt_borrow_capacity_available = no', 1)
     check(mutant != raw, 'Meaningful owned-body mutant '+path)
     try:
-        restore_debt_accounting(path, mutant)
+        restore_debt_accounting(path, project_current_money(path, mutant))
     except AssertionError:
         pass
     else:
         raise AssertionError('Historical inverse accepted an altered debt callback')
 
+# Current-source islands must be exact and unique. Foreign bytes must remain
+# visible to the full historical comparison, including beside accepted islands.
+projection_negatives = 0
+def detects_money_mutation(mutant, why):
+    global projection_negatives
+    check(mutant != raw_money, 'Meaningful projection mutant '+why)
+    try:
+        restored = restore_debt_accounting(money, project_current_money(money, mutant))
+    except AssertionError:
+        detected = True
+    else:
+        detected = restored != before
+    check(detected, 'Historical money boundary detects '+why)
+    projection_negatives += 1
+
+arsenal_hook = arsenal.INSERTIONS[money]
+expense_start = b'\tset_variable = { additional_expenses_rate = 0 }\n'
+catalog = []
+for island in migration.CATALOG['islands']:
+    after, original = (island[key].encode('utf-8') for key in ('current', 'original'))
+    # The expense snippet overlaps the separately accepted arsenal insertion.
+    # Keep that hook valid while testing a missing/duplicated migration island.
+    if raw_money.count(after) == 0:
+        check(after.count(expense_start) == original.count(expense_start) == 1,
+              'Only the reviewed expense island overlaps the arsenal hook')
+        raw_after = after.replace(expense_start, expense_start+arsenal_hook, 1)
+        raw_original = original.replace(expense_start, expense_start+arsenal_hook, 1)
+    else:
+        raw_after, raw_original = after, original
+    check(raw_money.count(raw_after) == 1, 'One raw migration island '+island['label'])
+    catalog.append((island['label'], raw_after, raw_original, after))
+for index, (after, original, _, _) in enumerate(EU_FINANCE_ISLANDS):
+    catalog.append(('EU finance gate '+str(index), after, original, after))
+catalog.append(('weekly EU calculation', weekly.CURRENT.encode(), weekly.ORIGINAL.encode(), weekly.CURRENT.encode()))
+for label, after, original, duplicate in catalog:
+    check(raw_money.count(after) == 1, 'One exact current raw island '+label)
+    detects_money_mutation(raw_money.replace(after, after.replace(b'=', b'!=', 1), 1), 'changed '+label)
+    detects_money_mutation(raw_money.replace(after, original, 1), 'missing '+label)
+    detects_money_mutation(raw_money.replace(after, after+duplicate, 1), 'duplicate '+label)
+    detects_money_mutation(raw_money.replace(after, after+b'# unreviewed adjacent byte\n', 1), 'foreign beside '+label)
+for label, after in (('arsenal hook', arsenal_hook), ('market reset', arsenal.MARKET_RESET)):
+    detects_money_mutation(raw_money.replace(after, b'', 1), 'missing '+label)
+    detects_money_mutation(raw_money.replace(after, after+after, 1), 'duplicate '+label)
+detects_money_mutation(raw_money.replace(b'divide_variable = { EU_subsidies = 52 }',
+                                        b'divide_variable = { EU_subsidies = 51 }', 1), 'weekly EU denominator')
+detects_money_mutation(raw_money.replace(b'eon_nuclear_arsenal_refresh = yes',
+                                        b'eon_nuclear_arsenal_refresh = no', 1), 'arsenal hook body')
+detects_money_mutation(raw_money.replace(b'market_purchase_factories_cost = 0',
+                                        b'market_purchase_factories_cost = 1', 1), 'market reset body')
+detects_money_mutation(raw_money.replace(b'eon_debt_borrow_capacity_available = yes',
+                                        b'eon_debt_borrow_capacity_available = no', 1), 'accepted debt body')
+detects_money_mutation(b'# unreviewed prefix\n'+raw_money, 'foreign prefix')
+detects_money_mutation(raw_money+b'# unreviewed suffix\n', 'foreign suffix')
+try:
+    project_current_money(money, before)
+except AssertionError:
+    pass
+else:
+    raise AssertionError('Current-source projection accepted historical input')
+
 print(json.dumps({'source_checks': checks, 'all_passed': True,
+                  'later_money_negative_controls': projection_negatives,
                   'unrelated_bytes_preserved': True, 'native_compilation_verified': False}, indent=2))

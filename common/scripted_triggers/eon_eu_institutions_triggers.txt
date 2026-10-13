@@ -1,0 +1,116 @@
+# Countries are origin-of-nominee proxies, not governments directing independent EU bodies.
+eon_eu_office_available = {
+ OR = {
+  AND = { check_variable = { eon_eu_office_requested_id = 1 } }
+  AND = { check_variable = { eon_eu_office_requested_id = 2 } }
+  AND = { check_variable = { eon_eu_office_requested_id = 3 } }
+  AND = { check_variable = { eon_eu_office_requested_id = 4 } has_global_flag = treaty_of_lisbon }
+  AND = { check_variable = { eon_eu_office_requested_id = 5 } }
+  AND = { check_variable = { eon_eu_office_requested_id = 6 } has_global_flag = frontex_ExDir }
+  AND = { check_variable = { eon_eu_office_requested_id = 7 } has_global_flag = EU_finance_minister }
+  AND = { check_variable = { eon_eu_office_requested_id = 8 } has_global_flag = euro_army }
+  AND = { check_variable = { eon_eu_office_requested_id = 9 } has_global_flag = euro_navy }
+  AND = { check_variable = { eon_eu_office_requested_id = 10 } has_global_flag = EU_UNSC }
+ }
+}
+eon_eu_office_nominee_eligible = {
+ eon_eu_is_active_member = yes
+ eon_eu_office_available = yes
+ NOT = { has_country_flag = eon_eu_office_nomination_cooldown }
+ # Council-government voting suspension does not disqualify an independent EP nominee by origin.
+ OR = { check_variable = { eon_eu_office_requested_id = 2 } NOT = { has_idea = EUU_voting_rights_suspended } }
+ OR = {
+  NOT = { check_variable = { eon_eu_office_requested_id = 3 } }
+  AND = {
+   has_idea = the_euro
+   OR = { check_variable = { eon_eu_ecb_appointed_generation < 1 } NOT = { check_variable = { var = eon_eu_ecb_appointed_generation value = eon_eu_office_nominee_generation compare = equals } } }
+  }
+ }
+ OR = {
+  NOT = { check_variable = { eon_eu_office_requested_id = 4 } }
+  NOT = { check_variable = { var = eon_eu_council_served_generation value = eon_eu_office_nominee_generation compare = equals } }
+  check_variable = { eon_eu_council_nominee_terms < 2 }
+ }
+ OR = {
+  NOT = { check_variable = { eon_eu_office_requested_id = 6 } }
+  NOT = { check_variable = { var = eon_eu_frontex_served_generation value = eon_eu_office_nominee_generation compare = equals } }
+  check_variable = { eon_eu_frontex_nominee_terms < 2 }
+ }
+ OR = {
+  NOT = { check_variable = { eon_eu_office_requested_id = 9 } }
+  any_owned_state = { is_coastal = yes }
+ }
+}
+eon_eu_office_vacant = {
+ OR = {
+  AND = { check_variable = { eon_eu_office_requested_id = 1 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = EU_commission_president } } }
+  AND = { check_variable = { eon_eu_office_requested_id = 2 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = EU_parliament_president } } }
+  AND = { check_variable = { eon_eu_office_requested_id = 3 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = ECB_president } } }
+  AND = { check_variable = { eon_eu_office_requested_id = 4 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = EU_council_president } } }
+  AND = { check_variable = { eon_eu_office_requested_id = 5 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = EU_foreign_minister } } }
+  AND = { check_variable = { eon_eu_office_requested_id = 6 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = frontex_ExDir } } }
+  AND = { check_variable = { eon_eu_office_requested_id = 7 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = EU_finance_minister } } }
+  AND = { check_variable = { eon_eu_office_requested_id = 8 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = EUU_euroarmy_sc } } }
+  AND = { check_variable = { eon_eu_office_requested_id = 9 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = EUU_euronavy_sc } } }
+  AND = { check_variable = { eon_eu_office_requested_id = 10 } NOT = { any_of_scopes = { array = global.EU_member eon_eu_is_active_member = yes has_idea = EUU_ambassador_unsc } } }
+ }
+}
+eon_eu_office_nomination_ready = {
+ custom_trigger_tooltip = { tooltip = eon_eu_office_nominee_eligible_tt eon_eu_office_nominee_eligible = yes }
+ custom_trigger_tooltip = { tooltip = eon_eu_office_vacant_tt eon_eu_office_vacant = yes }
+ custom_trigger_tooltip = { tooltip = eon_eu_office_no_parallel_ballot_tt check_variable = { global.eon_eu_office_id = 0 } }
+}
+eon_eu_can_cast_office_ballot = {
+ custom_trigger_tooltip = {
+ tooltip = eon_eu_office_current_ballot_tt
+ eon_eu_is_active_member = yes
+ check_variable = { global.eon_eu_office_id > 0 }
+ has_global_flag = eon_eu_office_ballot_deadline
+ # Suspended Council voting rights do not silence the citizens' Parliament seats.
+ OR = {
+  check_variable = { global.eon_eu_office_id = 2 }
+  AND = { check_variable = { global.eon_eu_office_id = 1 } check_variable = { global.eon_eu_office_phase = 2 } }
+  NOT = { has_idea = EUU_voting_rights_suspended }
+ }
+ OR = { NOT = { check_variable = { global.eon_eu_office_id = 3 } } has_idea = the_euro }
+ }
+}
+eon_eu_office_enhanced_qmv_passed = {
+ check_variable = { global.eon_eu_office_voters > 0 }
+ check_variable = { var = global.eon_eu_office_yes value = eon_eu_office_state_threshold compare = greater_than_or_equals }
+ check_variable = { var = global.eon_eu_office_yes_population_k value = eon_eu_office_population_threshold compare = greater_than_or_equals }
+}
+eon_eu_office_ep_majority_passed = {
+ OR = {
+  AND = {
+   check_variable = { global.eon_eu_office_id = 2 }
+   check_variable = { global.eon_eu_office_ep_yes > 0 }
+   check_variable = { var = global.eon_eu_office_ep_yes value = global.eon_eu_office_ep_no compare = greater_than }
+  }
+  AND = {
+   check_variable = { global.eon_eu_office_id = 1 }
+   check_variable = { global.eon_eu_office_ep_total > 0 }
+   check_variable = { var = global.eon_eu_office_ep_yes value = eon_eu_office_ep_threshold compare = greater_than }
+  }
+ }
+}
+eon_eu_office_board_passed = {
+ check_variable = { global.eon_eu_office_voters > 0 }
+ check_variable = { var = eon_eu_office_board_yes_times_three value = eon_eu_office_board_total_times_two compare = greater_than_or_equals }
+}
+eon_eu_can_refresh_nominee_cohort = {
+ custom_trigger_tooltip = {
+ tooltip = eon_eu_office_refresh_cohort_tt
+ eon_eu_is_active_member = yes
+ NOT = { has_country_flag = eon_eu_national_nominees_recently_refreshed }
+ NOT = { has_idea = ECB_president }
+ NOT = { has_idea = EU_council_president }
+ NOT = { has_idea = frontex_ExDir }
+ NOT = { AND = { check_variable = { global.eon_eu_office_nominee = THIS } check_variable = { global.eon_eu_office_id > 0 } } }
+ OR = {
+  AND = { check_variable = { eon_eu_ecb_appointed_generation > 0 } check_variable = { var = eon_eu_ecb_appointed_generation value = eon_eu_office_nominee_generation compare = equals } }
+  check_variable = { var = eon_eu_council_nominee_terms value = 2 compare = greater_than_or_equals }
+  check_variable = { var = eon_eu_frontex_nominee_terms value = 2 compare = greater_than_or_equals }
+ }
+ }
+}

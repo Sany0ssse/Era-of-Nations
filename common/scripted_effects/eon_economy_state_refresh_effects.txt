@@ -1,0 +1,179 @@
+# Fused adjacent damage/state aggregation only.
+# Original public entrypoints remain byte-unchanged. Every refresh stays fresh.
+# Exact source-island AST/commutation is guarded by performance_refresh tests.
+
+eon_economy_refresh_state_and_damage = {
+	hidden_effect = {
+		
+
+ set_variable = { num_of_damaged_civs = 0 } #variables to count number of damaged buildings
+ set_variable = { num_of_damaged_mils = 0 }
+ set_variable = { num_of_damaged_dockyards = 0 }
+ set_variable = { num_of_damaged_offices = 0 }
+ set_variable = { num_of_damaged_rub_ref = 0 }
+ set_variable = { num_of_damaged_agriculture_district = 0 }
+ set_variable = { num_of_damaged_nuclear_reactor = 0 }
+ set_variable = { num_of_damaged_synthetic_refinery = 0 }
+ set_variable = { num_of_damaged_fossil_powerplant = 0 }
+
+
+	}
+	
+	# Global State Variables
+	set_variable = { var = population_total value = 0 }
+	set_variable = { var = office_park_total value = 0 }
+	set_variable = { var = rubber_refinery_total value = 0 }
+	set_variable = { var = agriculture_district_total value = 0 }
+	set_variable = { var = industrial_complex_total value = 0 }
+	set_variable = { var = biofuel_refineries value = 0 }
+	set_variable = { var = nuclear_reactors value = 0 }
+	set_variable = { var = rocket_sites value = 0 }
+	set_variable = { var = military_fac value = 0 }
+	set_variable = { var = dockyard_fac value = 0 }
+	set_variable = { var = fuel_silos value = 0 }
+	set_variable = { var = state_renewable_energy_var value = 0 }
+	set_variable = { var = minimum_renewable_energy_var value = 0 }
+	set_variable = { var = maximum_renewable_energy_var value = 1 }
+	set_variable = { var = hydroelectric_energy_generation value = 0 }
+	set_variable = { var = geothermal_energy_generation value = 0 }
+	set_variable = { var = number_of_fossil_pps value = 0 }
+	set_variable = { var = max_stored_energy value = 0 }
+	set_variable = { var = number_of_battery_parks value = 0 }
+	set_variable = { var = total_resource_amount value = 0 }
+	set_variable = { var = overall_productivity value = 0 }
+	set_variable = { var = nuclear_facility_total value = 0 }
+	set_variable = { var = air_facility_total value = 0 }
+	set_variable = { var = land_facility_total value = 0 }
+	set_variable = { var = naval_facility_total value = 0 }
+
+	# Missile Launch Site
+	set_variable = { num_missile_silo = 0 }
+	# SHORAD Site
+	set_variable = { num_anti_air_building = 0 }
+	# Radar Stations
+	set_variable = { num_radar_stations = 0 }
+	# Airbase
+	set_variable = { num_air_bases = 0 }
+
+	# Calculate Consumer Goods Factor
+	set_temp_variable = { actual_consumer_goods_percent = modifier@consumer_goods_expected_value }
+	set_temp_variable = { consumer_goods_factor_full = 1 }
+	add_to_temp_variable = { consumer_goods_factor_full = modifier@consumer_goods_factor }
+	multiply_temp_variable = { actual_consumer_goods_percent = consumer_goods_factor_full }
+	set_variable = { var = actual_consumer_goods_percent_display value = actual_consumer_goods_percent }
+
+
+	hidden_effect = {
+		productivity_growth_country_display_effect = yes
+		every_controlled_state = {
+			                 #counting number of damaged buildings for states and summing states numbers for country
+   add_to_variable = { PREV.num_of_damaged_civs = damaged_building_level@industrial_complex }
+   add_to_variable = { PREV.num_of_damaged_mils = damaged_building_level@arms_factory }
+   add_to_variable = { PREV.num_of_damaged_dockyards = damaged_building_level@dockyard }
+   add_to_variable = { PREV.num_of_damaged_offices = damaged_building_level@offices }
+   add_to_variable = { PREV.num_of_damaged_rub_ref = damaged_building_level@rubber_refinery }
+   add_to_variable = { PREV.num_of_damaged_agriculture_district = damaged_building_level@agriculture_district }
+   add_to_variable = { PREV.num_of_damaged_nuclear_reactor = damaged_building_level@nuclear_reactor }
+   add_to_variable = { PREV.num_of_damaged_synthetic_refinery = damaged_building_level@synthetic_refinery }
+   add_to_variable = { PREV.num_of_synthetic_refinery = building_level@synthetic_refinery }
+   add_to_variable = { PREV.num_of_damaged_fossil_powerplant = damaged_building_level@fossil_powerplant }
+                          
+			
+			add_to_variable = { PREV.num_missile_silo = building_level@rocket_site }
+			add_to_variable = { PREV.num_anti_air_building = building_level@anti_air_building }
+			add_to_variable = { PREV.num_radar_stations = building_level@radar_station }
+			add_to_variable = { PREV.num_air_bases = building_level@air_base }
+			add_to_variable = { PREV.total_number_of_controlled_states = 1 }
+			add_to_variable = { PREV.rocket_sites = building_level@rocket_site }
+			add_to_variable = { PREV.anti_air_building = buildling_level@anti_air_building }
+			add_to_variable = { PREV.agriculture_district_total = building_level@agriculture_district }
+			add_to_variable = { PREV.office_park_total = building_level@offices }
+			add_to_variable = { PREV.rubber_refinery_total = building_level@rubber_refinery }
+			add_to_variable = { PREV.industrial_complex_total = building_level@industrial_complex }
+			add_to_variable = { PREV.military_fac = building_level@arms_factory }
+			add_to_variable = { PREV.dockyard_fac = building_level@dockyard }
+			add_to_variable = { PREV.biofuel_refineries = building_level@synthetic_refinery }
+			add_to_variable = { PREV.nuclear_reactors = building_level@nuclear_reactor }
+			add_to_variable = { PREV.hydroelectric_energy_generation = hydroelectric_energy_production_var }
+			add_to_variable = { PREV.geothermal_energy_generation = geothermal_energy_production_var }
+			add_to_variable = { PREV.max_stored_energy = hydroelectric_energy_storage_var }
+			add_to_variable = { PREV.number_of_battery_parks = number_of_battery_parks_state_var }
+			add_to_variable = { PREV.number_of_fossil_pps = building_level@fossil_powerplant }
+			add_to_variable = { PREV.fuel_silos = building_level@fuel_silo }
+			add_to_variable = { PREV.nuclear_facility_total = building_level@nuclear_facility }
+			add_to_variable = { PREV.air_facility_total = building_level@air_facility }
+			add_to_variable = { PREV.land_facility_total = building_level@land_facility }
+			add_to_variable = { PREV.naval_facility_total = building_level@naval_facility }
+
+			# Calculate Renewble Infrastructure Information
+			if = { limit = { check_variable = { building_level@synthetic_refinery > 0 } }
+				set_temp_variable = { state_renewable_generation = building_level@synthetic_refinery }
+				multiply_temp_variable = { state_renewable_generation = 0.5 } #base power of a renewable building
+				set_temp_variable = { min_state_renewable_generation = state_renewable_generation }
+				set_temp_variable = { max_state_renewable_generation = state_renewable_generation }
+
+				multiply_temp_variable = { state_renewable_generation = renewable_energy_random_var } #set in on_weekly
+				multiply_temp_variable = { min_state_renewable_generation = min_renewable_energy_var }
+				multiply_temp_variable = { max_state_renewable_generation = max_renewable_energy_var }
+
+				# Renewable Energy Modifier
+				set_temp_variable = { state_renewable_generation_modifier = 1 }
+				add_to_temp_variable = { state_renewable_generation_modifier = THIS.modifier@state_renewable_energy_generation_modifier }
+				multiply_temp_variable = { state_renewable_generation = state_renewable_generation_modifier }
+				multiply_temp_variable = { min_state_renewable_generation = state_renewable_generation_modifier }
+				multiply_temp_variable = { max_state_renewable_generation = state_renewable_generation_modifier }
+
+				add_to_variable = { var = PREV.minimum_renewable_energy_var value = min_state_renewable_generation }
+				add_to_variable = { var = PREV.maximum_renewable_energy_var value = max_state_renewable_generation }
+				add_to_variable = { var = PREV.state_renewable_energy_var value = state_renewable_generation }
+			}
+
+			set_temp_variable = { var = temp_pop value = state_population_k } #in thousands
+			multiply_temp_variable = { var = temp_pop value = 0.01 } # 100 in hundred thousands
+			add_to_variable = { PREV.population_total = temp_pop } # Population Total is in hundreds of thousands
+
+			set_temp_variable = { productivity_temp_state_var = productivity_state_var }
+			multiply_temp_variable = { productivity_temp_state_var = 0.001 }
+			multiply_temp_variable = { productivity_temp_state_var = temp_pop }
+			add_to_variable = { PREV.overall_productivity = productivity_temp_state_var }
+			productivity_growth_controlled_display_effect = yes
+		
+		}
+		
+  set_variable = { damaged_civil_fac_debuff = num_of_damaged_civs }
+  multiply_variable = { damaged_civil_fac_debuff = 0.6 }
+  set_variable = { damaged_military_fac_debuff = num_of_damaged_mils }
+  multiply_variable = { damaged_military_fac_debuff = 0.6 }
+  set_variable = { damaged_dockyard_debuff = num_of_damaged_dockyards }
+  multiply_variable = { damaged_dockyard_debuff = 0.6 }
+  set_variable = { damaged_offices_debuff = num_of_damaged_offices }
+  multiply_variable = { damaged_offices_debuff = 0.6 }
+  set_variable = { damaged_rub_ref_debuff = num_of_damaged_rub_ref }
+  multiply_variable = { damaged_rub_ref_debuff = 0.6 }
+  set_variable = { damaged_agriculture_district_debuff = num_of_damaged_agriculture_district }
+  multiply_variable = { damaged_agriculture_district_debuff = 0.6 }
+                        
+	}
+	
+
+	add_to_variable = { total_resource_amount = resource_produced@oil }
+	add_to_variable = { total_resource_amount = resource_produced@steel }
+	add_to_variable = { total_resource_amount = resource_produced@chromium }
+	add_to_variable = { total_resource_amount = resource_produced@rubber }
+	add_to_variable = { total_resource_amount = resource_produced@aluminium }
+	add_to_variable = { total_resource_amount = resource_produced@tungsten }
+
+	# Population Total
+	set_variable = { population_total_m = population_total }
+	multiply_variable = { population_total_m = 0.1 }
+	clamp_variable = { var = population_total_m min = 0.0001 }
+
+	multiply_variable = { overall_productivity = 0.1 }
+	divide_variable = { overall_productivity = population_total_m }
+	multiply_variable = { overall_productivity = 1000 }
+	clamp_variable = { var = overall_productivity min = 0.1 max = 1000000 } # TODO: This is a workaround to prevent the overflow of produtcivity to 424 million.
+
+
+
+	calculate_gdp = yes
+}

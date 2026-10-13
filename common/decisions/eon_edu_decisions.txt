@@ -1,0 +1,33 @@
+EU_voting_category = {
+	eon_edu_request_join = {
+		icon = GFX_decision_generic_diplomacy
+		target_trigger = { FROM = { eon_edu_is_operational_leader = yes } }
+		visible = { eon_eu_is_active_member = yes is_in_faction = no has_global_flag = EDU }
+		available = { eon_edu_request_available = yes }
+		complete_effect = { eon_edu_request_join_effect = yes }
+		ai_will_do = { factor = 1 modifier = { factor = 0 has_opinion = { target = FROM value < 0 } } }
+	}
+	eon_edu_accept_request = {
+		icon = GFX_decision_generic_diplomacy
+		target_trigger = { eon_edu_reply_pair_live = yes }
+		visible = { eon_edu_is_operational_leader = yes }
+		available = { eon_edu_accept_available = yes }
+		complete_effect = { eon_edu_accept_request_effect = yes }
+		ai_will_do = { factor = 1 modifier = { factor = 0 has_opinion = { target = FROM value < 0 } } }
+	}
+	eon_edu_reject_request = {
+		icon = GFX_decision_generic_diplomacy
+		target_trigger = { eon_edu_reply_pair_live = yes }
+		visible = { eon_edu_is_operational_leader = yes }
+		available = { eon_edu_reject_available = yes }
+		complete_effect = { eon_edu_reject_request_effect = yes }
+		ai_will_do = { factor = 1 modifier = { factor = 0 NOT = { has_opinion = { target = FROM value < 0 } } } }
+	}
+	eon_edu_withdraw_request = {
+		icon = GFX_decision_generic_diplomacy
+		visible = { check_variable = { eon_edu_request_instance > 0 } }
+		available = { eon_edu_withdraw_available = yes }
+		complete_effect = { eon_edu_withdraw_request_effect = yes }
+		ai_will_do = { factor = 0 }
+	}
+}

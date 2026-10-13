@@ -1,0 +1,1 @@
+Actual current source AST tests for two callback-cache files and one humanitarian score island. 4608 humanitarian model cases + 7 byte negatives; six investment island test groups. No native array, RNG, scope/lifetime, FPS or campaign claim. Source inverses are used only by explicitly named hash comparisons. No canonical file projection or read shim.

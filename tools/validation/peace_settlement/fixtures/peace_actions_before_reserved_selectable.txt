@@ -1,0 +1,785 @@
+scripted_diplomatic_actions = {
+	eon_offer_peace_statusquo = {
+		allowed = { always = yes }
+		visible = {
+			eon_peace_contact_ready = yes
+			ROOT = {
+				OR = {
+					is_ai = yes
+					AND = {
+						is_ai = no
+						check_variable = { eon_peace_draft_target = PREV }
+						check_variable = { eon_peace_draft_kind = 1 }
+					}
+				}
+			}
+		}
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_offer_ready_tt
+				eon_peace_offer_statusquo_send_ready = yes
+			}
+		}
+		can_be_sent = { eon_peace_offer_statusquo_send_ready = yes }
+		can_be_accepted = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_accept_ready_tt
+				eon_peace_offer_statusquo_response_valid = yes
+			}
+		}
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		cost = 0
+		icon = 1
+		send_description = eon_offer_peace_statusquo_send_desc
+		receive_description = eon_offer_peace_statusquo_receive_desc
+		on_sent_effect = {
+			if = {
+				limit = { eon_peace_offer_statusquo_send_ready = yes }
+				set_country_flag = { flag = eon_peace_pending_statusquo@ROOT days = 30 value = 1 }
+				set_country_flag = eon_peace_reserved_statusquo@ROOT
+				ROOT = {
+					set_country_flag = { flag = eon_peace_pending_statusquo@PREV days = 30 value = 1 }
+					set_country_flag = eon_peace_reserved_statusquo@PREV
+				}
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = { eon_peace_offer_statusquo_response_valid = yes }
+				eon_peace_execute_statusquo = yes
+			}
+			else = { eon_peace_reject_statusquo = yes }
+		}
+		reject_effect = { eon_peace_reject_statusquo = yes }
+		# AI may initiate status quo or a short armistice under pressure; other drafts remain human-only.
+		ai_desire = {
+			base = -50
+			modifier = { add = 60 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+			modifier = { add = 50 ROOT = { surrender_progress > 0.65 } eon_peace_sender_core_pressure_in_pair = yes }
+			modifier = { add = 20 ROOT = { has_war_support < 0.3 } }
+			modifier = { add = 10 ROOT = { has_stability < 0.35 } }
+			modifier = { add = 10 war_length_with = { tag = ROOT months > 11 } }
+			modifier = { factor = 0 surrender_progress > 0.8 ROOT = { surrender_progress < 0.2 } eon_peace_recipient_core_pressure_in_pair = yes }
+			modifier = { factor = 0.25 has_game_rule = { rule = peace_deal_AI option = RESTRICTED } }
+			modifier = { factor = 2 has_game_rule = { rule = peace_deal_AI option = ENCOURAGED } }
+			modifier = { factor = 0 has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+		}
+		ai_acceptance = {
+			eon_peace_ai_caution = {
+				base = -20
+				modifier = { add = -100 has_game_rule = { rule = peace_deal_AI option = RESTRICTED } }
+				modifier = { add = 30 has_game_rule = { rule = peace_deal_AI option = ENCOURAGED } }
+			}
+			eon_peace_ai_war_pressure = {
+				base = 0
+				modifier = { add = 40 surrender_progress > 0.35 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = 80 surrender_progress > 0.65 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = -20 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -40 ROOT = { surrender_progress > 0.65 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -100 surrender_progress < 0.05 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+			}
+			eon_peace_ai_war_cost = {
+				base = 0
+				modifier = { add = 10 has_stability < 0.5 }
+				modifier = { add = 15 has_war_support < 0.4 }
+				modifier = { add = 10 war_length_with = { tag = ROOT months > 5 } }
+				modifier = { add = 15 war_length_with = { tag = ROOT months > 11 } }
+			}
+			eon_peace_ai_payment = { base = 0 }
+		}
+	}
+	eon_offer_armistice_90 = {
+		allowed = { always = yes }
+		visible = {
+			eon_peace_contact_ready = yes
+			ROOT = {
+				OR = {
+					is_ai = yes
+					AND = {
+						is_ai = no
+						check_variable = { eon_peace_draft_target = PREV }
+						check_variable = { eon_peace_draft_kind = 2 }
+					}
+				}
+			}
+		}
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_offer_ready_tt
+				eon_peace_offer_armistice_90_send_ready = yes
+			}
+		}
+		can_be_sent = { eon_peace_offer_armistice_90_send_ready = yes }
+		can_be_accepted = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_accept_ready_tt
+				eon_peace_offer_armistice_90_response_valid = yes
+			}
+		}
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		cost = 0
+		icon = 1
+		send_description = eon_offer_armistice_90_send_desc
+		receive_description = eon_offer_armistice_90_receive_desc
+		on_sent_effect = {
+			if = {
+				limit = { eon_peace_offer_armistice_90_send_ready = yes }
+				set_country_flag = { flag = eon_peace_pending_armistice_90@ROOT days = 30 value = 1 }
+				set_country_flag = eon_peace_reserved_armistice_90@ROOT
+				ROOT = {
+					set_country_flag = { flag = eon_peace_pending_armistice_90@PREV days = 30 value = 1 }
+					set_country_flag = eon_peace_reserved_armistice_90@PREV
+				}
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = { eon_peace_offer_armistice_90_response_valid = yes }
+				eon_peace_execute_armistice_90 = yes
+			}
+			else = { eon_peace_reject_armistice_90 = yes }
+		}
+		reject_effect = { eon_peace_reject_armistice_90 = yes }
+		# AI may initiate status quo or a short armistice under pressure; other drafts remain human-only.
+		ai_desire = {
+			base = -50
+			modifier = { add = 60 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+			modifier = { add = 50 ROOT = { surrender_progress > 0.65 } eon_peace_sender_core_pressure_in_pair = yes }
+			modifier = { add = 20 ROOT = { has_war_support < 0.3 } }
+			modifier = { add = 10 ROOT = { has_stability < 0.35 } }
+			modifier = { add = 10 war_length_with = { tag = ROOT months > 11 } }
+			modifier = { factor = 0 surrender_progress > 0.8 ROOT = { surrender_progress < 0.2 } eon_peace_recipient_core_pressure_in_pair = yes }
+			modifier = { factor = 0.25 has_game_rule = { rule = peace_deal_AI option = RESTRICTED } }
+			modifier = { factor = 2 has_game_rule = { rule = peace_deal_AI option = ENCOURAGED } }
+			modifier = { factor = 0 has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+		}
+		ai_acceptance = {
+			eon_peace_ai_caution = {
+				base = -5
+				modifier = { add = -100 has_game_rule = { rule = peace_deal_AI option = RESTRICTED } }
+				modifier = { add = 30 has_game_rule = { rule = peace_deal_AI option = ENCOURAGED } }
+			}
+			eon_peace_ai_war_pressure = {
+				base = 0
+				modifier = { add = 40 surrender_progress > 0.35 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = 80 surrender_progress > 0.65 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = -20 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -40 ROOT = { surrender_progress > 0.65 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -100 surrender_progress < 0.05 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+			}
+			eon_peace_ai_war_cost = {
+				base = 0
+				modifier = { add = 10 has_stability < 0.5 }
+				modifier = { add = 15 has_war_support < 0.4 }
+				modifier = { add = 10 war_length_with = { tag = ROOT months > 5 } }
+				modifier = { add = 15 war_length_with = { tag = ROOT months > 11 } }
+			}
+			eon_peace_ai_payment = { base = 0 }
+		}
+	}
+	eon_offer_armistice_180 = {
+		allowed = { ROOT = { is_ai = no } }
+		visible = {
+			eon_peace_contact_ready = yes
+			ROOT = {
+				check_variable = { eon_peace_draft_target = PREV }
+				check_variable = { eon_peace_draft_kind = 3 }
+			}
+		}
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_offer_ready_tt
+				eon_peace_offer_armistice_180_send_ready = yes
+			}
+		}
+		can_be_sent = { eon_peace_offer_armistice_180_send_ready = yes }
+		can_be_accepted = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_accept_ready_tt
+				eon_peace_offer_armistice_180_response_valid = yes
+			}
+		}
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		cost = 0
+		icon = 1
+		send_description = eon_offer_armistice_180_send_desc
+		receive_description = eon_offer_armistice_180_receive_desc
+		on_sent_effect = {
+			if = {
+				limit = { eon_peace_offer_armistice_180_send_ready = yes }
+				set_country_flag = { flag = eon_peace_pending_armistice_180@ROOT days = 30 value = 1 }
+				set_country_flag = eon_peace_reserved_armistice_180@ROOT
+				ROOT = {
+					set_country_flag = { flag = eon_peace_pending_armistice_180@PREV days = 30 value = 1 }
+					set_country_flag = eon_peace_reserved_armistice_180@PREV
+				}
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = { eon_peace_offer_armistice_180_response_valid = yes }
+				eon_peace_execute_armistice_180 = yes
+			}
+			else = { eon_peace_reject_armistice_180 = yes }
+		}
+		reject_effect = { eon_peace_reject_armistice_180 = yes }
+		# AI may initiate status quo or a short armistice under pressure; other drafts remain human-only.
+		ai_desire = {
+			base = 0
+			modifier = { factor = 0 has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+		}
+		ai_acceptance = {
+			eon_peace_ai_caution = {
+				base = -5
+				modifier = { add = -100 has_game_rule = { rule = peace_deal_AI option = RESTRICTED } }
+				modifier = { add = 30 has_game_rule = { rule = peace_deal_AI option = ENCOURAGED } }
+			}
+			eon_peace_ai_war_pressure = {
+				base = 0
+				modifier = { add = 40 surrender_progress > 0.35 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = 80 surrender_progress > 0.65 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = -20 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -40 ROOT = { surrender_progress > 0.65 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -100 surrender_progress < 0.05 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+			}
+			eon_peace_ai_war_cost = {
+				base = 0
+				modifier = { add = 10 has_stability < 0.5 }
+				modifier = { add = 15 has_war_support < 0.4 }
+				modifier = { add = 10 war_length_with = { tag = ROOT months > 5 } }
+				modifier = { add = 15 war_length_with = { tag = ROOT months > 11 } }
+			}
+			eon_peace_ai_payment = { base = 0 }
+		}
+	}
+	eon_offer_peace_payment_5 = {
+		allowed = { ROOT = { is_ai = no } }
+		visible = {
+			eon_peace_contact_ready = yes
+			ROOT = {
+				check_variable = { eon_peace_draft_target = PREV }
+				check_variable = { eon_peace_draft_kind = 4 }
+			}
+		}
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_offer_ready_tt
+				eon_peace_offer_payment_5_send_ready = yes
+			}
+		}
+		can_be_sent = { eon_peace_offer_payment_5_send_ready = yes }
+		can_be_accepted = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_accept_ready_tt
+				eon_peace_offer_payment_5_response_valid = yes
+			}
+		}
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		cost = 0
+		icon = 1
+		send_description = eon_offer_peace_payment_5_send_desc
+		receive_description = eon_offer_peace_payment_5_receive_desc
+		on_sent_effect = {
+			if = {
+				limit = { eon_peace_offer_payment_5_send_ready = yes }
+				set_country_flag = { flag = eon_peace_pending_payment_5@ROOT days = 30 value = 1 }
+				set_country_flag = eon_peace_reserved_payment_5@ROOT
+				ROOT = {
+					set_country_flag = { flag = eon_peace_pending_payment_5@PREV days = 30 value = 1 }
+					set_country_flag = eon_peace_reserved_payment_5@PREV
+				}
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = { eon_peace_offer_payment_5_response_valid = yes }
+				eon_peace_execute_payment_5 = yes
+			}
+			else = { eon_peace_reject_payment_5 = yes }
+		}
+		reject_effect = { eon_peace_reject_payment_5 = yes }
+		# AI may initiate status quo or a short armistice under pressure; other drafts remain human-only.
+		ai_desire = {
+			base = 0
+			modifier = { factor = 0 has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+		}
+		ai_acceptance = {
+			eon_peace_ai_caution = {
+				base = -20
+				modifier = { add = -100 has_game_rule = { rule = peace_deal_AI option = RESTRICTED } }
+				modifier = { add = 30 has_game_rule = { rule = peace_deal_AI option = ENCOURAGED } }
+			}
+			eon_peace_ai_war_pressure = {
+				base = 0
+				modifier = { add = 40 surrender_progress > 0.35 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = 80 surrender_progress > 0.65 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = -20 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -40 ROOT = { surrender_progress > 0.65 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -100 surrender_progress < 0.05 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+			}
+			eon_peace_ai_war_cost = {
+				base = 0
+				modifier = { add = 10 has_stability < 0.5 }
+				modifier = { add = 15 has_war_support < 0.4 }
+				modifier = { add = 10 war_length_with = { tag = ROOT months > 5 } }
+				modifier = { add = 15 war_length_with = { tag = ROOT months > 11 } }
+			}
+			eon_peace_ai_payment = { base = 10 }
+		}
+	}
+	eon_offer_peace_payment_10 = {
+		allowed = { ROOT = { is_ai = no } }
+		visible = {
+			eon_peace_contact_ready = yes
+			ROOT = {
+				check_variable = { eon_peace_draft_target = PREV }
+				check_variable = { eon_peace_draft_kind = 5 }
+			}
+		}
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_offer_ready_tt
+				eon_peace_offer_payment_10_send_ready = yes
+			}
+		}
+		can_be_sent = { eon_peace_offer_payment_10_send_ready = yes }
+		can_be_accepted = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_accept_ready_tt
+				eon_peace_offer_payment_10_response_valid = yes
+			}
+		}
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		cost = 0
+		icon = 1
+		send_description = eon_offer_peace_payment_10_send_desc
+		receive_description = eon_offer_peace_payment_10_receive_desc
+		on_sent_effect = {
+			if = {
+				limit = { eon_peace_offer_payment_10_send_ready = yes }
+				set_country_flag = { flag = eon_peace_pending_payment_10@ROOT days = 30 value = 1 }
+				set_country_flag = eon_peace_reserved_payment_10@ROOT
+				ROOT = {
+					set_country_flag = { flag = eon_peace_pending_payment_10@PREV days = 30 value = 1 }
+					set_country_flag = eon_peace_reserved_payment_10@PREV
+				}
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = { eon_peace_offer_payment_10_response_valid = yes }
+				eon_peace_execute_payment_10 = yes
+			}
+			else = { eon_peace_reject_payment_10 = yes }
+		}
+		reject_effect = { eon_peace_reject_payment_10 = yes }
+		# AI may initiate status quo or a short armistice under pressure; other drafts remain human-only.
+		ai_desire = {
+			base = 0
+			modifier = { factor = 0 has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+		}
+		ai_acceptance = {
+			eon_peace_ai_caution = {
+				base = -20
+				modifier = { add = -100 has_game_rule = { rule = peace_deal_AI option = RESTRICTED } }
+				modifier = { add = 30 has_game_rule = { rule = peace_deal_AI option = ENCOURAGED } }
+			}
+			eon_peace_ai_war_pressure = {
+				base = 0
+				modifier = { add = 40 surrender_progress > 0.35 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = 80 surrender_progress > 0.65 eon_peace_recipient_core_pressure_in_pair = yes }
+				modifier = { add = -20 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -40 ROOT = { surrender_progress > 0.65 } eon_peace_sender_core_pressure_in_pair = yes }
+				modifier = { add = -100 surrender_progress < 0.05 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }
+			}
+			eon_peace_ai_war_cost = {
+				base = 0
+				modifier = { add = 10 has_stability < 0.5 }
+				modifier = { add = 15 has_war_support < 0.4 }
+				modifier = { add = 10 war_length_with = { tag = ROOT months > 5 } }
+				modifier = { add = 15 war_length_with = { tag = ROOT months > 11 } }
+			}
+			eon_peace_ai_payment = { base = 20 }
+		}
+	}
+	eon_offer_peace_conference = {
+		allowed = { ROOT = { is_ai = no } }
+		visible = {
+			eon_peace_contact_ready = yes
+			ROOT = {
+				check_variable = { eon_peace_draft_target = PREV }
+				check_variable = { eon_peace_draft_kind = 6 }
+			}
+		}
+		selectable = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_offer_ready_tt
+				eon_peace_offer_conference_send_ready = yes
+			}
+		}
+		can_be_sent = { eon_peace_offer_conference_send_ready = yes }
+		can_be_accepted = {
+			custom_trigger_tooltip = {
+				tooltip = eon_peace_accept_ready_tt
+				eon_peace_offer_conference_response_valid = yes
+			}
+		}
+		requires_acceptance = yes
+		show_acceptance_on_action_button = yes
+		cost = 0
+		icon = 1
+		send_description = eon_offer_peace_conference_send_desc
+		receive_description = eon_offer_peace_conference_receive_desc
+		on_sent_effect = {
+			if = {
+				limit = { eon_peace_offer_conference_send_ready = yes }
+				set_country_flag = { flag = eon_peace_pending_conference@ROOT days = 30 value = 1 }
+				set_country_flag = eon_peace_reserved_conference@ROOT
+				ROOT = {
+					set_country_flag = { flag = eon_peace_pending_conference@PREV days = 30 value = 1 }
+					set_country_flag = eon_peace_reserved_conference@PREV
+				}
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = { eon_peace_offer_conference_response_valid = yes }
+				eon_peace_execute_conference = yes
+			}
+			else = { eon_peace_reject_conference = yes }
+		}
+		reject_effect = { eon_peace_reject_conference = yes }
+		# AI may initiate status quo or a short armistice under pressure; other drafts remain human-only.
+		ai_desire = {
+			base = 0
+			modifier = { factor = 0 has_game_rule = { rule = peace_deal_AI option = DISABLED } }
+		}
+		ai_acceptance = {
+		
+			surrender_progress_loc = {
+				base = 0
+				modifier = {
+					set_temp_variable = { temp_weight = 0 }
+					if = { limit = { eon_peace_recipient_core_pressure_in_pair = yes } set_temp_variable = { temp_weight = THIS.surrender_progress } }
+					if = { limit = { eon_peace_sender_core_pressure_in_pair = yes } subtract_from_temp_variable = { temp_weight = ROOT.surrender_progress } }
+					multiply_temp_variable = { temp_weight = 100 }
+					add = var:temp_weight
+				}
+				modifier = {
+					has_variable = war_exhaustion_value
+					set_temp_variable = { temp_weight_exhaust = THIS.war_exhaustion_value }
+					subtract_from_temp_variable = { temp_weight_exhaust = ROOT.war_exhaustion_value }
+					multiply_temp_variable = { temp_weight_exhaust = 100 }
+					add = var:temp_weight_exhaust
+				}
+			}
+			
+			army_ratio_loc = {
+				base = 0
+				modifier = {
+					set_temp_variable = { temp_weight_army = enemies_strength_ratio }
+					subtract_from_temp_variable = { temp_weight_army = ROOT.enemies_strength_ratio }
+					multiply_temp_variable = { temp_weight_army = 10 }
+					add = var:temp_weight_army
+				}
+			}
+			
+			alliance_ratio_loc = {
+				base = 0
+				modifier = {
+					OR = {
+						ROOT = {
+							is_in_faction = yes
+						}
+						is_in_faction = yes
+					}
+					set_temp_variable = { temp_weight_alliance = ROOT.alliance_strength_ratio@THIS }
+					subtract_from_temp_variable = { temp_weight_alliance = THIS.alliance_strength_ratio@ROOT }
+					multiply_temp_variable = { temp_weight_alliance = 20 }
+					add = var:temp_weight_alliance
+				}
+			}
+			
+			faction_backing = {
+				# more likely to not surrender if is in one of the major factions
+				base = 0
+				modifier = {
+					add = -250
+					THIS = {
+						is_in_faction = yes
+						any_allied_country = {
+							has_capitulated = no
+						}
+						check_variable = { alliance_strength_ratio > 0.99 }
+					}
+				}
+			}
+			
+			stability_counter = {
+				base = 0
+			    modifier = {
+					set_temp_variable = { temp_weight_stability = ROOT.stability }
+					subtract_from_temp_variable = { temp_weight_stability = THIS.stability }
+					multiply_temp_variable = { temp_weight_stability = 100 }
+					add = var:temp_weight_stability
+				}
+			}
+
+			war_support_counter = {
+				base = 0
+				modifier = {
+					set_temp_variable = { temp_weight_war_support = ROOT.has_war_support }
+					subtract_from_temp_variable = { temp_weight_war_support = THIS.has_war_support }
+					multiply_temp_variable = { temp_weight_war_support = 100 }
+					add = var:temp_weight_war_support
+				}
+			}
+
+			casualties_ratio_loc = {
+				base = 0
+				modifier = {
+					set_temp_variable = { temp_weight_casualties = THIS.casualties_k }
+					subtract_from_temp_variable = { temp_weight_casualties = ROOT.casualties_k }
+					
+					set_temp_variable = { temp_weight_casualties2 = THIS.casualties_k }
+					add_to_temp_variable = { temp_weight_casualties2 = ROOT.casualties_k }
+					
+					if = {
+						limit = { check_variable = { temp_weight_casualties2 > 0 } }
+						divide_temp_variable = { temp_weight_casualties = var:temp_weight_casualties2 }
+					}	
+					
+					multiply_temp_variable = {
+						temp_weight_casualties = 100
+					}
+					
+					add = var:temp_weight_casualties
+					
+				}
+			}
+
+			ROOT_turn_on_perimetr = {
+				# More likely to surrender if ROOT turned on perimetr system
+				base = 0
+				modifier = {
+					add = 25
+					ROOT = { has_country_flag = perimetr_system }
+				}
+			}
+			
+			enemy_has_nukes = {
+				# More likely to surrender if sender has nukes and This has no nukes
+				base = 0
+				modifier = {
+					add = 25
+					ROOT = {
+					has_civil_war = no
+					OR = {
+							check_variable = { num_equipment@nuclear_missile_equipment > 0 }
+							check_variable = { num_equipment@nuclear_ballistic_missile_equipment > 0 }
+						 }
+					NOT = {
+								has_idea = non_nuclear_power
+								has_idea = nuclear_energy
+						  }
+					}
+					THIS = {
+						check_variable = { num_equipment@nuclear_missile_equipment = 0 }
+						check_variable = { num_equipment@nuclear_ballistic_missile_equipment = 0 }
+					}
+				}
+			}
+			
+			has_been_nuked = {
+				# More likely to surrender if has_been_nucked
+				base = 0
+				modifier = {
+					add = 50
+					THIS = { has_country_flag = has_been_hrucked }
+				}
+			}
+
+			ROOT_is_nuker = {
+				# More likely to surrender if ROOT used nukes at war
+				base = 0
+				modifier = {
+					add = 50
+					ROOT = { has_country_flag = hrucker }
+				}
+			}
+			
+			distance_ratio_loc = {
+				base = 0
+				modifier = {
+					is_reachable_continent = no
+					add = 50
+				}
+				modifier = {
+					is_reachable = no
+					add = 50
+				}
+			}
+			
+			industry_ratio_loc = {
+				base = 0
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio < 1
+						}
+					}	
+					add = -10
+				}
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio < 1.5
+						}
+					}
+					add = -10
+				}
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio < 2
+						}
+					}
+					add = -10
+				}
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio < 2.5
+						}
+					}
+					add = -20
+				}
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio < 3
+						}
+					}
+					add = -30
+				}
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio > 1
+						}
+					}
+					add = 10
+				}
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio > 1.5
+						}
+					}
+					add = 10
+				}
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio > 2
+						}
+					}
+					add = 10
+				}
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio > 2.5
+						}
+					}
+					add = 20
+				}
+				modifier = {
+					ROOT = {
+						ic_ratio = {
+							tag = PREV
+							ratio > 3
+						}
+					}
+					add = 30
+				}
+			}
+
+			economic_cost_of_war = {
+				# more likely to surrender if in default or high interest rate
+				base = 0
+				modifier = {
+					add = 2
+					check_variable = { interest_rate > 4.99 }
+				}
+				modifier = {
+					add = 2
+					check_variable = { interest_rate > 7.99 }
+				}
+				modifier = {
+					add = 2
+					check_variable = { interest_rate > 9.99 }
+				}
+				modifier = {
+					add = 2
+					check_variable = { interest_rate > 12.99 }
+				}
+				modifier = {
+					add = 2
+					check_variable = { interest_rate > 14.99 }
+				}
+				modifier = {
+					add = 5
+					has_active_mission = debt_default_main_mission
+				}
+			}
+
+			power_ranking = {
+				# more likely to surrender if receiver is not at least minor power
+				base = 0
+				modifier = {
+					add = -60
+					THIS = { has_idea = superpower }
+				}
+				modifier = {
+					add = -45
+					THIS = { has_idea = great_power }
+				}
+				modifier = {
+					add = -30
+					THIS = { has_idea = large_power }
+				}
+				modifier = {
+					add = -15
+					THIS = { has_idea = regional_power }
+				}
+				modifier = {
+					add = 15
+					THIS = { has_idea = non_power }
+				}
+			}
+
+			year_of_war = {
+				base = 0
+				modifier = {
+					add = 50
+					NOT = { has_idea = twelve_months_of_war }
+				}
+			}
+		}
+	}
+}

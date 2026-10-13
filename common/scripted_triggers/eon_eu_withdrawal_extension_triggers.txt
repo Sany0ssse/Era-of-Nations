@@ -1,0 +1,73 @@
+# Era of Nations: current Article50 extension and response eligibility.
+eon_eu_extension_notice_current = {
+ eon_eu_withdrawal_current = yes
+ has_country_flag = eon_eu_extension_notice_initialized
+ check_variable = { eon_eu_extension_notice_serial > 0 }
+}
+eon_eu_extension_period_open = {
+ eon_eu_extension_notice_current = yes
+ OR = {
+  has_country_flag = eon_eu_withdrawal_deadline
+  AND = {
+   has_country_flag = eon_eu_legacy_exit_clock_authoritative
+   has_active_mission = EU_exit
+  }
+  AND = {
+   has_country_flag = eon_eu_legacy_short_clock_authoritative
+   has_active_mission = EU_exit_three_month
+  }
+ }
+}
+eon_eu_extension_can_propose = {
+ eon_eu_extension_period_open = yes
+ check_variable = { eon_eu_extension_queued_units = 0 }
+ NOT = { has_country_flag = eon_eu_extension_proposal }
+ NOT = { has_country_flag = eon_eu_extension_cooldown }
+}
+eon_eu_extension_proposal_current = {
+ eon_eu_extension_period_open = yes
+ has_country_flag = eon_eu_extension_proposal
+ has_country_flag = eon_eu_extension_proposal_window
+ check_variable = { eon_eu_extension_proposal_serial > 0 }
+ check_variable = { var = eon_eu_extension_project_notice_serial value = eon_eu_extension_notice_serial compare = equals }
+ check_variable = { eon_eu_extension_queued_units = 0 }
+}
+# Pair API: ROOT responds to the currently visible proposal in FROM.
+# Event OK never invokes this API or carries a delayed response receipt.
+eon_eu_extension_member_can_respond = {
+ eon_eu_can_vote = yes
+ FROM = {
+  eon_eu_extension_proposal_current = yes
+  NOT = { tag = ROOT }
+ }
+}
+eon_eu_extension_can_approve = {
+ eon_eu_extension_member_can_respond = yes
+ FROM = { NOT = { is_in_array = { eon_eu_extension_approvals = ROOT } } }
+}
+eon_eu_extension_can_reject = {
+ eon_eu_extension_member_can_respond = yes
+ FROM = { NOT = { is_in_array = { eon_eu_extension_rejections = ROOT } } }
+}
+eon_eu_extension_can_abstain = {
+ eon_eu_extension_member_can_respond = yes
+ FROM = {
+  NOT = { is_in_array = { eon_eu_extension_abstentions = ROOT } }
+ }
+}
+eon_eu_extension_final_ready = {
+ eon_eu_extension_proposal_current = yes
+ has_country_flag = eon_eu_extension_council_consent
+ check_variable = { eon_eu_extension_electorate_total > 0 }
+ # Article235(1): explicit represented abstentions do not prevent unanimity.
+ # No response is not recorded presence/representation in this bounded model.
+ check_variable = { var = eon_eu_extension_answer_count value = eon_eu_extension_electorate_total compare = equals }
+ check_variable = { eon_eu_extension_no_count = 0 }
+}
+eon_eu_extension_queue_current = {
+ eon_eu_extension_notice_current = yes
+ check_variable = { eon_eu_extension_queued_units = 1 }
+ check_variable = { eon_eu_extension_queued_proposal_serial > 0 }
+ check_variable = { var = eon_eu_extension_queued_proposal_serial value = eon_eu_extension_proposal_serial compare = equals }
+ check_variable = { var = eon_eu_extension_queued_notice_serial value = eon_eu_extension_notice_serial compare = equals }
+}

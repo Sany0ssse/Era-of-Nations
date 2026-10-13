@@ -55,8 +55,7 @@
 # This function is used to update the economic setup mid game
 ingame_update_setup = {
 	#National values (GDP, pop etc.) MUST BE FIRST
-	calculate_damaged_buildings_count = yes
-	update_state_variables = yes
+	eon_economy_refresh_state_and_damage = yes
 
 	# create_dynamic_country (civil-war splits, copy_tag) can inherit an unowned capital, leaving capital_scope invalid; reassign it to an owned state.
 	if = {
@@ -457,16 +456,19 @@ calculate_tax_gain = {
 		}
 	}
 	multiply_variable = { abroad_branches_tax_gain = abroad_branches_tax_gain_multiplier }
-	if = {
-		limit = {
-			any_country = {
-				is_in_array = {
-					array = PREV.countries_with_branches
-					value = THIS
+	if = { limit = { check_variable = { countries_with_branches^num > 0 } }
+		if = {
+			limit = {
+				any_country = {
+					is_in_array = {
+						array = PREV.countries_with_branches
+						value = THIS
+					}
 				}
 			}
+			clamp_variable = { var = abroad_branches_tax_gain min = 0.001 }
 		}
-		clamp_variable = { var = abroad_branches_tax_gain min = 0.001 }
+		else = { set_variable = { abroad_branches_tax_gain = 0 } }
 	}
 	else = { set_variable = { abroad_branches_tax_gain = 0 } }
 	clear_variable = i
@@ -671,36 +673,6 @@ calculate_additional_income_rate = {
 
 	#Sanction evasion help
 	clear_variable = sanctions_evasion_income
-	for_each_loop = {
-		array = global.countries
-		value = v
-		if = {
-			limit = {
-				is_in_array = { sanctions_evade_helpers = THIS }
-			}
-			if = {
-				limit = { var:v = { has_idea = non_power } }
-				add_to_variable = { sanctions_evasion_income = 0.05 }
-			}
-			else_if = {
-				limit = { var:v = { has_idea = minor_power } }
-				add_to_variable = { sanctions_evasion_income = 0.1 }
-			}
-			else_if = {
-				limit = { var:v = { has_idea = regional_power } }
-				add_to_variable = { sanctions_evasion_income = 0.5 }
-			}
-			else_if = {
-				limit = { var:v = { has_idea = large_power } }
-				add_to_variable = { sanctions_evasion_income = 1 }
-			}
-			else_if = {
-				limit = { var:v = { has_idea = great_power } }
-				add_to_variable = { sanctions_evasion_income = 2.5 }
-			}
-			else = { add_to_variable = { sanctions_evasion_income = 5 } }
-		}
-	}
 	add_to_variable = { additional_income_rate = sanctions_evasion_income }
 
 	# Worker remittances are private transfers, not free government revenue.
@@ -1069,7 +1041,7 @@ calculate_additional_income_rate = {
 	# EU
 	if = {
 		limit = {
-			is_in_array = { global.EU_member = THIS }
+			eon_eu_is_budget_participant = yes
 			NOT = { has_idea = EUU_subsidies_suspended }
 		}
 		set_variable = {
@@ -1078,9 +1050,9 @@ calculate_additional_income_rate = {
 				add = THIS.EU_growth_subsidies
 				add = THIS.EU_admin_subsidies
 				add = THIS.EU_global_exp_subsidies
-				multiply = 0.019
 			}
 		}
+		divide_variable = { EU_subsidies = 52 }
 		add_to_variable = { additional_income_rate = EU_subsidies }
 	}
 	if = {
@@ -5019,7 +4991,7 @@ calculate_additional_expense_rate = {
 		add_to_variable = { additional_expenses_rate = additional_expense_china_travel_ban }
 	}
 	# European Union Contribution Expenses
-	if = { limit = { has_idea = EU_member }
+	if = { limit = { eon_eu_is_budget_participant = yes }
 		add_to_variable = { additional_expenses_rate = EU_budget_contribution_weekly }
 	}
 	# Cartel Mechanic Costs

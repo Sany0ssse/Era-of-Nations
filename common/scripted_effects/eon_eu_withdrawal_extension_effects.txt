@@ -1,0 +1,235 @@
+# Era of Nations: Article50 extension. Game calibration: 365 / 30 / 90 days.
+# No mission or country-flag restart occurs when a proposal is agreed.
+eon_eu_extension_clear_project = {
+ clr_country_flag = eon_eu_extension_proposal
+ clr_country_flag = eon_eu_extension_proposal_window
+ clr_country_flag = eon_eu_extension_council_consent
+ clear_array = eon_eu_extension_approvals
+ clear_array = eon_eu_extension_rejections
+ clear_array = eon_eu_extension_abstentions
+ set_variable = { eon_eu_extension_project_notice_serial = 0 }
+ set_variable = { eon_eu_extension_electorate_total = 0 }
+ set_variable = { eon_eu_extension_yes_count = 0 }
+ set_variable = { eon_eu_extension_no_count = 0 }
+ set_variable = { eon_eu_extension_abstain_count = 0 }
+ set_variable = { eon_eu_extension_answer_count = 0 }
+}
+eon_eu_extension_clear_notice = {
+ # Preserve monotonic serials; invalidate once, not on every inactive daily pass.
+ if = {
+  limit = {
+   OR = {
+    has_country_flag = eon_eu_extension_notice_initialized
+    has_country_flag = eon_eu_extension_proposal
+    check_variable = { eon_eu_extension_queued_units > 0 }
+   }
+  }
+  add_to_variable = { eon_eu_extension_notice_serial = 1 }
+ }
+ eon_eu_extension_clear_project = yes
+ clr_country_flag = eon_eu_extension_notice_initialized
+ clr_country_flag = eon_eu_extension_cooldown
+ clr_country_flag = eon_eu_legacy_exit_clock_authoritative
+ clr_country_flag = eon_eu_legacy_short_clock_authoritative
+ set_variable = { eon_eu_extension_queued_units = 0 }
+ set_variable = { eon_eu_extension_queued_notice_serial = 0 }
+ set_variable = { eon_eu_extension_queued_proposal_serial = 0 }
+}
+eon_eu_extension_begin_notice = {
+ # Integrate only inside the actual successful notification branch.
+ if = { limit = { eon_eu_withdrawal_current = yes NOT = { has_country_flag = eon_eu_extension_notice_initialized } }
+  eon_eu_extension_clear_notice = yes
+  add_to_variable = { eon_eu_extension_notice_serial = 1 }
+  set_country_flag = eon_eu_extension_notice_initialized
+ }
+}
+eon_eu_extension_migrate_clock = {
+ # Recognise a genuine old clock; never manufacture a new 730-day old-save period.
+ if = { limit = { eon_eu_is_active_member = yes has_country_flag = Article_50 NOT = { has_country_flag = eon_eu_extension_notice_initialized } }
+  if = { limit = { has_active_mission = EU_exit }
+   set_country_flag = eon_eu_withdrawal_clock_started
+   eon_eu_extension_begin_notice = yes
+   set_country_flag = eon_eu_legacy_exit_clock_authoritative
+  }
+  else_if = { limit = { has_active_mission = EU_exit_three_month }
+   set_country_flag = eon_eu_withdrawal_clock_started
+   eon_eu_extension_begin_notice = yes
+   set_country_flag = eon_eu_legacy_short_clock_authoritative
+  }
+  else_if = { limit = { has_country_flag = eon_eu_withdrawal_clock_started }
+   # A known previous clock may already have expired. Preserve any positive
+   # remainder; otherwise the normal resolver finishes it without a new period.
+   eon_eu_extension_begin_notice = yes
+  }
+ }
+}
+eon_eu_extension_recount = {
+ clr_country_flag = eon_eu_extension_council_consent
+ set_variable = { eon_eu_extension_electorate_total = 0 }
+ set_variable = { eon_eu_extension_yes_count = 0 }
+ set_variable = { eon_eu_extension_no_count = 0 }
+ set_variable = { eon_eu_extension_abstain_count = 0 }
+ set_variable = { eon_eu_extension_answer_count = 0 }
+ if = { limit = { eon_eu_extension_proposal_current = yes }
+  for_each_scope_loop = {
+   array = global.EU_member
+   if = { limit = { eon_eu_can_vote = yes NOT = { tag = PREV } }
+    add_to_variable = { PREV.eon_eu_extension_electorate_total = 1 }
+    if = { limit = { is_in_array = { PREV.eon_eu_extension_approvals = THIS } NOT = { is_in_array = { PREV.eon_eu_extension_rejections = THIS } } }
+     add_to_variable = { PREV.eon_eu_extension_yes_count = 1 }
+    }
+    if = { limit = { is_in_array = { PREV.eon_eu_extension_rejections = THIS } }
+     add_to_variable = { PREV.eon_eu_extension_no_count = 1 }
+    }
+    if = { limit = { is_in_array = { PREV.eon_eu_extension_abstentions = THIS } NOT = { is_in_array = { PREV.eon_eu_extension_approvals = THIS } } NOT = { is_in_array = { PREV.eon_eu_extension_rejections = THIS } } }
+     add_to_variable = { PREV.eon_eu_extension_abstain_count = 1 }
+    }
+    if = { limit = { OR = { is_in_array = { PREV.eon_eu_extension_approvals = THIS } is_in_array = { PREV.eon_eu_extension_rejections = THIS } is_in_array = { PREV.eon_eu_extension_abstentions = THIS } } }
+     # Count one represented response per live government, regardless of duplicate stored IDs.
+     add_to_variable = { PREV.eon_eu_extension_answer_count = 1 }
+    }
+   }
+  }
+  if = { limit = { check_variable = { eon_eu_extension_electorate_total > 0 } check_variable = { var = eon_eu_extension_answer_count value = eon_eu_extension_electorate_total compare = equals } check_variable = { eon_eu_extension_no_count = 0 } }
+   set_country_flag = eon_eu_extension_council_consent
+  }
+ }
+}
+eon_eu_extension_propose = {
+ if = { limit = { eon_eu_extension_can_propose = yes }
+  eon_eu_extension_clear_project = yes
+  add_to_variable = { eon_eu_extension_proposal_serial = 1 }
+  set_variable = { eon_eu_extension_project_notice_serial = eon_eu_extension_notice_serial }
+  set_country_flag = eon_eu_extension_proposal
+  set_country_flag = { flag = eon_eu_extension_proposal_window days = 30 value = 1 }
+  # One informative notice at the actual phase transition. No event callbacks vote.
+  every_country = {
+   limit = { eon_eu_can_vote = yes is_ai = no NOT = { tag = PREV } }
+   country_event = { id = eon_eu_withdrawal_extension.1 }
+  }
+  eon_eu_extension_recount = yes
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_extension_approve = {
+ if = { limit = { eon_eu_extension_can_approve = yes }
+  FROM = {
+   remove_from_array = { eon_eu_extension_rejections = ROOT }
+   remove_from_array = { eon_eu_extension_abstentions = ROOT }
+   add_to_array = { eon_eu_extension_approvals = ROOT }
+   eon_eu_extension_recount = yes
+  }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_extension_reject = {
+ if = { limit = { eon_eu_extension_can_reject = yes }
+  FROM = {
+   remove_from_array = { eon_eu_extension_approvals = ROOT }
+   remove_from_array = { eon_eu_extension_abstentions = ROOT }
+   add_to_array = { eon_eu_extension_rejections = ROOT }
+   eon_eu_extension_recount = yes
+  }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_extension_abstain = {
+ if = { limit = { eon_eu_extension_can_abstain = yes }
+  FROM = {
+   remove_from_array = { eon_eu_extension_approvals = ROOT }
+   remove_from_array = { eon_eu_extension_rejections = ROOT }
+   add_to_array = { eon_eu_extension_abstentions = ROOT }
+   eon_eu_extension_recount = yes
+  }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_extension_accept_final = {
+ # The withdrawing country itself must accept; never called by an information popup.
+ eon_eu_refresh_membership = yes
+ eon_eu_extension_recount = yes
+ if = { limit = { eon_eu_extension_final_ready = yes }
+  set_variable = { eon_eu_extension_queued_units = 1 }
+  set_variable = { eon_eu_extension_queued_notice_serial = eon_eu_extension_notice_serial }
+  set_variable = { eon_eu_extension_queued_proposal_serial = eon_eu_extension_proposal_serial }
+  eon_eu_extension_clear_project = yes
+  if = { limit = { is_ai = no } country_event = { id = eon_eu_withdrawal_extension.2 } }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_extension_cancel_proposal = {
+ if = { limit = { has_country_flag = eon_eu_extension_proposal }
+  eon_eu_extension_clear_project = yes
+  set_country_flag = { flag = eon_eu_extension_cooldown days = 90 value = 1 }
+  update_eu_dirty_variable = yes
+ }
+}
+eon_eu_extension_resolve_deadline = {
+ if = { limit = { eon_eu_extension_notice_current = yes NOT = { has_country_flag = eon_eu_withdrawal_deadline } NOT = { has_country_flag = eon_eu_legacy_exit_clock_authoritative } NOT = { has_country_flag = eon_eu_legacy_short_clock_authoritative } }
+  if = { limit = { eon_eu_extension_queue_current = yes }
+   set_variable = { eon_eu_extension_queued_units = 0 }
+   set_variable = { eon_eu_extension_queued_notice_serial = 0 }
+   set_variable = { eon_eu_extension_queued_proposal_serial = 0 }
+   set_country_flag = { flag = eon_eu_withdrawal_deadline days = 365 value = 1 }
+   if = { limit = { is_ai = no } country_event = { id = eon_eu_withdrawal_extension.3 } }
+   update_eu_dirty_variable = yes
+  }
+  else = {
+   # The shared leaving_EU path must integrate clear_notice in its access cleanup.
+   add_timed_idea = { idea = no_deal_exit days = 730 }
+   leaving_EU = yes
+  }
+ }
+}
+eon_eu_extension_legacy_timeout = {
+ # Exact EU_exit timeout replacement: consume an old save's remaining native period.
+ # The real callback itself is the expiry receipt even if the engine removed
+ # the mission before first daily migration. Never restart a 730-day period.
+ if = { limit = { eon_eu_is_active_member = yes has_country_flag = Article_50 NOT = { has_country_flag = eon_eu_extension_notice_initialized } }
+  set_country_flag = eon_eu_withdrawal_clock_started
+  eon_eu_extension_begin_notice = yes
+  set_country_flag = eon_eu_legacy_exit_clock_authoritative
+ }
+ if = { limit = { eon_eu_extension_notice_current = yes has_country_flag = eon_eu_legacy_exit_clock_authoritative }
+  clr_country_flag = eon_eu_legacy_exit_clock_authoritative
+  clr_country_flag = eon_eu_withdrawal_deadline
+  remove_mission = EU_exit
+ }
+ eon_eu_extension_resolve_deadline = yes
+}
+eon_eu_extension_legacy_short_timeout = {
+ # EU_exit_three_month may be the sole real clock of a pre-extension save.
+ if = { limit = { eon_eu_is_active_member = yes has_country_flag = Article_50 NOT = { has_country_flag = eon_eu_extension_notice_initialized } }
+  set_country_flag = eon_eu_withdrawal_clock_started
+  eon_eu_extension_begin_notice = yes
+  if = { limit = { has_active_mission = EU_exit }
+   # The secondary callback must not expire the still-pending main old clock.
+   set_country_flag = eon_eu_legacy_exit_clock_authoritative
+  }
+  else = { set_country_flag = eon_eu_legacy_short_clock_authoritative }
+ }
+ if = { limit = { eon_eu_extension_notice_current = yes has_country_flag = eon_eu_legacy_short_clock_authoritative }
+  clr_country_flag = eon_eu_legacy_short_clock_authoritative
+  clr_country_flag = eon_eu_withdrawal_deadline
+  remove_mission = EU_exit_three_month
+ }
+ eon_eu_extension_resolve_deadline = yes
+}
+eon_eu_extension_daily_pulse = {
+ eon_eu_extension_migrate_clock = yes
+ if = { limit = { eon_eu_extension_notice_current = yes }
+  if = { limit = { has_country_flag = eon_eu_extension_proposal NOT = { eon_eu_extension_proposal_current = yes } }
+   eon_eu_extension_cancel_proposal = yes
+  }
+  eon_eu_extension_recount = yes
+  # If the mission was removed at native timeout before the daily pass, do not wait forever.
+  if = { limit = { has_country_flag = eon_eu_legacy_exit_clock_authoritative NOT = { has_active_mission = EU_exit } }
+   eon_eu_extension_legacy_timeout = yes
+  }
+  if = { limit = { has_country_flag = eon_eu_legacy_short_clock_authoritative NOT = { has_active_mission = EU_exit_three_month } }
+   eon_eu_extension_legacy_short_timeout = yes
+  }
+  eon_eu_extension_resolve_deadline = yes
+ }
+ else = { eon_eu_extension_clear_notice = yes }
+}

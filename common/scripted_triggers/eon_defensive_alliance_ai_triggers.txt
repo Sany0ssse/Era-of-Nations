@@ -1,0 +1,42 @@
+# Security policy for native AI proposals; thresholds are game heuristics, not law.
+# Country scope. PREV inside any_other_country is the country being protected.
+eon_defensive_alliance_ai_security_need = {
+	OR = {
+		has_defensive_war = yes
+		any_other_country = {
+			OR = {
+				has_wargoal_against = PREV
+				is_justifying_wargoal_against = PREV
+			}
+		}
+	}
+}
+
+# Native diplomacy: ROOT proposer, THIS recipient. Consent, rights and current
+# reservations remain in the existing offer lifecycle; cooldown never blocks a reply.
+eon_defensive_alliance_ai_initiation_ready = {
+	ROOT = {
+		is_ai = yes
+		NOT = { has_country_flag = eon_defensive_alliance_ai_offer_cooldown }
+		has_stability > 0.35
+		has_opinion = { target = PREV value > 100 }
+		NOT = {
+			OR = {
+				has_wargoal_against = PREV
+				is_justifying_wargoal_against = PREV
+			}
+		}
+	}
+	is_neighbor_of = ROOT
+	has_opinion = { target = ROOT value > 100 }
+	NOT = {
+		OR = {
+			has_wargoal_against = ROOT
+			is_justifying_wargoal_against = ROOT
+		}
+	}
+	OR = {
+		eon_defensive_alliance_ai_security_need = yes
+		ROOT = { eon_defensive_alliance_ai_security_need = yes }
+	}
+}

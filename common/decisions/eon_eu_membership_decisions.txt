@@ -1,0 +1,254 @@
+eon_eu_membership_category = {
+ eon_eu_membership_status = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { always = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_membership_status_requirements always = yes } }
+  cost = 0
+  complete_effect = { country_event = { id = eon_eu_membership.8 } }
+  ai_will_do = { factor = 0 }
+ }
+ eon_eu_apply = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_sovereign_european = yes NOT = { has_idea = EU_member } NOT = { has_country_flag = EU_candidate } NOT = { check_variable = { eon_eu_accession_phase > 0 } } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_apply_requirements eon_eu_application_ready = yes } }
+  cost = 50
+  complete_effect = { eon_eu_apply_for_membership_start = yes }
+  ai_will_do = { factor = 4 modifier = { factor = 0 check_variable = { eurosceptic > 0.25 } } }
+ }
+ eon_eu_endorse_application = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes FROM = { eon_eu_application_current = yes check_variable = { eon_eu_accession_phase = 1 } } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_endorse_application_requirements eon_eu_member_can_respond = yes } }
+  cost = 0
+  complete_effect = { eon_eu_endorse_application = yes }
+  ai_will_do = { factor = 4 modifier = { factor = 0 FROM = { eon_eu_reform_conditions = no } } modifier = { factor = 0 has_opinion = { target = FROM value < 0 } } }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_application_current = yes check_variable = { eon_eu_accession_phase = 1 } } }
+ }
+ eon_eu_reject_application = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes FROM = { eon_eu_application_current = yes } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_reject_application_requirements eon_eu_is_active_member = yes FROM = { eon_eu_application_current = yes } } }
+  cost = 0
+  complete_effect = { eon_eu_reject_application = yes }
+  ai_will_do = { factor = 0 modifier = { add = 4 FROM = { eon_eu_reform_conditions = no } } }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_application_current = yes } }
+ }
+ eon_eu_submit_accession_treaty = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_candidate = yes check_variable = { eon_eu_accession_phase = 2 } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_submit_accession_treaty_requirements eon_eu_treaty_submission_ready = yes } }
+  cost = 25
+  complete_effect = { eon_eu_submit_accession_treaty = yes }
+  ai_will_do = { factor = 4 }
+ }
+ eon_eu_member_ratify_accession = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes FROM = { eon_eu_application_current = yes OR = { check_variable = { eon_eu_accession_phase = 3 } check_variable = { eon_eu_accession_phase = 4 } } } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_member_ratify_accession_requirements eon_eu_member_can_respond = yes FROM = { eon_eu_reform_conditions = yes } } }
+  cost = 0
+  complete_effect = { eon_eu_ratify_member_accession = yes }
+  ai_will_do = { factor = 4 modifier = { factor = 0 has_opinion = { target = FROM value < 0 } } }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_application_current = yes OR = { check_variable = { eon_eu_accession_phase = 3 } check_variable = { eon_eu_accession_phase = 4 } } } }
+ }
+ eon_eu_ep_support_accession = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes FROM = { eon_eu_application_current = yes OR = { check_variable = { eon_eu_accession_phase = 3 } check_variable = { eon_eu_accession_phase = 4 } } } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_ep_support_accession_requirements NOT = { FROM = { is_in_array = { eon_eu_accession_ep_approvals = ROOT } } } } }
+  cost = 0
+  complete_effect = { eon_eu_support_accession_ep = yes }
+  ai_will_do = { factor = 4 modifier = { factor = 0 FROM = { eon_eu_reform_conditions = no } } }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_application_current = yes OR = { check_variable = { eon_eu_accession_phase = 3 } check_variable = { eon_eu_accession_phase = 4 } } } }
+ }
+ eon_eu_ep_reject_accession = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes FROM = { is_in_array = { eon_eu_accession_ep_approvals = ROOT } } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_ep_reject_accession_requirements eon_eu_is_active_member = yes } }
+  cost = 0
+  complete_effect = { FROM = { remove_from_array = { eon_eu_accession_ep_approvals = ROOT } clr_country_flag = eon_eu_accession_ep_consent } }
+  ai_will_do = { factor = 0 }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_application_current = yes } }
+ }
+ eon_eu_final_ratify_accession = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_candidate = yes check_variable = { eon_eu_accession_phase = 4 } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_final_ratify_accession_requirements eon_eu_accession_final_ready = yes } }
+  cost = 25
+  complete_effect = { eon_eu_ratify_accession_treaty = yes }
+  ai_will_do = { factor = 4 }
+ }
+ eon_eu_cancel_application = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_application_current = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_cancel_application_requirements eon_eu_application_current = yes } }
+  cost = 0
+  complete_effect = { eon_eu_cancel_application = yes }
+  ai_will_do = { factor = 0 }
+ }
+ eon_eu_notify_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes NOT = { has_country_flag = Article_50 } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_notify_withdrawal_requirements NOT = { has_country_flag = cant_invoke_article_50 } } }
+  cost = 0
+  complete_effect = { eon_eu_notify_withdrawal = yes }
+  ai_will_do = { factor = 0 modifier = { add = 4 gov_is_EUexiteer = yes check_variable = { eurosceptic > 0.5 } } }
+ }
+ eon_eu_revoke_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_can_revoke_withdrawal = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_revoke_withdrawal_requirements eon_eu_can_revoke_withdrawal = yes } }
+  cost = 0
+  complete_effect = { eon_eu_revoke_withdrawal = yes }
+  ai_will_do = { factor = 0 }
+ }
+ eon_eu_propose_withdrawal_treaty = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_withdrawal_current = yes NOT = { has_country_flag = eon_eu_withdrawal_proposal } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_propose_withdrawal_treaty_requirements eon_eu_withdrawal_current = yes } }
+  cost = 25
+  complete_effect = { eon_eu_propose_withdrawal_treaty = yes }
+  ai_will_do = { factor = 4 }
+ }
+ eon_eu_member_approve_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes FROM = { eon_eu_withdrawal_proposal_current = yes } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_member_approve_withdrawal_requirements eon_eu_member_can_approve_withdrawal = yes } }
+  cost = 0
+  complete_effect = { eon_eu_approve_withdrawal_treaty = yes }
+  ai_will_do = { factor = 4 }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_withdrawal_proposal_current = yes } }
+ }
+ eon_eu_ep_support_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes FROM = { eon_eu_withdrawal_proposal_current = yes } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_ep_support_withdrawal_requirements NOT = { FROM = { is_in_array = { eon_eu_withdrawal_ep_approvals = ROOT } } } } }
+  cost = 0
+  complete_effect = { eon_eu_support_withdrawal_ep = yes }
+  ai_will_do = { factor = 4 }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_withdrawal_proposal_current = yes } }
+ }
+ eon_eu_ep_reject_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes FROM = { eon_eu_withdrawal_proposal_current = yes } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_ep_reject_withdrawal_requirements NOT = { FROM = { is_in_array = { eon_eu_withdrawal_ep_rejections = ROOT } } } } }
+  cost = 0
+  complete_effect = { eon_eu_reject_withdrawal_ep = yes }
+  ai_will_do = { factor = 0 }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_withdrawal_proposal_current = yes } }
+ }
+ eon_eu_finalize_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_withdrawal_proposal_current = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_finalize_withdrawal_requirements has_country_flag = eon_eu_withdrawal_council_consent has_country_flag = eon_eu_withdrawal_ep_consent } }
+  cost = 0
+  complete_effect = { eon_eu_finish_withdrawal = yes }
+  ai_will_do = { factor = 4 }
+ }
+ eon_eu_refound_offer = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { has_global_flag = eon_eu_dormant eon_eu_is_sovereign_european = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_refound_offer_requirements eon_eu_refound_offer_ready = yes } }
+  cost = 50
+  complete_effect = { eon_eu_propose_refounding = yes }
+  ai_will_do = { factor = 1 }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_is_sovereign_european = yes } }
+ }
+ eon_eu_refound_accept = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { has_country_flag = eon_eu_refound_incoming FROM = { check_variable = { var = eon_eu_refound_target value = ROOT.id compare = equals } } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_refound_accept_requirements eon_eu_refound_response_ready = yes check_variable = { var = eon_eu_refound_sender value = FROM.id compare = equals } } }
+  cost = 50
+  complete_effect = { eon_eu_accept_refounding = yes }
+  ai_will_do = { factor = 2 modifier = { factor = 0 has_opinion = { target = FROM value < 0 } } }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } has_country_flag = eon_eu_refound_outgoing } }
+ }
+ eon_eu_refound_refuse = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { has_country_flag = eon_eu_refound_incoming check_variable = { var = eon_eu_refound_sender value = FROM.id compare = equals } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_refound_refuse_requirements always = yes } }
+  cost = 0
+  complete_effect = { eon_eu_refuse_refounding = yes }
+  ai_will_do = { factor = 0 }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } has_country_flag = eon_eu_refound_outgoing } }
+ }
+ eon_eu_ep_support_own_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_withdrawal_proposal_current = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_ep_support_own_withdrawal_requirements NOT = { is_in_array = { eon_eu_withdrawal_ep_approvals = THIS } } } }
+  cost = 0
+  complete_effect = { eon_eu_support_own_withdrawal_ep = yes }
+  ai_will_do = { factor = 4 }
+ }
+ eon_eu_ep_abstain_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_is_active_member = yes FROM = { eon_eu_withdrawal_proposal_current = yes } }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_ep_abstain_withdrawal_requirements FROM = { OR = { is_in_array = { eon_eu_withdrawal_ep_approvals = ROOT } is_in_array = { eon_eu_withdrawal_ep_rejections = ROOT } } } } }
+  cost = 0
+  complete_effect = { eon_eu_abstain_withdrawal_ep = yes }
+  ai_will_do = { factor = 0 }
+  target_array = global.EU_potential
+  target_root_trigger = { exists = yes }
+  target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } eon_eu_withdrawal_proposal_current = yes } }
+ }
+ eon_eu_ep_reject_own_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_withdrawal_proposal_current = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_ep_reject_own_withdrawal_requirements NOT = { is_in_array = { eon_eu_withdrawal_ep_rejections = THIS } } } }
+  cost = 0
+  complete_effect = { eon_eu_reject_own_withdrawal_ep = yes }
+  ai_will_do = { factor = 0 }
+ }
+ eon_eu_ep_abstain_own_withdrawal = {
+  icon = generic_decision
+  allowed = { always = yes }
+  visible = { eon_eu_withdrawal_proposal_current = yes }
+  available = { custom_trigger_tooltip = { tooltip = eon_eu_ep_abstain_own_withdrawal_requirements OR = { is_in_array = { eon_eu_withdrawal_ep_approvals = THIS } is_in_array = { eon_eu_withdrawal_ep_rejections = THIS } } } }
+  cost = 0
+  complete_effect = { eon_eu_abstain_own_withdrawal_ep = yes }
+  ai_will_do = { factor = 0 }
+ }
+}

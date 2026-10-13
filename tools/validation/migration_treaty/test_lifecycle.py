@@ -10,6 +10,10 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'tools/validation/diplomacy_package_02'))
 from _treaty_support import Country, Interpreter as Base, ast, one, compare
 
+MIGRATION_CACHE_ARRAY = 'global.eon_migration_treaty_dead_cache'
+MIGRATION_CACHE_READY = 'eon_migration_treaty_dead_cache_ready'
+MIGRATION_CACHE_BREAK = 'eon_migration_treaty_dead_cache_break'
+
 
 @dataclass
 class PopulationState:
@@ -32,6 +36,7 @@ class Interpreter(Base):
         self.from_id = receiver if from_id is None else from_id
         self.temp, self.external_calls, self.opinion_calls = {}, [], []
         self.remove_all = False
+        self.global_flags, self.global_arrays, self.scope_visits = set(), {}, []
         self.effects = {k: v for k, op, v in ast((ROOT / 'common/scripted_effects/eon_migration_treaty_effects.txt').read_text(encoding='utf-8-sig'))}
         self.triggers = {k: v for k, op, v in ast((ROOT / 'common/scripted_triggers/eon_migration_treaty_triggers.txt').read_text(encoding='utf-8-sig'))}
         self.actions = {k: v for k, op, v in one(ast((ROOT / 'common/scripted_diplomatic_actions/MDC_migration.txt').read_text(encoding='utf-8-sig')), 'scripted_diplomatic_actions')}
@@ -54,6 +59,10 @@ class Interpreter(Base):
             current = stack[-1]
             if key == 'FROM':
                 passed = self.trigger(value, stack + [self.country('FROM', stack)])
+            elif key == 'has_global_flag':
+                if value != MIGRATION_CACHE_READY:
+                    raise ValueError('Unmodeled global flag: ' + str(value))
+                passed = value in self.global_flags
             elif key == 'has_dynamic_modifier':
                 passed = one(value, 'modifier') in current.modifiers
             elif key == 'has_idea':
@@ -99,6 +108,39 @@ class Interpreter(Base):
                 for nation in sorted(self.countries.values(), key=lambda nation: nation.ident):
                     if (nation.exists or key == 'every_possible_country') and self.trigger(limit, stack + [nation]):
                         self.effect([node for node in value if node[0] != 'limit'], stack + [nation])
+            elif key in ('set_global_flag', 'clr_global_flag'):
+                if value != MIGRATION_CACHE_READY:
+                    raise ValueError('Unmodeled global flag: ' + str(value))
+                if key == 'set_global_flag':
+                    self.global_flags.add(value)
+                else:
+                    self.global_flags.discard(value)
+            elif key == 'clear_array':
+                if value != MIGRATION_CACHE_ARRAY:
+                    raise ValueError('Unmodeled global array: ' + str(value))
+                self.global_arrays[value] = []
+            elif key == 'add_to_array' and one(value, 'array').startswith('global.'):
+                if one(value, 'array') != MIGRATION_CACHE_ARRAY:
+                    raise ValueError('Unmodeled global array: ' + one(value, 'array'))
+                token = one(value, 'value')
+                if token not in ('ROOT', 'THIS', 'PREV') and not token.startswith('var:'):
+                    raise ValueError('Unmodeled scope-array token: ' + token)
+                self.global_arrays.setdefault(MIGRATION_CACHE_ARRAY, []).append(self.country(token, stack))
+            elif key == 'for_each_scope_loop':
+                if one(value, 'array') != MIGRATION_CACHE_ARRAY:
+                    raise ValueError('Unmodeled scope array: ' + one(value, 'array'))
+                if one(value, 'break') != MIGRATION_CACHE_BREAK:
+                    raise ValueError('Unmodeled scope-loop break: ' + one(value, 'break'))
+                # This bounded production loop never edits its cache mid-loop.
+                # Retain actual country scopes, including dead countries; no
+                # integer conversion or sorting of the stored scope sequence.
+                for nation in list(self.global_arrays.get(MIGRATION_CACHE_ARRAY, [])):
+                    if self.value(MIGRATION_CACHE_BREAK, stack) != 0:
+                        break
+                    if not isinstance(nation, Nation) or self.countries.get(nation.ident) is not nation:
+                        raise ValueError('Unmodeled or foreign country scope in migration cache')
+                    self.scope_visits.append((self.sender, current.ident, nation.ident))
+                    self.effect([node for node in value if node[0] not in ('array', 'break')], stack + [nation])
             elif key == 'FROM':
                 self.effect(value, stack + [self.country('FROM', stack)])
             elif key in ('add_dynamic_modifier', 'remove_dynamic_modifier'):
@@ -432,6 +474,141 @@ class TreatyLifecycle(unittest.TestCase):
         self.assertIn('migrants_agreement_add', nations[3].modifiers)
         self.assertIn('migrants_agreement_cut', nations[4].modifiers)
 
+
+
+class MigrationSnapshotModel(unittest.TestCase):
+    """Model control-flow regression; native lifecycle/campaign proof is separate."""
+    def seed_pair(self, nations, dead=True):
+        nations[2].exists = not dead
+        nations[1].flags.add('migration_agreement_migrants_add@2')
+        nations[2].flags.add('migration_agreement_migrants_cut@1')
+        nations[1].variables.update(pending_migration_agreement_country=2,
+                                   eon_migration_treaty_pending_sender=3,
+                                   eon_migration_treaty_pending_terms=1)
+        nations[2].variables.update(pending_migration_agreement_country=1,
+                                   eon_migration_treaty_pending_terms=1)
+        nations[1].flags.add('migration_agreement_migrants_add@3')
+        nations[3].flags.add('migration_agreement_migrants_cut@1')
+        nations[4].variables.update(pending_migration_agreement_country=3,
+                                   eon_migration_treaty_pending_terms=1)
+
+    def test_actual_month_prefix_replaces_snapshot_and_actual_suffix_clears_it(self):
+        nations = setup()
+        nations[2].exists = nations[4].exists = False
+        model = Interpreter(nations)
+        world = one(ast((ROOT / 'common/scripted_effects/eon_migration_relief_effects.txt').read_text(encoding='utf-8-sig')),
+                    'eon_migration_monthly_world_update')
+        first_live = next(i for i, node in enumerate(world) if node[0] == 'every_country')
+        prefix = world[:first_live]
+        self.assertEqual([node[0] for node in prefix],
+                         ['clr_global_flag', 'clear_array', 'every_possible_country', 'set_global_flag'])
+        model.global_flags.update((MIGRATION_CACHE_READY, 'unrelated_existing_global'))
+        model.global_arrays[MIGRATION_CACHE_ARRAY] = [nations[1]]
+        model.effect(prefix, [nations[3]])
+        self.assertEqual(model.global_arrays[MIGRATION_CACHE_ARRAY], [nations[2], nations[4]])
+        self.assertTrue(model.trigger(ast('has_global_flag = ' + MIGRATION_CACHE_READY), [nations[1]]))
+        suffix = world[first_live + 1:first_live + 3]
+        self.assertEqual([node[0] for node in suffix], ['clear_array', 'clr_global_flag'])
+        model.effect(suffix, [nations[3]])
+        self.assertEqual(model.global_arrays[MIGRATION_CACHE_ARRAY], [])
+        self.assertNotIn(MIGRATION_CACHE_READY, model.global_flags)
+        self.assertIn('unrelated_existing_global', model.global_flags)
+
+    def test_ready_cached_cleanup_preserves_live_pair_and_unrelated_reservation(self):
+        nations = setup(); self.seed_pair(nations)
+        model = Interpreter(nations, sender=4, receiver=1)
+        model.global_flags.add(MIGRATION_CACHE_READY)
+        model.global_arrays[MIGRATION_CACHE_ARRAY] = [nations[2]]
+        model.effect(model.effects['eon_migration_treaty_reconcile_country'], [nations[1]])
+        self.assertEqual(model.scope_visits, [(4, 1, 2)])
+        self.assertNotIn('migration_agreement_migrants_add@2', nations[1].flags)
+        self.assertNotIn('migration_agreement_migrants_cut@1', nations[2].flags)
+        self.assertNotIn('pending_migration_agreement_country', nations[1].variables)
+        self.assertEqual(nations[1].variables['eon_migration_treaty_pending_sender'], 3)
+        self.assertEqual(nations[1].variables['eon_migration_treaty_pending_terms'], 1)
+        self.assertIn('migration_agreement_migrants_add@3', nations[1].flags)
+        self.assertIn('migration_agreement_migrants_cut@1', nations[3].flags)
+        self.assertAlmostEqual(nations[1].variables['migrants_add'], .05)
+        self.assertEqual(nations[4].variables['pending_migration_agreement_country'], 3)
+        self.assertEqual(nations[4].variables['eon_migration_treaty_pending_terms'], 1)
+
+    def test_ready_empty_cache_does_not_silently_run_fallback(self):
+        nations = setup(); self.seed_pair(nations)
+        model = Interpreter(nations)
+        model.global_flags.add(MIGRATION_CACHE_READY)
+        model.effect(model.effects['eon_migration_treaty_cleanup_dead_partners'], [nations[1]])
+        self.assertEqual(model.scope_visits, [])
+        self.assertIn('migration_agreement_migrants_add@2', nations[1].flags)
+        self.assertEqual(nations[1].variables['pending_migration_agreement_country'], 2)
+        model.global_flags.discard(MIGRATION_CACHE_READY)
+        model.effect(model.effects['eon_migration_treaty_cleanup_dead_partners'], [nations[1]])
+        self.assertNotIn('migration_agreement_migrants_add@2', nations[1].flags)
+        self.assertNotIn('pending_migration_agreement_country', nations[1].variables)
+        self.assertEqual(model.scope_visits, [])
+
+    def test_owned_break_reset_preserves_foreign_temporary_values(self):
+        nations = setup(); self.seed_pair(nations)
+        model = Interpreter(nations)
+        model.global_flags.add(MIGRATION_CACHE_READY)
+        model.global_arrays[MIGRATION_CACHE_ARRAY] = [nations[2]]
+        model.temp.update({MIGRATION_CACHE_BREAK: 1, 'break': 1, 'foreign_break': 7})
+        model.effect(model.effects['eon_migration_treaty_cleanup_dead_partners'], [nations[1]])
+        self.assertEqual(model.scope_visits, [(1, 1, 2)])
+        self.assertEqual(model.temp[MIGRATION_CACHE_BREAK], 0)
+        self.assertEqual(model.temp['break'], 1)
+        self.assertEqual(model.temp['foreign_break'], 7)
+
+    def test_live_and_same_country_cache_entries_are_filtered_by_actual_body(self):
+        nations = setup(); self.seed_pair(nations)
+        model = Interpreter(nations)
+        model.global_flags.add(MIGRATION_CACHE_READY)
+        model.global_arrays[MIGRATION_CACHE_ARRAY] = [nations[3], nations[1], nations[2]]
+        model.effect(model.effects['eon_migration_treaty_cleanup_dead_partners'], [nations[1]])
+        self.assertEqual(model.scope_visits, [(1, 1, 3), (1, 1, 1), (1, 1, 2)])
+        self.assertIn('migration_agreement_migrants_add@3', nations[1].flags)
+        self.assertIn('migration_agreement_migrants_cut@1', nations[3].flags)
+        self.assertNotIn('migration_agreement_migrants_add@2', nations[1].flags)
+
+    def test_scope_array_preserves_order_ROOT_PREV_and_break_semantics(self):
+        nations = setup(); nations[2].exists = nations[4].exists = False
+        model = Interpreter(nations, sender=3, receiver=1)
+        model.global_arrays[MIGRATION_CACHE_ARRAY] = [nations[4], nations[2]]
+        body = ast('for_each_scope_loop = { array = ' + MIGRATION_CACHE_ARRAY + ' break = ' + MIGRATION_CACHE_BREAK +
+                   ' set_variable = { seen_root = ROOT.id } set_variable = { seen_prev = PREV.id }' +
+                   ' PREV = { set_variable = { seen_peer = PREV.id } } }')
+        model.effect(body, [nations[1]])
+        self.assertEqual(model.scope_visits, [(3, 1, 4), (3, 1, 2)])
+        self.assertEqual(nations[4].variables['seen_root'], 3)
+        self.assertEqual(nations[2].variables['seen_prev'], 1)
+        self.assertEqual(nations[1].variables['seen_peer'], 2)
+        model.scope_visits.clear()
+        body[0][2].append(('set_temp_variable', '=', [(MIGRATION_CACHE_BREAK, '=', '1')]))
+        model.effect(body, [nations[1]])
+        self.assertEqual(model.scope_visits, [(3, 1, 4)])
+        model.scope_visits.clear()
+        model.effect(body, [nations[1]])
+        self.assertEqual(model.scope_visits, [])
+
+    def test_unknown_commands_flags_arrays_and_breaks_still_fail_closed(self):
+        model = Interpreter(setup())
+        with self.assertRaises(ValueError): model.trigger(ast('unknown_trigger = yes'))
+        with self.assertRaises(ValueError): model.trigger(ast('has_global_flag = unrelated_unknown_global'))
+        for script in ('unknown_effect = yes', 'set_global_flag = unrelated_unknown_global',
+                       'clear_array = global.unknown_array',
+                       'add_to_array = { array = global.unknown_array value = THIS }',
+                       'add_to_array = { array = ' + MIGRATION_CACHE_ARRAY + ' value = 2 }',
+                       'for_each_scope_loop = { array = global.unknown_array break = ' + MIGRATION_CACHE_BREAK + ' }',
+                       'for_each_scope_loop = { array = ' + MIGRATION_CACHE_ARRAY + ' break = foreign_break }'):
+            with self.subTest(script=script):
+                with self.assertRaises(ValueError): model.effect(ast(script), [model.countries[1]])
+
+    def test_foreign_scope_or_truncated_pointer_is_rejected_not_normalized(self):
+        model = Interpreter(setup())
+        body = ast('for_each_scope_loop = { array = ' + MIGRATION_CACHE_ARRAY + ' break = ' + MIGRATION_CACHE_BREAK + ' }')
+        for token in (2, 2.5, Nation(2), object()):
+            model.global_arrays[MIGRATION_CACHE_ARRAY] = [token]
+            with self.subTest(token=token):
+                with self.assertRaises(ValueError): model.effect(body, [model.countries[1]])
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -1,0 +1,369 @@
+# Era of Nations: shared Council electorate and voting rules.
+eon_eu_can_view_union = {
+	OR = {
+		eon_eu_is_active_member = yes
+		eon_eu_is_candidate = yes
+	}
+}
+
+eon_eu_can_vote = {
+	eon_eu_is_active_member = yes
+	NOT = { has_idea = EUU_voting_rights_suspended }
+}
+
+eon_eu_can_cast_council_vote = { eon_eu_can_vote = yes check_variable = { global.current_active_vote_disp > 0 } eon_eu_council_ballot_window_open = yes }
+
+# Treaties, enlargement mandates, own-resource/fiscal and common foreign-policy
+# reforms require unanimous assent in this national-delegation abstraction.
+# Individual accession treaties are handled by the separate Article49 lifecycle.
+eon_eu_agenda_requires_unanimity = {
+	OR = {
+		check_variable = { global.current_active_vote_disp = 103 }
+		check_variable = { global.current_active_vote_disp = 104 }
+		check_variable = { global.current_active_vote_disp = 203 }
+		check_variable = { global.current_active_vote_disp = 206 }
+		check_variable = { global.current_active_vote_disp = 207 }
+		check_variable = { global.current_active_vote_disp = 208 }
+		check_variable = { global.current_active_vote_disp = 304 }
+		check_variable = { global.current_active_vote_disp = 305 }
+		check_variable = { global.current_active_vote_disp = 306 }
+		check_variable = { global.current_active_vote_disp = 307 }
+		check_variable = { global.current_active_vote_disp = 308 }
+		check_variable = { global.current_active_vote_disp = 110 }
+		check_variable = { global.current_active_vote_disp = 112 }
+		check_variable = { global.current_active_vote_disp = 601 }
+		check_variable = { global.current_active_vote_disp = 602 }
+		check_variable = { global.current_active_vote_disp = 603 }
+		check_variable = { global.current_active_vote_disp = 605 }
+		check_variable = { global.current_active_vote_disp = 606 }
+		check_variable = { global.current_active_vote_disp = 607 }
+		check_variable = { global.current_active_vote_disp = 608 }
+		check_variable = { global.current_active_vote_disp = 609 }
+		check_variable = { global.current_active_vote_disp = 610 }
+		check_variable = { global.current_active_vote_disp = 611 }
+		check_variable = { global.current_active_vote_disp = 650 }
+		check_variable = { global.current_active_vote_disp = 651 }
+		check_variable = { global.current_active_vote_disp = 652 }
+		check_variable = { global.current_active_vote_disp = 653 }
+	}
+}
+eon_eu_council_vote_passes = { if = { limit = { eon_eu_council_deadline_outcome_current = yes } check_variable = { global.eon_eu_council_outcome_yes = 1 } } else = {
+	check_variable = { global.eon_eu_voters > 0 }
+	check_variable = { global.current_active_vote_disp > 0 }
+	OR = {
+		AND = {
+			eon_eu_agenda_requires_unanimity = yes
+			check_variable = { global.EU_active_vote_no = 0 }
+			# Abstention is permitted; an unanswered country has not consented.
+			check_variable = { global.eon_eu_unanswered_members = 0 }
+			check_variable = { global.EU_active_vote_yes > 0 }
+		}
+		AND = {
+			eon_eu_agenda_requires_unanimity = no
+			check_variable = { var = global.eon_eu_yes_fraction value = 0.55 compare = greater_than_or_equals }
+			OR = {
+				check_variable = { var = global.EU_pop_ratio_yes value = 0.65 compare = greater_than_or_equals }
+				check_variable = { global.eon_eu_opposing_members < 4 }
+			}
+		}
+	}
+
+} }
+
+eon_eu_council_proposal_free = {
+ OR = {
+  has_idea = EU_commission_president
+  has_idea = EU_council_president
+  has_idea = EU_parliament_president
+  influence_on_all_other_EU_members_3_percent = yes
+ }
+}
+eon_eu_council_proposal_ready = {
+ eon_eu_can_vote = yes
+ eon_eu_union_active = yes
+ is_in_array = { array = global.EU_member value = THIS }
+ is_in_array = { array = global.EU_council_votes value = v }
+ eon_eu_selected_council_agenda_supported = yes
+ OR = { NOT = { has_global_flag = delay_next_council_vote } eon_eu_handoff_selected_pending = yes }
+ OR = { NOT = { has_country_flag = delay_player_next_council_vote } eon_eu_handoff_selected_pending = yes }
+ check_variable = { global.current_active_vote_disp = 0 }
+ OR = { eon_eu_council_proposal_free = yes has_political_power > 500 }
+ var:global.eucomission = {
+  eon_eu_is_active_member = yes
+  has_idea = EU_commission_president
+  is_in_array = { array = global.EU_member value = THIS }
+ }
+ EU_external_chi_influence_15 = no
+ OR = { EU_external_sov_influence_15 = no SOV = { eon_eu_is_active_member = yes } }
+ check_variable = { eurosceptic < 0.4 }
+}
+eon_eu_council_sway_ready = {
+ eon_eu_can_cast_council_vote = yes
+ is_in_array = { array = global.EU_member value = THIS }
+ ROOT = {
+  eon_eu_can_cast_council_vote = yes
+  is_in_array = { array = global.EU_member value = THIS }
+ }
+ is_ai = yes
+ NOT = { has_country_flag = current_vote_influenced }
+ EU_external_chi_influence_15 = no
+ OR = { EU_external_sov_influence_15 = no SOV = { eon_eu_is_active_member = yes } }
+ OR = {
+  AND = {
+   is_in_array = { array = global.EU_active_vote_supporters value = ROOT }
+   is_in_array = { array = global.EU_active_vote_rejecters value = THIS }
+  }
+  AND = {
+   is_in_array = { array = global.EU_active_vote_rejecters value = ROOT }
+   is_in_array = { array = global.EU_active_vote_supporters value = THIS }
+  }
+ }
+ # Native trigger arithmetic uses the same value as the debit. PP balancing is
+ # a gameplay coefficient, never a claim that real votes can be bought.
+ # UI reads the existing canonical census; the effect refreshes it before
+ # rechecking this trigger. No effect-only country loop is placed in a trigger.
+ set_temp_variable = { eon_eu_council_sway_total_k = global.eon_eu_voting_population_k }
+ set_temp_variable = { eon_eu_council_sway_target_k = eon_eu_voting_population_k }
+ check_variable = { eon_eu_council_sway_total_k > 0 }
+ set_temp_variable = { eon_eu_council_sway_cost = eon_eu_council_sway_target_k }
+ divide_temp_variable = { eon_eu_council_sway_cost = eon_eu_council_sway_total_k }
+ multiply_temp_variable = { eon_eu_council_sway_cost = 7500 }
+ clamp_temp_variable = { var = eon_eu_council_sway_cost min = 0 max = 1000 }
+ set_temp_variable = { base_pp_cost = eon_eu_council_sway_cost }
+ ROOT = { has_political_power > eon_eu_council_sway_cost }
+}
+eon_eu_council_mission_current = {
+ eon_eu_is_active_member = yes
+ eon_eu_council_round_identity_current = yes
+ check_variable = { global.current_active_vote_disp > 0 }
+ check_variable = { var = eon_eu_council_mission_agenda value = global.current_active_vote_disp compare = equals }
+ check_variable = { var = eon_eu_council_mission_instance value = global.eon_eu_council_vote_instance compare = equals }
+}
+eon_eu_council_result_current = {
+ eon_eu_council_mission_current = yes
+ has_idea = EU_commission_president
+ check_variable = { var = global.eucomission value = THIS.id compare = equals }
+ check_variable = { var = global.eon_eu_council_vote_owner value = THIS.id compare = equals }
+}
+eon_eu_legacy_council_shape = {
+ eon_eu_union_active = yes
+ check_variable = { global.current_active_vote_disp > 0 }
+ check_variable = { var = global.EUXXX_council_agenda value = global.current_active_vote_disp compare = equals }
+ eon_eu_current_council_agenda_supported = yes
+}
+eon_eu_legacy_council_round_present = {
+ eon_eu_legacy_council_shape = yes
+ NOT = { is_in_array = { array = global.EU_passed_votes value = global.current_active_vote_disp } }
+}
+eon_eu_legacy_council_context = {
+ eon_eu_legacy_council_round_present = yes
+ var:global.eucomission = {
+  eon_eu_is_active_member = yes has_idea = EU_commission_president
+  is_in_array = { array = global.EU_member value = THIS }
+ }
+}
+eon_eu_council_mission_retained = {
+ OR = {
+  eon_eu_council_mission_current = yes
+  AND = {
+   NOT = { has_global_flag = eon_eu_council_vote_clock_started }
+   eon_eu_legacy_council_round_present = yes
+   eon_eu_is_active_member = yes
+   is_in_array = { array = global.EU_member value = THIS }
+   check_variable = { eon_eu_council_mission_instance = 0 }
+  }
+ }
+}
+eon_eu_council_ballot_window_open = {
+ OR = {
+  AND = { eon_eu_council_round_identity_current = yes has_global_flag = eon_eu_council_vote_deadline }
+  AND = {
+   NOT = { has_global_flag = eon_eu_council_vote_clock_started }
+   eon_eu_legacy_council_context = yes
+   NOT = { eon_eu_legacy_council_elapsed_receipt_matches = yes }
+   any_country = {
+    eon_eu_is_active_member = yes is_in_array = { array = global.EU_member value = THIS }
+    OR = {
+     AND = { has_active_mission = EU_voting_mission_focus_EUXXX_QMV_result check_variable = { days_mission_timeout@EU_voting_mission_focus_EUXXX_QMV_result > 0 } }
+     AND = { has_active_mission = EU_voting_mission_focus_EUXXX_QMV_result_timer check_variable = { days_mission_timeout@EU_voting_mission_focus_EUXXX_QMV_result_timer > 0 } }
+    }
+   }
+   NOT = { any_country = {
+    eon_eu_is_active_member = yes is_in_array = { array = global.EU_member value = THIS }
+    OR = {
+     AND = { has_active_mission = EU_voting_mission_focus_EUXXX_QMV_result check_variable = { var = days_mission_timeout@EU_voting_mission_focus_EUXXX_QMV_result value = 0 compare = less_than_or_equals } }
+     AND = { has_active_mission = EU_voting_mission_focus_EUXXX_QMV_result_timer check_variable = { var = days_mission_timeout@EU_voting_mission_focus_EUXXX_QMV_result_timer value = 0 compare = less_than_or_equals } }
+    }
+   } }
+  }
+ }
+}
+eon_eu_legacy_council_elapsed_receipt_matches = {
+ has_global_flag = eon_eu_legacy_council_expired_callback
+ check_variable = { var = global.eon_eu_legacy_council_expired_agenda value = global.current_active_vote_disp compare = equals }
+ check_variable = { var = global.eon_eu_legacy_council_expired_instance value = global.eon_eu_council_vote_instance compare = equals }
+}
+eon_eu_council_deadline_outcome_current = {
+ eon_eu_council_round_identity_current = yes
+ NOT = { has_global_flag = eon_eu_council_vote_deadline }
+ check_variable = { global.current_active_vote_disp > 0 }
+ check_variable = { var = global.eon_eu_council_outcome_instance value = global.eon_eu_council_vote_instance compare = equals }
+ check_variable = { var = global.eon_eu_council_outcome_agenda value = global.eon_eu_council_round_agenda compare = equals }
+}
+eon_eu_council_round_identity_current = {
+ has_global_flag = eon_eu_council_vote_clock_started
+ check_variable = { global.eon_eu_council_vote_instance > 0 }
+ eon_eu_current_council_agenda_supported = yes
+ check_variable = { var = global.eon_eu_council_round_agenda value = global.current_active_vote_disp compare = equals }
+ check_variable = { var = global.EUXXX_council_agenda value = global.current_active_vote_disp compare = equals }
+}
+
+eon_eu_selected_council_agenda_supported = { OR = {
+ check_variable = { v = 101 }
+ check_variable = { v = 102 }
+ check_variable = { v = 103 }
+ check_variable = { v = 104 }
+ check_variable = { v = 105 }
+ check_variable = { v = 201 }
+ check_variable = { v = 202 }
+ check_variable = { v = 203 }
+ check_variable = { v = 204 }
+ check_variable = { v = 205 }
+ check_variable = { v = 206 }
+ check_variable = { v = 207 }
+ check_variable = { v = 208 }
+ check_variable = { v = 301 }
+ check_variable = { v = 302 }
+ check_variable = { v = 303 }
+ check_variable = { v = 304 }
+ check_variable = { v = 305 }
+ check_variable = { v = 306 }
+ check_variable = { v = 307 }
+ check_variable = { v = 308 }
+ check_variable = { v = 401 }
+ check_variable = { v = 402 }
+ check_variable = { v = 403 }
+ check_variable = { v = 404 }
+ check_variable = { v = 405 }
+ check_variable = { v = 406 }
+ check_variable = { v = 407 }
+ check_variable = { v = 408 }
+ check_variable = { v = 601 }
+ check_variable = { v = 602 }
+ check_variable = { v = 603 }
+ check_variable = { v = 703 }
+ check_variable = { v = 110 }
+ check_variable = { v = 111 }
+ check_variable = { v = 112 }
+ check_variable = { v = 605 }
+ check_variable = { v = 606 }
+ check_variable = { v = 607 }
+ check_variable = { v = 608 }
+ check_variable = { v = 609 }
+ check_variable = { v = 610 }
+ check_variable = { v = 611 }
+ check_variable = { v = 650 }
+ check_variable = { v = 651 }
+ check_variable = { v = 652 }
+ check_variable = { v = 653 }
+} }
+
+eon_eu_legacy_council_agenda_receipt = { OR = {
+ AND = { check_variable = { global.current_active_vote_disp = 101 } has_global_flag = focus_EU101_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 102 } has_global_flag = focus_EU102_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 103 } has_global_flag = focus_EU103_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 104 } has_global_flag = focus_EU104_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 105 } has_global_flag = focus_EU105_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 201 } has_global_flag = focus_EU201_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 202 } has_global_flag = focus_EU202_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 203 } has_global_flag = focus_EU203_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 204 } has_global_flag = focus_EU204_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 205 } has_global_flag = focus_EU205_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 206 } has_global_flag = focus_EU206_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 207 } has_global_flag = focus_EU207_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 208 } has_global_flag = focus_EU208_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 301 } has_global_flag = focus_EU301_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 302 } has_global_flag = focus_EU302_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 303 } has_global_flag = focus_EU303_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 304 } has_global_flag = focus_EU304_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 305 } has_global_flag = focus_EU305_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 306 } has_global_flag = focus_EU306_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 307 } has_global_flag = focus_EU307_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 308 } has_global_flag = focus_EU308_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 401 } has_global_flag = focus_EU401_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 402 } has_global_flag = focus_EU402_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 403 } has_global_flag = focus_EU403_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 404 } has_global_flag = focus_EU404_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 405 } has_global_flag = focus_EU405_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 406 } has_global_flag = focus_EU406_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 407 } has_global_flag = focus_EU407_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 408 } has_global_flag = focus_EU408_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 601 } has_global_flag = focus_EU601_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 602 } has_global_flag = focus_EU602_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 603 } has_global_flag = focus_EU603_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 703 } has_global_flag = focus_EU703_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 110 } has_global_flag = focus_EU110_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 111 } has_global_flag = focus_EU111_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 112 } has_global_flag = focus_EU112_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 605 } has_global_flag = focus_EU605_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 606 } has_global_flag = focus_EU606_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 607 } has_global_flag = focus_EU607_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 608 } has_global_flag = focus_EU608_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 609 } has_global_flag = focus_EU609_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 610 } has_global_flag = focus_EU610_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 611 } has_global_flag = focus_EU611_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 650 } has_global_flag = focus_EU650_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 651 } has_global_flag = focus_EU651_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 652 } has_global_flag = focus_EU652_QMV_voted }
+ AND = { check_variable = { global.current_active_vote_disp = 653 } has_global_flag = focus_EU653_QMV_voted }
+} }
+
+eon_eu_current_council_agenda_supported = { OR = {
+ check_variable = { global.current_active_vote_disp = 101 }
+ check_variable = { global.current_active_vote_disp = 102 }
+ check_variable = { global.current_active_vote_disp = 103 }
+ check_variable = { global.current_active_vote_disp = 104 }
+ check_variable = { global.current_active_vote_disp = 105 }
+ check_variable = { global.current_active_vote_disp = 201 }
+ check_variable = { global.current_active_vote_disp = 202 }
+ check_variable = { global.current_active_vote_disp = 203 }
+ check_variable = { global.current_active_vote_disp = 204 }
+ check_variable = { global.current_active_vote_disp = 205 }
+ check_variable = { global.current_active_vote_disp = 206 }
+ check_variable = { global.current_active_vote_disp = 207 }
+ check_variable = { global.current_active_vote_disp = 208 }
+ check_variable = { global.current_active_vote_disp = 301 }
+ check_variable = { global.current_active_vote_disp = 302 }
+ check_variable = { global.current_active_vote_disp = 303 }
+ check_variable = { global.current_active_vote_disp = 304 }
+ check_variable = { global.current_active_vote_disp = 305 }
+ check_variable = { global.current_active_vote_disp = 306 }
+ check_variable = { global.current_active_vote_disp = 307 }
+ check_variable = { global.current_active_vote_disp = 308 }
+ check_variable = { global.current_active_vote_disp = 401 }
+ check_variable = { global.current_active_vote_disp = 402 }
+ check_variable = { global.current_active_vote_disp = 403 }
+ check_variable = { global.current_active_vote_disp = 404 }
+ check_variable = { global.current_active_vote_disp = 405 }
+ check_variable = { global.current_active_vote_disp = 406 }
+ check_variable = { global.current_active_vote_disp = 407 }
+ check_variable = { global.current_active_vote_disp = 408 }
+ check_variable = { global.current_active_vote_disp = 601 }
+ check_variable = { global.current_active_vote_disp = 602 }
+ check_variable = { global.current_active_vote_disp = 603 }
+ check_variable = { global.current_active_vote_disp = 703 }
+ check_variable = { global.current_active_vote_disp = 110 }
+ check_variable = { global.current_active_vote_disp = 111 }
+ check_variable = { global.current_active_vote_disp = 112 }
+ check_variable = { global.current_active_vote_disp = 605 }
+ check_variable = { global.current_active_vote_disp = 606 }
+ check_variable = { global.current_active_vote_disp = 607 }
+ check_variable = { global.current_active_vote_disp = 608 }
+ check_variable = { global.current_active_vote_disp = 609 }
+ check_variable = { global.current_active_vote_disp = 610 }
+ check_variable = { global.current_active_vote_disp = 611 }
+ check_variable = { global.current_active_vote_disp = 650 }
+ check_variable = { global.current_active_vote_disp = 651 }
+ check_variable = { global.current_active_vote_disp = 652 }
+ check_variable = { global.current_active_vote_disp = 653 }
+} }

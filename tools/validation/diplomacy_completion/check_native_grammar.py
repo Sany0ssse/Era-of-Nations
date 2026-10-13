@@ -25,6 +25,13 @@ def walk(nodes):
 
 def inspect(nodes):
     errors = []
+    def check_stability(rows, parents=()):
+        for key, operator, value in rows:
+            if key == 'stability' and operator in ('<', '>') and 'check_variable' not in parents:
+                errors.append('Country stability trigger is has_stability; bare stability is invalid')
+            if isinstance(value, list):
+                check_stability(value, parents + (key,))
+    check_stability(nodes)
     for key, operator, value in walk(nodes):
         if operator in ('>=', '<='):
             errors.append(f'Unsupported inclusive shorthand: {key} {operator}')

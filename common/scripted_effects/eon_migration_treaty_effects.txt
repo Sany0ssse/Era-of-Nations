@@ -177,6 +177,37 @@ eon_migration_treaty_cleanup_annexed_pair = {
 # Monthly reconciliation checks only recorded pairs or queues, never unlocks a
 # living unanswered partner, and removes the dead peer's reciprocal flags too.
 eon_migration_treaty_cleanup_dead_partners = {
+	if = {
+		limit = { has_global_flag = eon_migration_treaty_dead_cache_ready }
+		set_temp_variable = { eon_migration_treaty_dead_cache_break = 0 }
+		for_each_scope_loop = {
+			array = global.eon_migration_treaty_dead_cache
+			break = eon_migration_treaty_dead_cache_break
+			if = {
+		limit = {
+			exists = no
+			NOT = { tag = PREV }
+			OR = {
+				has_country_flag = migration_agreement_migrants_add@PREV
+				has_country_flag = migration_agreement_migrants_cut@PREV
+				PREV = {
+					OR = {
+						has_country_flag = migration_agreement_migrants_add@PREV
+						has_country_flag = migration_agreement_migrants_cut@PREV
+						check_variable = { pending_migration_agreement_country = PREV.id }
+						check_variable = { eon_migration_treaty_pending_sender = PREV.id }
+					}
+				}
+			}
+		}
+		PREV = {
+			set_temp_variable = { eon_migration_treaty_annexed_partner = PREV.id }
+			eon_migration_treaty_cleanup_annexed_pair = yes
+		}
+			}
+		}
+	}
+	else = {
 	every_possible_country = {
 		limit = {
 			exists = no
@@ -198,6 +229,7 @@ eon_migration_treaty_cleanup_dead_partners = {
 			set_temp_variable = { eon_migration_treaty_annexed_partner = PREV.id }
 			eon_migration_treaty_cleanup_annexed_pair = yes
 		}
+	}
 	}
 }
 

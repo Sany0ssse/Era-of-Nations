@@ -1,0 +1,54 @@
+# Native selected-country frame: THIS target / ROOT player / FROM unrelated.
+# ROOT switches to actor / PREV target before any pair TEMP predicate.
+scripted_diplomatic_actions = {
+ eon_investment_offer_v2_ui_review = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { ROOT = { is_ai = no } exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_investment_offer_v2_incoming = yes } }
+  selectable = { ROOT = { is_ai = no } ROOT = { exists = yes eon_investment_offer_v2_incoming = yes } }
+  can_be_sent = { ROOT = { is_ai = no } ROOT = { exists = yes eon_investment_offer_v2_incoming = yes } }
+  cost = 0 requires_acceptance = no show_acceptance_on_action_button = no icon = 17
+  send_description = eon_investment_offer_v2_ui_review_send_desc
+  complete_effect = { ROOT = { if = { limit = { is_ai = no exists = yes PREV = { exists = yes NOT = { tag = PREV } } eon_investment_offer_v2_incoming = yes } eon_investment_offer_v2_review = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_investment_offer_v2_ui_accept = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { ROOT = { is_ai = no } exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_investment_offer_v2_incoming = yes } }
+  selectable = { ROOT = { is_ai = no } ROOT = { exists = yes eon_investment_offer_v2_accept_ready = yes } }
+  can_be_sent = { ROOT = { is_ai = no } ROOT = { exists = yes eon_investment_offer_v2_accept_ready = yes } }
+  cost = 0 requires_acceptance = no show_acceptance_on_action_button = no icon = 17
+  send_description = eon_investment_offer_v2_ui_accept_send_desc
+  complete_effect = { ROOT = { if = { limit = { is_ai = no exists = yes PREV = { exists = yes NOT = { tag = PREV } } eon_investment_offer_v2_accept_ready = yes } set_temp_variable = { eon_investment_offer_v2_expected_epoch = eon_investment_offer_v2_epoch@PREV } eon_investment_offer_v2_accept = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_investment_offer_v2_ui_decline = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { ROOT = { is_ai = no } exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_investment_offer_v2_incoming = yes } }
+  selectable = { ROOT = { is_ai = no } ROOT = { exists = yes eon_investment_offer_v2_reviewed = yes } }
+  can_be_sent = { ROOT = { is_ai = no } ROOT = { exists = yes eon_investment_offer_v2_reviewed = yes } }
+  cost = 0 requires_acceptance = no show_acceptance_on_action_button = no icon = 17
+  send_description = eon_investment_offer_v2_ui_decline_send_desc
+  complete_effect = { ROOT = { if = { limit = { is_ai = no exists = yes PREV = { exists = yes NOT = { tag = PREV } } eon_investment_offer_v2_reviewed = yes } set_temp_variable = { eon_investment_offer_v2_expected_epoch = eon_investment_offer_v2_epoch@PREV } eon_investment_offer_v2_decline = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_investment_offer_v2_ui_withdraw = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { ROOT = { is_ai = no } exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_investment_offer_v2_outgoing = yes } }
+  selectable = { ROOT = { is_ai = no } ROOT = { exists = yes eon_investment_offer_v2_outgoing = yes } }
+  can_be_sent = { ROOT = { is_ai = no } ROOT = { exists = yes eon_investment_offer_v2_outgoing = yes } }
+  cost = 0 requires_acceptance = no show_acceptance_on_action_button = no icon = 17
+  send_description = eon_investment_offer_v2_ui_withdraw_send_desc
+  complete_effect = { ROOT = { if = { limit = { is_ai = no exists = yes PREV = { exists = yes NOT = { tag = PREV } } eon_investment_offer_v2_outgoing = yes } set_temp_variable = { eon_investment_offer_v2_expected_epoch = eon_investment_offer_v2_epoch@PREV } eon_investment_offer_v2_withdraw = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_investment_offer_v2_ui_status = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { ROOT = { is_ai = no } exists = yes NOT = { tag = ROOT } ROOT = { exists = yes check_variable = { eon_investment_offer_v2_epoch@PREV > 0 } } }
+  selectable = { ROOT = { is_ai = no } ROOT = { exists = yes check_variable = { eon_investment_offer_v2_epoch@PREV > 0 } } }
+  can_be_sent = { ROOT = { is_ai = no } ROOT = { exists = yes check_variable = { eon_investment_offer_v2_epoch@PREV > 0 } } }
+  cost = 0 requires_acceptance = no show_acceptance_on_action_button = no icon = 17
+  send_description = eon_investment_offer_v2_ui_status_send_desc
+  complete_effect = { ROOT = { if = { limit = { is_ai = no exists = yes PREV = { exists = yes NOT = { tag = PREV } } check_variable = { eon_investment_offer_v2_epoch@PREV > 0 } } custom_effect_tooltip = eon_investment_offer_v2_terms_tt } } }
+  ai_desire = { factor = 0 }
+ }
+}

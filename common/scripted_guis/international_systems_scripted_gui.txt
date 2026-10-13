@@ -34,6 +34,7 @@ scripted_gui = {
 					limit = { check_variable = { i = 1 } }
 					NOT = { has_global_flag = GAME_RULE_eu_disabled }
 					NOT = { has_global_flag = usoe_formed }
+					custom_trigger_tooltip = { tooltip = eon_eu_union_access_help eon_eu_can_view_union = yes }
 					is_ai = no
 				}
 			}
@@ -55,7 +56,7 @@ scripted_gui = {
 					update_arctic_dirty_variable = yes
 				}
 				else_if = {
-					limit = { check_variable = { i = 1 } }
+					limit = { check_variable = { i = 1 } eon_eu_can_view_union = yes }
 					eu_screen_selection = yes
 					if = { limit = { NOT = { has_country_flag = new_EU_open } }
 						set_country_flag = new_EU_open
@@ -63,7 +64,10 @@ scripted_gui = {
 					else = {
 						clr_country_flag = new_EU_open
 					}
-					set_country_flag = show_offices_screen
+					if = { limit = { eon_eu_is_active_member = yes }
+						set_country_flag = show_offices_screen
+					}
+					else = { set_country_flag = show_euro_info }
 					update_eu_dirty_variable = yes
 				}
 			}

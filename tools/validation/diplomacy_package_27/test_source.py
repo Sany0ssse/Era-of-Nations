@@ -3,6 +3,14 @@ from pathlib import Path
 import hashlib, importlib.util, json, re, subprocess, sys
 from _model import ROOT, ast, one, read
 
+# Restore only the exact reviewed later performance traversal island before
+# this package's original whole-file byte comparison. Outside bytes and
+# unreviewed phase/lifecycle edits must still fail.
+_perf_spec=importlib.util.spec_from_file_location('eon_energy_traversal_byte_compat',
+    ROOT/'tools/validation/performance_policy/energy_traversal_byte_compat.py')
+_perf_bytes=importlib.util.module_from_spec(_perf_spec)
+_perf_spec.loader.exec_module(_perf_bytes)
+
 BASELINE = 'f2832b6bfd980066163d0a69a6306169c992c5d7'
 CHANGED = ['common/scripted_effects/eon_energy_delivery_effects.txt',
            'common/scripted_effects/eon_energy_contract_effects.txt']
@@ -43,6 +51,12 @@ def expected_contract(old):
                         '\t\tset_temp_variable = { eon_energy_pair_partner = FROM }\n\t\teon_energy_settlement_close_world_interval = yes\n\t\teon_energy_settlement_retire_pair = yes\n')
 for path, transform in zip(CHANGED,(expected_delivery,expected_contract)):
     old=baseline(path); current=(ROOT/path).read_bytes()
+    if path==_perf_bytes.CATALOG['path']:
+        negative_controls=_perf_bytes.negative_controls(current.decode('utf-8-sig'))
+        check(len(negative_controls)==4,'All traversal-island and outside-byte mutants rejected')
+        projected=_perf_bytes.restore_energy_traversal(path,current.decode('utf-8-sig')).encode('utf-8')
+        if _perf_bytes.CATALOG['before_bom']:projected=b'\xef\xbb\xbf'+projected
+        current=projected
     check(current.startswith(b'\xef\xbb\xbf')==old.startswith(b'\xef\xbb\xbf'),path+' BOM')
     check(current.count(b'\r\n')==old.count(b'\r\n'),path+' EOL')
     expected=transform(old.decode('utf-8')).encode('utf-8')

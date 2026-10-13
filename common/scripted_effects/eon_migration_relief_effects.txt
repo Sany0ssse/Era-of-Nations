@@ -565,6 +565,15 @@ eon_migration_clear_flow_scratch = {
 eon_migration_monthly_world_update = {
  # Register new/civil-war countries without replacing existing origin slots.
  # Arrays only grow; no fixed list of playable tags is used.
+ # Fresh synchronous snapshot: only this first country pass may use it.
+ # No persistent membership cache; native possible-country order is retained.
+ clr_global_flag = eon_migration_treaty_dead_cache_ready
+ clear_array = global.eon_migration_treaty_dead_cache
+ every_possible_country = {
+  limit = { exists = no }
+  add_to_array = { array = global.eon_migration_treaty_dead_cache value = THIS }
+ }
+ set_global_flag = eon_migration_treaty_dead_cache_ready
  every_country = {
   eon_migration_initialize_country = yes
   if = {
@@ -581,6 +590,8 @@ eon_migration_monthly_world_update = {
   set_variable = { eon_labor_month_arrived = 0 }
   eon_migration_refresh_country = yes
  }
+ clear_array = global.eon_migration_treaty_dead_cache
+ clr_global_flag = eon_migration_treaty_dead_cache_ready
  every_state = {
   limit = { has_state_flag = eon_migration_has_ledger }
   eon_migration_prepare_state_ledger = yes

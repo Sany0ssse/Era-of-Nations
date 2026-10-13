@@ -159,6 +159,12 @@ on_actions = {
 					}
 					clr_country_flag = energy_main
 					set_country_flag = energy_sell
+						if = {
+							limit = { NOT = { has_country_flag = question_about_contract } }
+							# Fresh draft controls never inherit an unrelated stale selection.
+							clear_variable = energy_selling_selected_TAG
+							clear_variable = temp_energy_ammount
+							clear_variable = temp_energy_price
 					if = {
 						limit = {
 							has_dynamic_modifier = {
@@ -171,18 +177,22 @@ on_actions = {
 							index = i
 							break = b
 							if = {
-								limit = { check_variable = { v < 0 } }
+								# Positive GW are paid imports; negative GW are export income.
+								limit = { check_variable = { v > 0 } }
 								set_temp_variable = { b = 1 }
 								set_variable = { energy_selling_selected_TAG = energy_contractors^i }
 								set_variable = { temp_energy_ammount = 0 }
 							}
 						}
 					}
-					if = {
+					else_if = {
 						limit = { check_variable = { energy_balance < 0 } }
 						random_country = {
 							limit = {
 								has_country_flag = energy_agreement@ROOT
+							NOT = { has_country_flag = question_about_contract }
+							NOT = { has_war_with = ROOT }
+							ROOT = { NOT = { has_country_flag = energy_recall_calldown@PREV } }
 								check_variable = { energy_balance > 0 }
 							}
 							PREV = {
@@ -205,14 +215,13 @@ on_actions = {
 									limit = { NOT = { has_idea = heavy_additional_consumption_spirit } }
 									multiply_temp_variable = { energy_deficit = 1.2 }
 								}
-								round_temp_variable = energy_deficit
-								set_variable = { temp_energy_ammount = 0 }
-								while_loop_effect = {
-									limit = {
-										check_variable = { temp_energy_ammount < PREV.energy_balance }
-										check_variable = { temp_energy_ammount < energy_deficit }
-									}
-									add_to_variable = { temp_energy_ammount = 1 }
+								set_variable = { temp_energy_ammount = energy_deficit }
+								clamp_variable = { var = temp_energy_ammount min = 0 max = PREV.energy_balance }
+								set_temp_variable = { eon_energy_ai_unrounded_draft = temp_energy_ammount }
+								round_variable = temp_energy_ammount
+								if = {
+									limit = { check_variable = { temp_energy_ammount > eon_energy_ai_unrounded_draft } }
+									add_to_variable = { temp_energy_ammount = -1 }
 								}
 								set_variable = { temp_energy_price = 0.05 }
 							}
@@ -223,12 +232,20 @@ on_actions = {
 						random_country = {
 							limit = {
 								has_country_flag = energy_agreement@ROOT
+							NOT = { has_country_flag = question_about_contract }
+							NOT = { has_war_with = ROOT }
+							ROOT = { NOT = { has_country_flag = energy_recall_calldown@PREV } }
 								check_variable = { energy_balance < 0 }
 							}
 							PREV = {
 								set_variable = { energy_selling_selected_TAG = PREV }
 								set_variable = { temp_energy_ammount = energy_balance }
+								set_temp_variable = { eon_energy_ai_unrounded_draft = temp_energy_ammount }
 								round_variable = temp_energy_ammount
+								if = {
+									limit = { check_variable = { temp_energy_ammount > eon_energy_ai_unrounded_draft } }
+									add_to_variable = { temp_energy_ammount = -1 }
+								}
 								multiply_variable = { temp_energy_ammount = -1 }
 								set_variable = { temp_energy_price = 0.05 }
 								for_each_loop = {
@@ -282,6 +299,7 @@ on_actions = {
 							}
 						}
 					}
+						}
 					eon_nuclear_fuel_ai_prepare_offer = yes
 				}
 				else_if = {

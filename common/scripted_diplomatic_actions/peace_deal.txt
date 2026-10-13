@@ -1,70 +1,39 @@
 scripted_diplomatic_actions = {
 
-	propose_ceasefire = { #offensive
-
-		allowed = {
-			always = yes
-		}
-
+	propose_ceasefire = {
+		# The legacy IDs now open a draft; no war outcome happens before consent.
+		allowed = { ROOT = { is_ai = no } }
 		visible = {
+			eon_peace_contact_ready = yes
 			has_defensive_war_with = ROOT
 		}
-
 		selectable = {
-		
-			peace_deal_available = yes
-
-			NOT = { has_idea = enforced_war_idea }
-
-			ROOT = { NOT = { has_idea = enforced_war_idea } }
-			
 			custom_trigger_tooltip = {
-				tooltip = peace_deal_tt
-				AND = {
-					OR = {
-						is_faction_leader = yes
-						is_in_faction = no
-					}
-					ROOT = {
-						OR = {
-							is_faction_leader = yes
-							is_in_faction = no
-						}
-					}
+				tooltip = eon_peace_contact_tt
+				eon_peace_contact_ready = yes
+			}
+		}
+		requires_acceptance = no
+		cost = 0
+		show_acceptance_on_action_button = no
+		icon = 1
+		send_description = propose_ceasefire_send_desc
+		on_sent_effect = { }
+		can_be_sent = { eon_peace_contact_ready = yes ROOT = { is_ai = no } }
+		can_be_accepted = { always = yes }
+		receive_description = propose_ceasefire_receive_desc
+		complete_effect = {
+			if = {
+				limit = { eon_peace_contact_ready = yes ROOT = { is_ai = no } }
+				ROOT = {
+					set_variable = { eon_peace_draft_target = PREV }
+					set_variable = { eon_peace_draft_kind = 1 }
+					country_event = { id = eon_peace_settlement.1 }
 				}
 			}
 		}
-
-		requires_acceptance = yes
-		cost = 0
-		show_acceptance_on_action_button = yes
-		icon = 1
-
-		send_description = propose_ceasefire_send_desc
-
-		# Cooldown: set when sent, checked in selectable above via flag
-		on_sent_effect = {
-		}
-
-		can_be_sent = {
-		}
-		
-		can_be_accepted = { # accept button will be disabled if no
-			always = yes
-		}
-
-		receive_description = propose_ceasefire_receive_desc
-		
-		complete_effect = {
-			trigger_peace_deal = yes
-			log = "Peace deal between; ROOT: [ROOT.GetTag] and THIS: [THIS.GetTag]"
-		}
-		
-		reject_effect = {
-		}
-		
-		### AI ###
-		
+		reject_effect = { }
+		# Preserve the inherited AI blocks byte for byte as reference and conference scoring.
 		ai_desire = {
 			base = -10
 			modifier = {
@@ -572,67 +541,39 @@ scripted_diplomatic_actions = {
 	}
 
 	propose_ceasefire_defensive = {
-
-		allowed = {
-			always = yes
-		}
-
+		# The legacy IDs now open a draft; no war outcome happens before consent.
+		allowed = { ROOT = { is_ai = no } }
 		visible = {
+			eon_peace_contact_ready = yes
 			has_offensive_war_with = ROOT
 		}
-
 		selectable = {
-		
-			peace_deal_available = yes
-
-			NOT = { has_idea = enforced_war_idea }
-
-			ROOT = { NOT = { has_idea = enforced_war_idea } }
-			
 			custom_trigger_tooltip = {
-				tooltip = peace_deal_tt
-				AND = {
-					OR = {
-						is_faction_leader = yes
-						is_in_faction = no
-					}
-					ROOT = {
-						OR = {
-							is_faction_leader = yes
-							is_in_faction = no
-						}
-					}
+				tooltip = eon_peace_contact_tt
+				eon_peace_contact_ready = yes
+			}
+		}
+		requires_acceptance = no
+		cost = 0
+		show_acceptance_on_action_button = no
+		icon = 1
+		send_description = propose_ceasefire_defensive_send_desc
+		on_sent_effect = { }
+		can_be_sent = { eon_peace_contact_ready = yes ROOT = { is_ai = no } }
+		can_be_accepted = { always = yes }
+		receive_description = propose_ceasefire_defensive_receive_desc
+		complete_effect = {
+			if = {
+				limit = { eon_peace_contact_ready = yes ROOT = { is_ai = no } }
+				ROOT = {
+					set_variable = { eon_peace_draft_target = PREV }
+					set_variable = { eon_peace_draft_kind = 1 }
+					country_event = { id = eon_peace_settlement.1 }
 				}
 			}
 		}
-
-		requires_acceptance = yes
-		cost = 0
-		show_acceptance_on_action_button = yes
-		icon = 1
-
-		send_description = propose_ceasefire_defensive_send_desc
-		
-		on_sent_effect = {
-		}
-
-		can_be_sent = {
-		}
-		
-		can_be_accepted = { # accept button will be disabled if no
-			always = yes
-		}
-
-		receive_description = propose_ceasefire_defensive_receive_desc
-
-		complete_effect = {
-			trigger_peace_deal = yes
-			log = "Defensive Peace deal between; ROOT: [ROOT.GetTag] and THIS: [THIS.GetTag]"
-		}	
-		
-		reject_effect = {
-		}
-		
+		reject_effect = { }
+		# Preserve the inherited AI blocks byte for byte as reference and conference scoring.
 		ai_desire = {
 			base = -10
 			modifier = {

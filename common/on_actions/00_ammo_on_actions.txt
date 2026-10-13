@@ -124,35 +124,24 @@ on_actions = {
                 }
                 add_consumed_ammo = yes
                 count_ammo_stock_days = yes
+                # Share the daily participation check; consumption uses the prior
+                # amount before the new land/air/naval rate is recalculated.
+                if = {
+                    limit = {
+                        has_game_rule = {
+                            rule = ammo_potato_mod
+                            option = no
+                        }
+                    }
+                    count_current_consumption = yes
+                    count_consumption_rating = yes
+                    count_summarry_ammunition_effect = yes
+                }
             }
         }
     }
     on_monthly = {
         effect = { count_ammo_production = yes }
-    }
-    on_daily = {
-        effect = {
-            if = {
-                limit = {
-					has_game_rule = {
-						rule = ammo_potato_mod
-						option = no
-					}
-                    OR = {
-                        has_war = yes
-                        any_other_country = {
-                            has_volunteers_amount_from = {
-                                tag = PREV
-                                count > 0
-                            }
-                        }
-                    }
-                }
-                count_current_consumption = yes
-                count_consumption_rating = yes
-                count_summarry_ammunition_effect = yes
-            }
-        }
     }
     on_monthly = {
         effect = {

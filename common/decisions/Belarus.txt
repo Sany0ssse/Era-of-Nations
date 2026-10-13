@@ -2624,56 +2624,14 @@ BLR_euroitegration = {
 				tooltip = blr_full_eurointegration_tt
 				check_variable = { blr_euroitegration > 99 }
 			}
-			NOT = { has_war = yes }
+			eon_eu_application_ready = yes
 		}
 
 		fire_only_once = yes
 
 		complete_effect = {
-			add_ideas = EU_member
-			#force_update_map_mode = { mapmode = EU_map_mode }
-			if = {
-				limit = {
-					has_global_flag = EDU
-					has_idea = NATO_member
-				}
-				remove_ideas = NATO_member
-			}
-			if = { limit = { has_global_flag = EDU }
-				every_country = {
-					limit = {
-						has_idea = EU_member
-						is_faction_leader = yes
-					}
-					add_to_faction = ROOT
-					ROOT = {
-						add_ai_strategy = { type = alliance id = PREV value = 200 }
-					}
-				}
-				custom_effect_tooltip = TT_ALL_NATO_MEMBER_NATIONS_GAIN
-				effect_tooltip = {
-					news_event = { id = EU_news.49 }
-				}
-				for_each_scope_loop = {
-					array = global.nato_members
-					news_event = { id = EU_news.49 } ### NATO members leaves and joins EU and EDU
-				}
-			}
-			custom_effect_tooltip = TT_ALL_EU_MEMBER_NATIONS_GAIN
-			effect_tooltip = {
-				news_event = {
-					id = EU_news.27 ### one country joins
-				}
-			}
-			for_each_scope_loop = {
-				array = global.EU_member
-				news_event = {
-					id = EU_news.27 ### one country joins
-				}
-			}
-			hidden_effect = {
-				EU_clear_voting = yes
-			}
+			eon_eu_apply_for_membership_start = yes
+			custom_effect_tooltip = eon_eu_domestic_application_tt
 		}
 	}
 

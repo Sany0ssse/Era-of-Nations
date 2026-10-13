@@ -57,6 +57,7 @@ from diplomacy_package_23.test_source import (
     check_owned_existing as check_later_package23_owned,
 )
 check_later_package23_owned()
+from diplomacy_package_16.ammo_port_source_view import historical_ammo_mechanics_bytes
 ACTION = 'common/scripted_diplomatic_actions/MDC_send_ammo.txt'
 FX = 'common/scripted_effects/eon_ammo_effects.txt'
 TR = 'common/scripted_triggers/eon_ammo_triggers.txt'
@@ -739,7 +740,7 @@ def main():
     # Literal native equations, not the stale monthly cache, define current room.
     native_capacity_path = 'common/scripted_effects/00_ammo_mechanics_effects.txt'
     native_capacity_bytes = (ROOT / native_capacity_path).read_bytes()
-    assert native_capacity_bytes == baseline_bytes(native_capacity_path)
+    assert historical_ammo_mechanics_bytes(native_capacity_bytes) == baseline_bytes(native_capacity_path)
     for name, literal in (('@base_max_ammo_limit', '10000'), ('@base_max_ammo_limit_per_supply_node', '100000')):
         assert re.findall(rb'(?m)^\s*' + name.encode() + rb'\s*=\s*(\d+)', native_capacity_bytes) == [literal.encode()]
     native_capacity_block = next(item for item in blocks(native_capacity_bytes, 0) if item['key'] == 'count_max_ammo_limit')

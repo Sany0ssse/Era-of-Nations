@@ -24,13 +24,61 @@ on_actions = {
 	on_peace = {
 		effect = {
 			set_temp_variable = { stability_postwar_rate = prev_stability }
-			divide_temp_variable = { stability_postwar_rate = stability }
+			if = {
+				limit = { check_variable = { stability > 0 } }
+				divide_temp_variable = { stability_postwar_rate = stability }
+			}
+			else_if = {
+				limit = { check_variable = { prev_stability > 0 } }
+				# A positive baseline lost entirely still exceeds the recovery threshold.
+				set_temp_variable = { stability_postwar_rate = 3 }
+			}
+			else = {
+				# A zero baseline and zero current value represent no measurable loss.
+				set_temp_variable = { stability_postwar_rate = 1 }
+			}
 			set_temp_variable = { productivity_postwar_rate = prev_productivity }
-			divide_temp_variable = { productivity_postwar_rate = overall_productivity }
+			if = {
+				limit = { check_variable = { overall_productivity > 0 } }
+				divide_temp_variable = { productivity_postwar_rate = overall_productivity }
+			}
+			else_if = {
+				limit = { check_variable = { prev_productivity > 0 } }
+				# A positive baseline lost entirely still exceeds the recovery threshold.
+				set_temp_variable = { productivity_postwar_rate = 3 }
+			}
+			else = {
+				# A zero baseline and zero current value represent no measurable loss.
+				set_temp_variable = { productivity_postwar_rate = 1 }
+			}
 			set_temp_variable = { factories_postwar_rate = prev_num_of_factories }
-			divide_temp_variable = { factories_postwar_rate = industrial_complex_total }
+			if = {
+				limit = { check_variable = { industrial_complex_total > 0 } }
+				divide_temp_variable = { factories_postwar_rate = industrial_complex_total }
+			}
+			else_if = {
+				limit = { check_variable = { prev_num_of_factories > 0 } }
+				# A positive baseline lost entirely still exceeds the recovery threshold.
+				set_temp_variable = { factories_postwar_rate = 3 }
+			}
+			else = {
+				# A zero baseline and zero current value represent no measurable loss.
+				set_temp_variable = { factories_postwar_rate = 1 }
+			}
 			set_temp_variable = { factories_fixing_postwar_rate = num_of_damaged_civs }
-			divide_temp_variable = { factories_fixing_postwar_rate = prev_num_of_damaged_factories }
+			if = {
+				limit = { check_variable = { prev_num_of_damaged_factories > 0 } }
+				divide_temp_variable = { factories_fixing_postwar_rate = prev_num_of_damaged_factories }
+			}
+			else_if = {
+				limit = { check_variable = { num_of_damaged_civs > 0 } }
+				# A positive baseline lost entirely still exceeds the recovery threshold.
+				set_temp_variable = { factories_fixing_postwar_rate = 3 }
+			}
+			else = {
+				# A zero baseline and zero current value represent no measurable loss.
+				set_temp_variable = { factories_fixing_postwar_rate = 1 }
+			}
 			if = {
 				limit = {
 					OR = {

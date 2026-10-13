@@ -10,6 +10,7 @@ import hashlib
 ROOT=Path(__file__).resolve().parents[3]
 import sys as package16_sys
 package16_sys.path.insert(0, str(ROOT/'tools/validation'))
+from performance_refresh.weekly_optimization_byte_compat import restore_spy_first_refresh as _restore_weekly_spy
 from diplomacy_package_16.test_source import (
     NEW as LATER_PACKAGE16_NEW, package16_original_bytes, package16_historical_existing,
     package16_original_validator_bytes,
@@ -352,6 +353,7 @@ def expected_locale(path):
 def package15_original_bytes(path,actual):
     """Strict eleven-path restoration, before fourteen/thirteen/twelve proofs."""
     if path not in EXISTING:return actual
+    if path == NFX: actual = _restore_weekly_spy(path,actual)
     original=baseline_bytes(path)
     assert actual.startswith(b'\xef\xbb\xbf')==original.startswith(b'\xef\xbb\xbf'),path
     assert (b'\r\n' in actual)==(b'\r\n' in original) and b'\r' not in actual.replace(b'\r\n',b''),path

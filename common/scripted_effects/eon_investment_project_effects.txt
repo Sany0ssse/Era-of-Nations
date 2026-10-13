@@ -17,30 +17,13 @@ eon_investment_clear_offer = {
 
 # Stage once; later GUI edits do not alter this country-variable snapshot.
 eon_investment_prepare_offer = {
-	set_temp_variable = { eon_investment_offer_prepared = 0 }
-	if = { limit = { check_variable = { eon_investment_offer_partner = 0 } }
-		set_variable = { eon_investment_offer_partner = AC_nation_target }
-		set_variable = { eon_investment_offer_state = AC_state_target }
-		set_variable = { eon_investment_offer_type = project_building_type^-1 }
-		set_variable = { eon_investment_offer_amount = project_build_amount^-1 }
-		set_variable = { eon_investment_offer_cost = project_monetary_cost^-1 }
-		set_variable = { eon_investment_offer_cofunding = project_monetary_cost^-1 }
-		multiply_variable = { eon_investment_offer_cofunding = 0.10 }
-		set_variable = { eon_investment_offer_duration = project_construction_duration^-1 }
-		set_variable = { eon_investment_offer_total_duration = project_total_construction_duration_display^-1 }
-		if = { limit = { eon_investment_offer_valid = yes }
-			var:eon_investment_offer_partner = { PREV = { set_country_flag = { flag = this_investment_offer_pending@PREV days = 90 value = 1 } } }
-			set_country_flag = AC_ai_investment_pending
-			set_temp_variable = { eon_investment_offer_prepared = 1 }
-		}
-		else = { eon_investment_clear_offer = yes }
-	}
+	eon_investment_offer_v2_prepare = yes
 }
 
 # Legacy scripted investments are called in state scope, with ROOT as donor.
 eon_investment_prepare_scripted_offer = {
 	ROOT = {
-		if = { limit = { check_variable = { eon_investment_offer_partner = 0 } }
+		if = { limit = { eon_investment_offer_v2_capacity = yes }
 			PREV = {
 				save_event_target_as = AC_state_event_target
 				set_variable = { ROOT.AC_state_target = THIS.id }
@@ -55,8 +38,10 @@ eon_investment_prepare_scripted_offer = {
 # Atomic acceptance: validate first, then start exactly the frozen project and
 # debit its donor plus the existing 10% recipient contribution. No GUI restoration.
 eon_investment_execute_offer = {
+ if = { limit = { has_country_flag = eon_investment_offer_v2_bridge_in_progress }
+
 	set_temp_variable = { eon_investment_project_started = 0 }
-	if = { limit = { eon_investment_offer_valid = yes }
+	if = { limit = { has_country_flag = eon_investment_offer_v2_bridge_in_progress eon_investment_offer_valid = yes }
 		get_available_project = yes
 		if = { limit = { has_variable = new_project }
 			set_variable = { project = new_project }
@@ -127,6 +112,8 @@ eon_investment_execute_offer = {
 	}
 	eon_investment_clear_offer = yes
 	refresh_gui = yes
+
+ }
 }
 
 # Root inserts this into both annex hooks. Current country is surviving donor;

@@ -1,0 +1,585 @@
+# Native diplomacy: THIS is the selected country; ROOT is the player.
+# ROOT enters the existing THIS-owner / PREV-partner frame.
+# Consent stays in the existing 30-day request/response system.
+scripted_diplomatic_actions = {
+ eon_diplomatic_relations_ui_status = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_status_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_status_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_status_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_status_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_status_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_status_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_status_ready = yes } eon_diplomatic_relations_status_notice = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_propose = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_pair_peace = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_propose_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_relations_proposal_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_propose_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_relations_proposal_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_propose_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_relations_proposal_ready = yes } eon_diplomatic_relations_propose_relations = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_mission_charge = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes set_temp_variable = { eon_diplomatic_relations_selected_level = 1 } eon_diplomatic_relations_pair_peace = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_mission_charge_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_level = 1 } eon_diplomatic_relations_mission_proposal_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_mission_charge_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_level = 1 } eon_diplomatic_relations_mission_proposal_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_mission_charge_send_desc
+  complete_effect = { ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_level = 1 } if = { limit = { eon_diplomatic_relations_mission_proposal_ready = yes } eon_diplomatic_relations_propose_mission = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_mission_ambassador = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes set_temp_variable = { eon_diplomatic_relations_selected_level = 2 } eon_diplomatic_relations_pair_peace = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_mission_ambassador_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_level = 2 } eon_diplomatic_relations_mission_proposal_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_mission_ambassador_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_level = 2 } eon_diplomatic_relations_mission_proposal_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_mission_ambassador_send_desc
+  complete_effect = { ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_level = 2 } if = { limit = { eon_diplomatic_relations_mission_proposal_ready = yes } eon_diplomatic_relations_propose_mission = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_propose_head = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_pair_peace = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_propose_head_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_head_proposal_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_propose_head_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_head_proposal_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_propose_head_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_head_proposal_ready = yes } eon_diplomatic_relations_propose_head = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_accept_relations = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 1 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 0 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_current = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_accept_relations_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 1 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 0 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_accept_relations_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 1 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 0 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_accept_relations_send_desc
+  complete_effect = { ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 1 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 0 } if = { limit = { check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } eon_diplomatic_relations_accept_response = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_accept_charge = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_current = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_accept_charge_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_accept_charge_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_accept_charge_send_desc
+  complete_effect = { ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 1 } if = { limit = { check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } eon_diplomatic_relations_accept_response = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_accept_ambassador = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 2 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_current = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_accept_ambassador_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 2 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_accept_ambassador_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 2 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_accept_ambassador_send_desc
+  complete_effect = { ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 2 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = 2 } if = { limit = { check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } eon_diplomatic_relations_accept_response = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_accept_head = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 3 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = -1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_current = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_accept_head_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 3 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = -1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_accept_head_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 3 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = -1 } check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_accept_head_send_desc
+  complete_effect = { ROOT = { set_temp_variable = { eon_diplomatic_relations_selected_response_kind = 3 } set_temp_variable = { eon_diplomatic_relations_selected_response_level = -1 } if = { limit = { check_variable = { eon_diplomatic_relations_in_kind@PREV = eon_diplomatic_relations_selected_response_kind } if = { limit = { check_variable = { eon_diplomatic_relations_selected_response_level > -1 } } check_variable = { eon_diplomatic_relations_in_level@PREV = eon_diplomatic_relations_selected_response_level } } eon_diplomatic_relations_response_ready = yes } eon_diplomatic_relations_accept_response = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_decline = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_response_current = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_decline_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_response_current = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_decline_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_response_current = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_decline_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_response_current = yes } eon_diplomatic_relations_decline_response = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_withdraw = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_outgoing_present = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_withdraw_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_outgoing_present = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_withdraw_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_outgoing_present = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_withdraw_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_outgoing_present = yes } eon_diplomatic_relations_withdraw_request = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_credentials = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_credentials_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_credentials_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_credentials_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_credentials_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_credentials_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_credentials_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_credentials_ready = yes } eon_diplomatic_relations_activate_credentials = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_recall = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_recall_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_recall_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_recall_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_recall_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_recall_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_recall_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_recall_ready = yes } eon_diplomatic_relations_recall_head = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_persona_non_grata = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_png_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_persona_non_grata_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_png_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_persona_non_grata_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_png_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_persona_non_grata_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_png_ready = yes } eon_diplomatic_relations_persona_non_grata = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_persona_non_grata_approved = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_png_approved_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_persona_non_grata_approved_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_png_approved_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_persona_non_grata_approved_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_png_approved_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_persona_non_grata_approved_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_png_approved_ready = yes } eon_diplomatic_relations_persona_non_grata_approved = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_close = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_close_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_close_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_close_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_close_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_close_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_close_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_close_ready = yes } eon_diplomatic_relations_close_mission = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_close_host = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_close_host_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_close_host_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_close_host_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_close_host_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_close_host_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_close_host_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_close_host_ready = yes } eon_diplomatic_relations_close_host_mission = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_break = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_break_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_break_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_break_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_break_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_break_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_break_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_break_ready = yes } eon_diplomatic_relations_break_relations = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_exit_facilities = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_exit_facilities_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_exit_facilities_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_exit_facilities_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_exit_facilities_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_exit_facilities_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_exit_facilities_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_exit_facilities_ready = yes } eon_diplomatic_relations_ack_exit_facilities = yes } } }
+  ai_desire = { factor = 0 }
+ }
+ eon_diplomatic_relations_ui_report_departure = {
+  allowed = { ROOT = { is_ai = no } }
+  visible = { exists = yes NOT = { tag = ROOT } ROOT = { exists = yes eon_diplomatic_relations_departure_report_ready = yes } }
+  selectable = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_report_departure_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_departure_report_ready = yes }
+    }
+   }
+  }
+  can_be_sent = {
+   custom_trigger_tooltip = {
+    tooltip = eon_diplomatic_relations_ui_report_departure_ready_tt
+    hidden_trigger = {
+     tooltip_evaluation = eval
+     ROOT = { eon_diplomatic_relations_departure_report_ready = yes }
+    }
+   }
+  }
+  cost = 0
+  requires_acceptance = no
+  show_acceptance_on_action_button = no
+  icon = 17
+  send_description = eon_diplomatic_relations_ui_report_departure_send_desc
+  complete_effect = { ROOT = { if = { limit = { eon_diplomatic_relations_departure_report_ready = yes } eon_diplomatic_relations_report_departure = yes } } }
+  ai_desire = { factor = 0 }
+ }
+}

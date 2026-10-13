@@ -30,6 +30,7 @@ def main():
     sys.stderr.reconfigure(encoding='utf-8')
     reports = {}
     reports['localisation'] = run('tools/validation/diplomacy_completion/check_localisation.py')
+    reports['peace_settlement'] = run('tools/validation/peace_settlement/run_checks.py')
     reports['localisation_override_boundaries'] = run('tools/validation/localisation_override_checker/test_checker.py')
     reports['consultation_ui'] = run('tools/validation/diplomacy_channel_ui/run_checks.py')
     reports['consultation_lifecycle_completion'] = run('tools/validation/consultation_lifecycle_completion/run_checks.py')
@@ -38,7 +39,10 @@ def main():
         if not (ROOT / path).is_file():
             raise RuntimeError('Completion work is incomplete: missing ' + path)
         reports[f'package_{number}'] = run(path)
-    reports['cheat_hotkey'] = run('tools/validation/diplomacy_completion/check_hotkey_regression.py')
+    reports['investment_offer_active'] = run('tools/validation/investment_offer_active/run_checks.py')
+    reports['ai_thinking_cost'] = run('tools/validation/ai_thinking_cost/run_checks.py')
+    reports['mediation_live_expiry'] = run('tools/validation/mediation_live_expiry/run_checks.py')
+    reports['cheat_hotkey'] = run('tools/validation/private_debug_panel/test_panel.py')
     reports['native_grammar'] = run('tools/validation/diplomacy_completion/check_native_grammar.py')
     reports['support_native_compatibility'] = run('tools/validation/diplomacy_completion/check_support_native_compat.py')
     reports['ordinary_alliance'] = run('tools/validation/diplomacy_package_03/test_ordinary_alliance.py')

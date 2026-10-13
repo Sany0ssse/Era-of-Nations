@@ -1,0 +1,81 @@
+{
+  "purpose": "Pinned source-byte comparison for accepted pair and subject guards",
+  "native_execution_proven_by_this_catalog": false,
+  "files": {
+    "common/scripted_diplomatic_actions/eon_peace_settlement_actions.txt": {
+      "before_sha256": "5bd6dfe451eafdb9ec1d392aa08dc507bf703a9490cc45f1d525cfcfb57aa672",
+      "candidate_sha256": "a1b01f64430aae6d5fe92af8f0b90bcc1930a8691cf2fbb5834e34ce4c57cad2",
+      "exact_inverse_whole_source": true
+    },
+    "common/scripted_triggers/eon_peace_settlement_triggers.txt": {
+      "before_sha256": "d9c84acf755704fb3e09c6a7887c3b4d1a00b268ec386e75af51ba74e2da820e",
+      "candidate_sha256": "5f0171c324095f53294008e11fd396b34a4b5e46d63ec58d2c84f3c4a8222f90",
+      "append_sha256": "026f32453e7cd3b9c256ec9df8783b909ce8179e7d3113b766ce7745b7a0dc43"
+    }
+  },
+  "patches": [
+    {
+      "old": "modifier = { add = 60 ROOT = { surrender_progress > 0.35 } }",
+      "new": "modifier = { add = 60 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }",
+      "count": 2
+    },
+    {
+      "old": "modifier = { add = 50 ROOT = { surrender_progress > 0.65 } }",
+      "new": "modifier = { add = 50 ROOT = { surrender_progress > 0.65 } eon_peace_sender_core_pressure_in_pair = yes }",
+      "count": 2
+    },
+    {
+      "old": "modifier = { factor = 0 surrender_progress > 0.8 ROOT = { surrender_progress < 0.2 } }",
+      "new": "modifier = { factor = 0 surrender_progress > 0.8 ROOT = { surrender_progress < 0.2 } eon_peace_recipient_core_pressure_in_pair = yes }",
+      "count": 2
+    },
+    {
+      "old": "modifier = { add = 40 surrender_progress > 0.35 }",
+      "new": "modifier = { add = 40 surrender_progress > 0.35 eon_peace_recipient_core_pressure_in_pair = yes }",
+      "count": 5
+    },
+    {
+      "old": "modifier = { add = 80 surrender_progress > 0.65 }",
+      "new": "modifier = { add = 80 surrender_progress > 0.65 eon_peace_recipient_core_pressure_in_pair = yes }",
+      "count": 5
+    },
+    {
+      "old": "modifier = { add = -20 ROOT = { surrender_progress > 0.35 } }",
+      "new": "modifier = { add = -20 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }",
+      "count": 5
+    },
+    {
+      "old": "modifier = { add = -40 ROOT = { surrender_progress > 0.65 } }",
+      "new": "modifier = { add = -40 ROOT = { surrender_progress > 0.65 } eon_peace_sender_core_pressure_in_pair = yes }",
+      "count": 5
+    },
+    {
+      "old": "modifier = { add = -100 surrender_progress < 0.05 ROOT = { surrender_progress > 0.35 } }",
+      "new": "modifier = { add = -100 surrender_progress < 0.05 ROOT = { surrender_progress > 0.35 } eon_peace_sender_core_pressure_in_pair = yes }",
+      "count": 5
+    },
+    {
+      "old": "\t\t\t\t\tset_temp_variable = { temp_weight = THIS.surrender_progress }\n\t\t\t\t\tsubtract_from_temp_variable = { temp_weight = ROOT.surrender_progress }",
+      "new": "\t\t\t\t\tset_temp_variable = { temp_weight = 0 }\n\t\t\t\t\tif = { limit = { eon_peace_recipient_core_pressure_in_pair = yes } set_temp_variable = { temp_weight = THIS.surrender_progress } }\n\t\t\t\t\tif = { limit = { eon_peace_sender_core_pressure_in_pair = yes } subtract_from_temp_variable = { temp_weight = ROOT.surrender_progress } }",
+      "count": 1
+    }
+  ],
+  "pair_helpers": [
+    "eon_peace_recipient_core_pressure_in_pair",
+    "eon_peace_sender_core_pressure_in_pair"
+  ],
+  "preserved": [
+    "pending, reservation and consent callbacks",
+    "payments/costs",
+    "game rules",
+    "stability/war support/pair war-length fatigue",
+    "all unrelated conference scoring",
+    "Action fields unchanged outside AI; only two readiness subject guards gain selected-enemy conjunctions, all other safety terms exact"
+  ],
+  "limit": "Existence guard only, not an exact per-war surrender percentage. Once direct pair core occupation exists, native overall surrender severity still supplies magnitude. Native helper scopes/AI selection remain unproven until separate probe. Subject locality guard additionally awaits delayed native unrelated-front preservation proof.",
+  "subject_ready_guards": {
+    "old": "NOT = { any_subject_country = { has_war_together_with = PREV } }",
+    "new_recipient": "NOT = { any_subject_country = { has_war_together_with = PREV has_war_with = ROOT } }",
+    "new_sender": "NOT = { any_subject_country = { has_war_together_with = PREV has_war_with = PREV.PREV } }"
+  }
+}
