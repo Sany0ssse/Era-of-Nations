@@ -8,8 +8,9 @@ Initial identity prepared on 2026-10-05 using the built-in image generation tool
 | --- | --- | --- | --- |
 | `gfx/interface/logo_game.dds` | 560 × 407 | Uncompressed RGBA DDS | Transparent main-menu title |
 | `gfx/event_pictures/global/era_of_nations_start_logo.dds` | 217 × 163 | DXT5 / BC3 DDS | Opening-event illustration |
-| `thumbnail.png` | 500 × 500 | RGBA PNG | Launcher / project thumbnail |
-| `docs/uploads/logo.png` | 500 × 500 | RGBA PNG | Documentation cover |
+| `thumbnail.png` | 560 × 407 | RGBA PNG | Transparent launcher / project title logo |
+| `docs/uploads/era-of-nations/logo.png` | 560 × 407 | RGBA PNG | Transparent documentation title logo |
+| `docs/uploads/logo.png` | 500 × 500 | RGBA PNG | Original documentation cover, retained |
 | `gfx/interface/topbar/musicplayer/era_of_nations_album_art.dds` | 304 × 120 | Uncompressed RGBA DDS | Two music-player states, each 152 × 120 |
 | `gfx/era_of_nations_radio_station_cover.dds` | 304 × 120 | Uncompressed RGBA DDS | Two radio-station states |
 | `gfx/HOI4_icon.bmp` | 48 × 48 | 32-bit BMP, V5 header and alpha masks | Compact mod icon |
@@ -27,6 +28,21 @@ The generated PNG masters are kept in `docs/branding/` so future work can reuse 
 - `era_of_nations_icon_master.png` — 1254 × 1254, transparent emblem without lettering.
 
 Original replaced images are preserved locally under `.local/branding-originals/` with their original relative paths. `.local/` is excluded from Git. Source provenance and retained third-party credits are recorded separately in `SOURCE.md` and the relevant credit files.
+
+## Public logo export, 2026-10-13
+
+The public thumbnail and documentation logo now use the exact transparent main-menu artwork from `gfx/interface/logo_game.dds`: the globe, orbital emblem and complete **ERA OF NATIONS** wordmark. The existing 560 × 407 RGBA pixels were encoded as PNG without resizing, cropping, regenerating the artwork or changing pixels. The game texture and original generated masters were preserved.
+
+Both public PNG files contain identical bytes. The documentation layout references `uploads/era-of-nations/logo.png` through the existing `relative_url` filter. The earlier opaque `docs/uploads/logo.png` cover remains available as a historical asset.
+
+- PNG dimensions: 560 × 407; size: 290,927 bytes.
+- Alpha range: 0–255, including 123,479 fully transparent pixels.
+- PNG SHA-256: `743f4d2e9b3bb1c9d7f6de5c4be0f3c920c032ed29100f82e887402f92675e1f`.
+- Decoded RGBA SHA-256, identical to the game DDS: `e9f83fca59886111e573f2427a2d03aa07848198cfd786235b7d185b2a093b9d`.
+
+These local checks confirm the file conversion and transparency. Website rendering, complete gameplay flows and campaign stability require separate verification.
+
+The existing Steam Workshop item `3814861738` received this main logo and six real gameplay screenshots on 2026-10-13. Steam returned callback result 1. The seven uploaded files were retrieved from their verified official Steam CDN URLs and every SHA-256 matched the approved upload bytes. The uploaded main PNG matches the exact `743f4d2e9b3bb1c9d7f6de5c4be0f3c920c032ed29100f82e887402f92675e1f` file, including 560 × 407 RGBA pixels and alpha 0–255; all six JPEG screenshots retain their original 1920 × 1080 bytes without re-encoding. This proves the uploaded media files, not website rendering or campaign acceptance.
 
 ## Generation prompts
 

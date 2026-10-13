@@ -51,6 +51,46 @@ Era of Nations is an independent fork based on a supplied Millennium: Damaged Co
 - [Source Workshop mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3721160655)
 - [Source and attribution](https://github.com/Sany0ssse/Era-of-Nations/blob/main/docs/development/SOURCE.md)
 
+## Gameplay screenshots
+
+Real in-game screenshots from the current development build.
+
+### Country diplomacy
+
+![Country diplomacy](docs/uploads/era-of-nations/01-country-diplomacy.jpg)
+
+Diplomatic actions are available from the selected country's diplomacy screen.
+
+### European Union
+
+![European Union](docs/uploads/era-of-nations/02-european-union.jpg)
+
+EU members, population, European values and institutional tabs.
+
+### Modern production
+
+![Modern production](docs/uploads/era-of-nations/03-modern-production.jpg)
+
+Modern equipment and production lines.
+
+### Economy and government
+
+![Economy and government](docs/uploads/era-of-nations/04-economy-and-government.jpg)
+
+Government settings alongside income, spending and employment.
+
+### National focuses
+
+![National focuses](docs/uploads/era-of-nations/05-national-focus-tree.jpg)
+
+The national focus tree and visible focus states.
+
+### Resource trade
+
+![Resource trade](docs/uploads/era-of-nations/06-resource-trade.jpg)
+
+Strategic resources and country-to-country trade.
+
 ## Development and validation
 
 - [Steam Workshop playtest](https://steamcommunity.com/sharedfiles/filedetails/?id=3814861738)
